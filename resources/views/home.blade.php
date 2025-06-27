@@ -347,7 +347,7 @@
 .contrib-card-v3 {
     border-radius: 1.5rem;
     background: #fff;
-    box-shadow: 0 8px 32px rgba(76,203,143,0.13), 0 1.5px 6px rgba(0,0,0,0.04);
+    box-shadow: 0 8px 32px 0 rgba(76,203,143,0.18), 0 1.5px 6px 0 rgba(0,0,0,0.04);
     transition: box-shadow 0.2s, transform 0.2s;
     min-height: 340px;
     display: flex;
@@ -358,7 +358,7 @@
     padding: 2rem 1.5rem;
 }
 .contrib-card-v3:hover {
-    box-shadow: 0 16px 48px rgba(76,203,143,0.18), 0 3px 12px rgba(0,0,0,0.08);
+    box-shadow: 0 16px 48px 0 rgba(76,203,143,0.22), 0 3px 12px 0 rgba(0,0,0,0.08);
     transform: translateY(-6px) scale(1.03);
     z-index: 2;
 }
