@@ -92,24 +92,65 @@
         </div>
     </section>
 
-    {{-- Top Lists Section --}}
+    {{-- Top 5 Lists Section as Carousel --}}
     <section class="my-5">
-        <h3>Top 5 Lists</h3>
-        <div class="row">
-            @foreach($topLists as $list)
-                <div class="col-md-3 mb-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h6 class="card-title">{{ $list->title }}</h6>
-                            <ul>
-                                @foreach(json_decode($list->data_json, true)['items'] as $item)
-                                    <li>{{ $item['name'] }} ({{ $item['count'] }})</li>
-                                @endforeach
-                            </ul>
+        <h3 class="text-center mb-4">Top 5 Lists</h3>
+        <div id="top5Carousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                @php
+                    $topListTypes = [
+                        'skills' => [
+                            'title' => 'Top 5 Kualifikasi Paling Umum Pencari Kerja',
+                            'desc' => 'Menampilkan kualifikasi yang paling banyak dicari oleh pencari kerja.',
+                            'icon' => 'fa-user-graduate',
+                        ],
+                        'provinces' => [
+                            'title' => 'Top 5 Provinsi dengan Pencari Kerja Terbanyak',
+                            'desc' => 'Memetakan konsentrasi pencari kerja secara geografis.',
+                            'icon' => 'fa-map-marked-alt',
+                        ],
+                        'talents' => [
+                            'title' => 'Top 5 Talenta dengan Lowongan Terbanyak',
+                            'desc' => 'Talenta yang paling banyak dibutuhkan di pasar kerja.',
+                            'icon' => 'fa-users',
+                        ],
+                        'sectors' => [
+                            'title' => 'Top 5 Sektor Industri Pemberi Lowongan Terbanyak',
+                            'desc' => 'Sektor industri yang paling banyak membuka lowongan.',
+                            'icon' => 'fa-industry',
+                        ],
+                    ];
+                @endphp
+                @foreach($topListTypes as $type => $meta)
+                    @php
+                        $list = $topLists->where('type', $type)->first();
+                        $items = $list ? json_decode($list->data_json, true)['items'] : [];
+                        $date = $list ? $list->date : null;
+                    @endphp
+                    <div class="carousel-item @if($loop->first) active @endif">
+                        <div class="row justify-content-center align-items-center">
+                            <div class="col-md-6">
+                                <canvas id="top5-chart-{{ $type }}" height="260"></canvas>
+                            </div>
+                            <div class="col-md-6">
+                                <h4 class="fw-bold mb-2"><i class="fa {{ $meta['icon'] }} me-2 text-success"></i>{{ $meta['title'] }}</h4>
+                                <p class="mb-3">{{ $meta['desc'] }}</p>
+                                @if($date)
+                                    <div class="text-muted small">Data diperbarui pada {{ indo_date($date) }}</div>
+                                @endif
+                            </div>
                         </div>
                     </div>
-                </div>
-            @endforeach
+                @endforeach
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#top5Carousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#top5Carousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
         </div>
     </section>
 
@@ -227,6 +268,50 @@
                         }
                     }
                 });
+            @endforeach
+            @php
+                $topListTypes = ['skills', 'provinces', 'talents', 'sectors'];
+            @endphp
+            @foreach($topListTypes as $type)
+                @php
+                    $list = $topLists->where('type', $type)->first();
+                    $items = $list ? json_decode($list->data_json, true)['items'] : [];
+                @endphp
+                const ctxTop5{{ ucfirst($type) }} = document.getElementById('top5-chart-{{ $type }}');
+                if (ctxTop5{{ ucfirst($type) }}) {
+                    new Chart(ctxTop5{{ ucfirst($type) }}, {
+                        type: 'bar',
+                        data: {
+                            labels: {!! json_encode(array_column($items, 'name')) !!},
+                            datasets: [{
+                                data: {!! json_encode(array_column($items, 'count')) !!},
+                                backgroundColor: 'rgba(40, 167, 69, 0.2)',
+                                borderColor: 'rgba(40, 167, 69, 1)',
+                                borderWidth: 2,
+                                borderRadius: 8,
+                                maxBarThickness: 24,
+                            }]
+                        },
+                        options: {
+                            indexAxis: 'y',
+                            plugins: {
+                                legend: { display: false },
+                                tooltip: { enabled: true }
+                            },
+                            scales: {
+                                x: {
+                                    beginAtZero: true,
+                                    ticks: { color: '#333' },
+                                    grid: { display: false }
+                                },
+                                y: {
+                                    ticks: { color: '#333' },
+                                    grid: { display: false }
+                                }
+                            }
+                        }
+                    });
+                }
             @endforeach
         });
     </script>
