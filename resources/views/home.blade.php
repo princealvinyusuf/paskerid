@@ -163,16 +163,16 @@
 
     {{-- Contributions Section --}}
     <section class="my-5">
-        <h3>Kontribusi Pasker</h3>
-        <div class="row">
+        <h3 class="text-center mb-4">Kontribusi Pasker</h3>
+        <div class="row justify-content-center">
             @foreach($contributions as $contrib)
-                <div class="col-md-3 mb-4">
-                    <div class="card text-center">
-                        <div class="card-body">
-                            <i class="fa {{ $contrib->icon }} fa-2x mb-2"></i>
-                            <h6 class="card-title">{{ $contrib->title }}</h6>
-                            <p>{{ $contrib->description }}</p>
+                <div class="col-6 col-md-3 mb-4">
+                    <div class="contrib-card card text-center border-0 shadow-sm h-100 py-4 px-2 mx-auto">
+                        <div class="mb-3 text-success" style="font-size:2.5rem;">
+                            <i class="fa {{ $contrib->icon }}"></i>
                         </div>
+                        <h6 class="fw-bold mb-2">{{ $contrib->title }}</h6>
+                        <p class="text-muted small mb-0">{{ $contrib->description }}</p>
                     </div>
                 </div>
             @endforeach
@@ -322,4 +322,19 @@
             @endforeach
         });
     </script>
-@endsection 
+@endsection
+
+@push('head')
+<style>
+.contrib-card {
+    transition: box-shadow 0.2s, transform 0.2s;
+    border-radius: 1.5rem;
+    background: #fff;
+}
+.contrib-card:hover {
+    box-shadow: 0 8px 32px rgba(40,167,69,0.12), 0 1.5px 6px rgba(0,0,0,0.06);
+    transform: translateY(-4px) scale(1.04);
+    z-index: 2;
+}
+</style>
+@endpush 
