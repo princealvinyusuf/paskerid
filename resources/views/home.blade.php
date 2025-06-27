@@ -3,7 +3,7 @@
 @section('content')
 <div class="container-fluid p-0">
     {{-- Hero Banner Section --}}
-    <section class="hero-banner position-relative text-white mb-5" style="background: url('/images/hero-bg.jpg') center center/cover no-repeat; min-height: 320px;">
+    <section class="hero-banner position-relative text-white mb-5" style="background: url('{{ asset('images/hero-bg.jpg') }}') center center/cover no-repeat; min-height: 320px;">
         <div class="container h-100 d-flex flex-column justify-content-center align-items-center" style="min-height: 320px; background: rgba(0,0,0,0.4);">
             <h1 class="display-4 fw-bold mb-3 text-center">Selamat Datang di Paskerid</h1>
             <p class="lead mb-4 text-center">Platform data pasar kerja Indonesia terlengkap dan terpercaya.</p>
