@@ -1,10 +1,19 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
+<div class="container-fluid p-0">
+    {{-- Hero Banner Section --}}
+    <section class="hero-banner position-relative text-white mb-5" style="background: url('/images/hero-bg.jpg') center center/cover no-repeat; min-height: 320px;">
+        <div class="container h-100 d-flex flex-column justify-content-center align-items-center" style="min-height: 320px; background: rgba(0,0,0,0.4);">
+            <h1 class="display-4 fw-bold mb-3 text-center">Selamat Datang di Paskerid</h1>
+            <p class="lead mb-4 text-center">Platform data pasar kerja Indonesia terlengkap dan terpercaya.</p>
+            <a href="#informasi-terbaru" class="btn btn-primary btn-lg">Jelajahi Informasi</a>
+        </div>
+    </section>
+
     {{-- Hero Section: Statistics --}}
     <section class="hero my-5">
-        <div class="row text-center">
+        <div class="row text-center justify-content-center">
             @foreach($statistics as $stat)
                 <div class="col-md-4 mb-3">
                     <div class="card shadow-sm">
