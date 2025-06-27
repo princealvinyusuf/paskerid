@@ -164,15 +164,30 @@
     {{-- Contributions Section --}}
     <section class="my-5">
         <div class="text-center mb-2">
-            <h3 class="fw-bold mb-1">Kontribusi Pasker</h3>
-            <h4 class="fw-bold mb-4" style="font-size:2rem;">Untuk Masyarakat Indonesia</h4>
+            <h2 class="fw-bold mb-1" style="font-size:2.5rem;">Kontribusi Pasker</h2>
+            <h3 class="fw-bold mb-5" style="font-size:2rem;">Untuk Masyarakat Indonesia</h3>
         </div>
         <div class="row justify-content-center g-4">
             @foreach($contributions as $contrib)
                 <div class="col-12 col-md-6 col-lg-3 d-flex align-items-stretch">
-                    <div class="contrib-card-v2 card border-0 shadow-sm h-100 p-4 mx-auto">
-                        <div class="icon-bg mb-3 d-flex align-items-center justify-content-center mx-auto">
-                            <i class="fa {{ $contrib->icon }} fa-2x text-white"></i>
+                    <div class="contrib-card-v3 p-4 w-100 h-100 mx-auto">
+                        <div class="svg-icon-bg mb-4 d-flex align-items-center justify-content-center mx-auto">
+                            @if($contrib->icon === 'fa-users')
+                                <!-- Example SVG for Matching -->
+                                <svg width="40" height="40" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="40" height="40" rx="10" fill="#4ecb8f"/><path d="M13 25a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm14 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM10 28v-1a4 4 0 0 1 4-4h.5m11 5v-1a4 4 0 0 0-4-4h-.5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            @elseif($contrib->icon === 'fa-graduation-cap')
+                                <!-- Example SVG for Skills -->
+                                <svg width="40" height="40" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="40" height="40" rx="10" fill="#4ecb8f"/><path d="M20 13l10 5-10 5-10-5 10-5Zm0 10v4m-7-4v2a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-2" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            @elseif($contrib->icon === 'fa-lightbulb')
+                                <!-- Example SVG for Inovasi -->
+                                <svg width="40" height="40" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="40" height="40" rx="10" fill="#4ecb8f"/><path d="M20 28v2m-4 0h8m-4-18a6 6 0 0 1 6 6c0 2.5-1.5 4.5-3 6a2 2 0 0 0-1 1.7V26h-4v-2.3a2 2 0 0 0-1-1.7c-1.5-1.5-3-3.5-3-6a6 6 0 0 1 6-6Z" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            @elseif($contrib->icon === 'fa-briefcase')
+                                <!-- Example SVG for Inklusif -->
+                                <svg width="40" height="40" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="40" height="40" rx="10" fill="#4ecb8f"/><path d="M14 17v-2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v2m-12 0h12m-12 0v10a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V17m-12 0v-2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v2" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            @else
+                                <!-- Fallback icon -->
+                                <svg width="40" height="40"><rect width="40" height="40" rx="10" fill="#4ecb8f"/></svg>
+                            @endif
                         </div>
                         <h5 class="fw-bold mb-2 text-dark">{{ $contrib->title }}</h5>
                         <p class="text-dark mb-0" style="font-size:1rem;">{{ $contrib->description }}</p>
@@ -329,39 +344,29 @@
 
 @push('head')
 <style>
-.contrib-card {
-    transition: box-shadow 0.2s, transform 0.2s;
+.contrib-card-v3 {
     border-radius: 1.5rem;
     background: #fff;
-}
-.contrib-card:hover {
-    box-shadow: 0 8px 32px rgba(40,167,69,0.12), 0 1.5px 6px rgba(0,0,0,0.06);
-    transform: translateY(-4px) scale(1.04);
-    z-index: 2;
-}
-
-/* Improved v2 style for new design */
-.contrib-card-v2 {
-    border-radius: 1.5rem;
-    background: #fff;
-    box-shadow: 0 8px 32px rgba(40,167,69,0.10), 0 1.5px 6px rgba(0,0,0,0.04);
+    box-shadow: 0 8px 32px rgba(76,203,143,0.13), 0 1.5px 6px rgba(0,0,0,0.04);
     transition: box-shadow 0.2s, transform 0.2s;
     min-height: 340px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
+    border: none;
+    padding: 2rem 1.5rem;
 }
-.contrib-card-v2:hover {
-    box-shadow: 0 16px 48px rgba(40,167,69,0.16), 0 3px 12px rgba(0,0,0,0.08);
+.contrib-card-v3:hover {
+    box-shadow: 0 16px 48px rgba(76,203,143,0.18), 0 3px 12px rgba(0,0,0,0.08);
     transform: translateY(-6px) scale(1.03);
     z-index: 2;
 }
-.icon-bg {
+.svg-icon-bg {
     width: 64px;
     height: 64px;
     border-radius: 16px;
-    background: #4ecb8f;
+    background: none;
     display: flex;
     align-items: center;
     justify-content: center;
