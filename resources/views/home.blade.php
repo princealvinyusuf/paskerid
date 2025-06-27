@@ -29,20 +29,49 @@
     </section>
 
     {{-- Informasi Terbaru --}}
-    <section class="my-5">
-        <h3>Informasi Terbaru</h3>
-        <ul class="list-group">
-            @foreach($information as $info)
-                <li class="list-group-item">
-                    <strong>{{ $info->title }}</strong> <br>
-                    <small>{{ $info->date }}</small>
-                    <p>{{ $info->description }}</p>
-                    @if($info->file_url)
-                        <a href="{{ $info->file_url }}" target="_blank">Download</a>
-                    @endif
-                </li>
-            @endforeach
+    <section class="my-5" id="informasi-terbaru">
+        <h3 class="text-center mb-4">Informasi Terbaru</h3>
+        <ul class="nav nav-tabs justify-content-center mb-4" id="infoTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="statistik-tab" data-bs-toggle="tab" data-bs-target="#statistik" type="button" role="tab" aria-controls="statistik" aria-selected="true">Tabel Statistik</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="publikasi-tab" data-bs-toggle="tab" data-bs-target="#publikasi" type="button" role="tab" aria-controls="publikasi" aria-selected="false">Publikasi</button>
+            </li>
         </ul>
+        <div class="tab-content">
+            <div class="tab-pane fade show active" id="statistik" role="tabpanel" aria-labelledby="statistik-tab">
+                @foreach($information->where('type', 'statistik') as $info)
+                    <div class="card mb-3 shadow-sm rounded-pill px-4 py-3 d-flex flex-row align-items-center">
+                        <div class="me-3 text-primary" style="font-size:2rem;"><i class="fa fa-clipboard"></i></div>
+                        <div class="flex-grow-1">
+                            <div class="fw-bold">{{ $info->title }}</div>
+                            <div class="text-muted small">{{ indo_date($info->date) }}</div>
+                        </div>
+                        <div>
+                            <a href="{{ $info->file_url ?? '#' }}" class="btn btn-link text-success p-0" target="_blank"><i class="fa fa-arrow-right fa-lg"></i></a>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+            <div class="tab-pane fade" id="publikasi" role="tabpanel" aria-labelledby="publikasi-tab">
+                @foreach($information->where('type', 'publikasi') as $info)
+                    <div class="card mb-3 shadow-sm rounded-pill px-4 py-3 d-flex flex-row align-items-center">
+                        <div class="me-3 text-primary" style="font-size:2rem;"><i class="fa fa-book"></i></div>
+                        <div class="flex-grow-1">
+                            <div class="fw-bold">{{ $info->title }}</div>
+                            <div class="text-muted small">{{ indo_date($info->date) }}</div>
+                        </div>
+                        <div>
+                            <a href="{{ $info->file_url ?? '#' }}" class="btn btn-link text-success p-0" target="_blank"><i class="fa fa-arrow-right fa-lg"></i></a>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+        <div class="text-center mt-4">
+            <a href="{{ route('informasi.index') }}" class="btn btn-outline-success rounded-pill px-4 py-2">Lihat Semua <i class="fa fa-arrow-right"></i></a>
+        </div>
     </section>
 
     {{-- Charts Section --}}
