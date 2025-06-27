@@ -46,8 +46,7 @@
                         <div class="card-body">
                             <h5 class="card-title">{{ $chart->title }}</h5>
                             <p>{{ $chart->description }}</p>
-                            {{-- Chart rendering placeholder --}}
-                            <pre>{{ $chart->data_json }}</pre>
+                            <canvas id="chart-{{ $chart->id }}" height="200"></canvas>
                         </div>
                     </div>
                 </div>
@@ -158,4 +157,39 @@
         </div>
     </section>
 </div>
+@endsection
+
+@section('scripts')
+    @parent
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            @foreach($charts as $chart)
+                const ctx{{ $chart->id }} = document.getElementById('chart-{{ $chart->id }}').getContext('2d');
+                const data{{ $chart->id }} = @json(json_decode($chart->data_json, true));
+                new Chart(ctx{{ $chart->id }}, {
+                    type: '{{ $chart->chart_type }}',
+                    data: {
+                        labels: data{{ $chart->id }}.labels,
+                        datasets: [{
+                            label: '{{ $chart->title }}',
+                            data: data{{ $chart->id }}.data,
+                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: { display: false },
+                        },
+                        scales: {
+                            y: { beginAtZero: true }
+                        }
+                    }
+                });
+            @endforeach
+        });
+    </script>
 @endsection 
