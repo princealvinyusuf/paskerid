@@ -163,16 +163,19 @@
 
     {{-- Contributions Section --}}
     <section class="my-5">
-        <h3 class="text-center mb-4">Kontribusi Pasker</h3>
-        <div class="row justify-content-center">
+        <div class="text-center mb-2">
+            <h3 class="fw-bold mb-1">Kontribusi Pasker</h3>
+            <h4 class="fw-bold mb-4" style="font-size:2rem;">Untuk Masyarakat Indonesia</h4>
+        </div>
+        <div class="row justify-content-center g-4">
             @foreach($contributions as $contrib)
-                <div class="col-6 col-md-3 mb-4">
-                    <div class="contrib-card card text-center border-0 shadow-sm h-100 py-4 px-2 mx-auto">
-                        <div class="mb-3 text-success" style="font-size:2.5rem;">
-                            <i class="fa {{ $contrib->icon }}"></i>
+                <div class="col-12 col-md-6 col-lg-3 d-flex align-items-stretch">
+                    <div class="contrib-card-v2 card border-0 shadow-sm h-100 p-4 mx-auto">
+                        <div class="icon-bg mb-3 d-flex align-items-center justify-content-center mx-auto">
+                            <i class="fa {{ $contrib->icon }} fa-2x text-white"></i>
                         </div>
-                        <h6 class="fw-bold mb-2">{{ $contrib->title }}</h6>
-                        <p class="text-muted small mb-0">{{ $contrib->description }}</p>
+                        <h5 class="fw-bold mb-2 text-dark">{{ $contrib->title }}</h5>
+                        <p class="text-dark mb-0" style="font-size:1rem;">{{ $contrib->description }}</p>
                     </div>
                 </div>
             @endforeach
@@ -335,6 +338,34 @@
     box-shadow: 0 8px 32px rgba(40,167,69,0.12), 0 1.5px 6px rgba(0,0,0,0.06);
     transform: translateY(-4px) scale(1.04);
     z-index: 2;
+}
+
+/* Improved v2 style for new design */
+.contrib-card-v2 {
+    border-radius: 1.5rem;
+    background: #fff;
+    box-shadow: 0 8px 32px rgba(40,167,69,0.10), 0 1.5px 6px rgba(0,0,0,0.04);
+    transition: box-shadow 0.2s, transform 0.2s;
+    min-height: 340px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+.contrib-card-v2:hover {
+    box-shadow: 0 16px 48px rgba(40,167,69,0.16), 0 3px 12px rgba(0,0,0,0.08);
+    transform: translateY(-6px) scale(1.03);
+    z-index: 2;
+}
+.icon-bg {
+    width: 64px;
+    height: 64px;
+    border-radius: 16px;
+    background: #4ecb8f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
 }
 </style>
 @endpush 
