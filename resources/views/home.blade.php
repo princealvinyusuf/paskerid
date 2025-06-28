@@ -114,7 +114,7 @@
             @foreach($charts as $chart)
                 <div class="col-md-6 col-lg-4 mb-4" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
                     <div class="card shadow-sm rounded-4 border-0" style="min-height: 280px; max-width: 370px; margin: 0 auto;">
-                        <div class="card-body p-3">
+                        <div class="card-body d-flex flex-column align-items-center justify-content-center">
                             <h5 class="card-title mb-2" style="font-size:1.1rem;">{{ $chart->title }}</h5>
                             <p class="mb-2" style="font-size:0.97rem;">{{ $chart->description }}</p>
                             <canvas id="chart-{{ $chart->id }}" height="140"></canvas>
