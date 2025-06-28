@@ -203,7 +203,7 @@
         <div class="row justify-content-center g-4">
             @foreach($contributions as $contrib)
                 <div class="col-12 col-md-6 col-lg-3 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
-                    <div class="card shadow rounded-4 border-0 w-100 h-100 mx-auto d-flex flex-column align-items-center justify-content-center text-center">
+                    <div class="card shadow rounded-4 border-0 p-4 w-100 h-100 mx-auto d-flex flex-column align-items-center justify-content-center text-center">
                         <div class="stat-icon mb-3">
                             @if($contrib->icon === 'fa-users')
                                 <!-- Example SVG for Matching -->
