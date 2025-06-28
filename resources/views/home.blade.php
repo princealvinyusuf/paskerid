@@ -9,19 +9,19 @@
         </div>
     </section>
 
-    {{-- Statistic Cards Carousel --}}
-    <section class="stat-carousel-section bg-white py-4">
-        <div class="container">
+    {{-- Statistic Cards Carousel (Floating over Banner) --}}
+    <section class="stat-carousel-section position-relative" style="z-index: 10; margin-top: -90px;">
+        <div class="container position-relative" style="max-width:1200px;">
             <div class="swiper stat-swiper">
                 <div class="swiper-wrapper">
                     @foreach($statistics as $stat)
                         <div class="swiper-slide">
-                            <div class="stat-card shadow-sm rounded-4 p-4 h-100 d-flex flex-column align-items-center justify-content-between text-center bg-white">
+                            <div class="stat-card shadow rounded-4 p-4 h-100 d-flex flex-column align-items-center justify-content-between text-center bg-white">
                                 <div class="stat-icon mb-3">
                                     <i class="fa fa-chart-bar fa-2x text-success"></i>
                                 </div>
-                                <div class="stat-value fw-bold mb-1" style="font-size:2.2rem;">{{ $stat->value }} <span class="stat-unit" style="font-size:1.2rem;">{{ $stat->unit }}</span></div>
-                                <div class="stat-title fw-semibold mb-1" style="font-size:1.1rem;">{{ $stat->title }}</div>
+                                <div class="stat-title fw-bold mb-1" style="font-size:1.1rem; color:#187C19;">{{ $stat->title }}</div>
+                                <div class="stat-value fw-bold mb-1" style="font-size:2.2rem; color:#222;">{{ $stat->value }} <span class="stat-unit" style="font-size:1.2rem;">{{ $stat->unit }}</span></div>
                                 @if($stat->description)
                                     <div class="stat-desc text-muted mt-1" style="font-size:0.95rem;">{{ $stat->description }}</div>
                                 @endif
@@ -513,7 +513,9 @@
     font-size: 1rem;
 }
 .stat-carousel-section {
-    background: #f8fafc;
+    z-index: 10;
+    margin-top: -90px;
+    margin-bottom: 2rem;
 }
 .stat-card {
     min-height: 220px;
