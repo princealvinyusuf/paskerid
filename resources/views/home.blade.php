@@ -51,7 +51,7 @@
                 <button class="nav-link" id="publikasi-tab" data-bs-toggle="tab" data-bs-target="#publikasi" type="button" role="tab" aria-controls="publikasi" aria-selected="false">Publikasi</button>
             </li>
         </ul>
-        <div class="tab-content" style="padding-left:20rem; padding-right:20rem;">
+        <div class="tab-content">
             <div class="tab-pane fade show active" id="statistik" role="tabpanel" aria-labelledby="statistik-tab">
                 @foreach($information->where('type', 'statistik') as $info)
                     <div class="card mb-3 shadow-sm rounded-pill px-4 py-3 d-flex flex-row align-items-center" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
