@@ -195,10 +195,10 @@
     </section>
 
     {{-- Contributions Section --}}
-    <section class="my-5" data-aos="fade-up">
+    <section class="my-5" data-aos="fade-up" style="padding-left:10rem; padding-right:10rem;">
         <div class="text-center mb-2">
             <h2 class="fw-bold mb-1" style="font-size:2.5rem;">Kontribusi Pasker</h2>
-            <h3 class="fw-bold mb-5" style="font-size:2rem;">Untuk Masyarakat Indonesia</h3>
+            <h2 class="fw-bold mb-1" style="font-size:2.5rem;">Untuk Masyarakat Indonesia</h2>
         </div>
         <div class="row justify-content-center g-4">
             @foreach($contributions as $contrib)
