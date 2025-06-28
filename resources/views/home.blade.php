@@ -87,9 +87,9 @@
     </section>
 
     {{-- Hero Section: Statistics --}}
-    <section class="hero my-5" data-aos="fade-up">
+    <section class="hero my-5" data-aos="fade-up" style="padding-left:10rem; padding-right:10rem;">
         <h3 class="text-center mb-4">Pasar Kerja Indonesia Dalam Angka</h3>
-        <div class="row text-center justify-content-center px-5 px-md-6" style="padding-left:20rem; padding-right:20rem;">
+        <div class="row text-center justify-content-center px-5 px-md-6" >
             @foreach($statistics as $stat)
                 <div class="col-md-4 mb-3" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
                     <div class="card shadow rounded-4 stat-hero-card border-0 h-100 d-flex flex-column align-items-center justify-content-center">
