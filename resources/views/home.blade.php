@@ -16,12 +16,12 @@
                 <div class="swiper-wrapper">
                     @foreach($statistics as $stat)
                         <div class="swiper-slide">
-                            <div class="stat-card shadow-sm rounded-4 p-4 h-100 d-flex flex-column align-items-center justify-content-center text-center bg-white">
+                            <div class="stat-card shadow-sm rounded-4 p-4 h-100 d-flex flex-column align-items-center justify-content-between text-center bg-white">
                                 <div class="stat-icon mb-3">
                                     <i class="fa fa-chart-bar fa-2x text-success"></i>
                                 </div>
-                                <div class="stat-value fw-bold" style="font-size:2.2rem;">{{ $stat->value }} <span class="stat-unit" style="font-size:1.2rem;">{{ $stat->unit }}</span></div>
-                                <div class="stat-title fw-semibold mt-2" style="font-size:1.1rem;">{{ $stat->title }}</div>
+                                <div class="stat-value fw-bold mb-1" style="font-size:2.2rem;">{{ $stat->value }} <span class="stat-unit" style="font-size:1.2rem;">{{ $stat->unit }}</span></div>
+                                <div class="stat-title fw-semibold mb-1" style="font-size:1.1rem;">{{ $stat->title }}</div>
                                 @if($stat->description)
                                     <div class="stat-desc text-muted mt-1" style="font-size:0.95rem;">{{ $stat->description }}</div>
                                 @endif
@@ -523,6 +523,12 @@
     transition: box-shadow 0.2s, transform 0.2s;
     padding: 2rem 1.5rem;
     margin: 0.5rem 0;
+    width: 100%;
+    max-width: 320px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 .stat-card:hover {
     box-shadow: 0 16px 48px 0 rgba(40,167,69,0.18), 0 3px 12px 0 rgba(0,0,0,0.08);
@@ -539,6 +545,20 @@
     justify-content: center;
     margin-bottom: 1rem;
     color: #fff;
+}
+.swiper {
+    width: 100%;
+    padding-bottom: 32px;
+}
+.swiper-wrapper {
+    display: flex;
+    align-items: stretch;
+}
+.swiper-slide {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    height: auto;
 }
 .swiper-pagination-bullet {
     background: var(--primary-green) !important;
