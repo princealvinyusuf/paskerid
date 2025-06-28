@@ -18,15 +18,17 @@
                 </button>
                 <div id="statScrollRow" class="d-flex overflow-auto px-5" style="scroll-behavior:smooth; gap:16px; width:100%;">
                     @foreach($statistics as $stat)
-                        <div class="stat-card text-center flex-shrink-0" style="width:240px;">
-                            <div class="stat-icon mb-3">
-                                <i class="fa fa-chart-bar fa-2x text-success"></i>
+                        <div class="card shadow-sm stat-card text-center flex-shrink-0" style="width:260px;">
+                            <div class="card-body d-flex flex-column align-items-center justify-content-center">
+                                <div class="stat-icon mb-3">
+                                    <i class="fa fa-chart-bar fa-2x text-success"></i>
+                                </div>
+                                <div class="stat-title fw-bold mb-1" style="font-size:1.1rem; color:#187C19;">{{ $stat->title }}</div>
+                                <div class="stat-value fw-bold mb-1" style="font-size:2.2rem; color:#222;">{{ $stat->value }} <span class="stat-unit" style="font-size:1.2rem;">{{ $stat->unit }}</span></div>
+                                @if($stat->description)
+                                    <div class="stat-desc text-muted mt-1" style="font-size:0.95rem;">{{ $stat->description }}</div>
+                                @endif
                             </div>
-                            <div class="stat-title fw-bold mb-1" style="font-size:1.1rem; color:#187C19;">{{ $stat->title }}</div>
-                            <div class="stat-value fw-bold mb-1" style="font-size:2.2rem; color:#222;">{{ $stat->value }} <span class="stat-unit" style="font-size:1.2rem;">{{ $stat->unit }}</span></div>
-                            @if($stat->description)
-                                <div class="stat-desc text-muted mt-1" style="font-size:0.95rem;">{{ $stat->description }}</div>
-                            @endif
                         </div>
                     @endforeach
                 </div>
@@ -490,24 +492,16 @@
     display: block;
 }
 .stat-card {
-    background: #fff;
-    border: none;
     border-radius: 1.5rem;
-    box-shadow: 0 4px 24px 0 rgba(0,0,0,0.08), 0 1.5px 6px 0 rgba(0,0,0,0.04);
-    min-height: 260px;
-    width: 260px;
     padding: 2.5rem 1.5rem;
     margin: 0.5rem 0;
+    min-height: 220px;
+    width: 260px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    transition: box-shadow 0.2s, transform 0.2s;
-}
-.stat-card:hover {
-    box-shadow: 0 12px 32px 0 rgba(0,0,0,0.13), 0 3px 12px 0 rgba(0,0,0,0.08);
-    transform: translateY(-4px) scale(1.03);
-    z-index: 2;
+    /* Remove background and box-shadow here! */
 }
 .stat-icon {
     width: 48px;
