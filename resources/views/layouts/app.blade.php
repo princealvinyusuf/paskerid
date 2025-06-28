@@ -93,6 +93,22 @@
         opacity: 1;
         transform: scale(1.08);
     }
+    .btn:focus, .btn:focus-visible {
+        outline: none !important;
+        box-shadow: 0 0 0 0.2rem rgba(40,167,69,0.25) !important;
+    }
+    .btn-success:focus, .btn-success:focus-visible, .btn-outline-success:focus, .btn-outline-success:focus-visible {
+        box-shadow: 0 0 0 0.25rem rgba(40,167,69,0.45) !important;
+    }
+    .btn-primary:focus, .btn-primary:focus-visible {
+        box-shadow: 0 0 0 0.25rem rgba(0,123,255,0.45) !important;
+    }
+    .nav-link:focus, .nav-link:focus-visible {
+        outline: none !important;
+        box-shadow: 0 2px 0 0 #28a745;
+        background: rgba(40,167,69,0.08);
+        border-radius: 0.5rem;
+    }
     </style>
     @endpush
 </body>
