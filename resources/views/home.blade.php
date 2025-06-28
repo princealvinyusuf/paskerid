@@ -548,7 +548,7 @@
     opacity: 1;
 }
 .stat-hero-card {
-    border-radius: 5rem;
+    border-radius: 50rem;
     background: #fff;
     /* Use Bootstrap's shadow for consistency with Top 5 Lists */
     box-shadow: 0 2.5rem 1rem rgba(0,0,0,.30)!important;
