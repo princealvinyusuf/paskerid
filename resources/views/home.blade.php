@@ -41,7 +41,7 @@
     </section>
 
     {{-- Informasi Terbaru --}}
-    <section class="my-5" id="informasi-terbaru" data-aos="fade-up" style="padding-left:20rem; padding-right:20rem;">
+    <section class="my-5" id="informasi-terbaru" data-aos="fade-up" style="padding-left:10rem; padding-right:10rem;">
         <h3 class="text-center mb-4">Informasi Terbaru</h3>
         <ul class="nav nav-tabs justify-content-center mb-4" id="infoTab" role="tablist" >
             <li class="nav-item" role="presentation">
