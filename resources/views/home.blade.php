@@ -548,14 +548,14 @@
     opacity: 1;
 }
 .stat-hero-card {
-    border-radius: 1.25rem;
+    border-radius: 2.1rem;
     background: #fff;
     box-shadow: 0 8px 32px 0 rgba(40,167,69,0.18), 0 4px 16px 0 rgba(0,0,0,0.10);
     padding: 1rem 1rem 1.5rem 1rem;
     transition: box-shadow 0.2s, transform 0.2s;
     min-height: 200px;
     max-width: 320px;
-    width: 100%;
+    width: 70%;
     position: relative;
 }
 .stat-hero-card:hover {
