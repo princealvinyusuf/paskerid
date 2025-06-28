@@ -88,6 +88,7 @@
 
     {{-- Hero Section: Statistics --}}
     <section class="hero my-5" data-aos="fade-up">
+        <h3 class="text-center mb-4">Pasar Kerja Indonesia Dalam Angka</h3>
         <div class="row text-center justify-content-center">
             @foreach($statistics as $stat)
                 <div class="col-md-4 mb-3" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
