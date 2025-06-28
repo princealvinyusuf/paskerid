@@ -26,7 +26,7 @@
                         <a class="nav-link @if(request()->routeIs('informasi.index')) active fw-bold @endif" href="{{ route('informasi.index') }}">Informasi</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link @if(request()->routeIs('news.index')) active fw-bold @endif" href="{{ route('news.index') }}">Berita</a>
+                        <a class="nav-link @if(request()->routeIs('news.index')) active fw-bold @endif" href="{{ route('news.index') }}">News</a>
                     </li>
                 </ul>
             </div>
