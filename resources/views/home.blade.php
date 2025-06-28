@@ -2,29 +2,50 @@
 
 @section('content')
 <div class="container-fluid p-0">
-    {{-- Hero Banner Section --}}
-    <section class="hero-banner position-relative text-white mb-5" style="background: url('{{ asset('images/hero-bg.jpg') }}') center center/cover no-repeat; min-height: 320px;">
-        <div class="container h-100 d-flex flex-column justify-content-center align-items-center" style="min-height: 320px; background: rgba(0,0,0,0.4);">
-            <h1 class="display-4 fw-bold mb-3 text-center">Selamat Datang di Paskerid</h1>
-            <p class="lead mb-4 text-center">Platform data pasar kerja Indonesia terlengkap dan terpercaya.</p>
-            <a href="#informasi-terbaru" class="btn btn-primary btn-lg">Jelajahi Informasi</a>
-        </div>
-    </section>
-
-    {{-- Hero Section: Statistics --}}
-    <section class="hero my-5" data-aos="fade-up">
-        <div class="row text-center justify-content-center">
-            @foreach($statistics as $stat)
-                <div class="col-md-4 mb-3" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
-                    <div class="card shadow-sm">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ $stat->title }}</h5>
-                            <h2 class="display-4">{{ $stat->value }} <small>{{ $stat->unit }}</small></h2>
-                            <p class="card-text">{{ $stat->description }}</p>
-                        </div>
+    {{-- Hero Banner Carousel Section --}}
+    @php
+        $statisticChunks = $statistics->chunk(3);
+    @endphp
+    <section class="hero-banner position-relative text-white mb-5" style="background: url('{{ asset('images/hero-bg.jpg') }}') center center/cover no-repeat; min-height: 420px;">
+        <div class="container h-100 d-flex flex-column justify-content-center align-items-center" style="min-height: 420px; background: rgba(0,0,0,0.15);">
+            <h2 class="fw-bold text-center mb-4" style="font-size:2.2rem; color:#fff; text-shadow:0 2px 8px rgba(0,0,0,0.18);">Pasar Kerja Dalam Angka,<br>Untuk Negeri Berkarya</h2>
+            <div class="w-100 d-flex justify-content-center align-items-center" style="max-width:1100px;">
+                <div id="statCarousel" class="carousel slide w-100" data-bs-ride="carousel" data-bs-interval="7000">
+                    <div class="carousel-inner">
+                        @foreach($statisticChunks as $chunkIndex => $chunk)
+                            <div class="carousel-item @if($chunkIndex === 0) active @endif">
+                                <div class="row justify-content-center align-items-end g-4">
+                                    @foreach($chunk as $stat)
+                                        <div class="col-12 col-md-6 col-lg-4 d-flex align-items-stretch">
+                                            <div class="stat-card-carousel bg-white shadow rounded-4 p-4 w-100 h-100 mx-auto text-center">
+                                                <div class="stat-icon mb-3 mx-auto">
+                                                    <i class="fa fa-clipboard fa-2x" style="color:var(--accent-green);"></i>
+                                                </div>
+                                                <div class="fw-bold mb-1" style="font-size:1.1rem; color:var(--primary-green);">{{ $stat->title }}</div>
+                                                <div class="display-6 fw-bold mb-1" style="color:#222;">{{ $stat->value }} <span style="font-size:1.2rem; color:#888;">{{ $stat->unit }}</span></div>
+                                                <div class="text-muted" style="font-size:1rem;">{{ $stat->description }}</div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#statCarousel" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#statCarousel" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                    <div class="carousel-indicators mt-4">
+                        @foreach($statisticChunks as $chunkIndex => $chunk)
+                            <button type="button" data-bs-target="#statCarousel" data-bs-slide-to="{{ $chunkIndex }}" @if($chunkIndex === 0) class="active" aria-current="true" @endif aria-label="Slide {{ $chunkIndex+1 }}"></button>
+                        @endforeach
                     </div>
                 </div>
-            @endforeach
+            </div>
         </div>
     </section>
 
@@ -462,6 +483,34 @@
 }
 .card.blockquote {
     font-size: 1rem;
+}
+.stat-card-carousel {
+    border-radius: 1.5rem;
+    background: #fff;
+    box-shadow: 0 8px 32px 0 rgba(40,167,69,0.13), 0 1.5px 6px 0 rgba(0,0,0,0.04);
+    transition: box-shadow 0.2s, transform 0.2s;
+    min-height: 220px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    padding: 2rem 1.5rem;
+}
+.stat-card-carousel:hover {
+    box-shadow: 0 16px 48px 0 rgba(40,167,69,0.22), 0 3px 12px 0 rgba(0,0,0,0.08);
+    transform: translateY(-6px) scale(1.03);
+    z-index: 2;
+}
+.stat-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+    background: #f3f8f4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
 }
 </style>
 @endpush 
