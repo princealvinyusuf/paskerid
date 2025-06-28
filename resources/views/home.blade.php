@@ -98,8 +98,8 @@
                         </div>
                         <div class="card-body d-flex flex-column align-items-center justify-content-center">
                             <h5 class="card-title fw-bold mb-1" style="color:#187C19;">{{ $stat->title }}</h5>
-                            <h2 class="display-4 fw-bold mb-1" style="color:#222;">{{ $stat->value }} <small style="font-size:1.2rem;">{{ $stat->unit }}</small></h2>
-                            <p class="card-text text-muted" style="font-size:1rem;">{{ $stat->description }}</p>
+                            <h2 class="display-6 fw-bold mb-1" style="color:#222; font-size:2rem;">{{ $stat->value }} <small style="font-size:1rem;">{{ $stat->unit }}</small></h2>
+                            <p class="card-text text-muted" style="font-size:0.95rem;">{{ $stat->description }}</p>
                         </div>
                     </div>
                 </div>
@@ -548,45 +548,48 @@
     opacity: 1;
 }
 .stat-hero-card {
-    border-radius: 1.5rem;
+    border-radius: 1.25rem;
     background: #fff;
-    box-shadow: 0 8px 32px 0 rgba(40,167,69,0.10), 0 1.5px 6px 0 rgba(0,0,0,0.04);
-    padding: 1.5rem 1.5rem 2rem 1.5rem;
+    box-shadow: 0 8px 32px 0 rgba(40,167,69,0.18), 0 4px 16px 0 rgba(0,0,0,0.10);
+    padding: 1rem 1rem 1.5rem 1rem;
     transition: box-shadow 0.2s, transform 0.2s;
-    min-height: 320px;
+    min-height: 200px;
+    max-width: 320px;
+    width: 100%;
     position: relative;
 }
 .stat-hero-card:hover {
-    box-shadow: 0 16px 48px 0 rgba(40,167,69,0.18), 0 3px 12px 0 rgba(0,0,0,0.08);
-    transform: translateY(-4px) scale(1.03);
+    box-shadow: 0 16px 48px 0 rgba(40,167,69,0.22), 0 8px 24px 0 rgba(0,0,0,0.16);
+    transform: translateY(-4px) scale(1.04);
     z-index: 2;
 }
 .stat-hero-icon {
-    width: 56px;
-    height: 56px;
-    border-radius: 16px;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
     background: linear-gradient(135deg, #B8D53D 0%, #69B41E 100%);
     display: flex;
     align-items: center;
     justify-content: center;
     color: #fff;
-    font-size: 2rem;
-    box-shadow: 0 2px 8px 0 rgba(40,167,69,0.10);
+    font-size: 1.3rem;
+    box-shadow: 0 2px 8px 0 rgba(40,167,69,0.18);
     position: absolute;
-    top: -28px;
+    top: -22px;
     left: 50%;
     transform: translateX(-50%);
 }
 @media (max-width: 767px) {
     .stat-hero-card {
-        min-height: 220px;
-        padding: 1.2rem 0.7rem 1.5rem 0.7rem;
+        min-height: 140px;
+        padding: 0.7rem 0.5rem 1rem 0.5rem;
+        max-width: 95%;
     }
     .stat-hero-icon {
-        width: 44px;
-        height: 44px;
-        font-size: 1.3rem;
-        top: -22px;
+        width: 32px;
+        height: 32px;
+        font-size: 1rem;
+        top: -16px;
     }
 }
 </style>
