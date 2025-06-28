@@ -151,6 +151,11 @@
                         'desc' => 'Sektor industri yang paling banyak membuka lowongan.',
                         'icon' => 'fa-industry',
                     ],
+                    'sectors' => [
+                        'title' => 'Top 5 Sektor Industri Pemberi Lowongan Terbanyak',
+                        'desc' => 'Sektor industri yang paling banyak membuka lowongan.',
+                        'icon' => 'fa-industry',
+                    ],
                 ];
             @endphp
             @foreach($topListTypes as $type => $meta)
