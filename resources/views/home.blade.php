@@ -12,10 +12,10 @@
     </section>
 
     {{-- Hero Section: Statistics --}}
-    <section class="hero my-5">
+    <section class="hero my-5" data-aos="fade-up">
         <div class="row text-center justify-content-center">
             @foreach($statistics as $stat)
-                <div class="col-md-4 mb-3">
+                <div class="col-md-4 mb-3" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
                     <div class="card shadow-sm">
                         <div class="card-body">
                             <h5 class="card-title">{{ $stat->title }}</h5>
@@ -29,7 +29,7 @@
     </section>
 
     {{-- Informasi Terbaru --}}
-    <section class="my-5" id="informasi-terbaru">
+    <section class="my-5" id="informasi-terbaru" data-aos="fade-up">
         <h3 class="text-center mb-4">Informasi Terbaru</h3>
         <ul class="nav nav-tabs justify-content-center mb-4" id="infoTab" role="tablist">
             <li class="nav-item" role="presentation">
@@ -42,7 +42,7 @@
         <div class="tab-content">
             <div class="tab-pane fade show active" id="statistik" role="tabpanel" aria-labelledby="statistik-tab">
                 @foreach($information->where('type', 'statistik') as $info)
-                    <div class="card mb-3 shadow-sm rounded-pill px-4 py-3 d-flex flex-row align-items-center">
+                    <div class="card mb-3 shadow-sm rounded-pill px-4 py-3 d-flex flex-row align-items-center" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
                         <div class="me-3 text-primary" style="font-size:2rem;"><i class="fa fa-clipboard"></i></div>
                         <div class="flex-grow-1">
                             <div class="fw-bold">{{ $info->title }}</div>
@@ -56,7 +56,7 @@
             </div>
             <div class="tab-pane fade" id="publikasi" role="tabpanel" aria-labelledby="publikasi-tab">
                 @foreach($information->where('type', 'publikasi') as $info)
-                    <div class="card mb-3 shadow-sm rounded-pill px-4 py-3 d-flex flex-row align-items-center">
+                    <div class="card mb-3 shadow-sm rounded-pill px-4 py-3 d-flex flex-row align-items-center" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
                         <div class="me-3 text-primary" style="font-size:2rem;"><i class="fa fa-book"></i></div>
                         <div class="flex-grow-1">
                             <div class="fw-bold">{{ $info->title }}</div>
@@ -75,11 +75,11 @@
     </section>
 
     {{-- Charts Section --}}
-    <section class="my-5">
+    <section class="my-5" data-aos="fade-up">
         <h3>Tren Pencari Kerja</h3>
         <div class="row">
             @foreach($charts as $chart)
-                <div class="col-md-6 mb-4">
+                <div class="col-md-6 mb-4" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title">{{ $chart->title }}</h5>
@@ -93,7 +93,7 @@
     </section>
 
     {{-- Top 5 Lists Section as Carousel --}}
-    <section class="my-5">
+    <section class="my-5" data-aos="fade-up">
         <h3 class="text-center mb-4">Top 5 Lists</h3>
         <div class="card shadow rounded-4 p-4 mb-5" style="max-width: 1100px; margin: 0 auto;">
             <div id="top5Carousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="10000">
@@ -133,7 +133,7 @@
                             $items = $list ? json_decode($list->data_json, true)['items'] : [];
                             $date = $list ? $list->date : null;
                         @endphp
-                        <div class="carousel-item @if($loop->first) active @endif">
+                        <div class="carousel-item @if($loop->first) active @endif" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
                             <div class="row justify-content-center align-items-center">
                                 <div class="col-md-6">
                                     <canvas id="top5-chart-{{ $type }}" height="260"></canvas>
@@ -162,14 +162,14 @@
     </section>
 
     {{-- Contributions Section --}}
-    <section class="my-5">
+    <section class="my-5" data-aos="fade-up">
         <div class="text-center mb-2">
             <h2 class="fw-bold mb-1" style="font-size:2.5rem;">Kontribusi Pasker</h2>
             <h3 class="fw-bold mb-5" style="font-size:2rem;">Untuk Masyarakat Indonesia</h3>
         </div>
         <div class="row justify-content-center g-4">
             @foreach($contributions as $contrib)
-                <div class="col-12 col-md-6 col-lg-3 d-flex align-items-stretch">
+                <div class="col-12 col-md-6 col-lg-3 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
                     <div class="contrib-card-v3 p-4 w-100 h-100 mx-auto">
                         <div class="svg-icon-bg mb-4 d-flex align-items-center justify-content-center mx-auto">
                             @if($contrib->icon === 'fa-users')
@@ -198,14 +198,14 @@
     </section>
 
     {{-- Services Section --}}
-    <section class="my-5">
+    <section class="my-5" data-aos="fade-up">
         <div class="text-center mb-4">
             <h2 class="fw-bold" style="font-size:2.2rem;">Layanan Ketenagakerjaan</h2>
             <p class="text-muted mb-0">Berbagai layanan untuk mendukung pasar kerja Indonesia</p>
         </div>
         <div class="row justify-content-center g-4">
             @foreach($services as $service)
-                <div class="col-12 col-md-6 col-lg-4 d-flex align-items-stretch">
+                <div class="col-12 col-md-6 col-lg-4 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
                     <div class="service-card-v2 p-4 w-100 h-100 mx-auto">
                         <div class="service-icon-bg mb-4 d-flex align-items-center justify-content-center mx-auto">
                             <i class="fa {{ $service->icon }} fa-2x text-white"></i>
@@ -224,7 +224,7 @@
     </section>
 
     {{-- News Section --}}
-    <section class="my-5">
+    <section class="my-5" data-aos="fade-up">
         <h2 class="fw-bold text-center mb-4" style="font-size:2rem;">Berita Terkini</h2>
         <div class="row g-4 align-items-stretch">
             @php
@@ -274,15 +274,15 @@
         use Illuminate\Support\Collection;
         $testimonialChunks = $testimonials->chunk(4);
     @endphp
-    <section class="my-5">
+    <section class="my-5" data-aos="fade-up">
         <h3 class="fw-bold text-center mb-4" style="font-size:2rem;">Testimoni</h3>
         <div id="testiCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="7000">
             <div class="carousel-inner">
                 @foreach($testimonialChunks as $chunkIndex => $chunk)
-                    <div class="carousel-item @if($chunkIndex === 0) active @endif">
+                    <div class="carousel-item @if($chunkIndex === 0) active @endif" data-aos="fade-up" data-aos-delay="{{ $chunkIndex * 100 }}">
                         <div class="row justify-content-center g-4">
                             @foreach($chunk as $testi)
-                                <div class="col-12 col-md-6 col-lg-3 d-flex align-items-stretch">
+                                <div class="col-12 col-md-6 col-lg-3 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
                                     <div class="card h-100 shadow-sm border-0 rounded-4 p-3 text-center">
                                         @if($testi->photo_url)
                                             <img src="{{ $testi->photo_url }}" class="rounded-circle mx-auto mb-3" style="width:64px; height:64px; object-fit:cover;" alt="{{ $testi->name }}">
