@@ -242,6 +242,11 @@
                 </div>
             @endforeach
         </div>
+        <div class="text-center mt-4">
+            <a href="{{ route('news.index') }}" class="btn btn-outline-success rounded-pill px-4 py-2">
+                Lihat Semua Berita <i class="fa fa-arrow-right"></i>
+            </a>
+        </div>
     </section>
 
     {{-- Testimonials Section --}}
