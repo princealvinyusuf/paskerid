@@ -3,8 +3,8 @@
 @section('content')
 <div class="container-fluid p-0" style="background: #f4fbe8;">
     {{-- Hero Banner Section (Static) --}}
-    <section class="hero-banner position-relative text-white mb-0" style="background: url('{{ asset('images/hero-bg.jpg') }}') center center/cover no-repeat; min-height: 420px;">
-        <div class="container h-100 d-flex flex-column justify-content-center align-items-center">
+    <section class="hero-banner position-relative text-white mb-0 d-flex justify-content-center align-items-center h-100" style="background: url('{{ asset('images/hero-bg.jpg') }}') center center/cover no-repeat; min-height: 420px;">
+        <div>
             <h1 class="display-4 fw-bold mb-3 text-center" style="font-size:2.5rem;">Pasar Kerja Dalam Angka,<br>Untuk Negeri Berkarya</h1>
         </div>
     </section>
