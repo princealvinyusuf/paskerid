@@ -583,7 +583,7 @@
     .stat-hero-card {
         min-height: 140px;
         padding: 0.7rem 0.5rem 1rem 0.5rem;
-        max-width: 95%;
+        max-width: 70%;
     }
     .stat-hero-icon {
         width: 32px;
