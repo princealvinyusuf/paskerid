@@ -8,18 +8,6 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- FontAwesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    @push('head')
-    <style>
-    .navbar.navbar-scrolled {
-        background: #28a745 !important; /* Bootstrap green */
-        transition: background 0.3s;
-    }
-    .navbar.navbar-scrolled .nav-link,
-    .navbar.navbar-scrolled .navbar-brand {
-        color: #fff !important;
-    }
-    </style>
-    @endpush
     @yield('head')
 </head>
 <body>
@@ -48,6 +36,10 @@
     </nav>
     <main>
         @yield('content')
+        <!-- Back to Top Button -->
+        <button id="backToTopBtn" class="btn btn-success rounded-circle" style="position: fixed; bottom: 32px; right: 32px; display: none; z-index: 9999; width:48px; height:48px; box-shadow: 0 4px 16px rgba(40,167,69,0.18);">
+            <i class="fa fa-arrow-up"></i>
+        </button>
     </main>
     <footer class="bg-light text-center py-4 mt-5">
         <div class="container">
@@ -58,16 +50,40 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     @yield('scripts')
     <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var navbar = document.querySelector('.navbar');
-        window.addEventListener('scroll', function () {
-            if (window.scrollY > 50) {
-                navbar.classList.add('navbar-scrolled');
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    e.preventDefault();
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+        // Back to Top Button logic
+        const backToTopBtn = document.getElementById('backToTopBtn');
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 300) {
+                backToTopBtn.style.display = 'block';
             } else {
-                navbar.classList.remove('navbar-scrolled');
+                backToTopBtn.style.display = 'none';
             }
         });
-    });
+        backToTopBtn.addEventListener('click', function() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
     </script>
+    @push('head')
+    <style>
+    #backToTopBtn {
+        opacity: 0.85;
+        transition: opacity 0.2s, transform 0.2s;
+    }
+    #backToTopBtn:hover {
+        opacity: 1;
+        transform: scale(1.08);
+    }
+    </style>
+    @endpush
 </body>
 </html> 
