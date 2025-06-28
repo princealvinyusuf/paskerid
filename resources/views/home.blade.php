@@ -203,8 +203,8 @@
         <div class="row justify-content-center g-4">
             @foreach($contributions as $contrib)
                 <div class="col-12 col-md-6 col-lg-3 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
-                    <div class="contrib-card-v3 p-4 w-100 h-100 mx-auto">
-                        <div class="svg-icon-bg mb-4 d-flex align-items-center justify-content-center mx-auto">
+                    <div class="stat-card w-100 h-100 mx-auto d-flex flex-column align-items-center justify-content-center text-center">
+                        <div class="stat-icon mb-3">
                             @if($contrib->icon === 'fa-users')
                                 <!-- Example SVG for Matching -->
                                 <svg width="40" height="40" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="40" height="40" rx="10" fill="#4ecb8f"/><path d="M13 25a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm14 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM10 28v-1a4 4 0 0 1 4-4h.5m11 5v-1a4 4 0 0 0-4-4h-.5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -222,8 +222,8 @@
                                 <svg width="40" height="40"><rect width="40" height="40" rx="10" fill="#4ecb8f"/></svg>
                             @endif
                         </div>
-                        <h5 class="fw-bold mb-2 text-dark">{{ $contrib->title }}</h5>
-                        <p class="text-dark mb-0" style="font-size:1rem;">{{ $contrib->description }}</p>
+                        <div class="stat-title fw-bold mb-1" style="font-size:1.1rem; color:#187C19;">{{ $contrib->title }}</div>
+                        <div class="stat-desc text-muted mt-1" style="font-size:0.95rem;">{{ $contrib->description }}</div>
                     </div>
                 </div>
             @endforeach
