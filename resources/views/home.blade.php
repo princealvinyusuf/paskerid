@@ -141,11 +141,6 @@
                         'desc' => 'Memetakan konsentrasi pencari kerja secara geografis.',
                         'icon' => 'fa-map-marked-alt',
                     ],
-                    'talents' => [
-                        'title' => 'Top 5 Talenta dengan Lowongan Terbanyak',
-                        'desc' => 'Talenta yang paling banyak dibutuhkan di pasar kerja.',
-                        'icon' => 'fa-users',
-                    ],
                 ];
             @endphp
             @foreach($topListTypes as $type => $meta)
