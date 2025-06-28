@@ -85,6 +85,44 @@
     </script>
     @push('head')
     <style>
+    :root {
+        --primary-green: #187C19;
+        --secondary-green: #69B41E;
+        --accent-green: #8DC71E;
+        --light-green: #B8D53D;
+        --dark-green: #0D5B11;
+    }
+
+    .btn-success, .btn-primary {
+        background-color: var(--primary-green) !important;
+        border-color: var(--primary-green) !important;
+    }
+    .btn-success:hover, .btn-primary:hover {
+        background-color: var(--secondary-green) !important;
+        border-color: var(--secondary-green) !important;
+    }
+    .navbar, .sticky-top {
+        background-color: var(--primary-green) !important;
+    }
+    .navbar .nav-link, .navbar-brand {
+        color: #fff !important;
+    }
+    .navbar .nav-link.active, .navbar .nav-link:focus, .navbar .nav-link:hover {
+        color: var(--light-green) !important;
+    }
+    a, .text-success {
+        color: var(--primary-green) !important;
+    }
+    a:hover, .text-success:hover {
+        color: var(--secondary-green) !important;
+    }
+    .section-title {
+        color: var(--primary-green);
+    }
+    footer.bg-light {
+        background-color: var(--light-green) !important;
+        color: var(--dark-green) !important;
+    }
     #backToTopBtn {
         opacity: 0.85;
         transition: opacity 0.2s, transform 0.2s;
@@ -92,22 +130,6 @@
     #backToTopBtn:hover {
         opacity: 1;
         transform: scale(1.08);
-    }
-    .btn:focus, .btn:focus-visible {
-        outline: none !important;
-        box-shadow: 0 0 0 0.2rem rgba(40,167,69,0.25) !important;
-    }
-    .btn-success:focus, .btn-success:focus-visible, .btn-outline-success:focus, .btn-outline-success:focus-visible {
-        box-shadow: 0 0 0 0.25rem rgba(40,167,69,0.45) !important;
-    }
-    .btn-primary:focus, .btn-primary:focus-visible {
-        box-shadow: 0 0 0 0.25rem rgba(0,123,255,0.45) !important;
-    }
-    .nav-link:focus, .nav-link:focus-visible {
-        outline: none !important;
-        box-shadow: 0 2px 0 0 #28a745;
-        background: rgba(40,167,69,0.08);
-        border-radius: 0.5rem;
     }
     </style>
     @endpush

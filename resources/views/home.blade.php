@@ -7,7 +7,7 @@
         <div class="container h-100 d-flex flex-column justify-content-center align-items-center" style="min-height: 320px; background: rgba(0,0,0,0.4);">
             <h1 class="display-4 fw-bold mb-3 text-center">Selamat Datang di Paskerid</h1>
             <p class="lead mb-4 text-center">Platform data pasar kerja Indonesia terlengkap dan terpercaya.</p>
-            <a href="#informasi-terbaru" class="btn btn-primary btn-lg rounded-pill px-4 py-2" role="button" tabindex="0">Jelajahi Informasi</a>
+            <a href="#informasi-terbaru" class="btn btn-primary btn-lg">Jelajahi Informasi</a>
         </div>
     </section>
 
@@ -49,7 +49,7 @@
                             <div class="text-muted small">{{ indo_date($info->date) }}</div>
                         </div>
                         <div>
-                            <a href="{{ $info->file_url ?? '#' }}" class="btn btn-link text-success p-0 rounded-pill" target="_blank" role="button" tabindex="0"><i class="fa fa-arrow-right fa-lg"></i></a>
+                            <a href="{{ $info->file_url ?? '#' }}" class="btn btn-link text-success p-0" target="_blank"><i class="fa fa-arrow-right fa-lg"></i></a>
                         </div>
                     </div>
                 @endforeach
@@ -63,14 +63,14 @@
                             <div class="text-muted small">{{ indo_date($info->date) }}</div>
                         </div>
                         <div>
-                            <a href="{{ $info->file_url ?? '#' }}" class="btn btn-link text-success p-0 rounded-pill" target="_blank" role="button" tabindex="0"><i class="fa fa-arrow-right fa-lg"></i></a>
+                            <a href="{{ $info->file_url ?? '#' }}" class="btn btn-link text-success p-0" target="_blank"><i class="fa fa-arrow-right fa-lg"></i></a>
                         </div>
                     </div>
                 @endforeach
             </div>
         </div>
         <div class="text-center mt-4">
-            <a href="{{ route('informasi.index') }}" class="btn btn-outline-success rounded-pill px-4 py-2" role="button" tabindex="0">Lihat Semua <i class="fa fa-arrow-right"></i></a>
+            <a href="{{ route('informasi.index') }}" class="btn btn-outline-success rounded-pill px-4 py-2">Lihat Semua <i class="fa fa-arrow-right"></i></a>
         </div>
     </section>
 
@@ -214,7 +214,7 @@
                         <p class="text-dark mb-3 text-center" style="font-size:1rem;">{{ $service->description }}</p>
                         @if($service->link)
                             <div class="text-center mt-auto">
-                                <a href="{{ $service->link }}" target="_blank" class="btn btn-success rounded-pill px-4" role="button" tabindex="0">Kunjungi <i class="fa fa-arrow-right ms-1"></i></a>
+                                <a href="{{ $service->link }}" target="_blank" class="btn btn-success rounded-pill px-4">Kunjungi <i class="fa fa-arrow-right ms-1"></i></a>
                             </div>
                         @endif
                     </div>
@@ -263,7 +263,9 @@
             </div>
         </div>
         <div class="text-center mt-4">
-            <a href="{{ route('news.index') }}" class="btn btn-outline-success rounded-pill px-4 py-2" role="button" tabindex="0">Lihat Semua Berita <i class="fa fa-arrow-right"></i></a>
+            <a href="{{ route('news.index') }}" class="btn btn-outline-success rounded-pill px-4 py-2">
+                Lihat Semua Berita <i class="fa fa-arrow-right"></i>
+            </a>
         </div>
     </section>
 
@@ -462,6 +464,4 @@
     font-size: 1rem;
 }
 </style>
-@endpush
-
-<a href="{{ url('/') }}" class="btn btn-secondary rounded-pill px-4" role="button" tabindex="0">Kembali ke Beranda</a> 
+@endpush 
