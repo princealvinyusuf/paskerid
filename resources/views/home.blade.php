@@ -92,11 +92,14 @@
         <div class="row text-center justify-content-center">
             @foreach($statistics as $stat)
                 <div class="col-md-4 mb-3" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
-                    <div class="card shadow-sm">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ $stat->title }}</h5>
-                            <h2 class="display-4">{{ $stat->value }} <small>{{ $stat->unit }}</small></h2>
-                            <p class="card-text">{{ $stat->description }}</p>
+                    <div class="card stat-hero-card shadow-sm border-0 h-100 d-flex flex-column align-items-center justify-content-center">
+                        <div class="stat-hero-icon mb-3 mt-4">
+                            <i class="fa fa-chart-bar fa-2x"></i>
+                        </div>
+                        <div class="card-body d-flex flex-column align-items-center justify-content-center">
+                            <h5 class="card-title fw-bold mb-1" style="color:#187C19;">{{ $stat->title }}</h5>
+                            <h2 class="display-4 fw-bold mb-1" style="color:#222;">{{ $stat->value }} <small style="font-size:1.2rem;">{{ $stat->unit }}</small></h2>
+                            <p class="card-text text-muted" style="font-size:1rem;">{{ $stat->description }}</p>
                         </div>
                     </div>
                 </div>
@@ -543,6 +546,48 @@
 .stat-dot.active {
     background: #187C19;
     opacity: 1;
+}
+.stat-hero-card {
+    border-radius: 1.5rem;
+    background: #fff;
+    box-shadow: 0 8px 32px 0 rgba(40,167,69,0.10), 0 1.5px 6px 0 rgba(0,0,0,0.04);
+    padding: 1.5rem 1.5rem 2rem 1.5rem;
+    transition: box-shadow 0.2s, transform 0.2s;
+    min-height: 320px;
+    position: relative;
+}
+.stat-hero-card:hover {
+    box-shadow: 0 16px 48px 0 rgba(40,167,69,0.18), 0 3px 12px 0 rgba(0,0,0,0.08);
+    transform: translateY(-4px) scale(1.03);
+    z-index: 2;
+}
+.stat-hero-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #B8D53D 0%, #69B41E 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 2rem;
+    box-shadow: 0 2px 8px 0 rgba(40,167,69,0.10);
+    position: absolute;
+    top: -28px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+@media (max-width: 767px) {
+    .stat-hero-card {
+        min-height: 220px;
+        padding: 1.2rem 0.7rem 1.5rem 0.7rem;
+    }
+    .stat-hero-icon {
+        width: 44px;
+        height: 44px;
+        font-size: 1.3rem;
+        top: -22px;
+    }
 }
 </style>
 @endpush 
