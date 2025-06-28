@@ -199,19 +199,24 @@
 
     {{-- Services Section --}}
     <section class="my-5">
-        <h3>Layanan Ketenagakerjaan</h3>
-        <div class="row">
+        <div class="text-center mb-4">
+            <h2 class="fw-bold" style="font-size:2.2rem;">Layanan Ketenagakerjaan</h2>
+            <p class="text-muted mb-0">Berbagai layanan untuk mendukung pasar kerja Indonesia</p>
+        </div>
+        <div class="row justify-content-center g-4">
             @foreach($services as $service)
-                <div class="col-md-4 mb-4">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <i class="fa {{ $service->icon }} fa-2x mb-2"></i>
-                            <h6 class="card-title">{{ $service->title }}</h6>
-                            <p>{{ $service->description }}</p>
-                            @if($service->link)
-                                <a href="{{ $service->link }}" target="_blank">Kunjungi</a>
-                            @endif
+                <div class="col-12 col-md-6 col-lg-4 d-flex align-items-stretch">
+                    <div class="service-card-v2 p-4 w-100 h-100 mx-auto">
+                        <div class="service-icon-bg mb-4 d-flex align-items-center justify-content-center mx-auto">
+                            <i class="fa {{ $service->icon }} fa-2x text-white"></i>
                         </div>
+                        <h5 class="fw-bold mb-2 text-dark text-center">{{ $service->title }}</h5>
+                        <p class="text-dark mb-3 text-center" style="font-size:1rem;">{{ $service->description }}</p>
+                        @if($service->link)
+                            <div class="text-center mt-auto">
+                                <a href="{{ $service->link }}" target="_blank" class="btn btn-success rounded-pill px-4">Kunjungi <i class="fa fa-arrow-right ms-1"></i></a>
+                            </div>
+                        @endif
                     </div>
                 </div>
             @endforeach
@@ -347,20 +352,19 @@
 .contrib-card-v3 {
     border-radius: 1.5rem;
     background: #fff;
-    /* Extremely visible green shadow and a green border for debugging */
-    box-shadow: 0 12px 48px 0 rgba(76,203,143,0.8), 0 4px 24px 0 rgba(76,203,143,0.7);
-    border: 2px solid #4ecb8f;
-    transition: box-shadow 0.2s, transform 0.2s, border 0.2s;
+    /* Stronger, more visible green shadow */
+    box-shadow: 0 8px 32px 0 rgba(76,203,143,0.35), 0 1.5px 6px 0 rgba(0,0,0,0.04);
+    transition: box-shadow 0.2s, transform 0.2s;
     min-height: 340px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
+    border: none;
     padding: 2rem 1.5rem;
 }
 .contrib-card-v3:hover {
-    box-shadow: 0 24px 64px 0 rgba(76,203,143,1), 0 8px 32px 0 rgba(76,203,143,0.9);
-    border: 2.5px solid #4ecb8f;
+    box-shadow: 0 16px 48px 0 rgba(76,203,143,0.45), 0 3px 12px 0 rgba(0,0,0,0.08);
     transform: translateY(-6px) scale(1.03);
     z-index: 2;
 }
@@ -369,6 +373,34 @@
     height: 64px;
     border-radius: 16px;
     background: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+}
+.service-card-v2 {
+    border-radius: 1.5rem;
+    background: #fff;
+    box-shadow: 0 8px 32px 0 rgba(40,167,69,0.13), 0 1.5px 6px 0 rgba(0,0,0,0.04);
+    transition: box-shadow 0.2s, transform 0.2s;
+    min-height: 340px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    border: none;
+    padding: 2rem 1.5rem;
+}
+.service-card-v2:hover {
+    box-shadow: 0 16px 48px 0 rgba(40,167,69,0.22), 0 3px 12px 0 rgba(0,0,0,0.08);
+    transform: translateY(-6px) scale(1.03);
+    z-index: 2;
+}
+.service-icon-bg {
+    width: 64px;
+    height: 64px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #4ecb8f 0%, #28a745 100%);
     display: flex;
     align-items: center;
     justify-content: center;
