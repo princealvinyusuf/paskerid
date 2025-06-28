@@ -225,22 +225,42 @@
 
     {{-- News Section --}}
     <section class="my-5">
-        <h3>Berita Terkini</h3>
-        <div class="row">
-            @foreach($news as $item)
-                <div class="col-md-4 mb-4">
-                    <div class="card h-100">
-                        @if($item->image_url)
-                            <img src="{{ $item->image_url }}" class="card-img-top" alt="{{ $item->title }}">
+        <h2 class="fw-bold text-center mb-4" style="font-size:2rem;">Berita Terkini</h2>
+        <div class="row g-4 align-items-stretch">
+            @php
+                $featuredNews = $news->first();
+                $otherNews = $news->slice(1, 2);
+            @endphp
+            <div class="col-lg-7">
+                @if($featuredNews)
+                    <div class="position-relative h-100 rounded-4 overflow-hidden shadow-sm" style="min-height:340px;">
+                        @if($featuredNews->image_url)
+                            <img src="{{ $featuredNews->image_url }}" alt="{{ $featuredNews->title }}" class="w-100 h-100 object-fit-cover" style="min-height:340px;">
                         @endif
-                        <div class="card-body">
-                            <h6 class="card-title">{{ $item->title }}</h6>
-                            <p>{{ $item->content }}</p>
-                            <small>{{ $item->date }} | {{ $item->author }}</small>
+                        <div class="position-absolute bottom-0 start-0 w-100 p-4" style="background: linear-gradient(0deg,rgba(0,0,0,0.7) 70%,rgba(0,0,0,0.1) 100%);">
+                            <div class="text-white mb-1" style="font-size:1rem;">{{ indo_date($featuredNews->date) }}</div>
+                            <h3 class="fw-bold text-white mb-2" style="font-size:1.5rem;">{{ $featuredNews->title }}</h3>
+                            <p class="text-white mb-0" style="font-size:1.1rem;">{{ Str::limit($featuredNews->content, 120) }}</p>
                         </div>
                     </div>
-                </div>
-            @endforeach
+                @endif
+            </div>
+            <div class="col-lg-5 d-flex flex-column gap-4">
+                @foreach($otherNews as $item)
+                    <div class="d-flex flex-row rounded-4 shadow-sm bg-white overflow-hidden h-100" style="min-height:150px;">
+                        @if($item->image_url)
+                            <img src="{{ $item->image_url }}" alt="{{ $item->title }}" class="object-fit-cover" style="width:160px; height:100%; object-fit:cover;">
+                        @endif
+                        <div class="p-3 d-flex flex-column justify-content-between flex-grow-1">
+                            <div>
+                                <div class="text-muted mb-1" style="font-size:0.95rem;">{{ indo_date($item->date) }}</div>
+                                <div class="fw-bold mb-1" style="font-size:1.1rem;">{{ $item->title }}</div>
+                                <div class="text-muted" style="font-size:1rem;">{{ Str::limit($item->content, 80) }}</div>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
         </div>
         <div class="text-center mt-4">
             <a href="{{ route('news.index') }}" class="btn btn-outline-success rounded-pill px-4 py-2">
@@ -410,6 +430,9 @@
     align-items: center;
     justify-content: center;
     margin-bottom: 1rem;
+}
+.object-fit-cover {
+    object-fit: cover;
 }
 </style>
 @endpush 
