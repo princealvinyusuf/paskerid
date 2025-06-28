@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container-fluid p-0" style="background: #000000;">
+<div class="container-fluid p-0" style="background: #f4fbe8;">
     {{-- Hero Banner Section (Static) --}}
     <section class="hero-banner position-relative text-white mb-0" style="background: url('{{ asset('images/hero-bg.jpg') }}') center center/cover no-repeat; min-height: 340px;">
         <div class="container h-100 d-flex flex-column justify-content-center align-items-center" style="min-height: 340px; background: rgba(0,0,0,0.35);">
@@ -51,7 +51,7 @@
                 <button class="nav-link" id="publikasi-tab" data-bs-toggle="tab" data-bs-target="#publikasi" type="button" role="tab" aria-controls="publikasi" aria-selected="false">Publikasi</button>
             </li>
         </ul>
-        <div class="tab-content">
+        <div class="tab-content" style="padding-left:20rem; padding-right:20rem;">
             <div class="tab-pane fade show active" id="statistik" role="tabpanel" aria-labelledby="statistik-tab">
                 @foreach($information->where('type', 'statistik') as $info)
                     <div class="card mb-3 shadow-sm rounded-pill px-4 py-3 d-flex flex-row align-items-center" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
