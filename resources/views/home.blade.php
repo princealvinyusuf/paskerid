@@ -407,6 +407,38 @@
         });
 
         updateDots();
+
+        // --- Chart.js for Trend Pencari Kerja ---
+        const chartsData = @json($charts->mapWithKeys(function($chart) {
+            return [$chart->id => json_decode($chart->data_json)];
+        }));
+        Object.entries(chartsData).forEach(([id, chartData]) => {
+            const ctx = document.getElementById('chart-' + id);
+            if (ctx && chartData) {
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: chartData.labels,
+                        datasets: [{
+                            label: '',
+                            data: chartData.data,
+                            backgroundColor: 'rgba(40, 167, 69, 0.7)',
+                            borderColor: 'rgba(40, 167, 69, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: { display: false },
+                        },
+                        scales: {
+                            y: { beginAtZero: true }
+                        }
+                    }
+                });
+            }
+        });
     });
     </script>
 @endsection
