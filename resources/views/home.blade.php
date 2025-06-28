@@ -551,7 +551,7 @@
     border-radius: 5rem;
     background: #fff;
     /* Use Bootstrap's shadow for consistency with Top 5 Lists */
-    box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
+    box-shadow: 0 2.5rem 1rem rgba(0,0,0,.30)!important;
     border: 30px solidrgb(104, 230, 167);
     padding: 1rem 1rem 1.5rem 1rem;
     transition: box-shadow 0.2s, transform 0.2s;
@@ -561,7 +561,7 @@
     position: relative;
 }
 .stat-hero-card:hover {
-    box-shadow: 0 1rem 3rem rgba(0,0,0,.175)!important;
+    box-shadow: 0 2rem 3rem rgba(0,0,0,.200)!important;
     transform: translateY(-4px) scale(1.04);
     z-index: 2;
 }
