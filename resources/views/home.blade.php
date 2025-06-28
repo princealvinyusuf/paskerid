@@ -161,12 +161,12 @@
                 @endphp
                 <div class="col-12 col-md-6 col-lg-3 d-flex align-items-stretch">
                     <div class="card shadow-sm rounded-4 border-0 w-100 h-100 p-3 d-flex flex-column align-items-center justify-content-center text-center">
-                        <canvas id="top5-chart-{{ $type }}" height="180"></canvas>
                         <h4 class="fw-bold mb-2 mt-3" style="font-size:1.1rem;"><i class="fa {{ $meta['icon'] }} me-2 text-success"></i>{{ $meta['title'] }}</h4>
                         <p class="mb-2" style="font-size:0.97rem;">{{ $meta['desc'] }}</p>
                         @if($date)
                             <div class="text-muted small">Data diperbarui pada {{ indo_date($date) }}</div>
                         @endif
+                        <canvas id="top5-chart-{{ $type }}" height="180"></canvas>
                     </div>
                 </div>
             @endforeach
