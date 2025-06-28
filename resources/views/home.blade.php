@@ -109,7 +109,7 @@
 
     {{-- Charts Section --}}
     <section class="my-5" data-aos="fade-up" style="padding-left:5rem; padding-right:5rem;">
-        <h3>Tren Pencari Kerja</h3>
+        <h3 class="text-center mb-4">Trend Pencari Kerja</h3>
         <div class="row">
             @foreach($charts as $chart)
                 <div class="col-md-6 col-lg-4 mb-4" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
