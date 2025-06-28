@@ -16,3 +16,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::resource('news', App\Http\Controllers\Admin\NewsController::class);
     // You can add more resources here later (testimonials, services, etc.)
 });
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth'])->name('dashboard');
