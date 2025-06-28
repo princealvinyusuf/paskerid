@@ -3,7 +3,7 @@
 @section('content')
 <div class="container-fluid p-0" style="background: #f4fbe8;">
     {{-- Hero Banner Section (Static) --}}
-    <section class="hero-banner position-relative text-white mb-0" style="background: url('{{ asset('images/hero-bg.jpg') }}') center center/cover no-repeat; min-height: 340px;">
+    <section class="hero-banner position-relative text-white mb-0" style="background: url('{{ asset('images/hero-bg.jpg') }}') center center/cover no-repeat; min-height: 420px;">
         <div class="container h-100 d-flex flex-column justify-content-center align-items-center">
             <h1 class="display-4 fw-bold mb-3 text-center" style="font-size:2.5rem;">Pasar Kerja Dalam Angka,<br>Untuk Negeri Berkarya</h1>
         </div>
@@ -241,7 +241,7 @@
                 <div class="col-12 col-md-6 col-lg-4 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
                     <div class="card shadow rounded-4 border-0 p-4 w-100 h-100 mx-auto d-flex flex-column align-items-center justify-content-center text-center">
                         <div class="service-icon-bg mb-4 d-flex align-items-center justify-content-center mx-auto">
-                            <i class="fa {{ $service->icon }} fa-2x text-white"></i>
+                            <i class="fa {{ $service->icon }} fa-2x text-success"></i>
                         </div>
                         <h5 class="fw-bold mb-2 text-dark text-center">{{ $service->title }}</h5>
                         <p class="text-dark mb-3 text-center" style="font-size:1rem;">{{ $service->description }}</p>
