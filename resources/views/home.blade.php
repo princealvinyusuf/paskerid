@@ -474,9 +474,10 @@
     font-size: 1rem;
 }
 .stat-carousel-section {
-    z-index: 10;
-    margin-top: -90px;
-    margin-bottom: 2rem;
+    background: #f3f4f6; /* very light gray, like your image */
+    border-radius: 2rem;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
 }
 .swiper {
     width: 100%;
@@ -489,24 +490,23 @@
     display: block;
 }
 .stat-card {
-    min-height: 220px;
-    width: 240px;
-    border-radius: 1.25rem;
     background: #fff;
-    border: 1.5px solid #e0f2e9; /* subtle green border */
-    box-shadow: 0 8px 32px 0 rgba(40,167,69,0.13), 0 1.5px 6px 0 rgba(0,0,0,0.04);
-    transition: box-shadow 0.2s, border-color 0.2s, transform 0.2s;
-    padding: 2rem 1.5rem;
+    border: none;
+    border-radius: 1.5rem;
+    box-shadow: 0 4px 24px 0 rgba(0,0,0,0.08), 0 1.5px 6px 0 rgba(0,0,0,0.04);
+    min-height: 260px;
+    width: 260px;
+    padding: 2.5rem 1.5rem;
     margin: 0.5rem 0;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    transition: box-shadow 0.2s, transform 0.2s;
 }
 .stat-card:hover {
-    box-shadow: 0 16px 48px 0 rgba(40,167,69,0.18), 0 3px 12px 0 rgba(0,0,0,0.08);
-    border-color: #69B41E;
-    transform: translateY(-4px) scale(1.04);
+    box-shadow: 0 12px 32px 0 rgba(0,0,0,0.13), 0 3px 12px 0 rgba(0,0,0,0.08);
+    transform: translateY(-4px) scale(1.03);
     z-index: 2;
 }
 .stat-icon {
