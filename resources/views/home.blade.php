@@ -92,7 +92,7 @@
         <div class="row text-center justify-content-center px-5 px-md-6" style="padding-left:20rem; padding-right:20rem;">
             @foreach($statistics as $stat)
                 <div class="col-md-4 mb-3" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
-                    <div class="card stat-hero-card shadow-sm border-0 h-100 d-flex flex-column align-items-center justify-content-center">
+                    <div class="card shadow rounded-4 stat-hero-card border-0 h-100 d-flex flex-column align-items-center justify-content-center">
                         <div class="stat-hero-icon mb-3 mt-4">
                             <i class="fa fa-chart-bar fa-2x"></i>
                         </div>
@@ -548,11 +548,7 @@
     opacity: 1;
 }
 .stat-hero-card {
-    border-radius: 50rem;
-    background: #fff;
-    /* Use Bootstrap's shadow for consistency with Top 5 Lists */
-    box-shadow: 0 2.5rem 1rem rgba(0,0,0,.30)!important;
-    border: 30px solidrgb(104, 230, 167);
+    border-radius: 2rem;
     padding: 1rem 1rem 1.5rem 1rem;
     transition: box-shadow 0.2s, transform 0.2s;
     min-height: 200px;
@@ -561,7 +557,6 @@
     position: relative;
 }
 .stat-hero-card:hover {
-    box-shadow: 0 2rem 3rem rgba(0,0,0,.200)!important;
     transform: translateY(-4px) scale(1.04);
     z-index: 2;
 }
