@@ -24,7 +24,6 @@
                     <td>{{ $item->author }}</td>
                     <td>
                         <a href="{{ route('admin.news.edit', $item) }}" class="btn btn-sm btn-primary">Edit</a>
-                        <a href="{{ route('admin.news.show', $item) }}" class="btn btn-sm btn-info">Lihat</a>
                         <form action="{{ route('admin.news.destroy', $item) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin hapus berita ini?')">
                             @csrf
                             @method('DELETE')
