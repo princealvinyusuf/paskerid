@@ -12,10 +12,13 @@
     {{-- Statistic Cards Carousel (Floating over Banner) --}}
     <section class="stat-carousel-section position-relative" style="z-index: 10; margin-top: -90px;">
         <div class="container position-relative" style="max-width:1200px;">
-            <div class="stat-slick">
-                @foreach($statistics as $stat)
-                    <div>
-                        <div class="stat-card text-center">
+            <div class="d-flex align-items-center position-relative">
+                <button id="statScrollPrev" class="btn btn-light shadow rounded-circle position-absolute start-0 translate-middle-y" style="top:50%; z-index:2; width:40px; height:40px;">
+                    <i class="fa fa-chevron-left"></i>
+                </button>
+                <div id="statScrollRow" class="d-flex overflow-auto px-5" style="scroll-behavior:smooth; gap:16px; width:100%;">
+                    @foreach($statistics as $stat)
+                        <div class="stat-card text-center flex-shrink-0" style="width:240px;">
                             <div class="stat-icon mb-3">
                                 <i class="fa fa-chart-bar fa-2x text-success"></i>
                             </div>
@@ -25,9 +28,13 @@
                                 <div class="stat-desc text-muted mt-1" style="font-size:0.95rem;">{{ $stat->description }}</div>
                             @endif
                         </div>
-                    </div>
-                @endforeach
+                    @endforeach
+                </div>
+                <button id="statScrollNext" class="btn btn-light shadow rounded-circle position-absolute end-0 translate-middle-y" style="top:50%; z-index:2; width:40px; height:40px;">
+                    <i class="fa fa-chevron-right"></i>
+                </button>
             </div>
+            <div class="d-flex justify-content-center mt-3" id="statDots"></div>
         </div>
     </section>
 
@@ -342,98 +349,59 @@
 @section('scripts')
     @parent
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- jQuery (required for Slick) -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- Slick JS -->
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            @foreach($charts as $chart)
-                const ctx{{ $chart->id }} = document.getElementById('chart-{{ $chart->id }}').getContext('2d');
-                const data{{ $chart->id }} = @json(json_decode($chart->data_json, true));
-                new Chart(ctx{{ $chart->id }}, {
-                    type: '{{ $chart->chart_type }}',
-                    data: {
-                        labels: data{{ $chart->id }}.labels,
-                        datasets: [{
-                            label: '{{ $chart->title }}',
-                            data: data{{ $chart->id }}.data,
-                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                            borderColor: 'rgba(54, 162, 235, 1)',
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        plugins: {
-                            legend: { display: false },
-                        },
-                        scales: {
-                            y: { beginAtZero: true }
-                        }
-                    }
+    document.addEventListener('DOMContentLoaded', function () {
+        const row = document.getElementById('statScrollRow');
+        const prev = document.getElementById('statScrollPrev');
+        const next = document.getElementById('statScrollNext');
+        const dots = document.getElementById('statDots');
+        const cards = row.querySelectorAll('.stat-card');
+        const cardWidth = 256; // width + gap
+        let visible = Math.floor(row.offsetWidth / cardWidth) || 1;
+        const total = cards.length;
+        let current = 0;
+
+        function updateDots() {
+            dots.innerHTML = '';
+            visible = Math.floor(row.offsetWidth / cardWidth) || 1;
+            const dotCount = Math.ceil(total / visible);
+            for (let i = 0; i < dotCount; i++) {
+                const dot = document.createElement('span');
+                dot.className = 'stat-dot' + (i === Math.floor(current / visible) ? ' active' : '');
+                dot.addEventListener('click', () => {
+                    row.scrollTo({ left: i * cardWidth * visible, behavior: 'smooth' });
+                    current = i * visible;
+                    updateDots();
                 });
-            @endforeach
-            @php
-                $topListTypes = ['skills', 'provinces', 'talents', 'sectors'];
-            @endphp
-            @foreach($topListTypes as $type)
-                @php
-                    $list = $topLists->where('type', $type)->first();
-                    $items = $list ? json_decode($list->data_json, true)['items'] : [];
-                @endphp
-                const ctxTop5{{ ucfirst($type) }} = document.getElementById('top5-chart-{{ $type }}');
-                if (ctxTop5{{ ucfirst($type) }}) {
-                    new Chart(ctxTop5{{ ucfirst($type) }}, {
-                        type: 'bar',
-                        data: {
-                            labels: {!! json_encode(array_column($items, 'name')) !!},
-                            datasets: [{
-                                data: {!! json_encode(array_column($items, 'count')) !!},
-                                backgroundColor: 'rgba(40, 167, 69, 0.2)',
-                                borderColor: 'rgba(40, 167, 69, 1)',
-                                borderWidth: 2,
-                                borderRadius: 8,
-                                maxBarThickness: 24,
-                            }]
-                        },
-                        options: {
-                            indexAxis: 'y',
-                            plugins: {
-                                legend: { display: false },
-                                tooltip: { enabled: true }
-                            },
-                            scales: {
-                                x: {
-                                    beginAtZero: true,
-                                    ticks: { color: '#333' },
-                                    grid: { display: false }
-                                },
-                                y: {
-                                    ticks: { color: '#333' },
-                                    grid: { display: false }
-                                }
-                            }
-                        }
-                    });
-                }
-            @endforeach
-            // Swiper for statistics
-            $(document).ready(function(){
-                $('.stat-slick').slick({
-                    slidesToShow: 4,
-                    slidesToScroll: 1,
-                    dots: true,
-                    arrows: true,
-                    infinite: true,
-                    responsive: [
-                        { breakpoint: 1200, settings: { slidesToShow: 3 } },
-                        { breakpoint: 992, settings: { slidesToShow: 2 } },
-                        { breakpoint: 576, settings: { slidesToShow: 1 } }
-                    ]
-                });
-            });
+                dots.appendChild(dot);
+            }
+        }
+
+        function scrollToCurrent() {
+            row.scrollTo({ left: current * cardWidth, behavior: 'smooth' });
+            updateDots();
+        }
+
+        prev.addEventListener('click', () => {
+            current = Math.max(0, current - visible);
+            scrollToCurrent();
         });
+        next.addEventListener('click', () => {
+            current = Math.min(total - visible, current + visible);
+            scrollToCurrent();
+        });
+
+        row.addEventListener('scroll', () => {
+            current = Math.round(row.scrollLeft / cardWidth);
+            updateDots();
+        });
+
+        window.addEventListener('resize', () => {
+            updateDots();
+        });
+
+        updateDots();
+    });
     </script>
 @endsection
 
@@ -521,14 +489,13 @@
     display: block;
 }
 .stat-card {
-    width: 260px;
     min-height: 220px;
     border-radius: 1.5rem;
     background: #fff;
     box-shadow: 0 8px 32px 0 rgba(40,167,69,0.10), 0 1.5px 6px 0 rgba(0,0,0,0.04);
     transition: box-shadow 0.2s, transform 0.2s;
     padding: 2rem 1.5rem;
-    margin: 0.5rem auto;
+    margin: 0.5rem 0;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -561,6 +528,23 @@
 .swiper-button-next, .swiper-button-prev {
     color: var(--primary-green);
     top: 45%;
+}
+#statScrollRow::-webkit-scrollbar {
+    display: none;
+}
+.stat-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #B8D53D;
+    margin: 0 4px;
+    opacity: 0.4;
+    transition: opacity 0.2s;
+    display: inline-block;
+}
+.stat-dot.active {
+    background: #187C19;
+    opacity: 1;
 }
 </style>
 @endpush 
