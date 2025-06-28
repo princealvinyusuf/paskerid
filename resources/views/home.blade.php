@@ -16,7 +16,7 @@
                 <div class="swiper-wrapper">
                     @foreach($statistics as $stat)
                         <div class="swiper-slide">
-                            <div class="stat-card shadow rounded-4 p-4 h-100 d-flex flex-column align-items-center justify-content-between text-center bg-white">
+                            <div class="stat-card text-center">
                                 <div class="stat-icon mb-3">
                                     <i class="fa fa-chart-bar fa-2x text-success"></i>
                                 </div>
@@ -29,10 +29,8 @@
                         </div>
                     @endforeach
                 </div>
-                <!-- Add Arrows -->
                 <div class="swiper-button-next"></div>
                 <div class="swiper-button-prev"></div>
-                <!-- Add Pagination -->
                 <div class="swiper-pagination"></div>
             </div>
         </div>
