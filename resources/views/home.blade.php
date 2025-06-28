@@ -231,7 +231,7 @@
     </section>
 
     {{-- Services Section --}}
-    <section class="my-5" data-aos="fade-up">
+    <section class="my-5" data-aos="fade-up" style="padding-left:10rem; padding-right:10rem;">
         <div class="text-center mb-4">
             <h2 class="fw-bold" style="font-size:2.2rem;">Layanan Ketenagakerjaan</h2>
             <p class="text-muted mb-0">Berbagai layanan untuk mendukung pasar kerja Indonesia</p>
@@ -239,7 +239,7 @@
         <div class="row justify-content-center g-4">
             @foreach($services as $service)
                 <div class="col-12 col-md-6 col-lg-4 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
-                    <div class="service-card-v2 p-4 w-100 h-100 mx-auto">
+                    <div class="card shadow rounded-4 border-0 p-4 w-100 h-100 mx-auto d-flex flex-column align-items-center justify-content-center text-center">
                         <div class="service-icon-bg mb-4 d-flex align-items-center justify-content-center mx-auto">
                             <i class="fa {{ $service->icon }} fa-2x text-white"></i>
                         </div>
