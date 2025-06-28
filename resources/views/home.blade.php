@@ -40,23 +40,6 @@
         </div>
     </section>
 
-    {{-- Hero Section: Statistics --}}
-    <section class="hero my-5" data-aos="fade-up">
-        <div class="row text-center justify-content-center">
-            @foreach($statistics as $stat)
-                <div class="col-md-4 mb-3" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
-                    <div class="card shadow-sm">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ $stat->title }}</h5>
-                            <h2 class="display-4">{{ $stat->value }} <small>{{ $stat->unit }}</small></h2>
-                            <p class="card-text">{{ $stat->description }}</p>
-                        </div>
-                    </div>
-                </div>
-            @endforeach
-        </div>
-    </section>
-
     {{-- Informasi Terbaru --}}
     <section class="my-5" id="informasi-terbaru" data-aos="fade-up">
         <h3 class="text-center mb-4">Informasi Terbaru</h3>
@@ -100,6 +83,23 @@
         </div>
         <div class="text-center mt-4">
             <a href="{{ route('informasi.index') }}" class="btn btn-outline-success rounded-pill px-4 py-2">Lihat Semua <i class="fa fa-arrow-right"></i></a>
+        </div>
+    </section>
+
+    {{-- Hero Section: Statistics --}}
+    <section class="hero my-5" data-aos="fade-up">
+        <div class="row text-center justify-content-center">
+            @foreach($statistics as $stat)
+                <div class="col-md-4 mb-3" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ $stat->title }}</h5>
+                            <h2 class="display-4">{{ $stat->value }} <small>{{ $stat->unit }}</small></h2>
+                            <p class="card-text">{{ $stat->description }}</p>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
         </div>
     </section>
 
