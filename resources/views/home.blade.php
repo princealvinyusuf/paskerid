@@ -257,7 +257,7 @@
     </section>
 
     {{-- News Section --}}
-    <section class="my-5" data-aos="fade-up">
+    <section class="my-5" data-aos="fade-up" style="padding-left:10rem; padding-right:10rem;">
         <h2 class="fw-bold text-center mb-4" style="font-size:2rem;">Berita Terkini</h2>
         <div class="row g-4 align-items-stretch">
             @php
