@@ -41,9 +41,9 @@
     </section>
 
     {{-- Informasi Terbaru --}}
-    <section class="my-5" id="informasi-terbaru" data-aos="fade-up">
+    <section class="my-5" id="informasi-terbaru" data-aos="fade-up" style="padding-left:20rem; padding-right:20rem;">
         <h3 class="text-center mb-4">Informasi Terbaru</h3>
-        <ul class="nav nav-tabs justify-content-center mb-4" id="infoTab" role="tablist" style="padding-left:20rem; padding-right:20rem;">
+        <ul class="nav nav-tabs justify-content-center mb-4" id="infoTab" role="tablist" >
             <li class="nav-item" role="presentation">
                 <button class="nav-link active" id="statistik-tab" data-bs-toggle="tab" data-bs-target="#statistik" type="button" role="tab" aria-controls="statistik" aria-selected="true">Tabel Statistik</button>
             </li>
