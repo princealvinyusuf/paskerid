@@ -552,7 +552,7 @@
     background: #fff;
     /* Use Bootstrap's shadow for consistency with Top 5 Lists */
     box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
-    border: 10px solidrgb(104, 230, 167);
+    border: 30px solidrgb(104, 230, 167);
     padding: 1rem 1rem 1.5rem 1rem;
     transition: box-shadow 0.2s, transform 0.2s;
     min-height: 200px;
