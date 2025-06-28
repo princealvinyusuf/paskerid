@@ -439,6 +439,47 @@
                 });
             }
         });
+
+        // --- Chart.js for Top 5 Section ---
+        const top5Data = {
+            @foreach($topListTypes as $type => $meta)
+                @php
+                    $list = $topLists->where('type', $type)->first();
+                    $items = $list ? json_decode($list->data_json, true)['items'] : [];
+                @endphp
+                '{{ $type }}': {
+                    labels: {!! json_encode(collect($items)->pluck('name')) !!},
+                    data: {!! json_encode(collect($items)->pluck('count')) !!}
+                },
+            @endforeach
+        };
+        Object.entries(top5Data).forEach(([type, chartData]) => {
+            const ctx = document.getElementById('top5-chart-' + type);
+            if (ctx && chartData.labels.length) {
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: chartData.labels,
+                        datasets: [{
+                            label: '',
+                            data: chartData.data,
+                            backgroundColor: 'rgba(40, 167, 69, 0.7)',
+                            borderColor: 'rgba(40, 167, 69, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: { display: false },
+                        },
+                        scales: {
+                            y: { beginAtZero: true }
+                        }
+                    }
+                });
+            }
+        });
     });
     </script>
 @endsection
