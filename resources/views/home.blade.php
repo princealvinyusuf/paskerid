@@ -18,7 +18,7 @@
                 </button>
                 <div id="statScrollRow" class="d-flex overflow-auto px-5" style="scroll-behavior:smooth; gap:16px; width:100%;">
                     @foreach($statistics as $stat)
-                        <div class="card shadow-sm stat-card text-center flex-shrink-0" style="width:260px;">
+                        <div class="card shadow-sm stat-card text-center flex-shrink-0" style="width:90vw; max-width:260px; min-width:180px;">
                             <div class="card-body d-flex flex-column align-items-center justify-content-center">
                                 <div class="stat-icon mb-3">
                                     <i class="fa fa-chart-bar fa-2x text-success"></i>
@@ -41,7 +41,7 @@
     </section>
 
     {{-- Informasi Terbaru --}}
-    <section class="my-5" id="informasi-terbaru" data-aos="fade-up" style="padding-left:10rem; padding-right:10rem;">
+    <section class="my-5 px-2 px-md-4 px-lg-5" id="informasi-terbaru" data-aos="fade-up">
         <h3 class="text-center mb-4">Informasi Terbaru</h3>
         <ul class="nav nav-tabs justify-content-center mb-4" id="infoTab" role="tablist" >
             <li class="nav-item" role="presentation">
@@ -87,7 +87,7 @@
     </section>
 
     {{-- Hero Section: Statistics --}}
-    <section class="hero my-5" data-aos="fade-up" style="padding-left:10rem; padding-right:10rem;">
+    <section class="hero my-5 px-2 px-md-4 px-lg-5" data-aos="fade-up">
         <h3 class="text-center mb-4">Pasar Kerja Indonesia Dalam Angka</h3>
         <div class="row text-center justify-content-center px-5 px-md-6" >
             @foreach($statistics as $stat)
@@ -108,7 +108,7 @@
     </section>
 
     {{-- Charts Section --}}
-    <section class="my-5" data-aos="fade-up" style="padding-left:5rem; padding-right:5rem;">
+    <section class="my-5 px-2 px-md-4 px-lg-5" data-aos="fade-up">
         <h3 class="text-center mb-4">Trend Pencari Kerja</h3>
         <div class="row gx-2 gy-3 justify-content-center">
             @foreach($charts as $chart)
@@ -126,7 +126,7 @@
     </section>
 
     {{-- Top 5 Lists Section as Carousel --}}
-    <section class="my-5" data-aos="fade-up" style="padding-left:5rem; padding-right:5rem;">
+    <section class="my-5 px-2 px-md-4 px-lg-5" data-aos="fade-up">
         <h3 class="text-center mb-4">Top 5 Lists</h3>
         <div class="row gx-3 gy-4 justify-content-center">
             @php
@@ -141,6 +141,16 @@
                         'desc' => 'Memetakan konsentrasi pencari kerja secara geografis.',
                         'icon' => 'fa-map-marked-alt',
                     ],
+                    'talents' => [
+                        'title' => 'Top 5 Talenta dengan Lowongan Terbanyak',
+                        'desc' => 'Talenta yang paling banyak dibutuhkan di pasar kerja.',
+                        'icon' => 'fa-users',
+                    ],
+                    'sectors' => [
+                        'title' => 'Top 5 Sektor Industri Pemberi Lowongan Terbanyak',
+                        'desc' => 'Sektor industri yang paling banyak membuka lowongan.',
+                        'icon' => 'fa-industry',
+                    ],
                 ];
             @endphp
             @foreach($topListTypes as $type => $meta)
@@ -151,9 +161,9 @@
                 @endphp
                 <div class="col-12 col-md-6 col-lg-3 d-flex align-items-stretch">
                     <div class="card shadow-sm rounded-4 border-0 w-100 h-100 p-3 d-flex flex-column align-items-center justify-content-center text-center">
+                        <canvas id="top5-chart-{{ $type }}" height="180"></canvas>
                         <h4 class="fw-bold mb-2 mt-3" style="font-size:1.1rem;"><i class="fa {{ $meta['icon'] }} me-2 text-success"></i>{{ $meta['title'] }}</h4>
                         <p class="mb-2" style="font-size:0.97rem;">{{ $meta['desc'] }}</p>
-                        <canvas id="top5-chart-{{ $type }}" height="180"></canvas>
                         @if($date)
                             <div class="text-muted small">Data diperbarui pada {{ indo_date($date) }}</div>
                         @endif
@@ -164,7 +174,7 @@
     </section>
 
     {{-- Contributions Section --}}
-    <section class="my-5" data-aos="fade-up" style="padding-left:10rem; padding-right:10rem;">
+    <section class="my-5 px-2 px-md-4 px-lg-5" data-aos="fade-up">
         <div class="text-center mb-2">
             <h2 class="fw-bold mb-1" style="font-size:2.5rem;">Kontribusi Pasker</h2>
             <h2 class="fw-bold mb-1" style="font-size:2.5rem;">Untuk Masyarakat Indonesia</h2>
@@ -200,7 +210,7 @@
     </section>
 
     {{-- Services Section --}}
-    <section class="my-5" data-aos="fade-up" style="padding-left:10rem; padding-right:10rem;">
+    <section class="my-5 px-2 px-md-4 px-lg-5" data-aos="fade-up">
         <div class="text-center mb-4">
             <h2 class="fw-bold" style="font-size:2.2rem;">Layanan Ketenagakerjaan</h2>
             <p class="text-muted mb-0">Berbagai layanan untuk mendukung pasar kerja Indonesia</p>
@@ -226,7 +236,7 @@
     </section>
 
     {{-- News Section --}}
-    <section class="my-5" data-aos="fade-up" style="padding-left:10rem; padding-right:10rem;">
+    <section class="my-5 px-2 px-md-4 px-lg-5" data-aos="fade-up">
         <h2 class="fw-bold text-center mb-4" style="font-size:2rem;">Berita Terkini</h2>
         <div class="row g-4 align-items-stretch">
             @php
@@ -276,7 +286,7 @@
         use Illuminate\Support\Collection;
         $testimonialChunks = $testimonials->chunk(4);
     @endphp
-    <section class="my-5 pb-5" data-aos="fade-up" style="padding-left:10rem; padding-right:10rem;">
+    <section class="my-5 pb-5 px-2 px-md-4 px-lg-5" data-aos="fade-up">
         <h3 class="fw-bold text-center mb-4" style="font-size:2rem;">Testimoni</h3>
         <div id="testiCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="7000">
             <div class="carousel-inner">
