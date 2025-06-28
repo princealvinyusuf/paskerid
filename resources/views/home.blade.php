@@ -12,26 +12,21 @@
     {{-- Statistic Cards Carousel (Floating over Banner) --}}
     <section class="stat-carousel-section position-relative" style="z-index: 10; margin-top: -90px;">
         <div class="container position-relative" style="max-width:1200px;">
-            <div class="swiper stat-swiper">
-                <div class="swiper-wrapper">
-                    @foreach($statistics as $stat)
-                        <div class="swiper-slide">
-                            <div class="stat-card text-center">
-                                <div class="stat-icon mb-3">
-                                    <i class="fa fa-chart-bar fa-2x text-success"></i>
-                                </div>
-                                <div class="stat-title fw-bold mb-1" style="font-size:1.1rem; color:#187C19;">{{ $stat->title }}</div>
-                                <div class="stat-value fw-bold mb-1" style="font-size:2.2rem; color:#222;">{{ $stat->value }} <span class="stat-unit" style="font-size:1.2rem;">{{ $stat->unit }}</span></div>
-                                @if($stat->description)
-                                    <div class="stat-desc text-muted mt-1" style="font-size:0.95rem;">{{ $stat->description }}</div>
-                                @endif
+            <div class="stat-slick">
+                @foreach($statistics as $stat)
+                    <div>
+                        <div class="stat-card text-center">
+                            <div class="stat-icon mb-3">
+                                <i class="fa fa-chart-bar fa-2x text-success"></i>
                             </div>
+                            <div class="stat-title fw-bold mb-1" style="font-size:1.1rem; color:#187C19;">{{ $stat->title }}</div>
+                            <div class="stat-value fw-bold mb-1" style="font-size:2.2rem; color:#222;">{{ $stat->value }} <span class="stat-unit" style="font-size:1.2rem;">{{ $stat->unit }}</span></div>
+                            @if($stat->description)
+                                <div class="stat-desc text-muted mt-1" style="font-size:0.95rem;">{{ $stat->description }}</div>
+                            @endif
                         </div>
-                    @endforeach
-                </div>
-                <div class="swiper-button-next"></div>
-                <div class="swiper-button-prev"></div>
-                <div class="swiper-pagination"></div>
+                    </div>
+                @endforeach
             </div>
         </div>
     </section>
@@ -347,8 +342,10 @@
 @section('scripts')
     @parent
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Swiper JS -->
-    <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+    <!-- jQuery (required for Slick) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Slick JS -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             @foreach($charts as $chart)
@@ -422,23 +419,19 @@
                 }
             @endforeach
             // Swiper for statistics
-            new Swiper('.stat-swiper', {
-                slidesPerView: 1,
-                spaceBetween: 24,
-                loop: true,
-                pagination: {
-                    el: '.swiper-pagination',
-                    clickable: true,
-                },
-                navigation: {
-                    nextEl: '.swiper-button-next',
-                    prevEl: '.swiper-button-prev',
-                },
-                breakpoints: {
-                    576: { slidesPerView: 2 },
-                    992: { slidesPerView: 3 },
-                    1200: { slidesPerView: 4 }
-                }
+            $(document).ready(function(){
+                $('.stat-slick').slick({
+                    slidesToShow: 4,
+                    slidesToScroll: 1,
+                    dots: true,
+                    arrows: true,
+                    infinite: true,
+                    responsive: [
+                        { breakpoint: 1200, settings: { slidesToShow: 3 } },
+                        { breakpoint: 992, settings: { slidesToShow: 2 } },
+                        { breakpoint: 576, settings: { slidesToShow: 1 } }
+                    ]
+                });
             });
         });
     </script>
@@ -446,6 +439,8 @@
 
 @push('head')
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
 <style>
 .contrib-card-v3 {
     border-radius: 1.5rem;
@@ -533,7 +528,7 @@
     box-shadow: 0 8px 32px 0 rgba(40,167,69,0.10), 0 1.5px 6px 0 rgba(0,0,0,0.04);
     transition: box-shadow 0.2s, transform 0.2s;
     padding: 2rem 1.5rem;
-    margin: 0.5rem 0;
+    margin: 0.5rem auto;
     display: flex;
     flex-direction: column;
     align-items: center;
