@@ -126,7 +126,7 @@
     </section>
 
     {{-- Top 5 Lists Section as Carousel --}}
-    <section class="my-5" data-aos="fade-up">
+    <section class="my-5" data-aos="fade-up" style="padding-left:5rem; padding-right:5rem;">
         <h3 class="text-center mb-4">Top 5 Lists</h3>
         <div class="row gx-3 gy-4 justify-content-center">
             @php
