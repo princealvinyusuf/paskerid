@@ -4,21 +4,23 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Auth;
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
+// Public homepage
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::get('/informasi', [App\Http\Controllers\InformasiController::class, 'index'])->name('informasi.index');
 
 Route::get('/news', [App\Http\Controllers\NewsController::class, 'index'])->name('news.index');
 
+// Admin routes (protected)
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/', function () {
+        return view('admin.dashboard');
+    })->name('dashboard');
     Route::resource('news', App\Http\Controllers\Admin\NewsController::class);
-    // You can add more resources here later (testimonials, services, etc.)
+    // Add more admin resources here
 });
 
+// Dashboard route (optional, can be removed if not needed)
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
