@@ -43,7 +43,7 @@
             <i class="fa fa-arrow-up"></i>
         </button>
     </main>
-    <footer class="bg-light text-center py-4 mt-5">
+    <footer class="bg-light text-center py-2">
         <div class="container">
             <small>&copy; {{ date('Y') }} Paskerid. All rights reserved.</small>
         </div>
