@@ -13,7 +13,7 @@
     @yield('head')
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4 sticky-top shadow-sm">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top shadow-sm">
         <div class="container">
             <a class="navbar-brand" href="/">
                 <img src="{{ asset('images/logo.png') }}" alt="Paskerid Logo" style="height:40px; width:auto;">
