@@ -270,24 +270,50 @@
     </section>
 
     {{-- Testimonials Section --}}
+    @php
+        use Illuminate\Support\Collection;
+        $testimonialChunks = $testimonials->chunk(4);
+    @endphp
     <section class="my-5">
-        <h3>Testimoni</h3>
-        <div class="row">
-            @foreach($testimonials as $testi)
-                <div class="col-md-4 mb-4">
-                    <div class="card h-100">
-                        @if($testi->photo_url)
-                            <img src="{{ $testi->photo_url }}" class="card-img-top rounded-circle mx-auto mt-3" style="width:80px; height:80px; object-fit:cover;" alt="{{ $testi->name }}">
-                        @endif
-                        <div class="card-body text-center">
-                            <blockquote class="blockquote">
-                                <p class="mb-0">"{{ $testi->quote }}"</p>
-                                <footer class="blockquote-footer">{{ $testi->name }}, {{ $testi->position }} @ {{ $testi->company }}</footer>
-                            </blockquote>
+        <h3 class="fw-bold text-center mb-4" style="font-size:2rem;">Testimoni</h3>
+        <div id="testiCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="7000">
+            <div class="carousel-inner">
+                @foreach($testimonialChunks as $chunkIndex => $chunk)
+                    <div class="carousel-item @if($chunkIndex === 0) active @endif">
+                        <div class="row justify-content-center g-4">
+                            @foreach($chunk as $testi)
+                                <div class="col-12 col-md-6 col-lg-3 d-flex align-items-stretch">
+                                    <div class="card h-100 shadow-sm border-0 rounded-4 p-3 text-center">
+                                        @if($testi->photo_url)
+                                            <img src="{{ $testi->photo_url }}" class="rounded-circle mx-auto mb-3" style="width:64px; height:64px; object-fit:cover;" alt="{{ $testi->name }}">
+                                        @endif
+                                        <blockquote class="blockquote mb-2" style="font-size:1rem;">
+                                            <p class="mb-0">"{{ $testi->quote }}"</p>
+                                        </blockquote>
+                                        <footer class="blockquote-footer mt-2">
+                                            <span class="fw-bold">{{ $testi->name }}</span><br>
+                                            <span class="text-muted small">{{ $testi->position }} @ {{ $testi->company }}</span>
+                                        </footer>
+                                    </div>
+                                </div>
+                            @endforeach
                         </div>
                     </div>
-                </div>
-            @endforeach
+                @endforeach
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#testiCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#testiCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+            <div class="carousel-indicators mt-3">
+                @foreach($testimonialChunks as $chunkIndex => $chunk)
+                    <button type="button" data-bs-target="#testiCarousel" data-bs-slide-to="{{ $chunkIndex }}" @if($chunkIndex === 0) class="active" aria-current="true" @endif aria-label="Slide {{ $chunkIndex+1 }}"></button>
+                @endforeach
+            </div>
         </div>
     </section>
 </div>
@@ -433,6 +459,9 @@
 }
 .object-fit-cover {
     object-fit: cover;
+}
+.card.blockquote {
+    font-size: 1rem;
 }
 </style>
 @endpush 
