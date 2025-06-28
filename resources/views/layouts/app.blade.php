@@ -8,6 +8,18 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- FontAwesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    @push('head')
+    <style>
+    .navbar.navbar-scrolled {
+        background: #28a745 !important; /* Bootstrap green */
+        transition: background 0.3s;
+    }
+    .navbar.navbar-scrolled .nav-link,
+    .navbar.navbar-scrolled .navbar-brand {
+        color: #fff !important;
+    }
+    </style>
+    @endpush
     @yield('head')
 </head>
 <body>
@@ -45,5 +57,17 @@
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     @yield('scripts')
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var navbar = document.querySelector('.navbar');
+        window.addEventListener('scroll', function () {
+            if (window.scrollY > 50) {
+                navbar.classList.add('navbar-scrolled');
+            } else {
+                navbar.classList.remove('navbar-scrolled');
+            }
+        });
+    });
+    </script>
 </body>
 </html> 
