@@ -13,5 +13,6 @@ class Information extends Model
         'type',
         'subject',
         'file_url',
+        'iframe_url',
     ];
 } 
