@@ -17,10 +17,15 @@ class InformasiController extends Controller
         if ($request->filled('type')) {
             $query->where('type', $request->type);
         }
+        if ($request->filled('subject')) {
+            $query->where('subject', $request->subject);
+        }
 
         $information = $query->orderByDesc('date')->paginate(10);
         $types = Information::select('type')->distinct()->pluck('type');
+        $subjects = Information::select('subject')->distinct()->pluck('subject');
+        $selectedSubject = $request->subject;
 
-        return view('informasi.index', compact('information', 'types'));
+        return view('informasi.index', compact('information', 'types', 'subjects', 'selectedSubject'));
     }
 } 

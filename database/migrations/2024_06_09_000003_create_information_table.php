@@ -12,6 +12,7 @@ return new class extends Migration {
             $table->text('description')->nullable();
             $table->date('date')->nullable();
             $table->string('type');
+            $table->string('subject')->nullable();
             $table->string('file_url')->nullable();
             $table->timestamps();
         });
