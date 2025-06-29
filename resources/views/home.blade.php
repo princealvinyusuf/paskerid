@@ -5,7 +5,7 @@
     {{-- Hero Banner Section (Static) --}}
     <section class="hero-banner position-relative text-white mb-0 d-flex justify-content-center align-items-center h-100" style="background: url('{{ asset('images/hero-bg.jpg') }}') center center/cover no-repeat; min-height: 420px;">
         <div>
-            <h1 class="display-4 fw-bold mb-3 text-center" style="font-size:2.5rem;">Pasar Kerja Dalam Angka,<br>Untuk Negeri Berkarya</h1>
+            <h1 class="display-4 fw-bold mb-3 text-center" style="font-size:2.5rem; text-shadow: 2px 2px 6px #000, 0 0 2px #fff, 0 0 8px #000;">Pasar Kerja Dalam Angka,<br>Untuk Negeri Berkarya</h1>
         </div>
     </section>
 
