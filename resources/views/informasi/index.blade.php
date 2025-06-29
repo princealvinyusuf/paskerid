@@ -48,7 +48,7 @@
                     </thead>
                     <tbody>
                         @forelse($information as $index => $info)
-                            <tr class="info-row" data-row="{{ $index + 1 }}">
+                            <tr class="info-row" data-row="{{ $index + 1 }}" data-iframe-url="{{ $info->iframe_url }}">
                                 <td>{{ $index + 1 + ($information->currentPage() - 1) * $information->perPage() }}</td>
                                 <td>{{ $info->title }}</td>
                                 <td>{{ indo_date($info->date) }}</td>
@@ -67,6 +67,7 @@
             <div id="dynamic-container" class="mt-4" style="display:none;">
                 <div class="card">
                     <div class="card-body">
+                        <iframe id="container-iframe" src="" width="100%" height="400" style="border:none;display:none;"></iframe>
                         <span id="container-content">Container 1</span>
                     </div>
                 </div>
@@ -76,7 +77,18 @@
                     document.querySelectorAll('.info-row').forEach(function(row) {
                         row.addEventListener('click', function() {
                             document.getElementById('dynamic-container').style.display = 'block';
-                            document.getElementById('container-content').textContent = 'Container ' + this.dataset.row;
+                            var iframeUrl = this.dataset.iframeUrl;
+                            var iframe = document.getElementById('container-iframe');
+                            if (iframeUrl) {
+                                iframe.src = iframeUrl;
+                                iframe.style.display = 'block';
+                                document.getElementById('container-content').style.display = 'none';
+                            } else {
+                                iframe.src = '';
+                                iframe.style.display = 'none';
+                                document.getElementById('container-content').style.display = 'block';
+                                document.getElementById('container-content').textContent = 'No URL available';
+                            }
                         });
                     });
                 });
