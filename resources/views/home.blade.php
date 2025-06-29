@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container-fluid p-0" style="background: #c7e9c0;">
+<div class="container-fluid p-0" style="background: #edf8e9;">
     {{-- Hero Banner Section (Static) --}}
     <section class="hero-banner position-relative text-white mb-0 d-flex justify-content-center align-items-center h-100" style="background: url('{{ asset('images/hero-bg.jpg') }}') center center/cover no-repeat; min-height: 420px;">
         <div>
