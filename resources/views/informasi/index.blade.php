@@ -65,6 +65,7 @@
                 </div>
             </div>
             <div id="dynamic-container" class="mt-4" style="display:none;">
+                <button id="back-to-table" class="btn btn-secondary mb-3"><i class="fa fa-arrow-left"></i> Back</button>
                 <div class="card">
                     <div class="card-body">
                         <iframe id="container-iframe" src="" width="100%" height="400" style="border:none;display:none;"></iframe>
@@ -76,6 +77,7 @@
                 document.addEventListener('DOMContentLoaded', function() {
                     document.querySelectorAll('.info-row').forEach(function(row) {
                         row.addEventListener('click', function() {
+                            document.getElementById('info-table-container').style.display = 'none';
                             document.getElementById('dynamic-container').style.display = 'block';
                             var iframeUrl = this.dataset.iframeUrl;
                             var iframe = document.getElementById('container-iframe');
@@ -90,6 +92,10 @@
                                 document.getElementById('container-content').textContent = 'No URL available';
                             }
                         });
+                    });
+                    document.getElementById('back-to-table').addEventListener('click', function() {
+                        document.getElementById('dynamic-container').style.display = 'none';
+                        document.getElementById('info-table-container').style.display = 'block';
                     });
                 });
             </script>
