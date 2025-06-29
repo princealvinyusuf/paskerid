@@ -37,25 +37,50 @@
                     <button type="submit" class="btn btn-primary w-100">Cari</button>
                 </div>
             </form>
-            @forelse($information as $info)
-                <div class="card mb-3 shadow-sm rounded-pill px-4 py-3 d-flex flex-row align-items-center">
-                    <div class="me-3 text-primary" style="font-size:2rem;">
-                        <i class="fa {{ $info->type == 'publikasi' ? 'fa-book' : 'fa-clipboard' }}"></i>
-                    </div>
-                    <div class="flex-grow-1">
-                        <div class="fw-bold">{{ $info->title }}</div>
-                        <div class="text-muted small">{{ indo_date($info->date) }}</div>
-                    </div>
-                    <div>
-                        <a href="{{ $info->file_url ?? '#' }}" class="btn btn-link text-success p-0" target="_blank"><i class="fa fa-arrow-right fa-lg"></i></a>
+            <div id="info-table-container">
+                <table class="table table-bordered table-hover align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th style="width: 40px;">No.</th>
+                            <th>Judul Tabel</th>
+                            <th style="width: 180px;">Terakhir Diperbarui</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($information as $index => $info)
+                            <tr class="info-row" data-row="{{ $index + 1 }}">
+                                <td>{{ $index + 1 + ($information->currentPage() - 1) * $information->perPage() }}</td>
+                                <td>{{ $info->title }}</td>
+                                <td>{{ indo_date($info->date) }}</td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="3" class="text-center">Tidak ada informasi ditemukan.</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+                <div class="d-flex justify-content-center mt-4">
+                    {{ $information->withQueryString()->links() }}
+                </div>
+            </div>
+            <div id="dynamic-container" class="mt-4" style="display:none;">
+                <div class="card">
+                    <div class="card-body">
+                        <span id="container-content">Container 1</span>
                     </div>
                 </div>
-            @empty
-                <div class="alert alert-info text-center">Tidak ada informasi ditemukan.</div>
-            @endforelse
-            <div class="d-flex justify-content-center mt-4">
-                {{ $information->withQueryString()->links() }}
             </div>
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    document.querySelectorAll('.info-row').forEach(function(row) {
+                        row.addEventListener('click', function() {
+                            document.getElementById('dynamic-container').style.display = 'block';
+                            document.getElementById('container-content').textContent = 'Container ' + this.dataset.row;
+                        });
+                    });
+                });
+            </script>
             <div class="text-center mt-4">
                 <a href="{{ url('/') }}" class="btn btn-outline-secondary rounded-pill px-4 py-2">Kembali ke Beranda <i class="fa fa-arrow-left"></i></a>
             </div>
