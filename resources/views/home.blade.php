@@ -129,38 +129,14 @@
     <section class="my-5 px-2 px-md-4 px-lg-5" data-aos="fade-up">
         <h3 class="text-center mb-4">Top 5 Lists</h3>
         <div class="row gx-3 gy-4 justify-content-center">
-            @php
-                $topListTypes = [
-                    'skills' => [
-                        'title' => 'Top 5 Kualifikasi Paling Umum Pencari Kerja',
-                        'desc' => 'Menampilkan kualifikasi yang paling banyak dicari oleh pencari kerja.',
-                        'icon' => 'fa-user-graduate',
-                    ],
-                    'provinces' => [
-                        'title' => 'Top 5 Provinsi dengan Pencari Kerja Terbanyak',
-                        'desc' => 'Memetakan konsentrasi pencari kerja secara geografis.',
-                        'icon' => 'fa-map-marked-alt',
-                    ],
-                    'talents' => [
-                        'title' => 'Top 5 Talenta dengan Lowongan Terbanyak',
-                        'desc' => 'Talenta yang paling banyak dibutuhkan di pasar kerja.',
-                        'icon' => 'fa-users',
-                    ],
-                ];
-            @endphp
-            @foreach($topListTypes as $type => $meta)
-                @php
-                    $list = $topLists->where('type', $type)->first();
-                    $items = $list ? json_decode($list->data_json, true)['items'] : [];
-                    $date = $list ? $list->date : null;
-                @endphp
+            @foreach($topLists as $list)
                 <div class="col-12 col-md-6 col-lg-3 d-flex align-items-stretch">
                     <div class="card shadow-sm rounded-4 border-0 w-100 h-100 p-3 d-flex flex-column align-items-center justify-content-center text-center">
-                        <canvas id="top5-chart-{{ $type }}" height="180"></canvas>
-                        <h4 class="fw-bold mb-2 mt-3" style="font-size:1.1rem;"><i class="fa {{ $meta['icon'] }} me-2 text-success"></i>{{ $meta['title'] }}</h4>
-                        <p class="mb-2" style="font-size:0.97rem;">{{ $meta['desc'] }}</p>
-                        @if($date)
-                            <div class="text-muted small">Data diperbarui pada {{ indo_date($date) }}</div>
+                        <canvas id="top5-chart-{{ $list->type }}" height="180"></canvas>
+                        <h4 class="fw-bold mb-2 mt-3" style="font-size:1.1rem;"><i class="fa {{ $list->meta['icon'] ?? '' }} me-2 text-success"></i>{{ $list->meta['title'] ?? ucfirst($list->type) }}</h4>
+                        <p class="mb-2" style="font-size:0.97rem;">{{ $list->meta['desc'] ?? '' }}</p>
+                        @if($list->date)
+                            <div class="text-muted small">Data diperbarui pada {{ indo_date($list->date) }}</div>
                         @endif
                     </div>
                 </div>
@@ -416,14 +392,10 @@
 
         // --- Chart.js for Top 5 Section ---
         const top5Data = {
-            @foreach($topListTypes as $type => $meta)
-                @php
-                    $list = $topLists->where('type', $type)->first();
-                    $items = $list ? json_decode($list->data_json, true)['items'] : [];
-                @endphp
-                '{{ $type }}': {
-                    labels: {!! json_encode(collect($items)->pluck('name')) !!},
-                    data: {!! json_encode(collect($items)->pluck('count')) !!}
+            @foreach($topLists as $list)
+                '{{ $list->type }}': {
+                    labels: {!! json_encode(collect($list->items)->pluck('name')) !!},
+                    data: {!! json_encode(collect($list->items)->pluck('count')) !!}
                 },
             @endforeach
         };
