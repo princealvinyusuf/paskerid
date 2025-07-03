@@ -1,0 +1,29 @@
+@extends('layouts.app')
+
+@section('content')
+<div class="container my-5">
+    @foreach($sections as $section)
+        <section class="mb-5">
+            @if($section->type === 'text_image')
+                <div class="row align-items-center">
+                    <div class="col-md-6 mb-3 mb-md-0">
+                        <h2>{{ $section->title }}</h2>
+                        <div>{!! nl2br(e($section->content)) !!}</div>
+                    </div>
+                    <div class="col-md-6">
+                        <img src="{{ asset($section->media_url) }}" class="img-fluid rounded shadow" alt="{{ $section->title }}">
+                    </div>
+                </div>
+            @elseif($section->type === 'image')
+                <div class="text-center">
+                    <img src="{{ asset($section->media_url) }}" class="img-fluid rounded shadow" alt="{{ $section->title }}">
+                </div>
+            @elseif($section->type === 'youtube')
+                <div class="ratio ratio-16x9">
+                    <iframe src="{{ $section->media_url }}" frameborder="0" allowfullscreen></iframe>
+                </div>
+            @endif
+        </section>
+    @endforeach
+</div>
+@endsection 
