@@ -16,7 +16,7 @@ class CreateAboutSectionsTable extends Migration
             $table->string('type'); // 'text_image', 'image', 'youtube'
             $table->string('title')->nullable();
             $table->text('content')->nullable();
-            $table->string('media_url')->nullable(); // image or video url
+            $table->text('media_url')->nullable(); // image or video url
             $table->integer('order')->default(0);
             $table->timestamps();
         });

@@ -20,7 +20,7 @@
                 </div>
             @elseif($section->type === 'youtube')
                 <div class="ratio ratio-16x9">
-                    <iframe src="{{ $section->media_url }}" frameborder="0" allowfullscreen></iframe>
+                    {!! $section->media_url !!}
                 </div>
             @endif
         </section>
