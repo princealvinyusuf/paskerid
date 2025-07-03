@@ -4,10 +4,10 @@
 <div class="container my-5">
     @foreach($sections as $section)
         <section class="mb-5">
+            <h2 class="mb-4 text-center">{{ $section->title }}</h2>
             @if($section->type === 'text_image')
                 <div class="row align-items-center">
                     <div class="col-md-6 mb-3 mb-md-0">
-                        <h2>{{ $section->title }}</h2>
                         <div>{!! nl2br(e($section->content)) !!}</div>
                     </div>
                     <div class="col-md-6">
