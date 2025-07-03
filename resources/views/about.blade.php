@@ -3,7 +3,7 @@
 @section('content')
 <div class="container my-5">
     @foreach($sections as $section)
-        <section class="mb-5">
+        <section class="mb-5 py-4" style="border-bottom:1px solid #e5e5e5;">
             <h2 class="mb-4 text-center">{{ $section->title }}</h2>
             @if($section->type === 'text_image')
                 <div class="row align-items-center">
