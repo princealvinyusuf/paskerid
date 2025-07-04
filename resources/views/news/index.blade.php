@@ -4,12 +4,8 @@
 <section class="section-berita">
     <img src="/images/logo_siapkerja.svg" class="section-bg" alt="background">
     <div class="section-content">
-        <div class="section-breadcrumb">
-            <span class="text-primary fw-bold">Beranda</span> <span class="text-white">&gt;</span> <span class="text-white fw-bold">Berita</span>
-        </div>
-        <div class="section-subtitle">
-            Temukan berita terkini terkait dengan ketenagakerjaan
-        </div>
+        <h2 style="color: white; font-weight: bold; margin-left: 80px;">Berita</h2>
+    <p style="color: white; margin-left: 80px; font-size: 20px">Temukan Berita Terkini Terkait Dengan Ketenagakerjaan.</p>
     </div>
 </section>
 
@@ -127,7 +123,7 @@
 }
 
 .text-primary {
-    color: #194B7D;
+    color: white;
 }
 
 .text-white {
