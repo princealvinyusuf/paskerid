@@ -13,3 +13,5 @@ Route::get('/informasi', [App\Http\Controllers\InformasiController::class, 'inde
 Route::get('/news', [App\Http\Controllers\NewsController::class, 'index'])->name('news.index');
 
 Route::get('/about', [App\Http\Controllers\AboutController::class, 'index'])->name('about');
+
+Route::get('/dashboard-trend', [App\Http\Controllers\DashboardTrendController::class, 'index'])->name('dashboard.trend');

@@ -35,6 +35,9 @@
                     <li class="nav-item">
                         <a class="nav-link @if(request()->routeIs('about')) active fw-bold @endif" href="{{ route('about') }}">About</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link @if(request()->routeIs('dashboard.trend')) active fw-bold @endif" href="{{ route('dashboard.trend') }}">Dashboard Trend</a>
+                    </li>
                 </ul>
             </div>
         </div>

@@ -29,6 +29,8 @@ class DatabaseSeeder extends Seeder
             ServicesTableSeeder::class,
             NewsTableSeeder::class,
             TestimonialsTableSeeder::class,
+            DashboardTrendSeeder::class,
+            // \Database\Seeders\DashboardTrendSeeder::class,
         ]);
     }
 }
