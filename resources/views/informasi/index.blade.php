@@ -27,45 +27,47 @@
                     <a class="nav-link @if(request('type') == 'publikasi') active @endif" href="?subject={{ urlencode($selectedSubject) }}&type=publikasi">Publikasi</a>
                 </li>
             </ul>
-            <form method="GET" class="row g-3 mb-4">
-                <input type="hidden" name="type" value="{{ request('type', 'statistik') }}">
-                <input type="hidden" name="subject" value="{{ $selectedSubject }}">
-                <div class="col-md-7">
-                    <input type="text" name="search" class="form-control" placeholder="Cari judul..." value="{{ request('search') }}">
-                </div>
-                <div class="col-md-3">
-                    <button type="submit" class="btn btn-primary w-100">Cari</button>
-                </div>
-            </form>
-            <div id="info-table-container">
-                <table class="table table-bordered table-hover align-middle">
-                    <thead class="table-light">
-                        <tr>
-                            <th style="width: 40px;">No.</th>
-                            <th>Judul Tabel</th>
-                            <th style="width: 180px;">Terakhir Diperbarui</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse($information as $index => $info)
-                            <tr class="info-row" data-row="{{ $index + 1 }}" data-iframe-url="{{ $info->iframe_url }}">
-                                <td>{{ $index + 1 + ($information->currentPage() - 1) * $information->perPage() }}</td>
-                                <td>
-                                    <a href="?subject={{ urlencode($selectedSubject) }}&type={{ request('type', 'statistik') }}&show={{ $info->id }}">{{ $info->title }}</a>
-                                </td>
-                                <td>{{ indo_date($info->date) }}</td>
-                            </tr>
-                        @empty
+            @if(!isset($showInfo) || !$showInfo)
+                <div id="info-table-container">
+                    <form method="GET" class="row g-3 mb-4">
+                        <input type="hidden" name="type" value="{{ request('type', 'statistik') }}">
+                        <input type="hidden" name="subject" value="{{ $selectedSubject }}">
+                        <div class="col-md-7">
+                            <input type="text" name="search" class="form-control" placeholder="Cari judul..." value="{{ request('search') }}">
+                        </div>
+                        <div class="col-md-3">
+                            <button type="submit" class="btn btn-primary w-100">Cari</button>
+                        </div>
+                    </form>
+                    <table class="table table-bordered table-hover align-middle">
+                        <thead class="table-light">
                             <tr>
-                                <td colspan="3" class="text-center">Tidak ada informasi ditemukan.</td>
+                                <th style="width: 40px;">No.</th>
+                                <th>Judul Tabel</th>
+                                <th style="width: 180px;">Terakhir Diperbarui</th>
                             </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-                <div class="d-flex justify-content-center mt-4">
-                    {{ $information->withQueryString()->links() }}
+                        </thead>
+                        <tbody>
+                            @forelse($information as $index => $info)
+                                <tr class="info-row" data-row="{{ $index + 1 }}" data-iframe-url="{{ $info->iframe_url }}">
+                                    <td>{{ $index + 1 + ($information->currentPage() - 1) * $information->perPage() }}</td>
+                                    <td>
+                                        <a href="?subject={{ urlencode($selectedSubject) }}&type={{ request('type', 'statistik') }}&show={{ $info->id }}">{{ $info->title }}</a>
+                                    </td>
+                                    <td>{{ indo_date($info->date) }}</td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="3" class="text-center">Tidak ada informasi ditemukan.</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                    <div class="d-flex justify-content-center mt-4">
+                        {{ $information->withQueryString()->links() }}
+                    </div>
                 </div>
-            </div>
+            @endif
             <div id="dynamic-container" class="mt-4" @if(!isset($showInfo) || !$showInfo) style="display:none;" @endif>
                 <div class="card">
                     <div class="card-body">
