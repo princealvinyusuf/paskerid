@@ -70,6 +70,9 @@
                 <div class="card">
                     <div class="card-body">
                         @if(isset($showInfo) && $showInfo)
+                            <a href="?subject={{ urlencode($selectedSubject) }}&type={{ request('type', 'statistik') }}" class="btn btn-secondary mb-3">
+                                <i class="fa fa-arrow-left"></i> Back to Table
+                            </a>
                             {!! $showInfo->iframe_url !!}
                         @else
                             <span id="container-content">Container 1</span>
