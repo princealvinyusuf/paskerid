@@ -49,11 +49,9 @@
                         </thead>
                         <tbody>
                             @forelse($information as $index => $info)
-                                <tr class="info-row" data-row="{{ $index + 1 }}" data-iframe-url="{{ $info->iframe_url }}">
+                                <tr class="info-row" data-id="{{ $info->id }}" style="cursor:pointer;">
                                     <td>{{ $index + 1 + ($information->currentPage() - 1) * $information->perPage() }}</td>
-                                    <td>
-                                        <a href="?subject={{ urlencode($selectedSubject) }}&type={{ request('type', 'statistik') }}&show={{ $info->id }}">{{ $info->title }}</a>
-                                    </td>
+                                    <td>{{ $info->title }}</td>
                                     <td>{{ indo_date($info->date) }}</td>
                                 </tr>
                             @empty
@@ -88,4 +86,15 @@
         </div>
     </div>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.info-row').forEach(function(row) {
+            row.addEventListener('click', function() {
+                var params = new URLSearchParams(window.location.search);
+                params.set('show', this.dataset.id);
+                window.location.search = params.toString();
+            });
+        });
+    });
+</script>
 @endsection 
