@@ -1,10 +1,22 @@
 @extends('layouts.app')
 
 @section('content')
-<section style="background-color: #00a78e; padding: 20px 0 20px 20px;">
-    <h2 style="color: white; font-weight: bold; margin-bottom: 5px; margin-left: 90px">Berita</h2>
-    <p style="color: white; margin-left: 90px;">Temukan Berita Terkini Terkait Dengan Ketenagakerjaan.</p>
+<section class="section-berita">
+    <img src="/images/logo_siapkerja.svg" class="section-bg" alt="background">
+    <div class="section-content">
+        <div class="section-breadcrumb">
+            <span class="text-primary fw-bold">Beranda</span> <span class="text-white">&gt;</span> <span class="text-white fw-bold">Berita</span>
+        </div>
+        <div class="section-subtitle">
+            Temukan berita terkini terkait dengan ketenagakerjaan
+        </div>
+    </div>
 </section>
+
+
+
+
+
 
 <div class="container my-5">
     <h2 class="mb-4 text-center">Semua Berita</h2>
@@ -79,5 +91,55 @@
     background-color: #fff;
     border-color: #ddd;
 }
+
+.section-berita {
+    position: relative;
+    background-color: #00a78e;
+    padding: 30px 40px;
+    overflow: hidden;
+}
+
+.section-bg {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 400px; /* Perbesar sesuai kebutuhan */
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.4; /* Sesuaikan jika ingin transparan atau hapus jika full color */
+}
+
+.section-content {
+    position: relative; /* Agar teks tidak ketimpa gambar */
+    z-index: 1;
+    max-width: 1200px;
+}
+
+.section-breadcrumb {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.section-subtitle {
+    font-weight: bold;
+    font-size: 18px;
+    color: white;
+}
+
+.text-primary {
+    color: #194B7D;
+}
+
+.text-white {
+    color: white;
+}
+
+.fw-bold {
+    font-weight: bold;
+}
+
+
+
+
 
 </style>
