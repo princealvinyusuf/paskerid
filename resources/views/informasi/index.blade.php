@@ -70,6 +70,7 @@
                     <div class="card-body">
                         <iframe id="container-iframe" src="" width="100%" height="400" style="border:none;display:none;"></iframe>
                         <span id="container-content">Container 1</span>
+                        <div id="container-embed" style="display:none;"></div>
                     </div>
                 </div>
             </div>
@@ -81,15 +82,28 @@
                             document.getElementById('dynamic-container').style.display = 'block';
                             var iframeUrl = this.dataset.iframeUrl;
                             var iframe = document.getElementById('container-iframe');
+                            var embedDiv = document.getElementById('container-embed');
+                            var contentSpan = document.getElementById('container-content');
                             if (iframeUrl) {
-                                iframe.src = iframeUrl;
-                                iframe.style.display = 'block';
-                                document.getElementById('container-content').style.display = 'none';
+                                if (/^https?:\/\//.test(iframeUrl)) {
+                                    iframe.src = iframeUrl;
+                                    iframe.style.display = 'block';
+                                    embedDiv.style.display = 'none';
+                                    contentSpan.style.display = 'none';
+                                } else {
+                                    iframe.src = '';
+                                    iframe.style.display = 'none';
+                                    embedDiv.innerHTML = iframeUrl;
+                                    embedDiv.style.display = 'block';
+                                    contentSpan.style.display = 'none';
+                                }
                             } else {
                                 iframe.src = '';
                                 iframe.style.display = 'none';
-                                document.getElementById('container-content').style.display = 'block';
-                                document.getElementById('container-content').textContent = 'No URL available';
+                                embedDiv.innerHTML = '';
+                                embedDiv.style.display = 'none';
+                                contentSpan.style.display = 'block';
+                                contentSpan.textContent = 'No URL available';
                             }
                         });
                     });
