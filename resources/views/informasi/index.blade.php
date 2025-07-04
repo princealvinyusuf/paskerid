@@ -79,7 +79,8 @@
                                 vizObjs.forEach(function(obj) {
                                     obj.style.width = '100%';
                                     obj.style.maxWidth = '100%';
-                                    obj.style.height = 'auto';
+                                    // Optionally, set height to auto or a fixed value if needed
+                                    // obj.style.height = 'auto';
                                 });
                             });
                             </script>
