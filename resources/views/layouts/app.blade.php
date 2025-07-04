@@ -41,6 +41,9 @@
                     <li class="nav-item">
                         <a class="nav-link @if(request()->routeIs('dashboard.distribution')) active fw-bold @endif" href="{{ route('dashboard.distribution') }}">Dashboard Distribution</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link @if(request()->routeIs('dashboard.performance')) active fw-bold @endif" href="{{ route('dashboard.performance') }}">Dashboard Performance</a>
+                    </li>
                 </ul>
             </div>
         </div>

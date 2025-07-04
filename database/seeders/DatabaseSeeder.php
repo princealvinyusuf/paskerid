@@ -31,6 +31,7 @@ class DatabaseSeeder extends Seeder
             TestimonialsTableSeeder::class,
             DashboardTrendSeeder::class,
             DashboardDistributionSeeder::class,
+            DashboardPerformanceSeeder::class,
             // \Database\Seeders\DashboardTrendSeeder::class,
         ]);
     }
