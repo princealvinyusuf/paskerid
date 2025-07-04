@@ -38,6 +38,9 @@
                     <li class="nav-item">
                         <a class="nav-link @if(request()->routeIs('dashboard.trend')) active fw-bold @endif" href="{{ route('dashboard.trend') }}">Dashboard Trend</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link @if(request()->routeIs('dashboard.distribution')) active fw-bold @endif" href="{{ route('dashboard.distribution') }}">Dashboard Distribution</a>
+                    </li>
                 </ul>
             </div>
         </div>
