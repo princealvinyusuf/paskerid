@@ -51,7 +51,7 @@
                             <tr class="info-row" data-row="{{ $index + 1 }}" data-iframe-url="{{ $info->iframe_url }}">
                                 <td>{{ $index + 1 + ($information->currentPage() - 1) * $information->perPage() }}</td>
                                 <td>
-                                    <a href="{{ route('informasi.show', $info->id) }}">{{ $info->title }}</a>
+                                    <a href="?subject={{ urlencode($selectedSubject) }}&type={{ request('type', 'statistik') }}&show={{ $info->id }}">{{ $info->title }}</a>
                                 </td>
                                 <td>{{ indo_date($info->date) }}</td>
                             </tr>
@@ -66,55 +66,17 @@
                     {{ $information->withQueryString()->links() }}
                 </div>
             </div>
-            <div id="dynamic-container" class="mt-4" style="display:none;">
-                <button id="back-to-table" class="btn btn-secondary mb-3"><i class="fa fa-arrow-left"></i> Back</button>
+            <div id="dynamic-container" class="mt-4" @if(!isset($showInfo) || !$showInfo) style="display:none;" @endif>
                 <div class="card">
                     <div class="card-body">
-                        <iframe id="container-iframe" src="" width="100%" height="400" style="border:none;display:none;"></iframe>
-                        <span id="container-content">Container 1</span>
-                        <div id="container-embed" style="display:none;"></div>
+                        @if(isset($showInfo) && $showInfo)
+                            {!! $showInfo->iframe_url !!}
+                        @else
+                            <span id="container-content">Container 1</span>
+                        @endif
                     </div>
                 </div>
             </div>
-            <script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    document.querySelectorAll('.info-row').forEach(function(row) {
-                        row.addEventListener('click', function() {
-                            document.getElementById('info-table-container').style.display = 'none';
-                            document.getElementById('dynamic-container').style.display = 'block';
-                            var iframeUrl = this.dataset.iframeUrl;
-                            var iframe = document.getElementById('container-iframe');
-                            var embedDiv = document.getElementById('container-embed');
-                            var contentSpan = document.getElementById('container-content');
-                            if (iframeUrl) {
-                                if (/^https?:\/\//.test(iframeUrl)) {
-                                    iframe.src = iframeUrl;
-                                    iframe.style.display = 'block';
-                                    embedDiv.style.display = 'none';
-                                    contentSpan.style.display = 'none';
-                                } else {
-                                    iframe.src = '';
-                                    iframe.style.display = 'none';
-                                    embedDiv.innerHTML = iframeUrl;
-                                    embedDiv.style.display = 'block';
-                                    contentSpan.style.display = 'none';
-                                }
-                            } else {
-                                iframe.src = '';
-                                iframe.style.display = 'none';
-                                embedDiv.innerHTML = '';
-                                embedDiv.style.display = 'none';
-                                contentSpan.style.display = 'block';
-                                contentSpan.textContent = 'No URL available';
-                            }
-                        });
-                    });
-                    document.getElementById('back-to-table').addEventListener('click', function() {
-                        document.getElementById('dynamic-container').style.display = 'none';
-                        document.getElementById('info-table-container').style.display = 'block';
-                    });
-                });
-            </script>
             <div class="text-center mt-4">
                 <a href="{{ url('/') }}" class="btn btn-outline-secondary rounded-pill px-4 py-2">Kembali ke Beranda <i class="fa fa-arrow-left"></i></a>
             </div>

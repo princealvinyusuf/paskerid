@@ -25,8 +25,13 @@ class InformasiController extends Controller
         $types = Information::select('type')->distinct()->pluck('type');
         $subjects = Information::select('subject')->distinct()->pluck('subject');
         $selectedSubject = $request->subject;
+        $showId = $request->query('show');
+        $showInfo = null;
+        if ($showId) {
+            $showInfo = \App\Models\Information::find($showId);
+        }
 
-        return view('informasi.index', compact('information', 'types', 'subjects', 'selectedSubject'));
+        return view('informasi.index', compact('information', 'types', 'subjects', 'selectedSubject', 'showInfo'));
     }
 
     public function show($id)
