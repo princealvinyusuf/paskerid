@@ -35,17 +35,16 @@
                     <li class="nav-item">
                         <a class="nav-link @if(request()->routeIs('about')) active fw-bold @endif" href="{{ route('about') }}">About</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link @if(request()->routeIs('dashboard.trend')) active fw-bold @endif" href="{{ route('dashboard.trend') }}">Dashboard Trend</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link @if(request()->routeIs('dashboard.distribution')) active fw-bold @endif" href="{{ route('dashboard.distribution') }}">Dashboard Distribution</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link @if(request()->routeIs('dashboard.performance')) active fw-bold @endif" href="{{ route('dashboard.performance') }}">Dashboard Performance</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link @if(request()->routeIs('dashboard.labor_demand')) active fw-bold @endif" href="{{ route('dashboard.labor_demand') }}">Dashboard Labor Demand</a>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle @if(request()->routeIs('dashboard.trend') || request()->routeIs('dashboard.distribution') || request()->routeIs('dashboard.performance') || request()->routeIs('dashboard.labor_demand')) active fw-bold @endif" href="#" id="monitoringDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Monitoring Data
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="monitoringDropdown">
+                            <li><a class="dropdown-item @if(request()->routeIs('dashboard.trend')) active fw-bold @endif" href="{{ route('dashboard.trend') }}">Dashboard Trend</a></li>
+                            <li><a class="dropdown-item @if(request()->routeIs('dashboard.distribution')) active fw-bold @endif" href="{{ route('dashboard.distribution') }}">Dashboard Distribution</a></li>
+                            <li><a class="dropdown-item @if(request()->routeIs('dashboard.performance')) active fw-bold @endif" href="{{ route('dashboard.performance') }}">Dashboard Performance</a></li>
+                            <li><a class="dropdown-item @if(request()->routeIs('dashboard.labor_demand')) active fw-bold @endif" href="{{ route('dashboard.labor_demand') }}">Dashboard Labor Demand</a></li>
+                        </ul>
                     </li>
                 </ul>
             </div>
