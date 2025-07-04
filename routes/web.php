@@ -15,3 +15,5 @@ Route::get('/news', [App\Http\Controllers\NewsController::class, 'index'])->name
 Route::get('/about', [App\Http\Controllers\AboutController::class, 'index'])->name('about');
 
 Route::get('/dashboard-trend', [App\Http\Controllers\DashboardTrendController::class, 'index'])->name('dashboard.trend');
+
+Route::get('/dashboard-distribution', [App\Http\Controllers\DashboardDistributionController::class, 'index'])->name('dashboard.distribution');
