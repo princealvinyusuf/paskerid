@@ -36,8 +36,8 @@
             @endforelse
         </tbody>
     </table>
-    <div class="d-flex justify-content-center">
+    {{-- <div class="d-flex justify-content-center">
         {{ $news->links() }}
-    </div>
+    </div> --}}
 </div>
 @endsection
