@@ -15,7 +15,7 @@ class NewsController extends Controller
             $query->where('title', 'like', '%' . $request->search . '%');
         }
 
-        $news = $query->orderByDesc('date')->paginate(9);
+        $news = $query->orderByDesc('date')->paginate(6);
 
         return view('news.index', compact('news'));
     }

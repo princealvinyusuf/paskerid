@@ -1,6 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
+<section style="background-color: #00a78e; padding: 20px 0 20px 20px;">
+    <h2 style="color: white; font-weight: bold; margin-bottom: 5px; margin-left: 90px">Berita</h2>
+    <p style="color: white; margin-left: 90px;">Temukan Berita Terkini Terkait Dengan Ketenagakerjaan.</p>
+</section>
+
 <div class="container my-5">
     <h2 class="mb-4 text-center">Semua Berita</h2>
     <form method="GET" class="row g-3 mb-4 justify-content-center">
@@ -11,18 +16,19 @@
             <button type="submit" class="btn btn-success w-100">Cari</button>
         </div>
     </form>
-    <div class="row">
+    <div class="row row-cols-1 row-cols-md-3 g-4 align-items-stretch">
         @forelse($news as $item)
             <div class="col-md-4 mb-4">
-                <div class="card h-100 shadow-sm border-0 rounded-4">
+                <div class="card h-100 shadow-sm" style="border-radius: 15px">
                     @if($item->image_url)
                         <img src="{{ $item->image_url }}" class="card-img-top rounded-top-4" alt="{{ $item->title }}">
                     @endif
-                    <div class="card-body d-flex flex-column">
+                    <div class="card-body">
                         <h5 class="card-title fw-bold">{{ $item->title }}</h5>
                         <p class="card-text">{{ Str::limit($item->content, 120) }}</p>
-                        <div class="mt-auto">
-                            <small class="text-muted">{{ indo_date($item->date) }} | {{ $item->author }}</small>
+                        <div class="card-footer bg-white d-flex justify-content-between text-muted text-sm">
+                            <small>{{ indo_date($item->date) }} </small>
+                            <small>{{ $item->author }}</small>
                         </div>
                     </div>
                 </div>
@@ -31,11 +37,47 @@
             <div class="col-12 text-center text-muted">Tidak ada berita ditemukan.</div>
         @endforelse
     </div>
+    
     <div class="d-flex justify-content-center mt-4">
         {{ $news->withQueryString()->links() }}
     </div>
-    <div class="mt-4 text-center">
+    {{-- <div class="mt-4 text-center">
         <a href="{{ url('/') }}" class="btn btn-secondary rounded-pill px-4">Kembali ke Beranda</a>
-    </div>
+    </div> --}}
 </div>
 @endsection
+
+<style>
+
+/* Tombol normal */
+.page-link {
+    color: #42bba8 !important;
+}
+
+/* Tombol hover */
+.page-link:hover {
+    color: #fff;
+    background-color: #42bba8;
+    border-color: #42bba8;
+}
+
+/* Tombol fokus/klik */
+.page-link:focus {
+    box-shadow: 0 0 0 0.2rem rgba(66, 187, 168, 0.25);
+}
+
+/* Tombol aktif (halaman saat ini) */
+.page-item.active .page-link {
+    background-color: #42bba8;
+    border-color: #42bba8;
+    color: #fff !important;
+}
+
+/* Nonaktif (disable), misalnya tombol panah di page 1 */
+.page-item.disabled .page-link {
+    color: #ccc;
+    background-color: #fff;
+    border-color: #ddd;
+}
+
+</style>
