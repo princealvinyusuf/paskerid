@@ -70,7 +70,19 @@
                 <div class="card">
                     <div class="card-body">
                         @if(isset($showInfo) && $showInfo)
-                            {!! $showInfo->iframe_url !!}
+                            <div class="responsive-embed">
+                                {!! $showInfo->iframe_url !!}
+                            </div>
+                            <script>
+                            document.addEventListener('DOMContentLoaded', function() {
+                                var vizObjs = document.querySelectorAll('.tableauViz');
+                                vizObjs.forEach(function(obj) {
+                                    obj.style.width = '100%';
+                                    obj.style.maxWidth = '100%';
+                                    obj.style.height = 'auto';
+                                });
+                            });
+                            </script>
                         @else
                             <span id="container-content">Container 1</span>
                         @endif
@@ -83,4 +95,16 @@
         </div>
     </div>
 </div>
+<style>
+.responsive-embed {
+    position: relative;
+    width: 100%;
+    overflow-x: auto;
+}
+.responsive-embed > * {
+    max-width: 100% !important;
+    height: auto !important;
+    display: block;
+}
+</style>
 @endsection 
