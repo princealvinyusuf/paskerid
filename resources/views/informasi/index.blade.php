@@ -49,7 +49,7 @@
                         </thead>
                         <tbody>
                             @forelse($information as $index => $info)
-                                <tr class="info-row" data-id="{{ $info->id }}" style="cursor:pointer;">
+                                <tr class="info-row" data-id="{{ $info->id }}" data-file-url="{{ $info->file_url }}" style="cursor:pointer;">
                                     <td>{{ $index + 1 + ($information->currentPage() - 1) * $information->perPage() }}</td>
                                     <td>{{ $info->title }}</td>
                                     <td>{{ indo_date($info->date) }}</td>
@@ -70,10 +70,17 @@
                 <div class="card">
                     <div class="card-body">
                         @if(isset($showInfo) && $showInfo)
-                            <a href="?subject={{ urlencode($selectedSubject) }}&type={{ request('type', 'statistik') }}" class="btn btn-secondary mb-3">
-                                <i class="fa fa-arrow-left"></i> Back to Table
-                            </a>
-                            {!! $showInfo->iframe_url !!}
+                            @if(request('type') == 'publikasi' && $showInfo->file_url)
+                                <a href="?subject={{ urlencode($selectedSubject) }}&type=publikasi" class="btn btn-secondary mb-3">
+                                    <i class="fa fa-arrow-left"></i> Back to Table
+                                </a>
+                                <embed src="{{ asset($showInfo->file_url) }}" type="application/pdf" width="100%" height="600px" />
+                            @else
+                                <a href="?subject={{ urlencode($selectedSubject) }}&type={{ request('type', 'statistik') }}" class="btn btn-secondary mb-3">
+                                    <i class="fa fa-arrow-left"></i> Back to Table
+                                </a>
+                                {!! $showInfo->iframe_url !!}
+                            @endif
                         @else
                             <span id="container-content">Container 1</span>
                         @endif
