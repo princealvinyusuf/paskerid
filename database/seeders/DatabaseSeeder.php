@@ -32,6 +32,7 @@ class DatabaseSeeder extends Seeder
             DashboardTrendSeeder::class,
             DashboardDistributionSeeder::class,
             DashboardPerformanceSeeder::class,
+            DashboardLaborDemandSeeder::class,
             // \Database\Seeders\DashboardTrendSeeder::class,
         ]);
     }
