@@ -28,4 +28,10 @@ class InformasiController extends Controller
 
         return view('informasi.index', compact('information', 'types', 'subjects', 'selectedSubject'));
     }
+
+    public function show($id)
+    {
+        $info = \App\Models\Information::findOrFail($id);
+        return view('informasi.show', compact('info'));
+    }
 } 

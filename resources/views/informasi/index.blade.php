@@ -50,7 +50,9 @@
                         @forelse($information as $index => $info)
                             <tr class="info-row" data-row="{{ $index + 1 }}" data-iframe-url="{{ $info->iframe_url }}">
                                 <td>{{ $index + 1 + ($information->currentPage() - 1) * $information->perPage() }}</td>
-                                <td>{{ $info->title }}</td>
+                                <td>
+                                    <a href="{{ route('informasi.show', $info->id) }}">{{ $info->title }}</a>
+                                </td>
                                 <td>{{ indo_date($info->date) }}</td>
                             </tr>
                         @empty
