@@ -103,6 +103,20 @@
     .vk-jobfair-carousel .carousel-control-prev, .vk-jobfair-carousel .carousel-control-next {
         filter: invert(1);
     }
+    .vk-agenda-icon {
+        font-size: 1.3rem;
+        margin-right: 0.5rem;
+        color: #00c6fb;
+        vertical-align: middle;
+    }
+    .vk-agenda-row-upcoming {
+        background: #e3f2fd !important;
+        font-weight: 600;
+        color: #005baa;
+    }
+    .vk-agenda-row-odd {
+        background: #f8f9fa;
+    }
 </style>
 <div class="container py-4">
     <div class="vk-hero mb-5">
@@ -249,10 +263,29 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($agendas as $agenda)
-                            <tr>
-                                <td>{{ \Carbon\Carbon::parse($agenda->date)->format('d M Y') }}</td>
-                                <td>{{ $agenda->title }}</td>
+                        @php
+                            $now = \Carbon\Carbon::now();
+                            $nextIdx = null;
+                            foreach($agendas as $idx => $agenda) {
+                                if ($nextIdx === null && \Carbon\Carbon::parse($agenda->date)->isFuture()) {
+                                    $nextIdx = $idx;
+                                }
+                            }
+                        @endphp
+                        @foreach($agendas as $idx => $agenda)
+                            @php
+                                $date = \Carbon\Carbon::parse($agenda->date);
+                                $isUpcoming = $idx === $nextIdx;
+                                $rowClass = $isUpcoming ? 'vk-agenda-row-upcoming' : ($idx % 2 === 1 ? 'vk-agenda-row-odd' : '');
+                                // Simple icon logic based on title/desc
+                                $icon = 'fa-calendar';
+                                if (stripos($agenda->title, 'webinar') !== false) $icon = 'fa-chalkboard-teacher';
+                                elseif (stripos($agenda->title, 'pelatihan') !== false) $icon = 'fa-user-graduate';
+                                elseif (stripos($agenda->title, 'job fair') !== false) $icon = 'fa-briefcase';
+                            @endphp
+                            <tr class="{{ $rowClass }}">
+                                <td>{{ $date->format('d M Y') }}</td>
+                                <td><i class="fas {{ $icon }} vk-agenda-icon"></i>{{ $agenda->title }}</td>
                                 <td>{{ $agenda->description }}</td>
                             </tr>
                         @endforeach
