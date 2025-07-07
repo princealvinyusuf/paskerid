@@ -99,6 +99,21 @@
     </script>
     @push('head')
     <style>
+    html, body {
+        height: 100%;
+        min-height: 100%;
+    }
+    body {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+    main {
+        flex: 1 0 auto;
+    }
+    footer {
+        flex-shrink: 0;
+    }
     :root {
         --primary-green: #187C19;
         --secondary-green: #69B41E;
