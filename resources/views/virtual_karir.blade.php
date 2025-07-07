@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
 <style>
     .vk-hero {
         background: linear-gradient(90deg, #005baa 0%, #00c6fb 100%);
@@ -117,14 +118,29 @@
     .vk-agenda-row-odd {
         background: #f8f9fa;
     }
+    .vk-fadein {
+        animation: fadeInUp 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    @media (max-width: 767.98px) {
+        .vk-hero {
+            padding: 1.5rem 1rem 1rem 1rem;
+            font-size: 1.1rem;
+        }
+        .vk-section {
+            padding: 1.2rem 0.5rem;
+        }
+        .vk-service-card, .vk-jobfair-card {
+            min-height: unset;
+        }
+    }
 </style>
 <div class="container py-4">
-    <div class="vk-hero mb-5">
+    <div class="vk-hero mb-5 animate__animated animate__fadeInDown">
         <h1 class="display-5 fw-bold mb-2">Virtual Karir</h1>
         <p class="lead mb-0">Satu pintu layanan karir, job fair, dan agenda pasar kerja Indonesia secara digital dan terintegrasi.</p>
         <img src="/images/hero-bg.jpg" alt="Virtual Karir" style="position:absolute;right:2rem;bottom:0;max-width:200px;opacity:0.15;pointer-events:none;">
     </div>
-    <nav aria-label="breadcrumb">
+    <nav aria-label="breadcrumb" class="animate__animated animate__fadeIn animate__delay-1s">
         <ol class="breadcrumb bg-white px-0">
             <li class="breadcrumb-item"><a href="/">Beranda</a></li>
             <li class="breadcrumb-item active" aria-current="page">Layanan</li>
@@ -132,13 +148,13 @@
         </ol>
     </nav>
 
-    <div class="vk-section mb-5">
+    <div class="vk-section mb-5 animate__animated animate__fadeInUp animate__delay-1s">
         <div class="vk-section-title">Layanan Pusat Pasar Kerja</div>
         <div class="vk-section-desc">Berbagai layanan digital untuk mendukung pengembangan karir dan akses pasar kerja nasional.</div>
         <div class="row mb-2">
             @foreach($services as $service)
                 <div class="col-md-4 mb-4 d-flex align-items-stretch">
-                    <div class="card vk-service-card w-100 shadow-sm">
+                    <div class="card vk-service-card w-100 shadow-sm animate__animated animate__fadeInUp animate__faster">
                         <div class="card-body d-flex flex-column justify-content-between">
                             <div>
                                 @if($service->icon)
@@ -157,7 +173,7 @@
         </div>
     </div>
     <hr class="vk-divider">
-    <div class="vk-section mb-5">
+    <div class="vk-section mb-5 animate__animated animate__fadeInUp animate__delay-2s">
         <div class="vk-section-title">Layanan Job Fair</div>
         <div class="vk-section-desc">Temukan dan ikuti berbagai event job fair nasional secara daring maupun luring.</div>
         @if($jobFairs->count() > 1)
@@ -167,7 +183,7 @@
                         <div class="carousel-item @if($idx === 0) active @endif">
                             <div class="row justify-content-center">
                                 <div class="col-md-8">
-                                    <div class="card h-100 shadow-sm position-relative">
+                                    <div class="card h-100 shadow-sm position-relative animate__animated animate__fadeInUp animate__faster">
                                         @php
                                             $today = \Carbon\Carbon::today();
                                             $eventDate = \Carbon\Carbon::parse($jobFair->date);
@@ -214,7 +230,7 @@
             <div class="row mb-2">
                 @foreach($jobFairs as $jobFair)
                     <div class="col-md-4 mb-4">
-                        <div class="card h-100 shadow-sm position-relative">
+                        <div class="card h-100 shadow-sm position-relative animate__animated animate__fadeInUp animate__faster">
                             @php
                                 $today = \Carbon\Carbon::today();
                                 $eventDate = \Carbon\Carbon::parse($jobFair->date);
@@ -249,10 +265,10 @@
         @endif
     </div>
     <hr class="vk-divider">
-    <div class="vk-section">
+    <div class="vk-section animate__animated animate__fadeInUp animate__delay-3s">
         <div class="vk-section-title">Agenda Pusat Pasar Kerja</div>
         <div class="vk-section-desc">Jadwal kegiatan, webinar, pelatihan, dan agenda penting lainnya dari Pusat Pasar Kerja.</div>
-        <div class="card p-4">
+        <div class="card p-4 animate__animated animate__fadeIn animate__delay-4s">
             <div class="table-responsive">
                 <table class="table table-bordered">
                     <thead>
