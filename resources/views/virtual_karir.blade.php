@@ -36,6 +36,48 @@
         width: 100px;
         background: transparent;
     }
+    .vk-service-card {
+        transition: box-shadow 0.2s, transform 0.2s;
+        min-height: 340px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+    .vk-service-card:hover {
+        box-shadow: 0 8px 32px rgba(0,123,255,0.15);
+        transform: translateY(-4px) scale(1.03);
+        z-index: 2;
+    }
+    .vk-service-icon {
+        width: 56px;
+        height: 56px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #00c6fb 0%, #005baa 100%);
+        color: #fff;
+        font-size: 2rem;
+        margin-bottom: 1rem;
+        box-shadow: 0 2px 8px rgba(0,123,255,0.10);
+    }
+    .vk-learn-more {
+        margin-top: 1.5rem;
+        color: #fff;
+        background: linear-gradient(90deg, #005baa 0%, #00c6fb 100%);
+        border: none;
+        border-radius: 2rem;
+        padding: 0.5rem 1.5rem;
+        font-weight: 500;
+        transition: background 0.2s;
+        text-decoration: none;
+        display: inline-block;
+    }
+    .vk-learn-more:hover {
+        background: linear-gradient(90deg, #00c6fb 0%, #005baa 100%);
+        color: #fff;
+        text-decoration: none;
+    }
 </style>
 <div class="container py-4">
     <div class="vk-hero mb-5">
@@ -56,18 +98,18 @@
         <div class="vk-section-desc">Berbagai layanan digital untuk mendukung pengembangan karir dan akses pasar kerja nasional.</div>
         <div class="row mb-2">
             @foreach($services as $service)
-                <div class="col-md-4 mb-4">
-                    <div class="card h-100 shadow-sm">
-                        <div class="card-body">
-                            <div class="mb-2">
+                <div class="col-md-4 mb-4 d-flex align-items-stretch">
+                    <div class="card vk-service-card w-100 shadow-sm">
+                        <div class="card-body d-flex flex-column justify-content-between">
+                            <div>
                                 @if($service->icon)
-                                    <i class="{{ $service->icon }} fa-2x"></i>
+                                    <div class="vk-service-icon mb-3"><i class="{{ $service->icon }}"></i></div>
                                 @endif
+                                <h5 class="card-title fw-bold">{{ $service->title }}</h5>
+                                <p class="card-text">{{ $service->description }}</p>
                             </div>
-                            <h5 class="card-title fw-bold">{{ $service->title }}</h5>
-                            <p class="card-text">{{ $service->description }}</p>
                             @if($service->link)
-                                <a href="{{ $service->link }}" class="text-primary">Selengkapnya &rarr;</a>
+                                <a href="{{ $service->link }}" class="vk-learn-more mt-auto" target="_blank" rel="noopener">Learn More</a>
                             @endif
                         </div>
                     </div>
