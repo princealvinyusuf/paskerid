@@ -38,7 +38,7 @@
                 <h5 class="fw-bold mb-3">Berita Populer</h5>
                 @foreach($popularNews as $item)
                 <div class="mb-3">
-                    <a href=" {{ route('news.DetailBerita', '$item->id')}}" class="text-dark fw-semibold">{{Str::limit($item->title, 70)}}</a>
+                    <a href=" {{ route('news.DetailBerita', $item->id)}}" class="text-dark fw-semibold">{{Str::limit($item->title, 70)}}</a>
                     <div class="text-muted small">{{ \Carbon\Carbon::parse($item->date)->format('d M Y') }}</div>
                 </div>
                 @endforeach
