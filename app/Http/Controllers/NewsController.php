@@ -19,4 +19,12 @@ class NewsController extends Controller
 
         return view('news.index', compact('news'));
     }
+
+    public function show($id)
+    {
+        $news = \App\Models\News::findorFail($id);
+        $popularNews = \App\Models\News::orderBy('Created_at', 'desc')->limit(5)->get();
+
+        return view('news.DetailBerita', compact('news','popularNews'));
+    }
 }

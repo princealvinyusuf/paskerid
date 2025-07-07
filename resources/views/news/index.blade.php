@@ -27,6 +27,7 @@
     <div class="row row-cols-1 row-cols-md-3 g-4 align-items-stretch">
         @forelse($news as $item)
             <div class="col-md-4 mb-4">
+                <a href="{{ route('news.DetailBerita', $item->id)}}" class="text-decoration-none text-dark">
                 <div class="card h-100 shadow-sm" style="border-radius: 15px">
                     @if($item->image_url)
                         <img src="{{ $item->image_url }}" class="card-img-top rounded-top-4" alt="{{ $item->title }}">
@@ -40,6 +41,7 @@
                         </div>
                     </div>
                 </div>
+                </a>
             </div>
         @empty
             <div class="col-12 text-center text-muted">Tidak ada berita ditemukan.</div>
