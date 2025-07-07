@@ -78,6 +78,31 @@
         color: #fff;
         text-decoration: none;
     }
+    .vk-jobfair-badge {
+        position: absolute;
+        top: 1rem;
+        left: 1rem;
+        background: linear-gradient(90deg, #00c6fb 0%, #005baa 100%);
+        color: #fff;
+        font-size: 0.9rem;
+        font-weight: 600;
+        padding: 0.3rem 1rem;
+        border-radius: 1rem;
+        z-index: 2;
+        box-shadow: 0 2px 8px rgba(0,123,255,0.10);
+    }
+    .vk-jobfair-countdown {
+        font-size: 0.95rem;
+        font-weight: 500;
+        color: #005baa;
+        margin-top: 0.5rem;
+    }
+    .vk-jobfair-carousel .carousel-inner {
+        padding-bottom: 2rem;
+    }
+    .vk-jobfair-carousel .carousel-control-prev, .vk-jobfair-carousel .carousel-control-next {
+        filter: invert(1);
+    }
 </style>
 <div class="container py-4">
     <div class="vk-hero mb-5">
@@ -121,28 +146,93 @@
     <div class="vk-section mb-5">
         <div class="vk-section-title">Layanan Job Fair</div>
         <div class="vk-section-desc">Temukan dan ikuti berbagai event job fair nasional secara daring maupun luring.</div>
-        <div class="row mb-2">
-            @foreach($jobFairs as $jobFair)
-                <div class="col-md-4 mb-4">
-                    <div class="card h-100 shadow-sm">
-                        @if($jobFair->image_url)
-                            <img src="{{ $jobFair->image_url }}" class="card-img-top" alt="{{ $jobFair->title }}">
-                        @endif
-                        <div class="card-body">
-                            <h5 class="card-title fw-bold">{{ $jobFair->title }}</h5>
-                            <p class="card-text">{{ $jobFair->description }}</p>
-                            <div class="d-flex justify-content-between align-items-center mt-3">
-                                <small class="text-muted">{{ \Carbon\Carbon::parse($jobFair->date)->format('d M Y') }}</small>
-                                <small class="text-muted">{{ $jobFair->author }}</small>
+        @if($jobFairs->count() > 1)
+            <div id="jobFairCarousel" class="carousel slide vk-jobfair-carousel" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    @foreach($jobFairs as $idx => $jobFair)
+                        <div class="carousel-item @if($idx === 0) active @endif">
+                            <div class="row justify-content-center">
+                                <div class="col-md-8">
+                                    <div class="card h-100 shadow-sm position-relative">
+                                        @php
+                                            $today = \Carbon\Carbon::today();
+                                            $eventDate = \Carbon\Carbon::parse($jobFair->date);
+                                            $isUpcoming = $eventDate->isFuture();
+                                            $isToday = $eventDate->isToday();
+                                            $isOngoing = $isToday;
+                                        @endphp
+                                        @if($isOngoing)
+                                            <span class="vk-jobfair-badge">Ongoing</span>
+                                        @elseif($isUpcoming)
+                                            <span class="vk-jobfair-badge">Upcoming</span>
+                                        @endif
+                                        @if($jobFair->image_url)
+                                            <img src="{{ $jobFair->image_url }}" class="card-img-top" alt="{{ $jobFair->title }}">
+                                        @endif
+                                        <div class="card-body">
+                                            <h5 class="card-title fw-bold">{{ $jobFair->title }}</h5>
+                                            <p class="card-text">{{ $jobFair->description }}</p>
+                                            <div class="vk-jobfair-countdown" data-date="{{ $jobFair->date }}" id="countdown-{{ $jobFair->id }}"></div>
+                                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                                <small class="text-muted">{{ $eventDate->format('d M Y') }}</small>
+                                                <small class="text-muted">{{ $jobFair->author }}</small>
+                                            </div>
+                                            @if($jobFair->register_url)
+                                                <a href="{{ $jobFair->register_url }}" class="btn btn-primary btn-sm mt-2">Daftar Sekarang</a>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            @if($jobFair->register_url)
-                                <a href="{{ $jobFair->register_url }}" class="btn btn-primary btn-sm mt-2">Daftar Sekarang</a>
+                        </div>
+                    @endforeach
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#jobFairCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#jobFairCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        @else
+            <div class="row mb-2">
+                @foreach($jobFairs as $jobFair)
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100 shadow-sm position-relative">
+                            @php
+                                $today = \Carbon\Carbon::today();
+                                $eventDate = \Carbon\Carbon::parse($jobFair->date);
+                                $isUpcoming = $eventDate->isFuture();
+                                $isToday = $eventDate->isToday();
+                                $isOngoing = $isToday;
+                            @endphp
+                            @if($isOngoing)
+                                <span class="vk-jobfair-badge">Ongoing</span>
+                            @elseif($isUpcoming)
+                                <span class="vk-jobfair-badge">Upcoming</span>
                             @endif
+                            @if($jobFair->image_url)
+                                <img src="{{ $jobFair->image_url }}" class="card-img-top" alt="{{ $jobFair->title }}">
+                            @endif
+                            <div class="card-body">
+                                <h5 class="card-title fw-bold">{{ $jobFair->title }}</h5>
+                                <p class="card-text">{{ $jobFair->description }}</p>
+                                <div class="vk-jobfair-countdown" data-date="{{ $jobFair->date }}" id="countdown-{{ $jobFair->id }}"></div>
+                                <div class="d-flex justify-content-between align-items-center mt-3">
+                                    <small class="text-muted">{{ $eventDate->format('d M Y') }}</small>
+                                    <small class="text-muted">{{ $jobFair->author }}</small>
+                                </div>
+                                @if($jobFair->register_url)
+                                    <a href="{{ $jobFair->register_url }}" class="btn btn-primary btn-sm mt-2">Daftar Sekarang</a>
+                                @endif
+                            </div>
                         </div>
                     </div>
-                </div>
-            @endforeach
-        </div>
+                @endforeach
+            </div>
+        @endif
     </div>
     <hr class="vk-divider">
     <div class="vk-section">
@@ -172,4 +262,28 @@
         </div>
     </div>
 </div>
+<script>
+    function updateCountdowns() {
+        document.querySelectorAll('.vk-jobfair-countdown').forEach(function(el) {
+            var dateStr = el.getAttribute('data-date');
+            var eventDate = new Date(dateStr);
+            var now = new Date();
+            var diff = eventDate - now;
+            if (diff > 0) {
+                var days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                var hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+                var minutes = Math.floor((diff / (1000 * 60)) % 60);
+                el.innerHTML = 'Mulai dalam: <b>' + days + ' hari</b> ' + hours + ' jam ' + minutes + ' menit';
+            } else if (Math.abs(diff) < 1000 * 60 * 60 * 24) {
+                el.innerHTML = '<span class="text-success">Sedang berlangsung!</span>';
+            } else {
+                el.innerHTML = '<span class="text-muted">Sudah lewat</span>';
+            }
+        });
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+        updateCountdowns();
+        setInterval(updateCountdowns, 60000);
+    });
+</script>
 @endsection 
