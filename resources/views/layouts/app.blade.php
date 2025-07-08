@@ -144,9 +144,9 @@
     main {
         flex: 1 0 auto;
     }
-    /* footer {
-        flex-shrink: 0;
-    } */
+    .bg-success {
+        background-color: #00A38A !important;
+    }
     :root {
         --primary-green: #187C19;
         --secondary-green: #69B41E;
