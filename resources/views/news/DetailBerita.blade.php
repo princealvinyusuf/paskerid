@@ -34,11 +34,11 @@
 
         <!-- Berita Populer -->
         <div class="col-md-4">
-            <div class="p-3 bg-light rounded-3">
-                <h5 class="fw-bold mb-3">Berita Populer</h5>
+            <div class="p-3 bg-light2 rounded-3">
+                <h5 class="fw-bold mb-3 section-title">Berita Populer</h5>
                 @foreach($popularNews as $item)
                 <div class="mb-3">
-                    <a href=" {{ route('news.DetailBerita', $item->id)}}" class="text-dark fw-semibold">{{Str::limit($item->title, 70)}}</a>
+                    <a href=" {{ route('news.DetailBerita', $item->id)}}" class="text-dark fw-semibold" style="text-decoration: none;">{{Str::limit($item->title, 70)}}</a>
                     <div class="text-muted small">{{ \Carbon\Carbon::parse($item->date)->format('d M Y') }}</div>
                 </div>
                 @endforeach
@@ -71,8 +71,8 @@
     color: #6c757d;
 }
 
-.bg-light {
-    background-color: #f8f9fa;
+.bg-light2 {
+    background-color: #DFF4F0 !important;
 }
 
 .detailberita {
@@ -146,5 +146,22 @@
     padding-left: 30px;
     padding-right: 30px;
     text-align: justify;
+}
+.section-title {
+    position: relative;
+    display: inline-block;
+    padding-bottom: 8px;
+    margin-bottom: 16px;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;  /*panjang garis, bisa disesuaikan*/
+    max-width: 400px;
+    height: 3px;  /* tebal garis */
+    background-color: #00a78e; /* warna garis */
 }
 </style>
