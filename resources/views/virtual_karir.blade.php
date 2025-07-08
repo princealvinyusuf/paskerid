@@ -180,13 +180,7 @@
         </div>
         <img src="/images/hero-bg.jpg" class="vk-hero-img" alt="Virtual Karir">
     </div>
-    <nav aria-label="breadcrumb" class="animate__animated animate__fadeIn animate__delay-1s">
-        <ol class="breadcrumb bg-white px-0">
-            <li class="breadcrumb-item"><a href="/">Beranda</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Layanan</li>
-            <li class="breadcrumb-item active" aria-current="page">Virtual Karir</li>
-        </ol>
-    </nav>
+    {{-- Removed breadcrumb navigation --}}
 
     <div class="vk-section mb-5 animate__animated animate__fadeInUp animate__delay-1s">
         <div class="vk-section-title">Layanan Pusat Pasar Kerja</div>
