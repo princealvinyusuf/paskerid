@@ -10,6 +10,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <!-- AOS CSS -->
     <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     @yield('head')
 </head>
 <body>
@@ -60,11 +61,40 @@
             <i class="fa fa-arrow-up"></i>
         </button>
     </main>
-    <footer class="bg-light text-center py-2">
-        <div class="container">
-            <small>&copy; {{ date('Y') }} Paskerid. All rights reserved.</small>
+
+
+    <footer class="bg-success text-white py-3">
+    <div class="container-fluid">
+        <div class="row align-items-center justify-content-between">
+            <!-- Copyright ke kiri -->
+            <div class="col-md-4 ps-4 text-start">
+                Copyright © 2025 Pusat Pasar Kerja
+            </div>
+
+            <!-- Menu Tengah -->
+            <div class="col-md-4 d-flex justify-content-center flex-wrap gap-3">
+                <a href="#" class="text-white text-decoration-none">Layanan</a>
+                <a href="#" class="text-white text-decoration-none">Monitoring Data</a>
+                <a href="#" class="text-white text-decoration-none">Dokumen</a>
+                <a href="#" class="text-white text-decoration-none">Berita</a>
+                <a href="#" class="text-white text-decoration-none">Tentang Kami</a>
+            </div>
+
+            <!-- Sosial Media Kanan -->
+            <div class="col-md-4 text-end">
+                
+                <a href="https://www.instagram.com/pusatpasarkerja/?hl=en" target="_blank" class="text-white mx-1"><i class="fab fa-instagram"></i></a>
+                
+            </div>
         </div>
-    </footer>
+    </div>
+</footer>
+
+
+
+
+
+
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     @yield('scripts')
@@ -114,9 +144,9 @@
     main {
         flex: 1 0 auto;
     }
-    footer {
+    /* footer {
         flex-shrink: 0;
-    }
+    } */
     :root {
         --primary-green: #187C19;
         --secondary-green: #69B41E;
@@ -151,10 +181,10 @@
     .section-title {
         color: var(--primary-green);
     }
-    footer.bg-light {
+    /* footer.bg-light {
         background-color: var(--light-green) !important;
         color: var(--dark-green) !important;
-    }
+    } */
     #backToTopBtn {
         opacity: 0.85;
         transition: opacity 0.2s, transform 0.2s;
@@ -163,6 +193,12 @@
         opacity: 1;
         transform: scale(1.08);
     }
+    footer a {
+    white-space: nowrap;  /* Paksa 1 baris */
+}
+
+
+
     </style>
     @endpush
 </body>
