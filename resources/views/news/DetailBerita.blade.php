@@ -33,7 +33,7 @@
         
 
         <!-- Berita Populer -->
-        <div class="col-md-4">
+        <div class="col-md-4 mt-1">
             <div class="p-3 bg-light2 rounded-3">
                 <h5 class="fw-bold mb-3 section-title">Berita Populer</h5>
                 @foreach($popularNews as $item)
