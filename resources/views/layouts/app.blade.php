@@ -33,6 +33,9 @@
                         <a class="nav-link @if(request()->routeIs('news.index')) active fw-bold @endif" href="{{ route('news.index') }}">News</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link @if(request()->routeIs('virtual-karir.index')) active fw-bold @endif" href="{{ route('virtual-karir.index') }}">Virtual Karir</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link @if(request()->routeIs('about')) active fw-bold @endif" href="{{ route('about') }}">About</a>
                     </li>
                     <li class="nav-item dropdown">
