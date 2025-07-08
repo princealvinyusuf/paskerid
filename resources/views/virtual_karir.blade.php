@@ -249,7 +249,11 @@
                                                 <small class="text-muted">{{ $jobFair->author }}</small>
                                             </div>
                                             @if($jobFair->register_url)
-                                                <a href="{{ $jobFair->register_url }}" class="btn btn-primary btn-sm mt-2">Daftar Sekarang</a>
+                                                @if($eventDate->isPast())
+                                                    <button class="btn btn-secondary btn-sm mt-2" disabled style="background: #adb5bd; border-color: #adb5bd; cursor: not-allowed;">Daftar Sekarang</button>
+                                                @else
+                                                    <a href="{{ $jobFair->register_url }}" class="btn btn-primary btn-sm mt-2">Daftar Sekarang</a>
+                                                @endif
                                             @endif
                                         </div>
                                     </div>
@@ -296,7 +300,11 @@
                                     <small class="text-muted">{{ $jobFair->author }}</small>
                                 </div>
                                 @if($jobFair->register_url)
-                                    <a href="{{ $jobFair->register_url }}" class="btn btn-primary btn-sm mt-2">Daftar Sekarang</a>
+                                    @if($eventDate->isPast())
+                                        <button class="btn btn-secondary btn-sm mt-2" disabled style="background: #adb5bd; border-color: #adb5bd; cursor: not-allowed;">Daftar Sekarang</button>
+                                    @else
+                                        <a href="{{ $jobFair->register_url }}" class="btn btn-primary btn-sm mt-2">Daftar Sekarang</a>
+                                    @endif
                                 @endif
                             </div>
                         </div>
