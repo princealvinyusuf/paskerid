@@ -6,16 +6,44 @@
     .vk-hero {
         background: linear-gradient(90deg, #005baa 0%, #00c6fb 100%);
         color: #fff;
-        border-radius: 1rem;
+        border-radius: 1.5rem;
         padding: 2.5rem 2rem 2rem 2rem;
         margin-bottom: 2.5rem;
-        box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+        box-shadow: 0 4px 24px rgba(0,0,0,0.10);
         position: relative;
         overflow: hidden;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        min-height: 220px;
+    }
+    .vk-hero-content {
+        z-index: 2;
+        flex: 1 1 300px;
+    }
+    .vk-hero-img {
+        position: absolute;
+        right: 2rem;
+        bottom: 0;
+        max-width: 220px;
+        opacity: 0.18;
+        pointer-events: none;
+        z-index: 1;
+    }
+    .vk-hero-logo {
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        background: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1rem;
+        box-shadow: 0 2px 8px rgba(0,123,255,0.10);
     }
     .vk-section {
-        background: #f8f9fa;
-        border-radius: 1rem;
+        background: linear-gradient(135deg, #f8f9fa 80%, #e3f2fd 100%);
+        border-radius: 1.25rem;
         padding: 2rem 1.5rem;
         margin-bottom: 2.5rem;
         box-shadow: 0 2px 12px rgba(0,0,0,0.04);
@@ -25,17 +53,20 @@
         font-weight: 700;
         margin-bottom: 0.5rem;
         color: #005baa;
+        letter-spacing: -1px;
     }
     .vk-section-desc {
-        color: #6c757d;
+        color: #4a6fa1;
         margin-bottom: 1.5rem;
+        font-size: 1.1rem;
     }
     .vk-divider {
         border: none;
-        border-top: 2px solid #00c6fb;
+        border-top: 2.5px solid #00c6fb;
         margin: 2.5rem 0 2rem 0;
-        width: 100px;
+        width: 120px;
         background: transparent;
+        border-radius: 2px;
     }
     .vk-service-card {
         transition: box-shadow 0.2s, transform 0.2s;
@@ -62,10 +93,9 @@
         margin-bottom: 1rem;
         box-shadow: 0 2px 8px rgba(0,123,255,0.10);
     }
-    .vk-learn-more {
-        margin-top: 1.5rem;
-        color: #fff;
-        background: linear-gradient(90deg, #005baa 0%, #00c6fb 100%);
+    .vk-learn-more, .btn-primary {
+        background: linear-gradient(90deg, #005baa 0%, #00c6fb 100%) !important;
+        color: #fff !important;
         border: none;
         border-radius: 2rem;
         padding: 0.5rem 1.5rem;
@@ -73,10 +103,11 @@
         transition: background 0.2s;
         text-decoration: none;
         display: inline-block;
+        box-shadow: 0 2px 8px rgba(0,123,255,0.10);
     }
-    .vk-learn-more:hover {
-        background: linear-gradient(90deg, #00c6fb 0%, #005baa 100%);
-        color: #fff;
+    .vk-learn-more:hover, .btn-primary:hover {
+        background: linear-gradient(90deg, #00c6fb 0%, #005baa 100%) !important;
+        color: #fff !important;
         text-decoration: none;
     }
     .vk-jobfair-badge {
@@ -121,6 +152,10 @@
     .vk-fadein {
         animation: fadeInUp 0.8s cubic-bezier(0.23, 1, 0.32, 1);
     }
+    .breadcrumb-item.active {
+        color: #005baa !important;
+        font-weight: 600;
+    }
     @media (max-width: 767.98px) {
         .vk-hero {
             padding: 1.5rem 1rem 1rem 1rem;
@@ -136,9 +171,14 @@
 </style>
 <div class="container py-4">
     <div class="vk-hero mb-5 animate__animated animate__fadeInDown">
-        <h1 class="display-5 fw-bold mb-2">Virtual Karir</h1>
-        <p class="lead mb-0">Satu pintu layanan karir, job fair, dan agenda pasar kerja Indonesia secara digital dan terintegrasi.</p>
-        <img src="/images/hero-bg.jpg" alt="Virtual Karir" style="position:absolute;right:2rem;bottom:0;max-width:200px;opacity:0.15;pointer-events:none;">
+        <div class="vk-hero-content">
+            <div class="vk-hero-logo mb-3">
+                <img src="/images/logo_siapkerja.svg" alt="Logo" style="width:40px;height:40px;">
+            </div>
+            <h1 class="display-5 fw-bold mb-2">Virtual Karir</h1>
+            <p class="lead mb-0">Satu pintu layanan karir, job fair, dan agenda pasar kerja Indonesia secara digital dan terintegrasi.</p>
+        </div>
+        <img src="/images/hero-bg.jpg" class="vk-hero-img" alt="Virtual Karir">
     </div>
     <nav aria-label="breadcrumb" class="animate__animated animate__fadeIn animate__delay-1s">
         <ol class="breadcrumb bg-white px-0">
