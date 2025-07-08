@@ -351,7 +351,18 @@
                             <tr class="{{ $rowClass }}">
                                 <td>{{ $date->format('d M Y') }}</td>
                                 <td><i class="fas {{ $icon }} vk-agenda-icon"></i>{{ $agenda->title }}</td>
-                                <td>{{ $agenda->description }}</td>
+                                <td>
+                                    {{ $agenda->description }}
+                                    <button class="btn btn-outline-primary btn-sm ms-2" data-bs-toggle="modal" data-bs-target="#agendaDetailModal"
+                                        data-title="{{ e($agenda->title) }}"
+                                        data-organizer="{{ e($agenda->organizer) }}"
+                                        data-date="{{ $date->format('d M Y') }}"
+                                        data-location="{{ e($agenda->location) }}"
+                                        data-image="{{ $agenda->image_url }}"
+                                        data-registration="{{ $agenda->registration_url }}"
+                                        data-description="{{ e($agenda->description) }}"
+                                    >Detail</button>
+                                </td>
                             </tr>
                         @endforeach
                     </tbody>
@@ -359,6 +370,32 @@
             </div>
         </div>
     </div>
+</div>
+<!-- Modal for Agenda Detail -->
+<div class="modal fade" id="agendaDetailModal" tabindex="-1" aria-labelledby="agendaDetailModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="agendaDetailModalLabel">Detail Agenda</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-5 mb-3 mb-md-0">
+            <img id="agendaModalImage" src="" alt="Agenda Image" class="img-fluid rounded w-100" style="object-fit:cover;max-height:320px;">
+          </div>
+          <div class="col-md-7">
+            <h4 id="agendaModalTitle" class="fw-bold mb-1"></h4>
+            <div class="mb-2 text-muted" id="agendaModalOrganizer"></div>
+            <div class="mb-2"><i class="fa fa-calendar-alt me-2"></i><span id="agendaModalDate"></span></div>
+            <div class="mb-2"><i class="fa fa-map-marker-alt me-2"></i><span id="agendaModalLocation"></span></div>
+            <div class="mb-2" id="agendaModalRegistration"></div>
+            <div class="mt-3" id="agendaModalDescription"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 <script>
     function updateCountdowns() {
