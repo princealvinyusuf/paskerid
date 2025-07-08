@@ -419,6 +419,36 @@
     document.addEventListener('DOMContentLoaded', function() {
         updateCountdowns();
         setInterval(updateCountdowns, 60000);
+        var agendaModal = document.getElementById('agendaDetailModal');
+        agendaModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget;
+            if (!button) return;
+            // Debug log
+            console.log('Opening modal for:', button.getAttribute('data-title'));
+            document.getElementById('agendaModalTitle').textContent = button.getAttribute('data-title') || '';
+            document.getElementById('agendaModalOrganizer').textContent = button.getAttribute('data-organizer') || '';
+            document.getElementById('agendaModalDate').textContent = button.getAttribute('data-date') || '';
+            document.getElementById('agendaModalLocation').textContent = button.getAttribute('data-location') || '';
+            var img = document.getElementById('agendaModalImage');
+            var imgUrl = button.getAttribute('data-image');
+            if (imgUrl) {
+                img.src = imgUrl;
+                img.alt = button.getAttribute('data-title') || 'Agenda Image';
+                img.onerror = function() {
+                    this.src = 'https://via.placeholder.com/400x300?text=No+Image';
+                };
+            } else {
+                img.src = 'https://via.placeholder.com/400x300?text=No+Image';
+                img.alt = 'No Image';
+            }
+            var regUrl = button.getAttribute('data-registration');
+            if (regUrl) {
+                document.getElementById('agendaModalRegistration').innerHTML = '<a href="' + regUrl + '" target="_blank" class="btn btn-success btn-sm mb-2"><i class="fa fa-link me-1"></i> Link Pendaftaran</a>';
+            } else {
+                document.getElementById('agendaModalRegistration').innerHTML = '';
+            }
+            document.getElementById('agendaModalDescription').textContent = button.getAttribute('data-description') || '';
+        });
     });
 </script>
 @endsection 
