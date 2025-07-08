@@ -3,8 +3,15 @@
 @section('content')
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
 <style>
+    :root {
+        --primary-green: #187C19;
+        --secondary-green: #69B41E;
+        --accent-green: #8DC71E;
+        --light-green: #B8D53D;
+        --dark-green: #0D5B11;
+    }
     .vk-hero {
-        background: linear-gradient(90deg, #005baa 0%, #00c6fb 100%);
+        background: linear-gradient(90deg, var(--primary-green) 0%, var(--secondary-green) 100%);
         color: #fff;
         border-radius: 1.5rem;
         padding: 2.5rem 2rem 2rem 2rem;
@@ -39,10 +46,10 @@
         align-items: center;
         justify-content: center;
         margin-bottom: 1rem;
-        box-shadow: 0 2px 8px rgba(0,123,255,0.10);
+        box-shadow: 0 2px 8px rgba(24,124,25,0.10);
     }
     .vk-section {
-        background: linear-gradient(135deg, #f8f9fa 80%, #e3f2fd 100%);
+        background: linear-gradient(135deg, #f8f9fa 80%, var(--light-green) 100%);
         border-radius: 1.25rem;
         padding: 2rem 1.5rem;
         margin-bottom: 2.5rem;
@@ -52,17 +59,17 @@
         font-size: 2rem;
         font-weight: 700;
         margin-bottom: 0.5rem;
-        color: #005baa;
+        color: var(--primary-green);
         letter-spacing: -1px;
     }
     .vk-section-desc {
-        color: #4a6fa1;
+        color: var(--dark-green);
         margin-bottom: 1.5rem;
         font-size: 1.1rem;
     }
     .vk-divider {
         border: none;
-        border-top: 2.5px solid #00c6fb;
+        border-top: 2.5px solid var(--accent-green);
         margin: 2.5rem 0 2rem 0;
         width: 120px;
         background: transparent;
@@ -76,7 +83,7 @@
         justify-content: space-between;
     }
     .vk-service-card:hover {
-        box-shadow: 0 8px 32px rgba(0,123,255,0.15);
+        box-shadow: 0 8px 32px rgba(24,124,25,0.15);
         transform: translateY(-4px) scale(1.03);
         z-index: 2;
     }
@@ -87,14 +94,14 @@
         align-items: center;
         justify-content: center;
         border-radius: 50%;
-        background: linear-gradient(135deg, #00c6fb 0%, #005baa 100%);
+        background: linear-gradient(135deg, var(--accent-green) 0%, var(--primary-green) 100%);
         color: #fff;
         font-size: 2rem;
         margin-bottom: 1rem;
-        box-shadow: 0 2px 8px rgba(0,123,255,0.10);
+        box-shadow: 0 2px 8px rgba(24,124,25,0.10);
     }
     .vk-learn-more, .btn-primary {
-        background: linear-gradient(90deg, #005baa 0%, #00c6fb 100%) !important;
+        background: linear-gradient(90deg, var(--primary-green) 0%, var(--secondary-green) 100%) !important;
         color: #fff !important;
         border: none;
         border-radius: 2rem;
@@ -103,10 +110,10 @@
         transition: background 0.2s;
         text-decoration: none;
         display: inline-block;
-        box-shadow: 0 2px 8px rgba(0,123,255,0.10);
+        box-shadow: 0 2px 8px rgba(24,124,25,0.10);
     }
     .vk-learn-more:hover, .btn-primary:hover {
-        background: linear-gradient(90deg, #00c6fb 0%, #005baa 100%) !important;
+        background: linear-gradient(90deg, var(--secondary-green) 0%, var(--primary-green) 100%) !important;
         color: #fff !important;
         text-decoration: none;
     }
@@ -114,19 +121,19 @@
         position: absolute;
         top: 1rem;
         left: 1rem;
-        background: linear-gradient(90deg, #00c6fb 0%, #005baa 100%);
+        background: linear-gradient(90deg, var(--accent-green) 0%, var(--primary-green) 100%);
         color: #fff;
         font-size: 0.9rem;
         font-weight: 600;
         padding: 0.3rem 1rem;
         border-radius: 1rem;
         z-index: 2;
-        box-shadow: 0 2px 8px rgba(0,123,255,0.10);
+        box-shadow: 0 2px 8px rgba(24,124,25,0.10);
     }
     .vk-jobfair-countdown {
         font-size: 0.95rem;
         font-weight: 500;
-        color: #005baa;
+        color: var(--primary-green);
         margin-top: 0.5rem;
     }
     .vk-jobfair-carousel .carousel-inner {
@@ -138,13 +145,13 @@
     .vk-agenda-icon {
         font-size: 1.3rem;
         margin-right: 0.5rem;
-        color: #00c6fb;
+        color: var(--accent-green);
         vertical-align: middle;
     }
     .vk-agenda-row-upcoming {
-        background: #e3f2fd !important;
+        background: var(--light-green) !important;
         font-weight: 600;
-        color: #005baa;
+        color: var(--primary-green);
     }
     .vk-agenda-row-odd {
         background: #f8f9fa;
@@ -153,7 +160,7 @@
         animation: fadeInUp 0.8s cubic-bezier(0.23, 1, 0.32, 1);
     }
     .breadcrumb-item.active {
-        color: #005baa !important;
+        color: var(--primary-green) !important;
         font-weight: 600;
     }
     @media (max-width: 767.98px) {
