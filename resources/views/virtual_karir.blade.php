@@ -442,8 +442,24 @@
                 img.alt = 'No Image';
             }
             var regUrl = button.getAttribute('data-registration');
+            var agendaDate = button.getAttribute('data-date');
+            var isPast = false;
+            if (agendaDate) {
+                // Parse date in format 'd M Y'
+                var parts = agendaDate.split(' ');
+                var months = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+                var monthIdx = months.indexOf(parts[1]);
+                var dateObj = new Date(parts[2], monthIdx, parts[0]);
+                var now = new Date();
+                now.setHours(0,0,0,0);
+                if (dateObj < now) isPast = true;
+            }
             if (regUrl) {
-                document.getElementById('agendaModalRegistration').innerHTML = '<a href="' + regUrl + '" target="_blank" class="btn btn-success btn-sm mb-2"><i class="fa fa-link me-1"></i> Link Pendaftaran</a>';
+                if (isPast) {
+                    document.getElementById('agendaModalRegistration').innerHTML = '<button class="btn btn-secondary btn-sm mb-2" disabled style="background: #adb5bd; border-color: #adb5bd; cursor: not-allowed;"><i class="fa fa-link me-1"></i> Link Pendaftaran</button>';
+                } else {
+                    document.getElementById('agendaModalRegistration').innerHTML = '<a href="' + regUrl + '" target="_blank" class="btn btn-success btn-sm mb-2"><i class="fa fa-link me-1"></i> Link Pendaftaran</a>';
+                }
             } else {
                 document.getElementById('agendaModalRegistration').innerHTML = '';
             }
