@@ -48,7 +48,7 @@
             </div>
         </div>
         <div class="mt-4 d-flex justify-content-center">
-                <a href="/" class="btn btn-success rounded-pill">Kembali</a>
+                <a href="{{ route('news.index')}}" class="btn btn-success rounded-pill w-100">Kembali</a>
             </div>
     </div>
 </div>
