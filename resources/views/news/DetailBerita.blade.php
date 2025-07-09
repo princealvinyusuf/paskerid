@@ -169,3 +169,66 @@
     background-color: #00a78e; /* warna garis */
 }
 </style>
+
+<style>
+@media (max-width: 768px) {
+    .section-berita {
+        padding: 20px 10px;
+        background-size: 200px auto;
+    }
+    .section-content {
+        max-width: 100%;
+        margin-left: 0;
+    }
+    .TitleBerita,
+    .timestampBerita,
+    .gambarBerita,
+    .contentBerita {
+        padding-left: 10px;
+        padding-right: 10px;
+        padding-top: 20px;
+    }
+    .TitleBerita {
+        font-size: 1.2rem;
+    }
+    .contentBerita {
+        font-size: 1rem;
+    }
+    .section-title {
+        font-size: 1.1rem;
+    }
+    .section-title::after {
+        max-width: 100px;
+    }
+    .detailberita {
+        border-radius: 10px;
+    }
+    .gambarBerita {
+        width: 100%;
+        height: auto;
+    }
+    h2, p {
+        margin-left: 0 !important;
+        text-align: left;
+    }
+    .container {
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+}
+
+@media (max-width: 480px) {
+    .section-berita {
+        background-size: 100px auto;
+    }
+    .TitleBerita {
+        font-size: 1rem;
+    }
+    .contentBerita {
+        font-size: 0.95rem;
+    }
+    .section-title {
+        font-size: 1rem;
+    }
+}
+</style>
