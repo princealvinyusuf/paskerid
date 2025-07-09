@@ -144,6 +144,9 @@
     main {
         flex: 1 0 auto;
     }
+    main > .container {
+        min-height: 60vh;
+    }
     .bg-success {
         background-color: #00A38A !important;
     }
