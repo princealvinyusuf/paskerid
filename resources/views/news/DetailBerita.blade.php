@@ -2,7 +2,6 @@
 
 @section('content')
 <section class="section-berita">
-    <img src="/images/logo.png" class="section-bg" alt="background">
     <div class="section-content">
         <h2 style="color: white; font-weight: bold; margin-left: 80px;">Berita</h2>
     <p style="color: white; margin-left: 80px; font-size: 20px">Temukan Berita Terkini Terkait Dengan Ketenagakerjaan.</p>
@@ -85,6 +84,11 @@
     background-color: #00a78e;
     padding: 30px 40px;
     overflow: hidden;
+    background-image: url('/images/logo.png');
+    background-position: top right;
+    background-repeat: no-repeat;
+    background-size: 400px auto;
+    opacity: 1;
 }
 
 .section-bg {
