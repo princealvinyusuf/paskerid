@@ -196,7 +196,9 @@
     footer a {
     white-space: nowrap;  /* Paksa 1 baris */
 }
-
+footer {
+    margin-top: auto;
+}
 
 
     </style>
