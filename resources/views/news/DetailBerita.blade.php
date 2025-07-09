@@ -42,13 +42,13 @@
                 </div>
                 @endforeach
 
-
                 <!-- Tambahkan berita populer lainnya sesuai kebutuhan -->
             </div>
         </div>
-        <div class="mt-4 d-flex justify-content-center">
-                <a href="{{ route('news.index')}}" class="btn btn-success rounded-pill w-100">Kembali</a>
-            </div>
+        <!-- Kembali Button: match width with news container -->
+        <div class="col-md-8 mt-4">
+            <a href="{{ route('news.index')}}" class="btn btn-success rounded-pill w-100">Kembali</a>
+        </div>
     </div>
 </div>
 @endsection
