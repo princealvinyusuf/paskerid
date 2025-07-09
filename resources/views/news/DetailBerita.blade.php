@@ -2,7 +2,7 @@
 
 @section('content')
 <section class="section-berita">
-    <img src="images/logo_siapkerja.svg" class="section-bg" alt="background">
+    <img src="/images/logo_siapkerja.svg" class="section-bg" alt="background">
     <div class="section-content">
         <h2 style="color: white; font-weight: bold; margin-left: 80px;">Berita</h2>
     <p style="color: white; margin-left: 80px; font-size: 20px">Temukan Berita Terkini Terkait Dengan Ketenagakerjaan.</p>
