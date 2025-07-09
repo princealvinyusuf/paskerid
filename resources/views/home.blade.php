@@ -18,7 +18,7 @@
                 </button>
                 <div id="statScrollRow" class="d-flex px-5" style="scroll-behavior:smooth; gap:16px; width:100%; overflow-x:hidden;">
                     @foreach($statistics as $stat)
-                        <div class="card shadow-sm stat-card text-center flex-shrink-0" style="width:90vw; max-width:260px; min-width:180px;">
+                        <div class="card shadow-sm stat-card text-center flex-shrink-0 @if($loop->first) ms-4 @endif @if($loop->last) me-4 @endif" style="width:90vw; max-width:260px; min-width:180px;">
                             <div class="card-body d-flex flex-column align-items-center justify-content-center">
                                 <div class="stat-icon mb-3">
                                     <i class="fa fa-chart-bar fa-2x text-success"></i>
