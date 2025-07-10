@@ -10,6 +10,6 @@ class MitraKerja extends Model
     use HasFactory;
     protected $table = 'mitra_kerja';
     protected $fillable = [
-        'name', 'address', 'contact', 'email', 'website_url'
+        'name', 'wilayah', 'address', 'contact', 'email', 'website_url'
     ];
 } 

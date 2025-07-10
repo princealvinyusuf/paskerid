@@ -13,6 +13,7 @@ class MitraKerjaTableSeeder extends Seeder
         DB::table('mitra_kerja')->insert([
             [
                 'name' => 'LPK A',
+                'wilayah' => 'DKI Jakarta',
                 'address' => 'Jl. Contoh No.1',
                 'contact' => '08123456789',
                 'email' => 'lpkA@example.com',
@@ -22,6 +23,7 @@ class MitraKerjaTableSeeder extends Seeder
             ],
             [
                 'name' => 'LPK B',
+                'wilayah' => 'Jawa Barat',
                 'address' => 'Jl. Contoh No.2',
                 'contact' => '08123456788',
                 'email' => 'lpkB@example.com',

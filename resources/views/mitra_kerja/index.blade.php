@@ -24,6 +24,9 @@
                 <div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch">
                     <div class="p-4 shadow-sm rounded-4 bg-white h-100 stakeholder-card w-100 transition-all">
                         <span class="badge bg-success mb-2">Pusat</span>
+                        @if($stakeholder->wilayah)
+                            <span class="badge bg-light text-success border border-success mb-2 ms-2">{{ $stakeholder->wilayah }}</span>
+                        @endif
                         <h6 class="fw-bold mb-2">{{ $stakeholder->name }}</h6>
                         <p class="mb-1"><i class="fa fa-map-marker-alt me-2 text-success"></i>{{ $stakeholder->address }}</p>
                         <p class="mb-1"><i class="fa fa-phone me-2 text-success"></i>{{ $stakeholder->contact }}</p>
