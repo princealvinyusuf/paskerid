@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container my-5">
+<div class="container mt-5">
     <h2 class="text-center mb-4">Informasi Terbaru</h2>
     <div class="row">
         <div class="col-md-3 mb-4">
@@ -86,9 +86,6 @@
                         @endif
                     </div>
                 </div>
-            </div>
-            <div class="text-center mt-4">
-                <a href="{{ url('/') }}" class="btn btn-outline-secondary rounded-pill px-4 py-2">Kembali ke Beranda <i class="fa fa-arrow-left"></i></a>
             </div>
         </div>
     </div>

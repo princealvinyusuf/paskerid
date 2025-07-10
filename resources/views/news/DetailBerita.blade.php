@@ -2,7 +2,6 @@
 
 @section('content')
 <section class="section-berita">
-    <img src="/images/logo_siapkerja.svg" class="section-bg" alt="background">
     <div class="section-content">
         <h2 style="color: white; font-weight: bold; margin-left: 80px;">Berita</h2>
     <p style="color: white; margin-left: 80px; font-size: 20px">Temukan Berita Terkini Terkait Dengan Ketenagakerjaan.</p>
@@ -43,13 +42,13 @@
                 </div>
                 @endforeach
 
-
                 <!-- Tambahkan berita populer lainnya sesuai kebutuhan -->
             </div>
         </div>
-        <div class="mt-4 d-flex justify-content-center">
-                <a href="{{ route('news.index')}}" class="btn btn-success rounded-pill w-100">Kembali</a>
-            </div>
+        <!-- Kembali Button: match width with news container -->
+        <div class="col-md-8 mt-4">
+            <a href="{{ route('news.index')}}" class="btn btn-success rounded-pill w-100">Kembali</a>
+        </div>
     </div>
 </div>
 @endsection
@@ -85,6 +84,11 @@
     background-color: #00a78e;
     padding: 30px 40px;
     overflow: hidden;
+    background-image: url('/images/logo_siapkerja.svg');
+    background-position: top right;
+    background-repeat: no-repeat;
+    background-size: 400px auto;
+    opacity: 1;
 }
 
 .section-bg {
@@ -163,5 +167,68 @@
     max-width: 400px;
     height: 3px;  /* tebal garis */
     background-color: #00a78e; /* warna garis */
+}
+</style>
+
+<style>
+@media (max-width: 768px) {
+    .section-berita {
+        padding: 20px 10px;
+        background-size: 200px auto;
+    }
+    .section-content {
+        max-width: 100%;
+        margin-left: 0;
+    }
+    .TitleBerita,
+    .timestampBerita,
+    .gambarBerita,
+    .contentBerita {
+        padding-left: 10px;
+        padding-right: 10px;
+        padding-top: 20px;
+    }
+    .TitleBerita {
+        font-size: 1.2rem;
+    }
+    .contentBerita {
+        font-size: 1rem;
+    }
+    .section-title {
+        font-size: 1.1rem;
+    }
+    .section-title::after {
+        max-width: 100px;
+    }
+    .detailberita {
+        border-radius: 10px;
+    }
+    .gambarBerita {
+        width: 100%;
+        height: auto;
+    }
+    h2, p {
+        margin-left: 0 !important;
+        text-align: left;
+    }
+    .container {
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+}
+
+@media (max-width: 480px) {
+    .section-berita {
+        background-size: 100px auto;
+    }
+    .TitleBerita {
+        font-size: 1rem;
+    }
+    .contentBerita {
+        font-size: 0.95rem;
+    }
+    .section-title {
+        font-size: 1rem;
+    }
 }
 </style>

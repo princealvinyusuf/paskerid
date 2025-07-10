@@ -136,8 +136,11 @@
     font-weight: bold;
 }
 
-
-
+.card-img-top {
+    height: 220px;         /* or any height you prefer */
+    object-fit: cover;
+    width: 100%;
+}
 
 
 </style>

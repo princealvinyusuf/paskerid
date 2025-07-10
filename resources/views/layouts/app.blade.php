@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ config('app.name', 'Paskerid') }}</title>
+    <title>Pasker ID</title>
+    <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- FontAwesome -->
@@ -144,6 +145,9 @@
     main {
         flex: 1 0 auto;
     }
+    main > .container {
+        min-height: 60vh;
+    }
     .bg-success {
         background-color: #00A38A !important;
     }
@@ -196,7 +200,9 @@
     footer a {
     white-space: nowrap;  /* Paksa 1 baris */
 }
-
+footer {
+    margin-top: auto;
+}
 
 
     </style>
