@@ -20,6 +20,13 @@ class InformasiController extends Controller
         if ($request->filled('subject')) {
             $query->where('subject', $request->subject);
         }
+        // Date filter
+        if ($request->filled('start_date')) {
+            $query->whereDate('date', '>=', $request->start_date);
+        }
+        if ($request->filled('end_date')) {
+            $query->whereDate('date', '<=', $request->end_date);
+        }
 
         $information = $query->orderByDesc('date')->paginate(10);
         $types = Information::select('type')->distinct()->pluck('type');
