@@ -34,8 +34,15 @@
                     <li class="nav-item">
                         <a class="nav-link @if(request()->routeIs('news.index')) active fw-bold @endif" href="{{ route('news.index') }}">News</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link @if(request()->routeIs('virtual-karir.index')) active fw-bold @endif" href="{{ route('virtual-karir.index') }}">Virtual Karir</a>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle @if(request()->routeIs('virtual-karir.index') || request()->routeIs('mitra_kerja.index')) active fw-bold @endif" href="#" id="layananDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Layanan
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="layananDropdown">
+                            <li><a class="dropdown-item @if(request()->routeIs('virtual-karir.index')) active fw-bold @endif" href="{{ route('virtual-karir.index') }}">Virtual Karir</a></li>
+                            <li><a class="dropdown-item @if(request()->routeIs('mitra_kerja.index')) active fw-bold @endif" href="{{ route('mitra_kerja.index') }}">Informasi Mitra Kerja</a></li>
+                            <li><a class="dropdown-item" href="https://microlearning-paskerid.kemnaker.go.id/" target="_blank">Microlearning</a></li>
+                        </ul>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link @if(request()->routeIs('about')) active fw-bold @endif" href="{{ route('about') }}">About</a>
