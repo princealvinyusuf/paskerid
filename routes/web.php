@@ -6,6 +6,28 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/mitra_kerja/index', function () {
+    // Contoh dummy data
+    $stakeholders = [
+        ['name' => 'LPK A', 'address' => 'Jl. Contoh No.1', 'contact' => '08123456789', 'email' => 'lpkA@example.com'],
+        ['name' => 'LPK B', 'address' => 'Jl. Contoh No.2', 'contact' => '08123456788', 'email' => 'lpkB@example.com'],
+        ['name' => 'LPK C', 'address' => 'Jl. Contoh No.2', 'contact' => '08123456788', 'email' => 'lpkB@example.com'],
+        ['name' => 'LPK D', 'address' => 'Jl. Contoh No.2', 'contact' => '08123456788', 'email' => 'lpkB@example.com'],
+        ['name' => 'LPK E', 'address' => 'Jl. Contoh No.2', 'contact' => '08123456788', 'email' => 'lpkB@example.com'],
+        ['name' => 'LPK F', 'address' => 'Jl. Contoh No.2', 'contact' => '08123456788', 'email' => 'lpkB@example.com'],
+        ['name' => 'LPK G', 'address' => 'Jl. Contoh No.2', 'contact' => '08123456788', 'email' => 'lpkB@example.com'],
+        ['name' => 'LPK H', 'address' => 'Jl. Contoh No.2', 'contact' => '08123456788', 'email' => 'lpkB@example.com'],
+        ['name' => 'LPK I', 'address' => 'Jl. Contoh No.2', 'contact' => '08123456788', 'email' => 'lpkB@example.com'],
+        ['name' => 'LPK J', 'address' => 'Jl. Contoh No.2', 'contact' => '08123456788', 'email' => 'lpkB@example.com'],
+        ['name' => 'LPK K', 'address' => 'Jl. Contoh No.2', 'contact' => '08123456788', 'email' => 'lpkB@example.com'],
+        ['name' => 'LPK L', 'address' => 'Jl. Contoh No.2', 'contact' => '08123456788', 'email' => 'lpkB@example.com'],
+        // Tambahkan sesuai kebutuhan
+    ];
+
+    return view('mitra_kerja.index', compact('stakeholders'));
+});
+
+
 Route::get('/news/{id}', [App\Http\Controllers\NewsController::class, 'show'])->name('news.DetailBerita');
 
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
