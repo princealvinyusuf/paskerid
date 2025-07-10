@@ -74,14 +74,23 @@
                                 <a href="?subject={{ urlencode($selectedSubject) }}&type=publikasi" class="btn btn-secondary mb-3">
                                     <i class="fa fa-arrow-left"></i> Back to Table
                                 </a>
+                                @if(!empty($description))
+                                    <div class="alert alert-info mb-3">{{ $description }}</div>
+                                @endif
                                 <embed src="{{ asset($showInfo->file_url) }}" type="application/pdf" width="100%" height="600px" />
                             @else
                                 <a href="?subject={{ urlencode($selectedSubject) }}&type={{ request('type', 'statistik') }}" class="btn btn-secondary mb-3">
                                     <i class="fa fa-arrow-left"></i> Back to Table
                                 </a>
+                                @if(!empty($description))
+                                    <div class="alert alert-info mb-3">{{ $description }}</div>
+                                @endif
                                 {!! $showInfo->iframe_url !!}
                             @endif
                         @else
+                            @if(!empty($description))
+                                <div class="alert alert-info mb-3">{{ $description }}</div>
+                            @endif
                             <span id="container-content">Container 1</span>
                         @endif
                     </div>

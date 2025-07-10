@@ -30,8 +30,17 @@ class InformasiController extends Controller
         if ($showId) {
             $showInfo = \App\Models\Information::find($showId);
         }
-
-        return view('informasi.index', compact('information', 'types', 'subjects', 'selectedSubject', 'showInfo'));
+        // Fetch description for selected subject and type
+        $description = null;
+        if ($selectedSubject) {
+            $descQuery = Information::where('subject', $selectedSubject);
+            if ($request->filled('type')) {
+                $descQuery->where('type', $request->type);
+            }
+            $descRecord = $descQuery->orderByDesc('date')->first();
+            $description = $descRecord ? $descRecord->description : null;
+        }
+        return view('informasi.index', compact('information', 'types', 'subjects', 'selectedSubject', 'showInfo', 'description'));
     }
 
     public function show($id)
