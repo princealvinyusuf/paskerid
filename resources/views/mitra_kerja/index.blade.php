@@ -12,7 +12,7 @@
 
     <div class="circle-wrapper my-4">
         <a href="?divider=dinas" class="circle-btn {{ $divider === 'dinas' ? 'filled' : 'outlined' }}">Dinas <br> Tenaga <br> Kerja</a>
-        <img src="/images/logo.png" alt="Maskot" class="bird-image">
+        <img src="{{ asset('images/hero-bg.jpg') }}" alt="Maskot" class="bird-image">
         <a href="?divider=mitra" class="circle-btn {{ $divider === 'mitra' ? 'filled' : 'outlined' }}">Mitra <br> Pasker</a>
     </div>
 
