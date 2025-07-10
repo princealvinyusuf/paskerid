@@ -26,13 +26,7 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link @if(request()->routeIs('home')) active fw-bold @endif" href="{{ route('home') }}">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link @if(request()->routeIs('informasi.index')) active fw-bold @endif" href="{{ route('informasi.index') }}">Informasi</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link @if(request()->routeIs('news.index')) active fw-bold @endif" href="{{ route('news.index') }}">News</a>
+                        <a class="nav-link @if(request()->routeIs('home')) active fw-bold @endif" href="{{ route('home') }}">Beranda</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle @if(request()->routeIs('virtual-karir.index') || request()->routeIs('mitra_kerja.index')) active fw-bold @endif" href="#" id="layananDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -44,9 +38,6 @@
                             <li><a class="dropdown-item" href="https://microlearning-paskerid.kemnaker.go.id/" target="_blank">Microlearning</a></li>
                         </ul>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link @if(request()->routeIs('about')) active fw-bold @endif" href="{{ route('about') }}">About</a>
-                    </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle @if(request()->routeIs('dashboard.trend') || request()->routeIs('dashboard.distribution') || request()->routeIs('dashboard.performance') || request()->routeIs('dashboard.labor_demand')) active fw-bold @endif" href="#" id="monitoringDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Monitoring Data
@@ -57,6 +48,15 @@
                             <li><a class="dropdown-item @if(request()->routeIs('dashboard.performance')) active fw-bold @endif" href="{{ route('dashboard.performance') }}">Dashboard Performance</a></li>
                             <li><a class="dropdown-item @if(request()->routeIs('dashboard.labor_demand')) active fw-bold @endif" href="{{ route('dashboard.labor_demand') }}">Dashboard Labor Demand</a></li>
                         </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @if(request()->routeIs('informasi.index')) active fw-bold @endif" href="{{ route('informasi.index') }}">Pusat Informasi</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @if(request()->routeIs('news.index')) active fw-bold @endif" href="{{ route('news.index') }}">Berita</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @if(request()->routeIs('about')) active fw-bold @endif" href="{{ route('about') }}">Tentang Kami</a>
                     </li>
                 </ul>
             </div>
@@ -81,11 +81,12 @@
 
             <!-- Menu Tengah -->
             <div class="col-md-4 d-flex justify-content-center flex-wrap gap-3">
+                <a href="{{ route('home') }}" class="text-white text-decoration-none">Beranda</a>
                 <a href="#" class="text-white text-decoration-none">Layanan</a>
                 <a href="#" class="text-white text-decoration-none">Monitoring Data</a>
-                <a href="#" class="text-white text-decoration-none">Dokumen</a>
-                <a href="#" class="text-white text-decoration-none">Berita</a>
-                <a href="#" class="text-white text-decoration-none">Tentang Kami</a>
+                <a href="{{ route('informasi.index') }}" class="text-white text-decoration-none">Pusat Informasi</a>
+                <a href="{{ route('news.index') }}" class="text-white text-decoration-none">Berita</a>
+                <a href="{{ route('about') }}" class="text-white text-decoration-none">Tentang Kami</a>
             </div>
 
             <!-- Sosial Media Kanan -->
