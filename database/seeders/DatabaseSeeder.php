@@ -33,6 +33,7 @@ class DatabaseSeeder extends Seeder
             DashboardDistributionSeeder::class,
             DashboardPerformanceSeeder::class,
             DashboardLaborDemandSeeder::class,
+            MitraKerjaTableSeeder::class,
             // \Database\Seeders\DashboardTrendSeeder::class,
         ]);
     }

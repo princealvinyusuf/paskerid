@@ -27,6 +27,8 @@ Route::get('/mitra_kerja/index', function () {
     return view('mitra_kerja.index', compact('stakeholders'));
 });
 
+Route::get('/mitra-kerja', [App\Http\Controllers\MitraKerjaController::class, 'index'])->name('mitra_kerja.index');
+
 
 Route::get('/news/{id}', [App\Http\Controllers\NewsController::class, 'show'])->name('news.DetailBerita');
 

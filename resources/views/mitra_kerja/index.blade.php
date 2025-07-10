@@ -26,11 +26,13 @@
                     <div class="col-md-4 mb-4">
                         <div class="p-3 shadow-sm rounded-4 bg-white h-100">
                             <h6 class="fw-bold mb-2">Pusat</h6>
-                            <p class="mb-1">{{ $stakeholder['name'] }}</p>
-                            <p class="mb-1">{{ $stakeholder['address'] }}</p>
-                            <p class="mb-1">Telepon: {{ $stakeholder['contact'] }}</p>
-                            <p class="mb-1">Email: {{ $stakeholder['email'] }}</p>
-                            <a href="#" class="text-success">Kunjungi Website</a>
+                            <p class="mb-1">{{ $stakeholder->name }}</p>
+                            <p class="mb-1">{{ $stakeholder->address }}</p>
+                            <p class="mb-1">Telepon: {{ $stakeholder->contact }}</p>
+                            <p class="mb-1">Email: {{ $stakeholder->email }}</p>
+                            @if($stakeholder->website_url)
+                                <a href="{{ $stakeholder->website_url }}" class="text-success" target="_blank">Kunjungi Website</a>
+                            @endif
                         </div>
                     </div>
                 @endforeach
@@ -38,15 +40,7 @@
 
             {{-- Pagination --}}
             <div class="text-center">
-                <nav>
-                    <ul class="pagination justify-content-center">
-                        <li class="page-item disabled"><span class="page-link">«</span></li>
-                        <li class="page-item active"><span class="page-link">1</span></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item"><a class="page-link" href="#">»</a></li>
-                    </ul>
-                </nav>
+                {{ $stakeholders->links() }}
             </div>
         </div>
 
