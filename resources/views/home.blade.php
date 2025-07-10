@@ -220,6 +220,7 @@
                         @if($featuredNews->image_url)
                             <img src="{{ $featuredNews->image_url }}" alt="{{ $featuredNews->title }}" class="w-100 h-100 object-fit-cover" style="min-height:340px;">
                         @endif
+                        <a href="{{ route('news.DetailBerita', $featuredNews->id) }}" class="stretched-link"></a>
                         <div class="position-absolute bottom-0 start-0 w-100 p-4" style="background: linear-gradient(0deg,rgba(0,0,0,0.7) 70%,rgba(0,0,0,0.1) 100%);">
                             <div class="text-white mb-1" style="font-size:1rem;">{{ indo_date($featuredNews->date) }}</div>
                             <h3 class="fw-bold text-white mb-2" style="font-size:1.5rem;">{{ $featuredNews->title }}</h3>
@@ -230,10 +231,11 @@
             </div>
             <div class="col-lg-5 d-flex flex-column gap-4">
                 @foreach($otherNews as $item)
-                    <div class="d-flex flex-row rounded-4 shadow-sm bg-white overflow-hidden h-100" style="min-height:150px;">
+                    <div class="d-flex flex-row rounded-4 shadow-sm bg-white overflow-hidden h-100 position-relative" style="min-height:150px;">
                         @if($item->image_url)
                             <img src="{{ $item->image_url }}" alt="{{ $item->title }}" class="object-fit-cover" style="width:160px; height:100%; object-fit:cover;">
                         @endif
+                        <a href="{{ route('news.DetailBerita', $item->id) }}" class="stretched-link"></a>
                         <div class="p-3 d-flex flex-column justify-content-between flex-grow-1">
                             <div>
                                 <div class="text-muted mb-1" style="font-size:0.95rem;">{{ indo_date($item->date) }}</div>
