@@ -11,14 +11,16 @@
     </section>
 
     <div class="circle-wrapper my-4">
-        <button class="circle-btn filled">Dinas <br> Tenaga <br> Kerja</button>
+        <a href="?divider=dinas" class="circle-btn {{ $divider === 'dinas' ? 'filled' : 'outlined' }}">Dinas <br> Tenaga <br> Kerja</a>
         <img src="/images/logo.png" alt="Maskot" class="bird-image">
-        <button class="circle-btn outlined">Mitra <br> Pasker</button>
+        <a href="?divider=mitra" class="circle-btn {{ $divider === 'mitra' ? 'filled' : 'outlined' }}">Mitra <br> Pasker</a>
     </div>
 
     {{-- Stakeholder Cards --}}
     <div class="bg-green p-4 rounded-4 mb-5">
-        <h5 class="fw-bold mb-4 text-center">Stakeholder Dinas Tenaga Kerja</h5>
+        <h5 class="fw-bold mb-4 text-center">
+            Stakeholder {{ $divider === 'dinas' ? 'Dinas Tenaga Kerja' : 'Mitra Kerja' }}
+        </h5>
         <div class="row g-4">
             @foreach ($stakeholders as $stakeholder)
                 <div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch">
