@@ -31,6 +31,9 @@
                             </div>
                         @endif
                         <h6 class="fw-bold mb-2">{{ $stakeholder->name }}</h6>
+                        @if($stakeholder->pic)
+                            <p class="mb-1"><i class="fa fa-user me-2 text-success"></i>PIC: {{ $stakeholder->pic }}</p>
+                        @endif
                         <p class="mb-1"><i class="fa fa-map-marker-alt me-2 text-success"></i>{{ $stakeholder->address }}</p>
                         <p class="mb-1"><i class="fa fa-phone me-2 text-success"></i>{{ $stakeholder->contact }}</p>
                         <p class="mb-1"><i class="fa fa-envelope me-2 text-success"></i>{{ $stakeholder->email }}</p>

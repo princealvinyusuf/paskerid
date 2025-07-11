@@ -14,6 +14,7 @@ return new class extends Migration {
             $table->string('contact');
             $table->string('email');
             $table->string('website_url')->nullable();
+            $table->string('pic')->nullable();
             $table->timestamps();
         });
     }
