@@ -2,7 +2,8 @@
 
 @section('content')
 <div class="container mt-5">
-    <h2 class="text-center mb-4">Informasi Terbaru</h2>
+    <h2 class="text-center mb-4">Statistik Pasar Kerja</h2>
+    <p class="text-center mb-4">Menyediakan tabel dan publikasi statistik pasar kerja yang dikelompokkan ke dalam berbagai kategori.</p>
     <div class="row">
         <div class="col-md-3 mb-4">
             <div class="card">

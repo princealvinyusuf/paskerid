@@ -50,7 +50,7 @@
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link @if(request()->routeIs('informasi.index')) active fw-bold @endif" href="{{ route('informasi.index') }}">Pusat Informasi</a>
+                        <a class="nav-link @if(request()->routeIs('informasi.index')) active fw-bold @endif" href="{{ route('informasi.index') }}">Statistik</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link @if(request()->routeIs('news.index')) active fw-bold @endif" href="{{ route('news.index') }}">Berita</a>
