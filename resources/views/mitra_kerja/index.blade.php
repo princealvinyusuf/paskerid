@@ -3,7 +3,7 @@
 @section('content')
 <section class="py-4 bg-light">
     <section class="section-berita position-relative">
-        <img src="{{ asset('images/logo_siapkerja.svg') }}" class="section-bg" alt="background">
+        <img src="{{ asset('images/logo_siapkerja_white.svg') }}" class="section-bg" alt="background">
         <div class="section-content text-center py-5">
             <h2 class="fw-bold text-white mb-2" style="font-size:2.5rem;">Informasi Mitra Kerja</h2>
             <p class="text-white mb-0" style="font-size: 1.25rem;">Dapatkan informasi mengenai kami dimanapun dan kapanpun, kami siap membantu Anda!</p>
