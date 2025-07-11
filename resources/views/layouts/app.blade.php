@@ -50,7 +50,7 @@
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link @if(request()->routeIs('informasi.index')) active fw-bold @endif" href="{{ route('informasi.index') }}">Statistik</a>
+                        <a class="nav-link statistik-nav @if(request()->routeIs('informasi.index')) active fw-bold @endif" href="{{ route('informasi.index') }}">Statistik</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link @if(request()->routeIs('news.index')) active fw-bold @endif" href="{{ route('news.index') }}">Berita</a>
@@ -211,6 +211,23 @@
 footer {
     margin-top: auto;
 }
+
+    .statistik-nav {
+        background: var(--light-green) !important;
+        color: var(--dark-green) !important;
+        border-radius: 0.5rem;
+        font-weight: bold;
+        box-shadow: 0 2px 8px rgba(139, 199, 30, 0.12);
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+        margin-left: 0.5rem;
+        margin-right: 0.5rem;
+        transition: background 0.2s, color 0.2s;
+    }
+    .statistik-nav.active, .statistik-nav:focus, .statistik-nav:hover {
+        background: var(--accent-green) !important;
+        color: #fff !important;
+    }
 
 
     </style>
