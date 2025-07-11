@@ -106,7 +106,7 @@
                     <div class="col-md-6">
                         <label for="request_letter" class="form-label">Surat Permohonan Kemitraan</label>
                         <div class="mb-2">
-                            <a href="public/documents/template-surat-permohonan.docx" class="btn btn-outline-secondary btn-sm" download>
+                            <a href="http://www.psid.run.place/paskerid/public/documents/template-surat-permohonan.docx" class="btn btn-outline-secondary btn-sm" download>
                                 <i class="bi bi-download me-1"></i>Download Template Surat Permohonan
                             </a>
                         </div>
