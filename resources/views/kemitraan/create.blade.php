@@ -97,8 +97,11 @@
                     </div>
                     <div class="col-md-6">
                         <label for="schedule" class="form-label">Usulan Jadwal Kegiatan</label>
-                        <input type="text" class="form-control" id="schedule" name="schedule" placeholder="Tanggal pelaksanaan / rentang waktu">
-                        <div class="form-text">Kalender atau tanggal yang sudah terisi tidak dapat dipilih.</div>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-calendar-event"></i></span>
+                            <input type="text" class="form-control" id="schedule" name="schedule" placeholder="Pilih rentang tanggal" autocomplete="off" required>
+                        </div>
+                        <div class="form-text">Pilih rentang tanggal pelaksanaan kegiatan.</div>
                     </div>
                     <div class="col-md-6">
                         <label for="request_letter" class="form-label">Surat Permohonan Kemitraan</label>
@@ -143,5 +146,31 @@
     });
 </script>
 @endif
+
+@push('head')
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+@endpush
+
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+    flatpickr("#schedule", {
+        mode: "range",
+        dateFormat: "Y-m-d",
+        minDate: "today",
+        locale: {
+            firstDayOfWeek: 1,
+            weekdays: {
+                shorthand: ["Min", "Sen", "Sel", "Rab", "Kam", "Jum", "Sab"],
+                longhand: ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"]
+            },
+            months: {
+                shorthand: ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"],
+                longhand: ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"]
+            }
+        }
+    });
+</script>
+@endpush
 
 @endsection 
