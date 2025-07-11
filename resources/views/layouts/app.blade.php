@@ -213,20 +213,22 @@ footer {
 }
 
     .statistik-nav {
-        background: var(--light-green) !important;
-        color: var(--dark-green) !important;
+        background: #00A38A !important;
+        color: #fff !important;
         border-radius: 0.5rem;
         font-weight: bold;
-        box-shadow: 0 2px 8px rgba(139, 199, 30, 0.12);
+        box-shadow: 0 2px 8px rgba(0, 163, 138, 0.18);
         padding-left: 1rem !important;
         padding-right: 1rem !important;
         margin-left: 0.5rem;
         margin-right: 0.5rem;
         transition: background 0.2s, color 0.2s;
+        border: 2px solid #187C19 !important;
     }
     .statistik-nav.active, .statistik-nav:focus, .statistik-nav:hover {
-        background: var(--accent-green) !important;
+        background: #187C19 !important;
         color: #fff !important;
+        border-color: #00A38A !important;
     }
 
 
