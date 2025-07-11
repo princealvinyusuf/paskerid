@@ -17,7 +17,8 @@ class HomeController extends Controller
     public function index()
     {
         $statistics = Statistic::orderBy('order')->get();
-        $information = Information::orderByDesc('date')->take(5)->get();
+        $statistik = Information::where('type', 'statistik')->orderByDesc('date')->take(5)->get();
+        $publikasi = Information::where('type', 'publikasi')->orderByDesc('date')->take(5)->get();
         $charts = Chart::orderBy('order')->get();
         $typeMeta = [
             'skills' => [
@@ -49,7 +50,8 @@ class HomeController extends Controller
 
         return view('home', compact(
             'statistics',
-            'information',
+            'statistik',
+            'publikasi',
             'charts',
             'topLists',
             'contributions',

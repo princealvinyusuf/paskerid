@@ -53,7 +53,7 @@
         </ul>
         <div class="tab-content">
             <div class="tab-pane fade show active" id="statistik" role="tabpanel" aria-labelledby="statistik-tab">
-                @foreach($information->where('type', 'statistik') as $info)
+                @foreach($statistik as $info)
                     <div class="card mb-3 shadow-sm rounded-pill px-4 py-3 d-flex flex-row align-items-center" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
                         <div class="me-3 text-primary" style="font-size:2rem;"><i class="fa fa-clipboard"></i></div>
                         <div class="flex-grow-1">
@@ -67,7 +67,7 @@
                 @endforeach
             </div>
             <div class="tab-pane fade" id="publikasi" role="tabpanel" aria-labelledby="publikasi-tab">
-                @foreach($information->where('type', 'publikasi') as $info)
+                @foreach($publikasi as $info)
                     <div class="card mb-3 shadow-sm rounded-pill px-4 py-3 d-flex flex-row align-items-center" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
                         <div class="me-3 text-primary" style="font-size:2rem;"><i class="fa fa-book"></i></div>
                         <div class="flex-grow-1">
