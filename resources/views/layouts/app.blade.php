@@ -56,6 +56,11 @@
                         <a class="nav-link @if(request()->routeIs('news.index')) active fw-bold @endif" href="{{ route('news.index') }}">Berita</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link @if(request()->routeIs('kemitraan.create')) active fw-bold @endif" href="{{ route('kemitraan.create') }}">
+                            <i class="bi bi-handshake me-1"></i> Kemitraan
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link @if(request()->routeIs('about')) active fw-bold @endif" href="{{ route('about') }}">Tentang Kami</a>
                     </li>
                 </ul>
