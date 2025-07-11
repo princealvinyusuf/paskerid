@@ -31,5 +31,6 @@ Route::get('/informasi/{id}', [App\Http\Controllers\InformasiController::class, 
 
 Route::get('/virtual-karir', [App\Http\Controllers\VirtualKarirController::class, 'index'])->name('virtual-karir.index');
 
-// Kemitraan routes
-Route::resource('kemitraan', App\Http\Controllers\KemitraanController::class);
+// Kemitraan routes (only create and store)
+Route::get('kemitraan/create', [App\Http\Controllers\KemitraanController::class, 'create'])->name('kemitraan.create');
+Route::post('kemitraan', [App\Http\Controllers\KemitraanController::class, 'store'])->name('kemitraan.store');

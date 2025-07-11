@@ -79,4 +79,32 @@
         <button type="submit" class="btn btn-primary">Kirim Pendaftaran</button>
     </form>
 </div>
+
+@if(session('success'))
+<!-- Modal -->
+<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-body text-center p-5">
+        <div class="mb-3">
+          <svg width="64" height="64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="32" cy="32" r="32" fill="#28a745"/>
+            <path d="M20 34l8 8 16-16" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h4 class="mb-2">Pengajuan Sukses</h4>
+        <p>Pendaftaran kemitraan Anda telah berhasil dikirim.</p>
+        <button type="button" class="btn btn-success" data-bs-dismiss="modal">Tutup</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+    var myModal = new bootstrap.Modal(document.getElementById('successModal'));
+    window.onload = function() {
+        myModal.show();
+    };
+</script>
+@endif
+
 @endsection 
