@@ -137,10 +137,10 @@
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
 <script>
-    var myModal = new bootstrap.Modal(document.getElementById('successModal'));
-    window.onload = function() {
+    document.addEventListener('DOMContentLoaded', function() {
+        var myModal = new bootstrap.Modal(document.getElementById('successModal'));
         myModal.show();
-    };
+    });
 </script>
 @endif
 
