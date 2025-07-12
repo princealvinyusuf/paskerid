@@ -10,9 +10,9 @@
             </h1>
         </div>
         <div class="w-100 d-flex justify-content-center mt-3 px-2 px-sm-3">
-            <form action="{{ route('informasi.index') }}" method="GET" class="d-flex flex-column flex-sm-row align-items-stretch shadow rounded-pill bg-white p-2 gap-2" style="max-width: 600px; width: 100%; overflow: hidden;">
-                <input type="text" name="search" class="form-control border-0 rounded-pill ps-3 py-2 flex-grow-1" placeholder="Cari informasi, statistik, atau publikasi..." aria-label="Cari informasi" style="font-size: 1rem; background: transparent; min-width:0;">
-                <button class="btn btn-success rounded-pill px-4 d-flex align-items-center justify-content-center" type="submit" style="font-size: 1rem; min-width: 90px;">
+            <form action="{{ route('informasi.index') }}" method="GET" class="d-flex flex-column flex-sm-row align-items-stretch shadow rounded-pill bg-white p-2 gap-2 searchbar-responsive" style="max-width: 600px; width: 100%; overflow: hidden;">
+                <input type="text" name="search" class="form-control border-0 rounded-pill ps-3 py-2 flex-grow-1 searchbar-input-responsive" placeholder="Cari informasi, statistik, atau publikasi..." aria-label="Cari informasi" style="font-size: 1rem; background: transparent; min-width:0;">
+                <button class="btn btn-success rounded-pill px-4 d-flex align-items-center justify-content-center searchbar-btn-responsive" type="submit" style="font-size: 1rem; min-width: 90px;">
                     <i class="fa fa-search me-2"></i> Cari
                 </button>
             </form>
@@ -681,6 +681,25 @@
         padding-left: 0.5rem;
         padding-right: 0.5rem;
         text-shadow: 1px 1px 3px #000, 0 0 1px #fff, 0 0 4px #000;
+    }
+    .searchbar-responsive {
+        flex-direction: column !important;
+        border-radius: 1rem !important;
+        padding: 0.75rem 0.5rem !important;
+        gap: 0.5rem !important;
+    }
+    .searchbar-input-responsive {
+        border-radius: 0.75rem !important;
+        width: 100% !important;
+        margin-bottom: 0.5rem !important;
+    }
+    .searchbar-btn-responsive {
+        border-radius: 0.75rem !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        justify-content: center !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
     }
 }
 </style>
