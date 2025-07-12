@@ -8,15 +8,32 @@ use Illuminate\Support\Facades\DB;
 
 class KemitraanController extends Controller
 {
-    public function create()
+    public function create(Request $request)
     {
+        // Get selected partnership type from request (default to first type if not set)
+        $selectedType = $request->input('partnership_type', 'Walk-in Interview');
+
+        // Partnership type limits (should match your PHP array)
+        $type_limits = [
+            'Walk-in Interview' => 10,
+            'Pendidikan Pasar Kerja' => 5,
+            'Talenta Muda' => 8,
+            'Job Fair' => 7,
+            'Konsultasi Pasar Kerja' => 3,
+            'Konsultasi Informasi Pasar Kerja' => 3,
+        ];
+        $max_bookings = $type_limits[$selectedType] ?? 10;
+
+        // Query for fully booked dates for the selected type
         $fullyBookedDates = DB::table('booked_date')
             ->select('booked_date')
-            ->groupBy('booked_date')
-            ->havingRaw('COUNT(*) >= 10')
+            ->where('partnership_type', $selectedType)
+            ->groupBy('booked_date', 'max_bookings')
+            ->havingRaw('COUNT(*) >= max_bookings')
             ->pluck('booked_date')
             ->toArray();
-        return view('kemitraan.create', compact('fullyBookedDates'));
+
+        return view('kemitraan.create', compact('fullyBookedDates', 'selectedType'));
     }
 
     public function store(Request $request)
