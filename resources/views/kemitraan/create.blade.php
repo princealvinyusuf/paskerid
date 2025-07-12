@@ -20,8 +20,8 @@
             @endif
             <hr class="my-4">
             <h5 class="mb-3"><i class="bi bi-link-45deg me-2"></i>Detail Kemitraan</h5>
-            <!-- Partnership Type Selector (GET form, for calendar) -->
-            <form method="GET" id="typeForm" class="mb-3">
+            <!-- GET form for partnership type (for calendar functionality, hidden initially) -->
+            <form method="GET" id="typeForm" class="mb-3" style="display:none;">
                 <label for="partnership_type" class="form-label">Jenis Kemitraan yang Diajukan</label>
                 <select class="form-select" id="partnership_type" name="partnership_type" onchange="document.getElementById('typeForm').submit()">
                     <option value="Walk-in Interview" {{ $selectedType == 'Walk-in Interview' ? 'selected' : '' }}>Walk-in Interview</option>
@@ -94,36 +94,42 @@
 
                 <hr class="my-4">
                 <h5 class="mb-3"><i class="bi bi-link-45deg me-2"></i>Detail Kemitraan</h5>
-                <div class="row g-3">
-                    <div class="col-md-6">
-                        <label for="needs" class="form-label">Kebutuhan yang Diajukan</label>
-                        <textarea class="form-control" id="needs" name="needs" rows="2" placeholder="Jelaskan kebutuhan atau bentuk dukungan yang diharapkan"></textarea>
-                    </div>
-                    <div class="col-md-6">
-                        <label for="schedule" class="form-label">Usulan Jadwal Kegiatan</label>
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="bi bi-calendar-event"></i></span>
-                            <input type="text" class="form-control" id="schedule" name="schedule" placeholder="Pilih rentang tanggal" autocomplete="off" required>
+                <!-- Placeholder for the type selector -->
+                <div id="typeSelectorPlaceholder"></div>
+                <form action="{{ route('kemitraan.store') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <input type="hidden" name="partnership_type" value="{{ $selectedType }}">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="needs" class="form-label">Kebutuhan yang Diajukan</label>
+                            <textarea class="form-control" id="needs" name="needs" rows="2" placeholder="Jelaskan kebutuhan atau bentuk dukungan yang diharapkan"></textarea>
                         </div>
-                        <div class="form-text">Pilih rentang tanggal pelaksanaan kegiatan.</div>
-                    </div>
-                    <div class="col-md-6">
-                        <label for="request_letter" class="form-label">Surat Permohonan Kemitraan</label>
-                        <div class="mb-2">
-                            <a href="http://www.psid.run.place/paskerid/public/documents/template-surat-permohonan.docx" class="btn btn-outline-secondary btn-sm" download>
-                                <i class="bi bi-download me-1"></i>Download Template Surat Permohonan
-                            </a>
+                        <div class="col-md-6">
+                            <label for="schedule" class="form-label">Usulan Jadwal Kegiatan</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-calendar-event"></i></span>
+                                <input type="text" class="form-control" id="schedule" name="schedule" placeholder="Pilih rentang tanggal" autocomplete="off" required>
+                            </div>
+                            <div class="form-text">Pilih rentang tanggal pelaksanaan kegiatan.</div>
                         </div>
-                        <input type="file" class="form-control" id="request_letter" name="request_letter" accept=".pdf,.doc,.docx" required>
-                        <div class="form-text">Unggah surat permohonan (PDF/DOC/DOCX, max 2MB).</div>
+                        <div class="col-md-6">
+                            <label for="request_letter" class="form-label">Surat Permohonan Kemitraan</label>
+                            <div class="mb-2">
+                                <a href="http://www.psid.run.place/paskerid/public/documents/template-surat-permohonan.docx" class="btn btn-outline-secondary btn-sm" download>
+                                    <i class="bi bi-download me-1"></i>Download Template Surat Permohonan
+                                </a>
+                            </div>
+                            <input type="file" class="form-control" id="request_letter" name="request_letter" accept=".pdf,.doc,.docx" required>
+                            <div class="form-text">Unggah surat permohonan (PDF/DOC/DOCX, max 2MB).</div>
+                        </div>
                     </div>
-                </div>
-                <div class="d-grid mt-4">
-                    <button type="submit" class="btn btn-primary btn-lg">
-                        <i class="bi bi-send-check me-2"></i>Kirim Pendaftaran
-                    </button>
-                </div>
-            </form>
+                    <div class="d-grid mt-4">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="bi bi-send-check me-2"></i>Kirim Pendaftaran
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>
@@ -163,6 +169,15 @@
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script>
+    // Move the GET form visually into the placeholder
+    document.addEventListener('DOMContentLoaded', function() {
+        var typeForm = document.getElementById('typeForm');
+        var placeholder = document.getElementById('typeSelectorPlaceholder');
+        if (typeForm && placeholder) {
+            typeForm.style.display = '';
+            placeholder.appendChild(typeForm);
+        }
+    });
     var fullyBookedDates = @json($fullyBookedDates ?? []);
     flatpickr("#schedule", {
         mode: "range",
