@@ -89,18 +89,18 @@
     {{-- Hero Section: Statistics --}}
     <section class="hero my-5 px-2 px-md-4 px-lg-5" data-aos="fade-up">
         <h3 class="text-center mb-4">Pasar Kerja Indonesia Dalam Angka</h3>
-        <div class="stat-hero-flex-container">
+        <div class="d-flex justify-content-center flex-wrap gap-3" style="gap:16px;">
             @foreach($statistics as $stat)
-                <div class="stat-hero-flex-item">
-                    <div class="card shadow rounded-4 stat-hero-card border-0 h-100 d-flex flex-column align-items-center justify-content-center">
-                        <div class="stat-hero-icon mb-3 mt-4">
-                            <i class="fa fa-chart-bar fa-2x"></i>
+                <div class="card shadow-sm stat-card text-center flex-shrink-0" style="width:90vw; max-width:260px; min-width:180px;">
+                    <div class="card-body d-flex flex-column align-items-center justify-content-center">
+                        <div class="stat-icon mb-3">
+                            <i class="fa fa-chart-bar fa-2x text-success"></i>
                         </div>
-                        <div class="card-body d-flex flex-column align-items-center justify-content-center">
-                            <h5 class="card-title fw-bold mb-1" style="color:#187C19;">{{ $stat->title }}</h5>
-                            <h2 class="display-6 fw-bold mb-1" style="color:#222; font-size:2rem;">{{ $stat->value }} <small style="font-size:1rem;">{{ $stat->unit }}</small></h2>
-                            <p class="card-text text-muted" style="font-size:0.95rem;">{{ $stat->description }}</p>
-                        </div>
+                        <div class="stat-title fw-bold mb-1" style="font-size:1.1rem; color:#187C19;">{{ $stat->title }}</div>
+                        <div class="stat-value fw-bold mb-1" style="font-size:2.2rem; color:#222;">{{ $stat->value }} <span class="stat-unit" style="font-size:1.2rem;">{{ $stat->unit }}</span></div>
+                        @if($stat->description)
+                            <div class="stat-desc text-muted mt-1" style="font-size:0.95rem;">{{ $stat->description }}</div>
+                        @endif
                     </div>
                 </div>
             @endforeach
