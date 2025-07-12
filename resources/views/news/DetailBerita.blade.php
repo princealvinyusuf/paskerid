@@ -84,7 +84,7 @@
     background-color: #00a78e;
     padding: 30px 40px;
     overflow: hidden;
-    background-image: url('/images/logo_siapkerja.svg');
+    background-image: url('{{ asset('images/logo_siapkerja.svg') }}');
     background-position: top right;
     background-repeat: no-repeat;
     background-size: 400px auto;
