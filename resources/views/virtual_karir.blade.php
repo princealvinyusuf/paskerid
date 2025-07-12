@@ -180,12 +180,12 @@
     <div class="vk-hero mb-5 animate__animated animate__fadeInDown">
         <div class="vk-hero-content">
             <div class="vk-hero-logo mb-3">
-                <img src="/images/logo_siapkerja.svg" alt="Logo" style="width:40px;height:40px;">
+                <img src="{{ asset('images/logo_siapkerja_white.svg') }}" alt="Logo" style="width:40px;height:40px;">
             </div>
             <h1 class="display-5 fw-bold mb-2">Virtual Karir</h1>
             <p class="lead mb-0">Satu pintu layanan karir, job fair, dan agenda pasar kerja Indonesia secara digital dan terintegrasi.</p>
         </div>
-        <img src="/images/logo_siapkerja_white.svg" class="vk-hero-img" alt="Virtual Karir">
+        <img src="{{ asset('images/logo_siapkerja_white.svg') }}" class="vk-hero-img" alt="Virtual Karir">
     </div>
     {{-- Removed breadcrumb navigation --}}
 
