@@ -54,30 +54,34 @@
         <div class="tab-content">
             <div class="tab-pane fade show active" id="statistik" role="tabpanel" aria-labelledby="statistik-tab">
                 @foreach($statistik as $info)
-                    <div class="card mb-3 shadow-sm rounded-pill px-4 py-3 d-flex flex-row align-items-center" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
-                        <div class="me-3 text-primary" style="font-size:2rem;"><i class="fa fa-clipboard"></i></div>
-                        <div class="flex-grow-1">
-                            <div class="fw-bold">{{ $info->title }}</div>
-                            <div class="text-muted small">{{ indo_date($info->date) }}</div>
+                    <a href="{{ route('informasi.index', ['type' => 'statistik', 'subject' => $info->subject, 'show' => $info->id]) }}" class="text-decoration-none">
+                        <div class="card mb-3 shadow-sm rounded-pill px-4 py-3 d-flex flex-row align-items-center" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}" style="cursor:pointer;">
+                            <div class="me-3 text-primary" style="font-size:2rem;"><i class="fa fa-clipboard"></i></div>
+                            <div class="flex-grow-1">
+                                <div class="fw-bold">{{ $info->title }}</div>
+                                <div class="text-muted small">{{ indo_date($info->date) }}</div>
+                            </div>
+                            <div>
+                                <i class="fa fa-arrow-right fa-lg text-success"></i>
+                            </div>
                         </div>
-                        <div>
-                            <a href="{{ $info->file_url ?? '#' }}" class="btn btn-link text-success p-0" target="_blank"><i class="fa fa-arrow-right fa-lg"></i></a>
-                        </div>
-                    </div>
+                    </a>
                 @endforeach
             </div>
             <div class="tab-pane fade" id="publikasi" role="tabpanel" aria-labelledby="publikasi-tab">
                 @foreach($publikasi as $info)
-                    <div class="card mb-3 shadow-sm rounded-pill px-4 py-3 d-flex flex-row align-items-center" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
-                        <div class="me-3 text-primary" style="font-size:2rem;"><i class="fa fa-book"></i></div>
-                        <div class="flex-grow-1">
-                            <div class="fw-bold">{{ $info->title }}</div>
-                            <div class="text-muted small">{{ indo_date($info->date) }}</div>
+                    <a href="{{ route('informasi.index', ['type' => 'publikasi', 'subject' => $info->subject, 'show' => $info->id]) }}" class="text-decoration-none">
+                        <div class="card mb-3 shadow-sm rounded-pill px-4 py-3 d-flex flex-row align-items-center" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}" style="cursor:pointer;">
+                            <div class="me-3 text-primary" style="font-size:2rem;"><i class="fa fa-book"></i></div>
+                            <div class="flex-grow-1">
+                                <div class="fw-bold">{{ $info->title }}</div>
+                                <div class="text-muted small">{{ indo_date($info->date) }}</div>
+                            </div>
+                            <div>
+                                <i class="fa fa-arrow-right fa-lg text-success"></i>
+                            </div>
                         </div>
-                        <div>
-                            <a href="{{ $info->file_url ?? '#' }}" class="btn btn-link text-success p-0" target="_blank"><i class="fa fa-arrow-right fa-lg"></i></a>
-                        </div>
-                    </div>
+                    </a>
                 @endforeach
             </div>
         </div>
