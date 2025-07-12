@@ -601,6 +601,7 @@
     display: flex;
     flex-wrap: nowrap;
     justify-content: center;
+    align-items: stretch;
     gap: 2rem;
     flex-direction: row;
 }
@@ -609,6 +610,20 @@
     max-width: 320px;
     min-width: 220px;
     display: flex;
+    flex-direction: column;
+    justify-content: stretch;
+}
+.stat-hero-card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+.stat-hero-card .card-body {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
 }
 @media (max-width: 991px) {
