@@ -23,7 +23,7 @@
             <!-- GET form for partnership type (for calendar functionality, hidden initially) -->
             <form method="GET" id="typeForm" class="mb-3" style="display:none;">
                 <label for="partnership_type" class="form-label">Jenis Kemitraan yang Diajukan</label>
-                <select class="form-select" id="partnership_type" name="partnership_type" onchange="document.getElementById('typeForm').submit()">
+                <select class="form-select" id="partnership_type" name="partnership_type" onchange="document.getElementById('typeForm').submit()" required>
                     <option value="Walk-in Interview" {{ $selectedType == 'Walk-in Interview' ? 'selected' : '' }}>Walk-in Interview</option>
                     <option value="Pendidikan Pasar Kerja" {{ $selectedType == 'Pendidikan Pasar Kerja' ? 'selected' : '' }}>Pendidikan Pasar Kerja</option>
                     <option value="Talenta Muda" {{ $selectedType == 'Talenta Muda' ? 'selected' : '' }}>Talenta Muda</option>
@@ -83,7 +83,7 @@
                     </div>
                     <div class="col-md-6">
                         <label for="business_sector" class="form-label">Sektor Lapangan Usaha</label>
-                        <input type="text" class="form-control" id="business_sector" name="business_sector" placeholder="Contoh: manufaktur, teknologi, dsb" value="{{ $formData['business_sector'] ?? old('business_sector') }}">
+                        <input type="text" class="form-control" id="business_sector" name="business_sector" placeholder="Contoh: manufaktur, teknologi, dsb" value="{{ $formData['business_sector'] ?? old('business_sector') }}" required>
                         <div class="form-text">Bidang usaha/sektor yang menjadi fokus utama instansi.</div>
                     </div>
                     <div class="col-md-6">
@@ -102,7 +102,7 @@
                     <div class="row g-3">
                         <div class="col-md-6">
                             <label for="needs" class="form-label">Kebutuhan yang Diajukan</label>
-                            <textarea class="form-control" id="needs" name="needs" rows="2" placeholder="Jelaskan kebutuhan atau bentuk dukungan yang diharapkan">{{ $formData['needs'] ?? old('needs') }}</textarea>
+                            <textarea class="form-control" id="needs" name="needs" rows="2" placeholder="Jelaskan kebutuhan atau bentuk dukungan yang diharapkan" required>{{ $formData['needs'] ?? old('needs') }}</textarea>
                         </div>
                         <div class="col-md-6">
                             <label for="schedule" class="form-label">Usulan Jadwal Kegiatan</label>
