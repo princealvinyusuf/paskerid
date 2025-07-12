@@ -4,12 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Models\Kemitraan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class KemitraanController extends Controller
 {
     public function create()
     {
-        return view('kemitraan.create');
+        $fullyBookedDates = DB::table('booked_date')
+            ->select('booked_date')
+            ->groupBy('booked_date')
+            ->havingRaw('COUNT(*) >= 10')
+            ->pluck('booked_date')
+            ->toArray();
+        return view('kemitraan.create', compact('fullyBookedDates'));
     }
 
     public function store(Request $request)

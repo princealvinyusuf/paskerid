@@ -159,10 +159,12 @@
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script>
+    var fullyBookedDates = @json($fullyBookedDates ?? []);
     flatpickr("#schedule", {
         mode: "range",
         dateFormat: "Y-m-d",
         minDate: "today",
+        disable: fullyBookedDates,
         locale: {
             firstDayOfWeek: 1,
             weekdays: {
