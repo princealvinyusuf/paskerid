@@ -9,6 +9,21 @@
                 <h2 class="mt-2 mb-0">Pendaftaran Kemitraan</h2>
                 <p class="text-muted">Pusat Pasar Kerja</p>
             </div>
+            <!-- Partnership Type Selector -->
+            <form method="GET" id="typeForm" class="mb-4">
+                <div class="mb-3">
+                    <label for="partnership_type" class="form-label">Jenis Kemitraan yang Diajukan</label>
+                    <select class="form-select" id="partnership_type" name="partnership_type" onchange="document.getElementById('typeForm').submit()">
+                        <option value="Walk-in Interview" {{ $selectedType == 'Walk-in Interview' ? 'selected' : '' }}>Walk-in Interview</option>
+                        <option value="Pendidikan Pasar Kerja" {{ $selectedType == 'Pendidikan Pasar Kerja' ? 'selected' : '' }}>Pendidikan Pasar Kerja</option>
+                        <option value="Talenta Muda" {{ $selectedType == 'Talenta Muda' ? 'selected' : '' }}>Talenta Muda</option>
+                        <option value="Job Fair" {{ $selectedType == 'Job Fair' ? 'selected' : '' }}>Job Fair</option>
+                        <option value="Konsultasi Pasar Kerja" {{ $selectedType == 'Konsultasi Pasar Kerja' ? 'selected' : '' }}>Konsultasi Pasar Kerja</option>
+                        <option value="Konsultasi Informasi Pasar Kerja" {{ $selectedType == 'Konsultasi Informasi Pasar Kerja' ? 'selected' : '' }}>Konsultasi Informasi Pasar Kerja</option>
+                    </select>
+                </div>
+            </form>
+            <!-- End Partnership Type Selector -->
             @if ($errors->any())
                 <div class="alert alert-danger">
                     <ul class="mb-0">
@@ -80,17 +95,6 @@
                 <hr class="my-4">
                 <h5 class="mb-3"><i class="bi bi-link-45deg me-2"></i>Detail Kemitraan</h5>
                 <div class="row g-3">
-                    <div class="col-md-6">
-                        <label for="partnership_type" class="form-label">Jenis Kemitraan yang Diajukan</label>
-                        <select class="form-select" id="partnership_type" name="partnership_type" required>
-                            <option value="">Pilih salah satu</option>
-                            <option value="Walk-in Interview">Walk-in Interview</option>
-                            <option value="Pendidikan Pasar Kerja">Pendidikan Pasar Kerja (Seminar/Webinar/Workshop)</option>
-                            <option value="Talenta Muda">Talenta Muda</option>
-                            <option value="Job Fair">Job Fair</option>
-                            <option value="Konsultasi Informasi Pasar Kerja">Konsultasi Informasi Pasar Kerja</option>
-                        </select>
-                    </div>
                     <div class="col-md-6">
                         <label for="needs" class="form-label">Kebutuhan yang Diajukan</label>
                         <textarea class="form-control" id="needs" name="needs" rows="2" placeholder="Jelaskan kebutuhan atau bentuk dukungan yang diharapkan"></textarea>
