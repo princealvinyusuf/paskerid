@@ -39,17 +39,17 @@
                 <div class="row g-3">
                     <div class="col-md-6">
                         <label for="pic_name" class="form-label">Nama Penanggung Jawab (PIC)</label>
-                        <input type="text" class="form-control" id="pic_name" name="pic_name" placeholder="Masukkan nama lengkap" required>
+                        <input type="text" class="form-control" id="pic_name" name="pic_name" placeholder="Masukkan nama lengkap" value="{{ old('pic_name') }}" required>
                     </div>
                     <div class="col-md-6">
                         <label for="pic_position" class="form-label">Jabatan Penanggung Jawab</label>
-                        <input type="text" class="form-control" id="pic_position" name="pic_position" placeholder="Masukkan jabatan" required>
+                        <input type="text" class="form-control" id="pic_position" name="pic_position" placeholder="Masukkan jabatan" value="{{ old('pic_position') }}" required>
                     </div>
                     <div class="col-md-6">
                         <label for="pic_email" class="form-label">Alamat Email Penanggung Jawab</label>
                         <div class="input-group">
                             <span class="input-group-text"><i class="bi bi-envelope"></i></span>
-                            <input type="email" class="form-control" id="pic_email" name="pic_email" placeholder="email@domain.com" required>
+                            <input type="email" class="form-control" id="pic_email" name="pic_email" placeholder="email@domain.com" value="{{ old('pic_email') }}" required>
                         </div>
                         <div class="form-text">Pastikan email aktif untuk komunikasi.</div>
                     </div>
@@ -57,7 +57,7 @@
                         <label for="pic_whatsapp" class="form-label">Nomor WhatsApp Aktif</label>
                         <div class="input-group">
                             <span class="input-group-text"><i class="bi bi-whatsapp"></i></span>
-                            <input type="text" class="form-control" id="pic_whatsapp" name="pic_whatsapp" placeholder="08xxxxxxxxxx" required>
+                            <input type="text" class="form-control" id="pic_whatsapp" name="pic_whatsapp" placeholder="08xxxxxxxxxx" value="{{ old('pic_whatsapp') }}" required>
                         </div>
                         <div class="form-text">Nomor aktif untuk keperluan komunikasi.</div>
                     </div>
@@ -70,25 +70,25 @@
                         <label for="sector_category" class="form-label">Kategori/Sektor Instansi</label>
                         <select class="form-select" id="sector_category" name="sector_category" required>
                             <option value="">Pilih salah satu</option>
-                            <option value="Kementerian/Lembaga">Kementerian/Lembaga</option>
-                            <option value="Pemerintah Daerah">Pemerintah Daerah (Kabupaten/Kota)</option>
-                            <option value="Mitra Pembangunan">Mitra Pembangunan (Perusahaan/Swasta/Job Portal)</option>
-                            <option value="Lembaga Pendidikan">Lembaga Pendidikan</option>
-                            <option value="Lembaga Non-Pemerintah">Lembaga Non-Pemerintah (Yayasan/Asosiasi/Organisasi)</option>
+                            <option value="Kementerian/Lembaga" {{ old('sector_category') == 'Kementerian/Lembaga' ? 'selected' : '' }}>Kementerian/Lembaga</option>
+                            <option value="Pemerintah Daerah" {{ old('sector_category') == 'Pemerintah Daerah' ? 'selected' : '' }}>Pemerintah Daerah (Kabupaten/Kota)</option>
+                            <option value="Mitra Pembangunan" {{ old('sector_category') == 'Mitra Pembangunan' ? 'selected' : '' }}>Mitra Pembangunan (Perusahaan/Swasta/Job Portal)</option>
+                            <option value="Lembaga Pendidikan" {{ old('sector_category') == 'Lembaga Pendidikan' ? 'selected' : '' }}>Lembaga Pendidikan</option>
+                            <option value="Lembaga Non-Pemerintah" {{ old('sector_category') == 'Lembaga Non-Pemerintah' ? 'selected' : '' }}>Lembaga Non-Pemerintah (Yayasan/Asosiasi/Organisasi)</option>
                         </select>
                     </div>
                     <div class="col-md-6">
                         <label for="institution_name" class="form-label">Nama Instansi</label>
-                        <input type="text" class="form-control" id="institution_name" name="institution_name" placeholder="Masukkan nama instansi" required>
+                        <input type="text" class="form-control" id="institution_name" name="institution_name" placeholder="Masukkan nama instansi" value="{{ old('institution_name') }}" required>
                     </div>
                     <div class="col-md-6">
                         <label for="business_sector" class="form-label">Sektor Lapangan Usaha</label>
-                        <input type="text" class="form-control" id="business_sector" name="business_sector" placeholder="Contoh: manufaktur, teknologi, dsb">
+                        <input type="text" class="form-control" id="business_sector" name="business_sector" placeholder="Contoh: manufaktur, teknologi, dsb" value="{{ old('business_sector') }}">
                         <div class="form-text">Bidang usaha/sektor yang menjadi fokus utama instansi.</div>
                     </div>
                     <div class="col-md-6">
                         <label for="institution_address" class="form-label">Alamat Instansi</label>
-                        <input type="text" class="form-control" id="institution_address" name="institution_address" placeholder="Masukkan alamat lengkap" required>
+                        <input type="text" class="form-control" id="institution_address" name="institution_address" placeholder="Masukkan alamat lengkap" value="{{ old('institution_address') }}" required>
                     </div>
                 </div>
 
@@ -102,13 +102,13 @@
                     <div class="row g-3">
                         <div class="col-md-6">
                             <label for="needs" class="form-label">Kebutuhan yang Diajukan</label>
-                            <textarea class="form-control" id="needs" name="needs" rows="2" placeholder="Jelaskan kebutuhan atau bentuk dukungan yang diharapkan"></textarea>
+                            <textarea class="form-control" id="needs" name="needs" rows="2" placeholder="Jelaskan kebutuhan atau bentuk dukungan yang diharapkan">{{ old('needs') }}</textarea>
                         </div>
                         <div class="col-md-6">
                             <label for="schedule" class="form-label">Usulan Jadwal Kegiatan</label>
                             <div class="input-group">
                                 <span class="input-group-text"><i class="bi bi-calendar-event"></i></span>
-                                <input type="text" class="form-control" id="schedule" name="schedule" placeholder="Pilih rentang tanggal" autocomplete="off" required>
+                                <input type="text" class="form-control" id="schedule" name="schedule" placeholder="Pilih rentang tanggal" autocomplete="off" value="{{ old('schedule') }}" required>
                             </div>
                             <div class="form-text">Pilih rentang tanggal pelaksanaan kegiatan.</div>
                         </div>
@@ -119,7 +119,7 @@
                                     <i class="bi bi-download me-1"></i>Download Template Surat Permohonan
                                 </a>
                             </div>
-                            <input type="file" class="form-control" id="request_letter" name="request_letter" accept=".pdf,.doc,.docx" required>
+                            <input type="file" class="form-control" id="request_letter" name="request_letter" accept=".pdf,.doc,.docx" value="{{ old('request_letter') }}" required>
                             <div class="form-text">Unggah surat permohonan (PDF/DOC/DOCX, max 2MB).</div>
                         </div>
                     </div>
@@ -194,6 +194,32 @@
                 shorthand: ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"],
                 longhand: ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"]
             }
+        }
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var typeForm = document.getElementById('typeForm');
+        var mainForm = document.querySelector('form[action="{{ route('kemitraan.store') }}"]');
+        var typeSelect = document.getElementById('partnership_type');
+
+        if (typeForm && mainForm && typeSelect) {
+            typeSelect.addEventListener('change', function() {
+                // Remove old hidden fields except partnership_type
+                Array.from(typeForm.querySelectorAll('input[type=hidden]:not([name=partnership_type])')).forEach(function(el) {
+                    el.remove();
+                });
+                // Copy all POST form values as hidden fields into GET form
+                Array.from(mainForm.elements).forEach(function(el) {
+                    if (el.name && el.value && el.type !== 'submit' && el.type !== 'button' && el.name !== 'partnership_type') {
+                        var hidden = document.createElement('input');
+                        hidden.type = 'hidden';
+                        hidden.name = el.name;
+                        hidden.value = el.value;
+                        typeForm.appendChild(hidden);
+                    }
+                });
+                typeForm.submit();
+            });
         }
     });
 </script>
