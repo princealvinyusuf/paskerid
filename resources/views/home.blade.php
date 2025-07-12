@@ -9,6 +9,16 @@
         </div>
     </section>
 
+    {{-- Modern Search Bar under Hero Banner --}}
+    <div class="container position-relative" style="margin-top: -40px; z-index: 20; max-width: 600px;">
+        <form action="{{ route('informasi.index') }}" method="GET" class="input-group shadow rounded-pill bg-white p-2" style="overflow: hidden;">
+            <input type="text" name="search" class="form-control border-0 rounded-pill ps-4" placeholder="Cari informasi, statistik, atau publikasi..." aria-label="Cari informasi" style="font-size: 1.1rem; background: transparent;">
+            <button class="btn btn-success rounded-pill px-4 d-flex align-items-center" type="submit" style="font-size: 1.1rem;">
+                <i class="fa fa-search me-2"></i> Cari
+            </button>
+        </form>
+    </div>
+
     {{-- Statistic Cards Carousel (Floating over Banner) --}}
     <section class="stat-carousel-section position-relative" style="z-index: 10; margin-top: -90px;">
         <div class="container position-relative" style="max-width:1200px;">
