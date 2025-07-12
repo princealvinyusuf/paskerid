@@ -3,21 +3,19 @@
 @section('content')
 <div class="container-fluid p-0" style="background: #edf8e9;">
     {{-- Hero Banner Section (Static) --}}
-    <section class="hero-banner position-relative text-white mb-0 d-flex justify-content-center align-items-center h-100" style="background: url('{{ asset('images/hero-bg.jpg') }}') center center/cover no-repeat; min-height: 420px;">
+    <section class="hero-banner position-relative text-white mb-0 d-flex flex-column justify-content-center align-items-center h-100" style="background: url('{{ asset('images/hero-bg.jpg') }}') center center/cover no-repeat; min-height: 420px;">
         <div>
             <h1 class="display-4 fw-bold mb-3 text-center" style="font-size:2.5rem; text-shadow: 2px 2px 6px #000, 0 0 2px #fff, 0 0 8px #000;">Pasar Kerja Dalam Angka,<br>Untuk Negeri Berkarya</h1>
         </div>
+        <div class="w-100 d-flex justify-content-center mt-4">
+            <form action="{{ route('informasi.index') }}" method="GET" class="input-group shadow rounded-pill bg-white p-2" style="max-width: 600px; width: 100%; overflow: hidden;">
+                <input type="text" name="search" class="form-control border-0 rounded-pill ps-4" placeholder="Cari informasi, statistik, atau publikasi..." aria-label="Cari informasi" style="font-size: 1.1rem; background: transparent;">
+                <button class="btn btn-success rounded-pill px-4 d-flex align-items-center" type="submit" style="font-size: 1.1rem;">
+                    <i class="fa fa-search me-2"></i> Cari
+                </button>
+            </form>
+        </div>
     </section>
-
-    {{-- Modern Search Bar under Hero Banner --}}
-    <div class="container position-relative" style="margin-top: -40px; z-index: 20; max-width: 600px;">
-        <form action="{{ route('informasi.index') }}" method="GET" class="input-group shadow rounded-pill bg-white p-2" style="overflow: hidden;">
-            <input type="text" name="search" class="form-control border-0 rounded-pill ps-4" placeholder="Cari informasi, statistik, atau publikasi..." aria-label="Cari informasi" style="font-size: 1.1rem; background: transparent;">
-            <button class="btn btn-success rounded-pill px-4 d-flex align-items-center" type="submit" style="font-size: 1.1rem;">
-                <i class="fa fa-search me-2"></i> Cari
-            </button>
-        </form>
-    </div>
 
     {{-- Statistic Cards Carousel (Floating over Banner) --}}
     <section class="stat-carousel-section position-relative" style="z-index: 10; margin-top: -90px;">
