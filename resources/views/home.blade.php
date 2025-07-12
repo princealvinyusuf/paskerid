@@ -4,13 +4,15 @@
 <div class="container-fluid p-0" style="background: #edf8e9;">
     {{-- Hero Banner Section (Static) --}}
     <section class="hero-banner position-relative text-white mb-0 d-flex flex-column justify-content-center align-items-center h-100" style="background: url('{{ asset('images/hero-bg.jpg') }}') center center/cover no-repeat; min-height: 420px;">
-        <div>
-            <h1 class="hero-title fw-bold mb-3 text-center" style="text-shadow: 2px 2px 6px #000, 0 0 2px #fff, 0 0 8px #000;">Pasar Kerja Dalam Angka,<br>Untuk Negeri Berkarya</h1>
+        <div class="w-100">
+            <h1 class="fw-bold mb-3 text-center lh-sm hero-title-responsive" style="text-shadow: 2px 2px 6px #000, 0 0 2px #fff, 0 0 8px #000;">
+                Pasar Kerja Dalam Angka,<br>Untuk Negeri Berkarya
+            </h1>
         </div>
-        <div class="w-100 d-flex justify-content-center mt-4">
-            <form action="{{ route('informasi.index') }}" method="GET" class="hero-search-bar d-flex align-items-center shadow rounded-pill bg-white p-2" style="max-width: 600px; width: 100%; overflow: hidden;">
-                <input type="text" name="search" class="form-control border-0 rounded-pill ps-4" placeholder="Cari informasi, statistik, atau publikasi..." aria-label="Cari informasi" style="font-size: 1.1rem; background: transparent;">
-                <button class="btn btn-success rounded-pill px-4 d-flex align-items-center ms-2 hero-search-btn" type="submit" style="font-size: 1.1rem;">
+        <div class="w-100 d-flex justify-content-center mt-3 px-2 px-sm-3">
+            <form action="{{ route('informasi.index') }}" method="GET" class="d-flex flex-column flex-sm-row align-items-stretch shadow rounded-pill bg-white p-2 gap-2" style="max-width: 600px; width: 100%; overflow: hidden;">
+                <input type="text" name="search" class="form-control border-0 rounded-pill ps-3 py-2 flex-grow-1" placeholder="Cari informasi, statistik, atau publikasi..." aria-label="Cari informasi" style="font-size: 1rem; background: transparent; min-width:0;">
+                <button class="btn btn-success rounded-pill px-4 d-flex align-items-center justify-content-center" type="submit" style="font-size: 1rem; min-width: 90px;">
                     <i class="fa fa-search me-2"></i> Cari
                 </button>
             </form>
@@ -640,22 +642,6 @@
     align-items: center;
     justify-content: center;
 }
-/* Responsive hero title font size */
-.hero-title {
-    font-size: 2.2rem;
-}
-@media (min-width: 576px) {
-    .hero-title { font-size: 2.5rem; }
-}
-@media (min-width: 768px) {
-    .hero-title { font-size: 3rem; }
-}
-@media (min-width: 992px) {
-    .hero-title { font-size: 3.5rem; }
-}
-@media (min-width: 1200px) {
-    .hero-title { font-size: 4rem; }
-}
 @media (max-width: 991px) {
     .stat-hero-flex-container {
         flex-wrap: wrap;
@@ -677,43 +663,24 @@
         max-width: 100%;
     }
 }
-/* Responsive hero search bar */
-.hero-search-bar {
-    max-width: 600px;
-    width: 100%;
-    overflow: hidden;
+.hero-title-responsive {
+    font-size: 2.1rem;
 }
-.hero-search-bar .form-control {
-    font-size: 1.1rem;
-    padding-top: 0.75rem;
-    padding-bottom: 0.75rem;
+@media (min-width: 576px) {
+    .hero-title-responsive {
+        font-size: 2.5rem;
+    }
 }
-.hero-search-btn {
-    font-size: 1.1rem;
-    padding-top: 0.6rem;
-    padding-bottom: 0.6rem;
+@media (min-width: 768px) {
+    .hero-title-responsive {
+        font-size: 3rem;
+    }
 }
 @media (max-width: 575.98px) {
-    .hero-search-bar {
-        flex-direction: column;
-        align-items: stretch;
-        border-radius: 1.2rem;
-        padding: 0.5rem;
-        gap: 0.5rem;
-    }
-    .hero-search-bar .form-control {
-        font-size: 1rem;
-        padding-top: 0.55rem;
-        padding-bottom: 0.55rem;
-        border-radius: 1rem !important;
-    }
-    .hero-search-btn {
-        font-size: 1rem;
-        padding-top: 0.5rem;
-        padding-bottom: 0.5rem;
-        border-radius: 1rem !important;
-        width: 100%;
-        justify-content: center;
+    .hero-title-responsive {
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+        text-shadow: 1px 1px 3px #000, 0 0 1px #fff, 0 0 4px #000;
     }
 }
 </style>
