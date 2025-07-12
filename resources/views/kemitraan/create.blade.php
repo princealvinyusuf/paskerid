@@ -221,6 +221,18 @@
                 typeForm.submit();
             });
         }
+
+        // Custom validation for schedule field
+        if (mainForm) {
+            mainForm.addEventListener('submit', function(e) {
+                var schedule = document.getElementById('schedule');
+                if (!schedule.value.trim()) {
+                    alert('Field "Usulan Jadwal Kegiatan" wajib diisi.');
+                    schedule.focus();
+                    e.preventDefault();
+                }
+            });
+        }
     });
 </script>
 @endpush
