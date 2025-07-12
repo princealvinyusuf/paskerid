@@ -20,7 +20,7 @@
             @endif
             <hr class="my-4">
             <h5 class="mb-3"><i class="bi bi-link-45deg me-2"></i>Detail Kemitraan</h5>
-            <!-- Partnership Type Selector (GET form, outside POST form) -->
+            <!-- Partnership Type Selector (GET form, for calendar) -->
             <form method="GET" id="typeForm" class="mb-3">
                 <label for="partnership_type" class="form-label">Jenis Kemitraan yang Diajukan</label>
                 <select class="form-select" id="partnership_type" name="partnership_type" onchange="document.getElementById('typeForm').submit()">
@@ -35,7 +35,7 @@
             <!-- End Partnership Type Selector -->
             <form action="{{ route('kemitraan.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
-                <h5 class="mb-3 mt-4"><i class="bi bi-person-circle me-2"></i>Data Penanggung Jawab</h5>
+                <input type="hidden" name="partnership_type" value="{{ $selectedType }}">
                 <div class="row g-3">
                     <div class="col-md-6">
                         <label for="pic_name" class="form-label">Nama Penanggung Jawab (PIC)</label>
@@ -118,7 +118,6 @@
                         <div class="form-text">Unggah surat permohonan (PDF/DOC/DOCX, max 2MB).</div>
                     </div>
                 </div>
-                <input type="hidden" name="partnership_type" value="{{ $selectedType }}">
                 <div class="d-grid mt-4">
                     <button type="submit" class="btn btn-primary btn-lg">
                         <i class="bi bi-send-check me-2"></i>Kirim Pendaftaran
