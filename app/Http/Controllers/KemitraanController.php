@@ -32,8 +32,8 @@ class KemitraanController extends Controller
             ->havingRaw('COUNT(*) >= max_bookings')
             ->pluck('booked_date')
             ->toArray();
-
-        return view('kemitraan.create', compact('fullyBookedDates', 'selectedType'));
+        $formData = $request->all();
+        return view('kemitraan.create', compact('fullyBookedDates', 'selectedType', 'formData'));
     }
 
     public function store(Request $request)
