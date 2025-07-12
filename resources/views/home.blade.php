@@ -702,5 +702,23 @@
         padding-right: 0 !important;
     }
 }
+.stat-carousel-section a {
+    display: block;
+    height: 100%;
+    text-decoration: none;
+    padding: 0;
+    margin: 0;
+}
+.stat-carousel-section .stat-card {
+    height: 100%;
+    min-height: 220px;
+    width: 260px;
+    max-width: 260px;
+    min-width: 180px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
 </style>
 @endpush 
