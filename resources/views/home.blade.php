@@ -8,9 +8,9 @@
             <h1 class="display-4 fw-bold mb-3 text-center" style="font-size:2.5rem; text-shadow: 2px 2px 6px #000, 0 0 2px #fff, 0 0 8px #000;">Pasar Kerja Dalam Angka,<br>Untuk Negeri Berkarya</h1>
         </div>
         <div class="w-100 d-flex justify-content-center mt-4">
-            <form action="{{ route('informasi.index') }}" method="GET" class="input-group shadow rounded-pill bg-white p-2" style="max-width: 600px; width: 100%; overflow: hidden;">
+            <form action="{{ route('informasi.index') }}" method="GET" class="d-flex align-items-center shadow rounded-pill bg-white p-2" style="max-width: 600px; width: 100%; overflow: hidden;">
                 <input type="text" name="search" class="form-control border-0 rounded-pill ps-4" placeholder="Cari informasi, statistik, atau publikasi..." aria-label="Cari informasi" style="font-size: 1.1rem; background: transparent;">
-                <button class="btn btn-success rounded-pill px-4 d-flex align-items-center" type="submit" style="font-size: 1.1rem;">
+                <button class="btn btn-success rounded-pill px-4 d-flex align-items-center ms-2" type="submit" style="font-size: 1.1rem;">
                     <i class="fa fa-search me-2"></i> Cari
                 </button>
             </form>
