@@ -18,6 +18,21 @@
                     </ul>
                 </div>
             @endif
+            <hr class="my-4">
+            <h5 class="mb-3"><i class="bi bi-link-45deg me-2"></i>Detail Kemitraan</h5>
+            <!-- Partnership Type Selector (GET form, outside POST form) -->
+            <form method="GET" id="typeForm" class="mb-3">
+                <label for="partnership_type" class="form-label">Jenis Kemitraan yang Diajukan</label>
+                <select class="form-select" id="partnership_type" name="partnership_type" onchange="document.getElementById('typeForm').submit()">
+                    <option value="Walk-in Interview" {{ $selectedType == 'Walk-in Interview' ? 'selected' : '' }}>Walk-in Interview</option>
+                    <option value="Pendidikan Pasar Kerja" {{ $selectedType == 'Pendidikan Pasar Kerja' ? 'selected' : '' }}>Pendidikan Pasar Kerja</option>
+                    <option value="Talenta Muda" {{ $selectedType == 'Talenta Muda' ? 'selected' : '' }}>Talenta Muda</option>
+                    <option value="Job Fair" {{ $selectedType == 'Job Fair' ? 'selected' : '' }}>Job Fair</option>
+                    <option value="Konsultasi Pasar Kerja" {{ $selectedType == 'Konsultasi Pasar Kerja' ? 'selected' : '' }}>Konsultasi Pasar Kerja</option>
+                    <option value="Konsultasi Informasi Pasar Kerja" {{ $selectedType == 'Konsultasi Informasi Pasar Kerja' ? 'selected' : '' }}>Konsultasi Informasi Pasar Kerja</option>
+                </select>
+            </form>
+            <!-- End Partnership Type Selector -->
             <form action="{{ route('kemitraan.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <h5 class="mb-3 mt-4"><i class="bi bi-person-circle me-2"></i>Data Penanggung Jawab</h5>
@@ -80,21 +95,6 @@
                 <hr class="my-4">
                 <h5 class="mb-3"><i class="bi bi-link-45deg me-2"></i>Detail Kemitraan</h5>
                 <div class="row g-3">
-                    <!-- Partnership Type Selector (GET form) -->
-                    <div class="col-md-6">
-                        <form method="GET" id="typeForm" class="mb-3">
-                            <label for="partnership_type" class="form-label">Jenis Kemitraan yang Diajukan</label>
-                            <select class="form-select" id="partnership_type" name="partnership_type" onchange="document.getElementById('typeForm').submit()">
-                                <option value="Walk-in Interview" {{ $selectedType == 'Walk-in Interview' ? 'selected' : '' }}>Walk-in Interview</option>
-                                <option value="Pendidikan Pasar Kerja" {{ $selectedType == 'Pendidikan Pasar Kerja' ? 'selected' : '' }}>Pendidikan Pasar Kerja</option>
-                                <option value="Talenta Muda" {{ $selectedType == 'Talenta Muda' ? 'selected' : '' }}>Talenta Muda</option>
-                                <option value="Job Fair" {{ $selectedType == 'Job Fair' ? 'selected' : '' }}>Job Fair</option>
-                                <option value="Konsultasi Pasar Kerja" {{ $selectedType == 'Konsultasi Pasar Kerja' ? 'selected' : '' }}>Konsultasi Pasar Kerja</option>
-                                <option value="Konsultasi Informasi Pasar Kerja" {{ $selectedType == 'Konsultasi Informasi Pasar Kerja' ? 'selected' : '' }}>Konsultasi Informasi Pasar Kerja</option>
-                            </select>
-                        </form>
-                    </div>
-                    <!-- End Partnership Type Selector -->
                     <div class="col-md-6">
                         <label for="needs" class="form-label">Kebutuhan yang Diajukan</label>
                         <textarea class="form-control" id="needs" name="needs" rows="2" placeholder="Jelaskan kebutuhan atau bentuk dukungan yang diharapkan"></textarea>
@@ -118,6 +118,7 @@
                         <div class="form-text">Unggah surat permohonan (PDF/DOC/DOCX, max 2MB).</div>
                     </div>
                 </div>
+                <input type="hidden" name="partnership_type" value="{{ $selectedType }}">
                 <div class="d-grid mt-4">
                     <button type="submit" class="btn btn-primary btn-lg">
                         <i class="bi bi-send-check me-2"></i>Kirim Pendaftaran
