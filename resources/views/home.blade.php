@@ -45,7 +45,8 @@
 
     {{-- Statistic Cards Carousel (Floating over Banner) --}}
     <section class="stat-carousel-section position-relative" style="z-index: 10; margin-top: -90px;">
-        <div class="container position-relative" style="max-width:1200px;">
+        <div class="container position-relative rounded-section-bg p-4 p-md-5" style="max-width:1200px;">
+            <h3 class="text-center mb-4">Pasar Kerja Indonesia Dalam Angka</h3>
             <div class="d-flex align-items-center position-relative">
                 <button id="statScrollPrev" class="btn btn-light shadow rounded-circle position-absolute start-0 translate-middle-y" style="top:50%; z-index:2; width:40px; height:40px;">
                     <i class="fa fa-chevron-left"></i>
@@ -578,8 +579,7 @@
     font-size: 1rem;
 }
 .stat-carousel-section {
-    background: #f3f4f6; /* very light gray, like your image */
-    border-radius: 2rem;
+    background: transparent;
     padding-top: 2rem;
     padding-bottom: 2rem;
 }
