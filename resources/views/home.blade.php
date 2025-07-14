@@ -20,7 +20,7 @@
     </section>
 
     {{-- Karakteristik Lowongan Kerja Section --}}
-    <section class="karakteristik-section my-5 px-2 px-md-4 px-lg-5" data-aos="fade-up">
+    <section class="karakteristik-section my-5 px-2 px-md-4 px-lg-5 mx-auto" style="max-width: 1300px; background: #fff;" data-aos="fade-up">
         <h3 class="text-center mb-4">Karakteristik Lowongan Kerja</h3>
         <div class="row gx-3 gy-4 justify-content-center">
             @foreach($jobCharacteristics as $char)
@@ -791,7 +791,7 @@
 }
 .karakteristik-section {
     border-radius: 2rem;
-    background: #edf8e9;
+    background: #fff;
     padding-top: 2rem;
     padding-bottom: 2rem;
 }
