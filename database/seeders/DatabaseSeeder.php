@@ -34,6 +34,8 @@ class DatabaseSeeder extends Seeder
             DashboardPerformanceSeeder::class,
             DashboardLaborDemandSeeder::class,
             MitraKerjaTableSeeder::class,
+            JobCharacteristicsTableSeeder::class,
+            JobCharacteristics2TableSeeder::class,
             // \Database\Seeders\DashboardTrendSeeder::class,
         ]);
     }
