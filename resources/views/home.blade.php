@@ -20,7 +20,7 @@
     </section>
 
     {{-- Karakteristik Lowongan Kerja Section --}}
-    <section class="my-5 px-2 px-md-4 px-lg-5" data-aos="fade-up">
+    <section class="karakteristik-section my-5 px-2 px-md-4 px-lg-5" data-aos="fade-up">
         <h3 class="text-center mb-4">Karakteristik Lowongan Kerja</h3>
         <div class="row gx-3 gy-4 justify-content-center">
             @foreach($jobCharacteristics as $char)
@@ -42,7 +42,7 @@
     </section>
 
     {{-- Statistic Cards Carousel (Floating over Banner) --}}
-    <section class="stat-carousel-section position-relative" style="z-index: 10; margin-top: -90px;">
+    <!-- <section class="stat-carousel-section position-relative" style="z-index: 10; margin-top: -90px;">
         <div class="container position-relative" style="max-width:1200px;">
             <div class="d-flex align-items-center position-relative">
                 <button id="statScrollPrev" class="btn btn-light shadow rounded-circle position-absolute start-0 translate-middle-y" style="top:50%; z-index:2; width:40px; height:40px;">
@@ -72,7 +72,7 @@
             </div>
             <div class="d-flex justify-content-center mt-3" id="statDots"></div>
         </div>
-    </section>
+    </section> -->
 
     {{-- Informasi Terbaru --}}
     <section class="my-5 px-2 px-md-4 px-lg-5" id="informasi-terbaru" data-aos="fade-up">
@@ -788,6 +788,12 @@
     width: 100%;
     border: none;
     display: block;
+}
+.karakteristik-section {
+    border-radius: 2rem;
+    background: #edf8e9;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
 }
 </style>
 @endpush 
