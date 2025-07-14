@@ -36,6 +36,7 @@ class DatabaseSeeder extends Seeder
             MitraKerjaTableSeeder::class,
             JobCharacteristicsTableSeeder::class,
             JobCharacteristics2TableSeeder::class,
+            JobCharacteristics3TableSeeder::class,
             // \Database\Seeders\DashboardTrendSeeder::class,
         ]);
     }
