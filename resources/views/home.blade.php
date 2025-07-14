@@ -25,7 +25,7 @@
         <div class="row gx-3 gy-4 justify-content-center">
             @foreach($jobCharacteristics as $char)
                 <div class="col-12 col-md-6 col-lg-3 d-flex align-items-stretch">
-                    <div class="card shadow-sm rounded-4 border-0 w-100 h-100 p-3 d-flex flex-column align-items-center justify-content-center text-center">
+                    <div class="card stat-card shadow-sm border-0 w-100 h-100 p-3 d-flex flex-column align-items-center justify-content-center text-center">
                         <h5 class="fw-bold mb-2">{{ $char->title }}</h5>
                         <p class="mb-2 text-muted">{{ $char->description }}</p>
                         <div class="w-100" style="min-height: 350px;">
