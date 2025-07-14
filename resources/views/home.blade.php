@@ -20,29 +20,31 @@
     </section>
 
     {{-- Karakteristik Lowongan Kerja Section --}}
-    <section class="karakteristik-section my-5 px-2 px-md-4 px-lg-5 mx-auto" style="max-width: 1300px; background: #fff;" data-aos="fade-up">
-        <h3 class="text-center mb-4">Karakteristik Lowongan Kerja</h3>
-        <div class="row gx-3 gy-4 justify-content-center">
-            @foreach($jobCharacteristics as $char)
-                <div class="col-12 col-md-6 col-lg-3 d-flex align-items-stretch">
-                    <div class="card stat-card shadow-sm border-0 w-100 h-100 p-3 d-flex flex-column align-items-center justify-content-center text-center">
-                        <h5 class="fw-bold mb-2">{{ $char->title }}</h5>
-                        <p class="mb-2 text-muted">{{ $char->description }}</p>
-                        <div class="w-100" style="min-height: 350px;">
-                            <div class="tableau-embed-wrapper w-100" style="min-height: 350px; overflow-x: auto;">
-                                <div style="min-width: 400px;">
-                                    {!! $char->tableau_embed_code !!}
+    <section class="my-5 px-2 px-md-4 px-lg-5" data-aos="fade-up">
+        <div class="rounded-section-bg p-4 p-md-5">
+            <h3 class="text-center mb-4">Karakteristik Lowongan Kerja</h3>
+            <div class="row gx-3 gy-4 justify-content-center">
+                @foreach($jobCharacteristics as $char)
+                    <div class="col-12 col-md-6 col-lg-3 d-flex align-items-stretch">
+                        <div class="card stat-card shadow-sm border-0 w-100 h-100 p-3 d-flex flex-column align-items-center justify-content-center text-center">
+                            <h5 class="fw-bold mb-2">{{ $char->title }}</h5>
+                            <p class="mb-2 text-muted">{{ $char->description }}</p>
+                            <div class="w-100" style="min-height: 350px;">
+                                <div class="tableau-embed-wrapper w-100" style="min-height: 350px; overflow-x: auto;">
+                                    <div style="min-width: 400px;">
+                                        {!! $char->tableau_embed_code !!}
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            @endforeach
+                @endforeach
+            </div>
         </div>
     </section>
 
     {{-- Statistic Cards Carousel (Floating over Banner) --}}
-    <!-- <section class="stat-carousel-section position-relative" style="z-index: 10; margin-top: -90px;">
+    <section class="stat-carousel-section position-relative" style="z-index: 10; margin-top: -90px;">
         <div class="container position-relative" style="max-width:1200px;">
             <div class="d-flex align-items-center position-relative">
                 <button id="statScrollPrev" class="btn btn-light shadow rounded-circle position-absolute start-0 translate-middle-y" style="top:50%; z-index:2; width:40px; height:40px;">
@@ -72,7 +74,7 @@
             </div>
             <div class="d-flex justify-content-center mt-3" id="statDots"></div>
         </div>
-    </section> -->
+    </section>
 
     {{-- Informasi Terbaru --}}
     <section class="my-5 px-2 px-md-4 px-lg-5" id="informasi-terbaru" data-aos="fade-up">
@@ -789,11 +791,10 @@
     border: none;
     display: block;
 }
-.karakteristik-section {
+.rounded-section-bg {
+    background: #edf8e9;
     border-radius: 2rem;
-    background: #fff;
-    padding-top: 2rem;
-    padding-bottom: 2rem;
+    box-shadow: 0 8px 32px 0 rgba(76,203,143,0.10);
 }
 </style>
 @endpush 
