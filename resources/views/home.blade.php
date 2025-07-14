@@ -80,7 +80,7 @@
 
     {{-- Hero Section: Statistics --}}
     <section class="hero my-5 px-2 px-md-4 px-lg-5" data-aos="fade-up">
-        <h3 class="text-center mb-4">Pasar Kerja Indonesia Dalam Angka</h3>
+        <h3 class="text-center mb-4">Data Ketenagakerjaan</h3>
         <div class="d-flex justify-content-center flex-wrap gap-3" style="gap:16px;">
             @foreach($heroStatistics as $stat)
                 <div class="card shadow-sm stat-card text-center flex-shrink-0" style="width:90vw; max-width:260px; min-width:180px;">
