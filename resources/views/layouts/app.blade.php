@@ -20,7 +20,7 @@
         <div class="container">
             <a class="navbar-brand" href="/">
                 <img src="{{ asset('images/logo.png') }}" alt="Paskerid Logo" style="height:40px; width:auto;">
-                Pasker ID
+                <span class="fw-bold ms-2" style="font-family: inherit; color: inherit;">Pasker ID</span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
