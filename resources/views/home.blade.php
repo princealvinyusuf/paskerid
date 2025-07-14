@@ -21,25 +21,23 @@
 
     {{-- Karakteristik Lowongan Kerja Section --}}
     <section class="my-5 px-2 px-md-4 px-lg-5 overlap-hero" data-aos="fade-up">
-        <div class="rounded-section-bg p-4 p-md-5">
-            <h3 class="text-center mb-4">Karakteristik Lowongan Kerja</h3>
-            <div class="row gx-3 gy-4 justify-content-center">
-                @foreach($jobCharacteristics as $char)
-                    <div class="col-12 col-md-6 col-lg-3 d-flex align-items-stretch">
-                        <div class="card stat-card shadow-sm border-0 w-100 h-100 p-3 d-flex flex-column align-items-center justify-content-center text-center">
-                            <h5 class="fw-bold mb-2">{{ $char->title }}</h5>
-                            <p class="mb-2 text-muted">{{ $char->description }}</p>
-                            <div class="w-100" style="min-height: 350px;">
-                                <div class="tableau-embed-wrapper w-100" style="min-height: 350px; overflow-x: auto;">
-                                    <div style="min-width: 400px;">
-                                        {!! $char->tableau_embed_code !!}
-                                    </div>
+        <h3 class="text-center mb-4">Karakteristik Lowongan Kerja</h3>
+        <div class="row gx-3 gy-4 justify-content-center">
+            @foreach($jobCharacteristics as $char)
+                <div class="col-12 col-md-6 col-lg-3 d-flex align-items-stretch">
+                    <div class="card stat-card shadow-sm border-0 w-100 h-100 p-3 d-flex flex-column align-items-center justify-content-center text-center">
+                        <h5 class="fw-bold mb-2">{{ $char->title }}</h5>
+                        <p class="mb-2 text-muted">{{ $char->description }}</p>
+                        <div class="w-100" style="min-height: 350px;">
+                            <div class="tableau-embed-wrapper w-100" style="min-height: 350px; overflow-x: auto;">
+                                <div style="min-width: 400px;">
+                                    {!! $char->tableau_embed_code !!}
                                 </div>
                             </div>
                         </div>
                     </div>
-                @endforeach
-            </div>
+                </div>
+            @endforeach
         </div>
     </section>
 
