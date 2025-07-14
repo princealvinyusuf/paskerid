@@ -11,12 +11,14 @@ use App\Models\Contribution;
 use App\Models\Service;
 use App\Models\News;
 use App\Models\Testimonial;
+use App\Models\HeroStatistic;
 
 class HomeController extends Controller
 {
     public function index()
     {
         $statistics = Statistic::orderBy('order')->get();
+        $heroStatistics = HeroStatistic::orderBy('order')->get();
         $statistik = Information::where('type', 'statistik')->orderByDesc('date')->take(5)->get();
         $publikasi = Information::where('type', 'publikasi')->orderByDesc('date')->take(5)->get();
         $charts = Chart::orderBy('order')->get();
@@ -50,6 +52,7 @@ class HomeController extends Controller
 
         return view('home', compact(
             'statistics',
+            'heroStatistics',
             'statistik',
             'publikasi',
             'charts',
