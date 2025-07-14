@@ -438,6 +438,24 @@
         Object.entries(top5Data).forEach(([type, chartData]) => {
             const ctx = document.getElementById('top5-chart-' + type);
             if (ctx && chartData.labels.length) {
+                // Define a colorful palette (repeat if more bars)
+                const colorPalette = [
+                    'rgba(255, 99, 132, 0.7)',   // Red
+                    'rgba(54, 162, 235, 0.7)',   // Blue
+                    'rgba(255, 206, 86, 0.7)',   // Yellow
+                    'rgba(75, 192, 192, 0.7)',   // Teal
+                    'rgba(153, 102, 255, 0.7)'   // Purple
+                ];
+                const borderPalette = [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)'
+                ];
+                // Repeat colors if there are more bars than colors
+                const bgColors = chartData.data.map((_, i) => colorPalette[i % colorPalette.length]);
+                const borderColors = chartData.data.map((_, i) => borderPalette[i % borderPalette.length]);
                 new Chart(ctx, {
                     type: 'bar',
                     data: {
@@ -445,8 +463,8 @@
                         datasets: [{
                             label: '',
                             data: chartData.data,
-                            backgroundColor: 'rgba(40, 167, 69, 0.7)',
-                            borderColor: 'rgba(40, 167, 69, 1)',
+                            backgroundColor: bgColors,
+                            borderColor: borderColors,
                             borderWidth: 1
                         }]
                     },
