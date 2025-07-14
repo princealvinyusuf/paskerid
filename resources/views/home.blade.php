@@ -20,7 +20,7 @@
     </section>
 
     {{-- Karakteristik Lowongan Kerja Section --}}
-    <section class="my-5 px-2 px-md-4 px-lg-5" data-aos="fade-up">
+    <section class="my-5 px-2 px-md-4 px-lg-5 overlap-hero" data-aos="fade-up">
         <div class="rounded-section-bg p-4 p-md-5">
             <h3 class="text-center mb-4">Karakteristik Lowongan Kerja</h3>
             <div class="row gx-3 gy-4 justify-content-center">
@@ -795,6 +795,16 @@
     background: #edf8e9;
     border-radius: 2rem;
     box-shadow: 0 8px 32px 0 rgba(76,203,143,0.10);
+}
+.overlap-hero {
+    margin-top: -140px; /* Overlap by about 1/3 of the section height, adjust as needed */
+    position: relative;
+    z-index: 2;
+}
+@media (max-width: 767px) {
+    .overlap-hero {
+        margin-top: -60px; /* Less overlap on mobile */
+    }
 }
 </style>
 @endpush 
