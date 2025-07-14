@@ -143,6 +143,7 @@
 
     {{-- Top 5 Lists Section as Carousel --}}
     <section class="my-5 px-2 px-md-4 px-lg-5" data-aos="fade-up">
+        <h3 class="text-center mb-4">Top 5 Lists</h3>
         <div class="row gx-3 gy-4 justify-content-center">
             @foreach($topLists as $list)
                 <div class="col-12 col-md-6 col-lg-3 d-flex align-items-stretch">
@@ -159,11 +160,29 @@
         </div>
     </section>
 
+    {{-- Karakteristik Lowongan Kerja Section --}}
+    <section class="my-5 px-2 px-md-4 px-lg-5" data-aos="fade-up">
+        <h3 class="text-center mb-4">Karakteristik Lowongan Kerja</h3>
+        <div class="row gx-3 gy-4 justify-content-center">
+            @foreach($jobCharacteristics as $char)
+                <div class="col-12 col-md-6 col-lg-3 d-flex align-items-stretch">
+                    <div class="card shadow-sm rounded-4 border-0 w-100 h-100 p-3 d-flex flex-column align-items-center justify-content-center text-center">
+                        <h5 class="fw-bold mb-2">{{ $char->title }}</h5>
+                        <p class="mb-2 text-muted">{{ $char->description }}</p>
+                        <div class="w-100" style="min-height: 350px;">
+                            {!! $char->tableau_embed_code !!}
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    </section>
+
     {{-- Contributions Section --}}
     <section class="my-5 px-2 px-md-4 px-lg-5" data-aos="fade-up">
         <div class="text-center mb-2">
-            <h2 class="fw-bold mb-1" style="font-size:2.5rem;">Kontribusi Pasker</h2>
-            <h2 class="fw-bold mb-1" style="font-size:2.5rem;">Untuk Masyarakat Indonesia</h2>
+            <h3 class="fw-bold mb-1" style="font-size:2.5rem;">Kontribusi Pasker</h3>
+            <h3 class="fw-bold mb-1" style="font-size:2.5rem;">Untuk Masyarakat Indonesia</h3>
         </div>
         <div class="row justify-content-center g-4">
             @foreach($contributions as $contrib)

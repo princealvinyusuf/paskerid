@@ -12,6 +12,7 @@ use App\Models\Service;
 use App\Models\News;
 use App\Models\Testimonial;
 use App\Models\HeroStatistic;
+use App\Models\JobCharacteristic;
 
 class HomeController extends Controller
 {
@@ -49,6 +50,7 @@ class HomeController extends Controller
         $services = Service::all();
         $news = News::orderByDesc('date')->take(3)->get();
         $testimonials = Testimonial::all();
+        $jobCharacteristics = JobCharacteristic::orderBy('order')->take(4)->get();
 
         return view('home', compact(
             'statistics',
@@ -60,7 +62,8 @@ class HomeController extends Controller
             'contributions',
             'services',
             'news',
-            'testimonials'
+            'testimonials',
+            'jobCharacteristics'
         ));
     }
 } 
