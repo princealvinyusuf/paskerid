@@ -170,7 +170,11 @@
                         <h5 class="fw-bold mb-2">{{ $char->title }}</h5>
                         <p class="mb-2 text-muted">{{ $char->description }}</p>
                         <div class="w-100" style="min-height: 350px;">
-                            {!! $char->tableau_embed_code !!}
+                            <div class="tableau-embed-wrapper w-100" style="min-height: 350px; overflow-x: auto;">
+                                <div style="min-width: 400px;">
+                                    {!! $char->tableau_embed_code !!}
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -773,6 +777,17 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+}
+.tableau-embed-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+}
+.tableau-embed-wrapper iframe {
+    min-width: 400px;
+    width: 100%;
+    border: none;
+    display: block;
 }
 </style>
 @endpush 
