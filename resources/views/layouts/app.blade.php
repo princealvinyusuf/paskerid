@@ -78,24 +78,19 @@
     </main>
 
 
-    <footer class="bg-success text-white py-3">
-    <div class="container-fluid">
-        <div class="row align-items-center justify-content-between">
-            <!-- Logo & Description Kiri -->
-            <div class="col-md-4 ps-4 text-start d-flex align-items-center mb-2 mb-md-0">
-                <img src="{{ asset('images/logo_kemnaker.png') }}" alt="Logo Kemnaker" style="height:48px; width:auto; margin-right:16px; background:#fff; border-radius:8px; padding:4px;">
+    <footer class="bg-success text-white py-4">
+    <div class="container">
+        <div class="row gy-4 align-items-center justify-content-between flex-column flex-md-row">
+            <!-- Logo & Description -->
+            <div class="col-12 col-md-4 d-flex align-items-center gap-3 justify-content-center justify-content-md-start text-center text-md-start">
+                <img src="{{ asset('images/logo_kemnaker.png') }}" alt="Logo Kemnaker" style="height:48px; width:auto; background:#fff; border-radius:8px; padding:4px;">
                 <div style="font-size:0.97rem; line-height:1.4;">
                     <span class="fw-bold">Pusat Pasar Kerja Indonesia (Pasker ID)</span><br>
                     merupakan inisiatif Kementerian Ketenagakerjaan Republik Indonesia untuk mempertemukan pencari kerja dan pemberi kerja secara digital, terintegrasi, dan inklusif.
                 </div>
             </div>
-            <!-- Copyright ke kiri -->
-            <div class="col-md-4 ps-4 text-start d-none d-md-block">
-                Copyright © 2025 Pusat Pasar Kerja
-            </div>
-
             <!-- Menu Tengah -->
-            <div class="col-md-4 d-flex justify-content-center flex-wrap gap-3">
+            <div class="col-12 col-md-4 d-flex flex-wrap justify-content-center gap-3 order-3 order-md-2">
                 <a href="{{ route('home') }}" class="text-white text-decoration-none">Beranda</a>
                 <a href="#" class="text-white text-decoration-none">Layanan</a>
                 <a href="#" class="text-white text-decoration-none">Monitoring Data</a>
@@ -103,12 +98,12 @@
                 <a href="{{ route('news.index') }}" class="text-white text-decoration-none">Berita</a>
                 <a href="{{ route('about') }}" class="text-white text-decoration-none">Tentang Kami</a>
             </div>
-
-            <!-- Sosial Media Kanan -->
-            <div class="col-md-4 text-end">
-                
-                <a href="https://www.instagram.com/pusatpasarkerja/?hl=en" target="_blank" class="text-white mx-1"><i class="fab fa-instagram"></i></a>
-                
+            <!-- Sosial & Copyright -->
+            <div class="col-12 col-md-4 d-flex flex-column align-items-center align-items-md-end gap-2 order-2 order-md-3">
+                <div>
+                    <a href="https://www.instagram.com/pusatpasarkerja/?hl=en" target="_blank" class="text-white mx-1"><i class="fab fa-instagram fa-lg"></i></a>
+                </div>
+                <div class="small">Copyright © 2025 Pusat Pasar Kerja</div>
             </div>
         </div>
     </div>
