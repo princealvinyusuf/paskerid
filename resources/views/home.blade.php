@@ -6,7 +6,7 @@
     <section class="hero-banner position-relative text-white mb-0 d-flex flex-column justify-content-center align-items-center h-100" style="background: url('{{ asset('images/hero-bg.jpg') }}') center center/cover no-repeat; min-height: 420px;">
         <div class="w-100">
             <h1 class="fw-bold mb-3 text-center lh-sm hero-title-responsive" style="text-shadow: 2px 2px 6px #000, 0 0 2px #fff, 0 0 8px #000;">
-                Pasar Kerja Dalam Angka,<br>Untuk Negeri Berkarya
+                Get A Job Live Better
             </h1>
         </div>
         <div class="w-100 d-flex justify-content-center mt-3 px-2 px-sm-3">
