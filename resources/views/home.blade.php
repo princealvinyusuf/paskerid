@@ -100,7 +100,7 @@
 
      {{-- Karakteristik Lowongan Kerja 2 Section --}}
      <section class="my-5 mb-5 px-2 px-md-4 px-lg-5" data-aos="fade-up">
-        <h3 class="text-center mb-4">Karakteristik Lowongan Kerja 2</h3>
+        <h3 class="text-center mb-4">Sistem Informasi Pasar Kerja (SIPK)</h3>
         <div class="row gx-3 gy-4 justify-content-center">
             @foreach($jobCharacteristics2 as $char)
                 <div class="col-12 col-md-6 col-lg-3 d-flex align-items-stretch">
