@@ -142,7 +142,7 @@
         </div>
     </section>
 
-
+<!-- 
     {{-- Hero Section: Statistics --}}
     <section class="hero my-5 px-2 px-md-4 px-lg-5" data-aos="fade-up">
         <h3 class="text-center mb-4">Data Ketenagakerjaan</h3>
@@ -162,7 +162,7 @@
                 </div>
             @endforeach
         </div>
-    </section>
+    </section> -->
 
     {{-- Charts Section --}}
     <section class="my-5 px-2 px-md-4 px-lg-5" data-aos="fade-up">

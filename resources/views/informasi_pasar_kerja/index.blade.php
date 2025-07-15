@@ -3,7 +3,7 @@
 @section('content')
 <div class="container-fluid p-0" style="background: #edf8e9;">
     <section class="my-5 mb-5 px-2 px-md-4 px-lg-5" data-aos="fade-up">
-        <h3 class="text-center mb-4">Informasi Pasar Kerja</h3>
+        <h3 class="text-center mb-4">Karakteristik Lowongan Kerja</h3>
         <div class="row gx-3 gy-4 justify-content-center">
             @foreach($informasiSection1 as $info)
                 <div class="col-12 col-md-6 col-lg-3 d-flex align-items-stretch">
@@ -23,7 +23,7 @@
         </div>
     </section>
     <section class="my-5 mb-5 px-2 px-md-4 px-lg-5" data-aos="fade-up">
-        <h3 class="text-center mb-4">Informasi Pasar Kerja 2</h3>
+        <h3 class="text-center mb-4">Karakteristik Pencari Kerja</h3>
         <div class="row gx-3 gy-4 justify-content-center">
             @foreach($informasiSection2 as $info)
                 <div class="col-12 col-md-6 col-lg-3 d-flex align-items-stretch">
