@@ -15,5 +15,6 @@ class Publication extends Model
         'description',
         'date',
         'file_url',
+        'image_url',
     ];
 } 

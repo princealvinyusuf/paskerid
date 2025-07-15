@@ -95,15 +95,19 @@
                 <div id="publikasiScrollRow" class="d-flex px-7" style="scroll-behavior:smooth; gap:16px; width:100%; overflow-x:hidden;">
                     @foreach($publikasi as $pub)
                         <a href="{{ route('informasi.index', ['type' => 'publikasi', 'search' => $pub->title]) }}" class="text-decoration-none">
-                            <div class="card shadow-sm stat-card text-center flex-shrink-0" style="max-width:260px; min-width:180px; cursor:pointer;">
-                                <div class="card-body d-flex flex-column align-items-center justify-content-center">
-                                    <div class="stat-icon mb-3">
+                            <div class="card shadow-sm stat-card text-center flex-shrink-0 position-relative overflow-hidden" style="max-width:260px; min-width:180px; cursor:pointer; padding:0; border:none; min-height:220px;">
+                                @if($pub->image_url)
+                                    <div class="position-absolute top-0 start-0 w-100 h-100" style="background: url('{{ $pub->image_url }}') center center/cover no-repeat; z-index:1;"></div>
+                                    <div class="position-absolute top-0 start-0 w-100 h-100" style="background:rgba(0,0,0,0.45); z-index:2;"></div>
+                                @endif
+                                <div class="card-body d-flex flex-column align-items-center justify-content-center position-relative" style="z-index:3; min-height:220px;">
+                                    <div class="stat-icon mb-3 bg-white bg-opacity-75 rounded-circle d-flex align-items-center justify-content-center" style="width:48px; height:48px;">
                                         <i class="fa fa-book fa-2x text-success"></i>
                                     </div>
-                                    <div class="stat-title fw-bold mb-1" style="font-size:1.1rem; color:#187C19;">{{ $pub->title }}</div>
-                                    <div class="stat-value fw-bold mb-1" style="font-size:1.1rem; color:#222;">{{ $pub->date ? indo_date($pub->date) : '' }}</div>
+                                    <div class="stat-title fw-bold mb-1 text-white" style="font-size:1.1rem;">{{ $pub->title }}</div>
+                                    <div class="stat-value fw-bold mb-1 text-white" style="font-size:1.1rem;">{{ $pub->date ? indo_date($pub->date) : '' }}</div>
                                     @if($pub->description)
-                                        <div class="stat-desc text-muted mt-1" style="font-size:0.95rem;">{{ $pub->description }}</div>
+                                        <div class="stat-desc mt-1 text-white-50" style="font-size:0.95rem;">{{ $pub->description }}</div>
                                     @endif
                                 </div>
                             </div>

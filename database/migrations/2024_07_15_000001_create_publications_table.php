@@ -13,6 +13,7 @@ return new class extends Migration {
             $table->text('description')->nullable();
             $table->date('date')->nullable();
             $table->string('file_url')->nullable();
+            $table->string('image_url')->nullable(); // Add image background support
             $table->timestamps();
         });
     }
