@@ -49,7 +49,7 @@
                             Monitoring Data
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="monitoringDropdown">
-                            <li><a class="dropdown-item @if(request()->routeIs('dashboard.trend')) active fw-bold @endif" href="{{ route('dashboard.trend') }}">Dashboard Trend</a></li>
+                            <li><a class="dropdown-item @if(request()->routeIs('dashboard.trend')) active fw-bold @endif" href="{{ route('dashboard.trend') }}">Tren Informasi Kebutuhan Kerja</a></li>
                             <li><a class="dropdown-item @if(request()->routeIs('dashboard.distribution')) active fw-bold @endif" href="{{ route('dashboard.distribution') }}">Dashboard Distribution</a></li>
                             <li><a class="dropdown-item @if(request()->routeIs('dashboard.performance')) active fw-bold @endif" href="{{ route('dashboard.performance') }}">Dashboard Performance</a></li>
                             <li><a class="dropdown-item @if(request()->routeIs('dashboard.labor_demand')) active fw-bold @endif" href="{{ route('dashboard.labor_demand') }}">Dashboard Labor Demand</a></li>
@@ -94,7 +94,7 @@
             <div class="col-12 col-md-4 d-flex flex-wrap justify-content-center gap-3 order-3 order-md-2">
                 <a href="{{ route('home') }}" class="text-white text-decoration-none">Beranda</a>
                 <a href="#" class="text-white text-decoration-none">Layanan</a>
-                <a href="#" class="text-white text-decoration-none">Monitoring Data</a>
+                <a href="#" class="text-white text-decoration-none">Dashboard</a>
                 <a href="{{ route('informasi.index') }}" class="text-white text-decoration-none">Pusat Informasi</a>
                 <a href="{{ route('news.index') }}" class="text-white text-decoration-none">Berita</a>
                 <a href="{{ route('about') }}" class="text-white text-decoration-none">Tentang Kami</a>
