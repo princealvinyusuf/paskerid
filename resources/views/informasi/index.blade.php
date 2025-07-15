@@ -20,14 +20,25 @@
             </div>
         </div>
         <div class="col-md-9">
+            @php
+                // Determine if there is data for each tab
+                $hasStatistik = \App\Models\Information::where('subject', $selectedSubject)->where('type', 'statistik')->exists();
+                $hasPublikasi = \App\Models\Information::where('subject', $selectedSubject)->where('type', 'publikasi')->exists();
+            @endphp
+            @if($hasStatistik || $hasPublikasi)
             <ul class="nav nav-tabs mb-4" id="infoTab" role="tablist">
+                @if($hasStatistik)
                 <li class="nav-item" role="presentation">
                     <a class="nav-link @if(request('type', 'statistik') == 'statistik') active @endif" href="?subject={{ urlencode($selectedSubject) }}&type=statistik">Tabel Statistik</a>
                 </li>
+                @endif
+                @if($hasPublikasi)
                 <li class="nav-item" role="presentation">
                     <a class="nav-link @if(request('type') == 'publikasi') active @endif" href="?subject={{ urlencode($selectedSubject) }}&type=publikasi">Publikasi</a>
                 </li>
+                @endif
             </ul>
+            @endif
             @if(!isset($showInfo) || !$showInfo)
                 <div id="info-table-container">
                     <form method="GET" class="row g-3 mb-4">
