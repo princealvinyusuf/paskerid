@@ -22,6 +22,16 @@
     {{-- Karakteristik Lowongan Kerja Section --}}
     <section class="my-5 mb-5 px-2 px-md-4 px-lg-5 overlap-hero" data-aos="fade-up">
         <h3 class="text-center mb-4">Karakteristik Lowongan Kerja</h3>
+        <style>
+            /* Responsive Tableau Embed */
+            .tableauPlaceholder,
+            .tableauPlaceholder object {
+                width: 100% !important;
+                min-width: 0 !important;
+                max-width: 100% !important;
+                height: 427px !important; /* Fixed height as requested */
+            }
+        </style>
         <div class="row gx-3 gy-4 justify-content-center">
             @foreach($jobCharacteristics as $char)
                 <div class="col-12 col-md-6 col-lg-3 d-flex align-items-stretch">
@@ -29,9 +39,21 @@
                         <h5 class="fw-bold mb-2">{{ $char->title }}</h5>
                         <p class="mb-2 text-muted">{{ $char->description }}</p>
                         <div class="w-100" style="min-height: 350px;">
-                            <div class="tableau-embed-wrapper w-100" style="min-height: 350px; overflow-x: auto;">
-                                <div style="min-width: 400px;">
-                                    {!! $char->tableau_embed_code !!}
+                            <div class="tableau-embed-wrapper w-100" style="min-height: 350px;">
+                                <div style="width: 100%;">
+                                    {!! str_replace([
+                                        "vizElement.style.width='400px';",
+                                        'vizElement.style.width = \"400px\";',
+                                        'vizElement.style.width = \"100%\";',
+                                        'vizElement.style.height=\'427px\';',
+                                        'vizElement.style.height = \"427px\";'
+                                    ], [
+                                        "vizElement.style.width='100%';",
+                                        'vizElement.style.width = "100%";',
+                                        'vizElement.style.width = "100%";',
+                                        "vizElement.style.height='427px';",
+                                        'vizElement.style.height = "427px";'
+                                    ], $char->tableau_embed_code) !!}
                                 </div>
                             </div>
                         </div>
