@@ -5,16 +5,37 @@
     
     <section class="my-5 mb-5 px-2 px-md-4 px-lg-5" data-aos="fade-up">
         <h3 class="text-center mb-4">Karakteristik Lowongan Kerja</h3>
+        <style>
+            .tableauPlaceholder,
+            .tableauPlaceholder object {
+                width: 100% !important;
+                min-width: 0 !important;
+                max-width: 100% !important;
+                height: 427px !important;
+            }
+        </style>
         <div class="row gx-3 gy-4 justify-content-center">
             @foreach($informasiSection1 as $info)
                 <div class="col-12 col-md-6 col-lg-3 d-flex align-items-stretch">
-                    <div class="card stat-card shadow-sm border-0 w-100 h-100 p-3 d-flex flex-column align-items-center justify-content-center text-center" style="min-height: 430px;">
+                    <div class="card stat-card shadow-sm border-0 w-100 h-100 p-3 d-flex flex-column align-items-center justify-content-center text-center">
                         <h5 class="fw-bold mb-2">{{ $info->title }}</h5>
                         <p class="mb-2 text-muted">{{ $info->description }}</p>
                         <div class="w-100" style="min-height: 350px;">
                             <div class="tableau-embed-wrapper w-100" style="min-height: 350px; overflow-x: auto;">
                                 <div style="min-width: 400px;">
-                                    {!! $info->tableau_embed_code !!}
+                                    {!! str_replace([
+                                        "vizElement.style.width='400px';",
+                                        'vizElement.style.width = \"400px\";',
+                                        'vizElement.style.width = \"100%\";',
+                                        'vizElement.style.height=\'427px\';',
+                                        'vizElement.style.height = \"427px\";'
+                                    ], [
+                                        "vizElement.style.width='100%';",
+                                        'vizElement.style.width = "100%";',
+                                        'vizElement.style.width = "100%";',
+                                        "vizElement.style.height='427px';",
+                                        'vizElement.style.height = "427px";'
+                                    ], $info->tableau_embed_code) !!}
                                 </div>
                             </div>
                         </div>
@@ -28,13 +49,25 @@
         <div class="row gx-3 gy-4 justify-content-center">
             @foreach($informasiSection2 as $info)
                 <div class="col-12 col-md-6 col-lg-3 d-flex align-items-stretch">
-                    <div class="card stat-card shadow-sm border-0 w-100 h-100 p-3 d-flex flex-column align-items-center justify-content-center text-center" style="min-height: 430px;">
+                    <div class="card stat-card shadow-sm border-0 w-100 h-100 p-3 d-flex flex-column align-items-center justify-content-center text-center">
                         <h5 class="fw-bold mb-2">{{ $info->title }}</h5>
                         <p class="mb-2 text-muted">{{ $info->description }}</p>
                         <div class="w-100" style="min-height: 350px;">
                             <div class="tableau-embed-wrapper w-100" style="min-height: 350px; overflow-x: auto;">
                                 <div style="min-width: 400px;">
-                                    {!! $info->tableau_embed_code !!}
+                                    {!! str_replace([
+                                        "vizElement.style.width='400px';",
+                                        'vizElement.style.width = \"400px\";',
+                                        'vizElement.style.width = \"100%\";',
+                                        'vizElement.style.height=\'427px\';',
+                                        'vizElement.style.height = \"427px\";'
+                                    ], [
+                                        "vizElement.style.width='100%';",
+                                        'vizElement.style.width = "100%";',
+                                        'vizElement.style.width = "100%";',
+                                        "vizElement.style.height='427px';",
+                                        'vizElement.style.height = "427px";'
+                                    ], $info->tableau_embed_code) !!}
                                 </div>
                             </div>
                         </div>
@@ -48,13 +81,25 @@
         <div class="row gx-3 gy-4 justify-content-center">
             @foreach($informasiSection3 as $info)
                 <div class="col-12 col-md-6 col-lg-3 d-flex align-items-stretch">
-                    <div class="card stat-card shadow-sm border-0 w-100 h-100 p-3 d-flex flex-column align-items-center justify-content-center text-center" style="min-height: 430px;">
+                    <div class="card stat-card shadow-sm border-0 w-100 h-100 p-3 d-flex flex-column align-items-center justify-content-center text-center">
                         <h5 class="fw-bold mb-2">{{ $info->title }}</h5>
                         <p class="mb-2 text-muted">{{ $info->description }}</p>
                         <div class="w-100" style="min-height: 350px;">
                             <div class="tableau-embed-wrapper w-100" style="min-height: 350px; overflow-x: auto;">
                                 <div style="min-width: 400px;">
-                                    {!! $info->tableau_embed_code !!}
+                                    {!! str_replace([
+                                        "vizElement.style.width='400px';",
+                                        'vizElement.style.width = \"400px\";',
+                                        'vizElement.style.width = \"100%\";',
+                                        'vizElement.style.height=\'427px\';',
+                                        'vizElement.style.height = \"427px\";'
+                                    ], [
+                                        "vizElement.style.width='100%';",
+                                        'vizElement.style.width = "100%";',
+                                        'vizElement.style.width = "100%";',
+                                        "vizElement.style.height='427px';",
+                                        'vizElement.style.height = "427px";'
+                                    ], $info->tableau_embed_code) !!}
                                 </div>
                             </div>
                         </div>
@@ -68,13 +113,25 @@
         <div class="row gx-3 gy-4 justify-content-center">
             @foreach($informasiSection4 as $info)
                 <div class="col-12 col-md-6 col-lg-3 d-flex align-items-stretch">
-                    <div class="card stat-card shadow-sm border-0 w-100 h-100 p-3 d-flex flex-column align-items-center justify-content-center text-center" style="min-height: 430px;">
+                    <div class="card stat-card shadow-sm border-0 w-100 h-100 p-3 d-flex flex-column align-items-center justify-content-center text-center">
                         <h5 class="fw-bold mb-2">{{ $info->title }}</h5>
                         <p class="mb-2 text-muted">{{ $info->description }}</p>
                         <div class="w-100" style="min-height: 350px;">
                             <div class="tableau-embed-wrapper w-100" style="min-height: 350px; overflow-x: auto;">
                                 <div style="min-width: 400px;">
-                                    {!! $info->tableau_embed_code !!}
+                                    {!! str_replace([
+                                        "vizElement.style.width='400px';",
+                                        'vizElement.style.width = \"400px\";',
+                                        'vizElement.style.width = \"100%\";',
+                                        'vizElement.style.height=\'427px\';',
+                                        'vizElement.style.height = \"427px\";'
+                                    ], [
+                                        "vizElement.style.width='100%';",
+                                        'vizElement.style.width = "100%";',
+                                        'vizElement.style.width = "100%";',
+                                        "vizElement.style.height='427px';",
+                                        'vizElement.style.height = "427px";'
+                                    ], $info->tableau_embed_code) !!}
                                 </div>
                             </div>
                         </div>
