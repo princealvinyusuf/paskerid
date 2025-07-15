@@ -203,7 +203,7 @@
 
     {{-- Informasi Terbaru --}}
     <section class="my-5 px-2 px-md-4 px-lg-5" id="informasi-terbaru" data-aos="fade-up">
-        <h3 class="text-center mb-4">Informasi Terbaru</h3>
+        <h3 class="text-center mb-4">Data dan Informasi</h3>
         <ul class="nav nav-tabs justify-content-center mb-4" id="infoTab" role="tablist" >
             <li class="nav-item" role="presentation">
                 <button class="nav-link active" id="publikasi-tab" data-bs-toggle="tab" data-bs-target="#publikasi" type="button" role="tab" aria-controls="publikasi" aria-selected="true">Publikasi</button>
