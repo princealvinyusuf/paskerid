@@ -31,6 +31,20 @@
                 max-width: 100% !important;
                 height: 427px !important; /* Fixed height as requested */
             }
+            /* Mobile responsiveness for custom .px-2 padding (8px left/right) */
+            @media (max-width: 576px) {
+                .tableauPlaceholder,
+                .tableauPlaceholder object {
+                    width: 100vw !important;
+                    max-width: 100vw !important;
+                    margin-left: -8px;  /* Offset .px-2 left padding */
+                    margin-right: -8px; /* Offset .px-2 right padding */
+                }
+                .tableau-embed-wrapper {
+                    overflow-x: auto;
+                    -webkit-overflow-scrolling: touch;
+                }
+            }
         </style>
         <div class="row gx-3 gy-4 justify-content-center">
             @foreach($jobCharacteristics as $char)
