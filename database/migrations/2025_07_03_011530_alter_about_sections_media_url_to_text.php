@@ -21,8 +21,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('about_sections', function (Blueprint $table) {
-            $table->string('media_url', 255)->change();
-        });
+        // Do not revert to VARCHAR(255) to avoid data truncation issues.
+        // The column will remain as TEXT.
     }
 };
