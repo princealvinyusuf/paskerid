@@ -24,6 +24,16 @@
                 // Determine if there is data for each tab
                 $hasStatistik = \App\Models\Information::where('subject', $selectedSubject)->where('type', 'statistik')->exists();
                 $hasPublikasi = \App\Models\Information::where('subject', $selectedSubject)->where('type', 'publikasi')->exists();
+                $currentType = request('type', 'statistik');
+                // If only one tab has data and the current type is not that tab, redirect
+                if ($hasStatistik && !$hasPublikasi && $currentType !== 'statistik') {
+                    header('Location: ?subject=' . urlencode($selectedSubject) . '&type=statistik');
+                    exit;
+                }
+                if ($hasPublikasi && !$hasStatistik && $currentType !== 'publikasi') {
+                    header('Location: ?subject=' . urlencode($selectedSubject) . '&type=publikasi');
+                    exit;
+                }
             @endphp
             @if($hasStatistik || $hasPublikasi)
             <ul class="nav nav-tabs mb-4" id="infoTab" role="tablist">
