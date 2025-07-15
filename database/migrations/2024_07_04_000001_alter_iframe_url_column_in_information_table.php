@@ -15,8 +15,7 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::table('information', function (Blueprint $table) {
-            $table->string('iframe_url')->nullable()->change();
-        });
+        // Do not revert to VARCHAR(255) to avoid data truncation issues.
+        // The column will remain as TEXT.
     }
 }; 
