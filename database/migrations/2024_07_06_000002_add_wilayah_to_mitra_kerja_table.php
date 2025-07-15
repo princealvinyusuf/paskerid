@@ -14,8 +14,6 @@ return new class extends Migration {
 
     public function down(): void
     {
-        Schema::table('mitra_kerja', function (Blueprint $table) {
-            $table->dropColumn('wilayah');
-        });
+        // No need to drop the column, as the table will be dropped by the main migration.
     }
 }; 
