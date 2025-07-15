@@ -23,18 +23,13 @@
     <section class="my-5 mb-5 px-2 px-md-4 px-lg-5 overlap-hero" data-aos="fade-up">
         <h3 class="text-center mb-4">Karakteristik Lowongan Kerja</h3>
         <style>
+            /* Responsive Tableau Embed */
             .tableauPlaceholder,
             .tableauPlaceholder object {
                 width: 100% !important;
                 min-width: 0 !important;
                 max-width: 100% !important;
-                height: 427px !important;
-            }
-            @media (max-width: 576px) {
-                .tableau-embed-scroll-mobile {
-                    overflow-x: auto;
-                    -webkit-overflow-scrolling: touch;
-                }
+                height: 427px !important; /* Fixed height as requested */
             }
         </style>
         <div class="row gx-3 gy-4 justify-content-center">
@@ -44,7 +39,7 @@
                         <h5 class="fw-bold mb-2">{{ $char->title }}</h5>
                         <p class="mb-2 text-muted">{{ $char->description }}</p>
                         <div class="w-100" style="min-height: 350px;">
-                            <div class="tableau-embed-wrapper w-100 tableau-embed-scroll-mobile" style="min-height: 350px;">
+                            <div class="tableau-embed-wrapper w-100" style="min-height: 350px;">
                                 <div style="width: 100%;">
                                     {!! str_replace([
                                         "vizElement.style.width='400px';",
