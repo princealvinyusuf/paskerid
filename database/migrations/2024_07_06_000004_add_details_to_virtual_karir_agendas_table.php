@@ -7,15 +7,11 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up(): void
     {
-        Schema::table('mitra_kerja', function (Blueprint $table) {
-            $table->string('pic')->nullable()->after('website_url');
-        });
+        // No changes to 'pic' column needed here.
     }
 
     public function down(): void
     {
-        Schema::table('mitra_kerja', function (Blueprint $table) {
-            $table->dropColumn('pic');
-        });
+        // No changes to 'pic' column needed here.
     }
 }; 
