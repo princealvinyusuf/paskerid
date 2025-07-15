@@ -39,6 +39,7 @@ class DatabaseSeeder extends Seeder
             JobCharacteristics3TableSeeder::class,
             InformasiSection1TableSeeder::class,
             InformasiSection2TableSeeder::class,
+            InformasiSection3TableSeeder::class,
             // \Database\Seeders\DashboardTrendSeeder::class,
         ]);
     }
