@@ -164,7 +164,7 @@
         </div>
     </section> -->
 
-    {{-- Charts Section --}}
+    <!-- {{-- Charts Section --}}
     <section class="my-5 px-2 px-md-4 px-lg-5" data-aos="fade-up">
         <h3 class="text-center mb-4">Karakteristik Pencari Kerja</h3>
         <div class="row gx-2 gy-3 justify-content-center">
@@ -180,9 +180,9 @@
                 </div>
             @endforeach
         </div>
-    </section>
+    </section> -->
 
-    {{-- Top 5 Lists Section as Carousel --}}
+    <!-- {{-- Top 5 Lists Section as Carousel --}}
     <section class="my-5 px-2 px-md-4 px-lg-5" data-aos="fade-up">
         <h3 class="text-center mb-4">Top 5 Lists</h3>
         <div class="row gx-3 gy-4 justify-content-center">
@@ -199,7 +199,7 @@
                 </div>
             @endforeach
         </div>
-    </section>
+    </section> -->
 
     {{-- Informasi Terbaru --}}
     <section class="my-5 px-2 px-md-4 px-lg-5" id="informasi-terbaru" data-aos="fade-up">
