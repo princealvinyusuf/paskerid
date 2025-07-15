@@ -206,18 +206,18 @@
         <h3 class="text-center mb-4">Informasi Terbaru</h3>
         <ul class="nav nav-tabs justify-content-center mb-4" id="infoTab" role="tablist" >
             <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="statistik-tab" data-bs-toggle="tab" data-bs-target="#statistik" type="button" role="tab" aria-controls="statistik" aria-selected="true">Tabel Statistik</button>
+                <button class="nav-link active" id="publikasi-tab" data-bs-toggle="tab" data-bs-target="#publikasi" type="button" role="tab" aria-controls="publikasi" aria-selected="true">Publikasi</button>
             </li>
             <li class="nav-item" role="presentation">
-                <button class="nav-link" id="publikasi-tab" data-bs-toggle="tab" data-bs-target="#publikasi" type="button" role="tab" aria-controls="publikasi" aria-selected="false">Publikasi</button>
+                <button class="nav-link" id="statistik-tab" data-bs-toggle="tab" data-bs-target="#statistik" type="button" role="tab" aria-controls="statistik" aria-selected="false">Tabel Statistik</button>
             </li>
         </ul>
         <div class="tab-content">
-            <div class="tab-pane fade show active" id="statistik" role="tabpanel" aria-labelledby="statistik-tab">
-                @foreach($statistik as $info)
-                    <a href="{{ route('informasi.index', ['type' => 'statistik', 'subject' => $info->subject, 'show' => $info->id]) }}" class="text-decoration-none">
+            <div class="tab-pane fade show active" id="publikasi" role="tabpanel" aria-labelledby="publikasi-tab">
+                @foreach($publikasi as $info)
+                    <a href="{{ route('informasi.index', ['type' => 'publikasi', 'subject' => $info->subject, 'show' => $info->id]) }}" class="text-decoration-none">
                         <div class="card mb-3 shadow-sm rounded-pill px-4 py-3 d-flex flex-row align-items-center" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}" style="cursor:pointer;">
-                            <div class="me-3 text-primary" style="font-size:2rem;"><i class="fa fa-clipboard"></i></div>
+                            <div class="me-3 text-primary" style="font-size:2rem;"><i class="fa fa-book"></i></div>
                             <div class="flex-grow-1">
                                 <div class="fw-bold">{{ $info->title }}</div>
                                 <div class="text-muted small">{{ indo_date($info->date) }}</div>
@@ -229,11 +229,11 @@
                     </a>
                 @endforeach
             </div>
-            <div class="tab-pane fade" id="publikasi" role="tabpanel" aria-labelledby="publikasi-tab">
-                @foreach($publikasi as $info)
-                    <a href="{{ route('informasi.index', ['type' => 'publikasi', 'subject' => $info->subject, 'show' => $info->id]) }}" class="text-decoration-none">
+            <div class="tab-pane fade" id="statistik" role="tabpanel" aria-labelledby="statistik-tab">
+                @foreach($statistik as $info)
+                    <a href="{{ route('informasi.index', ['type' => 'statistik', 'subject' => $info->subject, 'show' => $info->id]) }}" class="text-decoration-none">
                         <div class="card mb-3 shadow-sm rounded-pill px-4 py-3 d-flex flex-row align-items-center" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}" style="cursor:pointer;">
-                            <div class="me-3 text-primary" style="font-size:2rem;"><i class="fa fa-book"></i></div>
+                            <div class="me-3 text-primary" style="font-size:2rem;"><i class="fa fa-clipboard"></i></div>
                             <div class="flex-grow-1">
                                 <div class="fw-bold">{{ $info->title }}</div>
                                 <div class="text-muted small">{{ indo_date($info->date) }}</div>
