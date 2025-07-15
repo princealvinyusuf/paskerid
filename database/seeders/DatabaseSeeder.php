@@ -40,6 +40,7 @@ class DatabaseSeeder extends Seeder
             InformasiSection1TableSeeder::class,
             InformasiSection2TableSeeder::class,
             InformasiSection3TableSeeder::class,
+            InformasiSection4TableSeeder::class,
             // \Database\Seeders\DashboardTrendSeeder::class,
         ]);
     }
