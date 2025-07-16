@@ -203,10 +203,7 @@
         <div class="container position-relative" style="max-width:1200px;">
             <h3 class="text-center mb-4">Publikasi</h3>
             <div class="d-flex align-items-center position-relative">
-                <button id="publikasiScrollPrev" class="btn btn-light shadow rounded-circle position-absolute start-0 translate-middle-y" style="top:50%; z-index:2; width:40px; height:40px;">
-                    <i class="fa fa-chevron-left"></i>
-                </button>
-                <div id="publikasiScrollRow" class="d-flex px-7" style="scroll-behavior:smooth; gap:32px; width:100%; overflow-x:hidden;">
+                <div id="publikasiScrollRow" class="d-flex flex-wrap justify-content-center px-7" style="gap:32px; width:100%;">
                     @foreach($publikasi as $pub)
                         <a href="{{ route('informasi.index', ['type' => 'publikasi', 'search' => $pub->title]) }}" class="text-decoration-none">
                             <div class="card shadow-sm stat-card text-center flex-shrink-0 position-relative overflow-hidden publikasi-card" style="max-width:340px; min-width:260px; cursor:pointer; padding:0; border:none; min-height:320px;">
@@ -222,34 +219,20 @@
                         </a>
                     @endforeach
                 </div>
-                <button id="publikasiScrollNext" class="btn btn-light shadow rounded-circle position-absolute end-0 translate-middle-y" style="top:50%; z-index:2; width:40px; height:40px;">
-                    <i class="fa fa-chevron-right"></i>
-                </button>
+                <style>
+                @media (max-width: 1200px) {
+                    #publikasiScrollRow { gap: 20px !important; }
+                }
+                @media (max-width: 900px) {
+                    #publikasiScrollRow { gap: 12px !important; }
+                    .publikasi-card { min-width: 180px !important; max-width: 220px !important; height: 220px !important; }
+                }
+                @media (max-width: 600px) {
+                    #publikasiScrollRow { gap: 8px !important; }
+                    .publikasi-card { min-width: 120px !important; max-width: 150px !important; height: 150px !important; }
+                }
+                </style>
             </div>
-            <style>
-            .publikasi-card {
-                max-width: 340px !important;
-                min-width: 260px !important;
-                min-height: 320px !important;
-                height: 370px !important;
-                border-radius: 18px !important;
-            }
-            .publikasi-card .card-body {
-                min-height: 320px !important;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                padding: 32px 16px 16px 16px;
-            }
-            .publikasi-card .stat-title {
-                font-size: 1.35rem !important;
-                margin-bottom: 0.5rem;
-            }
-            .publikasi-card .stat-value {
-                font-size: 1.15rem !important;
-            }
-            </style>
             <div class="d-flex justify-content-center mt-3" id="publikasiDots"></div>
         </div>
     </section>
