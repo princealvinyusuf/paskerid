@@ -82,9 +82,11 @@
     </section>
     <section class="my-5 mb-5 px-2 px-md-4 px-lg-5" data-aos="fade-up">
         <h3 class="text-center mb-4">Karakteristik Pencari Kerja</h3>
-        <div class="row gx-3 gy-4 justify-content-center">
+        <div class="row gx-3 gy-4 justify-content-center" id="section2Cards">
+            @php $count2 = 0; $total2 = count($informasiSection2); @endphp
             @foreach($informasiSection2 as $info)
-                <div class="col-12 col-md-6 col-lg-3 d-flex align-items-stretch">
+                @php $count2++; @endphp
+                <div class="col-12 col-md-6 col-lg-3 d-flex align-items-stretch section2-card{{ $count2 > 4 ? ' d-none' : '' }}">
                     <div class="card stat-card shadow-sm border-0 w-100 h-100 p-3 d-flex flex-column align-items-center justify-content-center text-center">
                         <h5 class="fw-bold mb-2">{{ $info->title }}</h5>
                         <p class="mb-2 text-muted">{{ $info->description }}</p>
@@ -111,12 +113,19 @@
                 </div>
             @endforeach
         </div>
+        @if($total2 > 4)
+            <div class="text-center mt-3">
+                <button id="lihatLebihBanyakBtn2" class="btn btn-success px-4">Lihat lebih banyak</button>
+            </div>
+        @endif
     </section>
     <section class="my-5 mb-5 px-2 px-md-4 px-lg-5" data-aos="fade-up">
         <h3 class="text-center mb-4">Informasi Pasar Kerja 3</h3>
-        <div class="row gx-3 gy-4 justify-content-center">
+        <div class="row gx-3 gy-4 justify-content-center" id="section3Cards">
+            @php $count3 = 0; $total3 = count($informasiSection3); @endphp
             @foreach($informasiSection3 as $info)
-                <div class="col-12 col-md-6 col-lg-3 d-flex align-items-stretch">
+                @php $count3++; @endphp
+                <div class="col-12 col-md-6 col-lg-3 d-flex align-items-stretch section3-card{{ $count3 > 4 ? ' d-none' : '' }}">
                     <div class="card stat-card shadow-sm border-0 w-100 h-100 p-3 d-flex flex-column align-items-center justify-content-center text-center">
                         <h5 class="fw-bold mb-2">{{ $info->title }}</h5>
                         <p class="mb-2 text-muted">{{ $info->description }}</p>
@@ -143,12 +152,19 @@
                 </div>
             @endforeach
         </div>
+        @if($total3 > 4)
+            <div class="text-center mt-3">
+                <button id="lihatLebihBanyakBtn3" class="btn btn-success px-4">Lihat lebih banyak</button>
+            </div>
+        @endif
     </section>
     <section class="my-5 mb-5 px-2 px-md-4 px-lg-5" data-aos="fade-up">
         <h3 class="text-center mb-4">Informasi Pasar Kerja 4</h3>
-        <div class="row gx-3 gy-4 justify-content-center">
+        <div class="row gx-3 gy-4 justify-content-center" id="section4Cards">
+            @php $count4 = 0; $total4 = count($informasiSection4); @endphp
             @foreach($informasiSection4 as $info)
-                <div class="col-12 col-md-6 col-lg-3 d-flex align-items-stretch">
+                @php $count4++; @endphp
+                <div class="col-12 col-md-6 col-lg-3 d-flex align-items-stretch section4-card{{ $count4 > 4 ? ' d-none' : '' }}">
                     <div class="card stat-card shadow-sm border-0 w-100 h-100 p-3 d-flex flex-column align-items-center justify-content-center text-center">
                         <h5 class="fw-bold mb-2">{{ $info->title }}</h5>
                         <p class="mb-2 text-muted">{{ $info->description }}</p>
@@ -175,6 +191,11 @@
                 </div>
             @endforeach
         </div>
+        @if($total4 > 4)
+            <div class="text-center mt-3">
+                <button id="lihatLebihBanyakBtn4" class="btn btn-success px-4">Lihat lebih banyak</button>
+            </div>
+        @endif
     </section>
 
     {{-- Publikasi Cards Carousel (Floating over Banner) --}}
@@ -284,6 +305,36 @@ document.addEventListener('DOMContentLoaded', function () {
                 card.classList.remove('d-none');
             });
             lihatLebihBanyakBtn.style.display = 'none';
+        });
+    }
+    // Lihat lebih banyak logic for Section 2
+    const lihatLebihBanyakBtn2 = document.getElementById('lihatLebihBanyakBtn2');
+    if (lihatLebihBanyakBtn2) {
+        lihatLebihBanyakBtn2.addEventListener('click', function() {
+            document.querySelectorAll('.section2-card.d-none').forEach(function(card) {
+                card.classList.remove('d-none');
+            });
+            lihatLebihBanyakBtn2.style.display = 'none';
+        });
+    }
+    // Lihat lebih banyak logic for Section 3
+    const lihatLebihBanyakBtn3 = document.getElementById('lihatLebihBanyakBtn3');
+    if (lihatLebihBanyakBtn3) {
+        lihatLebihBanyakBtn3.addEventListener('click', function() {
+            document.querySelectorAll('.section3-card.d-none').forEach(function(card) {
+                card.classList.remove('d-none');
+            });
+            lihatLebihBanyakBtn3.style.display = 'none';
+        });
+    }
+    // Lihat lebih banyak logic for Section 4
+    const lihatLebihBanyakBtn4 = document.getElementById('lihatLebihBanyakBtn4');
+    if (lihatLebihBanyakBtn4) {
+        lihatLebihBanyakBtn4.addEventListener('click', function() {
+            document.querySelectorAll('.section4-card.d-none').forEach(function(card) {
+                card.classList.remove('d-none');
+            });
+            lihatLebihBanyakBtn4.style.display = 'none';
         });
     }
 });
