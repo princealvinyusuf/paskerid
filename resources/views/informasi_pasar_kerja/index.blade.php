@@ -43,18 +43,14 @@
     backdrop-filter: blur(24px); /* stronger blur */
     -webkit-backdrop-filter: blur(24px);
 }
-.section-green-card h3,
+.section-green-card h3 {
+    color: #111 !important;
+}
 .section-green-card p {
     color: #fff;
 }
-.polkadot-bg {
-    background-color: #000;
-    background-image: radial-gradient(#00a78e 4px, transparent 6px);
-    background-size: 32px 32px;
-    background-position: 0 0, 16px 16px;
-}
 </style>
-<div class="container-fluid p-0 polkadot-bg">
+<div class="container-fluid p-0" style="background: #000000;">
     
     <section class="mb-5 px-2 px-md-4 px-lg-5 pt-custom" data-aos="fade-up">
         <div class="section-green-card">
