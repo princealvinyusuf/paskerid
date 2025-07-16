@@ -14,6 +14,14 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     @yield('head')
     @stack('head')
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-VVRKTYE9YB"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-VVRKTYE9YB');
+    </script>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top shadow-sm">
