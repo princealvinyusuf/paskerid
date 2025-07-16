@@ -841,16 +841,30 @@
     padding: 0;
     margin: 0;
 }
-.stat-carousel-section .stat-card {
-    height: 100%;
-    min-height: 220px;
+.stat-card {
+    height: 320px;
     width: 260px;
-    max-width: 260px;
-    min-width: 180px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+}
+.stat-card .card-body {
+    flex: 1 1 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+.stat-desc {
+    margin-top: auto;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-height: 2.6em;
 }
 .tableau-embed-wrapper {
     overflow-x: auto;
