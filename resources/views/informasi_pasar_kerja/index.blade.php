@@ -32,57 +32,71 @@
 .pt-custom {
     padding-top: 60px;
 }
+.section-green-card {
+    background: #00a78e;
+    border-radius: 24px;
+    padding: 40px 32px 32px 32px;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+    color: #fff;
+    margin-bottom: 32px;
+}
+.section-green-card h3,
+.section-green-card p {
+    color: #fff;
+}
 </style>
 <div class="container-fluid p-0" style="background: #edf8e9;">
     
     <section class="mb-5 px-2 px-md-4 px-lg-5 pt-custom" data-aos="fade-up">
-        <h3 class="text-center mb-4">Karakteristik Lowongan Kerja</h3>
-        <style>
-            .tableauPlaceholder,
-            .tableauPlaceholder object {
-                width: 100% !important;
-                min-width: 0 !important;
-                max-width: 100% !important;
-                height: 427px !important;
-            }
-        </style>
-        <div class="row gx-3 gy-4 justify-content-center" id="section1Cards">
-            @php $count = 0; $total = count($informasiSection1); @endphp
-            @foreach($informasiSection1 as $info)
-                @php $count++; @endphp
-                <div class="col-12 col-md-6 col-lg-3 d-flex align-items-stretch section1-card{{ $count > 4 ? ' d-none' : '' }}">
-                    <div class="card stat-card shadow-sm border-0 w-100 h-100 p-3 d-flex flex-column align-items-center justify-content-center text-center">
-                        <h5 class="fw-bold mb-2">{{ $info->title }}</h5>
-                        <p class="mb-2 text-muted">{{ $info->description }}</p>
-                        <div class="w-100" style="min-height: 350px;">
-                            <div class="tableau-embed-wrapper w-100" style="min-height: 350px; overflow-x: auto;">
-                                <div style="min-width: 400px;">
-                                    {!! str_replace([
-                                        "vizElement.style.width='400px';",
-                                        'vizElement.style.width = \"400px\";',
-                                        'vizElement.style.width = \"100%\";',
-                                        'vizElement.style.height=\'427px\';',
-                                        'vizElement.style.height = \"427px\";'
-                                    ], [
-                                        "vizElement.style.width='100%';",
-                                        'vizElement.style.width = "100%";',
-                                        'vizElement.style.width = "100%";',
-                                        "vizElement.style.height='427px';",
-                                        'vizElement.style.height = "427px";'
-                                    ], $info->tableau_embed_code) !!}
+        <div class="section-green-card">
+            <h3 class="text-center mb-4">Karakteristik Lowongan Kerja</h3>
+            <style>
+                .tableauPlaceholder,
+                .tableauPlaceholder object {
+                    width: 100% !important;
+                    min-width: 0 !important;
+                    max-width: 100% !important;
+                    height: 427px !important;
+                }
+            </style>
+            <div class="row gx-3 gy-4 justify-content-center" id="section1Cards">
+                @php $count = 0; $total = count($informasiSection1); @endphp
+                @foreach($informasiSection1 as $info)
+                    @php $count++; @endphp
+                    <div class="col-12 col-md-6 col-lg-3 d-flex align-items-stretch section1-card{{ $count > 4 ? ' d-none' : '' }}">
+                        <div class="card stat-card shadow-sm border-0 w-100 h-100 p-3 d-flex flex-column align-items-center justify-content-center text-center">
+                            <h5 class="fw-bold mb-2">{{ $info->title }}</h5>
+                            <p class="mb-2 text-muted">{{ $info->description }}</p>
+                            <div class="w-100" style="min-height: 350px;">
+                                <div class="tableau-embed-wrapper w-100" style="min-height: 350px; overflow-x: auto;">
+                                    <div style="min-width: 400px;">
+                                        {!! str_replace([
+                                            "vizElement.style.width='400px';",
+                                            'vizElement.style.width = \"400px\";',
+                                            'vizElement.style.width = \"100%\";',
+                                            'vizElement.style.height=\'427px\';',
+                                            'vizElement.style.height = \"427px\";'
+                                        ], [
+                                            "vizElement.style.width='100%';",
+                                            'vizElement.style.width = "100%";',
+                                            'vizElement.style.width = "100%";',
+                                            "vizElement.style.height='427px';",
+                                            'vizElement.style.height = "427px";'
+                                        ], $info->tableau_embed_code) !!}
+                                    </div>
                                 </div>
                             </div>
+                            <a href="{{ route('dashboard.trend') }}" class="btn btn-primary mt-3 w-100">Lihat Dashboard</a>
                         </div>
-                        <a href="{{ route('dashboard.trend') }}" class="btn btn-primary mt-3 w-100">Lihat Dashboard</a>
                     </div>
-                </div>
-            @endforeach
-        </div>
-        @if($total > 4)
-            <div class="text-center mt-3">
-                <button id="lihatLebihBanyakBtn" class="btn btn-success px-4">Lihat lebih banyak</button>
+                @endforeach
             </div>
-        @endif
+            @if($total > 4)
+                <div class="text-center mt-3">
+                    <button id="lihatLebihBanyakBtn" class="btn btn-success px-4">Lihat lebih banyak</button>
+                </div>
+            @endif
+        </div>
     </section>
     <section class="my-5 mb-5 px-2 px-md-4 px-lg-5 pt-custom" data-aos="fade-up">
         <h3 class="text-center mb-4">Karakteristik Pencari Kerja</h3>
