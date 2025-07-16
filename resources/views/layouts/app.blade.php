@@ -92,7 +92,7 @@
         <div class="row gy-4 align-items-center justify-content-between flex-column flex-md-row">
             <!-- Logo & Description -->
             <div class="col-12 col-md-4 d-flex align-items-center gap-3 justify-content-center justify-content-md-start text-center text-md-start">
-                <img src="{{ asset('images/logo_kemnaker.png') }}" alt="Logo Kemnaker" style="height:48px; width:auto; background:#fff; border-radius:8px; padding:4px;">
+                <img src="{{ asset('images/logo_kemnaker.svg') }}" alt="Logo Kemnaker" style="height:48px; width:auto; background:#fff; border-radius:8px; padding:4px;">
                 <div style="font-size:0.97rem; line-height:1.4;">
                     <span class="fw-bold">Pusat Pasar Kerja Indonesia (Pasker ID)</span><br>
                     merupakan inisiatif Kementerian Ketenagakerjaan Republik Indonesia untuk mempertemukan pencari kerja dan pemberi kerja secara digital, terintegrasi, dan inklusif.
