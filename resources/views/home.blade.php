@@ -91,6 +91,9 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="mt-3">
+                            <a href="{{ route('informasi_pasar_kerja.index') }}#section1Cards" class="btn btn-success rounded-pill px-4">Detail</a>
+                        </div>
                     </div>
                 </div>
             @endforeach
