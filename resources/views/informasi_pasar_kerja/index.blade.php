@@ -49,6 +49,12 @@
 .section-green-card p {
     color: #fff;
 }
+.section-green-card:last-of-type {
+    margin-bottom: 0 !important;
+}
+section:last-of-type {
+    margin-bottom: 0 !important;
+}
 </style>
 <div class="container-fluid p-0" style="background: #edf8e9;">
     
