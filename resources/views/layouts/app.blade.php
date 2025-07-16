@@ -112,7 +112,7 @@
                 <div>
                     <a href="https://www.instagram.com/pusatpasarkerja/?hl=en" target="_blank" class="text-white mx-1"><i class="fab fa-instagram fa-lg"></i></a>
                 </div>
-                <div class="small">Copyright © 2025 Pusat Pasar Kerja</div>
+                <div class="small">Copyright © 2025 Pusat Pasar Kerja Indonesia</div>
             </div>
         </div>
     </div>
