@@ -32,7 +32,7 @@
 </style>
 <div class="container-fluid p-0" style="background: #edf8e9;">
     
-    <section class="mb-5 px-2 px-md-4 px-lg-5" data-aos="fade-up">
+    <section class="mt-5 mb-5 px-2 px-md-4 px-lg-5" data-aos="fade-up">
         <h3 class="text-center mb-4">Karakteristik Lowongan Kerja</h3>
         <style>
             .tableauPlaceholder,
