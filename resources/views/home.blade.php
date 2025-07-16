@@ -860,11 +860,11 @@
 .stat-desc {
     margin-top: auto;
     display: -webkit-box;
-    -webkit-line-clamp: 2;
+    -webkit-line-clamp: 4;         /* Show up to 4 lines */
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-height: 2.6em;
+    max-height: 5.2em;             /* Adjust for 4 lines (1.3em per line) */
 }
 .tableau-embed-wrapper {
     overflow-x: auto;
