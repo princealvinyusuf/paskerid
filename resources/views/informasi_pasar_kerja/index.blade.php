@@ -84,7 +84,7 @@
             </div>
         @endif
     </section>
-    <section class="my-5 mb-5 px-2 px-md-4 px-lg-5" data-aos="fade-up">
+    <section class="my-5 mb-5 px-2 px-md-4 px-lg-5 pt-custom" data-aos="fade-up">
         <h3 class="text-center mb-4">Karakteristik Pencari Kerja</h3>
         <div class="row gx-3 gy-4 justify-content-center" id="section2Cards">
             @php $count2 = 0; $total2 = count($informasiSection2); @endphp
@@ -123,7 +123,7 @@
             </div>
         @endif
     </section>
-    <section class="my-5 mb-5 px-2 px-md-4 px-lg-5" data-aos="fade-up">
+    <section class="my-5 mb-5 px-2 px-md-4 px-lg-5 pt-custom" data-aos="fade-up">
         <h3 class="text-center mb-4">Informasi Pasar Kerja 3</h3>
         <div class="row gx-3 gy-4 justify-content-center" id="section3Cards">
             @php $count3 = 0; $total3 = count($informasiSection3); @endphp
@@ -162,7 +162,7 @@
             </div>
         @endif
     </section>
-    <section class="my-5 mb-5 px-2 px-md-4 px-lg-5" data-aos="fade-up">
+    <section class="my-5 mb-5 px-2 px-md-4 px-lg-5 pt-custom" data-aos="fade-up">
         <h3 class="text-center mb-4">Informasi Pasar Kerja 4</h3>
         <div class="row gx-3 gy-4 justify-content-center" id="section4Cards">
             @php $count4 = 0; $total4 = count($informasiSection4); @endphp
@@ -203,7 +203,7 @@
     </section>
 
     {{-- Publikasi Cards Carousel (Floating over Banner) --}}
-    <section class="stat-carousel-section position-relative mt-5" style="z-index: 10; margin-top: -90px;">
+    <section class="stat-carousel-section position-relative mt-5 pt-custom" style="z-index: 10; margin-top: -90px;">
         <div class="container-fluid px-2 px-md-4 px-lg-5 position-relative" style="max-width:1400px;">
             <h3 class="text-center mb-4">Publikasi</h3>
             <div class="d-flex align-items-center position-relative">
