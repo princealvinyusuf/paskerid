@@ -201,42 +201,59 @@
 
     {{-- Publikasi Cards Carousel (Floating over Banner) --}}
     <section class="stat-carousel-section position-relative mt-5" style="z-index: 10; margin-top: -90px;">
-        <div class="container position-relative" style="max-width:1200px;">
+        <div class="container-fluid px-2 px-md-4 px-lg-5 position-relative" style="max-width:1400px;">
             <h3 class="text-center mb-4">Publikasi</h3>
             <div class="d-flex align-items-center position-relative">
-                <div id="publikasiScrollRow" class="d-flex flex-wrap justify-content-start px-7" style="gap:32px; width:100%;">
+                <div id="publikasiScrollRow"
+                     class="d-flex flex-nowrap overflow-auto w-100"
+                     style="gap:32px; scrollbar-width:thin; padding-bottom: 8px;">
                     @foreach($publikasi as $pub)
                         <a href="{{ route('informasi.index', ['type' => 'publikasi', 'search' => $pub->title]) }}" class="text-decoration-none">
-                            <div class="card shadow-sm stat-card text-center flex-shrink-0 position-relative overflow-hidden publikasi-card" style="max-width:340px; min-width:260px; cursor:pointer; padding:0; border:none; min-height:320px;">
+                            <div class="card shadow-sm stat-card text-center flex-shrink-0 position-relative overflow-hidden publikasi-card"
+                                 style="max-width:340px; min-width:260px; cursor:pointer; padding:0; border:none; min-height:320px;">
                                 @if($pub->image_url)
-                                    <div class="position-absolute top-0 start-0 w-100 h-100" style="background: url('{{ $pub->image_url }}') center center/cover no-repeat; z-index:1;"></div>
-                                    <div class="position-absolute top-0 start-0 w-100 h-100" style="background:rgba(0,0,0,0.35); z-index:2;"></div>
+                                    <div class="position-absolute top-0 start-0 w-100 h-100"
+                                         style="background: url('{{ $pub->image_url }}') center center/cover no-repeat; z-index:1;"></div>
+                                    <div class="position-absolute top-0 start-0 w-100 h-100"
+                                         style="background:rgba(0,0,0,0.35); z-index:2;"></div>
                                 @endif
-                                <div class="card-body d-flex flex-column align-items-center justify-content-center position-relative" style="z-index:3; min-height:320px;">
+                                <div class="card-body d-flex flex-column align-items-center justify-content-center position-relative"
+                                     style="z-index:3; min-height:320px;">
                                     <div class="stat-title fw-bold mb-2 text-white" style="font-size:1.35rem; line-height:1.2;">{{ $pub->title }}</div>
-                                    {{-- <div class="stat-value fw-bold mb-2 text-white" style="font-size:1.15rem;">{{ $pub->date ? indo_date($pub->date) : '' }}</div> --}}
                                 </div>
                             </div>
                         </a>
                     @endforeach
                 </div>
-                <style>
-                @media (max-width: 1200px) {
-                    #publikasiScrollRow { gap: 20px !important; }
-                }
-                @media (max-width: 900px) {
-                    #publikasiScrollRow { gap: 12px !important; }
-                    .publikasi-card { min-width: 180px !important; max-width: 220px !important; height: 220px !important; }
-                }
-                @media (max-width: 600px) {
-                    #publikasiScrollRow { gap: 8px !important; }
-                    .publikasi-card { min-width: 120px !important; max-width: 150px !important; height: 150px !important; }
-                }
-                </style>
             </div>
             <div class="d-flex justify-content-center mt-3" id="publikasiDots"></div>
         </div>
     </section>
+    <style>
+    #publikasiScrollRow {
+        gap: 32px;
+        overflow-x: auto;
+        scrollbar-width: thin;
+        padding-bottom: 8px;
+    }
+    .publikasi-card {
+        min-width: 260px;
+        max-width: 340px;
+        min-height: 320px;
+    }
+    @media (max-width: 1200px) {
+        #publikasiScrollRow { gap: 20px !important; }
+        .publikasi-card { min-width: 200px !important; max-width: 240px !important; }
+    }
+    @media (max-width: 900px) {
+        #publikasiScrollRow { gap: 12px !important; }
+        .publikasi-card { min-width: 160px !important; max-width: 180px !important; min-height: 180px !important; }
+    }
+    @media (max-width: 600px) {
+        #publikasiScrollRow { gap: 8px !important; }
+        .publikasi-card { min-width: 120px !important; max-width: 150px !important; min-height: 120px !important; }
+    }
+    </style>
 
     
 </div>
