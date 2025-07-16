@@ -662,13 +662,19 @@
     border-radius: 1.5rem;
     padding: 2.5rem 1.5rem;
     margin: 0.5rem 0;
-    min-height: 220px;
+    height: 320px; /* Fixed height for uniformity */
     width: 260px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    /* Remove background and box-shadow here! */
+}
+.stat-card .card-body {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 .stat-icon {
     width: 48px;
