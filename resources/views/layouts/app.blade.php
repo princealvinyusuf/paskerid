@@ -91,15 +91,15 @@
     <div class="container">
         <div class="row gy-4 align-items-center justify-content-between flex-column flex-md-row">
             <!-- Logo & Description -->
-            <div class="col-12 col-md-4 d-flex align-items-center gap-3 justify-content-center justify-content-md-start text-center text-md-start">
-                <img src="{{ asset('images/logo_kemnaker.svg') }}" alt="Logo Kemnaker" class="footer-logo">
+            <div class="col-12 col-md-4 d-flex flex-column flex-md-row align-items-center gap-2 gap-md-3 justify-content-center justify-content-md-start text-center text-md-start mb-3 mb-md-0">
+                <img src="{{ asset('images/logo_kemnaker.svg') }}" alt="Logo Kemnaker" class="footer-logo mb-2 mb-md-0">
                 <div style="font-size:0.97rem; line-height:1.4;">
                     <span class="fw-bold">Pusat Pasar Kerja Indonesia (Pasker ID)</span><br>
                     merupakan inisiatif Kementerian Ketenagakerjaan Republik Indonesia untuk mempertemukan pencari kerja dan pemberi kerja secara digital, terintegrasi, dan inklusif.
                 </div>
             </div>
             <!-- Menu Tengah -->
-            <div class="col-12 col-md-4 d-flex flex-wrap justify-content-center gap-3 order-3 order-md-2">
+            <div class="col-12 col-md-4 d-flex flex-wrap justify-content-center gap-2 order-3 order-md-2 mb-3 mb-md-0">
                 <a href="{{ route('home') }}" class="text-white text-decoration-none">Beranda</a>
                 <a href="#" class="text-white text-decoration-none">Layanan</a>
                 <a href="#" class="text-white text-decoration-none">Dashboard</a>
@@ -252,7 +252,7 @@ footer {
     }
 
     .footer-logo {
-        height: 5px;
+        height: 32px;
         width: auto;
         opacity: 0.6;
         background: none !important;
