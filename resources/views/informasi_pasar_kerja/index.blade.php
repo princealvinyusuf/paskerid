@@ -43,9 +43,11 @@
                 height: 427px !important;
             }
         </style>
-        <div class="row gx-3 gy-4 justify-content-center">
+        <div class="row gx-3 gy-4 justify-content-center" id="section1Cards">
+            @php $count = 0; $total = count($informasiSection1); @endphp
             @foreach($informasiSection1 as $info)
-                <div class="col-12 col-md-6 col-lg-3 d-flex align-items-stretch">
+                @php $count++; @endphp
+                <div class="col-12 col-md-6 col-lg-3 d-flex align-items-stretch section1-card{{ $count > 4 ? ' d-none' : '' }}">
                     <div class="card stat-card shadow-sm border-0 w-100 h-100 p-3 d-flex flex-column align-items-center justify-content-center text-center">
                         <h5 class="fw-bold mb-2">{{ $info->title }}</h5>
                         <p class="mb-2 text-muted">{{ $info->description }}</p>
@@ -72,6 +74,11 @@
                 </div>
             @endforeach
         </div>
+        @if($total > 4)
+            <div class="text-center mt-3">
+                <button id="lihatLebihBanyakBtn" class="btn btn-success px-4">Lihat lebih banyak</button>
+            </div>
+        @endif
     </section>
     <section class="my-5 mb-5 px-2 px-md-4 px-lg-5" data-aos="fade-up">
         <h3 class="text-center mb-4">Karakteristik Pencari Kerja</h3>
@@ -267,6 +274,17 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         updatePubDots();
+    }
+
+    // Lihat lebih banyak logic for Section 1
+    const lihatLebihBanyakBtn = document.getElementById('lihatLebihBanyakBtn');
+    if (lihatLebihBanyakBtn) {
+        lihatLebihBanyakBtn.addEventListener('click', function() {
+            document.querySelectorAll('.section1-card.d-none').forEach(function(card) {
+                card.classList.remove('d-none');
+            });
+            lihatLebihBanyakBtn.style.display = 'none';
+        });
     }
 });
 </script>
