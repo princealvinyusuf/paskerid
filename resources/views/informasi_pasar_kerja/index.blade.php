@@ -216,7 +216,7 @@
                                 @endif
                                 <div class="card-body d-flex flex-column align-items-center justify-content-center position-relative" style="z-index:3; min-height:320px;">
                                     <div class="stat-title fw-bold mb-2 text-white" style="font-size:1.35rem; line-height:1.2;">{{ $pub->title }}</div>
-                                    <div class="stat-value fw-bold mb-2 text-white" style="font-size:1.15rem;">{{ $pub->date ? indo_date($pub->date) : '' }}</div>
+                                    {{-- <div class="stat-value fw-bold mb-2 text-white" style="font-size:1.15rem;">{{ $pub->date ? indo_date($pub->date) : '' }}</div> --}}
                                 </div>
                             </div>
                         </a>
