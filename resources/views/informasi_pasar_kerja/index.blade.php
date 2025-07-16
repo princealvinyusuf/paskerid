@@ -206,23 +206,17 @@
                 <button id="publikasiScrollPrev" class="btn btn-light shadow rounded-circle position-absolute start-0 translate-middle-y" style="top:50%; z-index:2; width:40px; height:40px;">
                     <i class="fa fa-chevron-left"></i>
                 </button>
-                <div id="publikasiScrollRow" class="d-flex px-7" style="scroll-behavior:smooth; gap:16px; width:100%; overflow-x:hidden;">
+                <div id="publikasiScrollRow" class="d-flex px-7" style="scroll-behavior:smooth; gap:32px; width:100%; overflow-x:hidden;">
                     @foreach($publikasi as $pub)
                         <a href="{{ route('informasi.index', ['type' => 'publikasi', 'search' => $pub->title]) }}" class="text-decoration-none">
-                            <div class="card shadow-sm stat-card text-center flex-shrink-0 position-relative overflow-hidden" style="max-width:260px; min-width:180px; cursor:pointer; padding:0; border:none; min-height:220px;">
+                            <div class="card shadow-sm stat-card text-center flex-shrink-0 position-relative overflow-hidden publikasi-card" style="max-width:340px; min-width:260px; cursor:pointer; padding:0; border:none; min-height:320px;">
                                 @if($pub->image_url)
                                     <div class="position-absolute top-0 start-0 w-100 h-100" style="background: url('{{ $pub->image_url }}') center center/cover no-repeat; z-index:1;"></div>
-                                    <div class="position-absolute top-0 start-0 w-100 h-100" style="background:rgba(0,0,0,0.45); z-index:2;"></div>
+                                    <div class="position-absolute top-0 start-0 w-100 h-100" style="background:rgba(0,0,0,0.35); z-index:2;"></div>
                                 @endif
-                                <div class="card-body d-flex flex-column align-items-center justify-content-center position-relative" style="z-index:3; min-height:220px;">
-                                    <div class="stat-icon mb-3 bg-white bg-opacity-75 rounded-circle d-flex align-items-center justify-content-center" style="width:48px; height:48px;">
-                                        <i class="fa fa-book fa-2x text-success"></i>
-                                    </div>
-                                    <div class="stat-title fw-bold mb-1 text-white" style="font-size:1.1rem;">{{ $pub->title }}</div>
-                                    <div class="stat-value fw-bold mb-1 text-white" style="font-size:1.1rem;">{{ $pub->date ? indo_date($pub->date) : '' }}</div>
-                                    @if($pub->description)
-                                        <div class="stat-desc mt-1 text-white-50" style="font-size:0.95rem;">{{ $pub->description }}</div>
-                                    @endif
+                                <div class="card-body d-flex flex-column align-items-center justify-content-center position-relative" style="z-index:3; min-height:320px;">
+                                    <div class="stat-title fw-bold mb-2 text-white" style="font-size:1.35rem; line-height:1.2;">{{ $pub->title }}</div>
+                                    <div class="stat-value fw-bold mb-2 text-white" style="font-size:1.15rem;">{{ $pub->date ? indo_date($pub->date) : '' }}</div>
                                 </div>
                             </div>
                         </a>
@@ -232,6 +226,30 @@
                     <i class="fa fa-chevron-right"></i>
                 </button>
             </div>
+            <style>
+            .publikasi-card {
+                max-width: 340px !important;
+                min-width: 260px !important;
+                min-height: 320px !important;
+                height: 370px !important;
+                border-radius: 18px !important;
+            }
+            .publikasi-card .card-body {
+                min-height: 320px !important;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                padding: 32px 16px 16px 16px;
+            }
+            .publikasi-card .stat-title {
+                font-size: 1.35rem !important;
+                margin-bottom: 0.5rem;
+            }
+            .publikasi-card .stat-value {
+                font-size: 1.15rem !important;
+            }
+            </style>
             <div class="d-flex justify-content-center mt-3" id="publikasiDots"></div>
         </div>
     </section>
