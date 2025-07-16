@@ -33,12 +33,15 @@
     padding-top: 60px;
 }
 .section-green-card {
-    background: #00a78e;
+    background: rgba(0, 167, 142, 0.35); /* glassy green */
     border-radius: 24px;
     padding: 40px 32px 32px 32px;
     box-shadow: 0 2px 16px rgba(0,0,0,0.08);
     color: #fff;
     margin-bottom: 32px;
+    border: 1.5px solid rgba(255,255,255,0.25);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
 }
 .section-green-card h3,
 .section-green-card p {
