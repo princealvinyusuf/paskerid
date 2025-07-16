@@ -252,7 +252,7 @@ footer {
     }
 
     .footer-logo {
-        height: 72px;
+        height: 48px;
         width: auto;
         opacity: 0.6;
         background: none !important;
