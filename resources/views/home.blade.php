@@ -123,7 +123,7 @@
         </div>
     </section>
 
-    {{-- Karakteristik Lowongan Kerja 3 Section --}}
+    <!-- {{-- Karakteristik Lowongan Kerja 3 Section --}}
     <section class="my-5 mb-5 px-2 px-md-4 px-lg-5" data-aos="fade-up">
         <h3 class="text-center mb-4">Karakteristik Lowongan Kerja 3</h3>
         <div class="row gx-3 gy-4 justify-content-center">
@@ -143,7 +143,7 @@
                 </div>
             @endforeach
         </div>
-    </section>
+    </section> -->
 
 <!-- 
     {{-- Hero Section: Statistics --}}
