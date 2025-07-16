@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<section class="mb-5 px-2 px-md-4 px-lg-5" data-aos="fade-up">
+<section class="section-berita mb-0">
     <img src="{{ asset('images/logo_siapkerja_white.svg') }}" class="section-bg" alt="background">
     <div class="section-content">
         <h2 style="color: white; font-weight: bold; margin-left: 80px;">Informasi Pasar Kerja</h2>
@@ -12,7 +12,7 @@
 .section-berita {
     position: relative;
     background-color: #00a78e;
-    padding: 30px 40px 70px 40px;
+    padding: 30px 40px;
     overflow: hidden;
 }
 .section-bg {
@@ -29,10 +29,13 @@
     z-index: 1;
     max-width: 1200px;
 }
+.pt-custom {
+    padding-top: 60px;
+}
 </style>
 <div class="container-fluid p-0" style="background: #edf8e9;">
     
-    <section class="mt-5 mb-5 px-2 px-md-4 px-lg-5" data-aos="fade-up">
+    <section class="mb-5 px-2 px-md-4 px-lg-5 pt-custom" data-aos="fade-up">
         <h3 class="text-center mb-4">Karakteristik Lowongan Kerja</h3>
         <style>
             .tableauPlaceholder,
