@@ -150,7 +150,7 @@ section:last-of-type {
             @endif
         </div>
     </section>
-    <section class="my-5 mb-5 px-2 px-md-4 px-lg-5 pt-custom" data-aos="fade-up">
+    <!-- <section class="my-5 mb-5 px-2 px-md-4 px-lg-5 pt-custom" data-aos="fade-up">
         <div class="section-green-card">
             <h3 class="text-center mb-4">Informasi Pasar Kerja 3</h3>
             <div class="row gx-3 gy-4 justify-content-center" id="section3Cards">
@@ -190,8 +190,8 @@ section:last-of-type {
                 </div>
             @endif
         </div>
-    </section>
-    <section class="my-5 mb-5 px-2 px-md-4 px-lg-5 pt-custom" data-aos="fade-up">
+    </section> -->
+    <!-- <section class="my-5 mb-5 px-2 px-md-4 px-lg-5 pt-custom" data-aos="fade-up">
         <div class="section-green-card">
             <h3 class="text-center mb-4">Informasi Pasar Kerja 4</h3>
             <div class="row gx-3 gy-4 justify-content-center" id="section4Cards">
@@ -231,7 +231,7 @@ section:last-of-type {
                 </div>
             @endif
         </div>
-    </section>
+    </section> -->
 
     {{-- Publikasi Cards Carousel (Floating over Banner) --}}
     <section class="stat-carousel-section position-relative mt-5 pt-custom" style="z-index: 10; margin-top: -90px;">
