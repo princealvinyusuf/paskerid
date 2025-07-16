@@ -102,151 +102,159 @@
         </div>
     </section>
     <section class="my-5 mb-5 px-2 px-md-4 px-lg-5 pt-custom" data-aos="fade-up">
-        <h3 class="text-center mb-4">Karakteristik Pencari Kerja</h3>
-        <div class="row gx-3 gy-4 justify-content-center" id="section2Cards">
-            @php $count2 = 0; $total2 = count($informasiSection2); @endphp
-            @foreach($informasiSection2 as $info)
-                @php $count2++; @endphp
-                <div class="col-12 col-md-6 col-lg-3 d-flex align-items-stretch section2-card{{ $count2 > 4 ? ' d-none' : '' }}">
-                    <div class="card stat-card shadow-sm border-0 w-100 h-100 p-3 d-flex flex-column align-items-center justify-content-center text-center">
-                        <h5 class="fw-bold mb-2">{{ $info->title }}</h5>
-                        <p class="mb-2 text-muted">{{ $info->description }}</p>
-                        <div class="w-100" style="min-height: 350px;">
-                            <div class="tableau-embed-wrapper w-100" style="min-height: 350px; overflow-x: auto;">
-                                <div style="min-width: 400px;">
-                                    {!! str_replace([
-                                        "vizElement.style.width='400px';",
-                                        'vizElement.style.width = \"400px\";',
-                                        'vizElement.style.width = \"100%\";',
-                                        'vizElement.style.height=\'427px\';',
-                                        'vizElement.style.height = \"427px\";'
-                                    ], [
-                                        "vizElement.style.width='100%';",
-                                        'vizElement.style.width = "100%";',
-                                        'vizElement.style.width = "100%";',
-                                        "vizElement.style.height='427px';",
-                                        'vizElement.style.height = "427px";'
-                                    ], $info->tableau_embed_code) !!}
+        <div class="section-green-card">
+            <h3 class="text-center mb-4">Karakteristik Pencari Kerja</h3>
+            <div class="row gx-3 gy-4 justify-content-center" id="section2Cards">
+                @php $count2 = 0; $total2 = count($informasiSection2); @endphp
+                @foreach($informasiSection2 as $info)
+                    @php $count2++; @endphp
+                    <div class="col-12 col-md-6 col-lg-3 d-flex align-items-stretch section2-card{{ $count2 > 4 ? ' d-none' : '' }}">
+                        <div class="card stat-card shadow-sm border-0 w-100 h-100 p-3 d-flex flex-column align-items-center justify-content-center text-center">
+                            <h5 class="fw-bold mb-2">{{ $info->title }}</h5>
+                            <p class="mb-2 text-muted">{{ $info->description }}</p>
+                            <div class="w-100" style="min-height: 350px;">
+                                <div class="tableau-embed-wrapper w-100" style="min-height: 350px; overflow-x: auto;">
+                                    <div style="min-width: 400px;">
+                                        {!! str_replace([
+                                            "vizElement.style.width='400px';",
+                                            'vizElement.style.width = \"400px\";',
+                                            'vizElement.style.width = \"100%\";',
+                                            'vizElement.style.height=\'427px\';',
+                                            'vizElement.style.height = \"427px\";'
+                                        ], [
+                                            "vizElement.style.width='100%';",
+                                            'vizElement.style.width = "100%";',
+                                            'vizElement.style.width = "100%";',
+                                            "vizElement.style.height='427px';",
+                                            'vizElement.style.height = "427px";'
+                                        ], $info->tableau_embed_code) !!}
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            @endforeach
-        </div>
-        @if($total2 > 4)
-            <div class="text-center mt-3">
-                <button id="lihatLebihBanyakBtn2" class="btn btn-success px-4">Lihat lebih banyak</button>
+                @endforeach
             </div>
-        @endif
+            @if($total2 > 4)
+                <div class="text-center mt-3">
+                    <button id="lihatLebihBanyakBtn2" class="btn btn-success px-4">Lihat lebih banyak</button>
+                </div>
+            @endif
+        </div>
     </section>
     <section class="my-5 mb-5 px-2 px-md-4 px-lg-5 pt-custom" data-aos="fade-up">
-        <h3 class="text-center mb-4">Informasi Pasar Kerja 3</h3>
-        <div class="row gx-3 gy-4 justify-content-center" id="section3Cards">
-            @php $count3 = 0; $total3 = count($informasiSection3); @endphp
-            @foreach($informasiSection3 as $info)
-                @php $count3++; @endphp
-                <div class="col-12 col-md-6 col-lg-3 d-flex align-items-stretch section3-card{{ $count3 > 4 ? ' d-none' : '' }}">
-                    <div class="card stat-card shadow-sm border-0 w-100 h-100 p-3 d-flex flex-column align-items-center justify-content-center text-center">
-                        <h5 class="fw-bold mb-2">{{ $info->title }}</h5>
-                        <p class="mb-2 text-muted">{{ $info->description }}</p>
-                        <div class="w-100" style="min-height: 350px;">
-                            <div class="tableau-embed-wrapper w-100" style="min-height: 350px; overflow-x: auto;">
-                                <div style="min-width: 400px;">
-                                    {!! str_replace([
-                                        "vizElement.style.width='400px';",
-                                        'vizElement.style.width = \"400px\";',
-                                        'vizElement.style.width = \"100%\";',
-                                        'vizElement.style.height=\'427px\';',
-                                        'vizElement.style.height = \"427px\";'
-                                    ], [
-                                        "vizElement.style.width='100%';",
-                                        'vizElement.style.width = "100%";',
-                                        'vizElement.style.width = "100%";',
-                                        "vizElement.style.height='427px';",
-                                        'vizElement.style.height = "427px";'
-                                    ], $info->tableau_embed_code) !!}
+        <div class="section-green-card">
+            <h3 class="text-center mb-4">Informasi Pasar Kerja 3</h3>
+            <div class="row gx-3 gy-4 justify-content-center" id="section3Cards">
+                @php $count3 = 0; $total3 = count($informasiSection3); @endphp
+                @foreach($informasiSection3 as $info)
+                    @php $count3++; @endphp
+                    <div class="col-12 col-md-6 col-lg-3 d-flex align-items-stretch section3-card{{ $count3 > 4 ? ' d-none' : '' }}">
+                        <div class="card stat-card shadow-sm border-0 w-100 h-100 p-3 d-flex flex-column align-items-center justify-content-center text-center">
+                            <h5 class="fw-bold mb-2">{{ $info->title }}</h5>
+                            <p class="mb-2 text-muted">{{ $info->description }}</p>
+                            <div class="w-100" style="min-height: 350px;">
+                                <div class="tableau-embed-wrapper w-100" style="min-height: 350px; overflow-x: auto;">
+                                    <div style="min-width: 400px;">
+                                        {!! str_replace([
+                                            "vizElement.style.width='400px';",
+                                            'vizElement.style.width = \"400px\";',
+                                            'vizElement.style.width = \"100%\";',
+                                            'vizElement.style.height=\'427px\';',
+                                            'vizElement.style.height = \"427px\";'
+                                        ], [
+                                            "vizElement.style.width='100%';",
+                                            'vizElement.style.width = "100%";',
+                                            'vizElement.style.width = "100%";',
+                                            "vizElement.style.height='427px';",
+                                            'vizElement.style.height = "427px";'
+                                        ], $info->tableau_embed_code) !!}
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            @endforeach
-        </div>
-        @if($total3 > 4)
-            <div class="text-center mt-3">
-                <button id="lihatLebihBanyakBtn3" class="btn btn-success px-4">Lihat lebih banyak</button>
+                @endforeach
             </div>
-        @endif
+            @if($total3 > 4)
+                <div class="text-center mt-3">
+                    <button id="lihatLebihBanyakBtn3" class="btn btn-success px-4">Lihat lebih banyak</button>
+                </div>
+            @endif
+        </div>
     </section>
     <section class="my-5 mb-5 px-2 px-md-4 px-lg-5 pt-custom" data-aos="fade-up">
-        <h3 class="text-center mb-4">Informasi Pasar Kerja 4</h3>
-        <div class="row gx-3 gy-4 justify-content-center" id="section4Cards">
-            @php $count4 = 0; $total4 = count($informasiSection4); @endphp
-            @foreach($informasiSection4 as $info)
-                @php $count4++; @endphp
-                <div class="col-12 col-md-6 col-lg-3 d-flex align-items-stretch section4-card{{ $count4 > 4 ? ' d-none' : '' }}">
-                    <div class="card stat-card shadow-sm border-0 w-100 h-100 p-3 d-flex flex-column align-items-center justify-content-center text-center">
-                        <h5 class="fw-bold mb-2">{{ $info->title }}</h5>
-                        <p class="mb-2 text-muted">{{ $info->description }}</p>
-                        <div class="w-100" style="min-height: 350px;">
-                            <div class="tableau-embed-wrapper w-100" style="min-height: 350px; overflow-x: auto;">
-                                <div style="min-width: 400px;">
-                                    {!! str_replace([
-                                        "vizElement.style.width='400px';",
-                                        'vizElement.style.width = \"400px\";',
-                                        'vizElement.style.width = \"100%\";',
-                                        'vizElement.style.height=\'427px\';',
-                                        'vizElement.style.height = \"427px\";'
-                                    ], [
-                                        "vizElement.style.width='100%';",
-                                        'vizElement.style.width = "100%";',
-                                        'vizElement.style.width = "100%";',
-                                        "vizElement.style.height='427px';",
-                                        'vizElement.style.height = "427px";'
-                                    ], $info->tableau_embed_code) !!}
+        <div class="section-green-card">
+            <h3 class="text-center mb-4">Informasi Pasar Kerja 4</h3>
+            <div class="row gx-3 gy-4 justify-content-center" id="section4Cards">
+                @php $count4 = 0; $total4 = count($informasiSection4); @endphp
+                @foreach($informasiSection4 as $info)
+                    @php $count4++; @endphp
+                    <div class="col-12 col-md-6 col-lg-3 d-flex align-items-stretch section4-card{{ $count4 > 4 ? ' d-none' : '' }}">
+                        <div class="card stat-card shadow-sm border-0 w-100 h-100 p-3 d-flex flex-column align-items-center justify-content-center text-center">
+                            <h5 class="fw-bold mb-2">{{ $info->title }}</h5>
+                            <p class="mb-2 text-muted">{{ $info->description }}</p>
+                            <div class="w-100" style="min-height: 350px;">
+                                <div class="tableau-embed-wrapper w-100" style="min-height: 350px; overflow-x: auto;">
+                                    <div style="min-width: 400px;">
+                                        {!! str_replace([
+                                            "vizElement.style.width='400px';",
+                                            'vizElement.style.width = \"400px\";',
+                                            'vizElement.style.width = \"100%\";',
+                                            'vizElement.style.height=\'427px\';',
+                                            'vizElement.style.height = \"427px\";'
+                                        ], [
+                                            "vizElement.style.width='100%';",
+                                            'vizElement.style.width = "100%";',
+                                            'vizElement.style.width = "100%";',
+                                            "vizElement.style.height='427px';",
+                                            'vizElement.style.height = "427px";'
+                                        ], $info->tableau_embed_code) !!}
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            @endforeach
-        </div>
-        @if($total4 > 4)
-            <div class="text-center mt-3">
-                <button id="lihatLebihBanyakBtn4" class="btn btn-success px-4">Lihat lebih banyak</button>
+                @endforeach
             </div>
-        @endif
+            @if($total4 > 4)
+                <div class="text-center mt-3">
+                    <button id="lihatLebihBanyakBtn4" class="btn btn-success px-4">Lihat lebih banyak</button>
+                </div>
+            @endif
+        </div>
     </section>
 
     {{-- Publikasi Cards Carousel (Floating over Banner) --}}
     <section class="stat-carousel-section position-relative mt-5 pt-custom" style="z-index: 10; margin-top: -90px;">
-        <div class="container-fluid px-2 px-md-4 px-lg-5 position-relative" style="max-width:1400px;">
-            <h3 class="text-center mb-4">Publikasi</h3>
-            <div class="d-flex align-items-center position-relative">
-                <div id="publikasiScrollRow"
-                     class="d-flex flex-nowrap overflow-auto w-100"
-                     style="gap:32px; scrollbar-width:thin; padding-bottom: 8px;">
-                    @foreach($publikasi as $pub)
-                        <a href="{{ route('informasi.index', ['type' => 'publikasi', 'search' => $pub->title]) }}" class="text-decoration-none">
-                            <div class="card shadow-sm stat-card text-center flex-shrink-0 position-relative overflow-hidden publikasi-card"
-                                 style="max-width:340px; min-width:260px; cursor:pointer; padding:0; border:none; min-height:320px;">
-                                @if($pub->image_url)
-                                    <div class="position-absolute top-0 start-0 w-100 h-100"
-                                         style="background: url('{{ $pub->image_url }}') center center/cover no-repeat; z-index:1;"></div>
-                                    <div class="position-absolute top-0 start-0 w-100 h-100"
-                                         style="background:rgba(0,0,0,0.35); z-index:2;"></div>
-                                @endif
-                                <div class="card-body d-flex flex-column align-items-center justify-content-center position-relative"
-                                     style="z-index:3; min-height:320px;">
-                                    <div class="stat-title fw-bold mb-2 text-white" style="font-size:1.35rem; line-height:1.2;">{{ $pub->title }}</div>
+        <div class="section-green-card">
+            <div class="container-fluid px-2 px-md-4 px-lg-5 position-relative" style="max-width:1400px;">
+                <h3 class="text-center mb-4">Publikasi</h3>
+                <div class="d-flex align-items-center position-relative">
+                    <div id="publikasiScrollRow"
+                         class="d-flex flex-nowrap overflow-auto w-100"
+                         style="gap:32px; scrollbar-width:thin; padding-bottom: 8px;">
+                        @foreach($publikasi as $pub)
+                            <a href="{{ route('informasi.index', ['type' => 'publikasi', 'search' => $pub->title]) }}" class="text-decoration-none">
+                                <div class="card shadow-sm stat-card text-center flex-shrink-0 position-relative overflow-hidden publikasi-card"
+                                     style="max-width:340px; min-width:260px; cursor:pointer; padding:0; border:none; min-height:320px;">
+                                    @if($pub->image_url)
+                                        <div class="position-absolute top-0 start-0 w-100 h-100"
+                                             style="background: url('{{ $pub->image_url }}') center center/cover no-repeat; z-index:1;"></div>
+                                        <div class="position-absolute top-0 start-0 w-100 h-100"
+                                             style="background:rgba(0,0,0,0.35); z-index:2;"></div>
+                                    @endif
+                                    <div class="card-body d-flex flex-column align-items-center justify-content-center position-relative"
+                                         style="z-index:3; min-height:320px;">
+                                        <div class="stat-title fw-bold mb-2 text-white" style="font-size:1.35rem; line-height:1.2;">{{ $pub->title }}</div>
+                                    </div>
                                 </div>
-                            </div>
-                        </a>
-                    @endforeach
+                            </a>
+                        @endforeach
+                    </div>
                 </div>
+                <div class="d-flex justify-content-center mt-3" id="publikasiDots"></div>
             </div>
-            <div class="d-flex justify-content-center mt-3" id="publikasiDots"></div>
         </div>
     </section>
     <style>
