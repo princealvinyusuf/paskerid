@@ -1,14 +1,36 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container-fluid p-0" style="background: #edf8e9;">
 <section class="section-berita">
     <img src="{{ asset('images/logo_siapkerja_white.svg') }}" class="section-bg" alt="background">
     <div class="section-content">
-        <h2 style="color: white; font-weight: bold; margin-left: 80px;">Berita</h2>
-    <p style="color: white; margin-left: 80px; font-size: 20px">Temukan Berita Terkini Terkait Dengan Ketenagakerjaan.</p>
+        <h2 style="color: white; font-weight: bold; margin-left: 80px;">Informasi Pasar Kerja</h2>
+        <p style="color: white; margin-left: 80px; font-size: 20px">Temukan data, tren, dan analisis terbaru seputar pasar kerja di Indonesia.</p>
     </div>
 </section>
+<style>
+.section-berita {
+    position: relative;
+    background-color: #00a78e;
+    padding: 30px 40px;
+    overflow: hidden;
+}
+.section-bg {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 400px;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.4;
+}
+.section-content {
+    position: relative;
+    z-index: 1;
+    max-width: 1200px;
+}
+</style>
+<div class="container-fluid p-0" style="background: #edf8e9;">
     
     <section class="my-5 mb-5 px-2 px-md-4 px-lg-5" data-aos="fade-up">
         <h3 class="text-center mb-4">Karakteristik Lowongan Kerja</h3>
