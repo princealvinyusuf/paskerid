@@ -11,7 +11,7 @@
                 <ul class="list-group list-group-flush">
                     @foreach($subjects as $subject)
                         <li class="list-group-item p-0">
-                            <a href="?subject={{ urlencode($subject) }}&type={{ request('type', 'statistik') }}" class="d-block px-3 py-2 @if($selectedSubject == $subject) bg-primary text-white @else text-dark @endif" style="text-decoration:none;">
+                            <a id="subject-{{ \Illuminate\Support\Str::slug($subject) }}" href="?subject={{ urlencode($subject) }}&type={{ request('type', 'statistik') }}" class="d-block px-3 py-2 @if($selectedSubject == $subject) bg-primary text-white @else text-dark @endif" style="text-decoration:none;">
                                 {{ $subject }}
                             </a>
                         </li>
@@ -136,6 +136,18 @@
                 window.location.search = params.toString();
             });
         });
+
+        // Scroll and highlight subject if 'search' param exists
+        const params = new URLSearchParams(window.location.search);
+        const search = params.get('search');
+        if (search) {
+            document.querySelectorAll('.list-group-item a').forEach(function(link) {
+                if (link.textContent.trim().toLowerCase() === search.trim().toLowerCase()) {
+                    link.classList.add('bg-warning', 'text-dark');
+                    link.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            });
+        }
     });
 </script>
 @endsection
