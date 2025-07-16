@@ -70,6 +70,7 @@
                                 </div>
                             </div>
                         </div>
+                        <a href="{{ route('dashboard.trend') }}" class="btn btn-primary mt-3 w-100">Lihat Dashboard</a>
                     </div>
                 </div>
             @endforeach
