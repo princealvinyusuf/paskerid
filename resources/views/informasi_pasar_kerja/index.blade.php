@@ -30,7 +30,7 @@
     max-width: 1200px;
 }
 </style>
-<div class="container-fluid p-0" style="background: #edf8e9;">
+<div class="container-fluid p-0" style="background: #00a78e;">
     
     <section class="my-5 mb-5 px-2 px-md-4 px-lg-5" data-aos="fade-up">
         <h3 class="text-center mb-4">Karakteristik Lowongan Kerja</h3>
