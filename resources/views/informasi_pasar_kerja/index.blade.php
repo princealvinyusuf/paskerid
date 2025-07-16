@@ -203,50 +203,30 @@
         <div class="container position-relative" style="max-width:1200px;">
             <h3 class="text-center mb-4">Publikasi</h3>
             <div class="d-flex align-items-center position-relative">
-                <div id="publikasiScrollRow" class="d-flex flex-wrap justify-content-center px-7" style="gap:32px; width:100%;">
+                <div id="publikasiScrollRow" class="d-flex flex-nowrap justify-content-center px-7" style="gap:32px; width:100%; overflow-x:auto;">
                     @foreach($publikasi as $pub)
                         <a href="{{ route('informasi.index', ['type' => 'publikasi', 'search' => $pub->title]) }}" class="text-decoration-none">
-                            <div class="card shadow-sm stat-card text-center flex-shrink-0 position-relative overflow-hidden publikasi-card">
+                            <div class="card shadow-sm stat-card text-center flex-shrink-0 position-relative overflow-hidden publikasi-card" style="max-width:340px; min-width:260px; cursor:pointer; padding:0; border:none; min-height:320px;">
                                 @if($pub->image_url)
                                     <div class="position-absolute top-0 start-0 w-100 h-100" style="background: url('{{ $pub->image_url }}') center center/cover no-repeat; z-index:1;"></div>
                                     <div class="position-absolute top-0 start-0 w-100 h-100" style="background:rgba(0,0,0,0.35); z-index:2;"></div>
                                 @endif
                                 <div class="card-body d-flex flex-column align-items-center justify-content-center position-relative" style="z-index:3; min-height:320px;">
                                     <div class="stat-title fw-bold mb-2 text-white" style="font-size:1.35rem; line-height:1.2;">{{ $pub->title }}</div>
+                                    {{-- <div class="stat-value fw-bold mb-2 text-white" style="font-size:1.15rem;">{{ $pub->date ? indo_date($pub->date) : '' }}</div> --}}
                                 </div>
                             </div>
                         </a>
                     @endforeach
                 </div>
                 <style>
+                /* No wrapping, horizontal scroll */
+                #publikasiScrollRow {
+                    scrollbar-width: thin;
+                }
                 .publikasi-card {
-                    flex: 0 0 calc(20% - 32px);
-                    max-width: calc(20% - 32px);
-                    min-width: 180px;
-                    min-height: 320px;
-                    height: 370px;
-                    border-radius: 18px;
-                    margin-bottom: 32px;
-                }
-                @media (max-width: 1200px) {
-                    .publikasi-card {
-                        flex: 0 0 calc(33.333% - 24px);
-                        max-width: calc(33.333% - 24px);
-                    }
-                }
-                @media (max-width: 900px) {
-                    .publikasi-card {
-                        flex: 0 0 calc(50% - 16px);
-                        max-width: calc(50% - 16px);
-                    }
-                }
-                @media (max-width: 600px) {
-                    .publikasi-card {
-                        flex: 0 0 100%;
-                        max-width: 100%;
-                        min-width: 120px;
-                        height: 150px;
-                    }
+                    min-width: 260px !important;
+                    max-width: 340px !important;
                 }
                 </style>
             </div>
