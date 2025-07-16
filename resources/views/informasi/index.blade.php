@@ -147,6 +147,11 @@
                     link.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 }
             });
+            // If 'subject' param is missing, redirect to include it
+            if (!params.get('subject')) {
+                params.set('subject', search);
+                window.location.search = params.toString();
+            }
         }
     });
 </script>
