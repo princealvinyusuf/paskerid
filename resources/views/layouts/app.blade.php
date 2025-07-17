@@ -117,16 +117,11 @@
                     </div>
                     <div class="col-6 col-md-3 mb-3 mb-md-0">
                         <div class="fw-bold mb-2">Tentang Kami</div>
-                        <div><a href="#" class="text-white text-decoration-none">Perusahaan</a></div>
-                        <div><a href="#" class="text-white text-decoration-none">FAQ</a></div>
-                        <div><a href="#" class="text-white text-decoration-none">Kontak</a></div>
+                        <div><a href="{{ route('about') }}" class="text-white text-decoration-none">Pasker ID</a></div>
                     </div>
                     <div class="col-6 col-md-3 mb-3 mb-md-0">
-                        <div class="fw-bold mb-2">Pranala</div>
-                        <div><a href="#" class="text-white text-decoration-none">Kementerian Komdigi</a></div>
-                        <div><a href="#" class="text-white text-decoration-none">Badan Pengembangan SDM Komdigi</a></div>
-                        <div><a href="#" class="text-white text-decoration-none">Digital Talent Scholarship</a></div>
-                        <div><a href="#" class="text-white text-decoration-none"><i class="fa fa-instagram me-1"></i>Follow Us</a></div>
+                        <div class="fw-bold mb-2">Alamat</div>
+                        <div><a class="text-white text-decoration-none">Jl. Gatot Subroto No.Kav. 44, Kuningan Bar., Kec. Mampang Prpt., Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12710</a></div>
                     </div>
                 </div>
             </div>
