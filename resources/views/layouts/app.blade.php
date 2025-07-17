@@ -118,7 +118,7 @@
                     </div>
                     <div class="col-6 col-md-3 mb-3 mb-md-0">
                         <div class="fw-bold mb-2">Alamat</div>
-                        <div><a class="text-white text-decoration-none">Jl. Gatot Subroto No.44, Kuningan Bar., Kec. Mampang Prpt., Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12710</a></div>
+                        <div><a class="text-white text-decoration-none">Jl. Gatot Subroto No.44, Kota Jakarta Selatan, 12710</a></div>
                     </div>
                 </div>
             </div>
