@@ -57,7 +57,7 @@
                             Dashboard
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="monitoringDropdown">
-                            <li><a class="dropdown-item @if(request()->routeIs('dashboard.trend')) active fw-bold @endif" href="{{ route('dashboard.trend') }}">Tren Informasi Kebutuhan Kerja</a></li>
+                            <li><a class="dropdown-item @if(request()->routeIs('dashboard.trend')) active fw-bold @endif" href="{{ route('dashboard.trend') }}">Tren Informasi Kebutuhan Tenaga Kerja</a></li>
                             <!-- <li><a class="dropdown-item @if(request()->routeIs('dashboard.distribution')) active fw-bold @endif" href="{{ route('dashboard.distribution') }}">Dashboard Distribution</a></li>
                             <li><a class="dropdown-item @if(request()->routeIs('dashboard.performance')) active fw-bold @endif" href="{{ route('dashboard.performance') }}">Dashboard Performance</a></li>
                             <li><a class="dropdown-item @if(request()->routeIs('dashboard.labor_demand')) active fw-bold @endif" href="{{ route('dashboard.labor_demand') }}">Dashboard Labor Demand</a></li> -->
