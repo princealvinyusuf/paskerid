@@ -95,7 +95,7 @@
                 <img src="{{ asset('images/logo_kemnaker.png') }}" alt="Logo Kemnaker" class="footer-logo mb-2 mb-md-0">
                 <div style="font-size:0.97rem; line-height:1.4;">
                     <span class="fw-bold">Pusat Pasar Kerja Indonesia (Pasker ID)</span><br>
-                    merupakan inisiatif Kementerian Ketenagakerjaan Republik Indonesia untuk mempertemukan pencari kerja dan pemberi kerja secara digital, terintegrasi, dan inklusif.
+                    Merupakan inisiatif Kementerian Ketenagakerjaan Republik Indonesia untuk mempertemukan pencari kerja dan pemberi kerja secara digital, terintegrasi, dan inklusif.
                 </div>
             </div>
             <!-- Menu Tengah -->
