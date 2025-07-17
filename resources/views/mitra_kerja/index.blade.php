@@ -73,34 +73,34 @@
 
     {{-- Hotline --}}
     <div class="bg-light p-4 rounded-4 mt-5">
-        <h5 class="fw-bold mb-4 text-center">Layanan Hotline Pusat Pasar Kerja <br> <span class="fw-normal">Jam Pelayanan: 09.00 - 17.00</span></h5>
+        <h5 class="fw-bold mb-4 text-center">Layanan Hotline Pusat Pasar Kerja <br> <span class="fw-normal">Jam Pelayanan: 09.00 - 16.00</span></h5>
         <div class="row g-4 justify-content-center">
             <div class="col-6 col-md-3">
                 <div class="card hotline-card shadow-sm rounded-4 text-center p-3 h-100">
                     <i class="fa fa-phone fa-2x mb-2 text-success"></i>
-                    <div class="fw-bold">Penempatan Dalam Negeri</div>
-                    <div>08123456789</div>
+                    <div class="fw-bold">Pemberi Kerja </div>
+                    <div>08118712018</div>
                 </div>
             </div>
             <div class="col-6 col-md-3">
                 <div class="card hotline-card shadow-sm rounded-4 text-center p-3 h-100">
                     <i class="fa fa-phone fa-2x mb-2 text-success"></i>
-                    <div class="fw-bold">Penempatan Luar Negeri</div>
-                    <div>08123456789</div>
+                    <div class="fw-bold">Pencari Kerja</div>
+                    <div>08118712019</div>
                 </div>
             </div>
             <div class="col-6 col-md-3">
                 <div class="card hotline-card shadow-sm rounded-4 text-center p-3 h-100">
                     <i class="fa fa-phone fa-2x mb-2 text-success"></i>
-                    <div class="fw-bold">Perlindungan Pekerja</div>
-                    <div>08123456789</div>
+                    <div class="fw-bold">CPMI/P3MI 1</div>
+                    <div>08118712016</div>
                 </div>
             </div>
             <div class="col-6 col-md-3">
                 <div class="card hotline-card shadow-sm rounded-4 text-center p-3 h-100">
                     <i class="fa fa-phone fa-2x mb-2 text-success"></i>
-                    <div class="fw-bold">Pusat Kerja</div>
-                    <div>08123456789</div>
+                    <div class="fw-bold">CPMI/P3MI 2</div>
+                    <div>08118712017</div>
                 </div>
             </div>
         </div>
