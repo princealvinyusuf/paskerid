@@ -10,6 +10,7 @@ class InformasiController extends Controller
     public function index(Request $request)
     {
         $query = Information::query();
+        $query->where('status', 'publik'); // Only show public information
 
         if ($request->filled('search')) {
             $query->where('title', 'like', '%' . $request->search . '%');
@@ -29,8 +30,8 @@ class InformasiController extends Controller
         }
 
         $information = $query->orderByDesc('date')->paginate(10);
-        $types = Information::select('type')->distinct()->pluck('type');
-        $subjects = Information::select('subject')->distinct()->pluck('subject');
+        $types = Information::where('status', 'publik')->select('type')->distinct()->pluck('type');
+        $subjects = Information::where('status', 'publik')->select('subject')->distinct()->pluck('subject');
         $selectedSubject = $request->subject;
         $showId = $request->query('show');
         $showInfo = null;
@@ -40,7 +41,7 @@ class InformasiController extends Controller
         // Fetch description for selected subject and type
         $description = null;
         if ($selectedSubject) {
-            $descQuery = Information::where('subject', $selectedSubject);
+            $descQuery = Information::where('subject', $selectedSubject)->where('status', 'publik');
             if ($request->filled('type')) {
                 $descQuery->where('type', $request->type);
             }
