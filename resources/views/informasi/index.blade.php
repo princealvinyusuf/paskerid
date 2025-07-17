@@ -98,7 +98,14 @@
                 <div class="card">
                     <div class="card-body">
                         @if(isset($showInfo) && $showInfo)
-                            @if(request('type') == 'publikasi' && $showInfo->file_url)
+                            @php $activeDescription = $showInfo->description; @endphp
+                        @else
+                            @php $activeDescription = $description; @endphp
+                        @endif
+                        @if(!empty($activeDescription))
+                            <div class="alert alert-info mb-3">{{ $activeDescription }}</div>
+                        @endif
+                        @if(request('type') == 'publikasi' && $showInfo->file_url)
                                 <a href="?subject={{ urlencode($selectedSubject) }}&type=publikasi" class="btn btn-secondary mb-3">
                                     <i class="fa fa-arrow-left"></i> Back to Table
                                 </a>
