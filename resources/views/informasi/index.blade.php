@@ -97,35 +97,26 @@
             <div id="dynamic-container" class="mt-4" @if(!isset($showInfo) || !$showInfo) style="display:none;" @endif>
                 <div class="card">
                     <div class="card-body">
-                        @if(isset($showInfo) && $showInfo)
-                            @php $activeDescription = $showInfo->description; @endphp
-                        @else
-                            @php $activeDescription = $description; @endphp
-                        @endif
+                        @php
+                            $activeDescription = (isset($showInfo) && $showInfo) ? $showInfo->description : $description;
+                        @endphp
                         @if(!empty($activeDescription))
                             <div class="alert alert-info mb-3">{{ $activeDescription }}</div>
                         @endif
-                        @if(request('type') == 'publikasi' && $showInfo->file_url)
+
+                        @if(isset($showInfo) && $showInfo)
+                            @if(request('type') == 'publikasi' && $showInfo->file_url)
                                 <a href="?subject={{ urlencode($selectedSubject) }}&type=publikasi" class="btn btn-secondary mb-3">
                                     <i class="fa fa-arrow-left"></i> Back to Table
                                 </a>
-                                @if(!empty($description))
-                                    <div class="alert alert-info mb-3">{{ $description }}</div>
-                                @endif
                                 <embed src="{{ asset($showInfo->file_url) }}" type="application/pdf" width="100%" height="600px" />
                             @else
                                 <a href="?subject={{ urlencode($selectedSubject) }}&type={{ request('type', 'statistik') }}" class="btn btn-secondary mb-3">
                                     <i class="fa fa-arrow-left"></i> Back to Table
                                 </a>
-                                @if(!empty($description))
-                                    <div class="alert alert-info mb-3">{{ $description }}</div>
-                                @endif
                                 {!! $showInfo->iframe_url !!}
                             @endif
                         @else
-                            @if(!empty($description))
-                                <div class="alert alert-info mb-3">{{ $description }}</div>
-                            @endif
                             <span id="container-content">Container 1</span>
                         @endif
                     </div>
