@@ -89,27 +89,50 @@
 
     <footer class="bg-success text-white py-4">
     <div class="container">
-        <div class="row gy-4 align-items-center justify-content-between flex-column flex-md-row">
+        <div class="row gy-4">
             <!-- Logo & Description -->
-            <div class="col-12 col-md-4 d-flex flex-column flex-md-row align-items-center gap-2 gap-md-3 justify-content-center justify-content-md-start text-center text-md-start mb-3 mb-md-0">
-                <img src="{{ asset('images/logo_kemnaker.png') }}" alt="Logo Kemnaker" class="footer-logo mb-2 mb-md-0">
+            <div class="col-12 col-lg-3 d-flex flex-column align-items-lg-start align-items-center text-center text-lg-start mb-3 mb-lg-0">
+                <img src="{{ asset('images/logo_kemnaker.png') }}" alt="Logo Kemnaker" class="footer-logo mb-2">
                 <div style="font-size:0.97rem; line-height:1.4;">
                     <span class="fw-bold">Pusat Pasar Kerja Indonesia (Pasker ID)</span><br>
                     Merupakan inisiatif Kementerian Ketenagakerjaan Republik Indonesia untuk mempertemukan pencari kerja dan pemberi kerja secara digital, terintegrasi, dan inklusif.
                 </div>
             </div>
-            <!-- Menu Tengah -->
-            <div class="col-12 col-md-4 d-flex flex-wrap justify-content-center gap-2 order-3 order-md-2 mb-3 mb-md-0">
-                <a href="{{ route('home') }}" class="text-white text-decoration-none">Beranda</a>
-                <a href="#" class="text-white text-decoration-none">Layanan</a>
-                <a href="#" class="text-white text-decoration-none">Dashboard</a>
-                <a href="{{ route('informasi.index') }}" class="text-white text-decoration-none">Pusat Informasi</a>
-                <a href="{{ route('news.index') }}" class="text-white text-decoration-none">Berita</a>
-                <a href="{{ route('about') }}" class="text-white text-decoration-none">Tentang Kami</a>
+            <!-- Menu Columns -->
+            <div class="col-12 col-lg-7">
+                <div class="row text-center text-lg-start">
+                    <div class="col-6 col-md-3 mb-3 mb-md-0">
+                        <div class="fw-bold mb-2">Untuk Talenta</div>
+                        <div><a href="#" class="text-white text-decoration-none">Fitur Talenta</a></div>
+                        <div><a href="#" class="text-white text-decoration-none">Lowongan</a></div>
+                        <div><a href="#" class="text-white text-decoration-none">Virtual Internship</a></div>
+                        <div><a href="#" class="text-white text-decoration-none">Project</a></div>
+                        <div><a href="#" class="text-white text-decoration-none">Masuk</a></div>
+                    </div>
+                    <div class="col-6 col-md-3 mb-3 mb-md-0">
+                        <div class="fw-bold mb-2">Untuk Perusahaan</div>
+                        <div><a href="#" class="text-white text-decoration-none">Fitur Perusahaan</a></div>
+                        <div><a href="#" class="text-white text-decoration-none">Masuk</a></div>
+                        <div><a href="#" class="text-white text-decoration-none">Pendaftaran</a></div>
+                    </div>
+                    <div class="col-6 col-md-3 mb-3 mb-md-0">
+                        <div class="fw-bold mb-2">Tentang Kami</div>
+                        <div><a href="#" class="text-white text-decoration-none">Perusahaan</a></div>
+                        <div><a href="#" class="text-white text-decoration-none">FAQ</a></div>
+                        <div><a href="#" class="text-white text-decoration-none">Kontak</a></div>
+                    </div>
+                    <div class="col-6 col-md-3 mb-3 mb-md-0">
+                        <div class="fw-bold mb-2">Pranala</div>
+                        <div><a href="#" class="text-white text-decoration-none">Kementerian Komdigi</a></div>
+                        <div><a href="#" class="text-white text-decoration-none">Badan Pengembangan SDM Komdigi</a></div>
+                        <div><a href="#" class="text-white text-decoration-none">Digital Talent Scholarship</a></div>
+                        <div><a href="#" class="text-white text-decoration-none"><i class="fa fa-instagram me-1"></i>Follow Us</a></div>
+                    </div>
+                </div>
             </div>
-            <!-- Sosial & Copyright -->
-            <div class="col-12 col-md-4 d-flex flex-column align-items-center align-items-md-end gap-2 order-2 order-md-3">
-                <div>
+            <!-- Social & Copyright -->
+            <div class="col-12 col-lg-2 d-flex flex-column align-items-center align-items-lg-end justify-content-end mt-3 mt-lg-0">
+                <div class="mb-2">
                     <a href="https://www.instagram.com/pusatpasarkerja/?hl=en" target="_blank" class="text-white mx-1"><i class="fab fa-instagram fa-lg"></i></a>
                 </div>
                 <div class="small">Copyright © 2025 Pusat Pasar Kerja Indonesia</div>
