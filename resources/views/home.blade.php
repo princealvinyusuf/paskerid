@@ -22,7 +22,7 @@
     {{-- Statistic Cards Carousel (Floating over Banner) --}}
     <section class="stat-carousel-section position-relative mt-5" style="z-index: 10; margin-top: -90px;">
         <div class="container position-relative" style="max-width:1200px;">
-            <h3 class="text-center mb-4">Data Insight</h3>
+            <h3 class="text-center mb-4">Highlight Pasar Kerja</h3>
             <div class="d-flex align-items-center position-relative">
                 <button id="statScrollPrev" class="btn btn-light shadow rounded-circle position-absolute start-0 translate-middle-y" style="top:50%; z-index:2; width:40px; height:40px;">
                     <i class="fa fa-chevron-left"></i>
@@ -55,7 +55,7 @@
 
     {{-- Karakteristik Lowongan Kerja Section --}}
     <section class="my-5 mb-5 px-2 px-md-4 px-lg-5 overlap-hero" data-aos="fade-up">
-        <h3 class="text-center mb-4">Karakteristik Lowongan Kerja</h3>
+        <h3 class="text-center mb-4">Insight Lowongan Kerja</h3>
         <style>
             /* Responsive Tableau Embed */
             .tableauPlaceholder,
@@ -103,7 +103,7 @@
 
      {{-- Karakteristik Lowongan Kerja 2 Section --}}
      <section class="my-5 mb-5 px-2 px-md-4 px-lg-5" data-aos="fade-up">
-        <h3 class="text-center mb-4">Karakteristik Pencari Kerja</h3>
+        <h3 class="text-center mb-4">Insight Pencari Kerja</h3>
         <div class="row gx-3 gy-4 justify-content-center">
             @foreach($jobCharacteristics2 as $char)
                 <div class="col-12 col-md-6 col-lg-3 d-flex align-items-stretch">
