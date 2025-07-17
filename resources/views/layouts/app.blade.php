@@ -116,6 +116,7 @@
                         <div class="fw-bold mb-2">Tentang Kami</div>
                         <div><a href="{{ route('about') }}" class="text-white text-decoration-none">Pasker ID</a></div>
                         <div><a href="{{ route('kebijakan_privasi') }}" class="text-white text-decoration-none">Kebijakan Privasi</a></div>
+                        <div><a href="{{ route('ketentuan_pengguna') }}" class="text-white text-decoration-none">Ketentuan Pengguna</a></div>
                     </div>
                     <div class="col-6 col-md-3 mb-3 mb-md-0">
                         <div class="fw-bold mb-2">Alamat</div>

@@ -40,3 +40,7 @@ Route::post('kemitraan', [App\Http\Controllers\KemitraanController::class, 'stor
 Route::get('/kebijakan-privasi', function () {
     return view('kebijakan_privasi');
 })->name('kebijakan_privasi');
+
+Route::get('/ketentuan-pengguna', function () {
+    return view('ketentuan_pengguna');
+})->name('ketentuan_pengguna');
