@@ -95,25 +95,22 @@
                 <img src="{{ asset('images/logo_kemnaker.png') }}" alt="Logo Kemnaker" class="footer-logo mb-2">
                 <div style="font-size:0.97rem; line-height:1.4;">
                     <span class="fw-bold">Pusat Pasar Kerja Indonesia (Pasker ID)</span><br>
-                    Merupakan inisiatif Kementerian Ketenagakerjaan Republik Indonesia untuk mempertemukan pencari kerja dan pemberi kerja secara digital, terintegrasi, dan inklusif.
+                    Merupakan unit kerja yang diinisiasi oleh Kementerian Ketenagakerjaan Republik Indonesia dalam mempertemukan pencari kerja dan pemberi kerja secara digital, terintegrasi, dan inklusif.
                 </div>
             </div>
             <!-- Menu Columns -->
             <div class="col-12 col-lg-7">
                 <div class="row text-center text-lg-start">
                     <div class="col-6 col-md-3 mb-3 mb-md-0">
-                        <div class="fw-bold mb-2">Untuk Talenta</div>
-                        <div><a href="#" class="text-white text-decoration-none">Fitur Talenta</a></div>
-                        <div><a href="#" class="text-white text-decoration-none">Lowongan</a></div>
-                        <div><a href="#" class="text-white text-decoration-none">Virtual Internship</a></div>
-                        <div><a href="#" class="text-white text-decoration-none">Project</a></div>
-                        <div><a href="#" class="text-white text-decoration-none">Masuk</a></div>
+                        <div class="fw-bold mb-2">Informasi</div>
+                        <div><a href="{{ route('informasi_pasar_kerja.index') }}" class="text-white text-decoration-none">Informasi Pasar Kerja</a></div>
                     </div>
                     <div class="col-6 col-md-3 mb-3 mb-md-0">
-                        <div class="fw-bold mb-2">Untuk Perusahaan</div>
-                        <div><a href="#" class="text-white text-decoration-none">Fitur Perusahaan</a></div>
-                        <div><a href="#" class="text-white text-decoration-none">Masuk</a></div>
-                        <div><a href="#" class="text-white text-decoration-none">Pendaftaran</a></div>
+                        <div class="fw-bold mb-2">Layanan</div>
+                        <div><a href="{{ route('virtual-karir.index') }}" class="text-white text-decoration-none">Virtual Karir</a></div>
+                        <div><a href="{{ route('mitra_kerja.index') }}" class="text-white text-decoration-none">Informasi Mitra Kerja</a></div>
+                        <div><a href="{{ route('informasi.index') }}" class="text-white text-decoration-none">Data</a></div>
+                        <div><a href="https://microlearning-paskerid.kemnaker.go.id/" target="_blank" class="text-white text-decoration-none">Microlearning</a></div>
                     </div>
                     <div class="col-6 col-md-3 mb-3 mb-md-0">
                         <div class="fw-bold mb-2">Tentang Kami</div>
@@ -121,7 +118,7 @@
                     </div>
                     <div class="col-6 col-md-3 mb-3 mb-md-0">
                         <div class="fw-bold mb-2">Alamat</div>
-                        <div><a class="text-white text-decoration-none">Jl. Gatot Subroto No.Kav. 44, Kuningan Bar., Kec. Mampang Prpt., Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12710</a></div>
+                        <div><a class="text-white text-decoration-none">Jl. Gatot Subroto No.44, Kuningan Bar., Kec. Mampang Prpt., Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12710</a></div>
                     </div>
                 </div>
             </div>
