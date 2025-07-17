@@ -6,7 +6,7 @@
     @if($dashboard)
         {!! $dashboard->iframe_code !!}
     @else
-        <p>No dashboard distribution available.</p>
+        <p>Sedang dikembangkan</p>
     @endif
 </div>
 @endsection 
