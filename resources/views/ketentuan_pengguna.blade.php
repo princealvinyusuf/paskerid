@@ -1,10 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container my-5 py-5">
-    <h2 class="mb-4 text-center">Ketentuan Pengguna</h2>
-    <div class="bg-white p-4 rounded shadow-sm" style="max-width:900px;margin:auto;">
-        <pre style="white-space:pre-wrap;font-family:inherit;background:none;border:none;padding:0;">SYARAT DAN KETENTUAN
+<div style="background:#edf8e9;min-height:100vh;width:100%;position:relative;">
+    <div class="container my-5 py-5">
+        <h2 class="mb-4 text-center">Ketentuan Pengguna</h2>
+        <div class="bg-white p-4 rounded shadow-sm" style="max-width:900px;margin:auto;">
+            <pre style="white-space:pre-wrap;font-family:inherit;background:none;border:none;padding:0;">SYARAT DAN KETENTUAN
 
 
 
@@ -89,6 +90,7 @@ Jika Anda memiliki pertanyaan atau saran mengenai layanan Pusat Pasar Kerja, Sil
 Pusat Pasar Kerja
 
 Kementerian Ketenagakerjaan Republik Indonesia</pre>
+        </div>
     </div>
 </div>
 @endsection 

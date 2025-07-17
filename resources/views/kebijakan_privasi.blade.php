@@ -1,10 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container my-5 py-5">
-    <h2 class="mb-4 text-center">Kebijakan Privasi</h2>
-    <div class="bg-white p-4 rounded shadow-sm" style="max-width:900px;margin:auto;">
-        <pre style="white-space:pre-wrap;font-family:inherit;background:none;border:none;padding:0;">Pusat Pasar Kerja (“Kami”) mengoperasikan Portal Pasker ID.
+<div style="background:#edf8e9;min-height:100vh;width:100%;position:relative;">
+    <div class="container my-5 py-5">
+        <h2 class="mb-4 text-center">Kebijakan Privasi</h2>
+        <div class="bg-white p-4 rounded shadow-sm" style="max-width:900px;margin:auto;">
+            <pre style="white-space:pre-wrap;font-family:inherit;background:none;border:none;padding:0;">Pusat Pasar Kerja (“Kami”) mengoperasikan Portal Pasker ID.
 
 Kami menggunakan data Anda dengan tujuan untuk menyediakan dan memberikan Layanan Aplikasi yang optimal. Dengan menggunakan layanan kami, Anda telah menyetujui pengumpulan dan penggunaan Informasi dari Anda sesuai dengan Kebijakan Privasi dan Ketentuan yang kami terapkan.
 
@@ -189,6 +190,7 @@ Jika Anda memiliki pertanyaan atau saran mengenai layanan Pasker ID, Silahkan Hu
 Pusat Pasar Kerja
 
 Kementerian KetenagaKerjaan Republik Indonesia</pre>
+        </div>
     </div>
 </div>
 @endsection 
