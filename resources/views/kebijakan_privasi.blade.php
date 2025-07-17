@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container my-5" style="background: #edf8e9;">
+<div class="container-fluid p-0" style="background: #edf8e9;">
     <h2 class="mb-4 text-center">Kebijakan Privasi</h2>
     <div class="bg-white p-4 rounded shadow-sm" style="max-width:900px;margin:auto;">
         <pre style="white-space:pre-wrap;font-family:inherit;background:none;border:none;padding:0;">Pusat Pasar Kerja (“Kami”) mengoperasikan Portal Pasker ID.
