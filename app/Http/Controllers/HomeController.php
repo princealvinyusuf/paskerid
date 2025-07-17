@@ -23,7 +23,7 @@ class HomeController extends Controller
         $statistics = Statistic::orderBy('order')->get();
         $heroStatistics = HeroStatistic::orderBy('order')->get();
         $statistik = Information::where('type', 'statistik')->orderByDesc('date')->take(5)->get();
-        $publikasi = Information::where('type', 'publikasi')->orderByDesc('date')->take(5)->get();
+        $publikasi = Information::where('type', 'publikasi')->where('status', 'publik')->orderByDesc('date')->take(5)->get();
         $charts = Chart::orderBy('order')->get();
         $typeMeta = [
             'skills' => [
