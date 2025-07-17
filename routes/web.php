@@ -36,3 +36,7 @@ Route::get('/informasi-pasar-kerja', [App\Http\Controllers\InformasiPasarKerjaCo
 // Kemitraan routes (only create and store)
 Route::get('kemitraan/create', [App\Http\Controllers\KemitraanController::class, 'create'])->name('kemitraan.create');
 Route::post('kemitraan', [App\Http\Controllers\KemitraanController::class, 'store'])->name('kemitraan.store');
+
+Route::get('/kebijakan-privasi', function () {
+    return view('kebijakan_privasi');
+})->name('kebijakan_privasi');
