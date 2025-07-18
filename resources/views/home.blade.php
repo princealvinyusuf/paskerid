@@ -172,7 +172,7 @@
 
     <!-- {{-- Charts Section --}}
     <section class="my-5 px-2 px-md-4 px-lg-5" data-aos="fade-up">
-        <h3 class="text-center mb-4">Karakteristik Pencari Kerja</h3>
+        <h3 class="text-center mb-4">Persediaan Tenaga Kerja</h3>
         <div class="row gx-2 gy-3 justify-content-center">
             @foreach($charts as $chart)
                 <div class="col-md-6 col-lg-4 mb-3" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">

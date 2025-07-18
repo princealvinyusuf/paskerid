@@ -111,7 +111,7 @@ section:last-of-type {
     </section>
     <section class="my-5 mb-5 px-2 px-md-4 px-lg-5 pt-custom" data-aos="fade-up">
         <div class="section-green-card">
-            <h3 class="text-center mb-4">Karakteristik Pencari Kerja</h3>
+            <h3 class="text-center mb-4">Persediaan Tenaga Kerja</h3>
             <div class="row gx-3 gy-4 justify-content-center" id="section2Cards">
                 @php $count2 = 0; $total2 = count($informasiSection2); @endphp
                 @foreach($informasiSection2 as $info)
