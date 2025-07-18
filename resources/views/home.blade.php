@@ -53,7 +53,7 @@
         </div>
     </section>
 
-    {{-- Karakteristik Lowongan Kerja Section --}}
+    <!-- {{-- Karakteristik Lowongan Kerja Section --}}
     <section class="my-5 mb-5 px-2 px-md-4 px-lg-5 overlap-hero" data-aos="fade-up">
         <h3 class="text-center mb-4">Insight Lowongan Kerja</h3>
         <style>
@@ -98,10 +98,10 @@
                 </div>
             @endforeach
         </div>
-    </section>
+    </section> -->
 
 
-     {{-- Karakteristik Lowongan Kerja 2 Section --}}
+     <!-- {{-- Karakteristik Lowongan Kerja 2 Section --}}
      <section class="my-5 mb-5 px-2 px-md-4 px-lg-5" data-aos="fade-up">
         <h3 class="text-center mb-4">Insight Pencari Kerja</h3>
         <div class="row gx-3 gy-4 justify-content-center">
@@ -124,7 +124,7 @@
                 </div>
             @endforeach
         </div>
-    </section>
+    </section> -->
 
     <!-- {{-- Karakteristik Lowongan Kerja 3 Section --}}
     <section class="my-5 mb-5 px-2 px-md-4 px-lg-5" data-aos="fade-up">
@@ -257,7 +257,7 @@
         </div>
     </section>
 
-    {{-- Contributions Section 
+    {{-- Contributions Section --}}
     <section class="my-5 px-2 px-md-4 px-lg-5" data-aos="fade-up">
         <div class="text-center mb-2">
             <h3 class="fw-bold mb-1" style="font-size:2.5rem;">Kontribusi Pasker</h3>
@@ -291,7 +291,7 @@
                 </div>
             @endforeach
         </div>
-    </section> --}}
+    </section> 
 
     {{-- Services Section --}}
     <section class="my-5 px-2 px-md-4 px-lg-5" data-aos="fade-up">
