@@ -666,9 +666,9 @@
 }
 .stat-card {
     border-radius: 1.5rem;
-    padding: 2.5rem 1.5rem;
+    padding: 2rem 0.5rem; /* Reduced horizontal padding */
     margin: 0.5rem 0;
-    height: 320px; /* Fixed height for uniformity */
+    height: 320px;
     width: 260px;
     display: flex;
     flex-direction: column;
@@ -865,12 +865,15 @@
 }
 .stat-desc {
     margin-top: auto;
+    width: 100%; /* Make description use full width */
     display: -webkit-box;
-    -webkit-line-clamp: 4;         /* Show up to 4 lines */
+    -webkit-line-clamp: 4;
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-height: 5.2em;             /* Adjust for 4 lines (1.3em per line) */
+    max-height: 5.2em;
+    font-size: 0.93rem; /* Optionally reduce font size */
+    padding: 0; /* Remove any padding if present */
 }
 .tableau-embed-wrapper {
     overflow-x: auto;
