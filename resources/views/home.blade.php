@@ -317,6 +317,11 @@
                 </div>
             @endforeach
         </div>
+        <div class="text-center mt-4">
+            <a href="{{ route('virtual-karir.index') }}" class="btn btn-outline-success rounded-pill px-4 py-2">
+                Lihat Layanan Lainnya <i class="fa fa-arrow-right"></i>
+            </a>
+        </div>
     </section>
 
     {{-- News Section --}}
