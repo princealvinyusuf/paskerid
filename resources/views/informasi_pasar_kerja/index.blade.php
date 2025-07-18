@@ -60,7 +60,7 @@ section:last-of-type {
     
     <section class="mb-5 px-2 px-md-4 px-lg-5 pt-custom" data-aos="fade-up">
         <div class="section-green-card">
-            <h3 class="text-center mb-4">Karakteristik Lowongan Kerja</h3>
+            <h3 class="text-center mb-4">Kebutuhan Tenaga Kerja</h3>
             <style>
                 .tableauPlaceholder,
                 .tableauPlaceholder object {
