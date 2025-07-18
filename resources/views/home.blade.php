@@ -353,6 +353,11 @@
                                     <div class="text-muted small">{{ \Carbon\Carbon::parse($topic->date)->format('d M Y') }}</div>
                                 @endif
                             </div>
+                            <div class="ms-auto d-flex align-items-center">
+                                <span class="btn btn-danger rounded-pill px-3 py-2 fw-bold d-flex align-items-center" style="font-size:1rem; pointer-events:none;">
+                                    <i class="fa fa-download me-2"></i> Download
+                                </span>
+                            </div>
                         </div>
                     </a>
                 </div>
