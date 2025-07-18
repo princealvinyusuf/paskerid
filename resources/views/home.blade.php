@@ -333,25 +333,28 @@
         <div class="row justify-content-center g-4">
             @foreach($topicData as $topic)
                 <div class="col-12 col-md-6 col-lg-4 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
-                    <div class="card shadow rounded-4 border-0 p-4 w-100 h-100 mx-auto d-flex flex-column align-items-center justify-content-center text-center">
-                        @if($topic->image_url)
-                            <div class="mb-4 d-flex align-items-center justify-content-center mx-auto">
-                                <img src="{{ asset($topic->image_url) }}" alt="{{ $topic->title }}" style="width: 120px; height: 120px; object-fit: contain;">
+                    <a href="{{ route('topicdata.download', $topic->id) }}" class="text-decoration-none w-100 h-100" target="_blank">
+                        <div class="card mb-3 shadow-sm rounded-4 px-4 py-3 d-flex flex-row align-items-center h-100" style="cursor:pointer; min-height:120px; transition:box-shadow 0.2s,transform 0.2s;">
+                            <div class="me-3 d-flex align-items-center justify-content-center flex-shrink-0" style="width:64px; height:64px;">
+                                @if($topic->image_url)
+                                    <img src="{{ asset($topic->image_url) }}" alt="{{ $topic->title }}" style="width:64px; height:64px; object-fit:contain;">
+                                @else
+                                    <span class="d-flex align-items-center justify-content-center" style="width:64px; height:64px;">
+                                        <i class="fa fa-file-pdf-o" style="font-size:2.5rem; color:#c00;"></i>
+                                    </span>
+                                @endif
                             </div>
-                        @endif
-                        <h5 class="fw-bold mb-2 text-dark text-center">{{ $topic->title }}</h5>
-                        <p class="text-dark mb-3 text-center" style="font-size:1rem; min-height: 48px;">{{ $topic->description }}</p>
-                        @if($topic->date)
-                            <div class="text-muted small mb-2">{{ \Carbon\Carbon::parse($topic->date)->format('d M Y') }}</div>
-                        @endif
-                        @if($topic->file_url)
-                            <div class="text-center mt-auto">
-                                <a href="{{ route('topicdata.download', $topic->id) }}" class="btn btn-danger rounded-pill px-4" target="_blank">
-                                    <i class="fa fa-download me-1"></i> Download
-                                </a>
+                            <div class="flex-grow-1 d-flex flex-column justify-content-center">
+                                <div class="fw-bold text-dark mb-1" style="font-size:1.1rem;">{{ $topic->title }}</div>
+                                @if($topic->description)
+                                    <div class="text-muted small mb-1">{{ $topic->description }}</div>
+                                @endif
+                                @if($topic->date)
+                                    <div class="text-muted small">{{ \Carbon\Carbon::parse($topic->date)->format('d M Y') }}</div>
+                                @endif
                             </div>
-                        @endif
-                    </div>
+                        </div>
+                    </a>
                 </div>
             @endforeach
         </div>
