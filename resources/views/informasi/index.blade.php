@@ -148,10 +148,14 @@
         }
 
         // If 'subject' param is missing, redirect to include it and remove 'search'
-        const from = params.get('from');
-        if (search && !params.get('subject') && from !== 'home') {
+        const ref = document.referrer;
+        if (
+            search &&
+            !params.get('subject') &&
+            ref.includes('/informasi_pasar_kerja')
+        ) {
             params.set('subject', search);
-            params.delete('search'); // Remove the search param from the URL
+            params.delete('search');
             window.location.search = params.toString();
         }
     });
