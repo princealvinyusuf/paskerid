@@ -138,8 +138,6 @@
         // Scroll and highlight subject if 'search' param exists
         const params = new URLSearchParams(window.location.search);
         const search = params.get('search');
-        const subject = params.get('subject');
-        const referrer = document.referrer;
         if (search) {
             document.querySelectorAll('.list-group-item a').forEach(function(link) {
                 if (link.textContent.trim().toLowerCase() === search.trim().toLowerCase()) {
@@ -149,13 +147,11 @@
             });
         }
 
-        // Only force subject if coming from /informasi_pasar_kerja
-        if (
-            search && !subject &&
-            referrer.includes('/informasi_pasar_kerja')
-        ) {
+        // If 'subject' param is missing, redirect to include it and remove 'search'
+        const from = params.get('from');
+        if (search && !params.get('subject') && from !== 'home') {
             params.set('subject', search);
-            params.delete('search');
+            params.delete('search'); // Remove the search param from the URL
             window.location.search = params.toString();
         }
     });
