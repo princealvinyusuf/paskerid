@@ -304,7 +304,7 @@
                 <div class="col-12 col-md-6 col-lg-4 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
                     <div class="card shadow rounded-4 border-0 p-4 w-100 h-100 mx-auto d-flex flex-column align-items-center justify-content-center text-center">
                         <div class="mb-4 d-flex align-items-center justify-content-center mx-auto">
-                            <img src="{{ asset('images/services/' . $service->logo) }}" alt="{{ $service->title }} Logo" style="width: 96px; height: 96px; object-fit: contain;">
+                            <img src="{{ asset('images/services/' . $service->logo) }}" alt="{{ $service->title }} Logo" style="width: 160px; height: 160px; object-fit: contain;">
                         </div>
                         <h5 class="fw-bold mb-2 text-dark text-center">{{ $service->title }}</h5>
                         <p class="text-dark mb-3 text-center" style="font-size:1rem;">{{ $service->description }}</p>
