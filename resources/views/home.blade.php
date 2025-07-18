@@ -257,7 +257,7 @@
         </div>
     </section>
 
-    {{-- Contributions Section --}}
+    {{-- Contributions Section 
     <section class="my-5 px-2 px-md-4 px-lg-5" data-aos="fade-up">
         <div class="text-center mb-2">
             <h3 class="fw-bold mb-1" style="font-size:2.5rem;">Kontribusi Pasker</h3>
@@ -291,7 +291,7 @@
                 </div>
             @endforeach
         </div>
-    </section> 
+    </section> --}}
 
     {{-- Services Section --}}
     <section class="my-5 px-2 px-md-4 px-lg-5" data-aos="fade-up">
