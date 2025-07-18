@@ -97,7 +97,7 @@ section:last-of-type {
                                     </div>
                                 </div>
                             </div>
-                            <a href="{{ route('dashboard.trend') }}" class="btn btn-primary mt-3 w-100">Lihat Dashboard</a>
+                            <a href="{{ route('dashboard.trend') }}" class="btn btn-primary mt-3 w-100">Lihat Detail</a>
                         </div>
                     </div>
                 @endforeach
@@ -139,7 +139,7 @@ section:last-of-type {
                                     </div>
                                 </div>
                             </div>
-                            <a href="{{ route('dashboard.distribution') }}" class="btn btn-primary mt-3 w-100">Lihat Dashboard</a>
+                            <a href="{{ route('dashboard.distribution') }}" class="btn btn-primary mt-3 w-100">Lihat Detail</a>
                         </div>
                     </div>
                 @endforeach
