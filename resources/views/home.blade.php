@@ -324,6 +324,39 @@
         </div>
     </section>
 
+    {{-- Topik Data Section --}}
+    <section class="my-5 px-2 px-md-4 px-lg-5" data-aos="fade-up">
+        <div class="text-center mb-4">
+            <h2 class="fw-bold" style="font-size:2.2rem;">Topik Data</h2>
+            <p class="text-muted mb-0">Kumpulan dokumen dan data penting yang dapat diunduh</p>
+        </div>
+        <div class="row justify-content-center g-4">
+            @foreach($topicData as $topic)
+                <div class="col-12 col-md-6 col-lg-4 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
+                    <div class="card shadow rounded-4 border-0 p-4 w-100 h-100 mx-auto d-flex flex-column align-items-center justify-content-center text-center">
+                        @if($topic->image_url)
+                            <div class="mb-4 d-flex align-items-center justify-content-center mx-auto">
+                                <img src="{{ asset($topic->image_url) }}" alt="{{ $topic->title }}" style="width: 120px; height: 120px; object-fit: contain;">
+                            </div>
+                        @endif
+                        <h5 class="fw-bold mb-2 text-dark text-center">{{ $topic->title }}</h5>
+                        <p class="text-dark mb-3 text-center" style="font-size:1rem; min-height: 48px;">{{ $topic->description }}</p>
+                        @if($topic->date)
+                            <div class="text-muted small mb-2">{{ \Carbon\Carbon::parse($topic->date)->format('d M Y') }}</div>
+                        @endif
+                        @if($topic->file_url)
+                            <div class="text-center mt-auto">
+                                <a href="{{ route('topicdata.download', $topic->id) }}" class="btn btn-danger rounded-pill px-4" target="_blank">
+                                    <i class="fa fa-download me-1"></i> Download
+                                </a>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    </section>
+
     {{-- News Section --}}
     <section class="my-5 px-2 px-md-4 px-lg-5" data-aos="fade-up">
         <h2 class="fw-bold text-center mb-4" style="font-size:2rem;">Berita Terkini</h2>

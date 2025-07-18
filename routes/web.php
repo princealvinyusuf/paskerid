@@ -44,3 +44,6 @@ Route::get('/kebijakan-privasi', function () {
 Route::get('/ketentuan-pengguna', function () {
     return view('ketentuan_pengguna');
 })->name('ketentuan_pengguna');
+
+// Topic Data download route
+Route::get('/topic-data/download/{id}', [App\Http\Controllers\TopicDataController::class, 'download'])->name('topicdata.download');

@@ -15,6 +15,7 @@ use App\Models\HeroStatistic;
 use App\Models\JobCharacteristic;
 use App\Models\JobCharacteristic2;
 use App\Models\JobCharacteristic3;
+use App\Models\TopicData;
 
 class HomeController extends Controller
 {
@@ -55,6 +56,7 @@ class HomeController extends Controller
         $jobCharacteristics = JobCharacteristic::orderBy('order')->take(4)->get();
         $jobCharacteristics2 = JobCharacteristic2::orderBy('order')->take(4)->get();
         $jobCharacteristics3 = JobCharacteristic3::orderBy('order')->take(4)->get();
+        $topicData = TopicData::orderByDesc('date')->get();
 
         return view('home', compact(
             'statistics',
@@ -69,7 +71,8 @@ class HomeController extends Controller
             'testimonials',
             'jobCharacteristics',
             'jobCharacteristics2',
-            'jobCharacteristics3'
+            'jobCharacteristics3',
+            'topicData'
         ));
     }
 } 
