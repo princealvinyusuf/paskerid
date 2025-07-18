@@ -29,7 +29,7 @@
                 </button>
                 <div id="statScrollRow" class="d-flex px-7" style="scroll-behavior:smooth; gap:16px; width:100%; overflow-x:hidden;">
                     @foreach($statistics as $stat)
-                        <a href="{{ route('informasi.index', ['type' => 'statistik', 'search' => $stat->title]) }}" class="text-decoration-none">
+                        <a href="{{ route('informasi.index', ['type' => 'publikasi', 'search' => $stat->title]) }}" class="text-decoration-none">
                             <div class="card shadow-sm stat-card text-center flex-shrink-0" style="max-width:260px; min-width:180px; cursor:pointer;">
                                 <div class="card-body d-flex flex-column align-items-center justify-content-center">
                                     <div class="stat-icon mb-3">
