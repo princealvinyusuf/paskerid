@@ -373,7 +373,7 @@
         @endforeach
     </div>
     <div class="text-center mt-4">
-        <a href="#" class="btn btn-outline-success rounded-pill px-4 py-2">Lihat Semua</a>
+        <a href="{{ route('datasets.index') }}" class="btn btn-outline-success rounded-pill px-4 py-2">Lihat Semua</a>
     </div>
 </section>
 

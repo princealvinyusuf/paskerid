@@ -47,3 +47,5 @@ Route::get('/ketentuan-pengguna', function () {
 
 // Topic Data download route
 Route::get('/topic-data/download/{id}', [App\Http\Controllers\TopicDataController::class, 'download'])->name('topicdata.download');
+
+Route::get('/datasets', [App\Http\Controllers\DatasetController::class, 'index'])->name('datasets.index');
