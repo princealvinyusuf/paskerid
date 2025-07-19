@@ -332,10 +332,17 @@
             DATASET PASAR KERJA
         </h2>
     </div>
+    @php
+        $categoryBg = [
+            'Pencari Kerja' => 'dataset-bg-yellow',
+            'Pemberi Kerja' => 'dataset-bg-blue',
+            'Lowongan Kerja' => 'dataset-bg-green',
+        ];
+    @endphp
     <div class="row justify-content-center g-4">
         @foreach($datasets as $category => $cards)
             <div class="col-12 col-md-4">
-                <div class="mb-3 p-3 rounded shadow" style="background: #f8f9fa;">
+                <div class="mb-3 p-3 rounded shadow {{ $categoryBg[$category] ?? '' }}">
                     <h4 class="fw-bold mb-2" style="color: #187C19;">
                         <span class="text-danger">DATASET</span> {{ strtoupper($category) }}
                         @if($cards->first()->icon)
@@ -993,5 +1000,8 @@
         margin-top: -60px; /* Less overlap on mobile */
     }
 }
+.dataset-bg-yellow { background: #fffbe6; }
+.dataset-bg-blue   { background: #e6f0ff; }
+.dataset-bg-green  { background: #e6ffed; }
 </style>
 @endpush 
