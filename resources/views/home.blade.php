@@ -375,7 +375,6 @@
     <section class="my-5 px-2 px-md-4 px-lg-5" data-aos="fade-up">
         <div class="text-center mb-4">
             <h2 class="fw-bold" style="font-size:2.2rem;">Topik Data</h2>
-            <p class="text-muted mb-0">Kumpulan dokumen dan data penting yang dapat diunduh</p>
         </div>
         <div class="row justify-content-center g-4">
             @foreach($topicData as $topic)
