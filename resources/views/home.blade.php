@@ -301,7 +301,7 @@
         <div class="row justify-content-center g-4">
             @foreach($services as $service)
                 <div class="col-12 col-md-6 col-lg-4 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
-                    <div class="card shadow rounded-4 border-0 p-4 w-100 h-100 mx-auto d-flex flex-column align-items-center justify-content-center text-center">
+                    <div class="card shadow rounded-4 border-0 p-2 w-100 h-100 mx-auto d-flex flex-column align-items-center justify-content-center text-center service-card-compact">
                         <div class="mb-4 d-flex align-items-center justify-content-center mx-auto">
                             <img src="{{ asset('images/services/' . $service->logo) }}" alt="{{ $service->title }} Logo" style="width: 260px; height: 260px; object-fit: contain;">
                         </div>
@@ -1002,5 +1002,11 @@
 .dataset-bg-yellow { background: #fffbe6; }
 .dataset-bg-blue   { background: #e6f0ff; }
 .dataset-bg-green  { background: #e6ffed; }
+.service-card-compact {
+    min-height: 260px;
+    max-height: 320px;
+    padding-top: 1.2rem !important;
+    padding-bottom: 1.2rem !important;
+}
 </style>
 @endpush 
