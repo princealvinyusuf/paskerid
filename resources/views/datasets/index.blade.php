@@ -20,7 +20,7 @@
             <div class="col-12 col-md-4">
                 <div class="mb-3 p-3 rounded shadow {{ $categoryBg[$category] ?? '' }}">
                     <h4 class="fw-bold mb-2" style="color: #187C19;">
-                        <span class="text-danger">DATASET</span> {{ strtoupper($category) }}
+                        <span class="text-danger">Dataset</span> {{ $category }}
                         @if($cards->first()->icon)
                             <i class="fa {{ $cards->first()->icon }} ms-2"></i>
                         @endif
