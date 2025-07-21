@@ -379,41 +379,43 @@
 
     {{-- Topik Data Section --}}
     <section class="my-5 px-2 px-md-4 px-lg-5" data-aos="fade-up">
-        <div class="text-center mb-4">
-            <h2 class="fw-bold" style="font-size:2.2rem;">Topik Data</h2>
-        </div>
-        <div class="row justify-content-center g-4">
-            @foreach($topicData as $topic)
-                <div class="col-12 col-md-6 col-lg-4 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
-                    <a href="{{ route('topicdata.download', $topic->id) }}" class="text-decoration-none w-100 h-100" target="_blank">
-                        <div class="card mb-3 shadow-sm rounded-4 px-4 py-3 d-flex flex-row align-items-center h-100 topik-card-bg" style="cursor:pointer; min-height:120px; transition:box-shadow 0.2s,transform 0.2s;">
-                            <div class="me-3 d-flex align-items-center justify-content-center flex-shrink-0" style="width:64px; height:64px;">
-                                @if($topic->image_url)
-                                    <img src="{{ asset($topic->image_url) }}" alt="{{ $topic->title }}" style="width:64px; height:64px; object-fit:contain;">
-                                @else
-                                    <span class="d-flex align-items-center justify-content-center" style="width:64px; height:64px;">
-                                        <i class="fa fa-file-pdf-o" style="font-size:2.5rem; color:#c00;"></i>
+        <div class="topik-data-bg-card p-4 p-md-5">
+            <div class="text-center mb-4">
+                <h2 class="fw-bold" style="font-size:2.2rem;">Topik Data</h2>
+            </div>
+            <div class="row justify-content-center g-4">
+                @foreach($topicData as $topic)
+                    <div class="col-12 col-md-6 col-lg-4 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
+                        <a href="{{ route('topicdata.download', $topic->id) }}" class="text-decoration-none w-100 h-100" target="_blank">
+                            <div class="card mb-3 shadow-sm rounded-4 px-4 py-3 d-flex flex-row align-items-center h-100" style="cursor:pointer; min-height:120px; transition:box-shadow 0.2s,transform 0.2s;">
+                                <div class="me-3 d-flex align-items-center justify-content-center flex-shrink-0" style="width:64px; height:64px;">
+                                    @if($topic->image_url)
+                                        <img src="{{ asset($topic->image_url) }}" alt="{{ $topic->title }}" style="width:64px; height:64px; object-fit:contain;">
+                                    @else
+                                        <span class="d-flex align-items-center justify-content-center" style="width:64px; height:64px;">
+                                            <i class="fa fa-file-pdf-o" style="font-size:2.5rem; color:#c00;"></i>
+                                        </span>
+                                    @endif
+                                </div>
+                                <div class="flex-grow-1 d-flex flex-column justify-content-center">
+                                    <div class="fw-bold text-dark mb-1" style="font-size:1.1rem;">{{ $topic->title }}</div>
+                                    @if($topic->description)
+                                        <div class="text-muted small mb-1">{{ $topic->description }}</div>
+                                    @endif
+                                    @if($topic->date)
+                                        <div class="text-muted small">{{ \Carbon\Carbon::parse($topic->date)->format('d M Y') }}</div>
+                                    @endif
+                                </div>
+                                <div class="ms-auto d-flex align-items-center">
+                                    <span class="btn btn-danger rounded-pill px-3 py-2 fw-bold d-flex align-items-center" style="font-size:1rem; pointer-events:none;">
+                                        <i class="fa fa-download me-2"></i> Download
                                     </span>
-                                @endif
+                                </div>
                             </div>
-                            <div class="flex-grow-1 d-flex flex-column justify-content-center">
-                                <div class="fw-bold text-dark mb-1" style="font-size:1.1rem;">{{ $topic->title }}</div>
-                                @if($topic->description)
-                                    <div class="text-muted small mb-1">{{ $topic->description }}</div>
-                                @endif
-                                @if($topic->date)
-                                    <div class="text-muted small">{{ \Carbon\Carbon::parse($topic->date)->format('d M Y') }}</div>
-                                @endif
-                            </div>
-                            <div class="ms-auto d-flex align-items-center">
-                                <span class="btn btn-danger rounded-pill px-3 py-2 fw-bold d-flex align-items-center" style="font-size:1rem; pointer-events:none;">
-                                    <i class="fa fa-download me-2"></i> Download
-                                </span>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-            @endforeach
+                        </a>
+                    </div>
+                @endforeach
+            </div>
         </div>
     </section>
 
@@ -1072,10 +1074,19 @@
         max-height: 65px;
     }
 }
-.topik-card-bg {
-    background: #e6ffed; /* Soft green, matches your theme */
-    border: none;
-    box-shadow: 0 4px 16px 0 rgba(40,167,69,0.10);
+.topik-data-bg-card {
+    background: #fff;
+    border-radius: 2rem;
+    box-shadow: 0 8px 32px 0 rgba(76,203,143,0.10);
+    padding: 2rem 1.5rem;
+    margin: 0 auto;
+    max-width: 1200px;
+}
+@media (max-width: 767px) {
+    .topik-data-bg-card {
+        padding: 1rem 0.5rem;
+        border-radius: 1rem;
+    }
 }
 </style>
 @endpush 
