@@ -21,37 +21,35 @@
 
     {{-- Statistic Cards Carousel (Floating over Banner) --}}
     <section class="stat-carousel-section position-relative mt-5" style="z-index: 10; margin-top: -90px;">
-        <div class="section-green-card">
-            <div class="container position-relative" style="max-width:1200px;">
-                <h3 class="text-center mb-4">Highlight Pasar Kerja</h3>
-                <div class="d-flex align-items-center position-relative">
-                    <button id="statScrollPrev" class="btn btn-light shadow rounded-circle position-absolute start-0 translate-middle-y" style="top:50%; z-index:2; width:40px; height:40px;">
-                        <i class="fa fa-chevron-left"></i>
-                    </button>
-                    <div id="statScrollRow" class="d-flex px-7" style="scroll-behavior:smooth; gap:16px; width:100%; overflow-x:hidden;">
-                        @foreach($statistics as $stat)
-                            <a href="{{ route('informasi.index', ['type' => 'publikasi', 'search' => $stat->title]) }}" class="text-decoration-none">
-                                <div class="card shadow-sm stat-card text-center flex-shrink-0" style="max-width:260px; min-width:180px; cursor:pointer;">
-                                    <div class="card-body d-flex flex-column align-items-center justify-content-center">
-                                        <div class="stat-icon mb-3">
-                                            <i class="fa fa-chart-bar fa-2x text-success"></i>
-                                        </div>
-                                        <div class="stat-title fw-bold mb-1" style="font-size:1.1rem; color:#187C19;">{{ $stat->title }}</div>
-                                        <div class="stat-value fw-bold mb-1" style="font-size:2.2rem; color:#222;">{{ $stat->value }} <span class="stat-unit" style="font-size:1.2rem;">{{ $stat->unit }}</span></div>
-                                        @if($stat->description)
-                                            <div class="stat-desc text-muted mt-1" style="font-size:0.95rem;">{{ $stat->description }}</div>
-                                        @endif
+        <div class="container position-relative" style="max-width:1200px;">
+            <h3 class="text-center mb-4">Highlight Pasar Kerja</h3>
+            <div class="d-flex align-items-center position-relative">
+                <button id="statScrollPrev" class="btn btn-light shadow rounded-circle position-absolute start-0 translate-middle-y" style="top:50%; z-index:2; width:40px; height:40px;">
+                    <i class="fa fa-chevron-left"></i>
+                </button>
+                <div id="statScrollRow" class="d-flex px-7" style="scroll-behavior:smooth; gap:16px; width:100%; overflow-x:hidden;">
+                    @foreach($statistics as $stat)
+                        <a href="{{ route('informasi.index', ['type' => 'publikasi', 'search' => $stat->title]) }}" class="text-decoration-none">
+                            <div class="card shadow-sm stat-card text-center flex-shrink-0" style="max-width:260px; min-width:180px; cursor:pointer;">
+                                <div class="card-body d-flex flex-column align-items-center justify-content-center">
+                                    <div class="stat-icon mb-3">
+                                        <i class="fa fa-chart-bar fa-2x text-success"></i>
                                     </div>
+                                    <div class="stat-title fw-bold mb-1" style="font-size:1.1rem; color:#187C19;">{{ $stat->title }}</div>
+                                    <div class="stat-value fw-bold mb-1" style="font-size:2.2rem; color:#222;">{{ $stat->value }} <span class="stat-unit" style="font-size:1.2rem;">{{ $stat->unit }}</span></div>
+                                    @if($stat->description)
+                                        <div class="stat-desc text-muted mt-1" style="font-size:0.95rem;">{{ $stat->description }}</div>
+                                    @endif
                                 </div>
-                            </a>
-                        @endforeach
-                    </div>
-                    <button id="statScrollNext" class="btn btn-light shadow rounded-circle position-absolute end-0 translate-middle-y" style="top:50%; z-index:2; width:40px; height:40px;">
-                        <i class="fa fa-chevron-right"></i>
-                    </button>
+                            </div>
+                        </a>
+                    @endforeach
                 </div>
-                <div class="d-flex justify-content-center mt-3" id="statDots"></div>
+                <button id="statScrollNext" class="btn btn-light shadow rounded-circle position-absolute end-0 translate-middle-y" style="top:50%; z-index:2; width:40px; height:40px;">
+                    <i class="fa fa-chevron-right"></i>
+                </button>
             </div>
+            <div class="d-flex justify-content-center mt-3" id="statDots"></div>
         </div>
     </section>
 
@@ -477,44 +475,46 @@
         $testimonialChunks = $testimonials->chunk(4);
     @endphp
     <section class="my-5 pb-5 px-2 px-md-4 px-lg-5" data-aos="fade-up">
-        <h3 class="fw-bold text-center mb-4" style="font-size:2rem;">Testimoni</h3>
-        <div id="testiCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="7000">
-            <div class="carousel-inner">
-                @foreach($testimonialChunks as $chunkIndex => $chunk)
-                    <div class="carousel-item @if($chunkIndex === 0) active @endif" data-aos="fade-up" data-aos-delay="{{ $chunkIndex * 100 }}">
-                        <div class="row justify-content-center g-4">
-                            @foreach($chunk as $testi)
-                                <div class="col-12 col-md-6 col-lg-3 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
-                                    <div class="card h-100 shadow-sm border-0 rounded-4 p-3 text-center">
-                                        @if($testi->photo_url)
-                                            <img src="{{ $testi->photo_url }}" class="rounded-circle mx-auto mb-3" style="width:64px; height:64px; object-fit:cover;" alt="{{ $testi->name }}">
-                                        @endif
-                                        <blockquote class="blockquote mb-2" style="font-size:1rem;">
-                                            <p class="mb-0">"{{ $testi->quote }}"</p>
-                                        </blockquote>
-                                        <footer class="blockquote-footer mt-2">
-                                            <span class="fw-bold">{{ $testi->name }}</span><br>
-                                            <span class="text-muted small">{{ $testi->position }} @ {{ $testi->company }}</span>
-                                        </footer>
+        <div class="section-green-card">
+            <h3 class="fw-bold text-center mb-4" style="font-size:2rem;">Testimoni</h3>
+            <div id="testiCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="7000">
+                <div class="carousel-inner">
+                    @foreach($testimonialChunks as $chunkIndex => $chunk)
+                        <div class="carousel-item @if($chunkIndex === 0) active @endif" data-aos="fade-up" data-aos-delay="{{ $chunkIndex * 100 }}">
+                            <div class="row justify-content-center g-4">
+                                @foreach($chunk as $testi)
+                                    <div class="col-12 col-md-6 col-lg-3 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
+                                        <div class="card h-100 shadow-sm border-0 rounded-4 p-3 text-center">
+                                            @if($testi->photo_url)
+                                                <img src="{{ $testi->photo_url }}" class="rounded-circle mx-auto mb-3" style="width:64px; height:64px; object-fit:cover;" alt="{{ $testi->name }}">
+                                            @endif
+                                            <blockquote class="blockquote mb-2" style="font-size:1rem;">
+                                                <p class="mb-0">"{{ $testi->quote }}"</p>
+                                            </blockquote>
+                                            <footer class="blockquote-footer mt-2">
+                                                <span class="fw-bold">{{ $testi->name }}</span><br>
+                                                <span class="text-muted small">{{ $testi->position }} @ {{ $testi->company }}</span>
+                                            </footer>
+                                        </div>
                                     </div>
-                                </div>
-                            @endforeach
+                                @endforeach
+                            </div>
                         </div>
-                    </div>
-                @endforeach
-            </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#testiCarousel" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#testiCarousel" data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
-            </button>
-            <div class="carousel-indicators mt-3">
-                @foreach($testimonialChunks as $chunkIndex => $chunk)
-                    <button type="button" data-bs-target="#testiCarousel" data-bs-slide-to="{{ $chunkIndex }}" @if($chunkIndex === 0) class="active" aria-current="true" @endif aria-label="Slide {{ $chunkIndex+1 }}"></button>
-                @endforeach
+                    @endforeach
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#testiCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#testiCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+                <div class="carousel-indicators mt-3">
+                    @foreach($testimonialChunks as $chunkIndex => $chunk)
+                        <button type="button" data-bs-target="#testiCarousel" data-bs-slide-to="{{ $chunkIndex }}" @if($chunkIndex === 0) class="active" aria-current="true" @endif aria-label="Slide {{ $chunkIndex+1 }}"></button>
+                    @endforeach
+                </div>
             </div>
         </div>
     </section>
