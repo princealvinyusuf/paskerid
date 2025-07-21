@@ -379,10 +379,10 @@
 
     {{-- Topik Data Section --}}
     <section class="my-5 px-2 px-md-4 px-lg-5" data-aos="fade-up">
-        <div class="text-center mb-4">
-            <h2 class="fw-bold" style="font-size:2.2rem;">Topik Data</h2>
-        </div>
         <div class="section-green-card">
+            <div class="text-center mb-4">
+                <h2 class="fw-bold" style="font-size:2.2rem;">Topik Data</h2>
+            </div>
             <div class="row justify-content-center g-4">
                 @foreach($topicData as $topic)
                     <div class="col-12 col-md-6 col-lg-4 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
