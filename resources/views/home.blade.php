@@ -1041,35 +1041,35 @@
 }
 .service-logo-container {
     width: 100%;
-    min-height: 120px;
-    height: 140px;
+    min-height: 100px;
+    height: 110px;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 .service-logo-img {
-    max-width: 80%;
-    max-height: 120px;
+    max-width: 70%;
+    max-height: 90px;
     width: auto;
     height: auto;
     object-fit: contain;
 }
 @media (max-width: 991px) {
     .service-logo-container {
-        min-height: 90px;
-        height: 100px;
+        min-height: 80px;
+        height: 90px;
     }
     .service-logo-img {
-        max-height: 90px;
+        max-height: 70px;
     }
 }
 @media (max-width: 767px) {
     .service-logo-container {
-        min-height: 60px;
-        height: 70px;
+        min-height: 70px;
+        height: 80px;
     }
     .service-logo-img {
-        max-height: 60px;
+        max-height: 65px;
     }
 }
 </style>
