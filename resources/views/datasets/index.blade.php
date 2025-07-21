@@ -4,7 +4,7 @@
 <div class="container my-5">
     <div class="text-center mb-4">
         <h2 class="fw-bold" style="font-size:2.2rem;">
-            <i class="fa fa-database text-primary"></i>
+            <i class="text-primary"></i>
             Dataset Pasar Kerja
         </h2>
     </div>
