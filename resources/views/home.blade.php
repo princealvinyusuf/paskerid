@@ -295,33 +295,31 @@
 
     {{-- Services Section --}}
     <section class="my-5 px-2 px-md-4 px-lg-5" data-aos="fade-up">
-        <div class="section-green-card">
-            <div class="text-center mb-4">
-                <h2 class="fw-bold" style="font-size:2.2rem;">Layanan Pasar Kerja</h2>
-            </div>
-            <div class="row justify-content-center g-4">
-                @foreach($services as $service)
-                    <div class="col-12 col-md-6 col-lg-4 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
-                        <div class="card service-card-compact shadow rounded-4 border-0 p-3 w-100 h-100 mx-auto d-flex flex-column align-items-center justify-content-center text-center">
-                            <div class="mb-3 d-flex align-items-center justify-content-center mx-auto service-logo-container">
-                                <img src="{{ asset('images/services/' . $service->logo) }}" alt="{{ $service->title }} Logo" class="service-logo-img">
-                            </div>
-                            <h5 class="fw-bold mb-2 text-dark text-center">{{ $service->title }}</h5>
-                            <p class="text-dark mb-3 text-center" style="font-size:1rem;">{{ $service->description }}</p>
-                            @if($service->link)
-                                <div class="text-center mt-auto">
-                                    <a href="{{ $service->link }}" target="_blank" class="btn btn-success rounded-pill px-4">Kunjungi <i class="fa fa-arrow-right ms-1"></i></a>
-                                </div>
-                            @endif
+        <div class="text-center mb-4">
+            <h2 class="fw-bold" style="font-size:2.2rem;">Layanan Pasar Kerja</h2>
+        </div>
+        <div class="row justify-content-center g-4">
+            @foreach($services as $service)
+                <div class="col-12 col-md-6 col-lg-4 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
+                    <div class="card service-card-compact shadow rounded-4 border-0 p-3 w-100 h-100 mx-auto d-flex flex-column align-items-center justify-content-center text-center">
+                        <div class="mb-3 d-flex align-items-center justify-content-center mx-auto service-logo-container">
+                            <img src="{{ asset('images/services/' . $service->logo) }}" alt="{{ $service->title }} Logo" class="service-logo-img">
                         </div>
+                        <h5 class="fw-bold mb-2 text-dark text-center">{{ $service->title }}</h5>
+                        <p class="text-dark mb-3 text-center" style="font-size:1rem;">{{ $service->description }}</p>
+                        @if($service->link)
+                            <div class="text-center mt-auto">
+                                <a href="{{ $service->link }}" target="_blank" class="btn btn-success rounded-pill px-4">Kunjungi <i class="fa fa-arrow-right ms-1"></i></a>
+                            </div>
+                        @endif
                     </div>
-                @endforeach
-            </div>
-            <div class="text-center mt-4">
-                <a href="{{ route('virtual-karir.index') }}" class="btn btn-outline-success rounded-pill px-4 py-2">
-                    Lihat Layanan Lainnya <i class="fa fa-arrow-right"></i>
-                </a>
-            </div>
+                </div>
+            @endforeach
+        </div>
+        <div class="text-center mt-4">
+            <a href="{{ route('virtual-karir.index') }}" class="btn btn-outline-success rounded-pill px-4 py-2">
+                Lihat Layanan Lainnya <i class="fa fa-arrow-right"></i>
+            </a>
         </div>
     </section>
 
@@ -381,43 +379,41 @@
 
     {{-- Topik Data Section --}}
     <section class="my-5 px-2 px-md-4 px-lg-5" data-aos="fade-up">
-        <div class="section-green-card">
-            <div class="text-center mb-4">
-                <h2 class="fw-bold" style="font-size:2.2rem;">Topik Data</h2>
-            </div>
-            <div class="row justify-content-center g-4">
-                @foreach($topicData as $topic)
-                    <div class="col-12 col-md-6 col-lg-4 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
-                        <a href="{{ route('topicdata.download', $topic->id) }}" class="text-decoration-none w-100 h-100" target="_blank">
-                            <div class="card mb-3 shadow-sm rounded-4 px-4 py-3 d-flex flex-row align-items-center h-100" style="cursor:pointer; min-height:120px; transition:box-shadow 0.2s,transform 0.2s;">
-                                <div class="me-3 d-flex align-items-center justify-content-center flex-shrink-0" style="width:64px; height:64px;">
-                                    @if($topic->image_url)
-                                        <img src="{{ asset($topic->image_url) }}" alt="{{ $topic->title }}" style="width:64px; height:64px; object-fit:contain;">
-                                    @else
-                                        <span class="d-flex align-items-center justify-content-center" style="width:64px; height:64px;">
-                                            <i class="fa fa-file-pdf-o" style="font-size:2.5rem; color:#c00;"></i>
-                                        </span>
-                                    @endif
-                                </div>
-                                <div class="flex-grow-1 d-flex flex-column justify-content-center">
-                                    <div class="fw-bold text-dark mb-1" style="font-size:1.1rem;">{{ $topic->title }}</div>
-                                    @if($topic->description)
-                                        <div class="text-muted small mb-1">{{ $topic->description }}</div>
-                                    @endif
-                                    @if($topic->date)
-                                        <div class="text-muted small">{{ \Carbon\Carbon::parse($topic->date)->format('d M Y') }}</div>
-                                    @endif
-                                </div>
-                                <div class="ms-auto d-flex align-items-center">
-                                    <span class="btn btn-danger rounded-pill px-3 py-2 fw-bold d-flex align-items-center" style="font-size:1rem; pointer-events:none;">
-                                        <i class="fa fa-download me-2"></i> Download
+        <div class="text-center mb-4">
+            <h2 class="fw-bold" style="font-size:2.2rem;">Topik Data</h2>
+        </div>
+        <div class="row justify-content-center g-4">
+            @foreach($topicData as $topic)
+                <div class="col-12 col-md-6 col-lg-4 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
+                    <a href="{{ route('topicdata.download', $topic->id) }}" class="text-decoration-none w-100 h-100" target="_blank">
+                        <div class="card mb-3 shadow-sm rounded-4 px-4 py-3 d-flex flex-row align-items-center h-100" style="cursor:pointer; min-height:120px; transition:box-shadow 0.2s,transform 0.2s;">
+                            <div class="me-3 d-flex align-items-center justify-content-center flex-shrink-0" style="width:64px; height:64px;">
+                                @if($topic->image_url)
+                                    <img src="{{ asset($topic->image_url) }}" alt="{{ $topic->title }}" style="width:64px; height:64px; object-fit:contain;">
+                                @else
+                                    <span class="d-flex align-items-center justify-content-center" style="width:64px; height:64px;">
+                                        <i class="fa fa-file-pdf-o" style="font-size:2.5rem; color:#c00;"></i>
                                     </span>
-                                </div>
+                                @endif
                             </div>
-                        </a>
-                    </div>
-                @endforeach
-            </div>
+                            <div class="flex-grow-1 d-flex flex-column justify-content-center">
+                                <div class="fw-bold text-dark mb-1" style="font-size:1.1rem;">{{ $topic->title }}</div>
+                                @if($topic->description)
+                                    <div class="text-muted small mb-1">{{ $topic->description }}</div>
+                                @endif
+                                @if($topic->date)
+                                    <div class="text-muted small">{{ \Carbon\Carbon::parse($topic->date)->format('d M Y') }}</div>
+                                @endif
+                            </div>
+                            <div class="ms-auto d-flex align-items-center">
+                                <span class="btn btn-danger rounded-pill px-3 py-2 fw-bold d-flex align-items-center" style="font-size:1rem; pointer-events:none;">
+                                    <i class="fa fa-download me-2"></i> Download
+                                </span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            @endforeach
         </div>
     </section>
 
@@ -475,46 +471,44 @@
         $testimonialChunks = $testimonials->chunk(4);
     @endphp
     <section class="my-5 pb-5 px-2 px-md-4 px-lg-5" data-aos="fade-up">
-        <div class="section-green-card">
-            <h3 class="fw-bold text-center mb-4" style="font-size:2rem;">Testimoni</h3>
-            <div id="testiCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="7000">
-                <div class="carousel-inner">
-                    @foreach($testimonialChunks as $chunkIndex => $chunk)
-                        <div class="carousel-item @if($chunkIndex === 0) active @endif" data-aos="fade-up" data-aos-delay="{{ $chunkIndex * 100 }}">
-                            <div class="row justify-content-center g-4">
-                                @foreach($chunk as $testi)
-                                    <div class="col-12 col-md-6 col-lg-3 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
-                                        <div class="card h-100 shadow-sm border-0 rounded-4 p-3 text-center">
-                                            @if($testi->photo_url)
-                                                <img src="{{ $testi->photo_url }}" class="rounded-circle mx-auto mb-3" style="width:64px; height:64px; object-fit:cover;" alt="{{ $testi->name }}">
-                                            @endif
-                                            <blockquote class="blockquote mb-2" style="font-size:1rem;">
-                                                <p class="mb-0">"{{ $testi->quote }}"</p>
-                                            </blockquote>
-                                            <footer class="blockquote-footer mt-2">
-                                                <span class="fw-bold">{{ $testi->name }}</span><br>
-                                                <span class="text-muted small">{{ $testi->position }} @ {{ $testi->company }}</span>
-                                            </footer>
-                                        </div>
+        <h3 class="fw-bold text-center mb-4" style="font-size:2rem;">Testimoni</h3>
+        <div id="testiCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="7000">
+            <div class="carousel-inner">
+                @foreach($testimonialChunks as $chunkIndex => $chunk)
+                    <div class="carousel-item @if($chunkIndex === 0) active @endif" data-aos="fade-up" data-aos-delay="{{ $chunkIndex * 100 }}">
+                        <div class="row justify-content-center g-4">
+                            @foreach($chunk as $testi)
+                                <div class="col-12 col-md-6 col-lg-3 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
+                                    <div class="card h-100 shadow-sm border-0 rounded-4 p-3 text-center">
+                                        @if($testi->photo_url)
+                                            <img src="{{ $testi->photo_url }}" class="rounded-circle mx-auto mb-3" style="width:64px; height:64px; object-fit:cover;" alt="{{ $testi->name }}">
+                                        @endif
+                                        <blockquote class="blockquote mb-2" style="font-size:1rem;">
+                                            <p class="mb-0">"{{ $testi->quote }}"</p>
+                                        </blockquote>
+                                        <footer class="blockquote-footer mt-2">
+                                            <span class="fw-bold">{{ $testi->name }}</span><br>
+                                            <span class="text-muted small">{{ $testi->position }} @ {{ $testi->company }}</span>
+                                        </footer>
                                     </div>
-                                @endforeach
-                            </div>
+                                </div>
+                            @endforeach
                         </div>
-                    @endforeach
-                </div>
-                <button class="carousel-control-prev" type="button" data-bs-target="#testiCarousel" data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Previous</span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#testiCarousel" data-bs-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Next</span>
-                </button>
-                <div class="carousel-indicators mt-3">
-                    @foreach($testimonialChunks as $chunkIndex => $chunk)
-                        <button type="button" data-bs-target="#testiCarousel" data-bs-slide-to="{{ $chunkIndex }}" @if($chunkIndex === 0) class="active" aria-current="true" @endif aria-label="Slide {{ $chunkIndex+1 }}"></button>
-                    @endforeach
-                </div>
+                    </div>
+                @endforeach
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#testiCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#testiCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+            <div class="carousel-indicators mt-3">
+                @foreach($testimonialChunks as $chunkIndex => $chunk)
+                    <button type="button" data-bs-target="#testiCarousel" data-bs-slide-to="{{ $chunkIndex }}" @if($chunkIndex === 0) class="active" aria-current="true" @endif aria-label="Slide {{ $chunkIndex+1 }}"></button>
+                @endforeach
             </div>
         </div>
     </section>
@@ -1077,29 +1071,6 @@
     .service-logo-img {
         max-height: 65px;
     }
-}
-.section-green-card {
-    background: rgba(255, 255, 255, 0.13); /* very transparent white */
-    border-radius: 24px;
-    padding: 40px 32px 32px 32px;
-    box-shadow: 0 2px 16px rgba(0,0,0,0.08);
-    color: #fff;
-    margin-bottom: 32px;
-    border: 2px solid rgba(255,255,255,0.45); /* brighter, more visible */
-    backdrop-filter: blur(24px); /* stronger blur */
-    -webkit-backdrop-filter: blur(24px);
-}
-.section-green-card h3 {
-    color: #111 !important;
-}
-.section-green-card p {
-    color: #fff;
-}
-.section-green-card:last-of-type {
-    margin-bottom: 0 !important;
-}
-.section-green-card h2 {
-    color: #111 !important;
 }
 </style>
 @endpush 
