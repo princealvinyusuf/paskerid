@@ -21,35 +21,37 @@
 
     {{-- Statistic Cards Carousel (Floating over Banner) --}}
     <section class="stat-carousel-section position-relative mt-5" style="z-index: 10; margin-top: -90px;">
-        <div class="container position-relative" style="max-width:1200px;">
-            <h3 class="text-center mb-4">Highlight Pasar Kerja</h3>
-            <div class="d-flex align-items-center position-relative">
-                <button id="statScrollPrev" class="btn btn-light shadow rounded-circle position-absolute start-0 translate-middle-y" style="top:50%; z-index:2; width:40px; height:40px;">
-                    <i class="fa fa-chevron-left"></i>
-                </button>
-                <div id="statScrollRow" class="d-flex px-7" style="scroll-behavior:smooth; gap:16px; width:100%; overflow-x:hidden;">
-                    @foreach($statistics as $stat)
-                        <a href="{{ route('informasi.index', ['type' => 'publikasi', 'search' => $stat->title]) }}" class="text-decoration-none">
-                            <div class="card shadow-sm stat-card text-center flex-shrink-0" style="max-width:260px; min-width:180px; cursor:pointer;">
-                                <div class="card-body d-flex flex-column align-items-center justify-content-center">
-                                    <div class="stat-icon mb-3">
-                                        <i class="fa fa-chart-bar fa-2x text-success"></i>
+        <div class="section-green-card">
+            <div class="container position-relative" style="max-width:1200px;">
+                <h3 class="text-center mb-4">Highlight Pasar Kerja</h3>
+                <div class="d-flex align-items-center position-relative">
+                    <button id="statScrollPrev" class="btn btn-light shadow rounded-circle position-absolute start-0 translate-middle-y" style="top:50%; z-index:2; width:40px; height:40px;">
+                        <i class="fa fa-chevron-left"></i>
+                    </button>
+                    <div id="statScrollRow" class="d-flex px-7" style="scroll-behavior:smooth; gap:16px; width:100%; overflow-x:hidden;">
+                        @foreach($statistics as $stat)
+                            <a href="{{ route('informasi.index', ['type' => 'publikasi', 'search' => $stat->title]) }}" class="text-decoration-none">
+                                <div class="card shadow-sm stat-card text-center flex-shrink-0" style="max-width:260px; min-width:180px; cursor:pointer;">
+                                    <div class="card-body d-flex flex-column align-items-center justify-content-center">
+                                        <div class="stat-icon mb-3">
+                                            <i class="fa fa-chart-bar fa-2x text-success"></i>
+                                        </div>
+                                        <div class="stat-title fw-bold mb-1" style="font-size:1.1rem; color:#187C19;">{{ $stat->title }}</div>
+                                        <div class="stat-value fw-bold mb-1" style="font-size:2.2rem; color:#222;">{{ $stat->value }} <span class="stat-unit" style="font-size:1.2rem;">{{ $stat->unit }}</span></div>
+                                        @if($stat->description)
+                                            <div class="stat-desc text-muted mt-1" style="font-size:0.95rem;">{{ $stat->description }}</div>
+                                        @endif
                                     </div>
-                                    <div class="stat-title fw-bold mb-1" style="font-size:1.1rem; color:#187C19;">{{ $stat->title }}</div>
-                                    <div class="stat-value fw-bold mb-1" style="font-size:2.2rem; color:#222;">{{ $stat->value }} <span class="stat-unit" style="font-size:1.2rem;">{{ $stat->unit }}</span></div>
-                                    @if($stat->description)
-                                        <div class="stat-desc text-muted mt-1" style="font-size:0.95rem;">{{ $stat->description }}</div>
-                                    @endif
                                 </div>
-                            </div>
-                        </a>
-                    @endforeach
+                            </a>
+                        @endforeach
+                    </div>
+                    <button id="statScrollNext" class="btn btn-light shadow rounded-circle position-absolute end-0 translate-middle-y" style="top:50%; z-index:2; width:40px; height:40px;">
+                        <i class="fa fa-chevron-right"></i>
+                    </button>
                 </div>
-                <button id="statScrollNext" class="btn btn-light shadow rounded-circle position-absolute end-0 translate-middle-y" style="top:50%; z-index:2; width:40px; height:40px;">
-                    <i class="fa fa-chevron-right"></i>
-                </button>
+                <div class="d-flex justify-content-center mt-3" id="statDots"></div>
             </div>
-            <div class="d-flex justify-content-center mt-3" id="statDots"></div>
         </div>
     </section>
 
