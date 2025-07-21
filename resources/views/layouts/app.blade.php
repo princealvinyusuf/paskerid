@@ -47,8 +47,8 @@
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="layananDropdown">
                             <li><a class="dropdown-item @if(request()->routeIs('virtual-karir.index')) active fw-bold @endif" href="{{ route('virtual-karir.index') }}">Virtual Karir</a></li>
-                            <li><a class="dropdown-item @if(request()->routeIs('mitra_kerja.index')) active fw-bold @endif" href="{{ route('mitra_kerja.index') }}">Informasi Mitra Kerja</a></li>
-                            <li><a class="dropdown-item @if(request()->routeIs('informasi.index')) active fw-bold @endif" href="{{ route('informasi.index') }}">Data</a></li>
+                            <!-- <li><a class="dropdown-item @if(request()->routeIs('mitra_kerja.index')) active fw-bold @endif" href="{{ route('mitra_kerja.index') }}">Informasi Mitra Kerja</a></li> -->
+                            <!-- <li><a class="dropdown-item @if(request()->routeIs('informasi.index')) active fw-bold @endif" href="{{ route('informasi.index') }}">Data</a></li> -->
                             <li><a class="dropdown-item" href="https://microlearning-paskerid.kemnaker.go.id/" target="_blank">Microlearning</a></li>
                         </ul>
                     </li>
@@ -108,13 +108,14 @@
                     <div class="col-6 col-md-3 mb-3 mb-md-0">
                         <div class="fw-bold mb-2">Layanan</div>
                         <div><a href="{{ route('virtual-karir.index') }}" class="text-white text-decoration-none">Virtual Karir</a></div>
-                        <div><a href="{{ route('mitra_kerja.index') }}" class="text-white text-decoration-none">Informasi Mitra Kerja</a></div>
-                        <div><a href="{{ route('informasi.index') }}" class="text-white text-decoration-none">Data</a></div>
+                        
+                        <!-- <div><a href="{{ route('informasi.index') }}" class="text-white text-decoration-none">Data</a></div> -->
                         <div><a href="https://microlearning-paskerid.kemnaker.go.id/" target="_blank" class="text-white text-decoration-none">Microlearning</a></div>
                     </div>
                     <div class="col-6 col-md-3 mb-3 mb-md-0">
                         <div class="fw-bold mb-2">Tentang Kami</div>
                         <div><a href="{{ route('about') }}" class="text-white text-decoration-none">Pasker ID</a></div>
+                        <div><a href="{{ route('mitra_kerja.index') }}" class="text-white text-decoration-none">Informasi Mitra Kerja</a></div>
                         <div><a href="{{ route('kebijakan_privasi') }}" class="text-white text-decoration-none">Kebijakan Privasi</a></div>
                         <div><a href="{{ route('ketentuan_pengguna') }}" class="text-white text-decoration-none">Ketentuan Pengguna</a></div>
                     </div>
