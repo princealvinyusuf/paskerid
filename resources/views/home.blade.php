@@ -379,7 +379,7 @@
 
     {{-- Topik Data Section --}}
     <section class="my-5 px-2 px-md-4 px-lg-5" data-aos="fade-up">
-        <div class="topik-data-bg-card p-4 p-md-5">
+        <div class="topik-data-bg-card">
             <div class="text-center mb-4">
                 <h2 class="fw-bold" style="font-size:2.2rem;">Topik Data</h2>
             </div>
@@ -1077,15 +1077,15 @@
 .topik-data-bg-card {
     background: #fff;
     border-radius: 2rem;
-    box-shadow: 0 8px 32px 0 rgba(76,203,143,0.10);
-    padding: 2rem 1.5rem;
+    box-shadow: 0 8px 32px 0 rgba(40,167,69,0.10);
+    padding: 2.5rem 2rem;
     margin: 0 auto;
-    max-width: 1200px;
+    max-width: 1400px;
 }
 @media (max-width: 767px) {
     .topik-data-bg-card {
-        padding: 1rem 0.5rem;
-        border-radius: 1rem;
+        padding: 1.2rem 0.5rem;
+        border-radius: 1.2rem;
     }
 }
 </style>
