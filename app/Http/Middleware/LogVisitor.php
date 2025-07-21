@@ -10,7 +10,7 @@ class LogVisitor
 {
     public function handle(Request $request, Closure $next)
     {
-        dd('LogVisitor middleware hit');
+        //dd('LogVisitor middleware hit');
         if (!app()->runningInConsole() && !app()->runningUnitTests()) {
             Visitor::create([
                 'ip_address' => $request->ip(),
