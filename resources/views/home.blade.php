@@ -301,9 +301,9 @@
         <div class="row justify-content-center g-4">
             @foreach($services as $service)
                 <div class="col-12 col-md-6 col-lg-4 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
-                    <div class="card shadow rounded-4 border-0 p-2 w-100 h-100 mx-auto d-flex flex-column align-items-center justify-content-center text-center service-card-compact">
-                        <div class="mb-4 d-flex align-items-center justify-content-center mx-auto">
-                            <img src="{{ asset('images/services/' . $service->logo) }}" alt="{{ $service->title }} Logo" style="width: 260px; height: 260px; object-fit: contain;">
+                    <div class="card service-card-compact shadow rounded-4 border-0 p-3 w-100 h-100 mx-auto d-flex flex-column align-items-center justify-content-center text-center">
+                        <div class="mb-3 d-flex align-items-center justify-content-center mx-auto">
+                            <img src="{{ asset('images/services/' . $service->logo) }}" alt="{{ $service->title }} Logo" style="width: 110px; height: 110px; object-fit: contain;">
                         </div>
                         <h5 class="fw-bold mb-2 text-dark text-center">{{ $service->title }}</h5>
                         <p class="text-dark mb-3 text-center" style="font-size:1rem;">{{ $service->description }}</p>
@@ -1003,10 +1003,41 @@
 .dataset-bg-blue   { background: #e6f0ff; }
 .dataset-bg-green  { background: #e6ffed; }
 .service-card-compact {
+    border-radius: 1.5rem;
+    background: #fff;
+    box-shadow: 0 8px 32px 0 rgba(40,167,69,0.13), 0 1.5px 6px 0 rgba(0,0,0,0.04);
+    transition: box-shadow 0.2s, transform 0.2s;
     min-height: 260px;
-    max-height: 320px;
-    padding-top: 1.2rem !important;
-    padding-bottom: 1.2rem !important;
+    max-height: 340px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    border: none;
+    padding: 1.5rem 1rem;
+}
+.service-card-compact:hover {
+    box-shadow: 0 16px 48px 0 rgba(40,167,69,0.22), 0 3px 12px 0 rgba(0,0,0,0.08);
+    transform: translateY(-6px) scale(1.03);
+    z-index: 2;
+}
+@media (max-width: 991px) {
+    .service-card-compact {
+        min-height: 200px;
+        max-height: 280px;
+        padding: 1rem 0.5rem;
+    }
+}
+@media (max-width: 767px) {
+    .service-card-compact {
+        min-height: 140px;
+        max-height: 220px;
+        padding: 0.75rem 0.25rem;
+    }
+    .service-card-compact img {
+        width: 70px !important;
+        height: 70px !important;
+    }
 }
 </style>
 @endpush 
