@@ -1094,5 +1094,8 @@
 .section-green-card:last-of-type {
     margin-bottom: 0 !important;
 }
+.section-green-card h2 {
+    color: #111 !important;
+}
 </style>
 @endpush 
