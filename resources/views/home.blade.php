@@ -296,8 +296,7 @@
     {{-- Services Section --}}
     <section class="my-5 px-2 px-md-4 px-lg-5" data-aos="fade-up">
         <div class="text-center mb-4">
-            <h2 class="fw-bold" style="font-size:2.2rem;">Layanan Ketenagakerjaan</h2>
-            <p class="text-muted mb-0">Berbagai layanan untuk mendukung pasar kerja Indonesia</p>
+            <h2 class="fw-bold" style="font-size:2.2rem;">Layanan Pasar Kerja</h2>
         </div>
         <div class="row justify-content-center g-4">
             @foreach($services as $service)
