@@ -386,7 +386,7 @@
             @foreach($topicData as $topic)
                 <div class="col-12 col-md-6 col-lg-4 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
                     <a href="{{ route('topicdata.download', $topic->id) }}" class="text-decoration-none w-100 h-100" target="_blank">
-                        <div class="card mb-3 shadow-sm rounded-4 px-4 py-3 d-flex flex-row align-items-center h-100" style="cursor:pointer; min-height:120px; transition:box-shadow 0.2s,transform 0.2s;">
+                        <div class="card mb-3 shadow-sm rounded-4 px-4 py-3 d-flex flex-row align-items-center h-100 topik-card-bg" style="cursor:pointer; min-height:120px; transition:box-shadow 0.2s,transform 0.2s;">
                             <div class="me-3 d-flex align-items-center justify-content-center flex-shrink-0" style="width:64px; height:64px;">
                                 @if($topic->image_url)
                                     <img src="{{ asset($topic->image_url) }}" alt="{{ $topic->title }}" style="width:64px; height:64px; object-fit:contain;">
@@ -1071,6 +1071,11 @@
     .service-logo-img {
         max-height: 65px;
     }
+}
+.topik-card-bg {
+    background: #e6ffed; /* Soft green, matches your theme */
+    border: none;
+    box-shadow: 0 4px 16px 0 rgba(40,167,69,0.10);
 }
 </style>
 @endpush 
