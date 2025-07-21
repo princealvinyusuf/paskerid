@@ -328,8 +328,8 @@
     <section class="my-5 px-2 px-md-4 px-lg-5" data-aos="fade-up">
     <div class="text-center mb-4">
         <h2 class="fw-bold" style="font-size:2.2rem;">
-            <i class="fa fa-database text-primary"></i>
-            DATASET PASAR KERJA
+            <i class="text-primary"></i>
+            Dataset Pasar Kerja
         </h2>
     </div>
     @php
