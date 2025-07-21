@@ -540,6 +540,12 @@
                 @endforeach
             </div>
         </div>
+        <div class="text-center mt-4">
+            <span class="badge bg-success fs-5 p-3 rounded-pill">
+                <i class="fa fa-eye me-2"></i>
+                Total Kunjungan: {{ number_format($visitCount) }}
+            </span>
+        </div>
     </section>
 </div>
 @endsection
