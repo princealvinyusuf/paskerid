@@ -379,10 +379,10 @@
 
     {{-- Topik Data Section --}}
     <section class="my-5 px-2 px-md-4 px-lg-5" data-aos="fade-up">
-        <div class="topik-data-bg-card">
-            <div class="text-center mb-4">
-                <h2 class="fw-bold" style="font-size:2.2rem;">Topik Data</h2>
-            </div>
+        <div class="text-center mb-4">
+            <h2 class="fw-bold" style="font-size:2.2rem;">Topik Data</h2>
+        </div>
+        <div class="section-green-card">
             <div class="row justify-content-center g-4">
                 @foreach($topicData as $topic)
                     <div class="col-12 col-md-6 col-lg-4 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
@@ -1074,19 +1074,25 @@
         max-height: 65px;
     }
 }
-.topik-data-bg-card {
-    background: #fff;
-    border-radius: 2rem;
-    box-shadow: 0 8px 32px 0 rgba(40,167,69,0.10);
-    padding: 2.5rem 2rem;
-    margin: 0 auto;
-    max-width: 1400px;
+.section-green-card {
+    background: rgba(255, 255, 255, 0.13); /* very transparent white */
+    border-radius: 24px;
+    padding: 40px 32px 32px 32px;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+    color: #fff;
+    margin-bottom: 32px;
+    border: 2px solid rgba(255,255,255,0.45); /* brighter, more visible */
+    backdrop-filter: blur(24px); /* stronger blur */
+    -webkit-backdrop-filter: blur(24px);
 }
-@media (max-width: 767px) {
-    .topik-data-bg-card {
-        padding: 1.2rem 0.5rem;
-        border-radius: 1.2rem;
-    }
+.section-green-card h3 {
+    color: #111 !important;
+}
+.section-green-card p {
+    color: #fff;
+}
+.section-green-card:last-of-type {
+    margin-bottom: 0 !important;
 }
 </style>
 @endpush 
