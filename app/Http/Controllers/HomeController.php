@@ -17,6 +17,7 @@ use App\Models\JobCharacteristic2;
 use App\Models\JobCharacteristic3;
 use App\Models\TopicData;
 use App\Models\Dataset;
+use App\Models\HighlightStatistic;
 
 class HomeController extends Controller
 {
@@ -59,6 +60,7 @@ class HomeController extends Controller
         $jobCharacteristics3 = JobCharacteristic3::orderBy('order')->take(4)->get();
         $topicData = TopicData::orderByDesc('date')->get();
         $datasets = Dataset::orderBy('order')->get()->groupBy('category');
+        $highlightStatistics = HighlightStatistic::all();
 
         return view('home', compact(
             'statistics',
@@ -75,7 +77,8 @@ class HomeController extends Controller
             'jobCharacteristics2',
             'jobCharacteristics3',
             'topicData',
-            'datasets'
+            'datasets',
+            'highlightStatistics'
         ));
     }
 } 
