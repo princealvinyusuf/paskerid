@@ -19,11 +19,12 @@
         </div>
     </section>
 
-    {{-- Statistic Cards Carousel (Floating over Banner) --}}
-    <section class="stat-carousel-section position-relative mt-5" style="z-index: 10; margin-top: -90px;">
+    {{-- Highlight Pasar Kerja Section (Both Carousels) --}}
+    <section class="stat-carousel-section position-relative" style="z-index: 10;">
         <div class="container position-relative" style="max-width:1200px;">
             <h3 class="text-center mb-4">Highlight Pasar Kerja</h3>
-            <div class="d-flex align-items-center position-relative">
+            {{-- First Carousel --}}
+            <div class="d-flex align-items-center position-relative mb-4">
                 <button id="statScrollPrev" class="btn btn-light shadow rounded-circle position-absolute start-0 translate-middle-y" style="top:50%; z-index:2; width:40px; height:40px;">
                     <i class="fa fa-chevron-left"></i>
                 </button>
@@ -50,13 +51,7 @@
                 </button>
             </div>
             <div class="d-flex justify-content-center mt-3" id="statDots"></div>
-        </div>
-    </section>
-
-    {{-- Second Highlight Pasar Kerja Section --}}
-    <section class="stat-carousel-section position-relative mt-5" style="z-index: 10;">
-        <div class="container position-relative" style="max-width:1200px;">
-            <h3 class="text-center mb-4">Highlight Pasar Kerja (Tabel Baru)</h3>
+            {{-- Second Carousel --}}
             <div class="d-flex align-items-center position-relative">
                 <button id="highlightStatScrollPrev" class="btn btn-light shadow rounded-circle position-absolute start-0 translate-middle-y" style="top:50%; z-index:2; width:40px; height:40px;">
                     <i class="fa fa-chevron-left"></i>
