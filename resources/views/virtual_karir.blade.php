@@ -205,7 +205,7 @@
                                 <p class="card-text">{{ $service->description }}</p>
                             </div>
                             @if($service->link)
-                                <a href="{{ $service->link }}" class="vk-learn-more mt-auto" target="_blank" rel="noopener">Learn More</a>
+                                <a href="{{ $service->link }}" class="vk-learn-more mt-auto" target="_blank" rel="noopener">Kunjungi</a>
                             @endif
                         </div>
                     </div>
