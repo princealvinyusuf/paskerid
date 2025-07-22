@@ -329,7 +329,7 @@
         </div>
         <div class="row justify-content-center g-4">
             @foreach($services as $service)
-                <div class="col-12 col-md-6 col-lg-4 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
+                <div class="col-12 col-md-6 col-lg-3 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
                     <div class="card service-card-compact shadow rounded-4 border-0 p-3 w-100 h-100 mx-auto d-flex flex-column align-items-center justify-content-center text-center">
                         <div class="mb-3 d-flex align-items-center justify-content-center mx-auto service-logo-container">
                             <img src="{{ asset('images/services/' . $service->logo) }}" alt="{{ $service->title }} Logo" class="service-logo-img">
