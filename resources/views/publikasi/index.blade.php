@@ -11,7 +11,7 @@
                          class="d-flex flex-nowrap overflow-auto w-100"
                          style="gap:32px; scrollbar-width:thin; padding-bottom: 8px;">
                         @foreach($publikasi as $pub)
-                            <a href="{{ $pub->file_url ? asset($pub->file_url) : '#' }}" class="text-decoration-none" target="_blank">
+                            <a href="{{ route('informasi.index', ['type' => 'publikasi', 'subject' => $pub->title, 'search' => $pub->title]) }}" class="text-decoration-none">
                                 <div class="card shadow-sm stat-card text-center flex-shrink-0 position-relative overflow-hidden publikasi-card"
                                      style="max-width:340px; min-width:260px; cursor:pointer; padding:0; border:none; min-height:320px;">
                                     @if($pub->image_url)

@@ -34,6 +34,11 @@
                     header('Location: ?subject=' . urlencode($selectedSubject) . '&type=publikasi');
                     exit;
                 }
+                // Auto-show detail if coming from Publikasi page and only one result
+                if (request('type') === 'publikasi' && request('search') && $information->count() === 1) {
+                    $info = $information->first();
+                    $showInfo = $info;
+                }
             @endphp
             @if($hasStatistik || $hasPublikasi)
             <ul class="nav nav-tabs mb-4" id="infoTab" role="tablist">
