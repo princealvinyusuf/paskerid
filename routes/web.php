@@ -49,3 +49,7 @@ Route::get('/ketentuan-pengguna', function () {
 Route::get('/topic-data/download/{id}', [App\Http\Controllers\TopicDataController::class, 'download'])->name('topicdata.download');
 
 Route::get('/datasets', [App\Http\Controllers\DatasetController::class, 'index'])->name('datasets.index');
+
+Route::get('/media-sosial', function () {
+    return view('media_sosial');
+})->name('media_sosial');
