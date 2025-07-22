@@ -26,9 +26,10 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top shadow-sm">
         <div class="container">
-            <a class="navbar-brand logo-stack" href="/">
+            <a class="navbar-brand" href="/">
+                <img src="{{ asset('images/logo_kemnaker.png') }}" alt="Kemnaker Logo" style="height:40px; width:auto; margin-right:8px;">
                 <img src="{{ asset('images/logo.png') }}" alt="Paskerid Logo" style="height:40px; width:auto;">
-                <span class="fw-bold mt-1" style="font-family: inherit; color: inherit;">Pasker ID</span>
+                <span class="fw-bold ms-2" style="font-family: inherit; color: inherit;">Pasker ID</span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -283,12 +284,6 @@ footer {
     }
     .footer-logo:hover {
         opacity: 0.8;
-    }
-
-    .logo-stack {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
     }
 
     </style>
