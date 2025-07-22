@@ -53,6 +53,9 @@
                             <li><a class="dropdown-item" href="https://microlearning-paskerid.kemnaker.go.id/" target="_blank">Microlearning</a></li>
                         </ul>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link @if(request()->routeIs('publikasi.index')) active fw-bold @endif" href="{{ route('publikasi.index') }}">Publikasi</a>
+                    </li>
                     <!-- <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle @if(request()->routeIs('dashboard.trend') || request()->routeIs('dashboard.distribution') || request()->routeIs('dashboard.performance') || request()->routeIs('dashboard.labor_demand')) active fw-bold @endif" href="#" id="monitoringDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Dashboard

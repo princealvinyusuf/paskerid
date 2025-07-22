@@ -53,3 +53,5 @@ Route::get('/datasets', [App\Http\Controllers\DatasetController::class, 'index']
 Route::get('/media-sosial', function () {
     return view('media_sosial');
 })->name('media_sosial');
+
+Route::get('/publikasi', [App\Http\Controllers\PublikasiController::class, 'index'])->name('publikasi.index');
