@@ -538,6 +538,11 @@
                 </div>
             @endforeach
         </div>
+        <div class="text-center mt-4">
+            <a href="{{ url('/mitra-kerja') }}" class="btn btn-outline-success rounded-pill px-4 py-2">
+                Lihat Semua Mitra <i class="fa fa-arrow-right"></i>
+            </a>
+        </div>
     </section>
 
     {{-- Testimonials Section --}}
