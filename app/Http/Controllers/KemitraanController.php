@@ -27,7 +27,7 @@ class KemitraanController extends Controller
         // Query for fully booked dates for the selected type
         $fullyBookedDates = DB::table('booked_date')
             ->select('booked_date')
-            ->where('partnership_type', $selectedType)
+            // ->where('partnership_type', $selectedType)
             ->groupBy('booked_date', 'max_bookings')
             ->havingRaw('COUNT(*) >= max_bookings')
             ->pluck('booked_date')
