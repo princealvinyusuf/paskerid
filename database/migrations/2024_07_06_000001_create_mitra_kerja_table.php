@@ -15,6 +15,10 @@ return new class extends Migration {
             $table->string('email');
             $table->string('website_url')->nullable();
             $table->string('pic')->nullable();
+            $table->string('wilayah')->nullable();
+            $table->string('divider', 255)->nullable();
+            $table->string('category')->nullable();
+            $table->string('logo')->nullable();
             $table->timestamps();
         });
     }
