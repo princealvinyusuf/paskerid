@@ -18,10 +18,10 @@
 
     {{-- Stakeholder Cards --}}
     <div class="bg-green p-4 rounded-4 mb-5">
-        <h5 class="fw-bold mb-4 text-center d-flex flex-wrap justify-content-center align-items-center gap-3">
-            <span>
+        <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
+            <h5 class="fw-bold mb-0">
                 Stakeholder {{ $divider === 'dinas' ? 'Dinas Tenaga Kerja' : 'Mitra Kerja' }}
-            </span>
+            </h5>
             <form method="GET" class="d-flex flex-wrap align-items-center gap-2" style="margin-bottom:0;">
                 <input type="hidden" name="divider" value="{{ $divider }}">
                 <select name="wilayah" class="form-select form-select-sm" style="width:auto;min-width:120px;" onchange="this.form.submit()">
@@ -38,7 +38,7 @@
                 </select>
                 <noscript><button type="submit" class="btn btn-success btn-sm">Filter</button></noscript>
             </form>
-        </h5>
+        </div>
         <div class="row g-4">
             @foreach ($stakeholders as $stakeholder)
                 <div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch">
