@@ -11,12 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('booked_date', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('kemitraan_id')->constrained('kemitraan')->onDelete('cascade');
-            $table->date('booked_date');
-            $table->timestamps();
-            $table->index('booked_date');
+        Schema::table('booked_date', function (Blueprint $table) {
+            $table->foreignId('type_of_partnership_id')->after('booked_date')->constrained('type_of_partnership')->onDelete('cascade');
         });
     }
 
@@ -25,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('booked_date');
+        Schema::table('booked_date', function (Blueprint $table) {
+            $table->dropColumn('type_of_partnership');
+        });
     }
-}; 
+};
