@@ -18,11 +18,9 @@
 
     {{-- Stakeholder Cards --}}
     <div class="bg-green p-4 rounded-4 mb-5">
-        <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
-            <h5 class="fw-bold mb-0">
-                Stakeholder {{ $divider === 'dinas' ? 'Dinas Tenaga Kerja' : 'Mitra Kerja' }}
-            </h5>
-            <form method="GET" class="d-flex flex-wrap align-items-center gap-2" style="margin-bottom:0;">
+        <div class="position-relative mb-4" style="min-height:48px;">
+            <h5 class="fw-bold text-center mb-0" style="line-height:48px;">Stakeholder {{ $divider === 'dinas' ? 'Dinas Tenaga Kerja' : 'Mitra Kerja' }}</h5>
+            <form method="GET" class="position-absolute top-0 end-0 d-flex flex-wrap align-items-center gap-2" style="margin:0;">
                 <input type="hidden" name="divider" value="{{ $divider }}">
                 <select name="wilayah" class="form-select form-select-sm" style="width:auto;min-width:120px;" onchange="this.form.submit()">
                     <option value="">Semua Wilayah</option>
