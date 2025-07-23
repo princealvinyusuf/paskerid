@@ -19,6 +19,7 @@ use App\Models\TopicData;
 use App\Models\Dataset;
 use App\Models\HighlightStatistic;
 use App\Models\Visitor;
+use App\Models\MitraKerja;
 
 class HomeController extends Controller
 {
@@ -63,6 +64,7 @@ class HomeController extends Controller
         $datasets = Dataset::orderBy('order')->get()->groupBy('category');
         $highlightStatistics = HighlightStatistic::all();
         $visitCount = Visitor::count();
+        $mitraKerja = MitraKerja::where('divider', 'mitra')->get();
 
         return view('home', compact(
             'statistics',
@@ -81,7 +83,8 @@ class HomeController extends Controller
             'topicData',
             'datasets',
             'highlightStatistics',
-            'visitCount'
+            'visitCount',
+            'mitraKerja'
         ));
     }
 } 
