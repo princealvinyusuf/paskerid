@@ -44,9 +44,15 @@
                         @if($stakeholder->pic)
                             <p class="mb-1"><i class="fa fa-user me-2 text-success"></i>PIC: {{ $stakeholder->pic }}</p>
                         @endif
-                        <p class="mb-1"><i class="fa fa-map-marker-alt me-2 text-success"></i>{{ $stakeholder->address }}</p>
-                        <p class="mb-1"><i class="fa fa-phone me-2 text-success"></i>{{ $stakeholder->contact }}</p>
-                        <p class="mb-1"><i class="fa fa-envelope me-2 text-success"></i>{{ $stakeholder->email }}</p>
+                        @if($stakeholder->address)
+                            <p class="mb-1"><i class="fa fa-map-marker-alt me-2 text-success"></i>{{ $stakeholder->address }}</p>
+                        @endif
+                        @if($stakeholder->contact)
+                            <p class="mb-1"><i class="fa fa-phone me-2 text-success"></i>{{ $stakeholder->contact }}</p>
+                        @endif
+                        @if($stakeholder->email)
+                            <p class="mb-1"><i class="fa fa-envelope me-2 text-success"></i>{{ $stakeholder->email }}</p>
+                        @endif
                         @if($stakeholder->website_url)
                             <a href="{{ $stakeholder->website_url }}" class="text-success fw-bold" target="_blank"><i class="fa fa-globe me-1"></i>Kunjungi Website</a>
                         @endif
