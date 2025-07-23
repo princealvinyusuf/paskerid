@@ -58,6 +58,49 @@ section:last-of-type {
 </style>
 <div class="container-fluid p-0" style="background: #edf8e9;">
     
+<section class="my-5 mb-5 px-2 px-md-4 px-lg-5 pt-custom" data-aos="fade-up">
+        <div class="section-green-card">
+            <h3 class="text-center mb-4">Struktur Ketenagakerjaan</h3>
+            <div class="row gx-3 gy-4 justify-content-center" id="section3Cards">
+                @php $count3 = 0; $total3 = count($informasiSection3); @endphp
+                @foreach($informasiSection3 as $info)
+                    @php $count3++; @endphp
+                    <div class="col-12 col-md-6 col-lg-3 d-flex align-items-stretch section3-card{{ $count3 > 4 ? ' d-none' : '' }}">
+                        <div class="card stat-card shadow-sm border-0 w-100 h-100 p-3 d-flex flex-column align-items-center justify-content-center text-center">
+                            <h5 class="fw-bold mb-2">{{ $info->title }}</h5>
+                            <p class="mb-2 text-muted">{{ $info->description }}</p>
+                            <div class="w-100" style="min-height: 350px;">
+                                <div class="tableau-embed-wrapper w-100" style="min-height: 350px; overflow-x: auto;">
+                                    <div style="min-width: 400px;">
+                                        {!! str_replace([
+                                            "vizElement.style.width='400px';",
+                                            'vizElement.style.width = \"400px\";',
+                                            'vizElement.style.width = \"100%\";',
+                                            'vizElement.style.height=\'427px\';',
+                                            'vizElement.style.height = \"427px\";'
+                                        ], [
+                                            "vizElement.style.width='100%';",
+                                            'vizElement.style.width = "100%";',
+                                            'vizElement.style.width = "100%";',
+                                            "vizElement.style.height='427px';",
+                                            'vizElement.style.height = "427px";'
+                                        ], $info->tableau_embed_code) !!}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+            @if($total3 > 4)
+                <div class="text-center mt-3">
+                    <button id="lihatLebihBanyakBtn3" class="btn btn-success px-4">Lihat lebih banyak</button>
+                </div>
+            @endif
+        </div>
+    </section>
+
+
     <section class="mb-5 px-2 px-md-4 px-lg-5 pt-custom" data-aos="fade-up">
         <div class="section-green-card">
             <h3 class="text-center mb-4">Kebutuhan Tenaga Kerja</h3>
@@ -151,47 +194,7 @@ section:last-of-type {
             @endif
         </div>
     </section>
-    <section class="my-5 mb-5 px-2 px-md-4 px-lg-5 pt-custom" data-aos="fade-up">
-        <div class="section-green-card">
-            <h3 class="text-center mb-4">Informasi Pasar Kerja 3</h3>
-            <div class="row gx-3 gy-4 justify-content-center" id="section3Cards">
-                @php $count3 = 0; $total3 = count($informasiSection3); @endphp
-                @foreach($informasiSection3 as $info)
-                    @php $count3++; @endphp
-                    <div class="col-12 col-md-6 col-lg-3 d-flex align-items-stretch section3-card{{ $count3 > 4 ? ' d-none' : '' }}">
-                        <div class="card stat-card shadow-sm border-0 w-100 h-100 p-3 d-flex flex-column align-items-center justify-content-center text-center">
-                            <h5 class="fw-bold mb-2">{{ $info->title }}</h5>
-                            <p class="mb-2 text-muted">{{ $info->description }}</p>
-                            <div class="w-100" style="min-height: 350px;">
-                                <div class="tableau-embed-wrapper w-100" style="min-height: 350px; overflow-x: auto;">
-                                    <div style="min-width: 400px;">
-                                        {!! str_replace([
-                                            "vizElement.style.width='400px';",
-                                            'vizElement.style.width = \"400px\";',
-                                            'vizElement.style.width = \"100%\";',
-                                            'vizElement.style.height=\'427px\';',
-                                            'vizElement.style.height = \"427px\";'
-                                        ], [
-                                            "vizElement.style.width='100%';",
-                                            'vizElement.style.width = "100%";',
-                                            'vizElement.style.width = "100%";',
-                                            "vizElement.style.height='427px';",
-                                            'vizElement.style.height = "427px";'
-                                        ], $info->tableau_embed_code) !!}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                @endforeach
-            </div>
-            @if($total3 > 4)
-                <div class="text-center mt-3">
-                    <button id="lihatLebihBanyakBtn3" class="btn btn-success px-4">Lihat lebih banyak</button>
-                </div>
-            @endif
-        </div>
-    </section>
+    
     <!-- <section class="my-5 mb-5 px-2 px-md-4 px-lg-5 pt-custom" data-aos="fade-up">
         <div class="section-green-card">
             <h3 class="text-center mb-4">Informasi Pasar Kerja 4</h3>
