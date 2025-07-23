@@ -18,8 +18,26 @@
 
     {{-- Stakeholder Cards --}}
     <div class="bg-green p-4 rounded-4 mb-5">
-        <h5 class="fw-bold mb-4 text-center">
-            Stakeholder {{ $divider === 'dinas' ? 'Dinas Tenaga Kerja' : 'Mitra Kerja' }}
+        <h5 class="fw-bold mb-4 text-center d-flex flex-wrap justify-content-center align-items-center gap-3">
+            <span>
+                Stakeholder {{ $divider === 'dinas' ? 'Dinas Tenaga Kerja' : 'Mitra Kerja' }}
+            </span>
+            <form method="GET" class="d-flex flex-wrap align-items-center gap-2" style="margin-bottom:0;">
+                <input type="hidden" name="divider" value="{{ $divider }}">
+                <select name="wilayah" class="form-select form-select-sm" style="width:auto;min-width:120px;" onchange="this.form.submit()">
+                    <option value="">Semua Wilayah</option>
+                    @foreach($wilayahList as $w)
+                        <option value="{{ $w }}" @if(request('wilayah') == $w) selected @endif>{{ $w }}</option>
+                    @endforeach
+                </select>
+                <select name="category" class="form-select form-select-sm" style="width:auto;min-width:120px;" onchange="this.form.submit()">
+                    <option value="">Semua Kategori</option>
+                    @foreach($categoryList as $c)
+                        <option value="{{ $c }}" @if(request('category') == $c) selected @endif>{{ $c }}</option>
+                    @endforeach
+                </select>
+                <noscript><button type="submit" class="btn btn-success btn-sm">Filter</button></noscript>
+            </form>
         </h5>
         <div class="row g-4">
             @foreach ($stakeholders as $stakeholder)
