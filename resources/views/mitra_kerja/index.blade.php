@@ -30,17 +30,17 @@
                                 <img src="{{ asset($stakeholder->logo) }}" alt="Logo" style="max-width: 80px; max-height: 80px; object-fit: contain;">
                             </div>
                         @endif
-                        @if($stakeholder->wilayah)
-                            <div class="mb-2" style="margin-left:2px;">
-                                <span class="badge bg-light text-success border border-success" style="font-weight:500;">{{ $stakeholder->wilayah }}</span>
+                        @if($stakeholder->wilayah || $stakeholder->category)
+                            <div class="mb-2 d-flex flex-wrap align-items-center gap-2" style="margin-left:2px;">
+                                @if($stakeholder->wilayah)
+                                    <span class="badge bg-light text-success border border-success" style="font-weight:500;">{{ $stakeholder->wilayah }}</span>
+                                @endif
+                                @if($stakeholder->category)
+                                    <span class="badge bg-info text-dark" style="font-weight:500;">{{ $stakeholder->category }}</span>
+                                @endif
                             </div>
                         @endif
                         <h6 class="fw-bold mb-2">{{ $stakeholder->name }}</h6>
-                        @if($stakeholder->category)
-                            <div class="mb-2">
-                                <span class="badge bg-info text-dark" style="font-weight:500;">{{ $stakeholder->category }}</span>
-                            </div>
-                        @endif
                         @if($stakeholder->pic)
                             <p class="mb-1"><i class="fa fa-user me-2 text-success"></i>PIC: {{ $stakeholder->pic }}</p>
                         @endif
