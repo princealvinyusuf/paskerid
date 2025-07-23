@@ -36,7 +36,7 @@
                                     <span class="badge bg-light text-success border border-success" style="font-weight:500;">{{ $stakeholder->wilayah }}</span>
                                 @endif
                                 @if($stakeholder->category)
-                                    <span class="badge bg-info text-dark" style="font-weight:500;">{{ $stakeholder->category }}</span>
+                                    <span class="badge bg-light text-success border border-success" style="font-weight:500;">{{ $stakeholder->category }}</span>
                                 @endif
                             </div>
                         @endif
