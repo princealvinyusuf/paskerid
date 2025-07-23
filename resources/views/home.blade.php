@@ -520,7 +520,7 @@
                         @endif
                         <h6 class="fw-bold mb-2">{{ $stakeholder->name }}</h6>
                         @if($stakeholder->pic)
-                            <p class="mb-1"><i class="fa fa-user me-2 text-success"></i>PIC: {{ $stakeholder->pic }}</p>
+                            {{-- <p class="mb-1"><i class="fa fa-user me-2 text-success"></i>PIC: {{ $stakeholder->pic }}</p> --}}
                         @endif
                         @if($stakeholder->address)
                             <p class="mb-1"><i class="fa fa-map-marker-alt me-2 text-success"></i>{{ $stakeholder->address }}</p>
