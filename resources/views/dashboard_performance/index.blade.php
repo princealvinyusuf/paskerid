@@ -2,11 +2,11 @@
 
 @section('content')
 <div class="container my-5">
-    <h2>Dashboard Performance</h2>
+    <h2>Dashboard Struktur Ketenagakerjaan</h2>
     @if($dashboard)
         {!! $dashboard->iframe_code !!}
     @else
-        <p>No dashboard performance available.</p>
+        <p>No Dashboard Struktur Ketenagakerjaan available.</p>
     @endif
 </div>
 @endsection 
