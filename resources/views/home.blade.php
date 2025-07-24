@@ -34,7 +34,7 @@
                             <div class="card shadow-sm stat-card text-center flex-shrink-0" style="max-width:260px; min-width:180px; cursor:pointer;">
                                 <div class="card-body d-flex flex-column align-items-center justify-content-center">
                                     <div class="stat-icon mb-3">
-                                        <i class="fa fa-chart-bar fa-2x text-success"></i>
+                                        <i class="fa {{ $stat->logo ?? 'fa-chart-bar' }} fa-2x text-success"></i>
                                     </div>
                                     <div class="stat-title fw-bold mb-1" style="font-size:1.1rem; color:#187C19;">{{ $stat->title }}</div>
                                     <div class="stat-value fw-bold mb-1" style="font-size:2.2rem; color:#222;">{{ $stat->value }} <span class="stat-unit" style="font-size:1.2rem;">{{ $stat->unit }}</span></div>

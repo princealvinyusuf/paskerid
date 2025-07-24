@@ -20,6 +20,7 @@ class StatisticsTableSeeder extends Seeder
                 'order' => 1,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
+                'logo' => 'fa-users',
             ],
             [
                 'title' => 'Tingkat Partisipasi Kerja',
@@ -30,6 +31,7 @@ class StatisticsTableSeeder extends Seeder
                 'order' => 2,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
+                'logo' => 'fa-percentage',
             ],
             [
                 'title' => 'Penduduk Bekerja',
@@ -40,6 +42,7 @@ class StatisticsTableSeeder extends Seeder
                 'order' => 3,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
+                'logo' => 'fa-briefcase',
             ],
         ]);
     }

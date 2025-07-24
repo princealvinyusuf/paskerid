@@ -13,6 +13,7 @@ return new class extends Migration {
             $table->string('unit')->nullable();
             $table->text('description')->nullable();
             $table->string('type');
+            $table->string('logo')->nullable();
             $table->integer('order')->default(0);
             $table->timestamps();
         });
