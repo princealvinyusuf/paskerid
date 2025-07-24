@@ -14,6 +14,7 @@
     background-color: #00a78e;
     padding: 30px 40px;
     overflow: hidden;
+    margin-bottom: 0 !important;
 }
 .section-bg {
     position: absolute;
