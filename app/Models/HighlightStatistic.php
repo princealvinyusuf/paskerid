@@ -14,5 +14,6 @@ class HighlightStatistic extends Model
         'value',
         'unit',
         'description',
+        'logo',
     ];
 } 
