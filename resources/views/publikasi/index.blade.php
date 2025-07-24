@@ -30,6 +30,9 @@
     z-index: 1;
     max-width: 1200px;
 }
+.pt-custom {
+    padding-top: 60px;
+}
 @media (max-width: 768px) {
     .section-berita {
         padding: 20px 10px;
