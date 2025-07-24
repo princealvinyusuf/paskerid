@@ -1,6 +1,34 @@
 @extends('layouts.app')
 
 @section('content')
+@push('styles')
+<style>
+.section-berita {
+    position: relative;
+    width: 100%;
+    min-height: 260px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    overflow: hidden;
+    margin-bottom: 0;
+}
+.section-bg {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+    opacity: 0.5;
+}
+.section-content {
+    position: relative;
+    z-index: 2;
+    padding: 60px 0 60px 0;
+}
+</style>
+@endpush
 <section class="section-berita mb-0">
     <img src="{{ asset('images/logo_siapkerja_white.svg') }}" class="section-bg" alt="background">
     <div class="section-content">
