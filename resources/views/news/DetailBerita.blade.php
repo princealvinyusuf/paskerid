@@ -31,7 +31,7 @@
 
         <!-- Berita Populer -->
         <div class="col-md-4 mt-1">
-            <div class="p-3 bg-light2 rounded-3">
+            <div class="popular-card p-3">
                 <h5 class="fw-bold mb-3 section-title">Berita Populer</h5>
                 @foreach($popularNews as $item)
                 <div class="mb-3">
@@ -69,14 +69,22 @@
 }
 
 .bg-light2 {
-    background-color: #DFF4F0 !important;
+    background-color: #DFF4F0 !important; /* legacy, not used for card anymore */
 }
 
 .detailberita {
     background-color: #fff;
     border-radius: 18px;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+    box-shadow: 0 6px 32px 0 rgba(0,0,0,0.16), 0 1.5px 6px 0 rgba(0,0,0,0.10);
     padding: 32px 0 32px 0;
+}
+
+/* Popular News Card */
+.popular-card {
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 6px 32px 0 rgba(0,0,0,0.16), 0 1.5px 6px 0 rgba(0,0,0,0.10);
+    padding: 24px 18px 18px 18px;
 }
 
 .section-berita {
@@ -199,6 +207,8 @@
     .contentBerita {
         font-size: 1.05rem;
         line-height: 1.7;
+        padding-left: 10px;
+        padding-right: 10px;
     }
     .section-title {
         font-size: 1.1rem;
@@ -209,6 +219,10 @@
     .detailberita {
         border-radius: 10px;
         padding: 18px 0 18px 0;
+    }
+    .popular-card {
+        border-radius: 10px;
+        padding: 12px 6px 10px 6px;
     }
     .gambarBerita {
         width: 100%;
