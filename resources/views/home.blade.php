@@ -21,7 +21,7 @@
 
     {{-- Highlight Pasar Kerja Section (Both Carousels) --}}
     <section class="stat-carousel-section position-relative" style="z-index: 10;">
-        <div class="container-fluid position-relative px-2" style="max-width:100%;">
+        <div class="container position-relative" style="max-width:1200px;">
             <h3 class="text-center mb-4">Highlight Pasar Kerja</h3>
             {{-- First Carousel --}}
             <div class="d-flex align-items-center position-relative mb-4">
