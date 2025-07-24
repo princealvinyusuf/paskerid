@@ -550,7 +550,7 @@
         use Illuminate\Support\Collection;
         $testimonialChunks = $testimonials->chunk(4);
     @endphp
-    <section class="my-0 pb-0 px-2 px-md-4 px-lg-5" data-aos="fade-up">
+    <section class="pb-5 px-2 px-md-4 px-lg-5" data-aos="fade-up">
         <h3 class="fw-bold text-center mb-4" style="font-size:2rem;">Testimoni</h3>
         <div id="testiCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="7000">
             <div class="carousel-inner">
