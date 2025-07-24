@@ -59,7 +59,7 @@ section:last-of-type {
 </style>
 <div class="container-fluid p-0" style="background: #edf8e9;">
     
-<section class="my-5 mb-5 px-2 px-md-4 px-lg-5 pt-custom" data-aos="fade-up">
+<section class="mb-5 px-2 px-md-4 px-lg-5 pt-custom" data-aos="fade-up">
         <div class="section-green-card">
             <h3 class="text-center mb-4">Struktur Ketenagakerjaan</h3>
             <div class="row gx-3 gy-4 justify-content-center" id="section3Cards">
