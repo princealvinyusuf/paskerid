@@ -25,19 +25,17 @@
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top shadow-sm">
-        <div class="container-fluid d-flex flex-row justify-content-between align-items-center px-0 position-relative">
+        <div class="container-fluid d-flex flex-row justify-content-between align-items-center px-0">
             <!-- Left: Kemnaker Logo and Text -->
-            <div class="d-flex align-items-center position-absolute start-0 ps-2" style="height: 100%;">
-                <a class="navbar-brand d-flex align-items-center m-0" href="/">
-                    <img src="{{ asset('images/logo_kemnaker.png') }}" alt="Kemnaker Logo" style="height:40px; width:auto;">
-                    <span class="ms-2 fw-bold d-none d-md-inline" style="font-family: inherit; color: #13416B; font-size:1.05rem; letter-spacing:0.5px;">
-                        Kementerian<br>Ketenagakerjaan<br>RI
-                    </span>
-                </a>
-            </div>
-            <!-- Center: Navbar links -->
-            <div class="collapse navbar-collapse justify-content-center mx-auto" id="navbarNav" style="max-width: 900px;">
-                <ul class="navbar-nav gap-4">
+            <a class="navbar-brand d-flex align-items-center ms-0 ps-2" href="/">
+                <img src="{{ asset('images/logo_kemnaker.png') }}" alt="Kemnaker Logo" style="height:40px; width:auto;">
+                <span class="ms-2 fw-bold d-none d-md-inline" style="font-family: inherit; color: #13416B; font-size:1.05rem; letter-spacing:0.5px;">
+                    Kementerian<br>Ketenagakerjaan<br>RI
+                </span>
+            </a>
+            <!-- Navbar links -->
+            <div class="collapse navbar-collapse w-100" id="navbarNav">
+                <ul class="navbar-nav ms-auto gap-4">
                     <li class="nav-item">
                         <a class="nav-link @if(request()->routeIs('home')) active fw-bold @endif" href="{{ route('home') }}">Beranda</a>
                     </li>
@@ -73,11 +71,11 @@
                 </ul>
             </div>
             <!-- Right: Pasker ID Logo and Text -->
-            <div class="d-flex align-items-center position-absolute end-0 pe-2" style="height: 100%;">
+            <div class="d-flex align-items-center me-0 pe-2">
                 <img src="{{ asset('images/logo.png') }}" alt="Paskerid Logo" style="height:40px; width:auto;">
                 <span class="fw-bold ms-2 d-none d-lg-inline" style="font-family: inherit; color: inherit;">Pasker ID</span>
             </div>
-            <button class="navbar-toggler ms-2 position-relative" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
         </div>
