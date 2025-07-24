@@ -1,6 +1,13 @@
 @extends('layouts.app')
 
 @section('content')
+<section class="section-berita">
+    <img src="{{ asset('images/logo_siapkerja_white.svg') }}" class="section-bg" alt="background">
+    <div class="section-content">
+        <h2 style="color: white; font-weight: bold; margin-left: 80px;">Publikasi</h2>
+        <p style="color: white; margin-left: 80px; font-size: 20px">Temukan Publikasi, Laporan, dan Dokumen Terkait Pasar Kerja di Indonesia.</p>
+    </div>
+</section>
 <div class="container-fluid p-0" style="background: #edf8e9;">
     <section class="stat-carousel-section position-relative mt-5 pt-custom" style="z-index: 10; margin-top: -90px;">
         <div class="section-green-card">
