@@ -25,9 +25,9 @@
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top shadow-sm">
-        <div class="container d-flex flex-row justify-content-between align-items-center">
+        <div class="container-fluid d-flex flex-row justify-content-between align-items-center px-0">
             <!-- Left: Kemnaker Logo and Text -->
-            <a class="navbar-brand d-flex align-items-center me-3" href="/">
+            <a class="navbar-brand d-flex align-items-center ms-0 ps-2" href="/">
                 <img src="{{ asset('images/logo_kemnaker.png') }}" alt="Kemnaker Logo" style="height:40px; width:auto;">
                 <span class="ms-2 fw-bold d-none d-md-inline" style="font-family: inherit; color: #13416B; font-size:1.05rem; letter-spacing:0.5px;">
                     Kementerian<br>Ketenagakerjaan<br>RI
@@ -71,7 +71,7 @@
                 </ul>
             </div>
             <!-- Right: Pasker ID Logo and Text -->
-            <div class="d-flex align-items-center ms-auto">
+            <div class="d-flex align-items-center me-0 pe-2">
                 <img src="{{ asset('images/logo.png') }}" alt="Paskerid Logo" style="height:40px; width:auto;">
                 <span class="fw-bold ms-2 d-none d-lg-inline" style="font-family: inherit; color: inherit;">Pasker ID</span>
             </div>
