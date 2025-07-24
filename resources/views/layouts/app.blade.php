@@ -136,6 +136,10 @@
             <div class="col-12 col-lg-2 d-flex flex-column align-items-center align-items-lg-end justify-content-end mt-3 mt-lg-0">
                 <div class="mb-2">
                     <a href="https://www.instagram.com/pusatpasarkerja/?hl=en" target="_blank" class="text-white mx-1"><i class="fab fa-instagram fa-lg"></i></a>
+                    <a href="https://twitter.com/pusatpasarkerja" target="_blank" class="text-white mx-1"><i class="fab fa-twitter fa-lg"></i></a>
+                    <a href="https://www.facebook.com/pusatpasarkerja" target="_blank" class="text-white mx-1"><i class="fab fa-facebook fa-lg"></i></a>
+                    <a href="https://www.youtube.com/pusatpasarkerja" target="_blank" class="text-white mx-1"><i class="fab fa-youtube fa-lg"></i></a>
+                    <a href="https://www.tiktok.com/@paskerid_" target="_blank" class="text-white mx-1"><i class="fab fa-tiktok fa-lg"></i></a>
                 </div>
                 <div class="small">Copyright © 2025 Pusat Pasar Kerja Indonesia</div>
             </div>
