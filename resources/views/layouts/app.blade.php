@@ -29,7 +29,7 @@
             <!-- Left: Kemnaker Logo and Text -->
             <a class="navbar-brand d-flex align-items-center me-3" href="/">
                 <img src="{{ asset('images/logo_kemnaker.png') }}" alt="Kemnaker Logo" style="height:40px; width:auto;">
-                <span class="ms-2 fw-semibold d-none d-md-inline" style="font-size:1.05rem; color:#187C19; letter-spacing:0.5px;">Kementerian Ketenagakerjaan RI</span>
+                <span class="ms-2 fw-bold d-none d-md-inline" style="font-family: inherit; color: inherit; font-size:1.05rem; letter-spacing:0.5px;">Kementerian Ketenagakerjaan RI</span>
             </a>
             <!-- Navbar links -->
             <div class="collapse navbar-collapse w-100" id="navbarNav">
