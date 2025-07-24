@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Kemitraan;
+use App\Models\TypeOfPartnership;
+use App\Models\companysector;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -12,28 +14,31 @@ class KemitraanController extends Controller
     {
         // Get selected partnership type from request (default to first type if not set)
         $selectedType = $request->input('partnership_type', 'Walk-in Interview');
+        $dropdownPartnership = TypeOfPartnership::all();
+        $dropdownCompanySectors = companysector::all();
 
         // Partnership type limits (should match your PHP array)
-        $type_limits = [
-            'Walk-in Interview' => 10,
-            'Pendidikan Pasar Kerja' => 5,
-            'Talenta Muda' => 8,
-            'Job Fair' => 7,
-            'Konsultasi Pasar Kerja' => 3,
-            'Konsultasi Informasi Pasar Kerja' => 3,
-        ];
-        $max_bookings = $type_limits[$selectedType] ?? 10;
+        // $type_limits = [
+        //     'Walk-in Interview' => 10,
+        //     'Pendidikan Pasar Kerja' => 5,
+        //     'Talenta Muda' => 8,
+        //     'Job Fair' => 7,
+        //     'Konsultasi Pasar Kerja' => 3,
+        //     'Konsultasi Informasi Pasar Kerja' => 3,
+        // ];
+        // $max_bookings = $type_limits[$selectedType] ?? 10;
 
-        // Query for fully booked dates for the selected type
-        $fullyBookedDates = DB::table('booked_date')
-            ->select('booked_date')
-            // ->where('partnership_type', $selectedType)
-            ->groupBy('booked_date', 'max_bookings')
-            ->havingRaw('COUNT(*) >= max_bookings')
-            ->pluck('booked_date')
-            ->toArray();
-        $formData = $request->all();
-        return view('kemitraan.create', compact('fullyBookedDates', 'selectedType', 'formData'));
+        // // Query for fully booked dates for the selected type
+        // $fullyBookedDates = DB::table('booked_date')
+        //     ->select('booked_date')
+        //     ->where('type_of_partnership_id')
+        //     ->groupBy('booked_date', 'max_bookings')
+        //     ->havingRaw('COUNT(*) >= max_bookings')
+        //     ->pluck('booked_date')
+        //     ->toArray();
+        // $formData = $request->all();
+        // return view('kemitraan.create', compact('fullyBookedDates', 'selectedType', 'formData'));
+        return view('kemitraan.create', compact('dropdownPartnership', 'dropdownCompanySectors'));
     }
 
     public function store(Request $request)

@@ -21,7 +21,8 @@
             <hr class="my-4">
             <h5 class="mb-3"><i class="bi bi-link-45deg me-2"></i>Detail Kemitraan</h5>
             <!-- GET form for partnership type (for calendar functionality, hidden initially) -->
-            <form method="GET" id="typeForm" class="mb-3" style="display:none;">
+           
+            {{-- <form method="GET" id="typeForm" class="mb-3" style="display:none;">
                 <label for="partnership_type" class="form-label">Jenis Kemitraan yang Diajukan</label>
                 <select class="form-select" id="partnership_type" name="partnership_type" onchange="document.getElementById('typeForm').submit()" required>
                     <option value="Walk-in Interview" {{ $selectedType == 'Walk-in Interview' ? 'selected' : '' }}>Walk-in Interview</option>
@@ -31,11 +32,11 @@
                     <option value="Konsultasi Pasar Kerja" {{ $selectedType == 'Konsultasi Pasar Kerja' ? 'selected' : '' }}>Konsultasi Pasar Kerja</option>
                     <option value="Konsultasi Informasi Pasar Kerja" {{ $selectedType == 'Konsultasi Informasi Pasar Kerja' ? 'selected' : '' }}>Konsultasi Informasi Pasar Kerja</option>
                 </select>
-            </form>
+            </form> --}}
             <!-- End Partnership Type Selector -->
             <form action="{{ route('kemitraan.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
-                <input type="hidden" name="partnership_type" value="{{ $selectedType }}">
+                {{-- <input type="hidden" name="partnership_type" value="{{ $selectedType }}"> --}}
                 <div class="row g-3">
                     <div class="col-md-6">
                         <label for="pic_name" class="form-label">Nama Penanggung Jawab (PIC)</label>
@@ -66,7 +67,7 @@
                 <hr class="my-4">
                 <h5 class="mb-3"><i class="bi bi-building me-2"></i>Data Instansi</h5>
                 <div class="row g-3">
-                    <div class="col-md-6">
+                    {{-- <div class="col-md-6">
                         <label for="sector_category" class="form-label">Kategori/Sektor Instansi</label>
                         <select class="form-select" id="sector_category" name="sector_category" required>
                             <option value="">Pilih salah satu</option>
@@ -75,6 +76,15 @@
                             <option value="Mitra Pembangunan" {{ ($formData['sector_category'] ?? old('sector_category')) == 'Mitra Pembangunan' ? 'selected' : '' }}>Mitra Pembangunan (Perusahaan/Swasta/Job Portal)</option>
                             <option value="Lembaga Pendidikan" {{ ($formData['sector_category'] ?? old('sector_category')) == 'Lembaga Pendidikan' ? 'selected' : '' }}>Lembaga Pendidikan</option>
                             <option value="Lembaga Non-Pemerintah" {{ ($formData['sector_category'] ?? old('sector_category')) == 'Lembaga Non-Pemerintah' ? 'selected' : '' }}>Lembaga Non-Pemerintah (Yayasan/Asosiasi/Organisasi)</option>
+                        </select>
+                    </div> --}}
+                    <div class="col-md-6">
+                        <label for="comapny_sectors" class="form-label">Kategori/Sektor Instansi</label>
+                        <select class="form-select" id="company_sectors_id" name="company_sectors" required>
+                            <option value="">-- Pilih Kategori / Sektor Instansi --</option>
+                        @foreach ($dropdownCompanySectors as $sectors)
+                            <option value="{{ $sectors->id }}">{{ $sectors->sector_name }}</option>
+                        @endforeach
                         </select>
                     </div>
                     <div class="col-md-6">
@@ -98,7 +108,14 @@
                 <div id="typeSelectorPlaceholder"></div>
                 <form action="{{ route('kemitraan.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
-                    <input type="hidden" name="partnership_type" value="{{ $selectedType }}">
+                    {{-- <input type="hidden" name="partnership_type_id"> --}}
+                     <label for="partnership_type_id" class="form-label">Jenis Kemitraan yang Diajukan</label>
+                        <select name="type_of_partnership_id" id="type_of_partnership_id" class="form-select" disabled>
+                        <option value="">-- Pilih Jenis Kemitraan --</option>
+                        @foreach ($dropdownPartnership as $type)
+                            <option value="{{ $type->id }}" {{$type->id == 1 ? 'selected' : ''}}>{{ $type->name }}</option>
+                        @endforeach
+                        </select>
                     <div class="row g-3">
                         <div class="col-md-6">
                             <label for="needs" class="form-label">Kebutuhan yang Diajukan</label>
@@ -115,7 +132,7 @@
                         <div class="col-md-6">
                             <label for="request_letter" class="form-label">Surat Permohonan Kemitraan</label>
                             <div class="mb-2">
-                                <a href="http://www.psid.run.place/paskerid/public/documents/template-surat-permohonan.docx" class="btn btn-outline-secondary btn-sm" download>
+                                <a href="https://s.id/Wk66?a=confirm" class="btn btn-outline-secondary btn-sm" download target="_blank">
                                     <i class="bi bi-download me-1"></i>Download Template Surat Permohonan
                                 </a>
                             </div>
