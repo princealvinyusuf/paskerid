@@ -1,43 +1,13 @@
 @extends('layouts.app')
 
 @section('content')
-@push('styles')
-<style>
-.section-berita {
-    position: relative;
-    width: 100%;
-    min-height: 260px;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    overflow: hidden;
-    margin-bottom: 0;
-}
-.section-bg {
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    z-index: 1;
-    opacity: 0.5;
-}
-.section-content {
-    position: relative;
-    z-index: 2;
-    padding: 60px 0 60px 0;
-}
-</style>
-@endpush
-<section class="section-berita mb-0">
+<section class="section-berita">
     <img src="{{ asset('images/logo_siapkerja_white.svg') }}" class="section-bg" alt="background">
     <div class="section-content">
-        <h2 style="color: white; font-weight: bold; margin-left: 80px;">Informasi Pasar Kerja</h2>
-        <p style="color: white; margin-left: 80px; font-size: 20px">Temukan data, tren, dan analisis terbaru seputar pasar kerja di Indonesia.</p>
+        <h2 style="color: white; font-weight: bold; margin-left: 80px;">Publikasi</h2>
+        <p style="color: white; margin-left: 80px; font-size: 20px">Temukan Publikasi, Laporan, dan Informasi Terkini Terkait Pasar Kerja dan Ketenagakerjaan.</p>
     </div>
 </section>
-
-
 <div class="container-fluid p-0" style="background: #edf8e9;">
     <section class="stat-carousel-section position-relative mt-5 pt-custom" style="z-index: 10; margin-top: -90px;">
         <div class="section-green-card">
