@@ -31,7 +31,7 @@
     max-width: 1200px;
 }
 .pt-custom {
-    padding-top: 60px;
+    padding-top: 40px;
 }
 @media (max-width: 768px) {
     .section-berita {
