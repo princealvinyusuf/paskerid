@@ -46,7 +46,7 @@
 }
 </style>
 <div class="container-fluid p-0" style="background: #edf8e9;">
-    <section class="stat-carousel-section position-relative mt-5 pt-custom" style="z-index: 10; margin-top: -90px;">
+    <section class="stat-carousel-section position-relative pt-custom" style="z-index: 10;">
         <div class="section-green-card">
             <div class="container-fluid px-2 px-md-4 px-lg-5 position-relative" style="max-width:1400px;">
                 <h3 class="text-center mb-4">Publikasi</h3>
