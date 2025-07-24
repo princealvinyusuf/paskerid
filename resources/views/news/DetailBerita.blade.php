@@ -11,22 +11,20 @@
 <div class="container my-5">
     <div class="row">
         <!-- Konten Berita -->
-        <div class=" detailberita col-md-8">
-            <h3 class="fw-bold TitleBerita">
+        <div class=" detailberita col-md-8" style="background: #fff; box-shadow: 0 2px 12px rgba(0,0,0,0.07); border-radius: 18px; padding: 32px 0 32px 0;">
+            <h3 class="fw-bold TitleBerita" style="margin-bottom: 18px;">
                 {{ $news->title }}
             </h3>
-            <div class="text-muted mb-3 timestampBerita">
+            <div class="text-muted mb-3 timestampBerita" style="margin-bottom: 22px !important;">
                 <i class="fa fa-clock" style="font-size:13px"></i> <span style="font-weight: bold; font-size: 13px">{{ \Carbon\Carbon::parse($news->date)->format('d M Y') }} &nbsp; </span>
                 <i class="fa fa-circle-user" style="font-size:13px"></i> <span style="font-weight: bold; font-size: 13px">{{ $news->author}}</span>
             </div>
             
-            <img src="{{ asset($news->image_url) }}" alt="{{ $news->title }}" class="img-fluid rounded-3 mb-2 gambarBerita">
-            
-            {{-- <p class="text-muted fst-italic">Pembukaan Acara Job Fair</p> --}}
+            <img src="{{ asset($news->image_url) }}" alt="{{ $news->title }}" class="img-fluid rounded-3 mb-2 gambarBerita" style="margin-bottom: 28px;">
 
-            <p class="contentBerita">{{ $news->content}}</p>
-
-            
+            <div class="contentBerita" style="font-size: 1.18rem; line-height: 1.85; color: #222; margin-bottom: 10px;">
+                {!! nl2br(e($news->content)) !!}
+            </div>
         </div>
 
         
@@ -75,8 +73,10 @@
 }
 
 .detailberita {
-    background-color: #DFF4F0;
-    border-radius: 15px;
+    background-color: #fff;
+    border-radius: 18px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+    padding: 32px 0 32px 0;
 }
 
 .section-berita {
@@ -144,12 +144,17 @@
 .gambarBerita {
     padding-left: 30px;
     padding-right: 30px;
+    margin-bottom: 28px;
 }
 
 .contentBerita {
     padding-left: 30px;
     padding-right: 30px;
     text-align: justify;
+    font-size: 1.18rem;
+    line-height: 1.85;
+    color: #222;
+    margin-bottom: 10px;
 }
 .section-title {
     position: relative;
@@ -192,7 +197,8 @@
         font-size: 1.2rem;
     }
     .contentBerita {
-        font-size: 1rem;
+        font-size: 1.05rem;
+        line-height: 1.7;
     }
     .section-title {
         font-size: 1.1rem;
@@ -202,10 +208,14 @@
     }
     .detailberita {
         border-radius: 10px;
+        padding: 18px 0 18px 0;
     }
     .gambarBerita {
         width: 100%;
         height: auto;
+        padding-left: 10px;
+        padding-right: 10px;
+        margin-bottom: 18px;
     }
     h2, p {
         margin-left: 0 !important;
@@ -225,7 +235,8 @@
         font-size: 1rem;
     }
     .contentBerita {
-        font-size: 0.95rem;
+        font-size: 0.98rem;
+        line-height: 1.6;
     }
     .section-title {
         font-size: 1rem;
