@@ -8,6 +8,43 @@
         <p style="color: white; margin-left: 80px; font-size: 20px">Temukan Publikasi, Laporan, dan Informasi Terkini Terkait Pasar Kerja dan Ketenagakerjaan.</p>
     </div>
 </section>
+<style>
+.section-berita {
+    position: relative;
+    background-color: #00a78e;
+    padding: 30px 40px;
+    overflow: hidden;
+    margin-bottom: 0 !important;
+}
+.section-bg {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 400px;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.4;
+}
+.section-content {
+    position: relative;
+    z-index: 1;
+    max-width: 1200px;
+}
+@media (max-width: 768px) {
+    .section-berita {
+        padding: 20px 10px;
+        background-size: 200px auto;
+    }
+    .section-content {
+        max-width: 100%;
+        margin-left: 0;
+    }
+    h2, p {
+        margin-left: 0 !important;
+        text-align: left;
+    }
+}
+</style>
 <div class="container-fluid p-0" style="background: #edf8e9;">
     <section class="stat-carousel-section position-relative mt-5 pt-custom" style="z-index: 10; margin-top: -90px;">
         <div class="section-green-card">
