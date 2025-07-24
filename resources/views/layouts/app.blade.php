@@ -30,7 +30,7 @@
             <a class="navbar-brand d-flex align-items-center ms-0 ps-2" href="/">
                 <img src="{{ asset('images/logo_kemnaker.png') }}" alt="Kemnaker Logo" style="height:40px; width:auto;">
                 <span class="ms-2 fw-bold d-none d-md-inline" style="font-family: inherit; color: #13416B; font-size:1.05rem; letter-spacing:0.5px;">
-                    Kementerian<br>Ketenagakerjaan<br>RI
+                    Kementerian<br>Ketenagakerjaan RI
                 </span>
             </a>
             <!-- Navbar links -->
