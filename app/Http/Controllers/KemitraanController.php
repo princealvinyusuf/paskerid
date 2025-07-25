@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Kemitraan;
 use App\Models\TypeOfPartnership;
 use App\Models\companysector;
+use App\Models\PaskerRoom;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -16,6 +17,7 @@ class KemitraanController extends Controller
         $selectedType = $request->input('partnership_type', 'Walk-in Interview');
         $dropdownPartnership = TypeOfPartnership::all();
         $dropdownCompanySectors = companysector::all();
+        $imagePaskerRoom = PaskerRoom::all();
 
         // Partnership type limits (should match your PHP array)
         // $type_limits = [
@@ -38,7 +40,7 @@ class KemitraanController extends Controller
         //     ->toArray();
         // $formData = $request->all();
         // return view('kemitraan.create', compact('fullyBookedDates', 'selectedType', 'formData'));
-        return view('kemitraan.create', compact('dropdownPartnership', 'dropdownCompanySectors'));
+        return view('kemitraan.create', compact('dropdownPartnership', 'dropdownCompanySectors', 'imagePaskerRoom'));
     }
 
     public function store(Request $request)

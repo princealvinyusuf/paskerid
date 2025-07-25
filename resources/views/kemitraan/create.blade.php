@@ -116,6 +116,32 @@
                             <option value="{{ $type->id }}" {{$type->id == 1 ? 'selected' : ''}}>{{ $type->name }}</option>
                         @endforeach
                         </select>
+                        <div class="col-12">
+                            <label for="pasker_room" class="form-label">Ruangan yang akan dipakai</label>
+                            <div class="grid-container">
+                                @foreach($imagePaskerRoom as $ruangan)
+                            <div class="ruangan-card">
+                                @if($ruangan->image_base64)
+                                    <img src="data:{{ $ruangan->mime_type }};base64,{{ $ruangan->image_base64 }}" alt="{{ $ruangan->title }}">
+                                @endif
+
+                            <div class="form-check">
+                             <input class="form-check-input" type="checkbox" name="ruangan[]" value="{{ $ruangan->id }}" id="ruangan{{ $ruangan->id }}">
+                            <label class="form-check-label" for="ruangan{{ $ruangan->id }}">
+                                {{ $ruangan->room_name }}
+                            </label>
+                                    </div>
+                                </div>
+                            @endforeach
+                            </div>
+                        </div>
+
+                        <div class="form-check align-items-center d-flex" style="padding-top: 10px">
+                            <input class="form-check-input mt-0" type="checkbox" id="lainnyaCheckbox" name="ruangan[]" value="lainnya" onchange="toggleOtherText(this)">
+                            <label class="form-check-label ms-2 mb-0" for="lainnyaCheckbox"><strong>Lainnya</strong></label>
+                        </div>
+                            <input type="text" id="ruanganOtherText" class="form-control mt-2" placeholder="Tulis nama ruangan..." name="ruangan_lainnya" style="display: none">
+
                     <div class="row g-3">
                         <div class="col-md-6">
                             <label for="needs" class="form-label">Kebutuhan yang Diajukan</label>
@@ -251,7 +277,71 @@
             });
         }
     });
+
+    function toggleOtherText(checkbox) {
+        const input = document.getElementById('ruanganOtherText');
+        input.style.display = checkbox.checked ? 'block' : 'none';
+    }
 </script>
 @endpush
+<style>
+    .grid-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 2 kolom tetap */
+    gap: 1.5rem; /* jarak antar card */
+}
+
+.ruangan-card {
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 1rem;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    background-color: #fff;
+}
+
+.ruangan-card img {
+    width: 100%;
+    height: 180px; /* Tetapkan tinggi tetap */
+    object-fit: cover; /* Potong gambar agar pas di dalam */
+    border-radius: 10px;
+    margin-bottom: 0.75rem;
+}
+
+
+.form-check {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+    .form-check-input {
+        width: 1.2em;
+        height: 1.2em;
+        margin-right: 0.5em;
+        vertical-align: middle;
+    }
+
+    .form-check-label {
+        font-weight: 500;
+        font-size: 1rem;
+    }
+
+    @media (max-width: 768px) {
+        .grid-container {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (max-width: 576px) {
+        .grid-container {
+            grid-template-columns: 1fr;
+        }
+    }
+    .ruang-card-lainnya {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+</style>
 
 @endsection 

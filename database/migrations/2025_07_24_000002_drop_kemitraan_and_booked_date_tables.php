@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::dropIfExists('booked_date');
-        Schema::dropIfExists('kemitraan');
+        // Schema::dropIfExists('kemitraan');
     }
 
     /**
