@@ -58,7 +58,7 @@
                         <label for="pic_whatsapp" class="form-label">Nomor WhatsApp Aktif</label>
                         <div class="input-group">
                             <span class="input-group-text"><i class="bi bi-whatsapp"></i></span>
-                            <input type="text" class="form-control" id="pic_whatsapp" name="pic_whatsapp" placeholder="08xxxxxxxxxx" value="{{ $formData['pic_whatsapp'] ?? old('pic_whatsapp') }}" required>
+                            <input type="text" class="form-control" id="pic_whatsapp" name="pic_whatsapp" placeholder="+62xxxxxxxxxx" value="{{ $formData['pic_whatsapp'] ?? old('pic_whatsapp') }}" required>
                         </div>
                         <div class="form-text">Nomor aktif untuk keperluan komunikasi.</div>
                     </div>
@@ -137,16 +137,28 @@
                         </div>
 
                         <div class="form-check align-items-center d-flex" style="padding-top: 10px">
-                            <input class="form-check-input mt-0" type="checkbox" id="lainnyaCheckbox" name="ruangan[]" value="lainnya" onchange="toggleOtherText(this)">
-                            <label class="form-check-label ms-2 mb-0" for="lainnyaCheckbox"><strong>Lainnya</strong></label>
+                            <input class="form-check-input mt-0" type="checkbox" id="raunganlainnyaCheckbox" name="ruangan[]" value="lainnya" onchange="toggleOtherroomText(this)">
+                            <label class="form-check-label ms-2 mb-0" for="raunganlainnyaCheckbox"><strong>Lainnya</strong></label>
                         </div>
                             <input type="text" id="ruanganOtherText" class="form-control mt-2" placeholder="Tulis nama ruangan..." name="ruangan_lainnya" style="display: none">
 
                     <div class="row g-3">
                         <div class="col-md-6">
                             <label for="needs" class="form-label">Kebutuhan yang Diajukan</label>
-                            <textarea class="form-control" id="needs" name="needs" rows="2" placeholder="Jelaskan kebutuhan atau bentuk dukungan yang diharapkan" required>{{ $formData['needs'] ?? old('needs') }}</textarea>
+                            @foreach ($paskerFacility as $facility)
+                           <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="facility[]" value="{{ $facility->id }}" id="facility{{ $facility->id }}">
+                                 <label class="form-check-label" for="facility{{ $facility->id }}">
+                                    {{ $facility->facility_name }}
+                                </label>
+                            </div>
+                            @endforeach
+                            <input class="form-check-input mt-0" type="checkbox" id="fasilitaslainnyaCheckbox" name="facility[]" value="lainnya" onchange="toggleOtherfacilityText(this)">
+                            <label class="form-check-label ms-1 mb-0" for="fasilitaslainnyaCheckbox">Lainnya</label>
+                            <input type="text" id="facilityOtherText" class="form-control mt-2" placeholder="Tulis nama fasilitas..." name="fasilitas_lainnya" style="display: none">
                         </div>
+
+
                         <div class="col-md-6">
                             <label for="schedule" class="form-label">Usulan Jadwal Kegiatan</label>
                             <div class="input-group">
@@ -155,6 +167,21 @@
                             </div>
                             <div class="form-text">Pilih rentang tanggal pelaksanaan kegiatan.</div>
                         </div>
+
+                        <div class="col-md-6">
+                            <label for="schedule" class="form-label">Usulan Waktu Kegiatan</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-calendar-event"></i></span>
+                                <input type="text" class="form-control" id="scheduletimestart" name="scheduletimestart" placeholder="Pilih waktu mulai" autocomplete="off" value="{{ $formData['schedule'] ?? old('schedule') }}" required>
+                            </div>
+                            <div class="form-text">Pilih rentang waktu mulai pelaksanaan kegiatan.</div>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-calendar-event"></i></span>
+                                <input type="text" class="form-control" id="scheduletimefinish" name="scheduletimefinish" placeholder="Pilih waktu selesai" autocomplete="off" value="{{ $formData['schedule'] ?? old('schedule') }}" required>
+                            </div>
+                            <div class="form-text">Pilih rentang waktu selesai pelaksanaan kegiatan.</div>
+                        </div>
+
                         <div class="col-md-6">
                             <label for="request_letter" class="form-label">Surat Permohonan Kemitraan</label>
                             <div class="mb-2">
@@ -240,6 +267,17 @@
         }
     });
 
+    flatpickr("#scheduletimestart", {
+        enableTime: true,
+        noCalendar: true,
+        dateFormat: "H:i",
+    });
+    flatpickr("#scheduletimefinish", {
+        enableTime: true,
+        noCalendar: true,
+        dateFormat: "H:i",
+    })
+
     document.addEventListener('DOMContentLoaded', function() {
         var typeForm = document.getElementById('typeForm');
         var mainForm = document.querySelector('form[action="{{ route('kemitraan.store') }}"]');
@@ -278,8 +316,13 @@
         }
     });
 
-    function toggleOtherText(checkbox) {
+    function toggleOtherroomText(checkbox) {
         const input = document.getElementById('ruanganOtherText');
+        input.style.display = checkbox.checked ? 'block' : 'none';
+    }
+
+    function toggleOtherfacilityText(checkbox) {
+        const input = document.getElementById('facilityOtherText');
         input.style.display = checkbox.checked ? 'block' : 'none';
     }
 </script>
@@ -342,6 +385,12 @@
     align-items: center;
     gap: 0.5rem;
 }
+
+.checkbox-label-align {
+        display: flex;
+        align-items: center;
+        gap: 8px; /* jarak antara checkbox dan label */
+    }
 </style>
 
 @endsection 

@@ -6,6 +6,7 @@ use App\Models\Kemitraan;
 use App\Models\TypeOfPartnership;
 use App\Models\companysector;
 use App\Models\PaskerRoom;
+use App\Models\PaskerFacility;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -18,6 +19,7 @@ class KemitraanController extends Controller
         $dropdownPartnership = TypeOfPartnership::all();
         $dropdownCompanySectors = companysector::all();
         $imagePaskerRoom = PaskerRoom::all();
+        $paskerFacility = PaskerFacility::all();
 
         // Partnership type limits (should match your PHP array)
         // $type_limits = [
@@ -40,7 +42,7 @@ class KemitraanController extends Controller
         //     ->toArray();
         // $formData = $request->all();
         // return view('kemitraan.create', compact('fullyBookedDates', 'selectedType', 'formData'));
-        return view('kemitraan.create', compact('dropdownPartnership', 'dropdownCompanySectors', 'imagePaskerRoom'));
+        return view('kemitraan.create', compact('dropdownPartnership', 'dropdownCompanySectors', 'imagePaskerRoom' ,'paskerFacility'));
     }
 
     public function store(Request $request)
