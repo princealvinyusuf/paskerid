@@ -61,7 +61,7 @@
                         <a class="nav-link @if(request()->routeIs('media_sosial')) active fw-bold @endif" href="{{ route('media_sosial') }}">Media Sosial</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link @if(request()->routeIs('kemitraan.create')) active fw-bold @endif" href="{{ route('kemitraan.create') }}">
+                        <a class="nav-link @if(request()->routeIs('kemitraan.underconstruction')) active fw-bold @endif" href="{{ route('kemitraan.underconstruction') }}">
                             <i class="bi bi-handshake me-1"></i> Walk In Interview
                         </a>
                     </li> 

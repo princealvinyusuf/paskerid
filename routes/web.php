@@ -34,9 +34,12 @@ Route::get('/virtual-karir', [App\Http\Controllers\VirtualKarirController::class
 Route::get('/informasi-pasar-kerja', [App\Http\Controllers\InformasiPasarKerjaController::class, 'index'])->name('informasi_pasar_kerja.index');
 
 // Kemitraan routes (only create and store)
-Route::get('kemitraan/create', function() {
+Route::get('kemitraan/under_construction', function() {
     return view('kemitraan.under_construction');
-})->name('kemitraan.create');
+})->name('kemitraan.underconstruction');
+
+
+Route::get('kemitraan/create', [App\Http\Controllers\KemitraanController::class, 'create'])->name('kemitraan.create');
 Route::post('kemitraan', [App\Http\Controllers\KemitraanController::class, 'store'])->name('kemitraan.store');
 
 Route::get('/kebijakan-privasi', function () {
