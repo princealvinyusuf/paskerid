@@ -387,7 +387,7 @@
                                 </div>
                                 <div class="d-flex gap-2 mt-2">
                                     @if($card->csv_url)
-                                        <a href="{{ asset($card->csv_url) }}" class="btn btn-warning btn-sm fw-bold" target="_blank">CSV</a>
+                                        <a href="{{ asset($card->csv_url) }}" class="btn btn-warning btn-sm fw-bold" download>CSV</a>
                                     @endif
                                     @if($card->xlsx_url)
                                         <a href="{{ asset($card->xlsx_url) }}" class="btn btn-success btn-sm fw-bold" target="_blank">XLSX</a>
