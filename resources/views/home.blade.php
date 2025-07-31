@@ -599,11 +599,101 @@
         </div>
     </section>
 </div>
+
+{{-- Mini Video Player (Floating) --}}
+<div id="mini-video-player" style="display:none; position:fixed; bottom:24px; right:24px; z-index:9999; width:360px; max-width:90vw; background:#222; border-radius:16px; box-shadow:0 4px 24px rgba(0,0,0,0.25); overflow:hidden;">
+    <div style="display:flex; justify-content:space-between; align-items:center; background:#111; color:#fff; padding:8px 16px;">
+        <span id="mini-video-title" style="font-size:1rem; font-weight:500;"></span>
+        <button id="mini-video-close" style="background:none; border:none; color:#fff; font-size:1.5rem; cursor:pointer;">&times;</button>
+    </div>
+    <div id="mini-video-iframe-container" style="width:100%; aspect-ratio:16/9; background:#000;"></div>
+</div>
 @endsection
 
 @section('scripts')
     @parent
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script>
+    let miniVideos = [];
+    let currentVideoIndex = 0;
+    let player = null;
+
+    // Fetch videos from backend
+    function fetchMiniVideos() {
+        fetch('{{ route('mini-videos.index') }}')
+            .then(res => res.json())
+            .then(data => {
+                miniVideos = data;
+                if (miniVideos.length > 0) {
+                    showMiniVideoPlayer(0);
+                }
+            });
+    }
+
+    // Show the mini player and load a video
+    function showMiniVideoPlayer(index) {
+        currentVideoIndex = index;
+        const video = miniVideos[index];
+        if (!video) return;
+        document.getElementById('mini-video-title').textContent = video.title;
+        document.getElementById('mini-video-player').style.display = 'block';
+
+        // Load YouTube player
+        loadYouTubePlayer(getYouTubeId(video.youtube_url));
+    }
+
+    // Extract YouTube video ID from URL
+    function getYouTubeId(url) {
+        const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\\?v=|\\&v=)([^#\\&\\?]*).*/;
+        const match = url.match(regExp);
+        return (match && match[2].length === 11) ? match[2] : null;
+    }
+
+    // YouTube API callback
+    function onYouTubeIframeAPIReady() {
+        // Will be called automatically by the API
+    }
+
+    // Load or update the YouTube player
+    function loadYouTubePlayer(videoId) {
+        if (!videoId) return;
+        if (player) {
+            player.loadVideoById(videoId);
+        } else {
+            player = new YT.Player('mini-video-iframe-container', {
+                height: '202',
+                width: '360',
+                videoId: videoId,
+                playerVars: { 'autoplay': 1, 'controls': 1, 'rel': 0 },
+                events: {
+                    'onStateChange': onPlayerStateChange
+                }
+            });
+        }
+    }
+
+    // When video ends, play next
+    function onPlayerStateChange(event) {
+        if (event.data === YT.PlayerState.ENDED) {
+            if (currentVideoIndex + 1 < miniVideos.length) {
+                showMiniVideoPlayer(currentVideoIndex + 1);
+            } else {
+                // Optionally loop or close
+                document.getElementById('mini-video-player').style.display = 'none';
+            }
+        }
+    }
+
+    // Close button
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('mini-video-close').onclick = function() {
+            document.getElementById('mini-video-player').style.display = 'none';
+            if (player) player.pauseVideo();
+        };
+        fetchMiniVideos();
+    });
+    </script>
     <script>
     document.addEventListener('DOMContentLoaded', function () {
         const row = document.getElementById('statScrollRow');

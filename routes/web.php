@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\MiniVideoController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -60,3 +61,9 @@ Route::get('/media-sosial', function () {
 })->name('media_sosial');
 
 Route::get('/publikasi', [App\Http\Controllers\PublikasiController::class, 'index'])->name('publikasi.index');
+
+// Mini Video Player routes
+Route::get('/mini-videos', [MiniVideoController::class, 'index'])->name('mini-videos.index');
+// (Optional: for admin panel or API use)
+Route::post('/mini-videos', [MiniVideoController::class, 'store'])->name('mini-videos.store');
+Route::delete('/mini-videos/{id}', [MiniVideoController::class, 'destroy'])->name('mini-videos.destroy');
