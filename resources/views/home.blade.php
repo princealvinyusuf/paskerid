@@ -353,7 +353,7 @@
     </section>
 
     {{-- for ads --}}
- <section class="my-5 py-5 bg-primary text-white rounded-4" data-aos="fade-up">
+ <section class="my-5 py-5 bg-success text-white rounded-4 mx-5" data-aos="fade-up">
     <div class="container">
         <div class="row align-items-center">
             {{-- Bagian kiri --}}
