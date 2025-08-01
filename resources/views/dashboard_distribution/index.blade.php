@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container my-5">
-    <h2>Dashboard Tren Persediaan Tenaga Kerja</h2>
+    <h2>Dashboard Persediaan Tenaga Kerja</h2>
     @if($dashboard)
         {!! $dashboard->iframe_code !!}
     @else
