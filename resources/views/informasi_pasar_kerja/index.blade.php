@@ -143,7 +143,7 @@ section:last-of-type {
                                     </div>
                                 </div>
                             </div>
-                            <a href="{{ route('dashboard.trend') }}" class="btn btn-primary mt-3 w-100">Lihat Detail</a>
+                            <a href="{{ route('dashboard.trend') }}" class="btn btn-primary mt-3 w-100 d-none">Lihat Detail</a>
                         </div>
                     </div>
                 @endforeach
@@ -151,6 +151,7 @@ section:last-of-type {
             @if($total > 4)
                 <div class="text-center mt-3">
                     <button id="lihatLebihBanyakBtn" class="btn btn-success px-4">Lihat lebih banyak</button>
+                    <a href="{{ route('dashboard.trend') }}" id="section1LihatDetailBtn" class="btn btn-primary px-4 mt-3 d-none">Lihat Detail</a>
                 </div>
             @endif
         </div>
@@ -185,7 +186,7 @@ section:last-of-type {
                                     </div>
                                 </div>
                             </div>
-                            <a href="{{ route('dashboard.distribution') }}" class="btn btn-primary mt-3 w-100">Lihat Detail</a>
+                            <a href="{{ route('dashboard.distribution') }}" class="btn btn-primary mt-3 w-100 d-none">Lihat Detail</a>
                         </div>
                     </div>
                 @endforeach
@@ -193,6 +194,7 @@ section:last-of-type {
             @if($total2 > 4)
                 <div class="text-center mt-3">
                     <button id="lihatLebihBanyakBtn2" class="btn btn-success px-4">Lihat lebih banyak</button>
+                    <a href="{{ route('dashboard.distribution') }}" id="section2LihatDetailBtn" class="btn btn-primary px-4 mt-3 d-none">Lihat Detail</a>
                 </div>
             @endif
         </div>
@@ -361,22 +363,30 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Lihat lebih banyak logic for Section 1
     const lihatLebihBanyakBtn = document.getElementById('lihatLebihBanyakBtn');
+    const section1LihatDetailBtn = document.getElementById('section1LihatDetailBtn');
     if (lihatLebihBanyakBtn) {
         lihatLebihBanyakBtn.addEventListener('click', function() {
             document.querySelectorAll('.section1-card.d-none').forEach(function(card) {
                 card.classList.remove('d-none');
             });
             lihatLebihBanyakBtn.style.display = 'none';
+            if (section1LihatDetailBtn) {
+                section1LihatDetailBtn.classList.remove('d-none');
+            }
         });
     }
     // Lihat lebih banyak logic for Section 2
     const lihatLebihBanyakBtn2 = document.getElementById('lihatLebihBanyakBtn2');
+    const section2LihatDetailBtn = document.getElementById('section2LihatDetailBtn');
     if (lihatLebihBanyakBtn2) {
         lihatLebihBanyakBtn2.addEventListener('click', function() {
             document.querySelectorAll('.section2-card.d-none').forEach(function(card) {
                 card.classList.remove('d-none');
             });
             lihatLebihBanyakBtn2.style.display = 'none';
+            if (section2LihatDetailBtn) {
+                section2LihatDetailBtn.classList.remove('d-none');
+            }
         });
     }
     // Lihat lebih banyak logic for Section 3
