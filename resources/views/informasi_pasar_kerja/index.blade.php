@@ -89,7 +89,7 @@ section:last-of-type {
                                     </div>
                                 </div>
                             </div>
-                            <a href="{{ route('dashboard.performance') }}" class="btn btn-primary mt-3 w-100">Lihat Detail</a>
+                            <a href="{{ route('dashboard.performance') }}" class="btn btn-primary mt-3 w-100 d-none">Lihat Detail</a>
                         </div>
                     </div>
                 @endforeach
@@ -97,6 +97,7 @@ section:last-of-type {
             @if($total3 > 4)
                 <div class="text-center mt-3">
                     <button id="lihatLebihBanyakBtn3" class="btn btn-success px-4">Lihat lebih banyak</button>
+                    <a href="{{ route('dashboard.performance') }}" id="section3LihatDetailBtn" class="btn btn-primary px-4 mt-3 d-none">Lihat Detail</a>
                 </div>
             @endif
         </div>
@@ -380,12 +381,16 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     // Lihat lebih banyak logic for Section 3
     const lihatLebihBanyakBtn3 = document.getElementById('lihatLebihBanyakBtn3');
+    const section3LihatDetailBtn = document.getElementById('section3LihatDetailBtn');
     if (lihatLebihBanyakBtn3) {
         lihatLebihBanyakBtn3.addEventListener('click', function() {
             document.querySelectorAll('.section3-card.d-none').forEach(function(card) {
                 card.classList.remove('d-none');
             });
             lihatLebihBanyakBtn3.style.display = 'none';
+            if (section3LihatDetailBtn) {
+                section3LihatDetailBtn.classList.remove('d-none');
+            }
         });
     }
     // Lihat lebih banyak logic for Section 4
