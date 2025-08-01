@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use App\Models\Statistic;
 use App\Models\Information;
 use App\Models\Chart;
@@ -20,6 +21,7 @@ use App\Models\Dataset;
 use App\Models\HighlightStatistic;
 use App\Models\Visitor;
 use App\Models\MitraKerja;
+use App\Models\KarirhubAds;
 
 class HomeController extends Controller
 {
@@ -65,6 +67,7 @@ class HomeController extends Controller
         $highlightStatistics = HighlightStatistic::all();
         $visitCount = Visitor::count();
         $mitraKerja = MitraKerja::where('divider', 'mitra')->get();
+        $ads = KarirhubAds::latest()->get();
 
         return view('home', compact(
             'statistics',
@@ -84,7 +87,8 @@ class HomeController extends Controller
             'datasets',
             'highlightStatistics',
             'visitCount',
-            'mitraKerja'
+            'mitraKerja',
+            'ads'
         ));
     }
 } 

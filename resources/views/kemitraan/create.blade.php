@@ -6,7 +6,7 @@
         <div class="card-body p-4">
             <div class="text-center mb-4">
                 <i class="bi bi-people-fill" style="font-size: 2.5rem; color: #0d6efd;"></i>
-                <h2 class="mt-2 mb-0">Pendaftaran Kemitraan</h2>
+                <h2 class="mt-2 mb-0">Pendaftaran Walk In Interview</h2>
                 <p class="text-muted">Pusat Pasar Kerja</p>
             </div>
             @if ($errors->any())
@@ -156,6 +156,9 @@
                             <input class="form-check-input mt-0" type="checkbox" id="fasilitaslainnyaCheckbox" name="facility[]" value="lainnya" onchange="toggleOtherfacilityText(this)">
                             <label class="form-check-label ms-1 mb-0" for="fasilitaslainnyaCheckbox">Lainnya</label>
                             <input type="text" id="facilityOtherText" class="form-control mt-2" placeholder="Tulis nama fasilitas..." name="fasilitas_lainnya" style="display: none">
+                            @error('facility')
+                                <div class="text-danger mt-1">{{ $message }}</div>
+                            @enderror
                         </div>
 
 
@@ -271,12 +274,44 @@
         enableTime: true,
         noCalendar: true,
         dateFormat: "H:i",
+        minuteIncrement: 30,
+        
     });
     flatpickr("#scheduletimefinish", {
         enableTime: true,
         noCalendar: true,
         dateFormat: "H:i",
-    })
+        minuteIncrement: 30,
+    });
+
+    const whatsappInput = document.getElementById('pic_whatsapp');
+
+    whatsappInput.addEventListener('input', function () {
+        let input = this.value;
+
+        // Hapus semua karakter kecuali angka dan +
+        input = input.replace(/[^0-9+]/g, '');
+
+        // Pastikan hanya satu '+' di awal
+        if (input.indexOf('+') > 0) {
+            input = input.replace(/\+/g, ''); // hapus semua '+'
+            input = '+' + input;
+        }
+
+        // Pastikan diawali dengan +62
+        if (!input.startsWith('+62')) {
+            input = '+62' + input.replace(/^\+*/, '').replace(/^62*/, '');
+        }
+
+        // Ambil hanya digit setelah +62
+        const digits = input.slice(3).replace(/[^0-9]/g, '');
+
+        // Batasi maksimal 13 digit setelah +62
+        const limitedDigits = digits.substring(0, 13);
+
+        // Gabungkan kembali
+        this.value = '+62' + limitedDigits;
+    });
 
     document.addEventListener('DOMContentLoaded', function() {
         var typeForm = document.getElementById('typeForm');
@@ -325,6 +360,16 @@
         const input = document.getElementById('facilityOtherText');
         input.style.display = checkbox.checked ? 'block' : 'none';
     }
+
+    document.querySelector('form').addEventListener('submit', function (e) {
+        const checkboxes = document.querySelectorAll('input[name="facility[]"]');
+        const isChecked = Array.from(checkboxes).some(cb => cb.checked);
+
+        if (!isChecked) {
+            e.preventDefault(); // cegah form submit
+            alert('Silakan pilih minimal satu fasilitas yang akan dipakai.');
+        }
+    });
 </script>
 @endpush
 <style>

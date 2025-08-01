@@ -345,12 +345,90 @@
                 </div>
             @endforeach
         </div>
-        <div class="text-center mt-4">
+        <div class="text-center mt-4" >
             <a href="{{ route('virtual-karir.index') }}" class="btn btn-outline-success rounded-pill px-4 py-2">
                 Lihat Layanan Lainnya <i class="fa fa-arrow-right"></i>
             </a>
         </div>
     </section>
+
+    {{-- for ads --}}
+ <section class="my-5 py-5 bg-primary text-white rounded-4" data-aos="fade-up">
+    <div class="container">
+        <div class="row align-items-center">
+            {{-- Bagian kiri --}}
+            <div class="col-md-4 mb-4 mb-md-0">
+                <h2 class="fw-bold" style="font-size:2rem;">Lowongan kerja yang sedang trending</h2>
+                <p class="mb-4">Temukan lowongan pekerjaan teratas yang banyak dilamar oleh para pencari kerja.</p>
+                <a href="#" class="btn btn-light fw-semibold text-dark px-4 py-2">Lihat Lebih Banyak</a>
+            </div>
+
+            {{-- Bagian kanan --}}
+            <div class="col-md-8 position-relative">
+                <div id="jobCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
+                    <div class="carousel-inner">
+                        @foreach ($ads->chunk(3) as $chunkIndex => $adChunk)
+                            <div class="carousel-item @if($chunkIndex === 0) active @endif">
+                                <div class="row g-3">
+                                    @foreach ($adChunk as $ad)
+                                        <div class="col-md-4">
+                                            <div class="job-card bg-white text-dark shadow-sm rounded-4 border p-3 h-100">
+                                                <div class="text-center mb-3">
+                                                    <img src="data:{{ $ad->mime_type }};base64,{{ $ad->image_base64 }}"
+                                                        alt="{{ $ad->company_name }}"
+                                                        class="rounded" style="height: 50px; object-fit: contain;">
+                                                </div>
+                                                <h6 class="fw-bold text-center">{{ \Illuminate\Support\Str::limit($ad->job_title, 15, '...') }}</h6>
+                                                <p class="text-center mb-1 text-muted small">{{ \Illuminate\Support\Str::limit($ad->company_name, 20, '...') }}</p>
+                                                <p class="text-center mb-1 text-secondary small">
+                                                    {{ strtoupper($ad->city ?? 'KOTA BELUM DIISI') }},
+                                                    <br>
+                                                    {{ strtoupper( Illuminate\Support\Str::limit($ad->province, 10, '...') ?? 'PROVINSI BELUM DIISI') }}
+                                                </p>
+                                                
+
+                                                <div class="text-center mt-2 mb-2">
+                                                    <small class="text-muted">Kisaran Gaji</small>
+                                                    @if ($ad->secret == 1)
+                                                        <div class="fw-semibold text-primary">Dirahasiakan</div>
+                                                    @else
+                                                        <div class="fw-semibold text-primary">
+                                                            Rp{{ number_format($ad->salary_min / 1000000, 0, ',', '.') }}jt - 
+                                                            Rp{{ number_format($ad->salary_max / 1000000, 2, ',', '.') }}jt
+                                                        </div>
+                                                    @endif
+                                                </div>
+
+                                                <div class="card-footer border-top pt-2 bg-transparent d-flex justify-content-between align-items-center small text-muted">
+                                                    <span>Lowongan dari</span>
+                                                    <img src="{{ asset('images/services/karirhub.png') }}" alt="Karirhub" height="18">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+
+                    {{-- Navigasi carousel --}}
+                    <button class="carousel-control-prev" type="button" data-bs-target="#jobCarousel" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon bg-white rounded-circle p-2" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#jobCarousel" data-bs-slide="next">
+                        <span class="carousel-control-next-icon bg-white rounded-circle p-2" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
 
     {{-- DATASET Section --}}
     <section class="my-5 px-2 px-md-4 px-lg-5" data-aos="fade-up">
@@ -614,6 +692,7 @@
     @parent
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://www.youtube.com/iframe_api"></script>
+    
     <script>
     let miniVideos = [];
     let currentVideoIndex = 0;
@@ -906,6 +985,22 @@
         });
 
         updateDots();
+    });
+
+    //for ads
+    document.addEventListener('DOMContentLoaded', function () {
+        const items = document.querySelectorAll('.ad-item');
+        let currentIndex = 0;
+
+        setInterval(() => {
+            items[currentIndex].classList.add('d-none');
+            items[currentIndex].classList.remove('active');
+
+            currentIndex = (currentIndex + 1) % items.length;
+
+            items[currentIndex].classList.remove('d-none');
+            items[currentIndex].classList.add('active');
+        }, 3000);
     });
     </script>
 @endsection
@@ -1303,5 +1398,24 @@
         max-height: 65px;
     }
 }
+    .job-card {
+    transition: box-shadow 0.3s ease;
+}
+
+.job-card:hover {
+    box-shadow: 0 0.5rem 1.25rem rgba(0, 0, 0, 0.1);
+}
+
+.job-card img {
+    max-height: 60px;
+}
+.job-card {
+    font-size: 0.9rem;
+    transition: transform 0.2s ease;
+}
+.job-card:hover {
+    transform: scale(1.02);
+}
+
 </style>
 @endpush 
