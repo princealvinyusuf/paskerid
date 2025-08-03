@@ -353,14 +353,15 @@
     </section>
 
     {{-- for ads --}}
- <section class="my-5 py-5 bg-success text-white rounded-4 mx-5" data-aos="fade-up">
+ <section class="my-5 py-5 text-white rounded-4 mx-5" style="background: linear-gradient(to right, #388FE8, #4DA4F3);" data-aos="fade-up">
     <div class="container">
         <div class="row align-items-center">
             {{-- Bagian kiri --}}
             <div class="col-md-4 mb-4 mb-md-0">
-                <h2 class="fw-bold" style="font-size:2rem;">Lowongan kerja yang sedang trending</h2>
-                <p class="mb-4">Temukan lowongan pekerjaan teratas yang banyak dilamar oleh para pencari kerja.</p>
-                <a href="#" class="btn btn-light fw-semibold text-dark px-4 py-2">Lihat Lebih Banyak</a>
+                <a href="https://karirhub.kemnaker.go.id/" target="_blank">
+    <img src="{{ asset('images/services/karirhub.png') }}" alt="Karirhub" class="img-fluid" style="max-height: 50px;">
+                </a>
+                <h2 class="fw-bold" style="font-size:3rem;">Lowongan Kerja Terkini Buat Kamu</h2>
             </div>
 
             {{-- Bagian kanan --}}
@@ -372,6 +373,7 @@
                                 <div class="row g-3">
                                     @foreach ($adChunk as $ad)
                                         <div class="col-md-4">
+                                            <a href="https://karirhub.kemnaker.go.id/" class="text-decoration-none text-dark">
                                             <div class="job-card bg-white text-dark shadow-sm rounded-4 border p-3 h-100">
                                                 <div class="text-center mb-3">
                                                     <img src="data:{{ $ad->mime_type }};base64,{{ $ad->image_base64 }}"
@@ -404,22 +406,13 @@
                                                     <img src="{{ asset('images/services/karirhub.png') }}" alt="Karirhub" height="18">
                                                 </div>
                                             </div>
+                                            </a>
                                         </div>
                                     @endforeach
                                 </div>
                             </div>
                         @endforeach
                     </div>
-
-                    {{-- Navigasi carousel --}}
-                    <button class="carousel-control-prev" type="button" data-bs-target="#jobCarousel" data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon bg-white rounded-circle p-2" aria-hidden="true"></span>
-                        <span class="visually-hidden">Previous</span>
-                    </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#jobCarousel" data-bs-slide="next">
-                        <span class="carousel-control-next-icon bg-white rounded-circle p-2" aria-hidden="true"></span>
-                        <span class="visually-hidden">Next</span>
-                    </button>
                 </div>
             </div>
         </div>
