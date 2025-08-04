@@ -359,7 +359,7 @@
             {{-- Bagian kiri --}}
             <div class="col-md-4 mb-4 mb-md-0">
                 <a href="https://karirhub.kemnaker.go.id/" target="_blank">
-    <img src="{{ asset('images/services/karirhub.png') }}" alt="Karirhub" class="img-fluid" style="max-height: 50px;">
+    <img src="{{ asset('images/services/karirhub_logo.png') }}" alt="Karirhub" class="img-fluid" style="max-height: 50px;">
                 </a>
                 <h2 class="fw-bold" style="font-size:3rem;">Lowongan Kerja Terkini Buat Kamu</h2>
             </div>
