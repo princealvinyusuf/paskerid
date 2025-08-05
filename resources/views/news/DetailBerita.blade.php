@@ -267,14 +267,19 @@ document.addEventListener('DOMContentLoaded', function() {
     background: #00a78e;
 }
 #likeCount {
-    font-size: 13px;
+    font-size: 11px;
     background: #0099ff;
     color: #fff;
     border-radius: 50%;
-    padding: 2px 7px;
+    padding: 1px 4px;
     position: absolute;
-    top: 4px;
-    right: 4px;
+    top: 2px;
+    right: 2px;
+    min-width: 16px;
+    min-height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 @media (max-width: 900px) {
     .ribbon-section {
