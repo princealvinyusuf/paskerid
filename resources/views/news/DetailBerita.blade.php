@@ -1,4 +1,16 @@
 @extends('layouts.app')
+@section('head')
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="{{ $news->title }}" />
+    <meta property="og:description" content="{{ Str::limit(strip_tags($news->content), 120) }}" />
+    <meta property="og:image" content="{{ asset($news->image_url) }}" />
+    <meta property="og:url" content="{{ url()->current() }}" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="{{ $news->title }}" />
+    <meta name="twitter:description" content="{{ Str::limit(strip_tags($news->content), 120) }}" />
+    <meta name="twitter:image" content="{{ asset($news->image_url) }}" />
+@endsection
 
 @section('content')
 <div class="ribbon-section">
