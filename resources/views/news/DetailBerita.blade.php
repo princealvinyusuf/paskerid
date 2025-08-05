@@ -1,6 +1,15 @@
 @extends('layouts.app')
 
 @section('content')
+<div class="ribbon-section">
+    <button id="likeBtn" class="ribbon-btn">
+        <i class="fa fa-thumbs-up"></i>
+        <span id="likeCount">{{ $news->likes }}</span>
+    </button>
+    <button id="shareBtn" class="ribbon-btn">
+        <i class="fa fa-share"></i>
+    </button>
+</div>
 <section class="section-berita">
     <div class="section-content">
         <h2 style="color: white; font-weight: bold; margin-left: 80px;">Berita</h2>
@@ -50,6 +59,41 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const likeBtn = document.getElementById('likeBtn');
+    const likeCount = document.getElementById('likeCount');
+    likeBtn.addEventListener('click', function() {
+        fetch("{{ route('news.like', $news->id) }}", {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json',
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            likeCount.textContent = data.likes;
+        });
+    });
+
+    const shareBtn = document.getElementById('shareBtn');
+    shareBtn.addEventListener('click', function() {
+        if (navigator.share) {
+            navigator.share({
+                title: document.title,
+                url: window.location.href
+            });
+        } else {
+            navigator.clipboard.writeText(window.location.href);
+            alert('Link copied to clipboard!');
+        }
+    });
+});
+</script>
+@endpush
 
 <style>
     body {
@@ -180,6 +224,56 @@
     max-width: 400px;
     height: 3px;  /* tebal garis */
     background-color: #00a78e; /* warna garis */
+}
+.ribbon-section {
+    position: fixed;
+    top: 120px;
+    left: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    z-index: 1000;
+}
+.ribbon-btn {
+    background: #333;
+    color: #fff;
+    border: none;
+    border-radius: 14px;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    cursor: pointer;
+    position: relative;
+    transition: background 0.2s;
+}
+.ribbon-btn:hover {
+    background: #00a78e;
+}
+#likeCount {
+    font-size: 13px;
+    background: #0099ff;
+    color: #fff;
+    border-radius: 50%;
+    padding: 2px 7px;
+    position: absolute;
+    top: 4px;
+    right: 4px;
+}
+@media (max-width: 900px) {
+    .ribbon-section {
+        position: static;
+        flex-direction: row;
+        gap: 12px;
+        margin-bottom: 18px;
+        left: unset;
+        top: unset;
+        justify-content: flex-start;
+    }
 }
 </style>
 

@@ -67,3 +67,5 @@ Route::get('/mini-videos', [MiniVideoController::class, 'index'])->name('mini-vi
 // (Optional: for admin panel or API use)
 Route::post('/mini-videos', [MiniVideoController::class, 'store'])->name('mini-videos.store');
 Route::delete('/mini-videos/{id}', [MiniVideoController::class, 'destroy'])->name('mini-videos.destroy');
+
+Route::post('/news/{id}/like', [App\Http\Controllers\NewsController::class, 'like'])->name('news.like');

@@ -27,4 +27,12 @@ class NewsController extends Controller
 
         return view('news.DetailBerita', compact('news','popularNews'));
     }
+
+    public function like($id)
+    {
+        $news = \App\Models\News::findOrFail($id);
+        $news->likes++;
+        $news->save();
+        return response()->json(['likes' => $news->likes]);
+    }
 }
