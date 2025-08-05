@@ -77,6 +77,21 @@
 document.addEventListener('DOMContentLoaded', function() {
     const likeBtn = document.getElementById('likeBtn');
     const likeCount = document.getElementById('likeCount');
+    let liked = false;
+
+    // Check like status on page load
+    fetch("{{ route('news.like', $news->id) }}", {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        liked = data.liked;
+        updateLikeBtn();
+    });
+
     likeBtn.addEventListener('click', function() {
         fetch("{{ route('news.like', $news->id) }}", {
             method: 'POST',
@@ -88,8 +103,20 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json())
         .then(data => {
             likeCount.textContent = data.likes;
+            liked = data.liked;
+            updateLikeBtn();
         });
     });
+
+    function updateLikeBtn() {
+        if (liked) {
+            likeBtn.classList.add('liked');
+            likeBtn.style.background = '#00a78e';
+        } else {
+            likeBtn.classList.remove('liked');
+            likeBtn.style.background = '#333';
+        }
+    }
 
     const shareBtn = document.getElementById('shareBtn');
     shareBtn.addEventListener('click', function() {

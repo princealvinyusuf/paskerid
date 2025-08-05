@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\News;
+use App\Models\NewsLike;
 
 class NewsController extends Controller
 {
@@ -28,11 +29,49 @@ class NewsController extends Controller
         return view('news.DetailBerita', compact('news','popularNews'));
     }
 
-    public function like($id)
+    public function like($id, Request $request)
     {
-        $news = \App\Models\News::findOrFail($id);
-        $news->likes++;
-        $news->save();
-        return response()->json(['likes' => $news->likes]);
+        $news = News::findOrFail($id);
+        $ip = $request->ip();
+        $userAgent = $request->header('User-Agent');
+
+        $like = NewsLike::where('news_id', $news->id)
+            ->where('ip_address', $ip)
+            ->where('user_agent', $userAgent)
+            ->first();
+
+        if ($like) {
+            // Unlike
+            $like->delete();
+            $news->likes = max(0, $news->likes - 1);
+            $news->save();
+            $liked = false;
+        } else {
+            // Like
+            NewsLike::create([
+                'news_id' => $news->id,
+                'ip_address' => $ip,
+                'user_agent' => $userAgent,
+            ]);
+            $news->likes++;
+            $news->save();
+            $liked = true;
+        }
+        return response()->json(['likes' => $news->likes, 'liked' => $liked]);
+    }
+
+    public function likeStatus($id, Request $request)
+    {
+        $news = News::findOrFail($id);
+        $ip = $request->ip();
+        $userAgent = $request->header('User-Agent');
+        $liked = \App\Models\NewsLike::where('news_id', $news->id)
+            ->where('ip_address', $ip)
+            ->where('user_agent', $userAgent)
+            ->exists();
+        return response()->json([
+            'liked' => $liked,
+            'likes' => $news->likes,
+        ]);
     }
 }
