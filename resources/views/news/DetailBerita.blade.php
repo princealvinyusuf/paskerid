@@ -283,13 +283,18 @@ document.addEventListener('DOMContentLoaded', function() {
 }
 @media (max-width: 900px) {
     .ribbon-section {
-        position: static;
+        position: fixed;
+        bottom: 24px;
+        left: 0;
+        right: 0;
+        width: 100vw;
+        display: flex;
         flex-direction: row;
         gap: 12px;
-        margin-bottom: 18px;
-        left: unset;
+        justify-content: center;
+        z-index: 1000;
+        margin-bottom: 0;
         top: unset;
-        justify-content: flex-start;
     }
 }
 </style>
