@@ -73,7 +73,7 @@
             <!-- Right: Pasker ID Logo and Text -->
             <div class="d-flex align-items-center me-0 pe-2">
                 <img src="{{ asset('images/logo.png') }}" alt="Paskerid Logo" style="height:40px; width:auto;">
-                <img src="{{ asset('images/logo.png') }}" alt="Paskerid Logo" style="height:40px; width:auto;">
+                <img src="{{ asset('images/Logo_Pasker_ID.png') }}" alt="Paskerid Logo" style="height:40px; width:auto;">
                 <!-- <span class="fw-bold ms-2 d-none d-lg-inline" style="font-family: inherit; color: inherit;">Pasker ID</span> -->
             </div>
             <button class="navbar-toggler ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
