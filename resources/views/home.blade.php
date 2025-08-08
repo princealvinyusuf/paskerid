@@ -680,64 +680,6 @@
     <div id="mini-video-iframe-container" style="width:100%; aspect-ratio:16/9; background:#000;"></div>
 </div>
 
-<!-- Chatbot Support Button -->
-<button id="chatbot-support-btn" style="
-    position: fixed;
-    left: 24px;
-    bottom: 24px;
-    z-index: 9999;
-    background: #187C19;
-    color: #fff;
-    border: none;
-    border-radius: 50%;
-    width: 60px;
-    height: 60px;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.18);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 2rem;
-    cursor: pointer;
-">
-    <i class="fa fa-comments"></i>
-</button>
-
-<!-- Chatbot Modal -->
-<div id="chatbot-modal" style="
-    display: none;
-    position: fixed;
-    left: 0; top: 0; width: 100vw; height: 100vh;
-    background: rgba(0,0,0,0.35);
-    z-index: 10000;
-    align-items: center;
-    justify-content: center;
-">
-    <div style="
-        background: #fff;
-        border-radius: 1.5rem;
-        max-width: 400px;
-        width: 95vw;
-        max-height: 90vh;
-        box-shadow: 0 8px 32px rgba(0,0,0,0.18);
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        overflow: hidden;
-    ">
-        <button id="chatbot-modal-close" style="
-            position: absolute;
-            top: 12px; right: 16px;
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            color: #888;
-            cursor: pointer;
-            z-index: 2;
-        ">&times;</button>
-        <iframe src="https://interfaces.zapier.com/embed/chatbot/cme2m5bo7000dpuncd9nwwgbe" height="600px" width="400px" allow="clipboard-write *" style="border: none;"></iframe>
-    </div>
-</div>
-
     <!-- Zapier Chatbot Embed -->
     <script async type='module' src='https://interfaces.zapier.com/assets/web-components/zapier-interfaces/zapier-interfaces.esm.js'></script>
     <zapier-interfaces-chatbot-embed is-popup='true' chatbot-id='cme2m5bo7000dpuncd9nwwgbe'></zapier-interfaces-chatbot-embed>
@@ -1056,22 +998,6 @@
             items[currentIndex].classList.remove('d-none');
             items[currentIndex].classList.add('active');
         }, 3000);
-    });
-    </script>
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const btn = document.getElementById('chatbot-support-btn');
-        const modal = document.getElementById('chatbot-modal');
-        const close = document.getElementById('chatbot-modal-close');
-        btn.addEventListener('click', function() {
-            modal.style.display = 'flex';
-        });
-        close.addEventListener('click', function() {
-            modal.style.display = 'none';
-        });
-        modal.addEventListener('click', function(e) {
-            if (e.target === modal) modal.style.display = 'none';
-        });
     });
     </script>
 @endsection
