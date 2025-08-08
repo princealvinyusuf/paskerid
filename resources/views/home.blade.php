@@ -679,22 +679,6 @@
     </div>
     <div id="mini-video-iframe-container" style="width:100%; aspect-ratio:16/9; background:#000;"></div>
 </div>
-
-<!-- Chatbot Floating Button (Home Page Only) -->
-<div id="chatbot-support-btn" style="position:fixed; bottom:32px; left:32px; z-index:9999;">
-    <button class="btn btn-success rounded-circle shadow" style="width:64px; height:64px; font-size:2rem;">
-        <i class="fa fa-comments"></i>
-    </button>
-</div>
-
-<!-- Chatbot Modal -->
-<div id="chatbot-modal" style="display:none; position:fixed; bottom:100px; left:32px; z-index:10000; width:400px; max-width:95vw; height:600px; background:#fff; border-radius:16px; box-shadow:0 4px 24px rgba(0,0,0,0.25); overflow:hidden;">
-    <div style="background:#28a745; color:#fff; padding:12px 16px; display:flex; justify-content:space-between; align-items:center;">
-        <span><i class="fa fa-robot me-2"></i>AI Support</span>
-        <button id="chatbot-close" style="background:none; border:none; color:#fff; font-size:1.5rem;">&times;</button>
-    </div>
-    <iframe src="https://cloud.activepieces.com/chats/wll9kCJ3csAYu6SNtnvRV" style="width:100%; height:calc(100% - 48px); border:none;"></iframe>
-</div>
 @endsection
 
 @section('scripts')
@@ -1010,43 +994,6 @@
             items[currentIndex].classList.remove('d-none');
             items[currentIndex].classList.add('active');
         }, 3000);
-    });
-    </script>
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const btn = document.getElementById('chatbot-support-btn');
-        const modal = document.getElementById('chatbot-modal');
-        const close = document.getElementById('chatbot-close');
-        btn.addEventListener('click', function() {
-            modal.style.display = 'block';
-        });
-        close.addEventListener('click', function() {
-            modal.style.display = 'none';
-        });
-        // Optional: Close modal when clicking outside the modal content
-        window.addEventListener('click', function(e) {
-            if (e.target === modal) {
-                modal.style.display = 'none';
-            }
-        });
-    });
-    </script>
-    <script src='https://www.noupe.com/embed/019888e6f57e746ea7e8524b71a34c6b512b.js'></script>
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const btn = document.getElementById('chatbot-support-btn');
-        btn.addEventListener('click', function() {
-            // Try to open the noupe widget programmatically if supported
-            if (window.NoupeWidget && typeof window.NoupeWidget.open === 'function') {
-                window.NoupeWidget.open();
-            } else {
-                // Fallback: if widget auto-loads, this will just focus it
-                const noupeWidget = document.querySelector('iframe[src*="noupe.com"]');
-                if (noupeWidget) {
-                    noupeWidget.contentWindow.focus();
-                }
-            }
-        });
     });
     </script>
 @endsection
