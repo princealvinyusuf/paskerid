@@ -683,6 +683,32 @@
     <!-- Zapier Chatbot Embed -->
     <script async type='module' src='https://interfaces.zapier.com/assets/web-components/zapier-interfaces/zapier-interfaces.esm.js'></script>
     <zapier-interfaces-chatbot-embed is-popup='true' chatbot-id='cme2m5bo7000dpuncd9nwwgbe'></zapier-interfaces-chatbot-embed>
+
+    <style>
+    /* Force Zapier Chatbot iframe to the left */
+    iframe[src*="zapier.com/embed/chatbot"] {
+        right: auto !important;
+        left: 24px !important;
+        bottom: 24px !important;
+        position: fixed !important;
+        z-index: 2147483647 !important;
+        transition: left 0.2s, right 0.2s;
+    }
+    </style>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        setInterval(function() {
+            var zapierIframe = document.querySelector('iframe[src*="zapier.com/embed/chatbot"]');
+            if (zapierIframe) {
+                zapierIframe.style.right = 'auto';
+                zapierIframe.style.left = '24px';
+                zapierIframe.style.bottom = '24px';
+                zapierIframe.style.position = 'fixed';
+                zapierIframe.style.zIndex = '2147483647';
+            }
+        }, 1000);
+    });
+    </script>
 @endsection
 
 @section('scripts')
