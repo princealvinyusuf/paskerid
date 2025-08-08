@@ -1031,6 +1031,24 @@
         });
     });
     </script>
+    <script src='https://www.noupe.com/embed/019888e6f57e746ea7e8524b71a34c6b512b.js'></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const btn = document.getElementById('chatbot-support-btn');
+        btn.addEventListener('click', function() {
+            // Try to open the noupe widget programmatically if supported
+            if (window.NoupeWidget && typeof window.NoupeWidget.open === 'function') {
+                window.NoupeWidget.open();
+            } else {
+                // Fallback: if widget auto-loads, this will just focus it
+                const noupeWidget = document.querySelector('iframe[src*="noupe.com"]');
+                if (noupeWidget) {
+                    noupeWidget.contentWindow.focus();
+                }
+            }
+        });
+    });
+    </script>
 @endsection
 
 @push('head')
