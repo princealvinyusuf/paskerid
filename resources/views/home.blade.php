@@ -681,14 +681,14 @@
 </div>
 
 <!-- Chatbot Floating Button (Home Page Only) -->
-<div id="chatbot-support-btn" style="position:fixed; bottom:32px; right:32px; z-index:9999;">
+<div id="chatbot-support-btn" style="position:fixed; bottom:32px; left:32px; z-index:9999;">
     <button class="btn btn-success rounded-circle shadow" style="width:64px; height:64px; font-size:2rem;">
         <i class="fa fa-comments"></i>
     </button>
 </div>
 
 <!-- Chatbot Modal -->
-<div id="chatbot-modal" style="display:none; position:fixed; bottom:100px; right:32px; z-index:10000; width:400px; max-width:95vw; height:600px; background:#fff; border-radius:16px; box-shadow:0 4px 24px rgba(0,0,0,0.25); overflow:hidden;">
+<div id="chatbot-modal" style="display:none; position:fixed; bottom:100px; left:32px; z-index:10000; width:400px; max-width:95vw; height:600px; background:#fff; border-radius:16px; box-shadow:0 4px 24px rgba(0,0,0,0.25); overflow:hidden;">
     <div style="background:#28a745; color:#fff; padding:12px 16px; display:flex; justify-content:space-between; align-items:center;">
         <span><i class="fa fa-robot me-2"></i>AI Support</span>
         <button id="chatbot-close" style="background:none; border:none; color:#fff; font-size:1.5rem;">&times;</button>
