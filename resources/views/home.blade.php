@@ -1414,5 +1414,11 @@
     transform: scale(1.02);
 }
 
+zapier-interfaces-chatbot-embed[is-popup="true"] {
+    right: auto !important;
+    left: 24px !important;
+    bottom: 24px !important;
+}
+
 </style>
 @endpush 
