@@ -737,6 +737,10 @@
         <iframe src="https://pasker-id.zapier.app" style="width:100%; height: 500px; border: none;"></iframe>
     </div>
 </div>
+
+    <!-- Zapier Chatbot Embed -->
+    <script async type='module' src='https://interfaces.zapier.com/assets/web-components/zapier-interfaces/zapier-interfaces.esm.js'></script>
+    <zapier-interfaces-chatbot-embed is-popup='true' chatbot-id='cme2m5bo7000dpuncd9nwwgbe'></zapier-interfaces-chatbot-embed>
 @endsection
 
 @section('scripts')
