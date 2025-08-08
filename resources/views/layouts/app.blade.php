@@ -84,7 +84,7 @@
     <main>
         @yield('content')
         <!-- Back to Top Button -->
-        <button id="backToTopBtn" class="btn btn-success rounded-circle" style="position: fixed; bottom: 32px; right: 32px; display: none; z-index: 9999; width:48px; height:48px; box-shadow: 0 4px 16px rgba(40,167,69,0.18);">
+        <button id="backToTopBtn" class="btn btn-success rounded-circle" style="position: fixed; bottom: 32px; left: 32px; display: none; z-index: 9999; width:48px; height:48px; box-shadow: 0 4px 16px rgba(40,167,69,0.18);">
             <i class="fa fa-arrow-up"></i>
         </button>
     </main>
