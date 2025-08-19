@@ -51,8 +51,14 @@
                             <li><a class="dropdown-item" href="https://microlearning-paskerid.kemnaker.go.id/" target="_blank">Microlearning</a></li>
                         </ul>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link @if(request()->routeIs('publikasi.index')) active fw-bold @endif" href="{{ route('publikasi.index') }}">Publikasi</a>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle @if(request()->routeIs('publikasi.index') || (request()->routeIs('informasi.index') && request('type') == 'publikasi')) active fw-bold @endif" href="#" id="publikasiDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Publikasi
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="publikasiDropdown">
+                            <li><a class="dropdown-item @if(request()->routeIs('publikasi.index')) active fw-bold @endif" href="{{ route('publikasi.index') }}">Publikasi</a></li>
+                            <li><a class="dropdown-item @if(request()->routeIs('informasi.index') && request('type') == 'publikasi') active fw-bold @endif" href="{{ route('informasi.index', ['type' => 'publikasi']) }}">Publikasi Pasar Kerja</a></li>
+                        </ul>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link @if(request()->routeIs('news.index')) active fw-bold @endif" href="{{ route('news.index') }}">Berita</a>
