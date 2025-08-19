@@ -58,6 +58,7 @@
                         <ul class="dropdown-menu" aria-labelledby="publikasiDropdown">
                             <li><a class="dropdown-item @if(request()->routeIs('publikasi.index')) active fw-bold @endif" href="{{ route('publikasi.index') }}">Publikasi</a></li>
                             <li><a class="dropdown-item @if(request()->routeIs('informasi.index') && request('type') == 'publikasi') active fw-bold @endif" href="{{ route('informasi.index', ['type' => 'publikasi']) }}">Publikasi Pasar Kerja</a></li>
+                            <li><a class="dropdown-item @if(request()->routeIs('datasets.index')) active fw-bold @endif" href="{{ route('datasets.index') }}">Dataset Pasar Kerja</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">
