@@ -1468,7 +1468,7 @@
 /* Social Floating Button (Desktop Only) */
 .social-float {
     position: fixed;
-    right: 400px; /* keep clear of mini video player */
+    left: 96px; /* beside Back to Top (32 + 48 + 16 gap) */
     bottom: 24px;
     z-index: 9998;
     display: none; /* hidden on mobile by default */
