@@ -59,14 +59,8 @@
                     <form method="GET" class="row g-3 mb-4">
                         <input type="hidden" name="type" value="{{ request('type', 'statistik') }}">
                         <input type="hidden" name="subject" value="{{ $selectedSubject }}">
-                        <div class="col-md-4">
+                        <div class="col-md-9">
                             <input type="text" name="search" class="form-control" placeholder="Cari judul..." value="{{ request('search') }}">
-                        </div>
-                        <div class="col-md-2">
-                            <input type="date" name="start_date" class="form-control" placeholder="Dari tanggal" value="{{ request('start_date') }}">
-                        </div>
-                        <div class="col-md-2">
-                            <input type="date" name="end_date" class="form-control" placeholder="Sampai tanggal" value="{{ request('end_date') }}">
                         </div>
                         <div class="col-md-3">
                             <button type="submit" class="btn btn-primary w-100">Cari</button>
