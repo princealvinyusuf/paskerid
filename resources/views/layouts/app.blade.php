@@ -52,7 +52,7 @@
                         </ul>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle @if(request()->routeIs('publikasi.index') || (request()->routeIs('informasi.index') && request('type') == 'publikasi')) active fw-bold @endif" href="#" id="publikasiDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle @if(request()->routeIs('publikasi.index') || request()->routeIs('datasets.index') || (request()->routeIs('informasi.index') && request('type') == 'publikasi')) active fw-bold @endif" href="#" id="publikasiDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Publikasi
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="publikasiDropdown">
