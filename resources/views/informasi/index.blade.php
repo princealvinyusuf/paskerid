@@ -60,7 +60,7 @@
                         <input type="hidden" name="type" value="{{ request('type', 'statistik') }}">
                         <input type="hidden" name="subject" value="{{ $selectedSubject }}">
                         <div class="col-md-9">
-                            <input type="text" name="search" class="form-control" placeholder="Cari judul..." value="{{ request('search') }}">
+                            <input type="text" name="search" class="form-control" placeholder="Cari Judul Publikasi atau Tahun Publikasi" value="{{ request('search') }}">
                         </div>
                         <div class="col-md-3">
                             <button type="submit" class="btn btn-primary w-100">Cari</button>
