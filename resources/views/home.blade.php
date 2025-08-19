@@ -1472,7 +1472,7 @@
     bottom: 32px; /* same as Back to Top */
     z-index: 9998;
     display: none; /* hidden on mobile by default */
-    padding-bottom: 0; /* keep exact alignment with Back to Top */
+    padding-bottom: 96px; /* invisible bridge so hover doesn't drop when moving to menu */
 }
 @media (min-width: 992px) {
     .social-float { display: block; }
@@ -1494,7 +1494,7 @@
 
 .social-menu {
     position: absolute;
-    bottom: 64px;
+    bottom: 64px; /* sits right above the fab; no gap */
     right: 0;
     width: 280px;
     background: #ffffff;
@@ -1502,10 +1502,11 @@
     padding: 14px;
     box-shadow: 0 12px 30px rgba(0,0,0,0.18), 0 0 0 2px rgba(255,255,255,0.9) inset;
     transform-origin: bottom right;
-    transform: scale(0.98);
+    transform: translateY(6px) scale(0.98);
     opacity: 0;
+    visibility: hidden;
     pointer-events: none;
-    transition: transform .18s ease, opacity .18s ease;
+    transition: transform .18s ease, opacity .18s ease, visibility .18s;
 }
 .social-menu:after {
     content: '';
@@ -1522,6 +1523,7 @@
 .social-float:focus-within .social-menu {
     transform: translateY(0) scale(1);
     opacity: 1;
+    visibility: visible;
     pointer-events: auto;
 }
 .social-chip {
