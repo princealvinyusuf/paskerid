@@ -1468,11 +1468,11 @@
 /* Social Floating Button (Desktop Only) */
 .social-float {
     position: fixed;
-    left: 96px; /* beside Back to Top (32 + 48 + 16 gap) */
-    bottom: 32px; /* align baseline with Back to Top */
+    left: calc(32px + 48px + 16px); /* beside Back to Top */
+    bottom: 32px; /* same as Back to Top */
     z-index: 9998;
     display: none; /* hidden on mobile by default */
-    padding-bottom: 100px; /* expand hover hit area to bridge the gap */
+    padding-bottom: 0; /* keep exact alignment with Back to Top */
 }
 @media (min-width: 992px) {
     .social-float { display: block; }
