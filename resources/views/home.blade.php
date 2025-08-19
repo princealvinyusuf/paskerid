@@ -1469,7 +1469,7 @@
 .social-float {
     position: fixed;
     left: 96px; /* beside Back to Top (32 + 48 + 16 gap) */
-    bottom: 24px;
+    bottom: 32px; /* align baseline with Back to Top */
     z-index: 9998;
     display: none; /* hidden on mobile by default */
     padding-bottom: 100px; /* expand hover hit area to bridge the gap */
