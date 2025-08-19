@@ -683,41 +683,49 @@
 <!-- Social Media Floating (Desktop Only) -->
 <div class="social-float" aria-label="Ikuti Kami">
     <div class="social-menu shadow-sm">
-        <a href="#" target="_blank" class="social-chip">
+        <a href="https://www.instagram.com/pusatpasarkerja" target="_blank" class="social-chip" rel="noopener">
             <span class="chip-left">
-                <span class="chip-icon"><i class="fa fa-instagram"></i></span>
+                <span class="chip-icon"><i class="fab fa-instagram"></i></span>
                 <span>Instagram</span>
             </span>
             <i class="fa fa-angle-right"></i>
         </a>
-        <a href="#" target="_blank" class="social-chip">
+        <a href="https://twitter.com/pusatpasarkerja" target="_blank" class="social-chip" rel="noopener">
             <span class="chip-left">
-                <span class="chip-icon"><i class="fa fa-music"></i></span>
-                <span>Tiktok</span>
+                <span class="chip-icon"><i class="fab fa-twitter"></i></span>
+                <span>Twitter (X)</span>
             </span>
             <i class="fa fa-angle-right"></i>
         </a>
-        <a href="#" target="_blank" class="social-chip">
+        <a href="https://www.facebook.com/pusatpasarkerja" target="_blank" class="social-chip" rel="noopener">
             <span class="chip-left">
-                <span class="chip-icon"><i class="fa fa-whatsapp"></i></span>
-                <span>WhatsApp</span>
+                <span class="chip-icon"><i class="fab fa-facebook"></i></span>
+                <span>Facebook</span>
             </span>
             <i class="fa fa-angle-right"></i>
         </a>
-        <a href="#" target="_blank" class="social-chip">
+        <a href="https://www.youtube.com/pusatpasarkerja" target="_blank" class="social-chip" rel="noopener">
             <span class="chip-left">
-                <span class="chip-icon"><i class="fa fa-telegram"></i></span>
-                <span>Telegram</span>
+                <span class="chip-icon"><i class="fab fa-youtube"></i></span>
+                <span>YouTube</span>
             </span>
             <i class="fa fa-angle-right"></i>
         </a>
-        <a href="#" class="social-other">Kanal Lainnya..</a>
+        <a href="https://www.tiktok.com/@paskerid_" target="_blank" class="social-chip" rel="noopener">
+            <span class="chip-left">
+                <span class="chip-icon"><i class="fab fa-tiktok"></i></span>
+                <span>TikTok</span>
+            </span>
+            <i class="fa fa-angle-right"></i>
+        </a>
+        <a href="{{ route('media_sosial') }}" class="social-other">Kanal Lainnya..</a>
     </div>
-    <a href="#" class="social-fab shadow">
+    <a href="{{ route('media_sosial') }}" class="social-fab shadow">
         <span class="fab-icons">
-            <i class="fa fa-instagram"></i>
-            <i class="fa fa-whatsapp"></i>
-            <i class="fa fa-telegram"></i>
+            <i class="fab fa-instagram"></i>
+            <i class="fab fa-twitter"></i>
+            <i class="fab fa-facebook"></i>
+            <i class="fab fa-youtube"></i>
         </span>
         <span class="fab-text">Ikuti Kami</span>
     </a>
@@ -1464,6 +1472,7 @@
     bottom: 24px;
     z-index: 9998;
     display: none; /* hidden on mobile by default */
+    padding-bottom: 100px; /* expand hover hit area to bridge the gap */
 }
 @media (min-width: 992px) {
     .social-float { display: block; }
@@ -1493,7 +1502,7 @@
     padding: 14px;
     box-shadow: 0 12px 30px rgba(0,0,0,0.18), 0 0 0 2px rgba(255,255,255,0.9) inset;
     transform-origin: bottom right;
-    transform: translateY(8px) scale(0.98);
+    transform: scale(0.98);
     opacity: 0;
     pointer-events: none;
     transition: transform .18s ease, opacity .18s ease;
@@ -1508,7 +1517,9 @@
     border-color: #ffffff transparent transparent transparent;
     filter: drop-shadow(0 -1px 1px rgba(0,0,0,.06));
 }
-.social-float:hover .social-menu {
+.social-float:hover .social-menu,
+.social-menu:hover,
+.social-float:focus-within .social-menu {
     transform: translateY(0) scale(1);
     opacity: 1;
     pointer-events: auto;
