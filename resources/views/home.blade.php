@@ -680,6 +680,49 @@
     <div id="mini-video-iframe-container" style="width:100%; aspect-ratio:16/9; background:#000;"></div>
 </div>
 
+<!-- Social Media Floating (Desktop Only) -->
+<div class="social-float" aria-label="Ikuti Kami">
+    <div class="social-menu shadow-sm">
+        <a href="#" target="_blank" class="social-chip">
+            <span class="chip-left">
+                <span class="chip-icon"><i class="fa fa-instagram"></i></span>
+                <span>Instagram</span>
+            </span>
+            <i class="fa fa-angle-right"></i>
+        </a>
+        <a href="#" target="_blank" class="social-chip">
+            <span class="chip-left">
+                <span class="chip-icon"><i class="fa fa-music"></i></span>
+                <span>Tiktok</span>
+            </span>
+            <i class="fa fa-angle-right"></i>
+        </a>
+        <a href="#" target="_blank" class="social-chip">
+            <span class="chip-left">
+                <span class="chip-icon"><i class="fa fa-whatsapp"></i></span>
+                <span>WhatsApp</span>
+            </span>
+            <i class="fa fa-angle-right"></i>
+        </a>
+        <a href="#" target="_blank" class="social-chip">
+            <span class="chip-left">
+                <span class="chip-icon"><i class="fa fa-telegram"></i></span>
+                <span>Telegram</span>
+            </span>
+            <i class="fa fa-angle-right"></i>
+        </a>
+        <a href="#" class="social-other">Kanal Lainnya..</a>
+    </div>
+    <a href="#" class="social-fab shadow">
+        <span class="fab-icons">
+            <i class="fa fa-instagram"></i>
+            <i class="fa fa-whatsapp"></i>
+            <i class="fa fa-telegram"></i>
+        </span>
+        <span class="fab-text">Ikuti Kami</span>
+    </a>
+</div>
+
     <!-- Zapier Chatbot Embed -->
     <script async type='module' src='https://interfaces.zapier.com/assets/web-components/zapier-interfaces/zapier-interfaces.esm.js'></script>
     <zapier-interfaces-chatbot-embed is-popup='true' chatbot-id='cme2m5bo7000dpuncd9nwwgbe'></zapier-interfaces-chatbot-embed>
@@ -1413,6 +1456,100 @@
 .job-card:hover {
     transform: scale(1.02);
 }
+
+/* Social Floating Button (Desktop Only) */
+.social-float {
+    position: fixed;
+    right: 400px; /* keep clear of mini video player */
+    bottom: 24px;
+    z-index: 9998;
+    display: none; /* hidden on mobile by default */
+}
+@media (min-width: 992px) {
+    .social-float { display: block; }
+}
+.social-fab {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    background: #fff;
+    color: #e91e63;
+    border-radius: 999px;
+    text-decoration: none;
+    font-weight: 600;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12), 0 0 0 2px #fff inset;
+}
+.social-fab .fab-icons i { margin-right: 6px; }
+.social-fab .fab-icons i:last-child { margin-right: 0; }
+
+.social-menu {
+    position: absolute;
+    bottom: 64px;
+    right: 0;
+    width: 280px;
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 14px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.18), 0 0 0 2px rgba(255,255,255,0.9) inset;
+    transform-origin: bottom right;
+    transform: translateY(8px) scale(0.98);
+    opacity: 0;
+    pointer-events: none;
+    transition: transform .18s ease, opacity .18s ease;
+}
+.social-menu:after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    right: 40px;
+    border-width: 10px 10px 0 10px;
+    border-style: solid;
+    border-color: #ffffff transparent transparent transparent;
+    filter: drop-shadow(0 -1px 1px rgba(0,0,0,.06));
+}
+.social-float:hover .social-menu {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+    pointer-events: auto;
+}
+.social-chip {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    width: 100%;
+    background: #1f2b3a;
+    color: #fff;
+    border-radius: 12px;
+    padding: 10px 12px;
+    margin-bottom: 10px;
+    text-decoration: none;
+}
+.social-chip .chip-left { display: inline-flex; align-items: center; gap: 10px; }
+.social-chip .chip-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.12);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+.social-chip:hover { background: #213246; }
+
+.social-other {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 10px 12px;
+    border-radius: 12px;
+    font-weight: 700;
+    color: #fff;
+    text-decoration: none;
+    background: linear-gradient(90deg, #ff6a00, #ee0979, #7F00FF);
+}
+.social-other:hover { filter: brightness(1.05); }
 
 </style>
 @endpush 
