@@ -1472,7 +1472,17 @@
     bottom: 32px; /* same as Back to Top */
     z-index: 9998;
     display: none; /* hidden on mobile by default */
-    padding-bottom: 96px; /* invisible bridge so hover doesn't drop when moving to menu */
+    padding-bottom: 0; /* keep exact alignment with Back to Top */
+}
+/* Invisible hover bridge between button and menu without changing layout */
+.social-float::before {
+    content: '';
+    position: absolute;
+    left: -8px;
+    right: -8px;
+    bottom: 48px; /* above the fab */
+    height: 88px; /* bridge area to reach the menu */
+    background: transparent;
 }
 @media (min-width: 992px) {
     .social-float { display: block; }
