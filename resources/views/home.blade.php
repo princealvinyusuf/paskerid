@@ -241,16 +241,10 @@
         <h3 class="text-center mb-4">Data dan Informasi</h3>
         <ul class="nav nav-tabs justify-content-center mb-4" id="infoTab" role="tablist" >
             <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="publikasi-tab" data-bs-toggle="tab" data-bs-target="#publikasi" type="button" role="tab" aria-controls="publikasi" aria-selected="true">Publikasi</button>
+                <button class="nav-link active" id="spark-tab" data-bs-toggle="tab" data-bs-target="#spark" type="button" role="tab" aria-controls="spark" aria-selected="true">Seputar Pasar Kerja (SPARK)</button>
             </li>
             <li class="nav-item" role="presentation">
-                <button class="nav-link" id="statistik-tab" data-bs-toggle="tab" data-bs-target="#statistik" type="button" role="tab" aria-controls="statistik" aria-selected="false">Tabel Statistik</button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="spark-tab" data-bs-toggle="tab" data-bs-target="#spark" type="button" role="tab" aria-controls="spark" aria-selected="false">Seputar Pasar Kerja (SPARK)</button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="lmir-tab" data-bs-toggle="tab" data-bs-target="#lmir" type="button" role="tab" aria-controls="lmir" aria-selected="false">Labour Market Intelligence Report</button>
+                <button class="nav-link" id="lmir-tab" data-bs-toggle="tab" data-bs-target="#lmir" type="button" role="tab" aria-controls="lmir" aria-selected="false">Labour Market Inteligence Report</button>
             </li>
             <li class="nav-item" role="presentation">
                 <button class="nav-link" id="regulasi-tab" data-bs-toggle="tab" data-bs-target="#regulasi" type="button" role="tab" aria-controls="regulasi" aria-selected="false">Pedoman / Regulasi</button>
@@ -263,39 +257,7 @@
             </li>
         </ul>
         <div class="tab-content">
-            <div class="tab-pane fade show active" id="publikasi" role="tabpanel" aria-labelledby="publikasi-tab">
-                @foreach($publikasi as $info)
-                    <a href="{{ route('informasi.index', ['type' => 'publikasi', 'subject' => $info->subject, 'show' => $info->id]) }}" class="text-decoration-none">
-                        <div class="card mb-3 shadow-sm rounded-pill px-4 py-3 d-flex flex-row align-items-center" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}" style="cursor:pointer;">
-                            <div class="me-3 text-primary" style="font-size:2rem;"><i class="fa fa-book"></i></div>
-                            <div class="flex-grow-1">
-                                <div class="fw-bold">{{ $info->title }}</div>
-                                <div class="text-muted small">{{ indo_date($info->date) }}</div>
-                            </div>
-                            <div>
-                                <i class="fa fa-arrow-right fa-lg text-success"></i>
-                            </div>
-                        </div>
-                    </a>
-                @endforeach
-            </div>
-            <div class="tab-pane fade" id="statistik" role="tabpanel" aria-labelledby="statistik-tab">
-                @foreach($statistik as $info)
-                    <a href="{{ route('informasi.index', ['type' => 'statistik', 'subject' => $info->subject, 'show' => $info->id]) }}" class="text-decoration-none">
-                        <div class="card mb-3 shadow-sm rounded-pill px-4 py-3 d-flex flex-row align-items-center" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}" style="cursor:pointer;">
-                            <div class="me-3 text-primary" style="font-size:2rem;"><i class="fa fa-clipboard"></i></div>
-                            <div class="flex-grow-1">
-                                <div class="fw-bold">{{ $info->title }}</div>
-                                <div class="text-muted small">{{ indo_date($info->date) }}</div>
-                            </div>
-                            <div>
-                                <i class="fa fa-arrow-right fa-lg text-success"></i>
-                            </div>
-                        </div>
-                    </a>
-                @endforeach
-            </div>
-            <div class="tab-pane fade" id="spark" role="tabpanel" aria-labelledby="spark-tab">
+            <div class="tab-pane fade show active" id="spark" role="tabpanel" aria-labelledby="spark-tab">
                 @foreach($spark as $info)
                     <a href="{{ route('informasi.index', ['subject' => $info->subject, 'show' => $info->id]) }}" class="text-decoration-none">
                         <div class="card mb-3 shadow-sm rounded-pill px-4 py-3 d-flex flex-row align-items-center" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}" style="cursor:pointer;">

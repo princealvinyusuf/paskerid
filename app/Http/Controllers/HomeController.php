@@ -71,7 +71,7 @@ class HomeController extends Controller
 
         // Additional categories for Informasi Terbaru section
         $spark = Information::where('subject', 'Seputar Pasar Kerja (SPARK)')->where('status', 'publik')->orderByDesc('date')->take(5)->get();
-        $lmir = Information::where('subject', 'Labour Market Intelligence Report')->where('status', 'publik')->orderByDesc('date')->take(5)->get();
+        $lmir = Information::where('subject', 'Labour Market Inteligence Report')->where('status', 'publik')->orderByDesc('date')->take(5)->get();
         $regulasi = Information::where('subject', 'Pedoman / Regulasi')->where('status', 'publik')->orderByDesc('date')->take(5)->get();
         $infografisSIPK = Information::where('subject', 'Infografis SIPK')->where('status', 'publik')->orderByDesc('date')->take(5)->get();
         $angkatanKerja = Information::where('subject', 'Angkatan Kerja')->where('status', 'publik')->orderByDesc('date')->take(5)->get();
