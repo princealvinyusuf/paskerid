@@ -1,0 +1,32 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        if (!Schema::hasColumn('kemitraan', 'status')) {
+            Schema::table('kemitraan', function (Blueprint $table) {
+                $table->string('status')->default('pending')->after('request_letter');
+            });
+        }
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        if (Schema::hasColumn('kemitraan', 'status')) {
+            Schema::table('kemitraan', function (Blueprint $table) {
+                $table->dropColumn('status');
+            });
+        }
+    }
+}; 
