@@ -69,6 +69,13 @@ class HomeController extends Controller
         $mitraKerja = MitraKerja::where('divider', 'mitra')->get();
         $ads = KarirhubAds::latest()->get();
 
+        // Additional categories for Informasi Terbaru section
+        $spark = Information::where('subject', 'Seputar Pasar Kerja (SPARK)')->where('status', 'publik')->orderByDesc('date')->take(5)->get();
+        $lmir = Information::where('subject', 'Labour Market Intelligence Report')->where('status', 'publik')->orderByDesc('date')->take(5)->get();
+        $regulasi = Information::where('subject', 'Pedoman / Regulasi')->where('status', 'publik')->orderByDesc('date')->take(5)->get();
+        $infografisSIPK = Information::where('subject', 'Infografis SIPK')->where('status', 'publik')->orderByDesc('date')->take(5)->get();
+        $angkatanKerja = Information::where('subject', 'Angkatan Kerja')->where('status', 'publik')->orderByDesc('date')->take(5)->get();
+
         return view('home', compact(
             'statistics',
             'heroStatistics',
@@ -88,7 +95,12 @@ class HomeController extends Controller
             'highlightStatistics',
             'visitCount',
             'mitraKerja',
-            'ads'
+            'ads',
+            'spark',
+            'lmir',
+            'regulasi',
+            'infografisSIPK',
+            'angkatanKerja'
         ));
     }
 } 
