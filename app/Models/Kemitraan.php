@@ -29,4 +29,14 @@ class Kemitraan extends Model
         'request_letter',
         'status',
     ];
+
+    public function rooms()
+    {
+        return $this->belongsToMany(PaskerRoom::class, 'kemitraan_pasker_room', 'kemitraan_id', 'pasker_room_id')->withTimestamps();
+    }
+
+    public function facilities()
+    {
+        return $this->belongsToMany(PaskerFacility::class, 'kemitraan_pasker_facility', 'kemitraan_id', 'pasker_facility_id')->withTimestamps();
+    }
 } 

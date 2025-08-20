@@ -21,27 +21,6 @@ class KemitraanController extends Controller
         $imagePaskerRoom = PaskerRoom::all();
         $paskerFacility = PaskerFacility::all();
 
-        // Partnership type limits (should match your PHP array)
-        // $type_limits = [
-        //     'Walk-in Interview' => 10,
-        //     'Pendidikan Pasar Kerja' => 5,
-        //     'Talenta Muda' => 8,
-        //     'Job Fair' => 7,
-        //     'Konsultasi Pasar Kerja' => 3,
-        //     'Konsultasi Informasi Pasar Kerja' => 3,
-        // ];
-        // $max_bookings = $type_limits[$selectedType] ?? 10;
-
-        // // Query for fully booked dates for the selected type
-        // $fullyBookedDates = DB::table('booked_date')
-        //     ->select('booked_date')
-        //     ->where('type_of_partnership_id')
-        //     ->groupBy('booked_date', 'max_bookings')
-        //     ->havingRaw('COUNT(*) >= max_bookings')
-        //     ->pluck('booked_date')
-        //     ->toArray();
-        // $formData = $request->all();
-        // return view('kemitraan.create', compact('fullyBookedDates', 'selectedType', 'formData'));
         return view('kemitraan.create', compact('dropdownPartnership', 'dropdownCompanySectors', 'imagePaskerRoom' ,'paskerFacility'));
     }
 
@@ -57,23 +36,46 @@ class KemitraanController extends Controller
             'business_sector' => 'nullable|string|max:255',
             'institution_address' => 'required|string|max:255',
             'type_of_partnership_id' => 'required|exists:type_of_partnership,id',
-            'pasker_room_id' => 'nullable|exists:pasker_room,id',
+            // Multi-select rooms and facilities
+            'pasker_room_ids' => 'nullable|array',
+            'pasker_room_ids.*' => 'integer|exists:pasker_room,id',
             'other_pasker_room' => 'nullable|string|max:255',
-            'pasker_facility_id' => 'required_without:other_pasker_facility|nullable|exists:pasker_facility,id',
-            'other_pasker_facility' => 'required_without:pasker_facility_id|nullable|string|max:255',
+            'pasker_facility_ids' => 'nullable|array',
+            'pasker_facility_ids.*' => 'integer|exists:pasker_facility,id',
+            'other_pasker_facility' => 'nullable|string|max:255',
+            // At least one facility either selected or other provided
+            // Custom manual check below will enforce this since array rules change semantics
             'schedule' => 'required|string|max:255',
             'request_letter' => 'nullable|file|mimes:pdf,doc,docx|max:2048',
-        ], [
-            'pasker_facility_id.required_without' => 'Pilih salah satu fasilitas atau isi Lainnya.',
-            'other_pasker_facility.required_without' => 'Pilih salah satu fasilitas atau isi Lainnya.',
         ]);
+
+        // Enforce facility presence: either array not empty or other provided
+        $facilityIds = $request->input('pasker_facility_ids', []);
+        $otherFacility = $request->input('other_pasker_facility');
+        if (empty($facilityIds) && empty($otherFacility)) {
+            return back()->withErrors(['pasker_facility_ids' => 'Pilih minimal satu fasilitas atau isi Lainnya.'])->withInput();
+        }
 
         if ($request->hasFile('request_letter')) {
             $validated['request_letter'] = $request->file('request_letter')->store('kemitraan_letters', 'public');
         }
 
-        // If user provided other_pasker_room/facility, we keep it alongside nullable FK
-        Kemitraan::create($validated);
+        // Backward compatibility: persist first selected room/facility id into legacy columns
+        $roomIds = $request->input('pasker_room_ids', []);
+        $validated['pasker_room_id'] = !empty($roomIds) ? (int) $roomIds[0] : null;
+
+        $validated['pasker_facility_id'] = !empty($facilityIds) ? (int) $facilityIds[0] : null;
+
+        DB::transaction(function () use ($validated, $roomIds, $facilityIds) {
+            $kemitraan = Kemitraan::create($validated);
+
+            if (!empty($roomIds)) {
+                $kemitraan->rooms()->sync(array_values(array_unique(array_map('intval', $roomIds))));
+            }
+            if (!empty($facilityIds)) {
+                $kemitraan->facilities()->sync(array_values(array_unique(array_map('intval', $facilityIds))));
+            }
+        });
 
         return redirect()->route('kemitraan.create')->with('success', true);
     }

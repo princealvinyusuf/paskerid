@@ -125,7 +125,7 @@
                                 @endif
 
                             <div class="form-check">
-                             <input class="form-check-input" type="radio" name="pasker_room_id" value="{{ $ruangan->id }}" id="ruangan{{ $ruangan->id }}" {{ old('pasker_room_id') == $ruangan->id ? 'checked' : '' }}>
+                             <input class="form-check-input" type="checkbox" name="pasker_room_ids[]" value="{{ $ruangan->id }}" id="ruangan{{ $ruangan->id }}" {{ collect(old('pasker_room_ids', []))->contains($ruangan->id) ? 'checked' : '' }}>
                             <label class="form-check-label" for="ruangan{{ $ruangan->id }}">
                                 {{ $ruangan->room_name }}
                             </label>
@@ -146,7 +146,7 @@
                             <label for="needs" class="form-label">Kebutuhan yang Diajukan</label>
                             @foreach ($paskerFacility as $facility)
                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="pasker_facility_id" value="{{ $facility->id }}" id="facility{{ $facility->id }}" {{ old('pasker_facility_id') == $facility->id ? 'checked' : '' }}>
+                                <input class="form-check-input" type="checkbox" name="pasker_facility_ids[]" value="{{ $facility->id }}" id="facility{{ $facility->id }}" {{ collect(old('pasker_facility_ids', []))->contains($facility->id) ? 'checked' : '' }}>
                                  <label class="form-check-label" for="facility{{ $facility->id }}">
                                     {{ $facility->facility_name }}
                                 </label>
@@ -154,10 +154,10 @@
                             @endforeach
                             <div class="checkbox-label-align">
                                 <input class="form-check-input mt-0" type="checkbox" id="fasilitaslainnyaCheckbox" onchange="toggleOtherfacilityText(this)">
-                                <label class="form-check-label ms-1 mb-0" for="fasilitaslainnyaCheckbox">Lainnya</label>
+                            <label class="form-check-label ms-1 mb-0" for="fasilitaslainnyaCheckbox">Lainnya</label>
                             </div>
                             <input type="text" id="facilityOtherText" class="form-control mt-2" placeholder="Tulis nama fasilitas..." name="other_pasker_facility" style="display: none" value="{{ old('other_pasker_facility') }}">
-                            @error('pasker_facility_id')
+                            @error('pasker_facility_ids')
                                 <div class="text-danger mt-1">{{ $message }}</div>
                             @enderror
                         </div>
@@ -365,13 +365,13 @@
     }
 
     document.querySelector('form').addEventListener('submit', function (e) {
-        const selectedFacility = document.querySelector('input[name="pasker_facility_id"]:checked');
+        const selectedFacility = document.querySelectorAll('input[name="pasker_facility_ids[]"]:checked');
         const otherFacilityText = document.getElementById('facilityOtherText');
         const hasOther = otherFacilityText && otherFacilityText.style.display !== 'none' && otherFacilityText.value.trim().length > 0;
 
-        if (!selectedFacility && !hasOther) {
+        if (selectedFacility.length === 0 && !hasOther) {
             e.preventDefault();
-            alert('Silakan pilih salah satu fasilitas atau isi Lainnya.');
+            alert('Silakan pilih minimal satu fasilitas atau isi Lainnya.');
         }
     });
 </script>
