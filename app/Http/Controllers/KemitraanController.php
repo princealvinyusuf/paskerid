@@ -52,17 +52,16 @@ class KemitraanController extends Controller
             'pic_position' => 'required|string|max:255',
             'pic_email' => 'required|email|max:255',
             'pic_whatsapp' => 'required|string|max:30',
-            'company_sectors_id' => 'required',
+            'company_sectors_id' => 'required|exists:company_sectors,id',
             'institution_name' => 'required|string|max:255',
             'business_sector' => 'nullable|string|max:255',
             'institution_address' => 'required|string|max:255',
-            'type_of_partnership_id' => 'required',
-            'facility' => 'required|array|min:1',
-            [
-                'facility.required' => 'Pilih minimal satu fasilitas.',
-                'facility.min' => 'Pilih minimal satu fasilitas.',
-            ],
-            'schedule' => 'nullable|string|max:255',
+            'type_of_partnership_id' => 'required|exists:type_of_partnership,id',
+            'pasker_room_id' => 'nullable|exists:pasker_room,id',
+            'other_pasker_room' => 'nullable|string|max:255',
+            'pasker_facility_id' => 'nullable|exists:pasker_facility,id',
+            'other_pasker_facility' => 'nullable|string|max:255',
+            'schedule' => 'required|string|max:255',
             'request_letter' => 'nullable|file|mimes:pdf,doc,docx|max:2048',
         ]);
 
@@ -70,6 +69,7 @@ class KemitraanController extends Controller
             $validated['request_letter'] = $request->file('request_letter')->store('kemitraan_letters', 'public');
         }
 
+        // If user provided other_pasker_room/facility, we keep it alongside nullable FK
         Kemitraan::create($validated);
 
         return redirect()->route('kemitraan.create')->with('success', true);

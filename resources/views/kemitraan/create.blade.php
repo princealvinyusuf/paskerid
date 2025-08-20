@@ -80,7 +80,7 @@
                     </div> --}}
                     <div class="col-md-6">
                         <label for="comapny_sectors" class="form-label">Kategori/Sektor Instansi</label>
-                        <select class="form-select" id="company_sectors_id" name="company_sectors" required>
+                        <select class="form-select" id="company_sectors_id" name="company_sectors_id" required>
                             <option value="">-- Pilih Kategori / Sektor Instansi --</option>
                         @foreach ($dropdownCompanySectors as $sectors)
                             <option value="{{ $sectors->id }}">{{ $sectors->sector_name }}</option>
@@ -106,11 +106,10 @@
                 <h5 class="mb-3"><i class="bi bi-link-45deg me-2"></i>Detail Kemitraan</h5>
                 <!-- Placeholder for the type selector -->
                 <div id="typeSelectorPlaceholder"></div>
-                <form action="{{ route('kemitraan.store') }}" method="POST" enctype="multipart/form-data">
-                    @csrf
+                {{-- Removed nested form start --}}
                     {{-- <input type="hidden" name="partnership_type_id"> --}}
                      <label for="partnership_type_id" class="form-label">Jenis Kemitraan yang Diajukan</label>
-                        <select name="type_of_partnership_id" id="type_of_partnership_id" class="form-select" disabled>
+                        <select name="type_of_partnership_id" id="type_of_partnership_id" class="form-select">
                         <option value="">-- Pilih Jenis Kemitraan --</option>
                         @foreach ($dropdownPartnership as $type)
                             <option value="{{ $type->id }}" {{$type->id == 1 ? 'selected' : ''}}>{{ $type->name }}</option>
@@ -126,7 +125,7 @@
                                 @endif
 
                             <div class="form-check">
-                             <input class="form-check-input" type="checkbox" name="ruangan[]" value="{{ $ruangan->id }}" id="ruangan{{ $ruangan->id }}">
+                             <input class="form-check-input" type="radio" name="pasker_room_id" value="{{ $ruangan->id }}" id="ruangan{{ $ruangan->id }}">
                             <label class="form-check-label" for="ruangan{{ $ruangan->id }}">
                                 {{ $ruangan->room_name }}
                             </label>
@@ -137,26 +136,28 @@
                         </div>
 
                         <div class="form-check align-items-center d-flex" style="padding-top: 10px">
-                            <input class="form-check-input mt-0" type="checkbox" id="raunganlainnyaCheckbox" name="ruangan[]" value="lainnya" onchange="toggleOtherroomText(this)">
+                            <input class="form-check-input mt-0" type="checkbox" id="raunganlainnyaCheckbox" onchange="toggleOtherroomText(this)">
                             <label class="form-check-label ms-2 mb-0" for="raunganlainnyaCheckbox"><strong>Lainnya</strong></label>
                         </div>
-                            <input type="text" id="ruanganOtherText" class="form-control mt-2" placeholder="Tulis nama ruangan..." name="ruangan_lainnya" style="display: none">
+                            <input type="text" id="ruanganOtherText" class="form-control mt-2" placeholder="Tulis nama ruangan..." name="other_pasker_room" style="display: none">
 
                     <div class="row g-3">
                         <div class="col-md-6">
                             <label for="needs" class="form-label">Kebutuhan yang Diajukan</label>
                             @foreach ($paskerFacility as $facility)
                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="facility[]" value="{{ $facility->id }}" id="facility{{ $facility->id }}">
+                                <input class="form-check-input" type="radio" name="pasker_facility_id" value="{{ $facility->id }}" id="facility{{ $facility->id }}">
                                  <label class="form-check-label" for="facility{{ $facility->id }}">
                                     {{ $facility->facility_name }}
                                 </label>
                             </div>
                             @endforeach
-                            <input class="form-check-input mt-0" type="checkbox" id="fasilitaslainnyaCheckbox" name="facility[]" value="lainnya" onchange="toggleOtherfacilityText(this)">
-                            <label class="form-check-label ms-1 mb-0" for="fasilitaslainnyaCheckbox">Lainnya</label>
-                            <input type="text" id="facilityOtherText" class="form-control mt-2" placeholder="Tulis nama fasilitas..." name="fasilitas_lainnya" style="display: none">
-                            @error('facility')
+                            <div class="checkbox-label-align">
+                                <input class="form-check-input mt-0" type="checkbox" id="fasilitaslainnyaCheckbox" onchange="toggleOtherfacilityText(this)">
+                                <label class="form-check-label ms-1 mb-0" for="fasilitaslainnyaCheckbox">Lainnya</label>
+                            </div>
+                            <input type="text" id="facilityOtherText" class="form-control mt-2" placeholder="Tulis nama fasilitas..." name="other_pasker_facility" style="display: none">
+                            @error('pasker_facility_id')
                                 <div class="text-danger mt-1">{{ $message }}</div>
                             @enderror
                         </div>
@@ -175,12 +176,12 @@
                             <label for="schedule" class="form-label">Usulan Waktu Kegiatan</label>
                             <div class="input-group">
                                 <span class="input-group-text"><i class="bi bi-calendar-event"></i></span>
-                                <input type="text" class="form-control" id="scheduletimestart" name="scheduletimestart" placeholder="Pilih waktu mulai" autocomplete="off" value="{{ $formData['schedule'] ?? old('schedule') }}" required>
+                                <input type="text" class="form-control" id="scheduletimestart" name="scheduletimestart" placeholder="Pilih waktu mulai" autocomplete="off" value="{{ $formData['schedule'] ?? old('schedule') }}">
                             </div>
                             <div class="form-text">Pilih rentang waktu mulai pelaksanaan kegiatan.</div>
                             <div class="input-group">
                                 <span class="input-group-text"><i class="bi bi-calendar-event"></i></span>
-                                <input type="text" class="form-control" id="scheduletimefinish" name="scheduletimefinish" placeholder="Pilih waktu selesai" autocomplete="off" value="{{ $formData['schedule'] ?? old('schedule') }}" required>
+                                <input type="text" class="form-control" id="scheduletimefinish" name="scheduletimefinish" placeholder="Pilih waktu selesai" autocomplete="off" value="{{ $formData['schedule'] ?? old('schedule') }}">
                             </div>
                             <div class="form-text">Pilih rentang waktu selesai pelaksanaan kegiatan.</div>
                         </div>
@@ -351,23 +352,26 @@
         }
     });
 
-    function toggleOtherroomText(checkbox) {
-        const input = document.getElementById('ruanganOtherText');
-        input.style.display = checkbox.checked ? 'block' : 'none';
+    function toggleOtherroomText(input) {
+        const field = document.getElementById('ruanganOtherText');
+        const isChecked = input && input.checked;
+        field.style.display = isChecked ? 'block' : 'none';
     }
 
-    function toggleOtherfacilityText(checkbox) {
-        const input = document.getElementById('facilityOtherText');
-        input.style.display = checkbox.checked ? 'block' : 'none';
+    function toggleOtherfacilityText(input) {
+        const field = document.getElementById('facilityOtherText');
+        const isChecked = input && input.checked;
+        field.style.display = isChecked ? 'block' : 'none';
     }
 
     document.querySelector('form').addEventListener('submit', function (e) {
-        const checkboxes = document.querySelectorAll('input[name="facility[]"]');
-        const isChecked = Array.from(checkboxes).some(cb => cb.checked);
+        const selectedFacility = document.querySelector('input[name="pasker_facility_id"]:checked');
+        const otherFacilityText = document.getElementById('facilityOtherText');
+        const hasOther = otherFacilityText && otherFacilityText.style.display !== 'none' && otherFacilityText.value.trim().length > 0;
 
-        if (!isChecked) {
-            e.preventDefault(); // cegah form submit
-            alert('Silakan pilih minimal satu fasilitas yang akan dipakai.');
+        if (!selectedFacility && !hasOther) {
+            e.preventDefault();
+            alert('Silakan pilih salah satu fasilitas atau isi Lainnya.');
         }
     });
 </script>
