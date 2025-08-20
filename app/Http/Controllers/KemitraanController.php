@@ -59,10 +59,13 @@ class KemitraanController extends Controller
             'type_of_partnership_id' => 'required|exists:type_of_partnership,id',
             'pasker_room_id' => 'nullable|exists:pasker_room,id',
             'other_pasker_room' => 'nullable|string|max:255',
-            'pasker_facility_id' => 'nullable|exists:pasker_facility,id',
-            'other_pasker_facility' => 'nullable|string|max:255',
+            'pasker_facility_id' => 'required_without:other_pasker_facility|nullable|exists:pasker_facility,id',
+            'other_pasker_facility' => 'required_without:pasker_facility_id|nullable|string|max:255',
             'schedule' => 'required|string|max:255',
             'request_letter' => 'nullable|file|mimes:pdf,doc,docx|max:2048',
+        ], [
+            'pasker_facility_id.required_without' => 'Pilih salah satu fasilitas atau isi Lainnya.',
+            'other_pasker_facility.required_without' => 'Pilih salah satu fasilitas atau isi Lainnya.',
         ]);
 
         if ($request->hasFile('request_letter')) {

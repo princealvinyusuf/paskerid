@@ -40,17 +40,17 @@
                 <div class="row g-3">
                     <div class="col-md-6">
                         <label for="pic_name" class="form-label">Nama Penanggung Jawab (PIC)</label>
-                        <input type="text" class="form-control" id="pic_name" name="pic_name" placeholder="Masukkan nama lengkap" value="{{ $formData['pic_name'] ?? old('pic_name') }}" required>
+                        <input type="text" class="form-control" id="pic_name" name="pic_name" placeholder="Masukkan nama lengkap" value="{{ old('pic_name') }}" required>
                     </div>
                     <div class="col-md-6">
                         <label for="pic_position" class="form-label">Jabatan Penanggung Jawab</label>
-                        <input type="text" class="form-control" id="pic_position" name="pic_position" placeholder="Masukkan jabatan" value="{{ $formData['pic_position'] ?? old('pic_position') }}" required>
+                        <input type="text" class="form-control" id="pic_position" name="pic_position" placeholder="Masukkan jabatan" value="{{ old('pic_position') }}" required>
                     </div>
                     <div class="col-md-6">
                         <label for="pic_email" class="form-label">Alamat Email Penanggung Jawab</label>
                         <div class="input-group">
                             <span class="input-group-text"><i class="bi bi-envelope"></i></span>
-                            <input type="email" class="form-control" id="pic_email" name="pic_email" placeholder="email@domain.com" value="{{ $formData['pic_email'] ?? old('pic_email') }}" required>
+                            <input type="email" class="form-control" id="pic_email" name="pic_email" placeholder="email@domain.com" value="{{ old('pic_email') }}" required>
                         </div>
                         <div class="form-text">Pastikan email aktif untuk komunikasi.</div>
                     </div>
@@ -58,7 +58,7 @@
                         <label for="pic_whatsapp" class="form-label">Nomor WhatsApp Aktif</label>
                         <div class="input-group">
                             <span class="input-group-text"><i class="bi bi-whatsapp"></i></span>
-                            <input type="text" class="form-control" id="pic_whatsapp" name="pic_whatsapp" placeholder="+62xxxxxxxxxx" value="{{ $formData['pic_whatsapp'] ?? old('pic_whatsapp') }}" required>
+                            <input type="text" class="form-control" id="pic_whatsapp" name="pic_whatsapp" placeholder="+62xxxxxxxxxx" value="{{ old('pic_whatsapp') }}" required>
                         </div>
                         <div class="form-text">Nomor aktif untuk keperluan komunikasi.</div>
                     </div>
@@ -71,11 +71,11 @@
                         <label for="sector_category" class="form-label">Kategori/Sektor Instansi</label>
                         <select class="form-select" id="sector_category" name="sector_category" required>
                             <option value="">Pilih salah satu</option>
-                            <option value="Kementerian/Lembaga" {{ ($formData['sector_category'] ?? old('sector_category')) == 'Kementerian/Lembaga' ? 'selected' : '' }}>Kementerian/Lembaga</option>
-                            <option value="Pemerintah Daerah" {{ ($formData['sector_category'] ?? old('sector_category')) == 'Pemerintah Daerah' ? 'selected' : '' }}>Pemerintah Daerah (Kabupaten/Kota)</option>
-                            <option value="Mitra Pembangunan" {{ ($formData['sector_category'] ?? old('sector_category')) == 'Mitra Pembangunan' ? 'selected' : '' }}>Mitra Pembangunan (Perusahaan/Swasta/Job Portal)</option>
-                            <option value="Lembaga Pendidikan" {{ ($formData['sector_category'] ?? old('sector_category')) == 'Lembaga Pendidikan' ? 'selected' : '' }}>Lembaga Pendidikan</option>
-                            <option value="Lembaga Non-Pemerintah" {{ ($formData['sector_category'] ?? old('sector_category')) == 'Lembaga Non-Pemerintah' ? 'selected' : '' }}>Lembaga Non-Pemerintah (Yayasan/Asosiasi/Organisasi)</option>
+                            <option value="Kementerian/Lembaga" {{ (old('sector_category')) == 'Kementerian/Lembaga' ? 'selected' : '' }}>Kementerian/Lembaga</option>
+                            <option value="Pemerintah Daerah" {{ (old('sector_category')) == 'Pemerintah Daerah' ? 'selected' : '' }}>Pemerintah Daerah (Kabupaten/Kota)</option>
+                            <option value="Mitra Pembangunan" {{ (old('sector_category')) == 'Mitra Pembangunan' ? 'selected' : '' }}>Mitra Pembangunan (Perusahaan/Swasta/Job Portal)</option>
+                            <option value="Lembaga Pendidikan" {{ (old('sector_category')) == 'Lembaga Pendidikan' ? 'selected' : '' }}>Lembaga Pendidikan</option>
+                            <option value="Lembaga Non-Pemerintah" {{ (old('sector_category')) == 'Lembaga Non-Pemerintah' ? 'selected' : '' }}>Lembaga Non-Pemerintah (Yayasan/Asosiasi/Organisasi)</option>
                         </select>
                     </div> --}}
                     <div class="col-md-6">
@@ -83,22 +83,22 @@
                         <select class="form-select" id="company_sectors_id" name="company_sectors_id" required>
                             <option value="">-- Pilih Kategori / Sektor Instansi --</option>
                         @foreach ($dropdownCompanySectors as $sectors)
-                            <option value="{{ $sectors->id }}">{{ $sectors->sector_name }}</option>
+                            <option value="{{ $sectors->id }}" {{ old('company_sectors_id') == $sectors->id ? 'selected' : '' }}>{{ $sectors->sector_name }}</option>
                         @endforeach
                         </select>
                     </div>
                     <div class="col-md-6">
                         <label for="institution_name" class="form-label">Nama Instansi</label>
-                        <input type="text" class="form-control" id="institution_name" name="institution_name" placeholder="Masukkan nama instansi" value="{{ $formData['institution_name'] ?? old('institution_name') }}" required>
+                        <input type="text" class="form-control" id="institution_name" name="institution_name" placeholder="Masukkan nama instansi" value="{{ old('institution_name') }}" required>
                     </div>
                     <div class="col-md-6">
                         <label for="business_sector" class="form-label">Sektor Lapangan Usaha</label>
-                        <input type="text" class="form-control" id="business_sector" name="business_sector" placeholder="Contoh: manufaktur, teknologi, dsb" value="{{ $formData['business_sector'] ?? old('business_sector') }}" required>
+                        <input type="text" class="form-control" id="business_sector" name="business_sector" placeholder="Contoh: manufaktur, teknologi, dsb" value="{{ old('business_sector') }}" required>
                         <div class="form-text">Bidang usaha/sektor yang menjadi fokus utama instansi.</div>
                     </div>
                     <div class="col-md-6">
                         <label for="institution_address" class="form-label">Alamat Instansi</label>
-                        <input type="text" class="form-control" id="institution_address" name="institution_address" placeholder="Masukkan alamat lengkap" value="{{ $formData['institution_address'] ?? old('institution_address') }}" required>
+                        <input type="text" class="form-control" id="institution_address" name="institution_address" placeholder="Masukkan alamat lengkap" value="{{ old('institution_address') }}" required>
                     </div>
                 </div>
 
@@ -112,7 +112,7 @@
                         <select name="type_of_partnership_id" id="type_of_partnership_id" class="form-select">
                         <option value="">-- Pilih Jenis Kemitraan --</option>
                         @foreach ($dropdownPartnership as $type)
-                            <option value="{{ $type->id }}" {{$type->id == 1 ? 'selected' : ''}}>{{ $type->name }}</option>
+                            <option value="{{ $type->id }}" {{ (old('type_of_partnership_id', 1) == $type->id) ? 'selected' : '' }}>{{ $type->name }}</option>
                         @endforeach
                         </select>
                         <div class="col-12">
@@ -125,7 +125,7 @@
                                 @endif
 
                             <div class="form-check">
-                             <input class="form-check-input" type="radio" name="pasker_room_id" value="{{ $ruangan->id }}" id="ruangan{{ $ruangan->id }}">
+                             <input class="form-check-input" type="radio" name="pasker_room_id" value="{{ $ruangan->id }}" id="ruangan{{ $ruangan->id }}" {{ old('pasker_room_id') == $ruangan->id ? 'checked' : '' }}>
                             <label class="form-check-label" for="ruangan{{ $ruangan->id }}">
                                 {{ $ruangan->room_name }}
                             </label>
@@ -139,14 +139,14 @@
                             <input class="form-check-input mt-0" type="checkbox" id="raunganlainnyaCheckbox" onchange="toggleOtherroomText(this)">
                             <label class="form-check-label ms-2 mb-0" for="raunganlainnyaCheckbox"><strong>Lainnya</strong></label>
                         </div>
-                            <input type="text" id="ruanganOtherText" class="form-control mt-2" placeholder="Tulis nama ruangan..." name="other_pasker_room" style="display: none">
+                            <input type="text" id="ruanganOtherText" class="form-control mt-2" placeholder="Tulis nama ruangan..." name="other_pasker_room" style="display: none" value="{{ old('other_pasker_room') }}">
 
                     <div class="row g-3">
                         <div class="col-md-6">
                             <label for="needs" class="form-label">Kebutuhan yang Diajukan</label>
                             @foreach ($paskerFacility as $facility)
                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="pasker_facility_id" value="{{ $facility->id }}" id="facility{{ $facility->id }}">
+                                <input class="form-check-input" type="radio" name="pasker_facility_id" value="{{ $facility->id }}" id="facility{{ $facility->id }}" {{ old('pasker_facility_id') == $facility->id ? 'checked' : '' }}>
                                  <label class="form-check-label" for="facility{{ $facility->id }}">
                                     {{ $facility->facility_name }}
                                 </label>
@@ -156,7 +156,7 @@
                                 <input class="form-check-input mt-0" type="checkbox" id="fasilitaslainnyaCheckbox" onchange="toggleOtherfacilityText(this)">
                                 <label class="form-check-label ms-1 mb-0" for="fasilitaslainnyaCheckbox">Lainnya</label>
                             </div>
-                            <input type="text" id="facilityOtherText" class="form-control mt-2" placeholder="Tulis nama fasilitas..." name="other_pasker_facility" style="display: none">
+                            <input type="text" id="facilityOtherText" class="form-control mt-2" placeholder="Tulis nama fasilitas..." name="other_pasker_facility" style="display: none" value="{{ old('other_pasker_facility') }}">
                             @error('pasker_facility_id')
                                 <div class="text-danger mt-1">{{ $message }}</div>
                             @enderror
@@ -167,7 +167,7 @@
                             <label for="schedule" class="form-label">Usulan Jadwal Kegiatan</label>
                             <div class="input-group">
                                 <span class="input-group-text"><i class="bi bi-calendar-event"></i></span>
-                                <input type="text" class="form-control" id="schedule" name="schedule" placeholder="Pilih rentang tanggal" autocomplete="off" value="{{ $formData['schedule'] ?? old('schedule') }}" required>
+                                <input type="text" class="form-control" id="schedule" name="schedule" placeholder="Pilih rentang tanggal" autocomplete="off" value="{{ old('schedule') }}" required>
                             </div>
                             <div class="form-text">Pilih rentang tanggal pelaksanaan kegiatan.</div>
                         </div>
@@ -176,12 +176,12 @@
                             <label for="schedule" class="form-label">Usulan Waktu Kegiatan</label>
                             <div class="input-group">
                                 <span class="input-group-text"><i class="bi bi-calendar-event"></i></span>
-                                <input type="text" class="form-control" id="scheduletimestart" name="scheduletimestart" placeholder="Pilih waktu mulai" autocomplete="off" value="{{ $formData['schedule'] ?? old('schedule') }}">
+                                <input type="text" class="form-control" id="scheduletimestart" name="scheduletimestart" placeholder="Pilih waktu mulai" autocomplete="off" value="{{ old('scheduletimestart') }}">
                             </div>
                             <div class="form-text">Pilih rentang waktu mulai pelaksanaan kegiatan.</div>
                             <div class="input-group">
                                 <span class="input-group-text"><i class="bi bi-calendar-event"></i></span>
-                                <input type="text" class="form-control" id="scheduletimefinish" name="scheduletimefinish" placeholder="Pilih waktu selesai" autocomplete="off" value="{{ $formData['schedule'] ?? old('schedule') }}">
+                                <input type="text" class="form-control" id="scheduletimefinish" name="scheduletimefinish" placeholder="Pilih waktu selesai" autocomplete="off" value="{{ old('scheduletimefinish') }}">
                             </div>
                             <div class="form-text">Pilih rentang waktu selesai pelaksanaan kegiatan.</div>
                         </div>
@@ -193,7 +193,7 @@
                                     <i class="bi bi-download me-1"></i>Download Template Surat Permohonan
                                 </a>
                             </div>
-                            <input type="file" class="form-control" id="request_letter" name="request_letter" accept=".pdf,.doc,.docx" value="{{ old('request_letter') }}" required>
+                            <input type="file" class="form-control" id="request_letter" name="request_letter" accept=".pdf,.doc,.docx" required>
                             <div class="form-text">Unggah surat permohonan (PDF/DOC/DOCX, max 2MB).</div>
                         </div>
                     </div>
