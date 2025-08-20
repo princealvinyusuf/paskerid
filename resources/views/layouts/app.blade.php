@@ -51,9 +51,8 @@
                             <li><a class="dropdown-item" href="https://microlearning-paskerid.kemnaker.go.id/" target="_blank">Microlearning</a></li>
                         </ul>
                     </li>
-                    <li class="nav-item dropdown d-flex align-items-center">
-                        <a class="nav-link @if(request()->routeIs('publikasi.index') || request()->routeIs('datasets.index') || (request()->routeIs('informasi.index') && request('type') == 'publikasi')) active fw-bold @endif" href="{{ route('publikasi.index') }}">Publikasi</a>
-                        <a class="nav-link dropdown-toggle dropdown-toggle-split" href="#" id="publikasiDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Toggle Publikasi menu"></a>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle @if(request()->routeIs('datasets.index') || (request()->routeIs('informasi.index') && request('type') == 'publikasi')) active fw-bold @endif" href="#" id="publikasiDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Publikasi</a>
                         <ul class="dropdown-menu" aria-labelledby="publikasiDropdown">
                             <li><a class="dropdown-item @if(request()->routeIs('informasi.index') && request('type') == 'publikasi') active fw-bold @endif" href="{{ route('informasi.index', ['type' => 'publikasi']) }}">Publikasi Pasar Kerja</a></li>
                             <li><a class="dropdown-item @if(request()->routeIs('datasets.index')) active fw-bold @endif" href="{{ route('datasets.index') }}">Dataset Pasar Kerja</a></li>
