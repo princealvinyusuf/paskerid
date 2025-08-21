@@ -26,6 +26,8 @@ class Kemitraan extends Model
         'pasker_facility_id',
         'other_pasker_facility',
         'schedule',
+        'scheduletimestart',
+        'scheduletimefinish',
         'request_letter',
         'status',
     ];

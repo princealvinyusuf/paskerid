@@ -46,6 +46,8 @@ class KemitraanController extends Controller
             // At least one facility either selected or other provided
             // Custom manual check below will enforce this since array rules change semantics
             'schedule' => 'required|string|max:255',
+            'scheduletimestart' => 'nullable|date_format:H:i',
+            'scheduletimefinish' => 'nullable|date_format:H:i',
             'request_letter' => 'nullable|file|mimes:pdf,doc,docx|max:2048',
         ]);
 
@@ -59,6 +61,12 @@ class KemitraanController extends Controller
         if ($request->hasFile('request_letter')) {
             $validated['request_letter'] = $request->file('request_letter')->store('kemitraan_letters', 'public');
         }
+
+        // Normalize time fields to HH:MM:SS if provided
+        $timeStart = $request->input('scheduletimestart');
+        $timeFinish = $request->input('scheduletimefinish');
+        $validated['scheduletimestart'] = $timeStart ? ($timeStart . ':00') : null;
+        $validated['scheduletimefinish'] = $timeFinish ? ($timeFinish . ':00') : null;
 
         // Backward compatibility: persist first selected room/facility id into legacy columns
         $roomIds = $request->input('pasker_room_ids', []);
