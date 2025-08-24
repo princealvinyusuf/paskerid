@@ -112,7 +112,7 @@
                         <select name="type_of_partnership_id" id="type_of_partnership_id" class="form-select">
                         <option value="">-- Pilih Jenis Kemitraan --</option>
                         @foreach ($dropdownPartnership as $type)
-                            <option value="{{ $type->id }}" {{ (old('type_of_partnership_id', 1) == $type->id) ? 'selected' : '' }}>{{ $type->name }}</option>
+                            <option value="{{ $type->id }}" {{ (old('type_of_partnership_id', $defaultTypeId ?? 1) == $type->id) ? 'selected' : '' }}>{{ $type->name }}</option>
                         @endforeach
                         </select>
                         <div class="col-12">
@@ -253,7 +253,7 @@
         }
     });
     var fullyBookedDates = @json($fullyBookedDates ?? []);
-    flatpickr("#schedule", {
+    var schedulePicker = flatpickr("#schedule", {
         mode: "range",
         dateFormat: "Y-m-d",
         minDate: "today",
@@ -270,6 +270,24 @@
             }
         }
     });
+
+    // Refresh disabled dates when partnership type changes
+    const typeSelectDynamic = document.getElementById('type_of_partnership_id');
+    if (typeSelectDynamic) {
+        typeSelectDynamic.addEventListener('change', function() {
+            const typeId = this.value;
+            if (!typeId) { return; }
+            fetch(`{{ route('kemitraan.fullyBookedDates') }}?type_id=${encodeURIComponent(typeId)}`)
+                .then(r => r.json())
+                .then(disabled => {
+                    if (Array.isArray(disabled)) {
+                        schedulePicker.set('disable', disabled);
+                        schedulePicker.clear();
+                    }
+                })
+                .catch(() => {});
+        });
+    }
 
     flatpickr("#scheduletimestart", {
         enableTime: true,

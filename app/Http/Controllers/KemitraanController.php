@@ -9,19 +9,22 @@ use App\Models\PaskerRoom;
 use App\Models\PaskerFacility;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 class KemitraanController extends Controller
 {
     public function create(Request $request)
     {
-        // Get selected partnership type from request (default to first type if not set)
-        $selectedType = $request->input('partnership_type', 'Walk-in Interview');
+        // Determine selected partnership type id (fallback to first type if not provided)
         $dropdownPartnership = TypeOfPartnership::all();
         $dropdownCompanySectors = companysector::all();
         $imagePaskerRoom = PaskerRoom::all();
         $paskerFacility = PaskerFacility::all();
 
-        return view('kemitraan.create', compact('dropdownPartnership', 'dropdownCompanySectors', 'imagePaskerRoom' ,'paskerFacility'));
+        $defaultTypeId = (int) $request->input('type_of_partnership_id', (int) optional($dropdownPartnership->first())->id);
+        $fullyBookedDates = $this->computeFullyBookedDates($defaultTypeId, 180);
+
+        return view('kemitraan.create', compact('dropdownPartnership', 'dropdownCompanySectors', 'imagePaskerRoom' ,'paskerFacility', 'fullyBookedDates', 'defaultTypeId'));
     }
 
     public function store(Request $request)
@@ -86,5 +89,77 @@ class KemitraanController extends Controller
         });
 
         return redirect()->route('kemitraan.create')->with('success', true);
+    }
+
+    public function fullyBookedDates(Request $request)
+    {
+        $typeId = (int) $request->query('type_id');
+        if ($typeId <= 0) {
+            return response()->json([]);
+        }
+        $daysAhead = (int) $request->query('days', 180);
+        $dates = $this->computeFullyBookedDates($typeId, $daysAhead);
+        return response()->json($dates);
+    }
+
+    private function computeFullyBookedDates(int $typeId, int $daysAhead = 180): array
+    {
+        $today = date('Y-m-d');
+        $endDate = date('Y-m-d', strtotime("+{$daysAhead} days"));
+
+        $type = TypeOfPartnership::find($typeId);
+        $maxBookings = $type && isset($type->max_bookings) ? (int) $type->max_bookings : 10;
+
+        $hasRange = Schema::hasColumn('booked_date', 'booked_date_start');
+        $hasTypeCol = Schema::hasColumn('booked_date', 'type_of_partnership_id');
+
+        $disabled = [];
+
+        if ($hasRange) {
+            $query = DB::table('booked_date')
+                ->select('booked_date_start', 'booked_date_finish');
+            if ($hasTypeCol) {
+                $query->where('type_of_partnership_id', $typeId);
+            }
+            $rows = $query
+                ->where('booked_date_start', '<=', $endDate)
+                ->where('booked_date_finish', '>=', $today)
+                ->get();
+
+            $counts = [];
+            foreach ($rows as $row) {
+                $start = $row->booked_date_start ?: $today;
+                $finish = $row->booked_date_finish ?: $row->booked_date_start;
+                $start = max($start, $today);
+                $finish = min($finish, $endDate);
+                $cur = strtotime($start);
+                $end = strtotime($finish);
+                if ($cur === false || $end === false) { continue; }
+                while ($cur <= $end) {
+                    $d = date('Y-m-d', $cur);
+                    $counts[$d] = isset($counts[$d]) ? $counts[$d] + 1 : 1;
+                    $cur = strtotime('+1 day', $cur);
+                }
+            }
+            foreach ($counts as $d => $cnt) {
+                if ($cnt >= $maxBookings) { $disabled[] = $d; }
+            }
+        } else {
+            $query = DB::table('booked_date')
+                ->select('booked_date as d', DB::raw('COUNT(*) as cnt'))
+                ->whereBetween('booked_date', [$today, $endDate]);
+            if ($hasTypeCol) {
+                $query->where('type_of_partnership_id', $typeId);
+            }
+            $rows = $query->groupBy('d')->get();
+            foreach ($rows as $row) {
+                if ((int) $row->cnt >= $maxBookings) {
+                    $disabled[] = $row->d;
+                }
+            }
+        }
+
+        sort($disabled);
+        return array_values(array_unique($disabled));
     }
 } 
