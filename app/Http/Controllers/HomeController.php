@@ -75,6 +75,7 @@ class HomeController extends Controller
         $regulasi = Information::where('subject', 'Pedoman / Regulasi')->where('status', 'publik')->orderByDesc('date')->take(5)->get();
         $infografisSIPK = Information::where('subject', 'Infografis SIPK')->where('status', 'publik')->orderByDesc('date')->take(5)->get();
         $angkatanKerja = Information::where('subject', 'Angkatan Kerja')->where('status', 'publik')->orderByDesc('date')->take(5)->get();
+        $infografisJobFair = Information::where('subject', 'Infografis Job Fair')->where('status', 'publik')->orderByDesc('date')->take(5)->get();
 
         return view('home', compact(
             'statistics',
@@ -100,7 +101,8 @@ class HomeController extends Controller
             'lmir',
             'regulasi',
             'infografisSIPK',
-            'angkatanKerja'
+            'angkatanKerja',
+            'infografisJobFair'
         ));
     }
 } 
