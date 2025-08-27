@@ -244,16 +244,16 @@
                 <button class="nav-link active" id="spark-tab" data-bs-toggle="tab" data-bs-target="#spark" type="button" role="tab" aria-controls="spark" aria-selected="true">Seputar Pasar Kerja (SPARK)</button>
             </li>
             <li class="nav-item" role="presentation">
-                <button class="nav-link" id="lmir-tab" data-bs-toggle="tab" data-bs-target="#lmir" type="button" role="tab" aria-controls="lmir" aria-selected="false">Labour Market Inteligence Report</button>
+                <button class="nav-link" id="infografis-sipk-tab" data-bs-toggle="tab" data-bs-target="#infografis-sipk" type="button" role="tab" aria-controls="infografis-sipk" aria-selected="false">Infografis SIPK</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="angkatan-kerja-tab" data-bs-toggle="tab" data-bs-target="#angkatan-kerja" type="button" role="tab" aria-controls="angkatan-kerja" aria-selected="false">Angkatan Kerja</button>
             </li>
             <li class="nav-item" role="presentation">
                 <button class="nav-link" id="regulasi-tab" data-bs-toggle="tab" data-bs-target="#regulasi" type="button" role="tab" aria-controls="regulasi" aria-selected="false">Pedoman / Regulasi</button>
             </li>
             <li class="nav-item" role="presentation">
-                <button class="nav-link" id="infografis-sipk-tab" data-bs-toggle="tab" data-bs-target="#infografis-sipk" type="button" role="tab" aria-controls="infografis-sipk" aria-selected="false">Infografis SIPK</button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="angkatan-kerja-tab" data-bs-toggle="tab" data-bs-target="#angkatan-kerja" type="button" role="tab" aria-controls="angkatan-kerja" aria-selected="false">Angkatan Kerja</button>
+                <button class="nav-link" id="lmir-tab" data-bs-toggle="tab" data-bs-target="#lmir" type="button" role="tab" aria-controls="lmir" aria-selected="false">Labour Market Inteligence Report</button>
             </li>
             <li class="nav-item" role="presentation">
                 <button class="nav-link" id="infografis-job-fair-tab" data-bs-toggle="tab" data-bs-target="#infografis-job-fair" type="button" role="tab" aria-controls="infografis-job-fair" aria-selected="false">Infografis Job Fair</button>
