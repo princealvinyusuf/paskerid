@@ -255,6 +255,9 @@
             <li class="nav-item" role="presentation">
                 <button class="nav-link" id="angkatan-kerja-tab" data-bs-toggle="tab" data-bs-target="#angkatan-kerja" type="button" role="tab" aria-controls="angkatan-kerja" aria-selected="false">Angkatan Kerja</button>
             </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="infografis-job-fair-tab" data-bs-toggle="tab" data-bs-target="#infografis-job-fair" type="button" role="tab" aria-controls="infografis-job-fair" aria-selected="false">Infografis Job Fair</button>
+            </li>
         </ul>
         <div class="tab-content">
             <div class="tab-pane fade show active" id="spark" role="tabpanel" aria-labelledby="spark-tab">
@@ -326,6 +329,22 @@
                     <a href="{{ route('informasi.index', ['subject' => $info->subject, 'show' => $info->id]) }}" class="text-decoration-none">
                         <div class="card mb-3 shadow-sm rounded-pill px-4 py-3 d-flex flex-row align-items-center" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}" style="cursor:pointer;">
                             <div class="me-3 text-primary" style="font-size:2rem;"><i class="fa fa-users"></i></div>
+                            <div class="flex-grow-1">
+                                <div class="fw-bold">{{ $info->title }}</div>
+                                <div class="text-muted small">{{ indo_date($info->date) }}</div>
+                            </div>
+                            <div>
+                                <i class="fa fa-arrow-right fa-lg text-success"></i>
+                            </div>
+                        </div>
+                    </a>
+                @endforeach
+            </div>
+            <div class="tab-pane fade" id="infografis-job-fair" role="tabpanel" aria-labelledby="infografis-job-fair-tab">
+                @foreach($infografisJobFair as $info)
+                    <a href="{{ route('informasi.index', ['subject' => $info->subject, 'show' => $info->id]) }}" class="text-decoration-none">
+                        <div class="card mb-3 shadow-sm rounded-pill px-4 py-3 d-flex flex-row align-items-center" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}" style="cursor:pointer;">
+                            <div class="me-3 text-primary" style="font-size:2rem;"><i class="fa fa-calendar-day"></i></div>
                             <div class="flex-grow-1">
                                 <div class="fw-bold">{{ $info->title }}</div>
                                 <div class="text-muted small">{{ indo_date($info->date) }}</div>
