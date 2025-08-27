@@ -341,7 +341,7 @@
                 @endforeach
             </div>
             <div class="tab-pane fade" id="infografis-job-fair" role="tabpanel" aria-labelledby="infografis-job-fair-tab">
-                @foreach($infografisJobFair as $info)
+                @foreach($information->where('subject', 'infografis-job-fair')->take(5) as $info)
                     <a href="{{ route('informasi.index', ['subject' => $info->subject, 'show' => $info->id]) }}" class="text-decoration-none">
                         <div class="card mb-3 shadow-sm rounded-pill px-4 py-3 d-flex flex-row align-items-center" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}" style="cursor:pointer;">
                             <div class="me-3 text-primary" style="font-size:2rem;"><i class="fa fa-calendar-day"></i></div>
