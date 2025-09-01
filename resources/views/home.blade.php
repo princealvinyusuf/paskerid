@@ -807,9 +807,9 @@
     </a>
 </div>
 
-    <!-- Zapier Chatbot Embed -->
-    <script async type='module' src='https://interfaces.zapier.com/assets/web-components/zapier-interfaces/zapier-interfaces.esm.js'></script>
-    <zapier-interfaces-chatbot-embed is-popup='true' chatbot-id='cme2m5bo7000dpuncd9nwwgbe'></zapier-interfaces-chatbot-embed>
+    <!-- Zapier Chatbot Embed - DISABLED -->
+    <!-- <script async type='module' src='https://interfaces.zapier.com/assets/web-components/zapier-interfaces/zapier-interfaces.esm.js'></script> -->
+    <!-- <zapier-interfaces-chatbot-embed is-popup='true' chatbot-id='cme2m5bo7000dpuncd9nwwgbe'></zapier-interfaces-chatbot-embed> -->
 @endsection
 
 @section('scripts')
