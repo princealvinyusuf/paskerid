@@ -65,7 +65,7 @@
                 </div>
 
                 <hr class="my-4">
-                <h5 class="mb-3"><i class="bi bi-building me-2"></i>Data Instansi</h5>
+                <h5 class="mb-3"><i class="bi bi-building me-2"></i>Data Perusahaan</h5>
                 <div class="row g-3">
                     {{-- <div class="col-md-6">
                         <label for="sector_category" class="form-label">Kategori/Sektor Instansi</label>
@@ -79,25 +79,25 @@
                         </select>
                     </div> --}}
                     <div class="col-md-6">
-                        <label for="comapny_sectors" class="form-label">Kategori/Sektor Instansi</label>
+                        <label for="comapny_sectors" class="form-label">Kategori/Sektor Perusahaan</label>
                         <select class="form-select" id="company_sectors_id" name="company_sectors_id" required>
-                            <option value="">-- Pilih Kategori / Sektor Instansi --</option>
+                            <option value="">-- Pilih Kategori / Sektor Perusahaan --</option>
                         @foreach ($dropdownCompanySectors as $sectors)
                             <option value="{{ $sectors->id }}" {{ old('company_sectors_id') == $sectors->id ? 'selected' : '' }}>{{ $sectors->sector_name }}</option>
                         @endforeach
                         </select>
                     </div>
                     <div class="col-md-6">
-                        <label for="institution_name" class="form-label">Nama Instansi</label>
-                        <input type="text" class="form-control" id="institution_name" name="institution_name" placeholder="Masukkan nama instansi" value="{{ old('institution_name') }}" required>
+                        <label for="institution_name" class="form-label">Nama Perusahaan</label>
+                        <input type="text" class="form-control" id="institution_name" name="institution_name" placeholder="Masukkan nama perusahaan" value="{{ old('institution_name') }}" required>
                     </div>
                     <div class="col-md-6">
                         <label for="business_sector" class="form-label">Sektor Lapangan Usaha</label>
                         <input type="text" class="form-control" id="business_sector" name="business_sector" placeholder="Contoh: manufaktur, teknologi, dsb" value="{{ old('business_sector') }}" required>
-                        <div class="form-text">Bidang usaha/sektor yang menjadi fokus utama instansi.</div>
+                        <div class="form-text">Bidang usaha/sektor yang menjadi fokus utama Perusahaan.</div>
                     </div>
                     <div class="col-md-6">
-                        <label for="institution_address" class="form-label">Alamat Instansi</label>
+                        <label for="institution_address" class="form-label">Alamat Perusahaan</label>
                         <input type="text" class="form-control" id="institution_address" name="institution_address" placeholder="Masukkan alamat lengkap" value="{{ old('institution_address') }}" required>
                     </div>
                 </div>
