@@ -169,6 +169,17 @@ section:last-of-type {
                 .card.stat-card .w-100 {
                     overflow: visible !important;
                 }
+                /* Support for scaled Tableau visualizations */
+                .tableau-embed-wrapper {
+                    position: relative;
+                }
+                .tableauPlaceholder {
+                    transition: transform 0.3s ease;
+                }
+                /* Ensure scaled content doesn't cause horizontal scroll */
+                .tableau-embed-wrapper.scaled {
+                    overflow: hidden !important;
+                }
             </style>
             <div class="row gx-3 gy-4 justify-content-center" id="section1Cards">
                 @php $count = 0; $total = count($informasiSection1); @endphp
@@ -441,6 +452,75 @@ section:last-of-type {
 
 @push('scripts')
 <script>
+// Function to scale Tableau visualizations to fit container
+function scaleTableauVisualizations() {
+    const tableauPlaceholders = document.querySelectorAll('.tableauPlaceholder');
+    
+    tableauPlaceholders.forEach(function(placeholder) {
+        const container = placeholder.closest('.tableau-embed-wrapper');
+        if (!container) return;
+        
+        const containerWidth = container.offsetWidth;
+        const tableauObject = placeholder.querySelector('object.tableauViz');
+        
+        if (tableauObject && containerWidth > 0) {
+            // Wait a bit for Tableau to render if needed
+            setTimeout(function() {
+                // Get the natural width of the Tableau visualization
+                let tableauWidth = tableauObject.offsetWidth;
+                
+                // If width is still 0, try to get it from the object's natural dimensions
+                if (tableauWidth === 0) {
+                    tableauWidth = tableauObject.getAttribute('width') || 800;
+                }
+                
+                // Convert to number if it's a string
+                tableauWidth = parseInt(tableauWidth) || 800;
+                
+                // Calculate scale factor (similar to 67% zoom)
+                let scaleFactor = containerWidth / tableauWidth;
+                
+                // Ensure scale factor is reasonable (between 0.4 and 1.0)
+                scaleFactor = Math.max(0.4, Math.min(1.0, scaleFactor));
+                
+                // Only apply scaling if it's significantly different from 1.0
+                if (scaleFactor < 0.95) {
+                    // Apply transform scale
+                    tableauObject.style.transform = `scale(${scaleFactor})`;
+                    tableauObject.style.transformOrigin = 'top left';
+                    
+                    // Also scale any iframes that might be created by Tableau
+                    const iframes = placeholder.querySelectorAll('iframe');
+                    iframes.forEach(function(iframe) {
+                        iframe.style.transform = `scale(${scaleFactor})`;
+                        iframe.style.transformOrigin = 'top left';
+                    });
+                    
+                    // Adjust container height to accommodate scaled content
+                    const scaledHeight = (427 * scaleFactor) + 'px';
+                    container.style.height = scaledHeight;
+                    placeholder.style.height = scaledHeight;
+                    
+                    // Mark as scaled and ensure no overflow
+                    container.classList.add('scaled');
+                    container.style.overflow = 'hidden';
+                    
+                    console.log(`Scaled Tableau visualization: ${scaleFactor.toFixed(2)}x (${tableauWidth}px -> ${containerWidth}px)`);
+                } else {
+                    // Reset scaling if not needed
+                    tableauObject.style.transform = '';
+                    const iframes = placeholder.querySelectorAll('iframe');
+                    iframes.forEach(function(iframe) {
+                        iframe.style.transform = '';
+                    });
+                    container.classList.remove('scaled');
+                    container.style.overflow = 'visible';
+                }
+            }, 100);
+        }
+    });
+}
+
 // Function to resize Tableau visualizations
 function resizeTableauVisualizations() {
     // Find all Tableau placeholder elements
@@ -535,16 +615,20 @@ document.addEventListener('DOMContentLoaded', function () {
         updatePubDots();
     }
 
-    // Resize Tableau visualizations on page load
-    resizeTableauVisualizations();
+    // Scale Tableau visualizations on page load
+    scaleTableauVisualizations();
     
-    // Resize again after a short delay to ensure Tableau has loaded
-    setTimeout(resizeTableauVisualizations, 1000);
+    // Scale again after a short delay to ensure Tableau has loaded
+    setTimeout(scaleTableauVisualizations, 1000);
     
-    // Resize on window resize
+    // Scale on window resize
     window.addEventListener('resize', function() {
-        setTimeout(resizeTableauVisualizations, 100);
+        setTimeout(scaleTableauVisualizations, 100);
     });
+    
+    // Also run the original resize function as backup
+    resizeTableauVisualizations();
+    setTimeout(resizeTableauVisualizations, 1000);
     
     // Watch for dynamically added Tableau content
     const observer = new MutationObserver(function(mutations) {
@@ -553,11 +637,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 mutation.addedNodes.forEach(function(node) {
                     if (node.nodeType === 1) { // Element node
                         if (node.classList && (node.classList.contains('tableauPlaceholder') || node.classList.contains('tableauViz'))) {
+                            setTimeout(scaleTableauVisualizations, 100);
                             setTimeout(resizeTableauVisualizations, 100);
                         }
                         // Check for Tableau elements in added nodes
                         const tableauElements = node.querySelectorAll && node.querySelectorAll('.tableauPlaceholder, .tableauViz');
                         if (tableauElements && tableauElements.length > 0) {
+                            setTimeout(scaleTableauVisualizations, 100);
                             setTimeout(resizeTableauVisualizations, 100);
                         }
                     }
