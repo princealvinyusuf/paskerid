@@ -655,32 +655,6 @@
                                 <img src="{{ asset($stakeholder->logo) }}" alt="Logo" style="max-width: 80px; max-height: 80px; object-fit: contain;">
                             </div>
                         @endif
-                        @if($stakeholder->wilayah || $stakeholder->category)
-                            <div class="mb-2 d-flex flex-wrap align-items-center gap-2" style="margin-left:2px;">
-                                @if($stakeholder->wilayah)
-                                    <span class="badge bg-light text-success border border-success" style="font-weight:500;">{{ $stakeholder->wilayah }}</span>
-                                @endif
-                                @if($stakeholder->category)
-                                    <span class="badge bg-light text-success border border-success" style="font-weight:500;">{{ $stakeholder->category }}</span>
-                                @endif
-                            </div>
-                        @endif
-                        <h6 class="fw-bold mb-2">{{ $stakeholder->name }}</h6>
-                        @if($stakeholder->pic)
-                            {{-- <p class="mb-1"><i class="fa fa-user me-2 text-success"></i>PIC: {{ $stakeholder->pic }}</p> --}}
-                        @endif
-                        @if($stakeholder->address)
-                            <p class="mb-1"><i class="fa fa-map-marker-alt me-2 text-success"></i>{{ $stakeholder->address }}</p>
-                        @endif
-                        @if($stakeholder->contact)
-                            <p class="mb-1"><i class="fa fa-phone me-2 text-success"></i>{{ $stakeholder->contact }}</p>
-                        @endif
-                        @if($stakeholder->email)
-                            <p class="mb-1"><i class="fa fa-envelope me-2 text-success"></i>{{ $stakeholder->email }}</p>
-                        @endif
-                        @if($stakeholder->website_url)
-                            <a href="{{ $stakeholder->website_url }}" class="text-success fw-bold" target="_blank"><i class="fa fa-globe me-1"></i>Kunjungi Website</a>
-                        @endif
                     </div>
                 </div>
             @endforeach
