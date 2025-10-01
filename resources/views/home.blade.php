@@ -554,7 +554,7 @@
 
 
     {{-- Topik Data Section --}}
-    <section class="my-5 px-2 px-md-4 px-lg-5" data-aos="fade-up">
+    <!-- <section class="my-5 px-2 px-md-4 px-lg-5" data-aos="fade-up">
         <div class="text-center mb-4">
             <h2 class="fw-bold" style="font-size:2.2rem;">Topik Data</h2>
         </div>
@@ -591,7 +591,7 @@
                 </div>
             @endforeach
         </div>
-    </section>
+    </section> -->
 
     {{-- News Section --}}
     <section class="my-5 px-2 px-md-4 px-lg-5" data-aos="fade-up">
