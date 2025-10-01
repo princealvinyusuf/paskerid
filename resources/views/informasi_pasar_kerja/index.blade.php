@@ -70,41 +70,21 @@ section:last-of-type {
                         <div class="card stat-card shadow-sm border-0 w-100 h-100 p-3 d-flex flex-column align-items-center justify-content-center text-center">
                             <h5 class="fw-bold mb-2">{{ $info->title }}</h5>
                             <p class="mb-2 text-muted">{{ $info->description }}</p>
-                            <div class="w-100" style="height: 286px;">
-                                <div class="tableau-embed-wrapper w-100" style="height: 286px; width: 100%; overflow: visible;">
-                                    <div style="width: 100%; min-width: 0;">
+                            <div class="w-100" style="min-height: 350px;">
+                                <div class="tableau-embed-wrapper w-100" style="min-height: 350px; overflow-x: auto;">
+                                    <div style="min-width: 400px;">
                                         {!! str_replace([
                                             "vizElement.style.width='400px';",
                                             'vizElement.style.width = \"400px\";',
                                             'vizElement.style.width = \"100%\";',
                                             'vizElement.style.height=\'427px\';',
-                                            'vizElement.style.height = \"427px\";',
-                                            "vizElement.style.width='800px';",
-                                            'vizElement.style.width = \"800px\";',
-                                            "vizElement.style.width='600px';",
-                                            'vizElement.style.width = \"600px\";',
-                                            "vizElement.style.width='500px';",
-                                            'vizElement.style.width = \"500px\";',
-                                            "vizElement.style.width='900px';",
-                                            'vizElement.style.width = \"900px\";',
-                                            "vizElement.style.width='700px';",
-                                            'vizElement.style.width = \"700px\";'
+                                            'vizElement.style.height = \"427px\";'
                                         ], [
-                                            "vizElement.style.width='100%';vizElement.style.minWidth='0';vizElement.style.maxWidth='100%';",
-                                            'vizElement.style.width = "100%";vizElement.style.minWidth = "0";vizElement.style.maxWidth = "100%";',
-                                            'vizElement.style.width = "100%";vizElement.style.minWidth = "0";vizElement.style.maxWidth = "100%";',
+                                            "vizElement.style.width='100%';",
+                                            'vizElement.style.width = "100%";',
+                                            'vizElement.style.width = "100%";',
                                             "vizElement.style.height='427px';",
-                                            'vizElement.style.height = "427px";',
-                                            "vizElement.style.width='100%';vizElement.style.minWidth='0';vizElement.style.maxWidth='100%';",
-                                            'vizElement.style.width = "100%";vizElement.style.minWidth = "0";vizElement.style.maxWidth = "100%";',
-                                            "vizElement.style.width='100%';vizElement.style.minWidth='0';vizElement.style.maxWidth='100%';",
-                                            'vizElement.style.width = "100%";vizElement.style.minWidth = "0";vizElement.style.maxWidth = "100%";',
-                                            "vizElement.style.width='100%';vizElement.style.minWidth='0';vizElement.style.maxWidth='100%';",
-                                            'vizElement.style.width = "100%";vizElement.style.minWidth = "0";vizElement.style.maxWidth = "100%";',
-                                            "vizElement.style.width='100%';vizElement.style.minWidth='0';vizElement.style.maxWidth='100%';",
-                                            'vizElement.style.width = "100%";vizElement.style.minWidth = "0";vizElement.style.maxWidth = "100%";',
-                                            "vizElement.style.width='100%';vizElement.style.minWidth='0';vizElement.style.maxWidth='100%';",
-                                            'vizElement.style.width = "100%";vizElement.style.minWidth = "0";vizElement.style.maxWidth = "100%";'
+                                            'vizElement.style.height = "427px";'
                                         ], $info->tableau_embed_code) !!}
                                     </div>
                                 </div>
@@ -129,59 +109,11 @@ section:last-of-type {
             <h3 class="text-center mb-4">Kebutuhan Tenaga Kerja</h3>
             <style>
                 .tableauPlaceholder,
-                .tableauPlaceholder object,
-                .tableauPlaceholder iframe {
+                .tableauPlaceholder object {
                     width: 100% !important;
                     min-width: 0 !important;
                     max-width: 100% !important;
                     height: 427px !important;
-                    overflow: visible !important;
-                }
-                .tableau-embed-wrapper {
-                    width: 100% !important;
-                    overflow: visible !important;
-                    max-width: 100% !important;
-                }
-                .tableau-embed-wrapper > div {
-                    width: 100% !important;
-                    min-width: 0 !important;
-                    max-width: 100% !important;
-                    overflow: visible !important;
-                }
-                .tableauViz {
-                    width: 100% !important;
-                    min-width: 0 !important;
-                    max-width: 100% !important;
-                    overflow: visible !important;
-                }
-                /* Force all Tableau-related elements to full width */
-                [class*="tableau"],
-                [id*="viz"] {
-                    width: 100% !important;
-                    min-width: 0 !important;
-                    max-width: 100% !important;
-                    overflow: visible !important;
-                }
-                /* Ensure parent containers don't constrain width */
-                .card.stat-card {
-                    overflow: visible !important;
-                }
-                .card.stat-card .w-100 {
-                    overflow: visible !important;
-                }
-                /* Apply 67% zoom out to Tableau visualizations */
-                .tableauPlaceholder,
-                .tableauPlaceholder object,
-                .tableauPlaceholder iframe {
-                    transform: scale(0.67) !important;
-                    transform-origin: top left !important;
-                }
-                /* Adjust container height for scaled content */
-                .tableau-embed-wrapper {
-                    height: 286px !important; /* 427px * 0.67 */
-                }
-                .tableau-embed-wrapper > div {
-                    height: 286px !important;
                 }
             </style>
             <div class="row gx-3 gy-4 justify-content-center" id="section1Cards">
@@ -192,41 +124,21 @@ section:last-of-type {
                         <div class="card stat-card shadow-sm border-0 w-100 h-100 p-3 d-flex flex-column align-items-center justify-content-center text-center">
                             <h5 class="fw-bold mb-2">{{ $info->title }}</h5>
                             <p class="mb-2 text-muted">{{ $info->description }}</p>
-                            <div class="w-100" style="height: 286px;">
-                                <div class="tableau-embed-wrapper w-100" style="height: 286px; width: 100%; overflow: visible;">
-                                    <div style="width: 100%; min-width: 0;">
+                            <div class="w-100" style="min-height: 350px;">
+                                <div class="tableau-embed-wrapper w-100" style="min-height: 350px; overflow-x: auto;">
+                                    <div style="min-width: 400px;">
                                         {!! str_replace([
                                             "vizElement.style.width='400px';",
                                             'vizElement.style.width = \"400px\";',
                                             'vizElement.style.width = \"100%\";',
                                             'vizElement.style.height=\'427px\';',
-                                            'vizElement.style.height = \"427px\";',
-                                            "vizElement.style.width='800px';",
-                                            'vizElement.style.width = \"800px\";',
-                                            "vizElement.style.width='600px';",
-                                            'vizElement.style.width = \"600px\";',
-                                            "vizElement.style.width='500px';",
-                                            'vizElement.style.width = \"500px\";',
-                                            "vizElement.style.width='900px';",
-                                            'vizElement.style.width = \"900px\";',
-                                            "vizElement.style.width='700px';",
-                                            'vizElement.style.width = \"700px\";'
+                                            'vizElement.style.height = \"427px\";'
                                         ], [
-                                            "vizElement.style.width='100%';vizElement.style.minWidth='0';vizElement.style.maxWidth='100%';",
-                                            'vizElement.style.width = "100%";vizElement.style.minWidth = "0";vizElement.style.maxWidth = "100%";',
-                                            'vizElement.style.width = "100%";vizElement.style.minWidth = "0";vizElement.style.maxWidth = "100%";',
+                                            "vizElement.style.width='100%';",
+                                            'vizElement.style.width = "100%";',
+                                            'vizElement.style.width = "100%";',
                                             "vizElement.style.height='427px';",
-                                            'vizElement.style.height = "427px";',
-                                            "vizElement.style.width='100%';vizElement.style.minWidth='0';vizElement.style.maxWidth='100%';",
-                                            'vizElement.style.width = "100%";vizElement.style.minWidth = "0";vizElement.style.maxWidth = "100%";',
-                                            "vizElement.style.width='100%';vizElement.style.minWidth='0';vizElement.style.maxWidth='100%';",
-                                            'vizElement.style.width = "100%";vizElement.style.minWidth = "0";vizElement.style.maxWidth = "100%";',
-                                            "vizElement.style.width='100%';vizElement.style.minWidth='0';vizElement.style.maxWidth='100%';",
-                                            'vizElement.style.width = "100%";vizElement.style.minWidth = "0";vizElement.style.maxWidth = "100%";',
-                                            "vizElement.style.width='100%';vizElement.style.minWidth='0';vizElement.style.maxWidth='100%';",
-                                            'vizElement.style.width = "100%";vizElement.style.minWidth = "0";vizElement.style.maxWidth = "100%";',
-                                            "vizElement.style.width='100%';vizElement.style.minWidth='0';vizElement.style.maxWidth='100%';",
-                                            'vizElement.style.width = "100%";vizElement.style.minWidth = "0";vizElement.style.maxWidth = "100%";'
+                                            'vizElement.style.height = "427px";'
                                         ], $info->tableau_embed_code) !!}
                                     </div>
                                 </div>
@@ -255,41 +167,21 @@ section:last-of-type {
                         <div class="card stat-card shadow-sm border-0 w-100 h-100 p-3 d-flex flex-column align-items-center justify-content-center text-center">
                             <h5 class="fw-bold mb-2">{{ $info->title }}</h5>
                             <p class="mb-2 text-muted">{{ $info->description }}</p>
-                            <div class="w-100" style="height: 286px;">
-                                <div class="tableau-embed-wrapper w-100" style="height: 286px; width: 100%; overflow: visible;">
-                                    <div style="width: 100%; min-width: 0;">
+                            <div class="w-100" style="min-height: 350px;">
+                                <div class="tableau-embed-wrapper w-100" style="min-height: 350px; overflow-x: auto;">
+                                    <div style="min-width: 400px;">
                                         {!! str_replace([
                                             "vizElement.style.width='400px';",
                                             'vizElement.style.width = \"400px\";',
                                             'vizElement.style.width = \"100%\";',
                                             'vizElement.style.height=\'427px\';',
-                                            'vizElement.style.height = \"427px\";',
-                                            "vizElement.style.width='800px';",
-                                            'vizElement.style.width = \"800px\";',
-                                            "vizElement.style.width='600px';",
-                                            'vizElement.style.width = \"600px\";',
-                                            "vizElement.style.width='500px';",
-                                            'vizElement.style.width = \"500px\";',
-                                            "vizElement.style.width='900px';",
-                                            'vizElement.style.width = \"900px\";',
-                                            "vizElement.style.width='700px';",
-                                            'vizElement.style.width = \"700px\";'
+                                            'vizElement.style.height = \"427px\";'
                                         ], [
-                                            "vizElement.style.width='100%';vizElement.style.minWidth='0';vizElement.style.maxWidth='100%';",
-                                            'vizElement.style.width = "100%";vizElement.style.minWidth = "0";vizElement.style.maxWidth = "100%";',
-                                            'vizElement.style.width = "100%";vizElement.style.minWidth = "0";vizElement.style.maxWidth = "100%";',
+                                            "vizElement.style.width='100%';",
+                                            'vizElement.style.width = "100%";',
+                                            'vizElement.style.width = "100%";',
                                             "vizElement.style.height='427px';",
-                                            'vizElement.style.height = "427px";',
-                                            "vizElement.style.width='100%';vizElement.style.minWidth='0';vizElement.style.maxWidth='100%';",
-                                            'vizElement.style.width = "100%";vizElement.style.minWidth = "0";vizElement.style.maxWidth = "100%";',
-                                            "vizElement.style.width='100%';vizElement.style.minWidth='0';vizElement.style.maxWidth='100%';",
-                                            'vizElement.style.width = "100%";vizElement.style.minWidth = "0";vizElement.style.maxWidth = "100%";',
-                                            "vizElement.style.width='100%';vizElement.style.minWidth='0';vizElement.style.maxWidth='100%';",
-                                            'vizElement.style.width = "100%";vizElement.style.minWidth = "0";vizElement.style.maxWidth = "100%";',
-                                            "vizElement.style.width='100%';vizElement.style.minWidth='0';vizElement.style.maxWidth='100%';",
-                                            'vizElement.style.width = "100%";vizElement.style.minWidth = "0";vizElement.style.maxWidth = "100%";',
-                                            "vizElement.style.width='100%';vizElement.style.minWidth='0';vizElement.style.maxWidth='100%';",
-                                            'vizElement.style.width = "100%";vizElement.style.minWidth = "0";vizElement.style.maxWidth = "100%";'
+                                            'vizElement.style.height = "427px";'
                                         ], $info->tableau_embed_code) !!}
                                     </div>
                                 </div>
@@ -319,41 +211,21 @@ section:last-of-type {
                         <div class="card stat-card shadow-sm border-0 w-100 h-100 p-3 d-flex flex-column align-items-center justify-content-center text-center">
                             <h5 class="fw-bold mb-2">{{ $info->title }}</h5>
                             <p class="mb-2 text-muted">{{ $info->description }}</p>
-                            <div class="w-100" style="height: 286px;">
-                                <div class="tableau-embed-wrapper w-100" style="height: 286px; width: 100%; overflow: visible;">
-                                    <div style="width: 100%; min-width: 0;">
+                            <div class="w-100" style="min-height: 350px;">
+                                <div class="tableau-embed-wrapper w-100" style="min-height: 350px; overflow-x: auto;">
+                                    <div style="min-width: 400px;">
                                         {!! str_replace([
                                             "vizElement.style.width='400px';",
                                             'vizElement.style.width = \"400px\";',
                                             'vizElement.style.width = \"100%\";',
                                             'vizElement.style.height=\'427px\';',
-                                            'vizElement.style.height = \"427px\";',
-                                            "vizElement.style.width='800px';",
-                                            'vizElement.style.width = \"800px\";',
-                                            "vizElement.style.width='600px';",
-                                            'vizElement.style.width = \"600px\";',
-                                            "vizElement.style.width='500px';",
-                                            'vizElement.style.width = \"500px\";',
-                                            "vizElement.style.width='900px';",
-                                            'vizElement.style.width = \"900px\";',
-                                            "vizElement.style.width='700px';",
-                                            'vizElement.style.width = \"700px\";'
+                                            'vizElement.style.height = \"427px\";'
                                         ], [
-                                            "vizElement.style.width='100%';vizElement.style.minWidth='0';vizElement.style.maxWidth='100%';",
-                                            'vizElement.style.width = "100%";vizElement.style.minWidth = "0";vizElement.style.maxWidth = "100%";',
-                                            'vizElement.style.width = "100%";vizElement.style.minWidth = "0";vizElement.style.maxWidth = "100%";',
+                                            "vizElement.style.width='100%';",
+                                            'vizElement.style.width = "100%";',
+                                            'vizElement.style.width = "100%";',
                                             "vizElement.style.height='427px';",
-                                            'vizElement.style.height = "427px";',
-                                            "vizElement.style.width='100%';vizElement.style.minWidth='0';vizElement.style.maxWidth='100%';",
-                                            'vizElement.style.width = "100%";vizElement.style.minWidth = "0";vizElement.style.maxWidth = "100%";',
-                                            "vizElement.style.width='100%';vizElement.style.minWidth='0';vizElement.style.maxWidth='100%';",
-                                            'vizElement.style.width = "100%";vizElement.style.minWidth = "0";vizElement.style.maxWidth = "100%";',
-                                            "vizElement.style.width='100%';vizElement.style.minWidth='0';vizElement.style.maxWidth='100%';",
-                                            'vizElement.style.width = "100%";vizElement.style.minWidth = "0";vizElement.style.maxWidth = "100%";',
-                                            "vizElement.style.width='100%';vizElement.style.minWidth='0';vizElement.style.maxWidth='100%';",
-                                            'vizElement.style.width = "100%";vizElement.style.minWidth = "0";vizElement.style.maxWidth = "100%";',
-                                            "vizElement.style.width='100%';vizElement.style.minWidth='0';vizElement.style.maxWidth='100%';",
-                                            'vizElement.style.width = "100%";vizElement.style.minWidth = "0";vizElement.style.maxWidth = "100%";'
+                                            'vizElement.style.height = "427px";'
                                         ], $info->tableau_embed_code) !!}
                                     </div>
                                 </div>
@@ -426,31 +298,6 @@ section:last-of-type {
         #publikasiScrollRow { gap: 8px !important; }
         .publikasi-card { min-width: 120px !important; max-width: 150px !important; min-height: 120px !important; }
     }
-    
-    /* Responsive Tableau Styles with 67% scaling */
-    @media (max-width: 768px) {
-        .tableau-embed-wrapper {
-            height: 200px !important; /* 300px * 0.67 */
-        }
-        .tableauPlaceholder,
-        .tableauPlaceholder object {
-            height: 300px !important;
-            transform: scale(0.67) !important;
-            transform-origin: top left !important;
-        }
-    }
-    
-    @media (max-width: 576px) {
-        .tableau-embed-wrapper {
-            height: 168px !important; /* 250px * 0.67 */
-        }
-        .tableauPlaceholder,
-        .tableauPlaceholder object {
-            height: 250px !important;
-            transform: scale(0.67) !important;
-            transform-origin: top left !important;
-        }
-    }
     </style>
 
     
@@ -459,53 +306,6 @@ section:last-of-type {
 
 @push('scripts')
 <script>
-// Function to apply 67% zoom out to Tableau visualizations
-function applyTableauZoomOut() {
-    // Find all Tableau placeholder elements
-    const tableauPlaceholders = document.querySelectorAll('.tableauPlaceholder');
-    
-    tableauPlaceholders.forEach(function(placeholder) {
-        // Apply 67% scale to the placeholder
-        placeholder.style.transform = 'scale(0.67)';
-        placeholder.style.transformOrigin = 'top left';
-        
-        // Get the Tableau object element
-        const tableauObject = placeholder.querySelector('object.tableauViz');
-        if (tableauObject) {
-            // Apply scaling to the object
-            tableauObject.style.transform = 'scale(0.67)';
-            tableauObject.style.transformOrigin = 'top left';
-            
-            // Set original dimensions (before scaling)
-            tableauObject.style.width = '100%';
-            tableauObject.style.height = '427px';
-        }
-        
-        // Handle any iframe elements that might be created by Tableau
-        const iframes = placeholder.querySelectorAll('iframe');
-        iframes.forEach(function(iframe) {
-            iframe.style.transform = 'scale(0.67)';
-            iframe.style.transformOrigin = 'top left';
-            iframe.style.width = '100%';
-            iframe.style.height = '427px';
-        });
-        
-        // Adjust container height for scaled content
-        const container = placeholder.closest('.tableau-embed-wrapper');
-        if (container) {
-            container.style.height = '286px'; // 427px * 0.67
-            container.style.overflow = 'visible';
-        }
-    });
-    
-    // Also handle any elements with tableau-specific classes
-    const tableauElements = document.querySelectorAll('.tableauViz, [class*="tableau"]');
-    tableauElements.forEach(function(element) {
-        element.style.transform = 'scale(0.67)';
-        element.style.transformOrigin = 'top left';
-    });
-}
-
 document.addEventListener('DOMContentLoaded', function () {
     // Publikasi Carousel Logic
     const pubRow = document.getElementById('publikasiScrollRow');
@@ -560,43 +360,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         updatePubDots();
     }
-
-    // Apply 67% zoom out to Tableau visualizations on page load
-    applyTableauZoomOut();
-    
-    // Apply zoom out again after a short delay to ensure Tableau has loaded
-    setTimeout(applyTableauZoomOut, 1000);
-    
-    // Apply zoom out on window resize
-    window.addEventListener('resize', function() {
-        setTimeout(applyTableauZoomOut, 100);
-    });
-    
-    // Watch for dynamically added Tableau content
-    const observer = new MutationObserver(function(mutations) {
-        mutations.forEach(function(mutation) {
-            if (mutation.type === 'childList') {
-                mutation.addedNodes.forEach(function(node) {
-                    if (node.nodeType === 1) { // Element node
-                        if (node.classList && (node.classList.contains('tableauPlaceholder') || node.classList.contains('tableauViz'))) {
-                            setTimeout(applyTableauZoomOut, 100);
-                        }
-                        // Check for Tableau elements in added nodes
-                        const tableauElements = node.querySelectorAll && node.querySelectorAll('.tableauPlaceholder, .tableauViz');
-                        if (tableauElements && tableauElements.length > 0) {
-                            setTimeout(applyTableauZoomOut, 100);
-                        }
-                    }
-                });
-            }
-        });
-    });
-    
-    // Start observing
-    observer.observe(document.body, {
-        childList: true,
-        subtree: true
-    });
 
     // Lihat lebih banyak logic for Section 1
     const lihatLebihBanyakBtn = document.getElementById('lihatLebihBanyakBtn');
