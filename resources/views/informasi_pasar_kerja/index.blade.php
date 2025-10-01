@@ -56,45 +56,6 @@
 section:last-of-type {
     margin-bottom: 0 !important;
 }
-/* Prevent horizontal overflow on this page */
-.container-fluid {
-    overflow-x: hidden;
-}
-/* Mobile responsiveness adjustments */
-@media (max-width: 768px) {
-    html, body {
-        overflow-x: hidden;
-    }
-    .section-content h2,
-    .section-content p {
-        margin-left: 0 !important;
-    }
-    .section-berita {
-        padding: 24px 16px;
-    }
-    .section-green-card {
-        padding: 24px 16px;
-    }
-    /* Neutralize Bootstrap row negative margins to avoid page overflow inside padded card */
-    .section-green-card .row {
-        margin-left: 0 !important;
-        margin-right: 0 !important;
-    }
-    /* Override inline min-width to avoid page-level overflow on embeds */
-    .tableau-embed-wrapper > div {
-        min-width: 0 !important;
-    }
-    .tableau-embed-wrapper {
-        overflow-x: hidden !important;
-    }
-    .tableau-embed-wrapper,
-    .tableau-embed-wrapper > div,
-    .tableau-embed-wrapper iframe,
-    .tableau-embed-wrapper object {
-        width: 100% !important;
-        max-width: 100% !important;
-    }
-}
 </style>
 <div class="container-fluid p-0" style="background: #edf8e9;">
     
