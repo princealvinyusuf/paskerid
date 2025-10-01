@@ -78,13 +78,33 @@ section:last-of-type {
                                             'vizElement.style.width = \"400px\";',
                                             'vizElement.style.width = \"100%\";',
                                             'vizElement.style.height=\'427px\';',
-                                            'vizElement.style.height = \"427px\";'
+                                            'vizElement.style.height = \"427px\";',
+                                            "vizElement.style.width='800px';",
+                                            'vizElement.style.width = \"800px\";',
+                                            "vizElement.style.width='600px';",
+                                            'vizElement.style.width = \"600px\";',
+                                            "vizElement.style.width='500px';",
+                                            'vizElement.style.width = \"500px\";',
+                                            "vizElement.style.width='900px';",
+                                            'vizElement.style.width = \"900px\";',
+                                            "vizElement.style.width='700px';",
+                                            'vizElement.style.width = \"700px\";'
                                         ], [
-                                            "vizElement.style.width='100%';",
-                                            'vizElement.style.width = "100%";',
-                                            'vizElement.style.width = "100%";',
+                                            "vizElement.style.width='100%';vizElement.style.minWidth='0';vizElement.style.maxWidth='100%';",
+                                            'vizElement.style.width = "100%";vizElement.style.minWidth = "0";vizElement.style.maxWidth = "100%";',
+                                            'vizElement.style.width = "100%";vizElement.style.minWidth = "0";vizElement.style.maxWidth = "100%";',
                                             "vizElement.style.height='427px';",
-                                            'vizElement.style.height = "427px";'
+                                            'vizElement.style.height = "427px";',
+                                            "vizElement.style.width='100%';vizElement.style.minWidth='0';vizElement.style.maxWidth='100%';",
+                                            'vizElement.style.width = "100%";vizElement.style.minWidth = "0";vizElement.style.maxWidth = "100%";',
+                                            "vizElement.style.width='100%';vizElement.style.minWidth='0';vizElement.style.maxWidth='100%';",
+                                            'vizElement.style.width = "100%";vizElement.style.minWidth = "0";vizElement.style.maxWidth = "100%";',
+                                            "vizElement.style.width='100%';vizElement.style.minWidth='0';vizElement.style.maxWidth='100%';",
+                                            'vizElement.style.width = "100%";vizElement.style.minWidth = "0";vizElement.style.maxWidth = "100%";',
+                                            "vizElement.style.width='100%';vizElement.style.minWidth='0';vizElement.style.maxWidth='100%';",
+                                            'vizElement.style.width = "100%";vizElement.style.minWidth = "0";vizElement.style.maxWidth = "100%";',
+                                            "vizElement.style.width='100%';vizElement.style.minWidth='0';vizElement.style.maxWidth='100%';",
+                                            'vizElement.style.width = "100%";vizElement.style.minWidth = "0";vizElement.style.maxWidth = "100%";'
                                         ], $info->tableau_embed_code) !!}
                                     </div>
                                 </div>
@@ -109,25 +129,45 @@ section:last-of-type {
             <h3 class="text-center mb-4">Kebutuhan Tenaga Kerja</h3>
             <style>
                 .tableauPlaceholder,
-                .tableauPlaceholder object {
+                .tableauPlaceholder object,
+                .tableauPlaceholder iframe {
                     width: 100% !important;
                     min-width: 0 !important;
                     max-width: 100% !important;
                     height: 427px !important;
+                    overflow: visible !important;
                 }
                 .tableau-embed-wrapper {
                     width: 100% !important;
                     overflow: visible !important;
+                    max-width: 100% !important;
                 }
                 .tableau-embed-wrapper > div {
                     width: 100% !important;
                     min-width: 0 !important;
                     max-width: 100% !important;
+                    overflow: visible !important;
                 }
                 .tableauViz {
                     width: 100% !important;
                     min-width: 0 !important;
                     max-width: 100% !important;
+                    overflow: visible !important;
+                }
+                /* Force all Tableau-related elements to full width */
+                [class*="tableau"],
+                [id*="viz"] {
+                    width: 100% !important;
+                    min-width: 0 !important;
+                    max-width: 100% !important;
+                    overflow: visible !important;
+                }
+                /* Ensure parent containers don't constrain width */
+                .card.stat-card {
+                    overflow: visible !important;
+                }
+                .card.stat-card .w-100 {
+                    overflow: visible !important;
                 }
             </style>
             <div class="row gx-3 gy-4 justify-content-center" id="section1Cards">
@@ -146,13 +186,33 @@ section:last-of-type {
                                             'vizElement.style.width = \"400px\";',
                                             'vizElement.style.width = \"100%\";',
                                             'vizElement.style.height=\'427px\';',
-                                            'vizElement.style.height = \"427px\";'
+                                            'vizElement.style.height = \"427px\";',
+                                            "vizElement.style.width='800px';",
+                                            'vizElement.style.width = \"800px\";',
+                                            "vizElement.style.width='600px';",
+                                            'vizElement.style.width = \"600px\";',
+                                            "vizElement.style.width='500px';",
+                                            'vizElement.style.width = \"500px\";',
+                                            "vizElement.style.width='900px';",
+                                            'vizElement.style.width = \"900px\";',
+                                            "vizElement.style.width='700px';",
+                                            'vizElement.style.width = \"700px\";'
                                         ], [
-                                            "vizElement.style.width='100%';",
-                                            'vizElement.style.width = "100%";',
-                                            'vizElement.style.width = "100%";',
+                                            "vizElement.style.width='100%';vizElement.style.minWidth='0';vizElement.style.maxWidth='100%';",
+                                            'vizElement.style.width = "100%";vizElement.style.minWidth = "0";vizElement.style.maxWidth = "100%";',
+                                            'vizElement.style.width = "100%";vizElement.style.minWidth = "0";vizElement.style.maxWidth = "100%";',
                                             "vizElement.style.height='427px';",
-                                            'vizElement.style.height = "427px";'
+                                            'vizElement.style.height = "427px";',
+                                            "vizElement.style.width='100%';vizElement.style.minWidth='0';vizElement.style.maxWidth='100%';",
+                                            'vizElement.style.width = "100%";vizElement.style.minWidth = "0";vizElement.style.maxWidth = "100%";',
+                                            "vizElement.style.width='100%';vizElement.style.minWidth='0';vizElement.style.maxWidth='100%';",
+                                            'vizElement.style.width = "100%";vizElement.style.minWidth = "0";vizElement.style.maxWidth = "100%";',
+                                            "vizElement.style.width='100%';vizElement.style.minWidth='0';vizElement.style.maxWidth='100%';",
+                                            'vizElement.style.width = "100%";vizElement.style.minWidth = "0";vizElement.style.maxWidth = "100%";',
+                                            "vizElement.style.width='100%';vizElement.style.minWidth='0';vizElement.style.maxWidth='100%';",
+                                            'vizElement.style.width = "100%";vizElement.style.minWidth = "0";vizElement.style.maxWidth = "100%";',
+                                            "vizElement.style.width='100%';vizElement.style.minWidth='0';vizElement.style.maxWidth='100%';",
+                                            'vizElement.style.width = "100%";vizElement.style.minWidth = "0";vizElement.style.maxWidth = "100%";'
                                         ], $info->tableau_embed_code) !!}
                                     </div>
                                 </div>
@@ -189,13 +249,33 @@ section:last-of-type {
                                             'vizElement.style.width = \"400px\";',
                                             'vizElement.style.width = \"100%\";',
                                             'vizElement.style.height=\'427px\';',
-                                            'vizElement.style.height = \"427px\";'
+                                            'vizElement.style.height = \"427px\";',
+                                            "vizElement.style.width='800px';",
+                                            'vizElement.style.width = \"800px\";',
+                                            "vizElement.style.width='600px';",
+                                            'vizElement.style.width = \"600px\";',
+                                            "vizElement.style.width='500px';",
+                                            'vizElement.style.width = \"500px\";',
+                                            "vizElement.style.width='900px';",
+                                            'vizElement.style.width = \"900px\";',
+                                            "vizElement.style.width='700px';",
+                                            'vizElement.style.width = \"700px\";'
                                         ], [
-                                            "vizElement.style.width='100%';",
-                                            'vizElement.style.width = "100%";',
-                                            'vizElement.style.width = "100%";',
+                                            "vizElement.style.width='100%';vizElement.style.minWidth='0';vizElement.style.maxWidth='100%';",
+                                            'vizElement.style.width = "100%";vizElement.style.minWidth = "0";vizElement.style.maxWidth = "100%";',
+                                            'vizElement.style.width = "100%";vizElement.style.minWidth = "0";vizElement.style.maxWidth = "100%";',
                                             "vizElement.style.height='427px';",
-                                            'vizElement.style.height = "427px";'
+                                            'vizElement.style.height = "427px";',
+                                            "vizElement.style.width='100%';vizElement.style.minWidth='0';vizElement.style.maxWidth='100%';",
+                                            'vizElement.style.width = "100%";vizElement.style.minWidth = "0";vizElement.style.maxWidth = "100%";',
+                                            "vizElement.style.width='100%';vizElement.style.minWidth='0';vizElement.style.maxWidth='100%';",
+                                            'vizElement.style.width = "100%";vizElement.style.minWidth = "0";vizElement.style.maxWidth = "100%";',
+                                            "vizElement.style.width='100%';vizElement.style.minWidth='0';vizElement.style.maxWidth='100%';",
+                                            'vizElement.style.width = "100%";vizElement.style.minWidth = "0";vizElement.style.maxWidth = "100%";',
+                                            "vizElement.style.width='100%';vizElement.style.minWidth='0';vizElement.style.maxWidth='100%';",
+                                            'vizElement.style.width = "100%";vizElement.style.minWidth = "0";vizElement.style.maxWidth = "100%";',
+                                            "vizElement.style.width='100%';vizElement.style.minWidth='0';vizElement.style.maxWidth='100%';",
+                                            'vizElement.style.width = "100%";vizElement.style.minWidth = "0";vizElement.style.maxWidth = "100%";'
                                         ], $info->tableau_embed_code) !!}
                                     </div>
                                 </div>
@@ -233,13 +313,33 @@ section:last-of-type {
                                             'vizElement.style.width = \"400px\";',
                                             'vizElement.style.width = \"100%\";',
                                             'vizElement.style.height=\'427px\';',
-                                            'vizElement.style.height = \"427px\";'
+                                            'vizElement.style.height = \"427px\";',
+                                            "vizElement.style.width='800px';",
+                                            'vizElement.style.width = \"800px\";',
+                                            "vizElement.style.width='600px';",
+                                            'vizElement.style.width = \"600px\";',
+                                            "vizElement.style.width='500px';",
+                                            'vizElement.style.width = \"500px\";',
+                                            "vizElement.style.width='900px';",
+                                            'vizElement.style.width = \"900px\";',
+                                            "vizElement.style.width='700px';",
+                                            'vizElement.style.width = \"700px\";'
                                         ], [
-                                            "vizElement.style.width='100%';",
-                                            'vizElement.style.width = "100%";',
-                                            'vizElement.style.width = "100%";',
+                                            "vizElement.style.width='100%';vizElement.style.minWidth='0';vizElement.style.maxWidth='100%';",
+                                            'vizElement.style.width = "100%";vizElement.style.minWidth = "0";vizElement.style.maxWidth = "100%";',
+                                            'vizElement.style.width = "100%";vizElement.style.minWidth = "0";vizElement.style.maxWidth = "100%";',
                                             "vizElement.style.height='427px';",
-                                            'vizElement.style.height = "427px";'
+                                            'vizElement.style.height = "427px";',
+                                            "vizElement.style.width='100%';vizElement.style.minWidth='0';vizElement.style.maxWidth='100%';",
+                                            'vizElement.style.width = "100%";vizElement.style.minWidth = "0";vizElement.style.maxWidth = "100%";',
+                                            "vizElement.style.width='100%';vizElement.style.minWidth='0';vizElement.style.maxWidth='100%';",
+                                            'vizElement.style.width = "100%";vizElement.style.minWidth = "0";vizElement.style.maxWidth = "100%";',
+                                            "vizElement.style.width='100%';vizElement.style.minWidth='0';vizElement.style.maxWidth='100%';",
+                                            'vizElement.style.width = "100%";vizElement.style.minWidth = "0";vizElement.style.maxWidth = "100%";',
+                                            "vizElement.style.width='100%';vizElement.style.minWidth='0';vizElement.style.maxWidth='100%';",
+                                            'vizElement.style.width = "100%";vizElement.style.minWidth = "0";vizElement.style.maxWidth = "100%";',
+                                            "vizElement.style.width='100%';vizElement.style.minWidth='0';vizElement.style.maxWidth='100%';",
+                                            'vizElement.style.width = "100%";vizElement.style.minWidth = "0";vizElement.style.maxWidth = "100%";'
                                         ], $info->tableau_embed_code) !!}
                                     </div>
                                 </div>
@@ -341,6 +441,45 @@ section:last-of-type {
 
 @push('scripts')
 <script>
+// Function to resize Tableau visualizations
+function resizeTableauVisualizations() {
+    // Find all Tableau placeholder elements
+    const tableauPlaceholders = document.querySelectorAll('.tableauPlaceholder');
+    
+    tableauPlaceholders.forEach(function(placeholder) {
+        // Get the Tableau object element
+        const tableauObject = placeholder.querySelector('object.tableauViz');
+        if (tableauObject) {
+            // Force width to 100%
+            tableauObject.style.width = '100%';
+            tableauObject.style.minWidth = '0';
+            tableauObject.style.maxWidth = '100%';
+            
+            // Also set the placeholder width
+            placeholder.style.width = '100%';
+            placeholder.style.minWidth = '0';
+            placeholder.style.maxWidth = '100%';
+            placeholder.style.overflow = 'visible';
+        }
+        
+        // Handle any iframe elements that might be created by Tableau
+        const iframes = placeholder.querySelectorAll('iframe');
+        iframes.forEach(function(iframe) {
+            iframe.style.width = '100%';
+            iframe.style.minWidth = '0';
+            iframe.style.maxWidth = '100%';
+        });
+    });
+    
+    // Also handle any elements with tableau-specific classes
+    const tableauElements = document.querySelectorAll('.tableauViz, [class*="tableau"]');
+    tableauElements.forEach(function(element) {
+        element.style.width = '100%';
+        element.style.minWidth = '0';
+        element.style.maxWidth = '100%';
+    });
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     // Publikasi Carousel Logic
     const pubRow = document.getElementById('publikasiScrollRow');
@@ -395,6 +534,43 @@ document.addEventListener('DOMContentLoaded', function () {
 
         updatePubDots();
     }
+
+    // Resize Tableau visualizations on page load
+    resizeTableauVisualizations();
+    
+    // Resize again after a short delay to ensure Tableau has loaded
+    setTimeout(resizeTableauVisualizations, 1000);
+    
+    // Resize on window resize
+    window.addEventListener('resize', function() {
+        setTimeout(resizeTableauVisualizations, 100);
+    });
+    
+    // Watch for dynamically added Tableau content
+    const observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+            if (mutation.type === 'childList') {
+                mutation.addedNodes.forEach(function(node) {
+                    if (node.nodeType === 1) { // Element node
+                        if (node.classList && (node.classList.contains('tableauPlaceholder') || node.classList.contains('tableauViz'))) {
+                            setTimeout(resizeTableauVisualizations, 100);
+                        }
+                        // Check for Tableau elements in added nodes
+                        const tableauElements = node.querySelectorAll && node.querySelectorAll('.tableauPlaceholder, .tableauViz');
+                        if (tableauElements && tableauElements.length > 0) {
+                            setTimeout(resizeTableauVisualizations, 100);
+                        }
+                    }
+                });
+            }
+        });
+    });
+    
+    // Start observing
+    observer.observe(document.body, {
+        childList: true,
+        subtree: true
+    });
 
     // Lihat lebih banyak logic for Section 1
     const lihatLebihBanyakBtn = document.getElementById('lihatLebihBanyakBtn');
