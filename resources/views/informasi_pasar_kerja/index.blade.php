@@ -56,6 +56,24 @@
 section:last-of-type {
     margin-bottom: 0 !important;
 }
+/* Prevent horizontal overflow on this page */
+.container-fluid {
+    overflow-x: hidden;
+}
+/* Mobile responsiveness adjustments */
+@media (max-width: 768px) {
+    .section-content h2,
+    .section-content p {
+        margin-left: 0 !important;
+    }
+    .section-berita {
+        padding: 24px 16px;
+    }
+    /* Override inline min-width to avoid page-level overflow on embeds */
+    .tableau-embed-wrapper > div {
+        min-width: 0 !important;
+    }
+}
 </style>
 <div class="container-fluid p-0" style="background: #edf8e9;">
     
