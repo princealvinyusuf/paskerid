@@ -70,8 +70,8 @@ section:last-of-type {
                         <div class="card stat-card shadow-sm border-0 w-100 h-100 p-3 d-flex flex-column align-items-center justify-content-center text-center">
                             <h5 class="fw-bold mb-2">{{ $info->title }}</h5>
                             <p class="mb-2 text-muted">{{ $info->description }}</p>
-                            <div class="w-100" style="min-height: 350px;">
-                                <div class="tableau-embed-wrapper w-100" style="min-height: 350px; width: 100%; overflow: visible;">
+                            <div class="w-100" style="height: 286px;">
+                                <div class="tableau-embed-wrapper w-100" style="height: 286px; width: 100%; overflow: visible;">
                                     <div style="width: 100%; min-width: 0;">
                                         {!! str_replace([
                                             "vizElement.style.width='400px';",
@@ -192,8 +192,8 @@ section:last-of-type {
                         <div class="card stat-card shadow-sm border-0 w-100 h-100 p-3 d-flex flex-column align-items-center justify-content-center text-center">
                             <h5 class="fw-bold mb-2">{{ $info->title }}</h5>
                             <p class="mb-2 text-muted">{{ $info->description }}</p>
-                            <div class="w-100" style="min-height: 350px;">
-                                <div class="tableau-embed-wrapper w-100" style="min-height: 350px; width: 100%; overflow: visible;">
+                            <div class="w-100" style="height: 286px;">
+                                <div class="tableau-embed-wrapper w-100" style="height: 286px; width: 100%; overflow: visible;">
                                     <div style="width: 100%; min-width: 0;">
                                         {!! str_replace([
                                             "vizElement.style.width='400px';",
@@ -255,8 +255,8 @@ section:last-of-type {
                         <div class="card stat-card shadow-sm border-0 w-100 h-100 p-3 d-flex flex-column align-items-center justify-content-center text-center">
                             <h5 class="fw-bold mb-2">{{ $info->title }}</h5>
                             <p class="mb-2 text-muted">{{ $info->description }}</p>
-                            <div class="w-100" style="min-height: 350px;">
-                                <div class="tableau-embed-wrapper w-100" style="min-height: 350px; width: 100%; overflow: visible;">
+                            <div class="w-100" style="height: 286px;">
+                                <div class="tableau-embed-wrapper w-100" style="height: 286px; width: 100%; overflow: visible;">
                                     <div style="width: 100%; min-width: 0;">
                                         {!! str_replace([
                                             "vizElement.style.width='400px';",
@@ -319,8 +319,8 @@ section:last-of-type {
                         <div class="card stat-card shadow-sm border-0 w-100 h-100 p-3 d-flex flex-column align-items-center justify-content-center text-center">
                             <h5 class="fw-bold mb-2">{{ $info->title }}</h5>
                             <p class="mb-2 text-muted">{{ $info->description }}</p>
-                            <div class="w-100" style="min-height: 350px;">
-                                <div class="tableau-embed-wrapper w-100" style="min-height: 350px; width: 100%; overflow: visible;">
+                            <div class="w-100" style="height: 286px;">
+                                <div class="tableau-embed-wrapper w-100" style="height: 286px; width: 100%; overflow: visible;">
                                     <div style="width: 100%; min-width: 0;">
                                         {!! str_replace([
                                             "vizElement.style.width='400px';",
@@ -427,24 +427,28 @@ section:last-of-type {
         .publikasi-card { min-width: 120px !important; max-width: 150px !important; min-height: 120px !important; }
     }
     
-    /* Responsive Tableau Styles */
+    /* Responsive Tableau Styles with 67% scaling */
     @media (max-width: 768px) {
         .tableau-embed-wrapper {
-            min-height: 300px !important;
+            height: 200px !important; /* 300px * 0.67 */
         }
         .tableauPlaceholder,
         .tableauPlaceholder object {
             height: 300px !important;
+            transform: scale(0.67) !important;
+            transform-origin: top left !important;
         }
     }
     
     @media (max-width: 576px) {
         .tableau-embed-wrapper {
-            min-height: 250px !important;
+            height: 168px !important; /* 250px * 0.67 */
         }
         .tableauPlaceholder,
         .tableauPlaceholder object {
             height: 250px !important;
+            transform: scale(0.67) !important;
+            transform-origin: top left !important;
         }
     }
     </style>
@@ -455,42 +459,50 @@ section:last-of-type {
 
 @push('scripts')
 <script>
-// Function to resize Tableau visualizations
-function resizeTableauVisualizations() {
+// Function to apply 67% zoom out to Tableau visualizations
+function applyTableauZoomOut() {
     // Find all Tableau placeholder elements
     const tableauPlaceholders = document.querySelectorAll('.tableauPlaceholder');
     
     tableauPlaceholders.forEach(function(placeholder) {
+        // Apply 67% scale to the placeholder
+        placeholder.style.transform = 'scale(0.67)';
+        placeholder.style.transformOrigin = 'top left';
+        
         // Get the Tableau object element
         const tableauObject = placeholder.querySelector('object.tableauViz');
         if (tableauObject) {
-            // Force width to 100%
-            tableauObject.style.width = '100%';
-            tableauObject.style.minWidth = '0';
-            tableauObject.style.maxWidth = '100%';
+            // Apply scaling to the object
+            tableauObject.style.transform = 'scale(0.67)';
+            tableauObject.style.transformOrigin = 'top left';
             
-            // Also set the placeholder width
-            placeholder.style.width = '100%';
-            placeholder.style.minWidth = '0';
-            placeholder.style.maxWidth = '100%';
-            placeholder.style.overflow = 'visible';
+            // Set original dimensions (before scaling)
+            tableauObject.style.width = '100%';
+            tableauObject.style.height = '427px';
         }
         
         // Handle any iframe elements that might be created by Tableau
         const iframes = placeholder.querySelectorAll('iframe');
         iframes.forEach(function(iframe) {
+            iframe.style.transform = 'scale(0.67)';
+            iframe.style.transformOrigin = 'top left';
             iframe.style.width = '100%';
-            iframe.style.minWidth = '0';
-            iframe.style.maxWidth = '100%';
+            iframe.style.height = '427px';
         });
+        
+        // Adjust container height for scaled content
+        const container = placeholder.closest('.tableau-embed-wrapper');
+        if (container) {
+            container.style.height = '286px'; // 427px * 0.67
+            container.style.overflow = 'visible';
+        }
     });
     
     // Also handle any elements with tableau-specific classes
     const tableauElements = document.querySelectorAll('.tableauViz, [class*="tableau"]');
     tableauElements.forEach(function(element) {
-        element.style.width = '100%';
-        element.style.minWidth = '0';
-        element.style.maxWidth = '100%';
+        element.style.transform = 'scale(0.67)';
+        element.style.transformOrigin = 'top left';
     });
 }
 
@@ -549,15 +561,15 @@ document.addEventListener('DOMContentLoaded', function () {
         updatePubDots();
     }
 
-    // Resize Tableau visualizations on page load
-    resizeTableauVisualizations();
+    // Apply 67% zoom out to Tableau visualizations on page load
+    applyTableauZoomOut();
     
-    // Resize again after a short delay to ensure Tableau has loaded
-    setTimeout(resizeTableauVisualizations, 1000);
+    // Apply zoom out again after a short delay to ensure Tableau has loaded
+    setTimeout(applyTableauZoomOut, 1000);
     
-    // Resize on window resize
+    // Apply zoom out on window resize
     window.addEventListener('resize', function() {
-        setTimeout(resizeTableauVisualizations, 100);
+        setTimeout(applyTableauZoomOut, 100);
     });
     
     // Watch for dynamically added Tableau content
@@ -567,12 +579,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 mutation.addedNodes.forEach(function(node) {
                     if (node.nodeType === 1) { // Element node
                         if (node.classList && (node.classList.contains('tableauPlaceholder') || node.classList.contains('tableauViz'))) {
-                            setTimeout(resizeTableauVisualizations, 100);
+                            setTimeout(applyTableauZoomOut, 100);
                         }
                         // Check for Tableau elements in added nodes
                         const tableauElements = node.querySelectorAll && node.querySelectorAll('.tableauPlaceholder, .tableauViz');
                         if (tableauElements && tableauElements.length > 0) {
-                            setTimeout(resizeTableauVisualizations, 100);
+                            setTimeout(applyTableauZoomOut, 100);
                         }
                     }
                 });
