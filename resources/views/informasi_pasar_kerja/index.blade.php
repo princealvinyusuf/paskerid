@@ -71,8 +71,8 @@ section:last-of-type {
                             <h5 class="fw-bold mb-2">{{ $info->title }}</h5>
                             <p class="mb-2 text-muted">{{ $info->description }}</p>
                             <div class="w-100" style="min-height: 350px;">
-                                <div class="tableau-embed-wrapper w-100" style="min-height: 350px; overflow-x: auto;">
-                                    <div style="min-width: 400px;">
+                                <div class="tableau-embed-wrapper w-100" style="min-height: 350px; width: 100%; overflow: visible;">
+                                    <div style="width: 100%; min-width: 0;">
                                         {!! str_replace([
                                             "vizElement.style.width='400px';",
                                             'vizElement.style.width = \"400px\";',
@@ -115,6 +115,20 @@ section:last-of-type {
                     max-width: 100% !important;
                     height: 427px !important;
                 }
+                .tableau-embed-wrapper {
+                    width: 100% !important;
+                    overflow: visible !important;
+                }
+                .tableau-embed-wrapper > div {
+                    width: 100% !important;
+                    min-width: 0 !important;
+                    max-width: 100% !important;
+                }
+                .tableauViz {
+                    width: 100% !important;
+                    min-width: 0 !important;
+                    max-width: 100% !important;
+                }
             </style>
             <div class="row gx-3 gy-4 justify-content-center" id="section1Cards">
                 @php $count = 0; $total = count($informasiSection1); @endphp
@@ -125,8 +139,8 @@ section:last-of-type {
                             <h5 class="fw-bold mb-2">{{ $info->title }}</h5>
                             <p class="mb-2 text-muted">{{ $info->description }}</p>
                             <div class="w-100" style="min-height: 350px;">
-                                <div class="tableau-embed-wrapper w-100" style="min-height: 350px; overflow-x: auto;">
-                                    <div style="min-width: 400px;">
+                                <div class="tableau-embed-wrapper w-100" style="min-height: 350px; width: 100%; overflow: visible;">
+                                    <div style="width: 100%; min-width: 0;">
                                         {!! str_replace([
                                             "vizElement.style.width='400px';",
                                             'vizElement.style.width = \"400px\";',
@@ -168,8 +182,8 @@ section:last-of-type {
                             <h5 class="fw-bold mb-2">{{ $info->title }}</h5>
                             <p class="mb-2 text-muted">{{ $info->description }}</p>
                             <div class="w-100" style="min-height: 350px;">
-                                <div class="tableau-embed-wrapper w-100" style="min-height: 350px; overflow-x: auto;">
-                                    <div style="min-width: 400px;">
+                                <div class="tableau-embed-wrapper w-100" style="min-height: 350px; width: 100%; overflow: visible;">
+                                    <div style="width: 100%; min-width: 0;">
                                         {!! str_replace([
                                             "vizElement.style.width='400px';",
                                             'vizElement.style.width = \"400px\";',
@@ -212,8 +226,8 @@ section:last-of-type {
                             <h5 class="fw-bold mb-2">{{ $info->title }}</h5>
                             <p class="mb-2 text-muted">{{ $info->description }}</p>
                             <div class="w-100" style="min-height: 350px;">
-                                <div class="tableau-embed-wrapper w-100" style="min-height: 350px; overflow-x: auto;">
-                                    <div style="min-width: 400px;">
+                                <div class="tableau-embed-wrapper w-100" style="min-height: 350px; width: 100%; overflow: visible;">
+                                    <div style="width: 100%; min-width: 0;">
                                         {!! str_replace([
                                             "vizElement.style.width='400px';",
                                             'vizElement.style.width = \"400px\";',
@@ -297,6 +311,27 @@ section:last-of-type {
     @media (max-width: 600px) {
         #publikasiScrollRow { gap: 8px !important; }
         .publikasi-card { min-width: 120px !important; max-width: 150px !important; min-height: 120px !important; }
+    }
+    
+    /* Responsive Tableau Styles */
+    @media (max-width: 768px) {
+        .tableau-embed-wrapper {
+            min-height: 300px !important;
+        }
+        .tableauPlaceholder,
+        .tableauPlaceholder object {
+            height: 300px !important;
+        }
+    }
+    
+    @media (max-width: 576px) {
+        .tableau-embed-wrapper {
+            min-height: 250px !important;
+        }
+        .tableauPlaceholder,
+        .tableauPlaceholder object {
+            height: 250px !important;
+        }
     }
     </style>
 
