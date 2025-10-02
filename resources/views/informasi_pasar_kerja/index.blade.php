@@ -298,10 +298,24 @@ section:last-of-type {
         #publikasiScrollRow { gap: 8px !important; }
         .publikasi-card { min-width: 120px !important; max-width: 150px !important; min-height: 120px !important; }
     }
+    .floating-desktop-btn {
+        position: fixed;
+        right: 16px;
+        bottom: 16px;
+        z-index: 1050;
+        background: #00a78e;
+        color: #fff;
+        border: none;
+        border-radius: 9999px;
+        padding: 12px 16px;
+        font-weight: 600;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
     </style>
 
     
 </div>
+<button id="requestDesktopBtn" type="button" class="floating-desktop-btn d-none">Request Desktop Site</button>
 @endsection
 
 @push('scripts')
@@ -411,6 +425,18 @@ document.addEventListener('DOMContentLoaded', function () {
                 card.classList.remove('d-none');
             });
             lihatLebihBanyakBtn4.style.display = 'none';
+        });
+    }
+    // Request Desktop Site floating button visibility (mobile only)
+    const requestDesktopBtn = document.getElementById('requestDesktopBtn');
+    if (requestDesktopBtn) {
+        const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768;
+        if (isMobileDevice) {
+            requestDesktopBtn.classList.remove('d-none');
+        }
+        window.addEventListener('resize', () => {
+            const isNowMobile = window.innerWidth <= 768;
+            requestDesktopBtn.classList.toggle('d-none', !isNowMobile);
         });
     }
 });
