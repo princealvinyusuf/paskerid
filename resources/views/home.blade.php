@@ -603,9 +603,9 @@
             @endphp
             <div class="col-lg-7">
                 @if($featuredNews)
-                    <div class="position-relative h-100 rounded-4 overflow-hidden shadow-sm" style="height:170px;">
+                    <div class="position-relative rounded-4 overflow-hidden shadow-sm" style="height:170px;">
                         @if($featuredNews->image_url)
-                            <img src="{{ $featuredNews->image_url }}" alt="{{ $featuredNews->title }}" class="w-100 h-100 object-fit-cover">
+                            <img src="{{ $featuredNews->image_url }}" alt="{{ $featuredNews->title }}" class="w-100 h-100 object-fit-cover" style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover;">
                         @endif
                         <a href="{{ route('news.DetailBerita', $featuredNews->id) }}" class="stretched-link"></a>
                         <div class="position-absolute bottom-0 start-0 w-100 p-4" style="background: linear-gradient(0deg,rgba(0,0,0,0.7) 70%,rgba(0,0,0,0.1) 100%);">
