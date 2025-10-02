@@ -58,6 +58,7 @@ section:last-of-type {
 }
 </style>
 <div class="container-fluid p-0" style="background: #edf8e9;">
+    @php $forceDesktop = request()->cookie('force_desktop') === '1'; @endphp
     
 <section class="mb-5 px-2 px-md-4 px-lg-5 pt-custom" data-aos="fade-up">
         <div class="section-green-card">
@@ -73,6 +74,22 @@ section:last-of-type {
                             <div class="w-100" style="min-height: 350px;">
                                 <div class="tableau-embed-wrapper w-100" style="min-height: 350px; overflow-x: auto;">
                                     <div style="min-width: 400px;">
+                                        @php
+                                            $embed3 = $info->tableau_embed_code;
+                                            if ($forceDesktop) {
+                                                $embed3 = str_replace([
+                                                    ':device=phone',
+                                                    ':device=tablet',
+                                                    'name="device" value="phone"',
+                                                    'name="device" value="tablet"'
+                                                ], [
+                                                    ':device=desktop',
+                                                    ':device=desktop',
+                                                    'name="device" value="desktop"',
+                                                    'name="device" value="desktop"'
+                                                ], $embed3);
+                                            }
+                                        @endphp
                                         {!! str_replace([
                                             "vizElement.style.width='400px';",
                                             'vizElement.style.width = \"400px\";',
@@ -85,7 +102,7 @@ section:last-of-type {
                                             'vizElement.style.width = "100%";',
                                             "vizElement.style.height='427px';",
                                             'vizElement.style.height = "427px";'
-                                        ], $info->tableau_embed_code) !!}
+                                        ], $embed3) !!}
                                     </div>
                                 </div>
                             </div>
@@ -127,6 +144,22 @@ section:last-of-type {
                             <div class="w-100" style="min-height: 350px;">
                                 <div class="tableau-embed-wrapper w-100" style="min-height: 350px; overflow-x: auto;">
                                     <div style="min-width: 400px;">
+                                        @php
+                                            $embed1 = $info->tableau_embed_code;
+                                            if ($forceDesktop) {
+                                                $embed1 = str_replace([
+                                                    ':device=phone',
+                                                    ':device=tablet',
+                                                    'name="device" value="phone"',
+                                                    'name="device" value="tablet"'
+                                                ], [
+                                                    ':device=desktop',
+                                                    ':device=desktop',
+                                                    'name="device" value="desktop"',
+                                                    'name="device" value="desktop"'
+                                                ], $embed1);
+                                            }
+                                        @endphp
                                         {!! str_replace([
                                             "vizElement.style.width='400px';",
                                             'vizElement.style.width = \"400px\";',
@@ -139,7 +172,7 @@ section:last-of-type {
                                             'vizElement.style.width = "100%";',
                                             "vizElement.style.height='427px';",
                                             'vizElement.style.height = "427px";'
-                                        ], $info->tableau_embed_code) !!}
+                                        ], $embed1) !!}
                                     </div>
                                 </div>
                             </div>
@@ -170,6 +203,22 @@ section:last-of-type {
                             <div class="w-100" style="min-height: 350px;">
                                 <div class="tableau-embed-wrapper w-100" style="min-height: 350px; overflow-x: auto;">
                                     <div style="min-width: 400px;">
+                                        @php
+                                            $embed2 = $info->tableau_embed_code;
+                                            if ($forceDesktop) {
+                                                $embed2 = str_replace([
+                                                    ':device=phone',
+                                                    ':device=tablet',
+                                                    'name="device" value="phone"',
+                                                    'name="device" value="tablet"'
+                                                ], [
+                                                    ':device=desktop',
+                                                    ':device=desktop',
+                                                    'name="device" value="desktop"',
+                                                    'name="device" value="desktop"'
+                                                ], $embed2);
+                                            }
+                                        @endphp
                                         {!! str_replace([
                                             "vizElement.style.width='400px';",
                                             'vizElement.style.width = \"400px\";',
@@ -182,7 +231,7 @@ section:last-of-type {
                                             'vizElement.style.width = "100%";',
                                             "vizElement.style.height='427px';",
                                             'vizElement.style.height = "427px";'
-                                        ], $info->tableau_embed_code) !!}
+                                        ], $embed2) !!}
                                     </div>
                                 </div>
                             </div>
@@ -456,8 +505,8 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         function computeTargetWidth() {
-            const physicalWidth = Math.round((window.screen && window.screen.width ? window.screen.width : window.innerWidth) * (window.devicePixelRatio || 1));
-            return Math.min(1920, Math.max(1024, physicalWidth || 1200));
+            // Mimic Chrome's "Desktop site" default layout viewport ~980 CSS px
+            return 980;
         }
 
         function applyForcedDesktopViewport(targetWidth) {
