@@ -646,9 +646,9 @@
         <div class="text-center mb-4">
             <h2 class="fw-bold" style="font-size:2.2rem;">Mitra Kerja</h2>
         </div>
-        <div class="row g-4 justify-content-center">
-            @foreach ($mitraKerja as $stakeholder)
-                <div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch">
+        <div class="row row-cols-2 row-cols-md-3 row-cols-lg-5 g-4 justify-content-center">
+            @foreach ($mitraKerja->take(15) as $stakeholder)
+                <div class="col d-flex align-items-stretch">
                     <div class="p-4 shadow-sm rounded-4 bg-white h-100 stakeholder-card w-100 transition-all">
                         @if($stakeholder->logo)
                             <div class="mb-2 text-center">
