@@ -431,12 +431,36 @@ document.addEventListener('DOMContentLoaded', function () {
     const requestDesktopBtn = document.getElementById('requestDesktopBtn');
     if (requestDesktopBtn) {
         const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768;
-        if (isMobileDevice) {
+        const forceCookieName = 'force_desktop';
+        const isForcedDesktop = document.cookie.split('; ').some(c => c.indexOf(forceCookieName + '=1') === 0);
+
+        // Apply desktop viewport override if forced
+        if (isForcedDesktop) {
+            let viewportMeta = document.querySelector('meta[name="viewport"]');
+            if (!viewportMeta) {
+                viewportMeta = document.createElement('meta');
+                viewportMeta.setAttribute('name', 'viewport');
+                document.head.appendChild(viewportMeta);
+            }
+            viewportMeta.setAttribute('content', 'width=1200, initial-scale=1.0');
+        }
+
+        // Show button only when on mobile and not already forced
+        if (isMobileDevice && !isForcedDesktop) {
             requestDesktopBtn.classList.remove('d-none');
         }
+
+        // On click: set cookie and reload to apply desktop viewport
+        requestDesktopBtn.addEventListener('click', () => {
+            document.cookie = forceCookieName + '=1; path=/; max-age=' + (60 * 60 * 24 * 30);
+            window.location.reload();
+        });
+
+        // Keep visibility consistent on resize (hide if not mobile or if forced)
         window.addEventListener('resize', () => {
             const isNowMobile = window.innerWidth <= 768;
-            requestDesktopBtn.classList.toggle('d-none', !isNowMobile);
+            const stillForced = document.cookie.split('; ').some(c => c.indexOf(forceCookieName + '=1') === 0);
+            requestDesktopBtn.classList.toggle('d-none', !isNowMobile || stillForced);
         });
     }
 });
