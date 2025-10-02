@@ -494,15 +494,8 @@ document.addEventListener('DOMContentLoaded', function () {
             document.cookie = parts.join('; ');
         }
 
-        function ensureViewportMeta() {
-            let viewportMeta = document.querySelector('meta[name="viewport"]');
-            if (!viewportMeta) {
-                viewportMeta = document.createElement('meta');
-                viewportMeta.setAttribute('name', 'viewport');
-                document.head.appendChild(viewportMeta);
-            }
-            return viewportMeta;
-        }
+        // Viewport meta is now set in layout head server-side when cookie is present
+        function ensureViewportMeta() { return document.querySelector('meta[name="viewport"]'); }
 
         function computeTargetWidth() {
             // Mimic Chrome's "Desktop site" default layout viewport ~980 CSS px
@@ -511,9 +504,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
         function applyForcedDesktopViewport(targetWidth) {
             const viewportMeta = ensureViewportMeta();
-            const deviceWidth = window.innerWidth || document.documentElement.clientWidth || 375;
-            const scale = Math.min(1, deviceWidth / targetWidth);
-            viewportMeta.setAttribute('content', 'width=' + targetWidth + ', initial-scale=' + scale + ', minimum-scale=' + scale + ', maximum-scale=' + scale + ', user-scalable=no');
+            if (viewportMeta) {
+                const deviceWidth = window.innerWidth || document.documentElement.clientWidth || 375;
+                const scale = Math.min(1, deviceWidth / targetWidth);
+                viewportMeta.setAttribute('content', 'width=' + targetWidth + ', initial-scale=' + scale + ', minimum-scale=' + scale + ', maximum-scale=' + scale + ', user-scalable=no');
+            }
         }
 
         const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768;
@@ -539,11 +534,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const isNowMobile = window.innerWidth <= 768;
             const forced = getCookie(forceCookieName) === '1';
             requestDesktopBtn.classList.toggle('d-none', !isNowMobile || forced);
-            if (forced) {
-                const widthFromCookie = parseInt(getCookie(widthCookieName) || '', 10);
-                const targetWidth = isNaN(widthFromCookie) ? computeTargetWidth() : widthFromCookie;
-                applyForcedDesktopViewport(targetWidth);
-            }
+            // No dynamic re-application after load to prevent flicker
         });
     }
 });

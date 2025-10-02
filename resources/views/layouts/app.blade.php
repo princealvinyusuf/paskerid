@@ -2,7 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    @php $forceDesktop = request()->cookie('force_desktop') === '1'; @endphp
+    @if($forceDesktop)
+    <meta name="viewport" content="width=980, user-scalable=no">
+    @else
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    @endif
     <title>Pasker ID</title>
     <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
     <!-- Bootstrap CSS -->
