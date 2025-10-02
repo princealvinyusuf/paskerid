@@ -427,49 +427,73 @@ document.addEventListener('DOMContentLoaded', function () {
             lihatLebihBanyakBtn4.style.display = 'none';
         });
     }
-    // Request Desktop Site floating button visibility (mobile only)
+    // Request Desktop Site floating button (mobile only) with forced desktop viewport
     const requestDesktopBtn = document.getElementById('requestDesktopBtn');
     if (requestDesktopBtn) {
-        const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768;
         const forceCookieName = 'force_desktop';
-        const isForcedDesktop = document.cookie.split('; ').some(c => c.indexOf(forceCookieName + '=1') === 0);
+        const widthCookieName = 'force_desktop_width';
 
-        // Apply desktop viewport override if forced
-        if (isForcedDesktop) {
+        function getCookie(name) {
+            const match = document.cookie.match(new RegExp('(?:^|; )' + name.replace(/([.$?*|{}()\[\]\\\/+^])/g, '\\$1') + '=([^;]*)'));
+            return match ? decodeURIComponent(match[1]) : null;
+        }
+
+        function setCookie(name, value, days) {
+            const maxAge = days ? days * 24 * 60 * 60 : 0;
+            const parts = [name + '=' + encodeURIComponent(value), 'path=/'];
+            if (maxAge > 0) parts.push('max-age=' + maxAge);
+            document.cookie = parts.join('; ');
+        }
+
+        function ensureViewportMeta() {
             let viewportMeta = document.querySelector('meta[name="viewport"]');
             if (!viewportMeta) {
                 viewportMeta = document.createElement('meta');
                 viewportMeta.setAttribute('name', 'viewport');
                 document.head.appendChild(viewportMeta);
             }
-            const targetWidth = 1200;
-            const scale = Math.min(1, window.innerWidth / targetWidth);
+            return viewportMeta;
+        }
+
+        function computeTargetWidth() {
+            const physicalWidth = Math.round((window.screen && window.screen.width ? window.screen.width : window.innerWidth) * (window.devicePixelRatio || 1));
+            return Math.min(1920, Math.max(1024, physicalWidth || 1200));
+        }
+
+        function applyForcedDesktopViewport(targetWidth) {
+            const viewportMeta = ensureViewportMeta();
+            const deviceWidth = window.innerWidth || document.documentElement.clientWidth || 375;
+            const scale = Math.min(1, deviceWidth / targetWidth);
             viewportMeta.setAttribute('content', 'width=' + targetWidth + ', initial-scale=' + scale + ', minimum-scale=' + scale + ', maximum-scale=' + scale + ', user-scalable=no');
         }
 
-        // Show button only when on mobile and not already forced
-        if (isMobileDevice && !isForcedDesktop) {
+        const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768;
+        const isForcedDesktop = getCookie(forceCookieName) === '1';
+        const storedWidth = parseInt(getCookie(widthCookieName) || '', 10);
+
+        if (isForcedDesktop) {
+            const targetWidth = isNaN(storedWidth) ? computeTargetWidth() : storedWidth;
+            applyForcedDesktopViewport(targetWidth);
+            requestDesktopBtn.classList.add('d-none');
+        } else if (isMobileDevice) {
             requestDesktopBtn.classList.remove('d-none');
         }
 
-        // On click: set cookie and reload to apply desktop viewport
         requestDesktopBtn.addEventListener('click', () => {
-            document.cookie = forceCookieName + '=1; path=/; max-age=' + (60 * 60 * 24 * 30);
+            const targetWidth = computeTargetWidth();
+            setCookie(forceCookieName, '1', 30);
+            setCookie(widthCookieName, String(targetWidth), 30);
             window.location.reload();
         });
 
-        // Keep visibility consistent on resize (hide if not mobile or if forced)
         window.addEventListener('resize', () => {
             const isNowMobile = window.innerWidth <= 768;
-            const stillForced = document.cookie.split('; ').some(c => c.indexOf(forceCookieName + '=1') === 0);
-            requestDesktopBtn.classList.toggle('d-none', !isNowMobile || stillForced);
-            if (stillForced) {
-                const viewportMeta = document.querySelector('meta[name="viewport"]');
-                if (viewportMeta) {
-                    const targetWidth = 1200;
-                    const scale = Math.min(1, window.innerWidth / targetWidth);
-                    viewportMeta.setAttribute('content', 'width=' + targetWidth + ', initial-scale=' + scale + ', minimum-scale=' + scale + ', maximum-scale=' + scale + ', user-scalable=no');
-                }
+            const forced = getCookie(forceCookieName) === '1';
+            requestDesktopBtn.classList.toggle('d-none', !isNowMobile || forced);
+            if (forced) {
+                const widthFromCookie = parseInt(getCookie(widthCookieName) || '', 10);
+                const targetWidth = isNaN(widthFromCookie) ? computeTargetWidth() : widthFromCookie;
+                applyForcedDesktopViewport(targetWidth);
             }
         });
     }
