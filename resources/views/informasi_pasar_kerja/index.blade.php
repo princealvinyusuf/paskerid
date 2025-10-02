@@ -442,7 +442,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 viewportMeta.setAttribute('name', 'viewport');
                 document.head.appendChild(viewportMeta);
             }
-            viewportMeta.setAttribute('content', 'width=1200, initial-scale=1.0');
+            const targetWidth = 1200;
+            const scale = Math.min(1, window.innerWidth / targetWidth);
+            viewportMeta.setAttribute('content', 'width=' + targetWidth + ', initial-scale=' + scale + ', minimum-scale=' + scale + ', maximum-scale=' + scale + ', user-scalable=no');
         }
 
         // Show button only when on mobile and not already forced
@@ -461,6 +463,14 @@ document.addEventListener('DOMContentLoaded', function () {
             const isNowMobile = window.innerWidth <= 768;
             const stillForced = document.cookie.split('; ').some(c => c.indexOf(forceCookieName + '=1') === 0);
             requestDesktopBtn.classList.toggle('d-none', !isNowMobile || stillForced);
+            if (stillForced) {
+                const viewportMeta = document.querySelector('meta[name="viewport"]');
+                if (viewportMeta) {
+                    const targetWidth = 1200;
+                    const scale = Math.min(1, window.innerWidth / targetWidth);
+                    viewportMeta.setAttribute('content', 'width=' + targetWidth + ', initial-scale=' + scale + ', minimum-scale=' + scale + ', maximum-scale=' + scale + ', user-scalable=no');
+                }
+            }
         });
     }
 });
