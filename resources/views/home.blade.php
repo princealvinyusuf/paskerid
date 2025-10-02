@@ -652,7 +652,7 @@
                     <div class="p-4 shadow-sm rounded-4 bg-white h-100 stakeholder-card w-100 transition-all">
                         @if($stakeholder->logo)
                             <div class="mb-2 text-center">
-                                <img src="{{ asset($stakeholder->logo) }}" alt="Logo" style="max-width: 120px; max-height: 120px; object-fit: contain;">
+                                <img src="{{ asset($stakeholder->logo) }}" alt="Logo" style="max-width: 160px; max-height: 160px; object-fit: contain;">
                             </div>
                         @endif
                     </div>
