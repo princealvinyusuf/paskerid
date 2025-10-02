@@ -603,7 +603,7 @@
             @endphp
             <div class="col-lg-7">
                 @if($featuredNews)
-                    <div class="position-relative h-100 rounded-4 overflow-hidden shadow-sm" style="height:340px;">
+                    <div class="position-relative h-100 rounded-4 overflow-hidden shadow-sm" style="height:170px;">
                         @if($featuredNews->image_url)
                             <img src="{{ $featuredNews->image_url }}" alt="{{ $featuredNews->title }}" class="w-100 h-100 object-fit-cover">
                         @endif
