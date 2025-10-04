@@ -79,6 +79,34 @@
                 </button>
             </div>
             <div class="d-flex justify-content-center mt-3" id="highlightStatDots"></div>
+            {{-- Third Carousel (Secondary Highlights) --}}
+            <div class="d-flex align-items-center position-relative mt-4">
+                <button id="highlightStat2ScrollPrev" class="btn btn-light shadow rounded-circle position-absolute start-0 translate-middle-y" style="top:50%; z-index:2; width:40px; height:40px;">
+                    <i class="fa fa-chevron-left"></i>
+                </button>
+                <div id="highlightStat2ScrollRow" class="d-flex px-7" style="scroll-behavior:smooth; gap:16px; width:100%; overflow-x:hidden;">
+                    @foreach($highlightStatistics2 ?? [] as $stat)
+                        <a href="{{ route('informasi.index', ['type' => 'statistik', 'search' => $stat->title]) }}" class="text-decoration-none">
+                            <div class="card shadow-sm stat-card text-center flex-shrink-0" style="max-width:260px; min-width:180px; cursor:pointer;">
+                                <div class="card-body d-flex flex-column align-items-center justify-content-center">
+                                    <div class="stat-icon mb-3">
+                                        <i class="fa {{ $stat->logo ?? 'fa-diamond' }} fa-2x text-info"></i>
+                                    </div>
+                                    <div class="stat-title fw-bold mb-1" style="font-size:1.1rem; color:#187C19;">{{ $stat->title }}</div>
+                                    <div class="stat-value fw-bold mb-1" style="font-size:2.2rem; color:#222;">{{ $stat->value }} <span class="stat-unit" style="font-size:1.2rem;">{{ $stat->unit }}</span></div>
+                                    @if($stat->description)
+                                        <div class="stat-desc text-muted mt-1" style="font-size:0.95rem;">{{ $stat->description }}</div>
+                                    @endif
+                                </div>
+                            </div>
+                        </a>
+                    @endforeach
+                </div>
+                <button id="highlightStat2ScrollNext" class="btn btn-light shadow rounded-circle position-absolute end-0 translate-middle-y" style="top:50%; z-index:2; width:40px; height:40px;">
+                    <i class="fa fa-chevron-right"></i>
+                </button>
+            </div>
+            <div class="d-flex justify-content-center mt-3" id="highlightStat2Dots"></div>
         </div>
     </section>
 
@@ -1037,6 +1065,61 @@
         const prev = document.getElementById('highlightStatScrollPrev');
         const next = document.getElementById('highlightStatScrollNext');
         const dots = document.getElementById('highlightStatDots');
+        const cards = row.querySelectorAll('.stat-card');
+        const cardWidth = 256;
+        let visible = Math.floor(row.offsetWidth / cardWidth) || 1;
+        const total = cards.length;
+        let current = 0;
+
+        function updateDots() {
+            dots.innerHTML = '';
+            visible = Math.floor(row.offsetWidth / cardWidth) || 1;
+            const dotCount = Math.ceil(total / visible);
+            for (let i = 0; i < dotCount; i++) {
+                const dot = document.createElement('span');
+                dot.className = 'stat-dot' + (i === Math.floor(current / visible) ? ' active' : '');
+                dot.addEventListener('click', () => {
+                    row.scrollTo({ left: i * cardWidth * visible, behavior: 'smooth' });
+                    current = i * visible;
+                    updateDots();
+                });
+                dots.appendChild(dot);
+            }
+        }
+
+        function scrollToCurrent() {
+            row.scrollTo({ left: current * cardWidth, behavior: 'smooth' });
+            updateDots();
+        }
+
+        prev.addEventListener('click', () => {
+            current = Math.max(0, current - visible);
+            scrollToCurrent();
+        });
+        next.addEventListener('click', () => {
+            current = Math.min(total - visible, current + visible);
+            scrollToCurrent();
+        });
+
+        row.addEventListener('scroll', () => {
+            current = Math.round(row.scrollLeft / cardWidth);
+            updateDots();
+        });
+
+        window.addEventListener('resize', () => {
+            updateDots();
+        });
+
+        updateDots();
+    });
+
+    // --- Highlight Stat Carousel 2 ---
+    document.addEventListener('DOMContentLoaded', function () {
+        const row = document.getElementById('highlightStat2ScrollRow');
+        if (!row) return;
+        const prev = document.getElementById('highlightStat2ScrollPrev');
+        const next = document.getElementById('highlightStat2ScrollNext');
+        const dots = document.getElementById('highlightStat2Dots');
         const cards = row.querySelectorAll('.stat-card');
         const cardWidth = 256;
         let visible = Math.floor(row.offsetWidth / cardWidth) || 1;

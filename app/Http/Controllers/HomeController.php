@@ -19,6 +19,7 @@ use App\Models\JobCharacteristic3;
 use App\Models\TopicData;
 use App\Models\Dataset;
 use App\Models\HighlightStatistic;
+use App\Models\HighlightStatisticSecondary;
 use App\Models\Visitor;
 use App\Models\MitraKerja;
 use App\Models\KarirhubAds;
@@ -65,6 +66,7 @@ class HomeController extends Controller
         $topicData = TopicData::orderByDesc('date')->get();
         $datasets = Dataset::orderBy('order')->get()->groupBy('category');
         $highlightStatistics = HighlightStatistic::all();
+        $highlightStatistics2 = HighlightStatisticSecondary::all();
         $visitCount = Visitor::count();
         $mitraKerja = MitraKerja::where('divider', 'mitra')->get();
         $ads = KarirhubAds::latest()->get();
@@ -94,6 +96,7 @@ class HomeController extends Controller
             'topicData',
             'datasets',
             'highlightStatistics',
+            'highlightStatistics2',
             'visitCount',
             'mitraKerja',
             'ads',
