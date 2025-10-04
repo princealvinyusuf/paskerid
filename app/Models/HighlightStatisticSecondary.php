@@ -9,6 +9,8 @@ class HighlightStatisticSecondary extends Model
 {
     use HasFactory;
 
+    protected $table = 'highlight_statistics_secondary';
+
     protected $fillable = [
         'title',
         'value',
