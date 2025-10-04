@@ -1296,7 +1296,8 @@
     border-radius: 1.5rem;
     padding: 2rem 0.5rem; /* Reduced horizontal padding */
     margin: 0.5rem 0;
-    height: 320px;
+    min-height: 320px;
+    height: auto;
     width: 260px;
     display: flex;
     flex-direction: column;
@@ -1476,7 +1477,8 @@
     margin: 0;
 }
 .stat-card {
-    height: 320px;
+    min-height: 320px;
+    height: auto;
     width: 260px;
     display: flex;
     flex-direction: column;
@@ -1494,13 +1496,11 @@
 .stat-desc {
     margin-top: auto;
     width: 100%; /* Make description use full width */
-    display: -webkit-box;
-    -webkit-line-clamp: 4;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-height: 5.2em;
-    font-size: 0.93rem; /* Optionally reduce font size */
+    display: block;
+    overflow: visible;
+    text-overflow: initial;
+    max-height: none;
+    font-size: 0.95rem;
     padding: 0; /* Remove any padding if present */
 }
 .tableau-embed-wrapper {
