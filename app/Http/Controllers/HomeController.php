@@ -68,6 +68,9 @@ class HomeController extends Controller
         $highlightStatistics = HighlightStatistic::all();
         $highlightStatistics2 = HighlightStatisticSecondary::all();
         $visitCount = Visitor::count();
+        $todayVisits = Visitor::whereDate('created_at', today())->count();
+        $totalVisitors = Visitor::distinct('ip_address')->count('ip_address');
+        $todayVisitors = Visitor::whereDate('created_at', today())->distinct('ip_address')->count('ip_address');
         $mitraKerja = MitraKerja::where('divider', 'mitra')->get();
         $ads = KarirhubAds::latest()->get();
 
@@ -98,6 +101,9 @@ class HomeController extends Controller
             'highlightStatistics',
             'highlightStatistics2',
             'visitCount',
+            'todayVisits',
+            'totalVisitors',
+            'todayVisitors',
             'mitraKerja',
             'ads',
             'spark',
