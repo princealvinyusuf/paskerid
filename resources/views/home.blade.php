@@ -79,34 +79,38 @@
                 </button>
             </div>
             <div class="d-flex justify-content-center mt-3" id="highlightStatDots"></div>
-            {{-- Third Carousel (Secondary Highlights) --}}
-            <div class="d-flex align-items-center position-relative mt-4">
-                <button id="highlightStat2ScrollPrev" class="btn btn-light shadow rounded-circle position-absolute start-0 translate-middle-y" style="top:50%; z-index:2; width:40px; height:40px;">
-                    <i class="fa fa-chevron-left"></i>
-                </button>
-                <div id="highlightStat2ScrollRow" class="d-flex px-7" style="scroll-behavior:smooth; gap:16px; width:100%; overflow-x:hidden;">
-                    @foreach($highlightStatistics2 ?? [] as $stat)
-                        <a href="{{ route('informasi.index', ['type' => 'statistik', 'search' => $stat->title]) }}" class="text-decoration-none">
-                            <div class="card shadow-sm stat-card text-center flex-shrink-0" style="max-width:260px; min-width:180px; cursor:pointer;">
-                                <div class="card-body d-flex flex-column align-items-center justify-content-center">
-                                    <div class="stat-icon mb-3">
-                                        <i class="fa {{ $stat->logo ?? 'fa-diamond' }} fa-2x text-info"></i>
+            {{-- Third Carousel (Secondary Highlights) with Blue Background Wrapper --}}
+            <div class="my-4 py-4 text-white rounded-4" style="background: linear-gradient(to right, #388FE8, #4DA4F3);">
+                <div class="px-3 px-md-4">
+                    <div class="d-flex align-items-center position-relative">
+                        <button id="highlightStat2ScrollPrev" class="btn btn-light shadow rounded-circle position-absolute start-0 translate-middle-y" style="top:50%; z-index:2; width:40px; height:40px;">
+                            <i class="fa fa-chevron-left"></i>
+                        </button>
+                        <div id="highlightStat2ScrollRow" class="d-flex px-7" style="scroll-behavior:smooth; gap:16px; width:100%; overflow-x:hidden;">
+                            @foreach($highlightStatistics2 ?? [] as $stat)
+                                <a href="{{ route('informasi.index', ['type' => 'statistik', 'search' => $stat->title]) }}" class="text-decoration-none">
+                                    <div class="card shadow-sm stat-card text-center flex-shrink-0" style="max-width:260px; min-width:180px; cursor:pointer;">
+                                        <div class="card-body d-flex flex-column align-items-center justify-content-center">
+                                            <div class="stat-icon mb-3">
+                                                <i class="fa {{ $stat->logo ?? 'fa-diamond' }} fa-2x text-info"></i>
+                                            </div>
+                                            <div class="stat-title fw-bold mb-1" style="font-size:1.1rem; color:#187C19;">{{ $stat->title }}</div>
+                                            <div class="stat-value fw-bold mb-1" style="font-size:2.2rem; color:#222;">{{ $stat->value }} <span class="stat-unit" style="font-size:1.2rem;">{{ $stat->unit }}</span></div>
+                                            @if($stat->description)
+                                                <div class="stat-desc text-muted mt-1" style="font-size:0.95rem;">{{ $stat->description }}</div>
+                                            @endif
+                                        </div>
                                     </div>
-                                    <div class="stat-title fw-bold mb-1" style="font-size:1.1rem; color:#187C19;">{{ $stat->title }}</div>
-                                    <div class="stat-value fw-bold mb-1" style="font-size:2.2rem; color:#222;">{{ $stat->value }} <span class="stat-unit" style="font-size:1.2rem;">{{ $stat->unit }}</span></div>
-                                    @if($stat->description)
-                                        <div class="stat-desc text-muted mt-1" style="font-size:0.95rem;">{{ $stat->description }}</div>
-                                    @endif
-                                </div>
-                            </div>
-                        </a>
-                    @endforeach
+                                </a>
+                            @endforeach
+                        </div>
+                        <button id="highlightStat2ScrollNext" class="btn btn-light shadow rounded-circle position-absolute end-0 translate-middle-y" style="top:50%; z-index:2; width:40px; height:40px;">
+                            <i class="fa fa-chevron-right"></i>
+                        </button>
+                    </div>
+                    <div class="d-flex justify-content-center mt-3" id="highlightStat2Dots"></div>
                 </div>
-                <button id="highlightStat2ScrollNext" class="btn btn-light shadow rounded-circle position-absolute end-0 translate-middle-y" style="top:50%; z-index:2; width:40px; height:40px;">
-                    <i class="fa fa-chevron-right"></i>
-                </button>
             </div>
-            <div class="d-flex justify-content-center mt-3" id="highlightStat2Dots"></div>
         </div>
     </section>
 
