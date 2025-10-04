@@ -28,7 +28,7 @@
                 <button id="statScrollPrev" class="btn btn-light shadow rounded-circle position-absolute start-0 translate-middle-y" style="top:50%; z-index:2; width:40px; height:40px;">
                     <i class="fa fa-chevron-left"></i>
                 </button>
-                <div id="statScrollRow" class="d-flex px-2" style="scroll-behavior:smooth; gap:16px; width:100%; overflow-x:hidden;">
+                <div id="statScrollRow" class="d-flex px-0" style="scroll-behavior:smooth; gap:16px; width:100%; overflow-x:hidden;">
                     @foreach($statistics as $stat)
                         <a href="{{ route('informasi.index', ['type' => 'statistik', 'search' => $stat->title]) }}" class="text-decoration-none">
                             <div class="card shadow-sm stat-card text-center flex-shrink-0" style="max-width:260px; min-width:180px; cursor:pointer;">
@@ -56,7 +56,7 @@
                 <button id="highlightStatScrollPrev" class="btn btn-light shadow rounded-circle position-absolute start-0 translate-middle-y" style="top:50%; z-index:2; width:40px; height:40px;">
                     <i class="fa fa-chevron-left"></i>
                 </button>
-                <div id="highlightStatScrollRow" class="d-flex px-2" style="scroll-behavior:smooth; gap:16px; width:100%; overflow-x:hidden;">
+                <div id="highlightStatScrollRow" class="d-flex px-0" style="scroll-behavior:smooth; gap:16px; width:100%; overflow-x:hidden;">
                     @foreach($highlightStatistics as $stat)
                         <a href="{{ route('informasi.index', ['type' => 'statistik', 'search' => $stat->title]) }}" class="text-decoration-none">
                             <div class="card shadow-sm stat-card text-center flex-shrink-0" style="max-width:260px; min-width:180px; cursor:pointer;">
@@ -94,7 +94,7 @@
                                 <button id="highlightStat2ScrollPrev" class="btn btn-light shadow rounded-circle position-absolute start-0 translate-middle-y" style="top:50%; z-index:2; width:40px; height:40px;">
                                     <i class="fa fa-chevron-left"></i>
                                 </button>
-                                <div id="highlightStat2ScrollRow" class="d-flex px-2" style="scroll-behavior:smooth; gap:16px; width:100%; overflow-x:hidden;">
+                                <div id="highlightStat2ScrollRow" class="d-flex px-0" style="scroll-behavior:smooth; gap:16px; width:100%; overflow-x:hidden;">
                                     @foreach($highlightStatistics2 ?? [] as $stat)
                                         <a href="{{ route('informasi.index', ['type' => 'statistik', 'search' => $stat->title]) }}" class="text-decoration-none">
                                             <div class="card shadow-sm stat-card text-center flex-shrink-0" style="max-width:260px; min-width:180px; cursor:pointer;">
