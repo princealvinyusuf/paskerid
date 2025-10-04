@@ -21,7 +21,7 @@
 
     {{-- Highlight Pasar Kerja Section (Both Carousels) --}}
     <section class="stat-carousel-section position-relative" style="z-index: 10;">
-        <div class="container position-relative px-0" style="max-width:1200px;">
+        <div class="container-fluid position-relative px-0">
             <h3 class="text-center mb-4">Highlight Pasar Kerja</h3>
             {{-- First Carousel --}}
             <div class="d-flex align-items-center position-relative mb-4">
@@ -81,7 +81,7 @@
             <div class="d-flex justify-content-center mt-3" id="highlightStatDots"></div>
             {{-- Third Carousel (Secondary Highlights) with Blue Background Wrapper --}}
             <div class="my-4 py-4 text-white rounded-4" style="background: linear-gradient(to right, #388FE8, #4DA4F3);">
-                <div class="container px-0">
+                <div class="container-fluid px-0">
                     <div class="row align-items-center">
                         <div class="col-md-4 mb-4 mb-md-0">
                             <a href="https://karirhub.kemnaker.go.id/" target="_blank">
