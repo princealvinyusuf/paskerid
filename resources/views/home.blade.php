@@ -924,6 +924,32 @@
     </script>
     <script>
     document.addEventListener('DOMContentLoaded', function () {
+        // Auto-shrink description text to fit within fixed box height
+        function autoshrinkDescriptions(root) {
+            const descriptions = (root || document).querySelectorAll('.stat-card .stat-desc');
+            descriptions.forEach((el) => {
+                let minSize = 12; // px
+                let size = parseFloat(window.getComputedStyle(el).fontSize);
+                const original = el.innerText;
+                // Reset any previous inline style before measuring
+                el.style.fontSize = size + 'px';
+                // Reduce font size until it fits within max-height or until min size
+                const maxHeight = parseFloat(window.getComputedStyle(el).maxHeight || '0');
+                if (!maxHeight) return;
+                let guard = 0;
+                while (el.scrollHeight > el.clientHeight && size > minSize && guard < 20) {
+                    size -= 1;
+                    el.style.fontSize = size + 'px';
+                    guard++;
+                }
+            });
+        }
+
+        // Run after content and layout are ready
+        setTimeout(() => autoshrinkDescriptions(document), 0);
+        // Re-run on resize for responsiveness
+        window.addEventListener('resize', () => autoshrinkDescriptions(document));
+
         const row = document.getElementById('statScrollRow');
         const prev = document.getElementById('statScrollPrev');
         const next = document.getElementById('statScrollNext');
@@ -1134,6 +1160,25 @@
         });
 
         updateDots();
+        // Apply autoshrink to ensure descriptions fit after any scroll adjustments
+        setTimeout(() => {
+            const container = document.getElementById('highlightStatScrollRow');
+            if (container) {
+                const descriptions = container.querySelectorAll('.stat-desc');
+                descriptions.forEach((el) => {
+                    let minSize = 12;
+                    let size = parseFloat(window.getComputedStyle(el).fontSize);
+                    el.style.fontSize = size + 'px';
+                    const maxHeight = parseFloat(window.getComputedStyle(el).maxHeight || '0');
+                    let guard = 0;
+                    while (el.scrollHeight > el.clientHeight && size > minSize && guard < 20) {
+                        size -= 1;
+                        el.style.fontSize = size + 'px';
+                        guard++;
+                    }
+                });
+            }
+        }, 0);
     });
 
     // --- Highlight Stat Carousel 2 ---
@@ -1189,6 +1234,25 @@
         });
 
         updateDots();
+        // Apply autoshrink for secondary list as well
+        setTimeout(() => {
+            const container = document.getElementById('highlightStat2ScrollRow');
+            if (container) {
+                const descriptions = container.querySelectorAll('.stat-desc');
+                descriptions.forEach((el) => {
+                    let minSize = 12;
+                    let size = parseFloat(window.getComputedStyle(el).fontSize);
+                    el.style.fontSize = size + 'px';
+                    const maxHeight = parseFloat(window.getComputedStyle(el).maxHeight || '0');
+                    let guard = 0;
+                    while (el.scrollHeight > el.clientHeight && size > minSize && guard < 20) {
+                        size -= 1;
+                        el.style.fontSize = size + 'px';
+                        guard++;
+                    }
+                });
+            }
+        }, 0);
     });
 
     //for ads
@@ -1296,8 +1360,7 @@
     border-radius: 1.5rem;
     padding: 2rem 0.5rem; /* Reduced horizontal padding */
     margin: 0.5rem 0;
-    min-height: 320px;
-    height: auto;
+    height: 320px;
     width: 260px;
     display: flex;
     flex-direction: column;
@@ -1477,8 +1540,7 @@
     margin: 0;
 }
 .stat-card {
-    min-height: 320px;
-    height: auto;
+    height: 320px;
     width: 260px;
     display: flex;
     flex-direction: column;
@@ -1497,10 +1559,12 @@
     margin-top: auto;
     width: 100%; /* Make description use full width */
     display: block;
-    overflow: visible;
-    text-overflow: initial;
-    max-height: none;
-    font-size: 0.95rem;
+    line-height: 1.35;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-height: 5.2em; /* ~4 lines at 1.3 line-height */
+    font-size: 0.95rem; /* Start size; will auto-shrink via JS if needed */
+    overflow-wrap: anywhere; /* break long words/links */
     padding: 0; /* Remove any padding if present */
 }
 .tableau-embed-wrapper {
