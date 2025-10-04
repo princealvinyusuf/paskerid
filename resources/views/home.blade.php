@@ -21,14 +21,14 @@
 
     {{-- Highlight Pasar Kerja Section (Both Carousels) --}}
     <section class="stat-carousel-section position-relative" style="z-index: 10;">
-        <div class="container position-relative" style="max-width:1200px;">
+        <div class="container position-relative px-0" style="max-width:1200px;">
             <h3 class="text-center mb-4">Highlight Pasar Kerja</h3>
             {{-- First Carousel --}}
             <div class="d-flex align-items-center position-relative mb-4">
                 <button id="statScrollPrev" class="btn btn-light shadow rounded-circle position-absolute start-0 translate-middle-y" style="top:50%; z-index:2; width:40px; height:40px;">
                     <i class="fa fa-chevron-left"></i>
                 </button>
-                <div id="statScrollRow" class="d-flex px-7" style="scroll-behavior:smooth; gap:16px; width:100%; overflow-x:hidden;">
+                <div id="statScrollRow" class="d-flex px-2" style="scroll-behavior:smooth; gap:16px; width:100%; overflow-x:hidden;">
                     @foreach($statistics as $stat)
                         <a href="{{ route('informasi.index', ['type' => 'statistik', 'search' => $stat->title]) }}" class="text-decoration-none">
                             <div class="card shadow-sm stat-card text-center flex-shrink-0" style="max-width:260px; min-width:180px; cursor:pointer;">
@@ -56,7 +56,7 @@
                 <button id="highlightStatScrollPrev" class="btn btn-light shadow rounded-circle position-absolute start-0 translate-middle-y" style="top:50%; z-index:2; width:40px; height:40px;">
                     <i class="fa fa-chevron-left"></i>
                 </button>
-                <div id="highlightStatScrollRow" class="d-flex px-7" style="scroll-behavior:smooth; gap:16px; width:100%; overflow-x:hidden;">
+                <div id="highlightStatScrollRow" class="d-flex px-2" style="scroll-behavior:smooth; gap:16px; width:100%; overflow-x:hidden;">
                     @foreach($highlightStatistics as $stat)
                         <a href="{{ route('informasi.index', ['type' => 'statistik', 'search' => $stat->title]) }}" class="text-decoration-none">
                             <div class="card shadow-sm stat-card text-center flex-shrink-0" style="max-width:260px; min-width:180px; cursor:pointer;">
@@ -81,7 +81,7 @@
             <div class="d-flex justify-content-center mt-3" id="highlightStatDots"></div>
             {{-- Third Carousel (Secondary Highlights) with Blue Background Wrapper --}}
             <div class="my-4 py-4 text-white rounded-4" style="background: linear-gradient(to right, #388FE8, #4DA4F3);">
-                <div class="container">
+                <div class="container px-0">
                     <div class="row align-items-center">
                         <div class="col-md-4 mb-4 mb-md-0">
                             <a href="https://karirhub.kemnaker.go.id/" target="_blank">
@@ -94,7 +94,7 @@
                                 <button id="highlightStat2ScrollPrev" class="btn btn-light shadow rounded-circle position-absolute start-0 translate-middle-y" style="top:50%; z-index:2; width:40px; height:40px;">
                                     <i class="fa fa-chevron-left"></i>
                                 </button>
-                                <div id="highlightStat2ScrollRow" class="d-flex px-7" style="scroll-behavior:smooth; gap:16px; width:100%; overflow-x:hidden;">
+                                <div id="highlightStat2ScrollRow" class="d-flex px-2" style="scroll-behavior:smooth; gap:16px; width:100%; overflow-x:hidden;">
                                     @foreach($highlightStatistics2 ?? [] as $stat)
                                         <a href="{{ route('informasi.index', ['type' => 'statistik', 'search' => $stat->title]) }}" class="text-decoration-none">
                                             <div class="card shadow-sm stat-card text-center flex-shrink-0" style="max-width:260px; min-width:180px; cursor:pointer;">
