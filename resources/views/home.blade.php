@@ -37,7 +37,10 @@
                                         <i class="fa {{ $stat->logo ?? 'fa-chart-bar' }} fa-2x text-success"></i>
                                     </div>
                                     <div class="stat-title fw-bold mb-1" style="font-size:1.1rem; color:#187C19;">{{ $stat->title }}</div>
-                                    <div class="stat-value fw-bold mb-1" style="font-size:2.2rem; color:#222;">{{ $stat->value }} <span class="stat-unit" style="font-size:1.2rem;">{{ $stat->unit }}</span></div>
+                                    <div class="stat-value fw-bold mb-0" style="font-size:2.2rem; color:#222;">{{ $stat->value }}</div>
+                                    @if($stat->unit)
+                                        <div class="stat-unit" style="font-size:1.2rem; color:#222;">{{ $stat->unit }}</div>
+                                    @endif
                                     @if($stat->description)
                                         <div class="stat-desc text-muted mt-1" style="font-size:0.95rem;">{{ $stat->description }}</div>
                                     @endif
@@ -65,7 +68,10 @@
                                         <i class="fa {{ $stat->logo ?? 'fa-star' }} fa-2x text-warning"></i>
                                     </div>
                                     <div class="stat-title fw-bold mb-1" style="font-size:1.1rem; color:#187C19;">{{ $stat->title }}</div>
-                                    <div class="stat-value fw-bold mb-1" style="font-size:2.2rem; color:#222;">{{ $stat->value }} <span class="stat-unit" style="font-size:1.2rem;">{{ $stat->unit }}</span></div>
+                                    <div class="stat-value fw-bold mb-0" style="font-size:2.2rem; color:#222;">{{ $stat->value }}</div>
+                                    @if($stat->unit)
+                                        <div class="stat-unit" style="font-size:1.2rem; color:#222;">{{ $stat->unit }}</div>
+                                    @endif
                                     @if($stat->description)
                                         <div class="stat-desc text-muted mt-1" style="font-size:0.95rem;">{{ $stat->description }}</div>
                                     @endif
@@ -102,8 +108,11 @@
                                                     <div class="stat-icon mb-3">
                                                         <i class="fa {{ $stat->logo ?? 'fa-diamond' }} fa-2x text-info"></i>
                                                     </div>
-                                                    <div class="stat-title fw-bold mb-1" style="font-size:1.1rem; color:#187C19;">{{ $stat->title }}</div>
-                                                    <div class="stat-value fw-bold mb-1" style="font-size:2.2rem; color:#222;">{{ $stat->value }} <span class="stat-unit" style="font-size:1.2rem;">{{ $stat->unit }}</span></div>
+                                    <div class="stat-title fw-bold mb-1" style="font-size:1.1rem; color:#187C19;">{{ $stat->title }}</div>
+                                    <div class="stat-value fw-bold mb-0" style="font-size:2.2rem; color:#222;">{{ $stat->value }}</div>
+                                    @if($stat->unit)
+                                        <div class="stat-unit" style="font-size:1.2rem; color:#222;">{{ $stat->unit }}</div>
+                                    @endif
                                                     @if($stat->description)
                                                         <div class="stat-desc text-muted mt-1" style="font-size:0.95rem;">{{ $stat->description }}</div>
                                                     @endif
