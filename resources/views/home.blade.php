@@ -1834,5 +1834,12 @@
 }
 .social-other:hover { filter: brightness(1.05); }
 
+
+/* Mitra Kerja: make stakeholder cards transparent */
+.stakeholder-card {
+    background-color: transparent !important;
+    box-shadow: none !important;
+}
+
 </style>
 @endpush 
