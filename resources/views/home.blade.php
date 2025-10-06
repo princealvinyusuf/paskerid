@@ -703,7 +703,13 @@
                     <div class="p-4 shadow-sm rounded-4 bg-white h-100 stakeholder-card w-100 transition-all">
                         @if($stakeholder->logo)
                             <div class="mb-2 text-center">
-                                <img src="{{ asset($stakeholder->logo) }}" alt="Logo" style="max-width: 160px; max-height: 160px; object-fit: contain;">
+                                @if(!empty($stakeholder->website_url))
+                                    <a href="{{ $stakeholder->website_url }}" target="_blank" rel="noopener noreferrer">
+                                        <img src="{{ asset($stakeholder->logo) }}" alt="Logo" style="max-width: 160px; max-height: 160px; object-fit: contain;">
+                                    </a>
+                                @else
+                                    <img src="{{ asset($stakeholder->logo) }}" alt="Logo" style="max-width: 160px; max-height: 160px; object-fit: contain;">
+                                @endif
                             </div>
                         @endif
                     </div>
