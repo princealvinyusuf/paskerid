@@ -717,7 +717,8 @@
         </div>
     </section>
 
-    {{-- Testimonials Section --}}
+    {{-- Testimonials Section - disabled --}}
+    {{-- 
     @php
         use Illuminate\Support\Collection;
         $testimonialChunks = $testimonials->chunk(4);
@@ -784,6 +785,7 @@
             </div>
         </div>
     </section>
+    --}}
 </div>
 
 {{-- Mini Video Player (Floating) --}}
