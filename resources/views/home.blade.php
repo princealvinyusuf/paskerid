@@ -786,6 +786,30 @@
         </div>
     </section>
     --}}
+
+    {{-- Visitor Stats --}}
+    <section class="pb-5 px-2 px-md-4 px-lg-5" data-aos="fade-up">
+        <div class="text-center mt-4">
+            <div class="d-inline-flex flex-wrap gap-2 justify-content-center">
+                <span class="badge bg-success fs-6 p-3 rounded-pill">
+                    <i class="fa fa-users me-2"></i>
+                    Total Pengunjung: {{ number_format($totalVisitors ?? 0) }}
+                </span>
+                <span class="badge bg-success fs-6 p-3 rounded-pill">
+                    <i class="fa fa-user-check me-2"></i>
+                    Pengunjung Hari Ini: {{ number_format($todayVisitors ?? 0) }}
+                </span>
+                <span class="badge bg-success fs-6 p-3 rounded-pill">
+                    <i class="fa fa-bolt me-2"></i>
+                    Kunjungan Hari Ini: {{ number_format($todayVisits ?? 0) }}
+                </span>
+                <span class="badge bg-success fs-6 p-3 rounded-pill">
+                    <i class="fa fa-eye me-2"></i>
+                    Total Kunjungan: {{ number_format($visitCount) }}
+                </span>
+            </div>
+        </div>
+    </section>
 </div>
 
 {{-- Mini Video Player (Floating) --}}
