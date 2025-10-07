@@ -878,6 +878,12 @@
     </a>
 </div>
 
+<!-- WhatsApp Floating Button -->
+<a href="https://wa.me/628118712018" class="whatsapp-float" target="_blank" rel="noopener" aria-label="Chat via WhatsApp">
+    <i class="fab fa-whatsapp" style="font-size:1.6rem;"></i>
+    <span class="visually-hidden">WhatsApp</span>
+    </a>
+
     <!-- Zapier Chatbot Embed - DISABLED -->
     <!-- <script async type='module' src='https://interfaces.zapier.com/assets/web-components/zapier-interfaces/zapier-interfaces.esm.js'></script> -->
     <!-- <zapier-interfaces-chatbot-embed is-popup='true' chatbot-id='cme2m5bo7000dpuncd9nwwgbe'></zapier-interfaces-chatbot-embed> -->
@@ -1845,6 +1851,29 @@
 .stakeholder-card {
     background-color: transparent !important;
     box-shadow: none !important;
+}
+
+/* WhatsApp Floating Button */
+.whatsapp-float {
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: #25D366; /* WhatsApp green */
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    text-decoration: none;
+    z-index: 10001; /* above mini-video */
+    transition: transform .15s ease, filter .15s ease;
+}
+.whatsapp-float:hover {
+    filter: brightness(1.05);
+    transform: translateY(-2px);
 }
 
 </style>
