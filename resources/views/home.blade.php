@@ -697,22 +697,20 @@
         <div class="text-center mb-4">
             <h2 class="fw-bold" style="font-size:2.2rem;">Mitra Kerja</h2>
         </div>
-        <div class="row row-cols-2 row-cols-md-3 row-cols-lg-5 g-4 justify-content-center">
-            @foreach ($mitraKerja->take(15) as $stakeholder)
-                <div class="col d-flex align-items-stretch">
-                    <div class="p-4 shadow-sm rounded-4 bg-white h-100 stakeholder-card w-100 transition-all">
-                        @if($stakeholder->logo)
-                            <div class="mb-2 text-center">
-                                @if(!empty($stakeholder->website_url))
-                                    <a href="{{ $stakeholder->website_url }}" target="_blank" rel="noopener noreferrer">
-                                        <img src="{{ asset($stakeholder->logo) }}" alt="Logo" style="max-width: 160px; max-height: 160px; object-fit: contain;">
-                                    </a>
-                                @else
+        <div class="mitra-grid">
+            @foreach ($mitraKerja->take(36) as $stakeholder)
+                <div class="p-4 shadow-sm rounded-4 bg-white h-100 stakeholder-card w-100 transition-all">
+                    @if($stakeholder->logo)
+                        <div class="mb-2 text-center">
+                            @if(!empty($stakeholder->website_url))
+                                <a href="{{ $stakeholder->website_url }}" target="_blank" rel="noopener noreferrer">
                                     <img src="{{ asset($stakeholder->logo) }}" alt="Logo" style="max-width: 160px; max-height: 160px; object-fit: contain;">
-                                @endif
-                            </div>
-                        @endif
-                    </div>
+                                </a>
+                            @else
+                                <img src="{{ asset($stakeholder->logo) }}" alt="Logo" style="max-width: 160px; max-height: 160px; object-fit: contain;">
+                            @endif
+                        </div>
+                    @endif
                 </div>
             @endforeach
         </div>
@@ -1851,6 +1849,24 @@
 .stakeholder-card {
     background-color: transparent !important;
     box-shadow: none !important;
+}
+
+/* Mitra Kerja: 9x4 grid layout */
+.mitra-grid {
+    display: grid;
+    grid-template-columns: repeat(9, 1fr);
+    gap: 1rem;
+    align-items: center;
+    justify-items: center;
+}
+.mitra-grid .stakeholder-card {
+    background-color: transparent !important;
+    box-shadow: none !important;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* WhatsApp Floating Button */
