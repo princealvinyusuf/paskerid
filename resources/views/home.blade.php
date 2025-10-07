@@ -878,11 +878,6 @@
     </a>
 </div>
 
-<button id="chatbot-fab" class="chatbot-fab" type="button" aria-label="Buka Chatbot">
-    <i class="fa fa-comments"></i>
-    
-</button>
-
     <!-- Zapier Chatbot Embed - DISABLED -->
     <!-- <script async type='module' src='https://interfaces.zapier.com/assets/web-components/zapier-interfaces/zapier-interfaces.esm.js'></script> -->
     <!-- <zapier-interfaces-chatbot-embed is-popup='true' chatbot-id='cme2m5bo7000dpuncd9nwwgbe'></zapier-interfaces-chatbot-embed> -->
@@ -1320,40 +1315,6 @@
             items[currentIndex].classList.remove('d-none');
             items[currentIndex].classList.add('active');
         }, 3000);
-    });
-    </script>
-    <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const chatFab = document.getElementById('chatbot-fab');
-        if (!chatFab) return;
-        let isLoadingQChat = false;
-
-        function loadQontakChat() {
-            if (window.qchatLoaded || isLoadingQChat) return;
-            isLoadingQChat = true;
-            const qchatInit = document.createElement('script');
-            qchatInit.src = 'https://webchat.qontak.com/qchatInitialize.js';
-            const qchatWidget = document.createElement('script');
-            qchatWidget.src = 'https://webchat.qontak.com/js/app.js';
-            document.head.prepend(qchatInit);
-            document.head.prepend(qchatWidget);
-            qchatInit.onload = function () {
-                try {
-                    window.qchatLoaded = true;
-                    qchatInitialize({
-                        id: '21d7335f-dfec-400a-8638-7ff31626e876',
-                        code: 'xo5tcmpFNQ3Ke0VIVYgRNw'
-                    });
-                    // Hide our FAB once the vendor widget is launched
-                    chatFab.style.display = 'none';
-                } catch (e) {
-                    console.error('Failed to initialize Qontak chat:', e);
-                    isLoadingQChat = false;
-                }
-            };
-        }
-
-        chatFab.addEventListener('click', loadQontakChat);
     });
     </script>
 @endsection
@@ -1885,26 +1846,6 @@
     background-color: transparent !important;
     box-shadow: none !important;
 }
-
-.chatbot-fab {
-    position: fixed;
-    right: 24px;
-    bottom: 24px;
-    z-index: 9999;
-    width: 56px;
-    height: 56px;
-    border: none;
-    border-radius: 50%;
-    background: #28a745;
-    color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.18), 0 1.5px 6px rgba(0,0,0,0.06);
-    cursor: pointer;
-}
-.chatbot-fab:hover { filter: brightness(1.05); }
-.chatbot-fab i { font-size: 1.25rem; }
 
 </style>
 @endpush 
