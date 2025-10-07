@@ -881,7 +881,7 @@
 <!-- WhatsApp Floating Button -->
 <a href="https://wa.me/628118712018" class="whatsapp-float" target="_blank" rel="noopener" aria-label="Chat via WhatsApp">
     <i class="fab fa-whatsapp" style="font-size:1.6rem;"></i>
-    <span class="visually-hidden">WhatsApp</span>
+    <span class="wa-label">Tanya JobiCare</span>
     </a>
 
     <!-- Zapier Chatbot Embed - DISABLED -->
@@ -1858,14 +1858,16 @@
     position: fixed;
     right: 24px;
     bottom: 24px;
-    width: 56px;
     height: 56px;
-    border-radius: 50%;
+    min-width: 56px;
+    padding: 0 16px;
+    border-radius: 999px;
     background: #25D366; /* WhatsApp green */
     color: #ffffff;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
+    gap: 10px;
     box-shadow: 0 8px 24px rgba(0,0,0,0.15);
     text-decoration: none;
     z-index: 10001; /* above mini-video */
@@ -1874,6 +1876,18 @@
 .whatsapp-float:hover {
     filter: brightness(1.05);
     transform: translateY(-2px);
+}
+
+.wa-label {
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: #ffffff;
+    white-space: nowrap;
+}
+
+@media (max-width: 575.98px) {
+    .whatsapp-float { padding: 0 12px; }
+    .whatsapp-float .wa-label { display: none; }
 }
 
 </style>
