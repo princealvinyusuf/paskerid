@@ -704,10 +704,10 @@
                         <div class="mb-2 text-center">
                             @if(!empty($stakeholder->website_url))
                                 <a href="{{ $stakeholder->website_url }}" target="_blank" rel="noopener noreferrer">
-                                    <img src="{{ asset($stakeholder->logo) }}" alt="Logo" style="max-width: 160px; max-height: 160px; object-fit: contain;">
+                                    <img src="{{ asset($stakeholder->logo) }}" alt="Logo" class="stakeholder-logo">
                                 </a>
                             @else
-                                <img src="{{ asset($stakeholder->logo) }}" alt="Logo" style="max-width: 160px; max-height: 160px; object-fit: contain;">
+                                <img src="{{ asset($stakeholder->logo) }}" alt="Logo" class="stakeholder-logo">
                             @endif
                         </div>
                     @endif
@@ -1854,10 +1854,36 @@
 /* Mitra Kerja: 9x4 grid layout */
 .mitra-grid {
     display: grid;
-    grid-template-columns: repeat(9, 1fr);
+    grid-template-columns: repeat(6, 1fr);
     gap: 1rem;
     align-items: center;
     justify-items: center;
+}
+.stakeholder-logo {
+    max-width: 140px;
+    max-height: 100px;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+}
+/* Responsive column count for Mitra grid */
+@media (max-width: 1399.98px) {
+    .mitra-grid { grid-template-columns: repeat(5, 1fr); }
+}
+@media (max-width: 1199.98px) {
+    .mitra-grid { grid-template-columns: repeat(4, 1fr); }
+}
+@media (max-width: 991.98px) {
+    .mitra-grid { grid-template-columns: repeat(3, 1fr); }
+    .stakeholder-logo { max-width: 120px; max-height: 90px; }
+}
+@media (max-width: 767.98px) {
+    .mitra-grid { grid-template-columns: repeat(2, 1fr); }
+    .stakeholder-logo { max-width: 100px; max-height: 70px; }
+}
+@media (max-width: 399.98px) {
+    .mitra-grid { grid-template-columns: 1fr; }
+    .stakeholder-logo { max-width: 90px; max-height: 60px; }
 }
 .mitra-grid .stakeholder-card {
     background-color: transparent !important;
