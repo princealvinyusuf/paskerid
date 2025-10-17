@@ -71,7 +71,10 @@ class HomeController extends Controller
         $todayVisits = Visitor::whereDate('created_at', today())->count();
         $totalVisitors = Visitor::distinct('ip_address')->count('ip_address');
         $todayVisitors = Visitor::whereDate('created_at', today())->distinct('ip_address')->count('ip_address');
-        $mitraKerja = MitraKerja::where('divider', 'mitra')->get();
+        $mitraKerja = MitraKerja::where('divider', 'mitra')
+            ->orderBy('sort')
+            ->orderBy('id')
+            ->get();
         $ads = KarirhubAds::latest()->get();
 
         // Additional categories for Informasi Terbaru section
