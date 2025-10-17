@@ -699,7 +699,7 @@
         </div>
         <div class="mitra-grid">
             @foreach ($mitraKerja->take(36) as $stakeholder)
-                <div class="p-4 shadow-sm rounded-4 bg-white h-100 stakeholder-card w-100 transition-all">
+                <div class="p-2 shadow-sm rounded-4 bg-white h-100 stakeholder-card w-100 transition-all">
                     @if($stakeholder->logo)
                         <div class="mb-2 text-center">
                             @if(!empty($stakeholder->website_url))
@@ -1855,7 +1855,7 @@
 .mitra-grid {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
-    gap: 1rem;
+    gap: 0.5rem;
     align-items: center;
     justify-items: center;
 }
