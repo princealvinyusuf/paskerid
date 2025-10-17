@@ -24,28 +24,32 @@
             <button type="submit" class="btn btn-success w-100">Cari</button>
         </div>
     </form>
-    <div class="row row-cols-1 row-cols-md-3 g-4 align-items-stretch">
-        @forelse($news as $item)
-            <div class="col-md-4 mb-4">
-                <a href="{{ route('news.DetailBerita', $item->id)}}" class="text-decoration-none text-dark">
-                <div class="card h-100 shadow-sm" style="border-radius: 15px">
-                    @if($item->image_url)
-                        <img src="{{ $item->image_url }}" class="card-img-top rounded-top-4" alt="{{ $item->title }}">
-                    @endif
-                    <div class="card-body">
-                        <h5 class="card-title fw-bold">{{ $item->title }}</h5>
-                        <p class="card-text">{{ Str::limit($item->content, 120) }}</p>
-                        <div class="card-footer bg-white d-flex justify-content-between text-muted text-sm">
-                            <small>{{ indo_date($item->date) }} </small>
-                            <small>{{ $item->author }}</small>
-                        </div>
-                    </div>
-                </div>
-                </a>
-            </div>
-        @empty
-            <div class="col-12 text-center text-muted">Tidak ada berita ditemukan.</div>
-        @endforelse
+  <div class="row row-cols-1 row-cols-md-3 g-4 align-items-stretch">
+  @forelse($news as $item)
+    <div class="col-md-4 mb-4">
+      <a href="{{ route('news.DetailBerita', $item->id)}}" class="text-decoration-none text-dark d-block h-100">
+        <div class="card h-100 shadow-sm" style="border-radius: 15px">
+          @if($item->image_url)
+            <img src="{{ $item->image_url }}" class="card-img-top rounded-top-4" alt="{{ $item->title }}">
+          @endif
+
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title fw-bold line-2">{{ $item->title }}</h5>
+            <p class="card-text flex-grow-1 line-3">{{ Str::limit($item->content, 160) }}</p>
+          </div>
+
+          <div class="card-footer bg-white d-flex justify-content-between text-muted text-sm mt-auto">
+            <small>{{ indo_date($item->date) }}</small>
+            <small>{{ $item->author }}</small>
+          </div>
+        </div>
+      </a>
+    </div>
+  @empty
+    <div class="col-12 text-center text-muted">Tidak ada berita ditemukan.</div>
+  @endforelse
+</div>
+
     </div>
     
     <div class="d-flex justify-content-center mt-4">
@@ -141,6 +145,40 @@
     object-fit: cover;
     width: 100%;
 }
+/* Bikin card “kolom” supaya footer bisa nempel bawah */
+.card {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Pastikan body mengisi ruang tersisa */
+.card-body {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Tinggi gambar konsisten */
+.card-img-top {
+  height: 220px;
+  object-fit: cover;
+  width: 100%;
+}
+
+/* (Opsional) Rapikan ketinggian judul & isi pakai line clamp */
+.line-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;    /* maksimal 2 baris */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.line-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;    /* maksimal 3 baris */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
 
 
 </style>
