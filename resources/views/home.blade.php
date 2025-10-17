@@ -699,7 +699,7 @@
         </div>
         <div class="mitra-grid">
             @foreach ($mitraKerja->take(36) as $stakeholder)
-                <div class="p-2 shadow-sm rounded-4 bg-white h-100 stakeholder-card w-100 transition-all">
+                <div class="p-1 shadow-sm rounded-4 bg-white h-100 stakeholder-card w-100 transition-all">
                     @if($stakeholder->logo)
                         <div class="mb-0 text-center">
                             @if(!empty($stakeholder->website_url))
@@ -1854,8 +1854,8 @@
 /* Mitra Kerja: 9x4 grid layout */
 .mitra-grid {
     display: grid;
-    grid-template-columns: repeat(8, 1fr);
-    gap: 0.5rem;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 0.25rem;
     align-items: center;
     justify-items: center;
 }
@@ -1868,17 +1868,17 @@
 }
 /* Responsive column count for Mitra grid */
 @media (max-width: 1399.98px) {
-    .mitra-grid { grid-template-columns: repeat(7, 1fr); }
+    .mitra-grid { grid-template-columns: repeat(9, 1fr); }
 }
 @media (max-width: 1199.98px) {
-    .mitra-grid { grid-template-columns: repeat(6, 1fr); }
+    .mitra-grid { grid-template-columns: repeat(8, 1fr); }
 }
 @media (max-width: 991.98px) {
-    .mitra-grid { grid-template-columns: repeat(4, 1fr); }
+    .mitra-grid { grid-template-columns: repeat(6, 1fr); }
     .stakeholder-logo { max-width: 120px; max-height: 90px; }
 }
 @media (max-width: 767.98px) {
-    .mitra-grid { grid-template-columns: repeat(3, 1fr); }
+    .mitra-grid { grid-template-columns: repeat(4, 1fr); }
     .stakeholder-logo { max-width: 100px; max-height: 70px; }
 }
 @media (max-width: 399.98px) {
