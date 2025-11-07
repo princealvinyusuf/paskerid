@@ -105,9 +105,14 @@
 
                         @if(isset($showInfo) && $showInfo)
                             @if(request('type') == 'publikasi' && $showInfo->file_url)
-                                <a href="?subject={{ urlencode($selectedSubject) }}&type=publikasi" class="btn btn-secondary mb-3">
-                                    <i class="fa fa-arrow-left"></i> Back to Table
-                                </a>
+                                <div class="mb-3 d-flex gap-2">
+                                    <a href="?subject={{ urlencode($selectedSubject) }}&type=publikasi" class="btn btn-secondary">
+                                        <i class="fa fa-arrow-left"></i> Back to Table
+                                    </a>
+                                    <a href="{{ asset($showInfo->file_url) }}" class="btn btn-success" target="_blank" download>
+                                        <i class="fa fa-download"></i> Unduh Dokumen
+                                    </a>
+                                </div>
                                 <embed src="{{ asset($showInfo->file_url) }}" type="application/pdf" width="100%" height="600px" />
                             @else
                                 <a href="?subject={{ urlencode($selectedSubject) }}&type={{ request('type', 'statistik') }}" class="btn btn-secondary mb-3">
