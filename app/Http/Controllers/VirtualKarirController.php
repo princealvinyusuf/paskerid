@@ -29,6 +29,8 @@ class VirtualKarirController extends Controller
         $hasRange = Schema::hasColumn('booked_date', 'booked_date_start');
         $hasTimeRange = Schema::hasColumn('booked_date', 'booked_time_start');
         
+        $today = Carbon::today()->format('Y-m-d');
+        
         // Build query with relationships
         $query = BookedDate::with([
             'kemitraan.typeOfPartnership',
@@ -43,10 +45,14 @@ class VirtualKarirController extends Controller
             }
         });
 
-        // Order by date
+        // Filter to show only upcoming events (today and future)
         if ($hasRange) {
+            // For date ranges, show events where start date is today or in the future
+            $query->where('booked_date_start', '>=', $today);
             $query->orderBy('booked_date_start', 'asc');
         } else {
+            // For single dates, show events where date is today or in the future
+            $query->where('booked_date', '>=', $today);
             $query->orderBy('booked_date', 'asc');
         }
 
