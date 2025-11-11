@@ -41,4 +41,14 @@ class Kemitraan extends Model
     {
         return $this->belongsToMany(PaskerFacility::class, 'kemitraan_pasker_facility', 'kemitraan_id', 'pasker_facility_id')->withTimestamps();
     }
+
+    public function bookedDates()
+    {
+        return $this->hasMany(BookedDate::class, 'kemitraan_id');
+    }
+
+    public function typeOfPartnership()
+    {
+        return $this->belongsTo(TypeOfPartnership::class, 'type_of_partnership_id');
+    }
 } 

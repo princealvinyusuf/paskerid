@@ -328,6 +328,7 @@
                         </tr>
                     </thead>
                     <tbody>
+                        @if($agendas->count() > 0)
                         @php
                             $now = \Carbon\Carbon::now();
                             $nextIdx = null;
@@ -342,11 +343,15 @@
                                 $date = \Carbon\Carbon::parse($agenda->date);
                                 $isUpcoming = $idx === $nextIdx;
                                 $rowClass = $isUpcoming ? 'vk-agenda-row-upcoming' : ($idx % 2 === 1 ? 'vk-agenda-row-odd' : '');
-                                // Simple icon logic based on title/desc
+                                // Icon logic based on partnership type/title
                                 $icon = 'fa-calendar';
-                                if (stripos($agenda->title, 'webinar') !== false) $icon = 'fa-chalkboard-teacher';
-                                elseif (stripos($agenda->title, 'pelatihan') !== false) $icon = 'fa-user-graduate';
-                                elseif (stripos($agenda->title, 'job fair') !== false) $icon = 'fa-briefcase';
+                                $titleLower = strtolower($agenda->title);
+                                if (stripos($titleLower, 'walk-in') !== false || stripos($titleLower, 'interview') !== false) $icon = 'fa-user-tie';
+                                elseif (stripos($titleLower, 'job fair') !== false || stripos($titleLower, 'jobfair') !== false) $icon = 'fa-briefcase';
+                                elseif (stripos($titleLower, 'pendidikan') !== false || stripos($titleLower, 'pelatihan') !== false) $icon = 'fa-user-graduate';
+                                elseif (stripos($titleLower, 'talenta') !== false) $icon = 'fa-users';
+                                elseif (stripos($titleLower, 'konsultasi') !== false) $icon = 'fa-comments';
+                                elseif (stripos($titleLower, 'webinar') !== false) $icon = 'fa-chalkboard-teacher';
                             @endphp
                             <tr class="{{ $rowClass }}">
                                 <td>{{ $date->format('d M Y') }}</td>
@@ -365,6 +370,14 @@
                                 </td>
                             </tr>
                         @endforeach
+                        @else
+                        <tr>
+                            <td colspan="3" class="text-center text-muted py-4">
+                                <i class="fas fa-calendar-times fa-2x mb-2"></i><br>
+                                Belum ada agenda kegiatan yang dijadwalkan.
+                            </td>
+                        </tr>
+                        @endif
                     </tbody>
                 </table>
             </div>
