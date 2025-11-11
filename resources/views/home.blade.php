@@ -1305,21 +1305,6 @@
         }, 0);
     });
 
-    //for ads
-    document.addEventListener('DOMContentLoaded', function () {
-        const items = document.querySelectorAll('.ad-item');
-        let currentIndex = 0;
-
-        setInterval(() => {
-            items[currentIndex].classList.add('d-none');
-            items[currentIndex].classList.remove('active');
-
-            currentIndex = (currentIndex + 1) % items.length;
-
-            items[currentIndex].classList.remove('d-none');
-            items[currentIndex].classList.add('active');
-        }, 3000);
-    });
     </script>
 @endsection
 
