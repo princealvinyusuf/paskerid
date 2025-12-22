@@ -39,6 +39,7 @@ class KemitraanController extends Controller
             'business_sector' => 'nullable|string|max:255',
             'institution_address' => 'required|string|max:255',
             'type_of_partnership_id' => 'required|exists:type_of_partnership,id',
+            'tipe_penyelenggara' => 'required|in:Job Portal,Perusahaan',
             // Multi-select rooms and facilities
             'pasker_room_ids' => 'nullable|array',
             'pasker_room_ids.*' => 'integer|exists:pasker_room,id',

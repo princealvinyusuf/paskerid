@@ -21,6 +21,7 @@ class Kemitraan extends Model
         'business_sector',
         'institution_address',
         'type_of_partnership_id',
+        'tipe_penyelenggara',
         'pasker_room_id',
         'other_pasker_room',
         'pasker_facility_id',

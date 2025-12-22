@@ -108,13 +108,25 @@
                 <div id="typeSelectorPlaceholder"></div>
                 {{-- Removed nested form start --}}
                     {{-- <input type="hidden" name="partnership_type_id"> --}}
-                     <label for="partnership_type_id" class="form-label">Jenis Kemitraan yang Diajukan</label>
-                        <select name="type_of_partnership_id" id="type_of_partnership_id" class="form-select">
-                        <option value="">-- Pilih Jenis Kemitraan --</option>
-                        @foreach ($dropdownPartnership as $type)
-                            <option value="{{ $type->id }}" {{ (old('type_of_partnership_id', $defaultTypeId ?? 1) == $type->id) ? 'selected' : '' }}>{{ $type->name }}</option>
-                        @endforeach
-                        </select>
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label for="partnership_type_id" class="form-label">Jenis Kemitraan yang Diajukan</label>
+                            <select name="type_of_partnership_id" id="type_of_partnership_id" class="form-select">
+                                <option value="">-- Pilih Jenis Kemitraan --</option>
+                                @foreach ($dropdownPartnership as $type)
+                                    <option value="{{ $type->id }}" {{ (old('type_of_partnership_id', $defaultTypeId ?? 1) == $type->id) ? 'selected' : '' }}>{{ $type->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="tipe_penyelenggara" class="form-label">Tipe Penyelenggara</label>
+                            <select name="tipe_penyelenggara" id="tipe_penyelenggara" class="form-select" required>
+                                <option value="">-- Pilih Tipe Penyelenggara --</option>
+                                <option value="Job Portal" {{ old('tipe_penyelenggara') == 'Job Portal' ? 'selected' : '' }}>Job Portal</option>
+                                <option value="Perusahaan" {{ old('tipe_penyelenggara') == 'Perusahaan' ? 'selected' : '' }}>Perusahaan</option>
+                            </select>
+                        </div>
+                    </div>
                         <div class="col-12">
                             <label for="pasker_room" class="form-label">Ruangan yang akan dipakai</label>
                             <div class="grid-container">
