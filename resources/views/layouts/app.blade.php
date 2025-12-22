@@ -147,7 +147,7 @@
                     <a href="https://www.youtube.com/pusatpasarkerja" target="_blank" class="text-white mx-1"><i class="fab fa-youtube fa-lg"></i></a>
                     <a href="https://www.tiktok.com/@paskerid_" target="_blank" class="text-white mx-1"><i class="fab fa-tiktok fa-lg"></i></a>
                 </div>
-                <div class="small">Copyright © 2025 Pusat Pasar Kerja Indonesia</div>
+                <div class="small">Copyright © 2026 Pusat Pasar Kerja Indonesia</div>
             </div>
         </div>
     </div>
