@@ -201,7 +201,7 @@
                         <div class="col-md-6">
                             <label for="request_letter" class="form-label">Surat Permohonan Kemitraan</label>
                             <div class="mb-2">
-                                <a href="https://s.id/Wk66?a=confirm" class="btn btn-outline-secondary btn-sm" download target="_blank">
+                                <a href="https://drive.google.com/drive/folders/1wZm4htxHuuTynLJXQ__-XiIW_omKrr7S?usp=sharing" class="btn btn-outline-secondary btn-sm" download target="_blank">
                                     <i class="bi bi-download me-1"></i>Download Template Surat Permohonan
                                 </a>
                             </div>
