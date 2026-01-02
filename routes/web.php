@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MiniVideoController;
+use App\Http\Controllers\Api\HighlightStatisticController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -71,3 +72,7 @@ Route::delete('/mini-videos/{id}', [MiniVideoController::class, 'destroy'])->nam
 
 Route::post('/news/{id}/like', [App\Http\Controllers\NewsController::class, 'like'])->name('news.like');
 Route::get('/news/{id}/like', [App\Http\Controllers\NewsController::class, 'likeStatus'])->name('news.like');
+
+// Public API: Highlight statistics for "Highlight Pasar Kerja" section
+Route::get('/api/highlight-statistics', [HighlightStatisticController::class, 'index'])
+    ->name('api.highlight-statistics');
