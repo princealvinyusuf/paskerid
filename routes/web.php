@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MiniVideoController;
 use App\Http\Controllers\Api\HighlightStatisticController;
+use App\Http\Controllers\Api\InformationController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -76,3 +77,7 @@ Route::get('/news/{id}/like', [App\Http\Controllers\NewsController::class, 'like
 // Public API: Highlight statistics for "Highlight Pasar Kerja" section
 Route::get('/api/highlight-statistics', [HighlightStatisticController::class, 'index'])
     ->name('api.highlight-statistics');
+
+// Public API: Information records (with file_url, iframe_url, etc.)
+Route::get('/api/information', [InformationController::class, 'index'])
+    ->name('api.information.index');
