@@ -63,8 +63,8 @@
                         <div class="form-text">Nomor aktif untuk keperluan komunikasi.</div>
                     </div>
                     <div class="col-md-12">
-                        <label for="foto_kartu_pegawai_pic" class="form-label">Upload Foto Kartu Pegawai (PIC)</label>
-                        <input type="file" class="form-control" id="foto_kartu_pegawai_pic" name="foto_kartu_pegawai_pic" accept="image/png,image/jpeg">
+                        <label for="foto_kartu_pegawai_pic" class="form-label">Upload Foto Kartu Pegawai (PIC) <span class="text-danger">*</span></label>
+                        <input type="file" class="form-control" id="foto_kartu_pegawai_pic" name="foto_kartu_pegawai_pic" accept="image/png,image/jpeg" required>
                         <div class="form-text">Format gambar (PNG, JPG/JPEG). Maksimal 2MB.</div>
                         @error('foto_kartu_pegawai_pic')
                             <div class="text-danger mt-1">{{ $message }}</div>
@@ -385,6 +385,16 @@
                     alert('Field "Usulan Jadwal Kegiatan" wajib diisi.');
                     schedule.focus();
                     e.preventDefault();
+                    return false;
+                }
+                
+                // Custom validation for foto_kartu_pegawai_pic field
+                var fotoKartuPegawai = document.getElementById('foto_kartu_pegawai_pic');
+                if (!fotoKartuPegawai.files || fotoKartuPegawai.files.length === 0) {
+                    alert('Field "Upload Foto Kartu Pegawai (PIC)" wajib diisi.');
+                    fotoKartuPegawai.focus();
+                    e.preventDefault();
+                    return false;
                 }
             });
         }

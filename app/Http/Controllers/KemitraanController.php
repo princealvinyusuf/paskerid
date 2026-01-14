@@ -53,7 +53,7 @@ class KemitraanController extends Controller
             'scheduletimestart' => 'nullable|date_format:H:i',
             'scheduletimefinish' => 'nullable|date_format:H:i',
             'request_letter' => 'nullable|file|mimes:pdf,doc,docx|max:2048',
-            'foto_kartu_pegawai_pic' => 'nullable|file|mimes:png,jpeg,jpg|max:2048',
+            'foto_kartu_pegawai_pic' => 'required|file|mimes:png,jpeg,jpg|max:2048',
         ]);
 
         // Enforce facility presence: either array not empty or other provided
@@ -66,9 +66,8 @@ class KemitraanController extends Controller
         if ($request->hasFile('request_letter')) {
             $validated['request_letter'] = $request->file('request_letter')->store('kemitraan_letters', 'public');
         }
-        if ($request->hasFile('foto_kartu_pegawai_pic')) {
-            $validated['foto_kartu_pegawai_pic'] = $request->file('foto_kartu_pegawai_pic')->store('kemitraan_foto_kartu', 'public');
-        }
+        // foto_kartu_pegawai_pic is required, so it will always be present after validation
+        $validated['foto_kartu_pegawai_pic'] = $request->file('foto_kartu_pegawai_pic')->store('kemitraan_foto_kartu', 'public');
 
         // Normalize time fields to HH:MM:SS if provided
         $timeStart = $request->input('scheduletimestart');
