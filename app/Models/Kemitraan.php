@@ -30,6 +30,7 @@ class Kemitraan extends Model
         'scheduletimestart',
         'scheduletimefinish',
         'request_letter',
+        'foto_kartu_pegawai_pic',
         'status',
     ];
 

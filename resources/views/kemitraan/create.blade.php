@@ -62,6 +62,14 @@
                         </div>
                         <div class="form-text">Nomor aktif untuk keperluan komunikasi.</div>
                     </div>
+                    <div class="col-md-12">
+                        <label for="foto_kartu_pegawai_pic" class="form-label">Upload Foto Kartu Pegawai (PIC)</label>
+                        <input type="file" class="form-control" id="foto_kartu_pegawai_pic" name="foto_kartu_pegawai_pic" accept="image/png,image/jpeg">
+                        <div class="form-text">Format gambar (PNG, JPG/JPEG). Maksimal 2MB.</div>
+                        @error('foto_kartu_pegawai_pic')
+                            <div class="text-danger mt-1">{{ $message }}</div>
+                        @enderror
+                    </div>
                 </div>
 
                 <hr class="my-4">
