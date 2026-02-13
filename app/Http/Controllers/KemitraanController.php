@@ -40,6 +40,16 @@ class KemitraanController extends Controller
             'institution_address' => 'required|string|max:255',
             'type_of_partnership_id' => 'required|exists:type_of_partnership,id',
             'tipe_penyelenggara' => 'required|in:Job Portal,Perusahaan',
+            // Detail Lowongan (repeatable)
+            'detail_lowongan' => 'required|array|min:1',
+            'detail_lowongan.*.jabatan_yang_dibuka' => 'required|string|max:255',
+            'detail_lowongan.*.jumlah_kebutuhan' => 'required|integer|min:1|max:1000000',
+            'detail_lowongan.*.gender' => 'nullable|string|max:50',
+            'detail_lowongan.*.pendidikan_terakhir' => 'nullable|string|max:255',
+            'detail_lowongan.*.pengalaman_kerja' => 'nullable|string|max:255',
+            'detail_lowongan.*.kompetensi_yang_dibutuhkan' => 'nullable|string',
+            'detail_lowongan.*.tahapan_seleksi' => 'nullable|string',
+            'detail_lowongan.*.lokasi_penempatan' => 'nullable|string|max:255',
             // Multi-select rooms and facilities
             'pasker_room_ids' => 'nullable|array',
             'pasker_room_ids.*' => 'integer|exists:pasker_room,id',
@@ -81,7 +91,9 @@ class KemitraanController extends Controller
 
         $validated['pasker_facility_id'] = !empty($facilityIds) ? (int) $facilityIds[0] : null;
 
-        DB::transaction(function () use ($validated, $roomIds, $facilityIds) {
+        $detailLowongan = $request->input('detail_lowongan', []);
+
+        DB::transaction(function () use ($validated, $roomIds, $facilityIds, $detailLowongan) {
             $kemitraan = Kemitraan::create($validated);
 
             if (!empty($roomIds)) {
@@ -89,6 +101,20 @@ class KemitraanController extends Controller
             }
             if (!empty($facilityIds)) {
                 $kemitraan->facilities()->sync(array_values(array_unique(array_map('intval', $facilityIds))));
+            }
+
+            // Persist Detail Lowongan (1 kemitraan can have many lowongan)
+            foreach ($detailLowongan as $dl) {
+                $kemitraan->detailLowongan()->create([
+                    'jabatan_yang_dibuka' => $dl['jabatan_yang_dibuka'] ?? null,
+                    'jumlah_kebutuhan' => isset($dl['jumlah_kebutuhan']) ? (int) $dl['jumlah_kebutuhan'] : null,
+                    'gender' => $dl['gender'] ?? null,
+                    'pendidikan_terakhir' => $dl['pendidikan_terakhir'] ?? null,
+                    'pengalaman_kerja' => $dl['pengalaman_kerja'] ?? null,
+                    'kompetensi_yang_dibutuhkan' => $dl['kompetensi_yang_dibutuhkan'] ?? null,
+                    'tahapan_seleksi' => $dl['tahapan_seleksi'] ?? null,
+                    'lokasi_penempatan' => $dl['lokasi_penempatan'] ?? null,
+                ]);
             }
         });
 

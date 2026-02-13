@@ -53,4 +53,9 @@ class Kemitraan extends Model
     {
         return $this->belongsTo(TypeOfPartnership::class, 'type_of_partnership_id');
     }
+
+    public function detailLowongan()
+    {
+        return $this->hasMany(KemitraanDetailLowongan::class, 'kemitraan_id');
+    }
 } 

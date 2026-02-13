@@ -111,6 +111,193 @@
                 </div>
 
                 <hr class="my-4">
+                <h5 class="mb-3"><i class="bi bi-briefcase me-2"></i>Detail Lowongan</h5>
+                @php
+                    $detailLowonganOld = old('detail_lowongan');
+                    if (!is_array($detailLowonganOld) || count($detailLowonganOld) < 1) {
+                        $detailLowonganOld = [[]];
+                    }
+                @endphp
+                <div id="detailLowonganList">
+                    @foreach ($detailLowonganOld as $i => $dl)
+                        <div class="card mb-3 detail-lowongan-item" data-index="{{ $i }}">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <div class="fw-semibold">Lowongan #<span class="detail-lowongan-number">{{ $i + 1 }}</span></div>
+                                    <button type="button" class="btn btn-outline-danger btn-sm btn-remove-lowongan">Hapus</button>
+                                </div>
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label" data-for-template="dl___INDEX___jabatan_yang_dibuka" for="dl_{{ $i }}_jabatan_yang_dibuka">Jabatan Yang Dibuka</label>
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            id="dl_{{ $i }}_jabatan_yang_dibuka"
+                                            data-id-template="dl___INDEX___jabatan_yang_dibuka"
+                                            name="detail_lowongan[{{ $i }}][jabatan_yang_dibuka]"
+                                            data-name-template="detail_lowongan[__INDEX__][jabatan_yang_dibuka]"
+                                            placeholder="Contoh: Admin, Operator Produksi, Software Engineer"
+                                            value="{{ $dl['jabatan_yang_dibuka'] ?? '' }}"
+                                            required
+                                        >
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label" data-for-template="dl___INDEX___jumlah_kebutuhan" for="dl_{{ $i }}_jumlah_kebutuhan">Jumlah Kebutuhan</label>
+                                        <input
+                                            type="number"
+                                            class="form-control"
+                                            id="dl_{{ $i }}_jumlah_kebutuhan"
+                                            data-id-template="dl___INDEX___jumlah_kebutuhan"
+                                            name="detail_lowongan[{{ $i }}][jumlah_kebutuhan]"
+                                            data-name-template="detail_lowongan[__INDEX__][jumlah_kebutuhan]"
+                                            placeholder="Contoh: 10"
+                                            value="{{ $dl['jumlah_kebutuhan'] ?? '' }}"
+                                            min="1"
+                                            required
+                                        >
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label" data-for-template="dl___INDEX___gender" for="dl_{{ $i }}_gender">Gender</label>
+                                        <select
+                                            class="form-select"
+                                            id="dl_{{ $i }}_gender"
+                                            data-id-template="dl___INDEX___gender"
+                                            name="detail_lowongan[{{ $i }}][gender]"
+                                            data-name-template="detail_lowongan[__INDEX__][gender]"
+                                        >
+                                            <option value="">-- Pilih Gender --</option>
+                                            @php $gender = $dl['gender'] ?? '' @endphp
+                                            <option value="Laki-laki" {{ $gender === 'Laki-laki' ? 'selected' : '' }}>Laki-laki</option>
+                                            <option value="Perempuan" {{ $gender === 'Perempuan' ? 'selected' : '' }}>Perempuan</option>
+                                            <option value="Laki-laki/Perempuan" {{ $gender === 'Laki-laki/Perempuan' ? 'selected' : '' }}>Laki-laki / Perempuan</option>
+                                            <option value="Bebas" {{ $gender === 'Bebas' ? 'selected' : '' }}>Bebas</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label" data-for-template="dl___INDEX___pendidikan_terakhir" for="dl_{{ $i }}_pendidikan_terakhir">Pendidikan Terakhir</label>
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            id="dl_{{ $i }}_pendidikan_terakhir"
+                                            data-id-template="dl___INDEX___pendidikan_terakhir"
+                                            name="detail_lowongan[{{ $i }}][pendidikan_terakhir]"
+                                            data-name-template="detail_lowongan[__INDEX__][pendidikan_terakhir]"
+                                            placeholder="Contoh: SMA/SMK, D3, S1"
+                                            value="{{ $dl['pendidikan_terakhir'] ?? '' }}"
+                                        >
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label" data-for-template="dl___INDEX___pengalaman_kerja" for="dl_{{ $i }}_pengalaman_kerja">Pengalaman Kerja</label>
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            id="dl_{{ $i }}_pengalaman_kerja"
+                                            data-id-template="dl___INDEX___pengalaman_kerja"
+                                            name="detail_lowongan[{{ $i }}][pengalaman_kerja]"
+                                            data-name-template="detail_lowongan[__INDEX__][pengalaman_kerja]"
+                                            placeholder="Contoh: 0-1 tahun / 2 tahun"
+                                            value="{{ $dl['pengalaman_kerja'] ?? '' }}"
+                                        >
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label" data-for-template="dl___INDEX___lokasi_penempatan" for="dl_{{ $i }}_lokasi_penempatan">Lokasi Penempatan</label>
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            id="dl_{{ $i }}_lokasi_penempatan"
+                                            data-id-template="dl___INDEX___lokasi_penempatan"
+                                            name="detail_lowongan[{{ $i }}][lokasi_penempatan]"
+                                            data-name-template="detail_lowongan[__INDEX__][lokasi_penempatan]"
+                                            placeholder="Contoh: Jakarta / Bandung / Remote"
+                                            value="{{ $dl['lokasi_penempatan'] ?? '' }}"
+                                        >
+                                    </div>
+                                    <div class="col-12">
+                                        <label class="form-label" data-for-template="dl___INDEX___kompetensi_yang_dibutuhkan" for="dl_{{ $i }}_kompetensi_yang_dibutuhkan">Kompetensi Yang Dibutuhkan</label>
+                                        <textarea
+                                            class="form-control"
+                                            id="dl_{{ $i }}_kompetensi_yang_dibutuhkan"
+                                            data-id-template="dl___INDEX___kompetensi_yang_dibutuhkan"
+                                            name="detail_lowongan[{{ $i }}][kompetensi_yang_dibutuhkan]"
+                                            data-name-template="detail_lowongan[__INDEX__][kompetensi_yang_dibutuhkan]"
+                                            rows="2"
+                                            placeholder="Tuliskan kompetensi/skill yang dibutuhkan"
+                                        >{{ $dl['kompetensi_yang_dibutuhkan'] ?? '' }}</textarea>
+                                    </div>
+                                    <div class="col-12">
+                                        <label class="form-label" data-for-template="dl___INDEX___tahapan_seleksi" for="dl_{{ $i }}_tahapan_seleksi">Tahapan Seleksi</label>
+                                        <textarea
+                                            class="form-control"
+                                            id="dl_{{ $i }}_tahapan_seleksi"
+                                            data-id-template="dl___INDEX___tahapan_seleksi"
+                                            name="detail_lowongan[{{ $i }}][tahapan_seleksi]"
+                                            data-name-template="detail_lowongan[__INDEX__][tahapan_seleksi]"
+                                            rows="2"
+                                            placeholder="Contoh: Seleksi administrasi, tes, interview, dsb"
+                                        >{{ $dl['tahapan_seleksi'] ?? '' }}</textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+                <div class="d-flex">
+                    <button type="button" class="btn btn-outline-primary" id="btnAddLowongan">
+                        <i class="bi bi-plus-circle me-1"></i>Tambah Detail Lowongan
+                    </button>
+                </div>
+                <template id="detailLowonganTemplate">
+                    <div class="card mb-3 detail-lowongan-item" data-index="__INDEX__">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <div class="fw-semibold">Lowongan #<span class="detail-lowongan-number">__NUMBER__</span></div>
+                                <button type="button" class="btn btn-outline-danger btn-sm btn-remove-lowongan">Hapus</button>
+                            </div>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label" data-for-template="dl___INDEX___jabatan_yang_dibuka" for="dl___INDEX___jabatan_yang_dibuka">Jabatan Yang Dibuka</label>
+                                    <input type="text" class="form-control" id="dl___INDEX___jabatan_yang_dibuka" data-id-template="dl___INDEX___jabatan_yang_dibuka" name="detail_lowongan[__INDEX__][jabatan_yang_dibuka]" data-name-template="detail_lowongan[__INDEX__][jabatan_yang_dibuka]" placeholder="Contoh: Admin, Operator Produksi, Software Engineer" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label" data-for-template="dl___INDEX___jumlah_kebutuhan" for="dl___INDEX___jumlah_kebutuhan">Jumlah Kebutuhan</label>
+                                    <input type="number" class="form-control" id="dl___INDEX___jumlah_kebutuhan" data-id-template="dl___INDEX___jumlah_kebutuhan" name="detail_lowongan[__INDEX__][jumlah_kebutuhan]" data-name-template="detail_lowongan[__INDEX__][jumlah_kebutuhan]" placeholder="Contoh: 10" min="1" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label" data-for-template="dl___INDEX___gender" for="dl___INDEX___gender">Gender</label>
+                                    <select class="form-select" id="dl___INDEX___gender" data-id-template="dl___INDEX___gender" name="detail_lowongan[__INDEX__][gender]" data-name-template="detail_lowongan[__INDEX__][gender]">
+                                        <option value="">-- Pilih Gender --</option>
+                                        <option value="Laki-laki">Laki-laki</option>
+                                        <option value="Perempuan">Perempuan</option>
+                                        <option value="Laki-laki/Perempuan">Laki-laki / Perempuan</option>
+                                        <option value="Bebas">Bebas</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label" data-for-template="dl___INDEX___pendidikan_terakhir" for="dl___INDEX___pendidikan_terakhir">Pendidikan Terakhir</label>
+                                    <input type="text" class="form-control" id="dl___INDEX___pendidikan_terakhir" data-id-template="dl___INDEX___pendidikan_terakhir" name="detail_lowongan[__INDEX__][pendidikan_terakhir]" data-name-template="detail_lowongan[__INDEX__][pendidikan_terakhir]" placeholder="Contoh: SMA/SMK, D3, S1">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label" data-for-template="dl___INDEX___pengalaman_kerja" for="dl___INDEX___pengalaman_kerja">Pengalaman Kerja</label>
+                                    <input type="text" class="form-control" id="dl___INDEX___pengalaman_kerja" data-id-template="dl___INDEX___pengalaman_kerja" name="detail_lowongan[__INDEX__][pengalaman_kerja]" data-name-template="detail_lowongan[__INDEX__][pengalaman_kerja]" placeholder="Contoh: 0-1 tahun / 2 tahun">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label" data-for-template="dl___INDEX___lokasi_penempatan" for="dl___INDEX___lokasi_penempatan">Lokasi Penempatan</label>
+                                    <input type="text" class="form-control" id="dl___INDEX___lokasi_penempatan" data-id-template="dl___INDEX___lokasi_penempatan" name="detail_lowongan[__INDEX__][lokasi_penempatan]" data-name-template="detail_lowongan[__INDEX__][lokasi_penempatan]" placeholder="Contoh: Jakarta / Bandung / Remote">
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label" data-for-template="dl___INDEX___kompetensi_yang_dibutuhkan" for="dl___INDEX___kompetensi_yang_dibutuhkan">Kompetensi Yang Dibutuhkan</label>
+                                    <textarea class="form-control" id="dl___INDEX___kompetensi_yang_dibutuhkan" data-id-template="dl___INDEX___kompetensi_yang_dibutuhkan" name="detail_lowongan[__INDEX__][kompetensi_yang_dibutuhkan]" data-name-template="detail_lowongan[__INDEX__][kompetensi_yang_dibutuhkan]" rows="2" placeholder="Tuliskan kompetensi/skill yang dibutuhkan"></textarea>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label" data-for-template="dl___INDEX___tahapan_seleksi" for="dl___INDEX___tahapan_seleksi">Tahapan Seleksi</label>
+                                    <textarea class="form-control" id="dl___INDEX___tahapan_seleksi" data-id-template="dl___INDEX___tahapan_seleksi" name="detail_lowongan[__INDEX__][tahapan_seleksi]" data-name-template="detail_lowongan[__INDEX__][tahapan_seleksi]" rows="2" placeholder="Contoh: Seleksi administrasi, tes, interview, dsb"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+
+                <hr class="my-4">
                 <h5 class="mb-3"><i class="bi bi-link-45deg me-2"></i>Detail Kemitraan</h5>
                 <!-- Placeholder for the type selector -->
                 <div id="typeSelectorPlaceholder"></div>
@@ -422,6 +609,67 @@
             alert('Silakan pilih minimal satu fasilitas atau isi Lainnya.');
         }
     });
+
+    // Detail Lowongan (repeatable)
+    (function () {
+        const list = document.getElementById('detailLowonganList');
+        const btnAdd = document.getElementById('btnAddLowongan');
+        const tpl = document.getElementById('detailLowonganTemplate');
+        if (!list || !btnAdd || !tpl) return;
+
+        function reindex() {
+            const items = Array.from(list.querySelectorAll('.detail-lowongan-item'));
+            items.forEach((item, idx) => {
+                item.dataset.index = String(idx);
+                const numberEl = item.querySelector('.detail-lowongan-number');
+                if (numberEl) numberEl.textContent = String(idx + 1);
+
+                item.querySelectorAll('[data-name-template]').forEach((el) => {
+                    const t = el.getAttribute('data-name-template');
+                    if (t) el.setAttribute('name', t.replace(/__INDEX__/g, String(idx)));
+                });
+                item.querySelectorAll('[data-id-template]').forEach((el) => {
+                    const t = el.getAttribute('data-id-template');
+                    if (t) el.setAttribute('id', t.replace(/__INDEX__/g, String(idx)));
+                });
+                item.querySelectorAll('label[data-for-template]').forEach((label) => {
+                    const t = label.getAttribute('data-for-template');
+                    if (t) label.setAttribute('for', t.replace(/__INDEX__/g, String(idx)));
+                });
+            });
+
+            const canRemove = items.length > 1;
+            items.forEach((item) => {
+                const btn = item.querySelector('.btn-remove-lowongan');
+                if (btn) btn.style.display = canRemove ? '' : 'none';
+            });
+        }
+
+        function addItem() {
+            const idx = list.querySelectorAll('.detail-lowongan-item').length;
+            const html = tpl.innerHTML
+                .replace(/__INDEX__/g, String(idx))
+                .replace(/__NUMBER__/g, String(idx + 1));
+            const wrapper = document.createElement('div');
+            wrapper.innerHTML = html.trim();
+            const node = wrapper.firstElementChild;
+            if (node) list.appendChild(node);
+            reindex();
+        }
+
+        list.addEventListener('click', function (e) {
+            const target = e.target;
+            if (!(target instanceof Element)) return;
+            if (target.classList.contains('btn-remove-lowongan')) {
+                const item = target.closest('.detail-lowongan-item');
+                if (item) item.remove();
+                reindex();
+            }
+        });
+
+        btnAdd.addEventListener('click', addItem);
+        reindex();
+    })();
 </script>
 @endpush
 <style>
