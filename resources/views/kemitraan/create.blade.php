@@ -450,12 +450,26 @@
 
                     <div id="walkinGalleryLoading" class="text-muted small">Memuat galeri...</div>
 
-                    <div id="walkinGalleryGrid" class="row g-2 d-none"></div>
+                    <!-- Company cards -->
+                    <div id="walkinGalleryCompanies" class="row g-2 d-none"></div>
+
+                    <!-- Company detail -->
+                    <div id="walkinGalleryCompanyDetail" class="d-none">
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <button type="button" class="btn btn-outline-secondary btn-sm" id="btnCompanyBack">
+                                <i class="bi bi-arrow-left me-1"></i>Kembali
+                            </button>
+                            <div class="text-muted small">Tampilan dokumentasi & komentar</div>
+                        </div>
+                        <div class="fw-semibold mb-2" id="walkinGalleryCompanyTitle"></div>
+                        <div id="walkinGalleryGrid" class="row g-2"></div>
+                    </div>
 
                     <div id="walkinGalleryComments" class="d-none">
                         <div class="border rounded p-3 bg-light mb-3">
                             <div class="fw-semibold mb-2">Tulis Komentar</div>
                             <form id="walkinGalleryCommentForm">
+                                <input type="hidden" name="company_name" id="walkinGalleryCommentCompany" value="">
                                 <div class="row g-2">
                                     <div class="col-12 col-md-5">
                                         <input type="text" class="form-control" name="name" placeholder="Nama kamu" required maxlength="80">
@@ -795,14 +809,19 @@
 
         const loadingEl = document.getElementById('walkinGalleryLoading');
         const gridEl = document.getElementById('walkinGalleryGrid');
+        const companiesEl = document.getElementById('walkinGalleryCompanies');
+        const companyDetailEl = document.getElementById('walkinGalleryCompanyDetail');
+        const companyTitleEl = document.getElementById('walkinGalleryCompanyTitle');
+        const companyBackBtn = document.getElementById('btnCompanyBack');
         const commentsWrapEl = document.getElementById('walkinGalleryComments');
         const commentListEl = document.getElementById('walkinGalleryCommentList');
         const alertEl = document.getElementById('walkinGalleryAlert');
         const refreshBtn = document.getElementById('btnGalleryRefresh');
         const filterBtns = Array.from(document.querySelectorAll('[data-gallery-filter]'));
         const commentForm = document.getElementById('walkinGalleryCommentForm');
+        const commentCompanyInput = document.getElementById('walkinGalleryCommentCompany');
 
-        if (!loadingEl || !gridEl || !commentsWrapEl || !commentListEl || !alertEl || filterBtns.length === 0) return;
+        if (!loadingEl || !gridEl || !companiesEl || !companyDetailEl || !companyTitleEl || !companyBackBtn || !commentsWrapEl || !commentListEl || !alertEl || filterBtns.length === 0 || !commentCompanyInput) return;
 
         function showAlert(text, type = 'info') {
             alertEl.className = `alert alert-${type} py-2 px-3`;
@@ -855,6 +874,36 @@
             });
         }
 
+        function renderCompanies(companies) {
+            companiesEl.innerHTML = '';
+            if (!companies || companies.length === 0) {
+                companiesEl.innerHTML = `<div class="text-muted small">Belum ada dokumentasi.</div>`;
+                return;
+            }
+            companies.forEach((c) => {
+                const name = c.company_name || 'Umum';
+                const count = c.count || 0;
+                const coverType = c.cover_type || 'photo';
+                const thumb = (c.cover_thumbnail_path ? storageUrl(c.cover_thumbnail_path) : (c.cover_media_path ? storageUrl(c.cover_media_path) : (c.cover_embed_thumbnail_url || '')));
+                const badgeIcon = (coverType === 'photo') ? 'bi-image' : 'bi-play-circle';
+
+                const col = document.createElement('div');
+                col.className = 'col-12 col-md-6';
+                col.innerHTML = `
+                    <div class="walkin-company-card" role="button" tabindex="0" data-company="${encodeURIComponent(name)}">
+                        <div class="walkin-company-thumb" style="background-image:url('${thumb ? thumb : ''}')">
+                            <div class="walkin-company-badge"><i class="bi ${badgeIcon} me-1"></i>${escapeHtml(String(count))} item</div>
+                        </div>
+                        <div class="walkin-company-body">
+                            <div class="fw-semibold">${escapeHtml(name)}</div>
+                            <div class="text-muted small">Klik untuk lihat dokumentasi & komentar</div>
+                        </div>
+                    </div>
+                `;
+                companiesEl.appendChild(col);
+            });
+        }
+
         function renderComments(comments) {
             commentListEl.innerHTML = '';
             if (!comments || comments.length === 0) {
@@ -886,15 +935,49 @@
         }
 
         let currentFilter = 'all';
-        let lastFeed = { items: [], comments: [] };
+        let currentCompany = '';
+        let lastFeed = { items: [], comments: [], companies: [] };
 
-        async function loadFeed(filter) {
-            currentFilter = filter;
+        function setView(mode) {
+            // mode: companies | company
+            if (mode === 'companies') {
+                companiesEl.classList.remove('d-none');
+                companyDetailEl.classList.add('d-none');
+                commentsWrapEl.classList.add('d-none');
+            } else {
+                companiesEl.classList.add('d-none');
+                companyDetailEl.classList.remove('d-none');
+                commentsWrapEl.classList.remove('d-none');
+            }
+        }
+
+        async function loadCompanies() {
             loadingEl.classList.remove('d-none');
-            gridEl.classList.add('d-none');
+            companiesEl.classList.add('d-none');
+            companyDetailEl.classList.add('d-none');
             commentsWrapEl.classList.add('d-none');
             try {
+                const res = await fetch(feedUrl, { headers: { 'Accept': 'application/json' } });
+                const data = await res.json();
+                lastFeed = data || { companies: [] };
+                loadingEl.classList.add('d-none');
+                setView('companies');
+                companiesEl.classList.remove('d-none');
+                renderCompanies(lastFeed.companies || []);
+            } catch (e) {
+                loadingEl.classList.add('d-none');
+                showAlert('Gagal memuat daftar perusahaan. Coba refresh.', 'warning');
+            }
+        }
+
+        async function loadCompany(company, filter) {
+            currentFilter = filter;
+            currentCompany = company;
+            loadingEl.classList.remove('d-none');
+            setView('company');
+            try {
                 const url = new URL(feedUrl, window.location.origin);
+                url.searchParams.set('company', company);
                 if (filter && filter !== 'all') url.searchParams.set('type', filter);
                 const res = await fetch(url.toString(), { headers: { 'Accept': 'application/json' } });
                 const data = await res.json();
@@ -903,11 +986,15 @@
                 loadingEl.classList.add('d-none');
 
                 if (filter === 'comment') {
-                    commentsWrapEl.classList.remove('d-none');
+                    companyTitleEl.textContent = company;
+                    commentCompanyInput.value = company;
                     renderComments(lastFeed.comments || []);
+                    gridEl.innerHTML = '';
                 } else {
-                    gridEl.classList.remove('d-none');
+                    companyTitleEl.textContent = company;
+                    commentCompanyInput.value = company;
                     renderGrid(lastFeed.items || []);
+                    renderComments(lastFeed.comments || []);
                 }
             } catch (e) {
                 loadingEl.classList.add('d-none');
@@ -923,11 +1010,51 @@
                 });
                 btn.classList.add('active');
                 btn.setAttribute('aria-selected', 'true');
-                loadFeed(btn.getAttribute('data-gallery-filter') || 'all');
+                const f = btn.getAttribute('data-gallery-filter') || 'all';
+                if (currentCompany) {
+                    loadCompany(currentCompany, f);
+                } else {
+                    // on company list, only "All" makes sense, keep list
+                    if (f !== 'all') {
+                        showAlert('Pilih perusahaan dulu untuk melihat filter ini.', 'info');
+                        // reset pill to All
+                        filterBtns.forEach((b) => b.classList.toggle('active', b.getAttribute('data-gallery-filter') === 'all'));
+                    }
+                }
             });
         });
 
-        if (refreshBtn) refreshBtn.addEventListener('click', () => loadFeed(currentFilter));
+        if (refreshBtn) refreshBtn.addEventListener('click', () => {
+            if (currentCompany) return loadCompany(currentCompany, currentFilter);
+            return loadCompanies();
+        });
+
+        companiesEl.addEventListener('click', (e) => {
+            const card = e.target && e.target.closest ? e.target.closest('.walkin-company-card') : null;
+            if (!card) return;
+            const raw = card.getAttribute('data-company');
+            if (!raw) return;
+            const company = decodeURIComponent(raw);
+            // reset pills to All when opening company
+            filterBtns.forEach((b) => {
+                const isAll = b.getAttribute('data-gallery-filter') === 'all';
+                b.classList.toggle('active', isAll);
+                b.setAttribute('aria-selected', isAll ? 'true' : 'false');
+            });
+            loadCompany(company, 'all');
+        });
+
+        companyBackBtn.addEventListener('click', () => {
+            currentCompany = '';
+            commentCompanyInput.value = '';
+            // reset pills to All
+            filterBtns.forEach((b) => {
+                const isAll = b.getAttribute('data-gallery-filter') === 'all';
+                b.classList.toggle('active', isAll);
+                b.setAttribute('aria-selected', isAll ? 'true' : 'false');
+            });
+            loadCompanies();
+        });
 
         // Modal viewer
         const modalEl = document.getElementById('walkinGalleryModal');
@@ -983,6 +1110,7 @@
                 const fd = new FormData(commentForm);
                 const payload = {
                     walkin_gallery_item_id: null,
+                    company_name: fd.get('company_name'),
                     name: fd.get('name'),
                     comment: fd.get('comment'),
                     website: fd.get('website'),
@@ -1003,6 +1131,8 @@
                     }
                     const data = await res.json();
                     commentForm.reset();
+                    // keep current company in hidden input after reset
+                    commentCompanyInput.value = currentCompany || payload.company_name || '';
                     showAlert((data && data.message) ? data.message : 'Komentar terkirim.', 'success');
                 } catch (err) {
                     showAlert('Gagal mengirim komentar. Coba lagi.', 'warning');
@@ -1010,8 +1140,8 @@
             });
         }
 
-        // initial load
-        loadFeed('all');
+        // initial load: show company cards
+        loadCompanies();
     })();
 </script>
 @endpush
@@ -1092,6 +1222,40 @@
     }
     .walkin-media-caption {
         padding: 10px 10px 12px 10px;
+    }
+
+    .walkin-company-card {
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+        overflow: hidden;
+        background: #fff;
+        transition: transform .12s ease, box-shadow .12s ease;
+    }
+    .walkin-company-card:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 10px 24px rgba(2,6,23,0.10);
+    }
+    .walkin-company-thumb {
+        position: relative;
+        width: 100%;
+        height: 140px;
+        background-color: #f3f4f6;
+        background-size: cover;
+        background-position: center;
+    }
+    .walkin-company-badge {
+        position: absolute;
+        left: 10px;
+        top: 10px;
+        background: rgba(17,24,39,0.85);
+        color: #fff;
+        padding: 4px 10px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+    .walkin-company-body {
+        padding: 12px 12px 14px 12px;
     }
 
     .grid-container {

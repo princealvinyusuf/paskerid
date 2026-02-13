@@ -13,6 +13,7 @@ class WalkinGalleryComment extends Model
 
     protected $fillable = [
         'walkin_gallery_item_id',
+        'company_name',
         'name',
         'comment',
         'status',

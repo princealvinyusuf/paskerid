@@ -13,6 +13,7 @@ class WalkinGalleryItem extends Model
 
     protected $fillable = [
         'type',
+        'company_name',
         'title',
         'caption',
         'media_path',
