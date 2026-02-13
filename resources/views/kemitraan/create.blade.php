@@ -448,41 +448,64 @@
 
                     <!-- Company detail -->
                     <div id="walkinGalleryCompanyDetail" class="d-none">
-                        <div class="d-flex align-items-center justify-content-between mb-2">
-                            <button type="button" class="btn btn-outline-secondary btn-sm" id="btnCompanyBack">
-                                <i class="bi bi-arrow-left me-1"></i>Kembali
-                            </button>
-                            <div class="text-muted small">Tampilan dokumentasi & komentar</div>
-                        </div>
-                        <div class="fw-semibold mb-2" id="walkinGalleryCompanyTitle"></div>
-                        <div id="walkinGalleryGrid" class="row g-2"></div>
-                    </div>
-
-                    <div id="walkinGalleryComments" class="d-none">
-                        <div class="border rounded p-3 bg-light mb-3">
-                            <div class="fw-semibold mb-2">Tulis Komentar</div>
-                            <form id="walkinGalleryCommentForm">
-                                <input type="hidden" name="company_name" id="walkinGalleryCommentCompany" value="">
-                                <div class="row g-2">
-                                    <div class="col-12 col-md-5">
-                                        <input type="text" class="form-control" name="name" placeholder="Nama kamu" required maxlength="80">
-                                    </div>
-                                    <div class="col-12 col-md-7">
-                                        <input type="text" class="form-control" name="comment" placeholder="Tulis komentar singkat..." required maxlength="1000">
-                                    </div>
+                        <div class="d-flex align-items-start justify-content-between mb-3">
+                            <div class="d-flex align-items-center gap-2">
+                                <button type="button" class="btn btn-light btn-sm border" id="btnCompanyBack">
+                                    <i class="bi bi-arrow-left me-1"></i>Kembali
+                                </button>
+                                <div>
+                                    <div class="text-muted small">Dokumentasi perusahaan</div>
+                                    <div class="walkin-company-title fw-semibold" id="walkinGalleryCompanyTitle"></div>
                                 </div>
-                                <input type="text" name="website" class="d-none" tabindex="-1" autocomplete="off">
-                                <div class="d-flex justify-content-between align-items-center mt-2">
-                                    <div class="text-muted small">Komentar akan tampil setelah disetujui admin.</div>
-                                    <button type="submit" class="btn btn-primary btn-sm">
-                                        <i class="bi bi-send me-1"></i>Kirim
-                                    </button>
-                                </div>
-                            </form>
+                            </div>
+                            <div class="text-muted small d-none d-md-block">Klik item untuk melihat detail.</div>
                         </div>
 
-                        <div class="fw-semibold mb-2">Komentar Terbaru</div>
-                        <div id="walkinGalleryCommentList" class="d-flex flex-column gap-2"></div>
+                        <div class="row g-3">
+                            <div class="col-12 col-lg-8">
+                                <div class="walkin-panel p-3 p-md-4">
+                                    <div class="d-flex align-items-center justify-content-between mb-3">
+                                        <div class="fw-semibold">Galeri</div>
+                                        <div class="text-muted small">Foto & video terbaru</div>
+                                    </div>
+                                    <div id="walkinGalleryGrid" class="row g-3"></div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-4">
+                                <div id="walkinGalleryComments" class="walkin-panel p-3 p-md-4 walkin-sticky">
+                                    <div class="d-flex align-items-center justify-content-between mb-3">
+                                        <div class="fw-semibold">Komentar</div>
+                                        <div class="text-muted small">Setelah disetujui admin</div>
+                                    </div>
+
+                                    <div class="walkin-comment-compose mb-3">
+                                        <form id="walkinGalleryCommentForm">
+                                            <input type="hidden" name="company_name" id="walkinGalleryCommentCompany" value="">
+                                            <div class="mb-2">
+                                                <label class="form-label small text-muted mb-1">Nama</label>
+                                                <input type="text" class="form-control" name="name" placeholder="Nama kamu" required maxlength="80">
+                                            </div>
+                                            <div class="mb-2">
+                                                <label class="form-label small text-muted mb-1">Komentar</label>
+                                                <textarea class="form-control" name="comment" rows="3" placeholder="Tulis komentar singkat..." required maxlength="1000"></textarea>
+                                            </div>
+                                            <input type="text" name="website" class="d-none" tabindex="-1" autocomplete="off">
+                                            <div class="d-flex justify-content-end mt-2">
+                                                <button type="submit" class="btn btn-primary btn-sm px-3">
+                                                    <i class="bi bi-send me-1"></i>Kirim
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+
+                                    <div class="d-flex align-items-center justify-content-between mb-2">
+                                        <div class="fw-semibold">Terbaru</div>
+                                        <div class="text-muted small" id="walkinCommentCount"></div>
+                                    </div>
+                                    <div id="walkinGalleryCommentList" class="d-flex flex-column gap-2"></div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -849,16 +872,20 @@
                 const label = isPhoto ? 'Foto' : 'Video';
 
                 const col = document.createElement('div');
-                col.className = 'col-6 col-md-4';
+                col.className = 'col-12 col-sm-6 col-xl-4';
                 col.innerHTML = `
                     <div class="walkin-media-card" role="button" tabindex="0"
                          data-item='${encodeURIComponent(JSON.stringify(item))}'>
                         <div class="walkin-media-thumb" style="background-image:url('${thumb ? thumb : ''}')">
                             <div class="walkin-media-badge"><i class="bi ${icon} me-1"></i>${label}</div>
+                            <div class="walkin-media-grad"></div>
                         </div>
                         <div class="walkin-media-caption">
-                            <div class="fw-semibold small text-truncate">${(item.title || label)}</div>
-                            <div class="text-muted small text-truncate">${(item.caption || '')}</div>
+                            <div class="d-flex align-items-start justify-content-between gap-2">
+                                <div class="fw-semibold text-truncate">${escapeHtml(item.title || label)}</div>
+                                <i class="bi bi-arrow-up-right text-muted"></i>
+                            </div>
+                            <div class="text-muted small walkin-2line">${escapeHtml(item.caption || '')}</div>
                         </div>
                     </div>
                 `;
@@ -880,15 +907,19 @@
                 const badgeIcon = (coverType === 'photo') ? 'bi-image' : 'bi-play-circle';
 
                 const col = document.createElement('div');
-                col.className = 'col-12 col-md-6';
+                col.className = 'col-12 col-lg-6';
                 col.innerHTML = `
                     <div class="walkin-company-card" role="button" tabindex="0" data-company="${encodeURIComponent(name)}">
                         <div class="walkin-company-thumb" style="background-image:url('${thumb ? thumb : ''}')">
                             <div class="walkin-company-badge"><i class="bi ${badgeIcon} me-1"></i>${escapeHtml(String(count))} item</div>
+                            <div class="walkin-company-grad"></div>
                         </div>
                         <div class="walkin-company-body">
-                            <div class="fw-semibold">${escapeHtml(name)}</div>
-                            <div class="text-muted small">Klik untuk lihat dokumentasi & komentar</div>
+                            <div class="d-flex align-items-center justify-content-between gap-2">
+                                <div class="fw-semibold text-truncate">${escapeHtml(name)}</div>
+                                <span class="walkin-chip">Lihat</span>
+                            </div>
+                            <div class="text-muted small">Dokumentasi & komentar terbaru</div>
                         </div>
                     </div>
                 `;
@@ -898,20 +929,29 @@
 
         function renderComments(comments) {
             commentListEl.innerHTML = '';
+            const countEl = document.getElementById('walkinCommentCount');
+            if (countEl) countEl.textContent = (comments && comments.length) ? `${comments.length} komentar` : '';
             if (!comments || comments.length === 0) {
                 commentListEl.innerHTML = `<div class="text-muted small">Belum ada komentar.</div>`;
                 return;
             }
             comments.forEach((c) => {
                 const card = document.createElement('div');
-                card.className = 'border rounded p-2 bg-white';
+                card.className = 'walkin-comment-card';
                 const date = c.created_at ? String(c.created_at).slice(0, 10) : '';
+                const name = (c.name || '').trim();
+                const initial = name ? name.slice(0, 1).toUpperCase() : '?';
                 card.innerHTML = `
-                    <div class="d-flex justify-content-between align-items-start">
-                        <div class="fw-semibold">${escapeHtml(c.name || '')}</div>
-                        <div class="text-muted small">${escapeHtml(date)}</div>
+                    <div class="d-flex align-items-start gap-2">
+                        <div class="walkin-avatar">${escapeHtml(initial)}</div>
+                        <div class="flex-grow-1">
+                            <div class="d-flex justify-content-between align-items-start gap-2">
+                                <div class="fw-semibold">${escapeHtml(name)}</div>
+                                <div class="text-muted small">${escapeHtml(date)}</div>
+                            </div>
+                            <div class="small mt-1">${escapeHtml(c.comment || '')}</div>
+                        </div>
                     </div>
-                    <div class="small mt-1">${escapeHtml(c.comment || '')}</div>
                 `;
                 commentListEl.appendChild(card);
             });
@@ -1119,72 +1159,157 @@
         color: #111827;
         box-shadow: 0 6px 16px rgba(2,6,23,0.10);
     }
+    .walkin-company-title {
+        font-size: 1.15rem;
+        line-height: 1.25;
+        letter-spacing: -0.01em;
+        color: #0f172a;
+    }
+    .walkin-panel {
+        border: 1px solid rgba(15,23,42,0.10);
+        border-radius: 16px;
+        background: rgba(255,255,255,0.92);
+        box-shadow: 0 10px 30px rgba(2,6,23,0.06);
+        backdrop-filter: blur(8px);
+    }
+    .walkin-sticky {
+        position: sticky;
+        top: 88px;
+    }
+    @media (max-width: 991.98px) {
+        .walkin-sticky { position: static; top: auto; }
+    }
+
+    .walkin-2line {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
+    }
     .walkin-media-card {
-        border: 1px solid #e5e7eb;
-        border-radius: 12px;
+        border: 1px solid rgba(15,23,42,0.10);
+        border-radius: 16px;
         overflow: hidden;
         background: #fff;
-        transition: transform .12s ease, box-shadow .12s ease;
+        box-shadow: 0 8px 22px rgba(2,6,23,0.06);
+        transition: transform .14s ease, box-shadow .14s ease, border-color .14s ease;
     }
     .walkin-media-card:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 10px 24px rgba(2,6,23,0.10);
+        transform: translateY(-2px);
+        border-color: rgba(15,23,42,0.16);
+        box-shadow: 0 16px 40px rgba(2,6,23,0.12);
     }
     .walkin-media-thumb {
         position: relative;
         width: 100%;
-        height: 130px;
-        background-color: #f3f4f6;
+        height: 170px;
+        background-color: #eef2ff;
         background-size: cover;
         background-position: center;
     }
     .walkin-media-badge {
         position: absolute;
-        left: 10px;
-        top: 10px;
-        background: rgba(17,24,39,0.85);
+        left: 12px;
+        top: 12px;
+        background: rgba(15,23,42,0.78);
         color: #fff;
-        padding: 4px 8px;
+        padding: 6px 10px;
         border-radius: 999px;
         font-size: 12px;
         font-weight: 600;
+        z-index: 2;
+    }
+    .walkin-media-grad {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(180deg, rgba(2,6,23,0.0) 30%, rgba(2,6,23,0.35) 100%);
+        opacity: 0.85;
+        pointer-events: none;
     }
     .walkin-media-caption {
-        padding: 10px 10px 12px 10px;
+        padding: 12px 12px 14px 12px;
     }
 
     .walkin-company-card {
-        border: 1px solid #e5e7eb;
-        border-radius: 14px;
+        border: 1px solid rgba(15,23,42,0.10);
+        border-radius: 18px;
         overflow: hidden;
         background: #fff;
-        transition: transform .12s ease, box-shadow .12s ease;
+        box-shadow: 0 10px 26px rgba(2,6,23,0.06);
+        transition: transform .14s ease, box-shadow .14s ease, border-color .14s ease;
     }
     .walkin-company-card:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 10px 24px rgba(2,6,23,0.10);
+        transform: translateY(-2px);
+        border-color: rgba(15,23,42,0.16);
+        box-shadow: 0 18px 44px rgba(2,6,23,0.12);
     }
     .walkin-company-thumb {
         position: relative;
         width: 100%;
         height: 140px;
-        background-color: #f3f4f6;
+        background-color: #eef2ff;
         background-size: cover;
         background-position: center;
     }
     .walkin-company-badge {
         position: absolute;
-        left: 10px;
-        top: 10px;
-        background: rgba(17,24,39,0.85);
+        left: 12px;
+        top: 12px;
+        background: rgba(15,23,42,0.78);
         color: #fff;
-        padding: 4px 10px;
+        padding: 6px 10px;
         border-radius: 999px;
         font-size: 12px;
         font-weight: 600;
+        z-index: 2;
+    }
+    .walkin-company-grad {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(180deg, rgba(2,6,23,0.0) 20%, rgba(2,6,23,0.40) 100%);
+        opacity: 0.9;
+        pointer-events: none;
     }
     .walkin-company-body {
         padding: 12px 12px 14px 12px;
+    }
+    .walkin-chip {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 4px 10px;
+        font-size: 12px;
+        font-weight: 700;
+        border-radius: 999px;
+        background: rgba(37,99,235,0.10);
+        color: #1d4ed8;
+        border: 1px solid rgba(37,99,235,0.15);
+        flex: 0 0 auto;
+    }
+
+    .walkin-comment-compose textarea.form-control {
+        resize: vertical;
+        min-height: 88px;
+    }
+    .walkin-comment-card {
+        border: 1px solid rgba(15,23,42,0.10);
+        border-radius: 14px;
+        background: #ffffff;
+        padding: 10px 10px;
+        box-shadow: 0 6px 16px rgba(2,6,23,0.05);
+    }
+    .walkin-avatar {
+        width: 34px;
+        height: 34px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, rgba(37,99,235,0.18), rgba(16,185,129,0.16));
+        border: 1px solid rgba(15,23,42,0.10);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        color: #0f172a;
+        flex: 0 0 auto;
     }
 
     .grid-container {
