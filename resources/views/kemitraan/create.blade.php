@@ -599,18 +599,33 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <div class="row g-3">
-          <div class="col-md-5">
-            <img id="agendaModalImage" src="" alt="Agenda Image" class="img-fluid rounded-4 w-100" style="object-fit:cover;max-height:320px;">
-          </div>
-          <div class="col-md-7">
+        <div class="walkin-agenda-detail">
             <h4 id="agendaModalTitle" class="fw-bold mb-1"></h4>
-            <div class="mb-2 text-muted" id="agendaModalOrganizer"></div>
-            <div class="mb-2"><i class="fa fa-calendar-alt me-2"></i><span id="agendaModalDate"></span></div>
-            <div class="mb-2"><i class="fa fa-map-marker-alt me-2"></i><span id="agendaModalLocation"></span></div>
-            <div class="mb-2" id="agendaModalRegistration"></div>
-            <div class="mt-3" id="agendaModalDescription"></div>
-          </div>
+            <div class="text-muted mb-3" id="agendaModalOrganizer"></div>
+
+            <div class="walkin-agenda-meta mb-3">
+                <div class="walkin-agenda-meta-item">
+                    <i class="fa fa-calendar-alt"></i>
+                    <div>
+                        <div class="small text-muted">Tanggal</div>
+                        <div class="fw-semibold" id="agendaModalDate"></div>
+                    </div>
+                </div>
+                <div class="walkin-agenda-meta-item">
+                    <i class="fa fa-map-marker-alt"></i>
+                    <div>
+                        <div class="small text-muted">Lokasi</div>
+                        <div class="fw-semibold" id="agendaModalLocation"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-3" id="agendaModalRegistration"></div>
+
+            <div class="walkin-agenda-desc">
+                <div class="small text-muted mb-1">Deskripsi</div>
+                <div id="agendaModalDescription"></div>
+            </div>
         </div>
       </div>
     </div>
@@ -942,18 +957,6 @@
             document.getElementById('agendaModalOrganizer').textContent = button.getAttribute('data-organizer') || '';
             document.getElementById('agendaModalDate').textContent = button.getAttribute('data-date') || '';
             document.getElementById('agendaModalLocation').textContent = button.getAttribute('data-location') || '';
-            const img = document.getElementById('agendaModalImage');
-            const imgUrl = button.getAttribute('data-image');
-            if (imgUrl) {
-                img.src = imgUrl;
-                img.alt = button.getAttribute('data-title') || 'Agenda Image';
-                img.onerror = function () {
-                    this.src = 'https://via.placeholder.com/400x300?text=No+Image';
-                };
-            } else {
-                img.src = 'https://via.placeholder.com/400x300?text=No+Image';
-                img.alt = 'No Image';
-            }
             const regUrl = button.getAttribute('data-registration');
             if (regUrl) {
                 document.getElementById('agendaModalRegistration').innerHTML =
@@ -1506,6 +1509,41 @@
     }
     .walkin-schedule-upcoming {
         background: rgba(37,99,235,0.10) !important;
+    }
+
+    /* Agenda detail modal (no image) */
+    .walkin-agenda-detail {
+        padding: 4px 2px;
+    }
+    .walkin-agenda-meta {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+    @media (max-width: 576px) {
+        .walkin-agenda-meta { grid-template-columns: 1fr; }
+    }
+    .walkin-agenda-meta-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 10px 12px;
+        border: 1px solid rgba(15,23,42,0.10);
+        border-radius: 14px;
+        background: rgba(2,6,23,0.02);
+    }
+    .walkin-agenda-meta-item i {
+        color: #2563eb;
+        margin-top: 2px;
+        width: 18px;
+        text-align: center;
+    }
+    .walkin-agenda-desc {
+        border: 1px solid rgba(15,23,42,0.10);
+        border-radius: 14px;
+        padding: 12px 12px;
+        background: #ffffff;
+        white-space: pre-wrap;
     }
 
     .grid-container {
