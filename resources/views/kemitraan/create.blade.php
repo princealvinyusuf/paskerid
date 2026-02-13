@@ -170,7 +170,6 @@
                                             <option value="Laki-laki" {{ $gender === 'Laki-laki' ? 'selected' : '' }}>Laki-laki</option>
                                             <option value="Perempuan" {{ $gender === 'Perempuan' ? 'selected' : '' }}>Perempuan</option>
                                             <option value="Laki-laki/Perempuan" {{ $gender === 'Laki-laki/Perempuan' ? 'selected' : '' }}>Laki-laki / Perempuan</option>
-                                            <option value="Bebas" {{ $gender === 'Bebas' ? 'selected' : '' }}>Bebas</option>
                                         </select>
                                     </div>
                                     <div class="col-md-6">
@@ -269,7 +268,6 @@
                                         <option value="Laki-laki">Laki-laki</option>
                                         <option value="Perempuan">Perempuan</option>
                                         <option value="Laki-laki/Perempuan">Laki-laki / Perempuan</option>
-                                        <option value="Bebas">Bebas</option>
                                     </select>
                                 </div>
                                 <div class="col-md-6">
