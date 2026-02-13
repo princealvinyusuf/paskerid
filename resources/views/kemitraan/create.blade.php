@@ -623,7 +623,7 @@
             <div class="mb-3" id="agendaModalRegistration"></div>
 
             <div class="walkin-agenda-desc">
-                <div class="small text-muted mb-1">Deskripsi</div>
+                <div class="small text-muted mb-0">Deskripsi</div>
                 <div id="agendaModalDescription"></div>
             </div>
         </div>
@@ -1541,9 +1541,15 @@
     .walkin-agenda-desc {
         border: 1px solid rgba(15,23,42,0.10);
         border-radius: 14px;
-        padding: 12px 12px;
+        padding: 10px 12px;
         background: #ffffff;
         white-space: pre-wrap;
+        font-size: 0.98rem;
+        line-height: 1.5;
+    }
+    .walkin-agenda-desc #agendaModalDescription {
+        margin-top: 6px;
+        color: #0f172a;
     }
 
     .grid-container {
