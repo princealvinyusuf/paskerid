@@ -4,21 +4,21 @@
 <div class="container mt-5 mb-5" style="max-width: 1200px;">
     <div class="text-center mb-4">
         <i class="bi bi-people-fill" style="font-size: 2.5rem; color: #0d6efd;"></i>
-        <h2 class="mt-2 mb-0">Pendaftaran Walk In Interview</h2>
+        <h2 class="mt-2 mb-0">Walk In Interview</h2>
         <p class="text-muted mb-0">Pusat Pasar Kerja</p>
     </div>
 
     <!-- Segmented toggle (top) -->
     <div class="mb-3">
         <div class="walkin-segmented" role="tablist" aria-label="Pilih tampilan">
-            <button type="button" class="walkin-seg-btn active" id="btnPanelForm" aria-selected="true">Form Pendaftaran Walk In</button>
-            <button type="button" class="walkin-seg-btn" id="btnPanelGallery" aria-selected="false">Galeri Walk In</button>
+            <button type="button" class="walkin-seg-btn" id="btnPanelForm" aria-selected="false">Form Pendaftaran Walk In</button>
+            <button type="button" class="walkin-seg-btn active" id="btnPanelGallery" aria-selected="true">Galeri Walk In</button>
         </div>
     </div>
 
     <div class="row g-4">
         <!-- Form (Big View) -->
-        <div class="col-12" id="panelForm">
+        <div class="col-12 d-none" id="panelForm">
             <div class="card shadow-lg w-100">
                 <div class="card-body p-4">
                     @if ($errors->any())
@@ -426,7 +426,7 @@
         </div>
 
         <!-- Gallery (Big View) -->
-        <div class="col-12 d-none" id="panelGallery">
+        <div class="col-12" id="panelGallery">
             <div class="card shadow-lg w-100 h-100">
                 <div class="card-body p-4">
                     <div class="d-flex align-items-center justify-content-between mb-2">
@@ -781,10 +781,10 @@
         btnForm.addEventListener('click', () => setActive('form'));
         btnGallery.addEventListener('click', () => setActive('gallery'));
 
-        // default
+        // default: Gallery first
         let last = null;
         try { last = localStorage.getItem('walkin_panel'); } catch (e) {}
-        if (last === 'gallery') setActive('gallery'); else setActive('form');
+        if (last === 'form') setActive('form'); else setActive('gallery');
     })();
 
     // Walk-in gallery UI (dynamic, admin-managed)
