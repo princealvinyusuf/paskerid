@@ -587,6 +587,31 @@
                                     <div id="walkinGalleryCommentList" class="d-flex flex-column gap-2"></div>
                                 </div>
                             </div>
+
+                            <div class="col-12">
+                                <div class="walkin-panel p-3 p-md-4">
+                                    <div class="d-flex align-items-center justify-content-between mb-2">
+                                        <div class="fw-semibold">Jadwal Walk In Di Perusahaan Ini</div>
+                                        <div class="text-muted small">Terdahulu & akan datang</div>
+                                    </div>
+                                    <div id="walkinCompanyScheduleLoading" class="text-muted small">Memuat jadwal...</div>
+                                    <div id="walkinCompanyScheduleEmpty" class="text-muted small d-none">Belum ada jadwal untuk perusahaan ini.</div>
+                                    <div id="walkinCompanyScheduleWrap" class="d-none">
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered align-middle walkin-schedule-table mb-0">
+                                                <thead class="table-light">
+                                                    <tr>
+                                                        <th style="width:160px">Tanggal</th>
+                                                        <th style="min-width:360px">Kegiatan</th>
+                                                        <th>Deskripsi</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="walkinCompanyScheduleBody"></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1038,6 +1063,7 @@
     (function () {
         const feedUrl = @json(route('walkin-gallery.feed'));
         const commentUrl = @json(route('walkin-gallery.comments.store'));
+        const scheduleUrl = @json(route('walkin-schedule.company'));
         const csrf = @json(csrf_token());
 
         const loadingEl = document.getElementById('walkinGalleryLoading');
@@ -1052,6 +1078,10 @@
         const refreshBtn = document.getElementById('btnGalleryRefresh');
         const commentForm = document.getElementById('walkinGalleryCommentForm');
         const commentCompanyInput = document.getElementById('walkinGalleryCommentCompany');
+        const scheduleLoadingEl = document.getElementById('walkinCompanyScheduleLoading');
+        const scheduleEmptyEl = document.getElementById('walkinCompanyScheduleEmpty');
+        const scheduleWrapEl = document.getElementById('walkinCompanyScheduleWrap');
+        const scheduleBodyEl = document.getElementById('walkinCompanyScheduleBody');
 
         if (!loadingEl || !gridEl || !companiesEl || !companyDetailEl || !companyTitleEl || !companyBackBtn || !commentsWrapEl || !commentListEl || !alertEl || !commentCompanyInput) return;
 
@@ -1183,6 +1213,107 @@
                 .replace(/'/g, '&#039;');
         }
 
+        function formatDateParts(ymd) {
+            // ymd: YYYY-MM-DD
+            const parts = String(ymd || '').split('-');
+            if (parts.length !== 3) return { dayMonth: '-', year: '' };
+            const y = parts[0];
+            const m = parseInt(parts[1], 10);
+            const d = parseInt(parts[2], 10);
+            const months = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+            const mm = months[(m - 1)] || '';
+            return { dayMonth: `${String(d).padStart(2,'0')} ${mm}`.trim(), year: y };
+        }
+
+        function formatLongDate(ymd) {
+            const parts = String(ymd || '').split('-');
+            if (parts.length !== 3) return '';
+            const y = parts[0];
+            const m = parseInt(parts[1], 10);
+            const d = parseInt(parts[2], 10);
+            const months = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+            const mm = months[(m - 1)] || '';
+            return `${String(d).padStart(2,'0')} ${mm} ${y}`.trim();
+        }
+
+        function setScheduleState(state) {
+            if (!scheduleLoadingEl || !scheduleEmptyEl || !scheduleWrapEl || !scheduleBodyEl) return;
+            scheduleLoadingEl.classList.toggle('d-none', state !== 'loading');
+            scheduleEmptyEl.classList.toggle('d-none', state !== 'empty');
+            scheduleWrapEl.classList.toggle('d-none', state !== 'ready');
+        }
+
+        function renderCompanySchedule(upcoming, past) {
+            if (!scheduleBodyEl) return;
+            scheduleBodyEl.innerHTML = '';
+            const rows = [];
+            (upcoming || []).forEach((a) => rows.push({ ...a, _bucket: 'upcoming' }));
+            (past || []).forEach((a) => rows.push({ ...a, _bucket: 'past' }));
+
+            if (rows.length === 0) {
+                setScheduleState('empty');
+                return;
+            }
+
+            // Sort: upcoming asc then past desc (already server ordered, but keep stable)
+            rows.sort((x, y) => {
+                if (x._bucket !== y._bucket) return x._bucket === 'upcoming' ? -1 : 1;
+                if (x.date === y.date) return 0;
+                return x._bucket === 'upcoming'
+                    ? (x.date < y.date ? -1 : 1)
+                    : (x.date > y.date ? -1 : 1);
+            });
+
+            rows.forEach((a, idx) => {
+                const isUpcoming = a._bucket === 'upcoming';
+                const { dayMonth, year } = formatDateParts(a.date);
+                const tr = document.createElement('tr');
+                tr.className = (!isUpcoming && idx % 2 === 1) ? 'walkin-schedule-odd' : (isUpcoming && idx === 0 ? 'walkin-schedule-upcoming' : '');
+                tr.innerHTML = `
+                    <td class="fw-semibold">
+                        <div class="walkin-schedule-date">${escapeHtml(dayMonth)}</div>
+                        <div class="text-muted small">${escapeHtml(year)}</div>
+                    </td>
+                    <td><i class="fas fa-user-tie walkin-schedule-icon"></i>${escapeHtml(a.title || '')}</td>
+                    <td>
+                        <div class="walkin-2line">${escapeHtml(a.description || '')}</div>
+                        <div class="d-flex align-items-center gap-2 mt-2">
+                            <button
+                                class="btn btn-outline-primary btn-sm"
+                                data-bs-toggle="modal"
+                                data-bs-target="#agendaDetailModal"
+                                data-title="${escapeHtml(a.title || '')}"
+                                data-organizer="${escapeHtml(a.organizer || '')}"
+                                data-date="${escapeHtml(formatLongDate(a.date))}"
+                                data-location="${escapeHtml(a.location || '')}"
+                                data-registration="${escapeHtml(a.registration_url || '')}"
+                                data-description="${escapeHtml(a.description || '')}"
+                            >Detail</button>
+                            ${isUpcoming ? `<span class="badge text-bg-primary">Akan datang</span>` : `<span class="badge text-bg-secondary">Terdahulu</span>`}
+                        </div>
+                    </td>
+                `;
+                scheduleBodyEl.appendChild(tr);
+            });
+
+            setScheduleState('ready');
+        }
+
+        async function loadCompanySchedule(company) {
+            if (!scheduleUrl || !scheduleLoadingEl || !scheduleEmptyEl || !scheduleWrapEl || !scheduleBodyEl) return;
+            setScheduleState('loading');
+            try {
+                const url = new URL(scheduleUrl, window.location.origin);
+                url.searchParams.set('company', company);
+                const res = await fetch(url.toString(), { headers: { 'Accept': 'application/json' } });
+                const data = await res.json();
+                renderCompanySchedule(data && data.upcoming ? data.upcoming : [], data && data.past ? data.past : []);
+            } catch (e) {
+                // if fails, just hide section quietly
+                setScheduleState('empty');
+            }
+        }
+
         let currentFilter = 'all';
         let currentCompany = '';
         let lastFeed = { items: [], comments: [], companies: [] };
@@ -1237,6 +1368,7 @@
                 commentCompanyInput.value = company;
                 renderGrid(lastFeed.items || []);
                 renderComments(lastFeed.comments || []);
+                loadCompanySchedule(company);
             } catch (e) {
                 loadingEl.classList.add('d-none');
                 showAlert('Gagal memuat galeri. Coba refresh.', 'warning');
@@ -1260,6 +1392,8 @@
         companyBackBtn.addEventListener('click', () => {
             currentCompany = '';
             commentCompanyInput.value = '';
+            if (scheduleBodyEl) scheduleBodyEl.innerHTML = '';
+            setScheduleState('empty');
             loadCompanies();
         });
 

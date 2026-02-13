@@ -53,6 +53,10 @@ Route::post('/walkin-gallery/comments', [WalkinGalleryController::class, 'storeC
     ->middleware('throttle:5,1')
     ->name('walkin-gallery.comments.store');
 
+// Walk-in Schedule (company-specific, public)
+Route::get('/walkin-schedule/company', [App\Http\Controllers\KemitraanController::class, 'companyWalkinSchedule'])
+    ->name('walkin-schedule.company');
+
 Route::get('/kebijakan-privasi', function () {
     return view('kebijakan_privasi');
 })->name('kebijakan_privasi');
