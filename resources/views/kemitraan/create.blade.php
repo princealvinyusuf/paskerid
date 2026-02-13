@@ -8,17 +8,17 @@
         <p class="text-muted mb-0">Pusat Pasar Kerja</p>
     </div>
 
-    <!-- Mobile segmented toggle -->
-    <div class="d-lg-none mb-3">
-        <div class="walkin-segmented" role="tablist" aria-label="Pilih panel">
-            <button type="button" class="walkin-seg-btn active" id="btnPanelForm" aria-selected="true">Form Pendaftaran</button>
+    <!-- Segmented toggle (top) -->
+    <div class="mb-3">
+        <div class="walkin-segmented" role="tablist" aria-label="Pilih tampilan">
+            <button type="button" class="walkin-seg-btn active" id="btnPanelForm" aria-selected="true">Form Pendaftaran Walk In</button>
             <button type="button" class="walkin-seg-btn" id="btnPanelGallery" aria-selected="false">Galeri Walk In</button>
         </div>
     </div>
 
     <div class="row g-4">
-        <!-- Left: Form -->
-        <div class="col-lg-6" id="panelForm">
+        <!-- Form (Big View) -->
+        <div class="col-12" id="panelForm">
             <div class="card shadow-lg w-100">
                 <div class="card-body p-4">
                     @if ($errors->any())
@@ -425,8 +425,8 @@
             </div>
         </div>
 
-        <!-- Right: Gallery -->
-        <div class="col-lg-6" id="panelGallery">
+        <!-- Gallery (Big View) -->
+        <div class="col-12 d-none" id="panelGallery">
             <div class="card shadow-lg w-100 h-100">
                 <div class="card-body p-4">
                     <div class="d-flex align-items-center justify-content-between mb-2">
@@ -434,7 +434,7 @@
                             <h5 class="mb-0"><i class="bi bi-images me-2"></i>Galeri Walk In</h5>
                             <div class="text-muted small">Dokumentasi kegiatan (foto, video, komentar)</div>
                         </div>
-                        <button type="button" class="btn btn-outline-secondary btn-sm d-none d-lg-inline" id="btnGalleryRefresh">
+                        <button type="button" class="btn btn-outline-secondary btn-sm" id="btnGalleryRefresh">
                             <i class="bi bi-arrow-clockwise me-1"></i>Refresh
                         </button>
                     </div>
@@ -785,19 +785,6 @@
         let last = null;
         try { last = localStorage.getItem('walkin_panel'); } catch (e) {}
         if (last === 'gallery') setActive('gallery'); else setActive('form');
-
-        // On desktop always show both
-        function onResize() {
-            if (window.matchMedia('(min-width: 992px)').matches) {
-                panelForm.classList.remove('d-none');
-                panelGallery.classList.remove('d-none');
-            } else {
-                const cur = btnGallery.classList.contains('active') ? 'gallery' : 'form';
-                setActive(cur);
-            }
-        }
-        window.addEventListener('resize', onResize);
-        onResize();
     })();
 
     // Walk-in gallery UI (dynamic, admin-managed)
