@@ -964,7 +964,8 @@
             } else {
                 document.getElementById('agendaModalRegistration').innerHTML = '';
             }
-            document.getElementById('agendaModalDescription').textContent = button.getAttribute('data-description') || '';
+            // Trim to avoid leading newlines/spaces creating large gaps (white-space: pre-wrap)
+            document.getElementById('agendaModalDescription').textContent = (button.getAttribute('data-description') || '').trim();
         });
     });
 
@@ -1546,9 +1547,12 @@
         white-space: pre-wrap;
         font-size: 0.98rem;
         line-height: 1.5;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
     }
     .walkin-agenda-desc #agendaModalDescription {
-        margin-top: 6px;
+        margin-top: 0;
         color: #0f172a;
     }
 
