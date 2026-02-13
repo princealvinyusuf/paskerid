@@ -26,7 +26,8 @@ class KemitraanController extends Controller
         $defaultTypeId = (int) $request->input('type_of_partnership_id', (int) optional($dropdownPartnership->first())->id);
         $fullyBookedDates = $this->computeFullyBookedDates($defaultTypeId, 180);
 
-        $walkinAgendas = $this->getWalkinAgendasFromBookedDates();
+        $walkinAgendas = $this->getWalkinAgendasFromBookedDates('upcoming');
+        $walkinAgendasPast = $this->getWalkinAgendasFromBookedDates('past', 80);
 
         return view('kemitraan.create', compact(
             'dropdownPartnership',
@@ -35,7 +36,8 @@ class KemitraanController extends Controller
             'paskerFacility',
             'fullyBookedDates',
             'defaultTypeId',
-            'walkinAgendas'
+            'walkinAgendas',
+            'walkinAgendasPast'
         ));
     }
 
@@ -205,7 +207,11 @@ class KemitraanController extends Controller
         return array_values(array_unique($disabled));
     }
 
-    private function getWalkinAgendasFromBookedDates()
+    /**
+     * @param string $scope 'upcoming'|'past'
+     * @param int $limit max records for past scope to keep UI light
+     */
+    private function getWalkinAgendasFromBookedDates(string $scope = 'upcoming', int $limit = 200)
     {
         $hasRange = Schema::hasColumn('booked_date', 'booked_date_start');
         $hasTimeRange = Schema::hasColumn('booked_date', 'booked_time_start');
@@ -224,11 +230,28 @@ class KemitraanController extends Controller
             }
         });
 
-        // Upcoming only (today and future)
-        if ($hasRange) {
-            $query->where('booked_date_start', '>=', $today)->orderBy('booked_date_start', 'asc');
+        // Scope filter: upcoming (today/future) or past
+        if ($scope === 'past') {
+            if ($hasRange) {
+                // consider past when finish < today (or start < today when finish null)
+                $query->where(function ($q) use ($today) {
+                    $q->where('booked_date_finish', '<', $today)
+                      ->orWhere(function ($q2) use ($today) {
+                          $q2->whereNull('booked_date_finish')
+                             ->where('booked_date_start', '<', $today);
+                      });
+                })->orderBy('booked_date_start', 'desc');
+            } else {
+                $query->where('booked_date', '<', $today)->orderBy('booked_date', 'desc');
+            }
+            $query->limit(max(1, $limit));
         } else {
-            $query->where('booked_date', '>=', $today)->orderBy('booked_date', 'asc');
+            // Upcoming only (today and future)
+            if ($hasRange) {
+                $query->where('booked_date_start', '>=', $today)->orderBy('booked_date_start', 'asc');
+            } else {
+                $query->where('booked_date', '>=', $today)->orderBy('booked_date', 'asc');
+            }
         }
 
         $bookedDates = $query->get();
@@ -304,6 +327,9 @@ class KemitraanController extends Controller
             $agendas->push($agenda);
         }
 
+        if ($scope === 'past') {
+            return $agendas->sortByDesc('date')->values();
+        }
         return $agendas->sortBy('date')->values();
     }
 } 

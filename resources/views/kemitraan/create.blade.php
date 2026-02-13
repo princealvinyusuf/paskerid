@@ -27,6 +27,11 @@
                             <h5 class="mb-0"><i class="fa-solid fa-calendar-days me-2"></i>Jadwal Walk In</h5>
                             <div class="text-muted small">Informasi jadwal kegiatan Walk-in Interview yang akan datang.</div>
                         </div>
+                        <div class="d-flex align-items-center gap-2">
+                            <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#pastWalkinModal">
+                                <i class="fa fa-clock-rotate-left me-1"></i>Walk In Terdahulu
+                            </button>
+                        </div>
                     </div>
 
                     <div class="walkin-panel p-3 p-md-4">
@@ -588,6 +593,70 @@
             </div>
         </div>
     </div>
+</div>
+
+<!-- Modal: Past Walk-in schedules -->
+<div class="modal fade" id="pastWalkinModal" tabindex="-1" aria-labelledby="pastWalkinModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content rounded-4">
+      <div class="modal-header">
+        <div>
+            <h5 class="modal-title" id="pastWalkinModalLabel">Walk In Terdahulu</h5>
+            <div class="text-muted small">Daftar jadwal Walk-in Interview yang sudah lewat.</div>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="walkin-panel p-3 p-md-4">
+            <div class="table-responsive">
+                <table class="table table-bordered align-middle walkin-schedule-table">
+                    <thead class="table-light">
+                        <tr>
+                            <th style="width: 160px;">Tanggal</th>
+                            <th style="min-width: 360px;">Kegiatan</th>
+                            <th>Deskripsi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if(isset($walkinAgendasPast) && $walkinAgendasPast->count() > 0)
+                            @foreach($walkinAgendasPast as $idx => $agenda)
+                                @php $date = \Carbon\Carbon::parse($agenda->date); @endphp
+                                <tr class="{{ $idx % 2 === 1 ? 'walkin-schedule-odd' : '' }}">
+                                    <td class="fw-semibold">
+                                        <div class="walkin-schedule-date">{{ $date->format('d M') }}</div>
+                                        <div class="text-muted small">{{ $date->format('Y') }}</div>
+                                    </td>
+                                    <td><i class="fas fa-user-tie walkin-schedule-icon"></i>{{ $agenda->title }}</td>
+                                    <td>
+                                        <div class="walkin-2line">{{ $agenda->description }}</div>
+                                        <button
+                                            class="btn btn-outline-primary btn-sm ms-2 mt-2"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#agendaDetailModal"
+                                            data-title="{{ e($agenda->title) }}"
+                                            data-organizer="{{ e($agenda->organizer) }}"
+                                            data-date="{{ $date->format('d M Y') }}"
+                                            data-location="{{ e($agenda->location) }}"
+                                            data-registration="{{ $agenda->registration_url }}"
+                                            data-description="{{ e($agenda->description) }}"
+                                        >Detail</button>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        @else
+                            <tr>
+                                <td colspan="3" class="text-center text-muted py-4">
+                                    Belum ada data Walk In terdahulu.
+                                </td>
+                            </tr>
+                        @endif
+                    </tbody>
+                </table>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- Modal for Agenda Detail -->
@@ -1506,6 +1575,9 @@
     }
     .walkin-schedule-upcoming {
         background: rgba(37,99,235,0.10) !important;
+    }
+    #pastWalkinModal .modal-body {
+        padding: 14px;
     }
 
     /* Agenda detail modal (no image) */
