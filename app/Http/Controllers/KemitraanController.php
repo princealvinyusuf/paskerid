@@ -153,6 +153,11 @@ class KemitraanController extends Controller
             return response()->json(['upcoming' => [], 'past' => []]);
         }
 
+        $keywords = $this->extractCompanyKeywords($company);
+        if (empty($keywords)) {
+            return response()->json(['upcoming' => [], 'past' => []]);
+        }
+
         $today = Carbon::today()->format('Y-m-d');
         $hasRange = Schema::hasColumn('booked_date', 'booked_date_start');
         $hasTimeRange = Schema::hasColumn('booked_date', 'booked_time_start');
@@ -162,8 +167,13 @@ class KemitraanController extends Controller
             'kemitraan.rooms',
             'kemitraan.facilities',
             'typeOfPartnership'
-        ])->whereHas('kemitraan', function ($q) use ($company) {
-            $q->where('institution_name', $company);
+        ])->whereHas('kemitraan', function ($q) use ($keywords) {
+            // Match by keyword(s) so incomplete company names still work
+            // Example: "Prima Karya" will match "PT Prima Karya Sarana Sejahtera (PKSS)"
+            foreach ($keywords as $kw) {
+                $like = '%' . $this->escapeLike($kw) . '%';
+                $q->whereRaw("LOWER(institution_name) LIKE ? ESCAPE '\\\\'", [strtolower($like)]);
+            }
             if (Schema::hasColumn('kemitraan', 'status')) {
                 $q->where('status', 'approved');
             }
@@ -199,6 +209,48 @@ class KemitraanController extends Controller
         }
 
         return response()->json(['upcoming' => $upcoming, 'past' => $past]);
+    }
+
+    private function extractCompanyKeywords(string $company): array
+    {
+        $c = mb_strtolower($company);
+        // Normalize punctuation to spaces
+        $c = preg_replace('/[^\pL\pN]+/u', ' ', $c) ?? $c;
+        $parts = array_values(array_filter(array_map('trim', preg_split('/\s+/', $c) ?: [])));
+
+        // Common legal/entity stopwords
+        $stop = [
+            'pt', 'cv', 'tbk', 'ud', 'pd',
+            'persero', 'perseroan', 'terbatas', 'sejahtera', 'indonesia',
+            'co', 'company', 'corp', 'corporation', 'inc', 'ltd', 'limited',
+            'the', 'of', 'and',
+        ];
+
+        $keywords = [];
+        foreach ($parts as $p) {
+            if (mb_strlen($p) < 3) continue;
+            if (in_array($p, $stop, true)) continue;
+            $keywords[] = $p;
+        }
+
+        // Fallback: if everything was filtered out, use the first meaningful token
+        if (empty($keywords)) {
+            foreach ($parts as $p) {
+                if (mb_strlen($p) >= 2 && !in_array($p, $stop, true)) {
+                    $keywords[] = $p;
+                    break;
+                }
+            }
+        }
+
+        // Limit to 3 keywords to keep query cheap
+        return array_slice(array_values(array_unique($keywords)), 0, 3);
+    }
+
+    private function escapeLike(string $value): string
+    {
+        // Escape % and _ for LIKE; backslash is the escape char
+        return str_replace(['\\', '%', '_'], ['\\\\', '\%', '\_'], $value);
     }
 
     private function computeFullyBookedDates(int $typeId, int $daysAhead = 180): array
