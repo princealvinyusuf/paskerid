@@ -27,3 +27,4 @@ class WalkinGalleryComment extends Model
 }
 
 
+
