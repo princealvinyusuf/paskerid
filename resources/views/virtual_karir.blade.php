@@ -156,6 +156,49 @@
     .vk-agenda-row-odd {
         background: #f8f9fa;
     }
+    /* Agenda detail modal (match kemitraan style, no image) */
+    .vk-agenda-detail {
+        padding: 4px 2px;
+    }
+    .vk-agenda-meta {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+    @media (max-width: 576px) {
+        .vk-agenda-meta { grid-template-columns: 1fr; }
+    }
+    .vk-agenda-meta-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 10px 12px;
+        border: 1px solid rgba(15,23,42,0.10);
+        border-radius: 14px;
+        background: rgba(2,6,23,0.02);
+    }
+    .vk-agenda-meta-item i {
+        color: var(--primary-green);
+        margin-top: 2px;
+        width: 18px;
+        text-align: center;
+    }
+    .vk-agenda-desc {
+        border: 1px solid rgba(15,23,42,0.10);
+        border-radius: 14px;
+        padding: 10px 12px;
+        background: #ffffff;
+        white-space: pre-wrap;
+        font-size: 0.98rem;
+        line-height: 1.5;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+    .vk-agenda-desc #agendaModalDescription {
+        margin-top: 0;
+        color: #0f172a;
+    }
     .vk-fadein {
         animation: fadeInUp 0.8s cubic-bezier(0.23, 1, 0.32, 1);
     }
@@ -386,25 +429,40 @@
 </div>
 <!-- Modal for Agenda Detail -->
 <div class="modal fade" id="agendaDetailModal" tabindex="-1" aria-labelledby="agendaDetailModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg modal-dialog-centered">
-    <div class="modal-content">
+  <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content rounded-4">
       <div class="modal-header">
         <h5 class="modal-title" id="agendaDetailModalLabel">Detail Agenda</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <div class="row">
-          <div class="col-md-5 mb-3 mb-md-0">
-            <img id="agendaModalImage" src="" alt="Agenda Image" class="img-fluid rounded w-100" style="object-fit:cover;max-height:320px;">
-          </div>
-          <div class="col-md-7">
+        <div class="vk-agenda-detail">
             <h4 id="agendaModalTitle" class="fw-bold mb-1"></h4>
-            <div class="mb-2 text-muted" id="agendaModalOrganizer"></div>
-            <div class="mb-2"><i class="fa fa-calendar-alt me-2"></i><span id="agendaModalDate"></span></div>
-            <div class="mb-2"><i class="fa fa-map-marker-alt me-2"></i><span id="agendaModalLocation"></span></div>
-            <div class="mb-2" id="agendaModalRegistration"></div>
-            <div class="mt-3" id="agendaModalDescription"></div>
-          </div>
+            <div class="text-muted mb-3" id="agendaModalOrganizer"></div>
+
+            <div class="vk-agenda-meta mb-3">
+                <div class="vk-agenda-meta-item">
+                    <i class="fa fa-calendar-alt"></i>
+                    <div>
+                        <div class="small text-muted">Tanggal</div>
+                        <div class="fw-semibold" id="agendaModalDate"></div>
+                    </div>
+                </div>
+                <div class="vk-agenda-meta-item">
+                    <i class="fa fa-map-marker-alt"></i>
+                    <div>
+                        <div class="small text-muted">Lokasi</div>
+                        <div class="fw-semibold" id="agendaModalLocation"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-3" id="agendaModalRegistration"></div>
+
+            <div class="vk-agenda-desc">
+                <div class="small text-muted mb-0">Deskripsi</div>
+                <div id="agendaModalDescription"></div>
+            </div>
         </div>
       </div>
     </div>
@@ -436,24 +494,10 @@
         agendaModal.addEventListener('show.bs.modal', function (event) {
             var button = event.relatedTarget;
             if (!button) return;
-            // Debug log
-            console.log('Opening modal for:', button.getAttribute('data-title'));
             document.getElementById('agendaModalTitle').textContent = button.getAttribute('data-title') || '';
             document.getElementById('agendaModalOrganizer').textContent = button.getAttribute('data-organizer') || '';
             document.getElementById('agendaModalDate').textContent = button.getAttribute('data-date') || '';
             document.getElementById('agendaModalLocation').textContent = button.getAttribute('data-location') || '';
-            var img = document.getElementById('agendaModalImage');
-            var imgUrl = button.getAttribute('data-image');
-            if (imgUrl) {
-                img.src = imgUrl;
-                img.alt = button.getAttribute('data-title') || 'Agenda Image';
-                img.onerror = function() {
-                    this.src = 'https://via.placeholder.com/400x300?text=No+Image';
-                };
-            } else {
-                img.src = 'https://via.placeholder.com/400x300?text=No+Image';
-                img.alt = 'No Image';
-            }
             var regUrl = button.getAttribute('data-registration');
             var agendaDate = button.getAttribute('data-date');
             var isPast = false;
@@ -476,7 +520,7 @@
             } else {
                 document.getElementById('agendaModalRegistration').innerHTML = '';
             }
-            document.getElementById('agendaModalDescription').textContent = button.getAttribute('data-description') || '';
+            document.getElementById('agendaModalDescription').textContent = (button.getAttribute('data-description') || '').trim();
         });
     });
 </script>
