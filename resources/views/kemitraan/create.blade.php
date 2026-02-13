@@ -76,7 +76,6 @@
                                                         data-organizer="{{ e($agenda->organizer) }}"
                                                         data-date="{{ $date->format('d M Y') }}"
                                                         data-location="{{ e($agenda->location) }}"
-                                                        data-image="{{ $agenda->image_url }}"
                                                         data-registration="{{ $agenda->registration_url }}"
                                                         data-description="{{ e($agenda->description) }}"
                                                     >Detail</button>
