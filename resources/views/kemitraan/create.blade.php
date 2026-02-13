@@ -13,10 +13,87 @@
         <div class="walkin-segmented" role="tablist" aria-label="Pilih tampilan">
             <button type="button" class="walkin-seg-btn active" id="btnPanelGallery" aria-selected="true">Galeri Walk In</button>
             <button type="button" class="walkin-seg-btn" id="btnPanelForm" aria-selected="false">Form Pendaftaran Walk In</button>
+            <button type="button" class="walkin-seg-btn" id="btnPanelSchedule" aria-selected="false">Jadwal Walk In</button>
         </div>
     </div>
 
     <div class="row g-4">
+        <!-- Schedule -->
+        <div class="col-12 d-none" id="panelSchedule">
+            <div class="card shadow-lg w-100">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <div>
+                            <h5 class="mb-0"><i class="fa-solid fa-calendar-days me-2"></i>Jadwal Walk In</h5>
+                            <div class="text-muted small">Informasi jadwal kegiatan Walk-in Interview yang akan datang.</div>
+                        </div>
+                    </div>
+
+                    <div class="walkin-panel p-3 p-md-4">
+                        <div class="table-responsive">
+                            <table class="table table-bordered align-middle walkin-schedule-table">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th style="width: 160px;">Tanggal</th>
+                                        <th style="min-width: 360px;">Kegiatan</th>
+                                        <th>Deskripsi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if(isset($walkinAgendas) && $walkinAgendas->count() > 0)
+                                        @php
+                                            $nextIdx = null;
+                                            foreach($walkinAgendas as $idx => $agenda) {
+                                                if ($nextIdx === null && \Carbon\Carbon::parse($agenda->date)->isFuture()) {
+                                                    $nextIdx = $idx;
+                                                }
+                                            }
+                                        @endphp
+                                        @foreach($walkinAgendas as $idx => $agenda)
+                                            @php
+                                                $date = \Carbon\Carbon::parse($agenda->date);
+                                                $isUpcoming = $idx === $nextIdx;
+                                                $rowClass = $isUpcoming ? 'walkin-schedule-upcoming' : ($idx % 2 === 1 ? 'walkin-schedule-odd' : '');
+                                            @endphp
+                                            <tr class="{{ $rowClass }}">
+                                                <td class="fw-semibold">
+                                                    <div class="walkin-schedule-date">{{ $date->format('d M') }}</div>
+                                                    <div class="text-muted small">{{ $date->format('Y') }}</div>
+                                                </td>
+                                                <td><i class="fas fa-user-tie walkin-schedule-icon"></i>{{ $agenda->title }}</td>
+                                                <td>
+                                                    <div class="walkin-2line">{{ $agenda->description }}</div>
+                                                    <button
+                                                        class="btn btn-outline-primary btn-sm ms-2 mt-2"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#agendaDetailModal"
+                                                        data-title="{{ e($agenda->title) }}"
+                                                        data-organizer="{{ e($agenda->organizer) }}"
+                                                        data-date="{{ $date->format('d M Y') }}"
+                                                        data-location="{{ e($agenda->location) }}"
+                                                        data-image="{{ $agenda->image_url }}"
+                                                        data-registration="{{ $agenda->registration_url }}"
+                                                        data-description="{{ e($agenda->description) }}"
+                                                    >Detail</button>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    @else
+                                        <tr>
+                                            <td colspan="3" class="text-center text-muted py-4">
+                                                <i class="fas fa-calendar-times fa-2x mb-2"></i><br>
+                                                Belum ada jadwal Walk In yang tersedia.
+                                            </td>
+                                        </tr>
+                                    @endif
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Form (Big View) -->
         <div class="col-12 d-none" id="panelForm">
             <div class="card shadow-lg w-100">
@@ -513,6 +590,33 @@
     </div>
 </div>
 
+<!-- Modal for Agenda Detail -->
+<div class="modal fade" id="agendaDetailModal" tabindex="-1" aria-labelledby="agendaDetailModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content rounded-4">
+      <div class="modal-header">
+        <h5 class="modal-title" id="agendaDetailModalLabel">Detail Jadwal Walk In</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row g-3">
+          <div class="col-md-5">
+            <img id="agendaModalImage" src="" alt="Agenda Image" class="img-fluid rounded-4 w-100" style="object-fit:cover;max-height:320px;">
+          </div>
+          <div class="col-md-7">
+            <h4 id="agendaModalTitle" class="fw-bold mb-1"></h4>
+            <div class="mb-2 text-muted" id="agendaModalOrganizer"></div>
+            <div class="mb-2"><i class="fa fa-calendar-alt me-2"></i><span id="agendaModalDate"></span></div>
+            <div class="mb-2"><i class="fa fa-map-marker-alt me-2"></i><span id="agendaModalLocation"></span></div>
+            <div class="mb-2" id="agendaModalRegistration"></div>
+            <div class="mt-3" id="agendaModalDescription"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 @if(session('success'))
 <!-- Modal -->
 <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
@@ -793,29 +897,73 @@
     (function () {
         const btnForm = document.getElementById('btnPanelForm');
         const btnGallery = document.getElementById('btnPanelGallery');
+        const btnSchedule = document.getElementById('btnPanelSchedule');
         const panelForm = document.getElementById('panelForm');
         const panelGallery = document.getElementById('panelGallery');
-        if (!btnForm || !btnGallery || !panelForm || !panelGallery) return;
+        const panelSchedule = document.getElementById('panelSchedule');
+        if (!btnForm || !btnGallery || !btnSchedule || !panelForm || !panelGallery || !panelSchedule) return;
 
         function setActive(which) {
             const isForm = which === 'form';
+            const isGallery = which === 'gallery';
+            const isSchedule = which === 'schedule';
             btnForm.classList.toggle('active', isForm);
-            btnGallery.classList.toggle('active', !isForm);
+            btnGallery.classList.toggle('active', isGallery);
+            btnSchedule.classList.toggle('active', isSchedule);
             btnForm.setAttribute('aria-selected', isForm ? 'true' : 'false');
-            btnGallery.setAttribute('aria-selected', !isForm ? 'true' : 'false');
+            btnGallery.setAttribute('aria-selected', isGallery ? 'true' : 'false');
+            btnSchedule.setAttribute('aria-selected', isSchedule ? 'true' : 'false');
             panelForm.classList.toggle('d-none', !isForm);
-            panelGallery.classList.toggle('d-none', isForm);
+            panelGallery.classList.toggle('d-none', !isGallery);
+            panelSchedule.classList.toggle('d-none', !isSchedule);
             try { localStorage.setItem('walkin_panel', which); } catch (e) {}
         }
 
         btnForm.addEventListener('click', () => setActive('form'));
         btnGallery.addEventListener('click', () => setActive('gallery'));
+        btnSchedule.addEventListener('click', () => setActive('schedule'));
 
         // default: Gallery first
         let last = null;
         try { last = localStorage.getItem('walkin_panel'); } catch (e) {}
-        if (last === 'form') setActive('form'); else setActive('gallery');
+        if (last === 'form') setActive('form');
+        else if (last === 'schedule') setActive('schedule');
+        else setActive('gallery');
     })();
+
+    // Schedule detail modal (reuse virtual-karir style)
+    document.addEventListener('DOMContentLoaded', function () {
+        const agendaModal = document.getElementById('agendaDetailModal');
+        if (!agendaModal) return;
+        agendaModal.addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget;
+            if (!button) return;
+            document.getElementById('agendaModalTitle').textContent = button.getAttribute('data-title') || '';
+            document.getElementById('agendaModalOrganizer').textContent = button.getAttribute('data-organizer') || '';
+            document.getElementById('agendaModalDate').textContent = button.getAttribute('data-date') || '';
+            document.getElementById('agendaModalLocation').textContent = button.getAttribute('data-location') || '';
+            const img = document.getElementById('agendaModalImage');
+            const imgUrl = button.getAttribute('data-image');
+            if (imgUrl) {
+                img.src = imgUrl;
+                img.alt = button.getAttribute('data-title') || 'Agenda Image';
+                img.onerror = function () {
+                    this.src = 'https://via.placeholder.com/400x300?text=No+Image';
+                };
+            } else {
+                img.src = 'https://via.placeholder.com/400x300?text=No+Image';
+                img.alt = 'No Image';
+            }
+            const regUrl = button.getAttribute('data-registration');
+            if (regUrl) {
+                document.getElementById('agendaModalRegistration').innerHTML =
+                    '<a href="' + regUrl + '" target="_blank" class="btn btn-success btn-sm mb-2"><i class="fa fa-link me-1"></i> Link Pendaftaran</a>';
+            } else {
+                document.getElementById('agendaModalRegistration').innerHTML = '';
+            }
+            document.getElementById('agendaModalDescription').textContent = button.getAttribute('data-description') || '';
+        });
+    });
 
     // Walk-in gallery UI (dynamic, admin-managed)
     (function () {
@@ -1338,6 +1486,26 @@
     @media (max-width: 576px) {
         .walkin-modal-media { max-height: 60vh; }
         .walkin-modal-img { max-height: 60vh; }
+    }
+
+    /* Schedule table */
+    .walkin-schedule-table td, .walkin-schedule-table th {
+        vertical-align: top;
+    }
+    .walkin-schedule-icon {
+        color: #2563eb;
+        margin-right: 8px;
+    }
+    .walkin-schedule-date {
+        font-size: 1.05rem;
+        letter-spacing: -0.01em;
+        color: #0f172a;
+    }
+    .walkin-schedule-odd {
+        background: rgba(2,6,23,0.02);
+    }
+    .walkin-schedule-upcoming {
+        background: rgba(37,99,235,0.10) !important;
     }
 
     .grid-container {

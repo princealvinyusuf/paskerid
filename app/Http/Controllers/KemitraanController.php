@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\Kemitraan;
 use App\Models\TypeOfPartnership;
+use App\Models\BookedDate;
 use App\Models\companysector;
 use App\Models\PaskerRoom;
 use App\Models\PaskerFacility;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Carbon\Carbon;
 
 class KemitraanController extends Controller
 {
@@ -24,7 +26,17 @@ class KemitraanController extends Controller
         $defaultTypeId = (int) $request->input('type_of_partnership_id', (int) optional($dropdownPartnership->first())->id);
         $fullyBookedDates = $this->computeFullyBookedDates($defaultTypeId, 180);
 
-        return view('kemitraan.create', compact('dropdownPartnership', 'dropdownCompanySectors', 'imagePaskerRoom' ,'paskerFacility', 'fullyBookedDates', 'defaultTypeId'));
+        $walkinAgendas = $this->getWalkinAgendasFromBookedDates();
+
+        return view('kemitraan.create', compact(
+            'dropdownPartnership',
+            'dropdownCompanySectors',
+            'imagePaskerRoom',
+            'paskerFacility',
+            'fullyBookedDates',
+            'defaultTypeId',
+            'walkinAgendas'
+        ));
     }
 
     public function store(Request $request)
@@ -191,5 +203,107 @@ class KemitraanController extends Controller
 
         sort($disabled);
         return array_values(array_unique($disabled));
+    }
+
+    private function getWalkinAgendasFromBookedDates()
+    {
+        $hasRange = Schema::hasColumn('booked_date', 'booked_date_start');
+        $hasTimeRange = Schema::hasColumn('booked_date', 'booked_time_start');
+
+        $today = Carbon::today()->format('Y-m-d');
+
+        $query = BookedDate::with([
+            'kemitraan.typeOfPartnership',
+            'kemitraan.rooms',
+            'kemitraan.facilities',
+            'typeOfPartnership'
+        ])->whereHas('kemitraan', function ($q) {
+            // Only show approved kemitraan bookings in the public agenda
+            if (Schema::hasColumn('kemitraan', 'status')) {
+                $q->where('status', 'approved');
+            }
+        });
+
+        // Upcoming only (today and future)
+        if ($hasRange) {
+            $query->where('booked_date_start', '>=', $today)->orderBy('booked_date_start', 'asc');
+        } else {
+            $query->where('booked_date', '>=', $today)->orderBy('booked_date', 'asc');
+        }
+
+        $bookedDates = $query->get();
+        $agendas = collect();
+
+        foreach ($bookedDates as $bookedDate) {
+            $kemitraan = $bookedDate->kemitraan;
+            if (!$kemitraan) continue;
+
+            $date = $hasRange
+                ? ($bookedDate->booked_date_start ?? $bookedDate->booked_date)
+                : $bookedDate->booked_date;
+
+            if (!$date) continue;
+
+            $dateStr = $date instanceof Carbon
+                ? $date->format('Y-m-d')
+                : (is_string($date) ? $date : Carbon::parse($date)->format('Y-m-d'));
+
+            $partnershipType = $bookedDate->typeOfPartnership ?? $kemitraan->typeOfPartnership;
+            $partnershipTypeName = $partnershipType ? $partnershipType->name : 'Kegiatan Kemitraan';
+
+            // Keep only Walk-in related entries
+            $tLower = strtolower($partnershipTypeName);
+            if (stripos($tLower, 'walk') === false && stripos($tLower, 'interview') === false && stripos($tLower, 'wawancara') === false) {
+                continue;
+            }
+
+            $rooms = $kemitraan->rooms->pluck('room_name')->toArray();
+            $roomNames = !empty($rooms)
+                ? implode(', ', $rooms)
+                : ($kemitraan->other_pasker_room ?? '-');
+
+            $facilities = $kemitraan->facilities->pluck('facility_name')->toArray();
+            $facilityNames = !empty($facilities)
+                ? implode(', ', $facilities)
+                : ($kemitraan->other_pasker_facility ?? '-');
+
+            $location = trim($roomNames . ($facilityNames !== '-' ? ' - ' . $facilityNames : ''), ' -');
+
+            $timeInfo = '';
+            if ($hasTimeRange) {
+                $timeStart = $bookedDate->booked_time_start
+                    ? substr($bookedDate->booked_time_start, 0, 5)
+                    : ($kemitraan->scheduletimestart ?? '');
+                $timeFinish = $bookedDate->booked_time_finish
+                    ? substr($bookedDate->booked_time_finish, 0, 5)
+                    : ($kemitraan->scheduletimefinish ?? '');
+                if ($timeStart && $timeFinish) $timeInfo = $timeStart . ' - ' . $timeFinish;
+                elseif ($timeStart) $timeInfo = $timeStart;
+            } else {
+                $timeStart = $bookedDate->booked_time
+                    ? substr($bookedDate->booked_time, 0, 5)
+                    : ($kemitraan->scheduletimestart ?? '');
+                $timeFinish = $kemitraan->scheduletimefinish ?? '';
+                if ($timeStart && $timeFinish) $timeInfo = $timeStart . ' - ' . $timeFinish;
+                elseif ($timeStart) $timeInfo = $timeStart;
+            }
+
+            $agenda = (object) [
+                'id' => $bookedDate->id,
+                'title' => $partnershipTypeName . ($kemitraan->institution_name ? ' - ' . $kemitraan->institution_name : ''),
+                'description' => ($kemitraan->institution_name ?? '')
+                    . ($timeInfo ? ' (' . $timeInfo . ')' : '')
+                    . ($location && $location !== '-' ? ' - Lokasi: ' . $location : ''),
+                'date' => $dateStr,
+                'location' => $location ?: '-',
+                'organizer' => $kemitraan->institution_name ?? '-',
+                'image_url' => null,
+                'registration_url' => null,
+            ];
+
+            $agendas->push($agenda);
+        }
+
+        return $agendas->sortBy('date')->values();
     }
 } 
