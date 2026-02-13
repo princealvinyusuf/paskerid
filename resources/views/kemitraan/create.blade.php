@@ -938,12 +938,8 @@
         btnGallery.addEventListener('click', () => setActive('gallery'));
         btnSchedule.addEventListener('click', () => setActive('schedule'));
 
-        // default: Gallery first
-        let last = null;
-        try { last = localStorage.getItem('walkin_panel'); } catch (e) {}
-        if (last === 'form') setActive('form');
-        else if (last === 'schedule') setActive('schedule');
-        else setActive('gallery');
+        // default: ALWAYS Gallery on page load (do not restore from localStorage)
+        setActive('gallery');
     })();
 
     // Schedule detail modal (reuse virtual-karir style)
