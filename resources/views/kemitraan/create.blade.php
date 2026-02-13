@@ -439,13 +439,6 @@
                         </button>
                     </div>
 
-                    <div class="walkin-gallery-filters mb-3" role="tablist" aria-label="Filter galeri">
-                        <button type="button" class="walkin-pill active" data-gallery-filter="all" aria-selected="true">All</button>
-                        <button type="button" class="walkin-pill" data-gallery-filter="photo" aria-selected="false">Foto</button>
-                        <button type="button" class="walkin-pill" data-gallery-filter="video" aria-selected="false">Video</button>
-                        <button type="button" class="walkin-pill" data-gallery-filter="comment" aria-selected="false">Komentar</button>
-                    </div>
-
                     <div id="walkinGalleryAlert" class="alert alert-info py-2 px-3 d-none" role="alert"></div>
 
                     <div id="walkinGalleryLoading" class="text-muted small">Memuat galeri...</div>
@@ -817,11 +810,10 @@
         const commentListEl = document.getElementById('walkinGalleryCommentList');
         const alertEl = document.getElementById('walkinGalleryAlert');
         const refreshBtn = document.getElementById('btnGalleryRefresh');
-        const filterBtns = Array.from(document.querySelectorAll('[data-gallery-filter]'));
         const commentForm = document.getElementById('walkinGalleryCommentForm');
         const commentCompanyInput = document.getElementById('walkinGalleryCommentCompany');
 
-        if (!loadingEl || !gridEl || !companiesEl || !companyDetailEl || !companyTitleEl || !companyBackBtn || !commentsWrapEl || !commentListEl || !alertEl || filterBtns.length === 0 || !commentCompanyInput) return;
+        if (!loadingEl || !gridEl || !companiesEl || !companyDetailEl || !companyTitleEl || !companyBackBtn || !commentsWrapEl || !commentListEl || !alertEl || !commentCompanyInput) return;
 
         function showAlert(text, type = 'info') {
             alertEl.className = `alert alert-${type} py-2 px-3`;
@@ -970,8 +962,8 @@
             }
         }
 
-        async function loadCompany(company, filter) {
-            currentFilter = filter;
+        async function loadCompany(company, filter = 'all') {
+            currentFilter = filter || 'all';
             currentCompany = company;
             loadingEl.classList.remove('d-none');
             setView('company');
@@ -984,45 +976,15 @@
                 lastFeed = data || { items: [], comments: [] };
 
                 loadingEl.classList.add('d-none');
-
-                if (filter === 'comment') {
-                    companyTitleEl.textContent = company;
-                    commentCompanyInput.value = company;
-                    renderComments(lastFeed.comments || []);
-                    gridEl.innerHTML = '';
-                } else {
-                    companyTitleEl.textContent = company;
-                    commentCompanyInput.value = company;
-                    renderGrid(lastFeed.items || []);
-                    renderComments(lastFeed.comments || []);
-                }
+                companyTitleEl.textContent = company;
+                commentCompanyInput.value = company;
+                renderGrid(lastFeed.items || []);
+                renderComments(lastFeed.comments || []);
             } catch (e) {
                 loadingEl.classList.add('d-none');
                 showAlert('Gagal memuat galeri. Coba refresh.', 'warning');
             }
         }
-
-        filterBtns.forEach((btn) => {
-            btn.addEventListener('click', () => {
-                filterBtns.forEach((b) => {
-                    b.classList.remove('active');
-                    b.setAttribute('aria-selected', 'false');
-                });
-                btn.classList.add('active');
-                btn.setAttribute('aria-selected', 'true');
-                const f = btn.getAttribute('data-gallery-filter') || 'all';
-                if (currentCompany) {
-                    loadCompany(currentCompany, f);
-                } else {
-                    // on company list, only "All" makes sense, keep list
-                    if (f !== 'all') {
-                        showAlert('Pilih perusahaan dulu untuk melihat filter ini.', 'info');
-                        // reset pill to All
-                        filterBtns.forEach((b) => b.classList.toggle('active', b.getAttribute('data-gallery-filter') === 'all'));
-                    }
-                }
-            });
-        });
 
         if (refreshBtn) refreshBtn.addEventListener('click', () => {
             if (currentCompany) return loadCompany(currentCompany, currentFilter);
@@ -1035,24 +997,12 @@
             const raw = card.getAttribute('data-company');
             if (!raw) return;
             const company = decodeURIComponent(raw);
-            // reset pills to All when opening company
-            filterBtns.forEach((b) => {
-                const isAll = b.getAttribute('data-gallery-filter') === 'all';
-                b.classList.toggle('active', isAll);
-                b.setAttribute('aria-selected', isAll ? 'true' : 'false');
-            });
             loadCompany(company, 'all');
         });
 
         companyBackBtn.addEventListener('click', () => {
             currentCompany = '';
             commentCompanyInput.value = '';
-            // reset pills to All
-            filterBtns.forEach((b) => {
-                const isAll = b.getAttribute('data-gallery-filter') === 'all';
-                b.classList.toggle('active', isAll);
-                b.setAttribute('aria-selected', isAll ? 'true' : 'false');
-            });
             loadCompanies();
         });
 
@@ -1168,27 +1118,6 @@
         background: #ffffff;
         color: #111827;
         box-shadow: 0 6px 16px rgba(2,6,23,0.10);
-    }
-    .walkin-gallery-filters {
-        display: flex;
-        gap: 8px;
-        flex-wrap: nowrap;
-        overflow-x: auto;
-        padding-bottom: 2px;
-    }
-    .walkin-pill {
-        border: 0;
-        border-radius: 999px;
-        padding: 8px 12px;
-        font-weight: 600;
-        background: #eef2f7;
-        color: #334155;
-        white-space: nowrap;
-    }
-    .walkin-pill.active {
-        background: #111827;
-        color: #fff;
-        box-shadow: 0 8px 18px rgba(2,6,23,0.18);
     }
     .walkin-media-card {
         border: 1px solid #e5e7eb;
