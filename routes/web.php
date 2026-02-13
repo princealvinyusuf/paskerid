@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MiniVideoController;
 use App\Http\Controllers\Api\HighlightStatisticController;
 use App\Http\Controllers\Api\InformationController;
+use App\Http\Controllers\WalkinGalleryController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -45,6 +46,12 @@ Route::get('kemitraan/under_construction', function() {
 Route::get('kemitraan/create', [App\Http\Controllers\KemitraanController::class, 'create'])->name('kemitraan.create');
 Route::post('kemitraan', [App\Http\Controllers\KemitraanController::class, 'store'])->name('kemitraan.store');
 Route::get('kemitraan/fully-booked-dates', [App\Http\Controllers\KemitraanController::class, 'fullyBookedDates'])->name('kemitraan.fullyBookedDates');
+
+// Walk-in Interview Gallery (public)
+Route::get('/walkin-gallery/feed', [WalkinGalleryController::class, 'feed'])->name('walkin-gallery.feed');
+Route::post('/walkin-gallery/comments', [WalkinGalleryController::class, 'storeComment'])
+    ->middleware('throttle:5,1')
+    ->name('walkin-gallery.comments.store');
 
 Route::get('/kebijakan-privasi', function () {
     return view('kebijakan_privasi');

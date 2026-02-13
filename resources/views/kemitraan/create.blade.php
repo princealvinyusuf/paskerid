@@ -1,40 +1,53 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container d-flex align-items-center justify-content-center mt-5 mb-5">
-    <div class="card shadow-lg w-100" style="max-width: 700px;">
-        <div class="card-body p-4">
-            <div class="text-center mb-4">
-                <i class="bi bi-people-fill" style="font-size: 2.5rem; color: #0d6efd;"></i>
-                <h2 class="mt-2 mb-0">Pendaftaran Walk In Interview</h2>
-                <p class="text-muted">Pusat Pasar Kerja</p>
-            </div>
-            @if ($errors->any())
-                <div class="alert alert-danger">
-                    <ul class="mb-0">
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
-            <hr class="my-4">
-            <h5 class="mb-3"><i class="bi bi-link-45deg me-2"></i>Detail Kemitraan</h5>
-            <!-- GET form for partnership type (for calendar functionality, hidden initially) -->
-           
-            {{-- <form method="GET" id="typeForm" class="mb-3" style="display:none;">
-                <label for="partnership_type" class="form-label">Jenis Kemitraan yang Diajukan</label>
-                <select class="form-select" id="partnership_type" name="partnership_type" onchange="document.getElementById('typeForm').submit()" required>
-                    <option value="Walk-in Interview" {{ $selectedType == 'Walk-in Interview' ? 'selected' : '' }}>Walk-in Interview</option>
-                    <option value="Pendidikan Pasar Kerja" {{ $selectedType == 'Pendidikan Pasar Kerja' ? 'selected' : '' }}>Pendidikan Pasar Kerja</option>
-                    <option value="Talenta Muda" {{ $selectedType == 'Talenta Muda' ? 'selected' : '' }}>Talenta Muda</option>
-                    <option value="Job Fair" {{ $selectedType == 'Job Fair' ? 'selected' : '' }}>Job Fair</option>
-                    <option value="Konsultasi Pasar Kerja" {{ $selectedType == 'Konsultasi Pasar Kerja' ? 'selected' : '' }}>Konsultasi Pasar Kerja</option>
-                    <option value="Konsultasi Informasi Pasar Kerja" {{ $selectedType == 'Konsultasi Informasi Pasar Kerja' ? 'selected' : '' }}>Konsultasi Informasi Pasar Kerja</option>
-                </select>
-            </form> --}}
-            <!-- End Partnership Type Selector -->
-            <form action="{{ route('kemitraan.store') }}" method="POST" enctype="multipart/form-data">
+<div class="container mt-5 mb-5" style="max-width: 1200px;">
+    <div class="text-center mb-4">
+        <i class="bi bi-people-fill" style="font-size: 2.5rem; color: #0d6efd;"></i>
+        <h2 class="mt-2 mb-0">Pendaftaran Walk In Interview</h2>
+        <p class="text-muted mb-0">Pusat Pasar Kerja</p>
+    </div>
+
+    <!-- Mobile segmented toggle -->
+    <div class="d-lg-none mb-3">
+        <div class="walkin-segmented" role="tablist" aria-label="Pilih panel">
+            <button type="button" class="walkin-seg-btn active" id="btnPanelForm" aria-selected="true">Form Pendaftaran</button>
+            <button type="button" class="walkin-seg-btn" id="btnPanelGallery" aria-selected="false">Galeri Walk In</button>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Left: Form -->
+        <div class="col-lg-6" id="panelForm">
+            <div class="card shadow-lg w-100">
+                <div class="card-body p-4">
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul class="mb-0">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
+                    <hr class="my-4">
+                    <h5 class="mb-3"><i class="bi bi-link-45deg me-2"></i>Detail Kemitraan</h5>
+                    <!-- GET form for partnership type (for calendar functionality, hidden initially) -->
+                   
+                    {{-- <form method="GET" id="typeForm" class="mb-3" style="display:none;">
+                        <label for="partnership_type" class="form-label">Jenis Kemitraan yang Diajukan</label>
+                        <select class="form-select" id="partnership_type" name="partnership_type" onchange="document.getElementById('typeForm').submit()" required>
+                            <option value="Walk-in Interview" {{ $selectedType == 'Walk-in Interview' ? 'selected' : '' }}>Walk-in Interview</option>
+                            <option value="Pendidikan Pasar Kerja" {{ $selectedType == 'Pendidikan Pasar Kerja' ? 'selected' : '' }}>Pendidikan Pasar Kerja</option>
+                            <option value="Talenta Muda" {{ $selectedType == 'Talenta Muda' ? 'selected' : '' }}>Talenta Muda</option>
+                            <option value="Job Fair" {{ $selectedType == 'Job Fair' ? 'selected' : '' }}>Job Fair</option>
+                            <option value="Konsultasi Pasar Kerja" {{ $selectedType == 'Konsultasi Pasar Kerja' ? 'selected' : '' }}>Konsultasi Pasar Kerja</option>
+                            <option value="Konsultasi Informasi Pasar Kerja" {{ $selectedType == 'Konsultasi Informasi Pasar Kerja' ? 'selected' : '' }}>Konsultasi Informasi Pasar Kerja</option>
+                        </select>
+                    </form> --}}
+                    <!-- End Partnership Type Selector -->
+                    <form action="{{ route('kemitraan.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 {{-- <input type="hidden" name="partnership_type" value="{{ $selectedType }}"> --}}
                 <div class="row g-3">
@@ -408,6 +421,63 @@
                         </button>
                     </div>
                 </form>
+</div>
+            </div>
+        </div>
+
+        <!-- Right: Gallery -->
+        <div class="col-lg-6" id="panelGallery">
+            <div class="card shadow-lg w-100 h-100">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <div>
+                            <h5 class="mb-0"><i class="bi bi-images me-2"></i>Galeri Walk In</h5>
+                            <div class="text-muted small">Dokumentasi kegiatan (foto, video, komentar)</div>
+                        </div>
+                        <button type="button" class="btn btn-outline-secondary btn-sm d-none d-lg-inline" id="btnGalleryRefresh">
+                            <i class="bi bi-arrow-clockwise me-1"></i>Refresh
+                        </button>
+                    </div>
+
+                    <div class="walkin-gallery-filters mb-3" role="tablist" aria-label="Filter galeri">
+                        <button type="button" class="walkin-pill active" data-gallery-filter="all" aria-selected="true">All</button>
+                        <button type="button" class="walkin-pill" data-gallery-filter="photo" aria-selected="false">Foto</button>
+                        <button type="button" class="walkin-pill" data-gallery-filter="video" aria-selected="false">Video</button>
+                        <button type="button" class="walkin-pill" data-gallery-filter="comment" aria-selected="false">Komentar</button>
+                    </div>
+
+                    <div id="walkinGalleryAlert" class="alert alert-info py-2 px-3 d-none" role="alert"></div>
+
+                    <div id="walkinGalleryLoading" class="text-muted small">Memuat galeri...</div>
+
+                    <div id="walkinGalleryGrid" class="row g-2 d-none"></div>
+
+                    <div id="walkinGalleryComments" class="d-none">
+                        <div class="border rounded p-3 bg-light mb-3">
+                            <div class="fw-semibold mb-2">Tulis Komentar</div>
+                            <form id="walkinGalleryCommentForm">
+                                <div class="row g-2">
+                                    <div class="col-12 col-md-5">
+                                        <input type="text" class="form-control" name="name" placeholder="Nama kamu" required maxlength="80">
+                                    </div>
+                                    <div class="col-12 col-md-7">
+                                        <input type="text" class="form-control" name="comment" placeholder="Tulis komentar singkat..." required maxlength="1000">
+                                    </div>
+                                </div>
+                                <input type="text" name="website" class="d-none" tabindex="-1" autocomplete="off">
+                                <div class="d-flex justify-content-between align-items-center mt-2">
+                                    <div class="text-muted small">Komentar akan tampil setelah disetujui admin.</div>
+                                    <button type="submit" class="btn btn-primary btn-sm">
+                                        <i class="bi bi-send me-1"></i>Kirim
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="fw-semibold mb-2">Komentar Terbaru</div>
+                        <div id="walkinGalleryCommentList" class="d-flex flex-column gap-2"></div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -440,6 +510,21 @@
     });
 </script>
 @endif
+
+<!-- Walkin Gallery Modal -->
+<div class="modal fade" id="walkinGalleryModal" tabindex="-1" aria-labelledby="walkinGalleryModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content rounded-4">
+      <div class="modal-header">
+        <h5 class="modal-title" id="walkinGalleryModalTitle">Galeri</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="walkinGalleryModalBody">
+        <div class="text-muted small">Memuat...</div>
+      </div>
+    </div>
+  </div>
+</div>
 
 @push('head')
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
@@ -597,16 +682,21 @@
         field.style.display = isChecked ? 'block' : 'none';
     }
 
-    document.querySelector('form').addEventListener('submit', function (e) {
-        const selectedFacility = document.querySelectorAll('input[name="pasker_facility_ids[]"]:checked');
-        const otherFacilityText = document.getElementById('facilityOtherText');
-        const hasOther = otherFacilityText && otherFacilityText.style.display !== 'none' && otherFacilityText.value.trim().length > 0;
+    // Ensure facility validation binds to the registration form (not gallery comment form)
+    (function () {
+        const mainForm = document.querySelector('form[action="{{ route('kemitraan.store') }}"]');
+        if (!mainForm) return;
+        mainForm.addEventListener('submit', function (e) {
+            const selectedFacility = document.querySelectorAll('input[name="pasker_facility_ids[]"]:checked');
+            const otherFacilityText = document.getElementById('facilityOtherText');
+            const hasOther = otherFacilityText && otherFacilityText.style.display !== 'none' && otherFacilityText.value.trim().length > 0;
 
-        if (selectedFacility.length === 0 && !hasOther) {
-            e.preventDefault();
-            alert('Silakan pilih minimal satu fasilitas atau isi Lainnya.');
-        }
-    });
+            if (selectedFacility.length === 0 && !hasOther) {
+                e.preventDefault();
+                alert('Silakan pilih minimal satu fasilitas atau isi Lainnya.');
+            }
+        });
+    })();
 
     // Detail Lowongan (repeatable)
     (function () {
@@ -668,9 +758,355 @@
         btnAdd.addEventListener('click', addItem);
         reindex();
     })();
+
+    // Mobile segmented toggle: Form vs Galeri
+    (function () {
+        const btnForm = document.getElementById('btnPanelForm');
+        const btnGallery = document.getElementById('btnPanelGallery');
+        const panelForm = document.getElementById('panelForm');
+        const panelGallery = document.getElementById('panelGallery');
+        if (!btnForm || !btnGallery || !panelForm || !panelGallery) return;
+
+        function setActive(which) {
+            const isForm = which === 'form';
+            btnForm.classList.toggle('active', isForm);
+            btnGallery.classList.toggle('active', !isForm);
+            btnForm.setAttribute('aria-selected', isForm ? 'true' : 'false');
+            btnGallery.setAttribute('aria-selected', !isForm ? 'true' : 'false');
+            panelForm.classList.toggle('d-none', !isForm);
+            panelGallery.classList.toggle('d-none', isForm);
+            try { localStorage.setItem('walkin_panel', which); } catch (e) {}
+        }
+
+        btnForm.addEventListener('click', () => setActive('form'));
+        btnGallery.addEventListener('click', () => setActive('gallery'));
+
+        // default
+        let last = null;
+        try { last = localStorage.getItem('walkin_panel'); } catch (e) {}
+        if (last === 'gallery') setActive('gallery'); else setActive('form');
+
+        // On desktop always show both
+        function onResize() {
+            if (window.matchMedia('(min-width: 992px)').matches) {
+                panelForm.classList.remove('d-none');
+                panelGallery.classList.remove('d-none');
+            } else {
+                const cur = btnGallery.classList.contains('active') ? 'gallery' : 'form';
+                setActive(cur);
+            }
+        }
+        window.addEventListener('resize', onResize);
+        onResize();
+    })();
+
+    // Walk-in gallery UI (dynamic, admin-managed)
+    (function () {
+        const feedUrl = @json(route('walkin-gallery.feed'));
+        const commentUrl = @json(route('walkin-gallery.comments.store'));
+        const csrf = @json(csrf_token());
+
+        const loadingEl = document.getElementById('walkinGalleryLoading');
+        const gridEl = document.getElementById('walkinGalleryGrid');
+        const commentsWrapEl = document.getElementById('walkinGalleryComments');
+        const commentListEl = document.getElementById('walkinGalleryCommentList');
+        const alertEl = document.getElementById('walkinGalleryAlert');
+        const refreshBtn = document.getElementById('btnGalleryRefresh');
+        const filterBtns = Array.from(document.querySelectorAll('[data-gallery-filter]'));
+        const commentForm = document.getElementById('walkinGalleryCommentForm');
+
+        if (!loadingEl || !gridEl || !commentsWrapEl || !commentListEl || !alertEl || filterBtns.length === 0) return;
+
+        function showAlert(text, type = 'info') {
+            alertEl.className = `alert alert-${type} py-2 px-3`;
+            alertEl.textContent = text;
+            alertEl.classList.remove('d-none');
+            setTimeout(() => alertEl.classList.add('d-none'), 3500);
+        }
+
+        function storageUrl(path) {
+            if (!path) return '';
+            const clean = String(path).replace(/^storage[\\\/]/, '').replace(/^[\\\/]+/, '');
+            return '/storage/' + clean.replace(/\\/g, '/');
+        }
+
+        function renderGrid(items) {
+            gridEl.innerHTML = '';
+            if (!items || items.length === 0) {
+                gridEl.innerHTML = `<div class="text-muted small">Belum ada dokumentasi.</div>`;
+                return;
+            }
+
+            items.forEach((item) => {
+                const type = item.type;
+                const isPhoto = type === 'photo';
+                const isVideoUpload = type === 'video_upload';
+                const isVideoEmbed = type === 'video_embed';
+
+                const thumb = isPhoto
+                    ? storageUrl(item.media_path)
+                    : (item.thumbnail_path ? storageUrl(item.thumbnail_path) : (item.embed_thumbnail_url || ''));
+
+                const icon = isPhoto ? 'bi-image' : 'bi-play-circle';
+                const label = isPhoto ? 'Foto' : 'Video';
+
+                const col = document.createElement('div');
+                col.className = 'col-6 col-md-4';
+                col.innerHTML = `
+                    <div class="walkin-media-card" role="button" tabindex="0"
+                         data-item='${encodeURIComponent(JSON.stringify(item))}'>
+                        <div class="walkin-media-thumb" style="background-image:url('${thumb ? thumb : ''}')">
+                            <div class="walkin-media-badge"><i class="bi ${icon} me-1"></i>${label}</div>
+                        </div>
+                        <div class="walkin-media-caption">
+                            <div class="fw-semibold small text-truncate">${(item.title || label)}</div>
+                            <div class="text-muted small text-truncate">${(item.caption || '')}</div>
+                        </div>
+                    </div>
+                `;
+                gridEl.appendChild(col);
+            });
+        }
+
+        function renderComments(comments) {
+            commentListEl.innerHTML = '';
+            if (!comments || comments.length === 0) {
+                commentListEl.innerHTML = `<div class="text-muted small">Belum ada komentar.</div>`;
+                return;
+            }
+            comments.forEach((c) => {
+                const card = document.createElement('div');
+                card.className = 'border rounded p-2 bg-white';
+                const date = c.created_at ? String(c.created_at).slice(0, 10) : '';
+                card.innerHTML = `
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div class="fw-semibold">${escapeHtml(c.name || '')}</div>
+                        <div class="text-muted small">${escapeHtml(date)}</div>
+                    </div>
+                    <div class="small mt-1">${escapeHtml(c.comment || '')}</div>
+                `;
+                commentListEl.appendChild(card);
+            });
+        }
+
+        function escapeHtml(str) {
+            return String(str ?? '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        let currentFilter = 'all';
+        let lastFeed = { items: [], comments: [] };
+
+        async function loadFeed(filter) {
+            currentFilter = filter;
+            loadingEl.classList.remove('d-none');
+            gridEl.classList.add('d-none');
+            commentsWrapEl.classList.add('d-none');
+            try {
+                const url = new URL(feedUrl, window.location.origin);
+                if (filter && filter !== 'all') url.searchParams.set('type', filter);
+                const res = await fetch(url.toString(), { headers: { 'Accept': 'application/json' } });
+                const data = await res.json();
+                lastFeed = data || { items: [], comments: [] };
+
+                loadingEl.classList.add('d-none');
+
+                if (filter === 'comment') {
+                    commentsWrapEl.classList.remove('d-none');
+                    renderComments(lastFeed.comments || []);
+                } else {
+                    gridEl.classList.remove('d-none');
+                    renderGrid(lastFeed.items || []);
+                }
+            } catch (e) {
+                loadingEl.classList.add('d-none');
+                showAlert('Gagal memuat galeri. Coba refresh.', 'warning');
+            }
+        }
+
+        filterBtns.forEach((btn) => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach((b) => {
+                    b.classList.remove('active');
+                    b.setAttribute('aria-selected', 'false');
+                });
+                btn.classList.add('active');
+                btn.setAttribute('aria-selected', 'true');
+                loadFeed(btn.getAttribute('data-gallery-filter') || 'all');
+            });
+        });
+
+        if (refreshBtn) refreshBtn.addEventListener('click', () => loadFeed(currentFilter));
+
+        // Modal viewer
+        const modalEl = document.getElementById('walkinGalleryModal');
+        let bsModal = null;
+        if (modalEl && window.bootstrap) {
+            bsModal = new bootstrap.Modal(modalEl);
+        }
+
+        function openItem(item) {
+            const body = document.getElementById('walkinGalleryModalBody');
+            const title = document.getElementById('walkinGalleryModalTitle');
+            if (!body || !title) return;
+            title.textContent = item.title || (item.type === 'photo' ? 'Foto' : 'Video');
+
+            if (item.type === 'photo') {
+                body.innerHTML = `
+                    <img src="${storageUrl(item.media_path)}" class="img-fluid rounded" alt="">
+                    ${item.caption ? `<div class="text-muted mt-2">${escapeHtml(item.caption)}</div>` : ``}
+                `;
+            } else if (item.type === 'video_upload') {
+                body.innerHTML = `
+                    <video class="w-100 rounded" controls src="${storageUrl(item.media_path)}"></video>
+                    ${item.caption ? `<div class="text-muted mt-2">${escapeHtml(item.caption)}</div>` : ``}
+                `;
+            } else {
+                const src = item.embed_url || '';
+                body.innerHTML = `
+                    <div class="ratio ratio-16x9">
+                        <iframe src="${src}" title="Video" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                    ${item.caption ? `<div class="text-muted mt-2">${escapeHtml(item.caption)}</div>` : ``}
+                `;
+            }
+
+            if (bsModal) bsModal.show();
+        }
+
+        gridEl.addEventListener('click', (e) => {
+            const card = e.target && e.target.closest ? e.target.closest('.walkin-media-card') : null;
+            if (!card) return;
+            const raw = card.getAttribute('data-item');
+            if (!raw) return;
+            try {
+                const item = JSON.parse(decodeURIComponent(raw));
+                openItem(item);
+            } catch (err) {}
+        });
+
+        // Comment submit
+        if (commentForm) {
+            commentForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const fd = new FormData(commentForm);
+                const payload = {
+                    walkin_gallery_item_id: null,
+                    name: fd.get('name'),
+                    comment: fd.get('comment'),
+                    website: fd.get('website'),
+                };
+                try {
+                    const res = await fetch(commentUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': csrf,
+                        },
+                        body: JSON.stringify(payload),
+                    });
+                    if (!res.ok) {
+                        showAlert('Gagal mengirim komentar. Coba lagi.', 'warning');
+                        return;
+                    }
+                    const data = await res.json();
+                    commentForm.reset();
+                    showAlert((data && data.message) ? data.message : 'Komentar terkirim.', 'success');
+                } catch (err) {
+                    showAlert('Gagal mengirim komentar. Coba lagi.', 'warning');
+                }
+            });
+        }
+
+        // initial load
+        loadFeed('all');
+    })();
 </script>
 @endpush
 <style>
+    .walkin-segmented {
+        display: inline-flex;
+        width: 100%;
+        background: #eef2f7;
+        border-radius: 999px;
+        padding: 6px;
+        box-shadow: inset 0 0 0 1px rgba(0,0,0,0.06);
+        gap: 6px;
+    }
+    .walkin-seg-btn {
+        flex: 1;
+        border: 0;
+        border-radius: 999px;
+        padding: 10px 12px;
+        font-weight: 600;
+        background: transparent;
+        color: #475569;
+    }
+    .walkin-seg-btn.active {
+        background: #ffffff;
+        color: #111827;
+        box-shadow: 0 6px 16px rgba(2,6,23,0.10);
+    }
+    .walkin-gallery-filters {
+        display: flex;
+        gap: 8px;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        padding-bottom: 2px;
+    }
+    .walkin-pill {
+        border: 0;
+        border-radius: 999px;
+        padding: 8px 12px;
+        font-weight: 600;
+        background: #eef2f7;
+        color: #334155;
+        white-space: nowrap;
+    }
+    .walkin-pill.active {
+        background: #111827;
+        color: #fff;
+        box-shadow: 0 8px 18px rgba(2,6,23,0.18);
+    }
+    .walkin-media-card {
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        overflow: hidden;
+        background: #fff;
+        transition: transform .12s ease, box-shadow .12s ease;
+    }
+    .walkin-media-card:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 10px 24px rgba(2,6,23,0.10);
+    }
+    .walkin-media-thumb {
+        position: relative;
+        width: 100%;
+        height: 130px;
+        background-color: #f3f4f6;
+        background-size: cover;
+        background-position: center;
+    }
+    .walkin-media-badge {
+        position: absolute;
+        left: 10px;
+        top: 10px;
+        background: rgba(17,24,39,0.85);
+        color: #fff;
+        padding: 4px 8px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+    .walkin-media-caption {
+        padding: 10px 10px 12px 10px;
+    }
+
     .grid-container {
     display: grid;
     grid-template-columns: repeat(3, 1fr); /* 2 kolom tetap */
