@@ -375,7 +375,7 @@ class KemitraanController extends Controller
         return $agendas->sortBy('date')->values();
     }
 
-    private function buildWalkinAgendaFromBookedDate(BookedDate $bookedDate, bool $hasRange, bool $hasTimeRange): ?array
+    private function buildWalkinAgendaFromBookedDate(BookedDate $bookedDate, bool $hasRange, bool $hasTimeRange): ?object
     {
         $kemitraan = $bookedDate->kemitraan;
         if (!$kemitraan) return null;
@@ -423,7 +423,7 @@ class KemitraanController extends Controller
             elseif ($timeStart) $timeInfo = $timeStart;
         }
 
-        return [
+        return (object) [
             'id' => (int) $bookedDate->id,
             'title' => $partnershipTypeName . ($kemitraan->institution_name ? ' - ' . $kemitraan->institution_name : ''),
             'description' => ($kemitraan->institution_name ?? '')
