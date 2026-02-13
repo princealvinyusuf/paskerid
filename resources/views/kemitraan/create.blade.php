@@ -543,7 +543,7 @@
 
 <!-- Walkin Gallery Modal -->
 <div class="modal fade" id="walkinGalleryModal" tabindex="-1" aria-labelledby="walkinGalleryModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg modal-dialog-centered">
+  <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
     <div class="modal-content rounded-4">
       <div class="modal-header">
         <h5 class="modal-title" id="walkinGalleryModalTitle">Galeri</h5>
@@ -1061,7 +1061,9 @@
 
             if (item.type === 'photo') {
                 body.innerHTML = `
-                    <img src="${storageUrl(item.media_path)}" class="img-fluid rounded" alt="">
+                    <div class="walkin-modal-media">
+                        <img src="${storageUrl(item.media_path)}" class="walkin-modal-img" alt="">
+                    </div>
                     ${item.caption ? `<div class="text-muted mt-2">${escapeHtml(item.caption)}</div>` : ``}
                 `;
             } else if (item.type === 'video_upload') {
@@ -1310,6 +1312,32 @@
         font-weight: 800;
         color: #0f172a;
         flex: 0 0 auto;
+    }
+
+    /* Modal media (neat for big photos) */
+    #walkinGalleryModal .modal-body {
+        padding: 14px;
+    }
+    .walkin-modal-media {
+        width: 100%;
+        max-height: 70vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #0b1220;
+        border-radius: 16px;
+        overflow: hidden;
+    }
+    .walkin-modal-img {
+        width: 100%;
+        height: auto;
+        max-height: 70vh;
+        object-fit: contain;
+        display: block;
+    }
+    @media (max-width: 576px) {
+        .walkin-modal-media { max-height: 60vh; }
+        .walkin-modal-img { max-height: 60vh; }
     }
 
     .grid-container {
