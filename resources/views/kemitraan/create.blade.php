@@ -1505,11 +1505,38 @@
         font-weight: 600;
         background: transparent;
         color: #475569;
+        text-align: center;
+        white-space: nowrap;
     }
     .walkin-seg-btn.active {
         background: #ffffff;
         color: #111827;
         box-shadow: 0 6px 16px rgba(2,6,23,0.10);
+    }
+    /* Responsive toggle: stack buttons on small screens (prevents cramped layout) */
+    @media (max-width: 576px) {
+        .walkin-segmented {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+            padding: 0;
+            background: transparent;
+            box-shadow: none;
+        }
+        .walkin-seg-btn {
+            border-radius: 16px;
+            padding: 12px 14px;
+            background: #eef2f7;
+            border: 1px solid rgba(15,23,42,0.10);
+            white-space: normal;
+            line-height: 1.2;
+        }
+        .walkin-seg-btn.active {
+            background: #111827;
+            color: #ffffff;
+            border-color: rgba(17,24,39,0.12);
+            box-shadow: 0 10px 22px rgba(2,6,23,0.16);
+        }
     }
     .walkin-company-title {
         font-size: 1.15rem;
