@@ -191,16 +191,31 @@
 
                                 <div class="col-12 col-md-6">
                                     <label class="form-label fw-semibold" for="pendidikan_terakhir">Pendidikan Terakhir</label>
-                                    <select id="pendidikan_terakhir" name="pendidikan_terakhir" class="form-select">
+                                    @php
+                                        $pendidikanOptions = ['SMA/SMK', 'D1/D2', 'D3', 'S1', 'S2', 'S3', 'Lainnya'];
+                                        $pendidikanChoiceOld = old('pendidikan_choice');
+                                        $pendidikanOtherOld = old('pendidikan_other');
+                                    @endphp
+                                    <select id="pendidikan_choice" name="pendidikan_choice" class="form-select">
                                         @php
-                                            $pendidikanOptions = ['SMA/SMK', 'D1/D2', 'D3', 'S1', 'S2', 'S3', 'Lainnya'];
-                                            $pendidikanOld = old('pendidikan_terakhir');
+                                            $pendidikanOld = $pendidikanChoiceOld;
                                         @endphp
                                         <option value="" {{ $pendidikanOld ? '' : 'selected' }}>Pilih (opsional)</option>
                                         @foreach($pendidikanOptions as $opt)
                                             <option value="{{ $opt }}" {{ $pendidikanOld === $opt ? 'selected' : '' }}>{{ $opt }}</option>
                                         @endforeach
                                     </select>
+                                    <div class="mt-2">
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            id="pendidikan_other"
+                                            name="pendidikan_other"
+                                            value="{{ $pendidikanOtherOld }}"
+                                            placeholder="Jika Lainnya, tulis pendidikan terakhir"
+                                        >
+                                        <div class="form-text" id="pendidikan_other_help">Isi field ini hanya jika memilih Lainnya.</div>
+                                    </div>
                                 </div>
 
                                 <div class="col-12 col-md-6">
@@ -240,6 +255,29 @@
                                 });
                                 document.addEventListener('DOMContentLoaded', syncStatusOther);
                                 syncStatusOther();
+                            })();
+                        </script>
+
+                        <script>
+                            (function () {
+                                function syncPendidikanOther() {
+                                    var sel = document.getElementById('pendidikan_choice');
+                                    var otherInput = document.getElementById('pendidikan_other');
+                                    var help = document.getElementById('pendidikan_other_help');
+                                    if (!sel || !otherInput) return;
+
+                                    var enabled = (sel.value === 'Lainnya');
+                                    otherInput.disabled = !enabled;
+                                    otherInput.required = enabled;
+                                    if (!enabled) otherInput.value = '';
+                                    if (help) help.style.opacity = enabled ? '1' : '0.6';
+                                }
+
+                                document.addEventListener('change', function (e) {
+                                    if (e.target && e.target.id === 'pendidikan_choice') syncPendidikanOther();
+                                });
+                                document.addEventListener('DOMContentLoaded', syncPendidikanOther);
+                                syncPendidikanOther();
                             })();
                         </script>
                     </div>

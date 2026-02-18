@@ -41,7 +41,8 @@ class CareerBoostdayController extends Controller
             'status_other' => ['nullable', 'string', 'max:120'],
             'jenis_konseling' => ['required', 'string', 'max:255'],
             'jadwal_konseling' => ['required', 'string', 'max:120'],
-            'pendidikan_terakhir' => ['nullable', 'string', 'max:120'],
+            'pendidikan_choice' => ['nullable', 'string', 'max:40'],
+            'pendidikan_other' => ['nullable', 'string', 'max:120'],
             'cv' => ['nullable', 'file', 'mimes:pdf,doc,docx', 'max:5120'],
         ]);
 
@@ -57,6 +58,21 @@ class CareerBoostdayController extends Controller
             $status = $other;
         }
 
+        $pendidikan = null;
+        if (array_key_exists('pendidikan_choice', $validated) && $validated['pendidikan_choice'] !== null && $validated['pendidikan_choice'] !== '') {
+            if ($validated['pendidikan_choice'] === 'Lainnya') {
+                $other = trim((string)($validated['pendidikan_other'] ?? ''));
+                if ($other === '') {
+                    return back()
+                        ->withErrors(['pendidikan_other' => 'Field Pendidikan (Lainnya) wajib diisi jika memilih Lainnya.'])
+                        ->withInput();
+                }
+                $pendidikan = $other;
+            } else {
+                $pendidikan = $validated['pendidikan_choice'];
+            }
+        }
+
         $cvPath = null;
         $cvOriginalName = null;
         if ($request->hasFile('cv')) {
@@ -70,7 +86,7 @@ class CareerBoostdayController extends Controller
             'status' => $status,
             'jenis_konseling' => $validated['jenis_konseling'],
             'jadwal_konseling' => $validated['jadwal_konseling'],
-            'pendidikan_terakhir' => $validated['pendidikan_terakhir'] ?? null,
+            'pendidikan_terakhir' => $pendidikan,
             'cv_path' => $cvPath,
             'cv_original_name' => $cvOriginalName,
         ]);
