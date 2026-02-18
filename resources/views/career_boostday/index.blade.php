@@ -60,6 +60,47 @@
                     </div>
                 </div>
 
+                <div class="card shadow-sm rounded-4 mb-4">
+                    <div class="card-body p-4">
+                        <h3 class="h6 fw-bold mb-2"><i class="fa-solid fa-user-check me-2 text-success"></i>Jadwal Konsultasi Terbooking</h3>
+                        <div class="text-muted mb-3">Berikut jadwal konsultasi yang sudah di-accept. Nama pencari kerja ditampilkan <b>disamarkan</b>.</div>
+
+                        @if(!$bookedFeatureAvailable)
+                            <div class="alert alert-warning mb-0">
+                                Fitur “Terbooking” belum aktif (tabel/kolom belum tersedia di database).
+                            </div>
+                        @elseif($bookedKonsultasi->count() === 0)
+                            <div class="text-muted">Belum ada jadwal konsultasi yang terbooking.</div>
+                        @else
+                            <div class="table-responsive">
+                                <table class="table table-bordered align-middle mb-0">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th style="width: 160px;">Tanggal</th>
+                                            <th style="width: 140px;">Waktu</th>
+                                            <th>Nama (disamarkan)</th>
+                                            <th style="width: 160px;">Konselor</th>
+                                            <th style="width: 220px;">Jenis</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($bookedKonsultasi as $b)
+                                            @php $date = \Carbon\Carbon::parse($b->booked_date); @endphp
+                                            <tr>
+                                                <td class="fw-semibold">{{ $date->format('d M Y') }}</td>
+                                                <td>{{ $b->time ?: '-' }}</td>
+                                                <td class="fw-semibold">{{ $b->masked_name }}</td>
+                                                <td class="fw-semibold">{{ $b->konselor_name }}</td>
+                                                <td>{{ $b->jenis_konseling }}</td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+
                 <div class="card shadow-sm rounded-4">
                     <div class="card-body p-4">
                         <h3 class="h6 fw-bold mb-2"><i class="fa-solid fa-list-check me-2 text-success"></i>Agenda Konsultasi (Jika Ada)</h3>

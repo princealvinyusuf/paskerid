@@ -6,6 +6,7 @@ use App\Models\BookedDate;
 use App\Models\CareerBoostdayConsultation;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 class CareerBoostdayController extends Controller
@@ -29,7 +30,65 @@ class CareerBoostdayController extends Controller
             })
             ->values();
 
-        return view('career_boostday.index', compact('tab', 'konsultasiSlots', 'konsultasiAgendas'));
+        $bookedFeatureAvailable =
+            Schema::hasTable('career_boostday_consultations') &&
+            Schema::hasColumn('career_boostday_consultations', 'admin_status') &&
+            Schema::hasColumn('career_boostday_consultations', 'booked_date');
+
+        $hasPicRelation =
+            Schema::hasColumn('career_boostday_consultations', 'pic_id') &&
+            Schema::hasTable('career_boostday_pics');
+
+        $bookedKonsultasi = collect();
+        if ($bookedFeatureAvailable) {
+            $today = Carbon::today()->toDateString();
+            $q = DB::table('career_boostday_consultations as c');
+            if ($hasPicRelation) {
+                $q->leftJoin('career_boostday_pics as p', 'p.id', '=', 'c.pic_id');
+            }
+
+            $select = [
+                'c.booked_date',
+                'c.booked_time_start',
+                'c.booked_time_finish',
+                'c.name',
+                'c.jenis_konseling',
+                'c.jadwal_konseling',
+            ];
+            if ($hasPicRelation) {
+                $select[] = DB::raw('p.name as konselor_name');
+            } else {
+                $select[] = DB::raw("'-' as konselor_name");
+            }
+
+            $rows = $q
+                ->where('c.admin_status', 'accepted')
+                ->whereNotNull('c.booked_date')
+                ->where('c.booked_date', '>=', $today)
+                ->orderBy('c.booked_date', 'asc')
+                ->orderBy('c.booked_time_start', 'asc')
+                ->orderBy('c.created_at', 'asc')
+                ->limit(200)
+                ->get($select);
+
+            $bookedKonsultasi = $rows->map(function ($r) {
+                $time = null;
+                if (!empty($r->booked_time_start) && !empty($r->booked_time_finish)) {
+                    $time = substr((string)$r->booked_time_start, 0, 5) . ' - ' . substr((string)$r->booked_time_finish, 0, 5);
+                }
+
+                return (object) [
+                    'booked_date' => $r->booked_date,
+                    'time' => $time,
+                    'masked_name' => $this->maskPersonName((string)($r->name ?? '')),
+                    'konselor_name' => (string)($r->konselor_name ?? '-'),
+                    'jenis_konseling' => (string)($r->jenis_konseling ?? ''),
+                    'jadwal_konseling' => (string)($r->jadwal_konseling ?? ''),
+                ];
+            });
+        }
+
+        return view('career_boostday.index', compact('tab', 'konsultasiSlots', 'konsultasiAgendas', 'bookedKonsultasi', 'bookedFeatureAvailable'));
     }
 
     public function store(Request $request)
@@ -193,6 +252,41 @@ class CareerBoostdayController extends Controller
         }
 
         return $agendas->sortBy('date')->values();
+    }
+
+    private function maskPersonName(string $name): string
+    {
+        $name = trim(preg_replace('/\s+/u', ' ', $name) ?? '');
+        if ($name === '') {
+            return '';
+        }
+
+        $parts = explode(' ', $name);
+        $maskedParts = [];
+
+        foreach ($parts as $part) {
+            $part = trim($part);
+            if ($part === '') {
+                continue;
+            }
+
+            $len = mb_strlen($part, 'UTF-8');
+            if ($len <= 1) {
+                $maskedParts[] = '*';
+                continue;
+            }
+            if ($len === 2) {
+                $maskedParts[] = mb_substr($part, 0, 1, 'UTF-8') . '*';
+                continue;
+            }
+
+            $first = mb_substr($part, 0, 1, 'UTF-8');
+            $last = mb_substr($part, $len - 1, 1, 'UTF-8');
+            $middleCount = max(2, $len - 2);
+            $maskedParts[] = $first . str_repeat('*', $middleCount) . $last;
+        }
+
+        return implode(' ', $maskedParts);
     }
 }
 
