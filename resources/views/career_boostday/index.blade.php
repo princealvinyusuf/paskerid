@@ -125,20 +125,38 @@
 
                                 <div class="col-12">
                                     <label class="form-label fw-semibold">Apakah Saudara/i :</label>
-                                    <div class="d-flex flex-wrap gap-3">
-                                        @php
-                                            $statusOptions = [
-                                                'Fresh Graduate',
-                                                'Sudah bekerja & ingin pindah kerja',
-                                                'Lainnya',
-                                            ];
-                                        @endphp
-                                        @foreach($statusOptions as $opt)
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="status" id="status_{{ $loop->index }}" value="{{ $opt }}" {{ old('status') === $opt ? 'checked' : '' }} required>
-                                                <label class="form-check-label" for="status_{{ $loop->index }}">{{ $opt }}</label>
+                                    @php
+                                        $statusChoiceOld = old('status_choice');
+                                        $statusOtherOld = old('status_other');
+                                    @endphp
+
+                                    <div class="d-flex flex-column gap-2">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="status_choice" id="status_choice_fresh" value="Fresh Graduate" {{ $statusChoiceOld === 'Fresh Graduate' ? 'checked' : '' }} required>
+                                            <label class="form-check-label" for="status_choice_fresh">Fresh Graduate</label>
+                                        </div>
+
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="status_choice" id="status_choice_pindah" value="Sudah bekerja & ingin pindah kerja" {{ $statusChoiceOld === 'Sudah bekerja & ingin pindah kerja' ? 'checked' : '' }} required>
+                                            <label class="form-check-label" for="status_choice_pindah">Sudah bekerja &amp; ingin pindah bekerja</label>
+                                        </div>
+
+                                        <div class="d-flex flex-column flex-md-row align-items-md-center gap-2">
+                                            <div class="form-check m-0">
+                                                <input class="form-check-input" type="radio" name="status_choice" id="status_choice_other" value="Lainnya" {{ $statusChoiceOld === 'Lainnya' ? 'checked' : '' }} required>
+                                                <label class="form-check-label" for="status_choice_other">Other:</label>
                                             </div>
-                                        @endforeach
+                                            <input
+                                                type="text"
+                                                class="form-control"
+                                                id="status_other"
+                                                name="status_other"
+                                                value="{{ $statusOtherOld }}"
+                                                placeholder="Tulis jawaban lainnya"
+                                                style="max-width: 520px;"
+                                            >
+                                        </div>
+                                        <div class="form-text" id="status_other_help">Isi field Other hanya jika memilih Lainnya.</div>
                                     </div>
                                 </div>
 
@@ -194,6 +212,29 @@
                                 </button>
                             </div>
                         </form>
+
+                        <script>
+                            (function () {
+                                function syncStatusOther() {
+                                    var otherRadio = document.getElementById('status_choice_other');
+                                    var otherInput = document.getElementById('status_other');
+                                    var help = document.getElementById('status_other_help');
+                                    if (!otherRadio || !otherInput) return;
+
+                                    var enabled = !!otherRadio.checked;
+                                    otherInput.disabled = !enabled;
+                                    otherInput.required = enabled;
+                                    if (!enabled) otherInput.value = '';
+                                    if (help) help.style.opacity = enabled ? '1' : '0.6';
+                                }
+
+                                document.addEventListener('change', function (e) {
+                                    if (e.target && e.target.name === 'status_choice') syncStatusOther();
+                                });
+                                document.addEventListener('DOMContentLoaded', syncStatusOther);
+                                syncStatusOther();
+                            })();
+                        </script>
                     </div>
                 </div>
             @endif

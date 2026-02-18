@@ -37,12 +37,25 @@ class CareerBoostdayController extends Controller
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:120'],
             'whatsapp' => ['required', 'string', 'max:30'],
-            'status' => ['required', 'string', 'max:120'],
+            'status_choice' => ['required', 'string', 'max:20'],
+            'status_other' => ['nullable', 'string', 'max:120'],
             'jenis_konseling' => ['required', 'string', 'max:120'],
             'jadwal_konseling' => ['required', 'string', 'max:120'],
             'pendidikan_terakhir' => ['nullable', 'string', 'max:120'],
             'cv' => ['nullable', 'file', 'mimes:pdf,doc,docx', 'max:5120'],
         ]);
+
+        $statusChoice = $validated['status_choice'];
+        $status = $statusChoice;
+        if ($statusChoice === 'Lainnya') {
+            $other = trim((string)($validated['status_other'] ?? ''));
+            if ($other === '') {
+                return back()
+                    ->withErrors(['status_other' => 'Field Other wajib diisi jika memilih Lainnya.'])
+                    ->withInput();
+            }
+            $status = $other;
+        }
 
         $cvPath = null;
         $cvOriginalName = null;
@@ -54,7 +67,7 @@ class CareerBoostdayController extends Controller
         CareerBoostdayConsultation::create([
             'name' => $validated['name'],
             'whatsapp' => $validated['whatsapp'],
-            'status' => $validated['status'],
+            'status' => $status,
             'jenis_konseling' => $validated['jenis_konseling'],
             'jadwal_konseling' => $validated['jadwal_konseling'],
             'pendidikan_terakhir' => $validated['pendidikan_terakhir'] ?? null,
