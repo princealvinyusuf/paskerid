@@ -5,6 +5,7 @@ use App\Http\Controllers\MiniVideoController;
 use App\Http\Controllers\Api\HighlightStatisticController;
 use App\Http\Controllers\Api\InformationController;
 use App\Http\Controllers\WalkinGalleryController;
+use App\Http\Controllers\CareerBoostdayController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -34,6 +35,10 @@ Route::get('/dashboard-labor-demand', [App\Http\Controllers\DashboardLaborDemand
 Route::get('/informasi/{id}', [App\Http\Controllers\InformasiController::class, 'show'])->name('informasi.show');
 
 Route::get('/virtual-karir', [App\Http\Controllers\VirtualKarirController::class, 'index'])->name('virtual-karir.index');
+
+// Career BoostDay (public)
+Route::get('/career-boostday', [CareerBoostdayController::class, 'index'])->name('career-boostday.index');
+Route::post('/career-boostday/konsultasi', [CareerBoostdayController::class, 'store'])->name('career-boostday.store');
 
 Route::get('/informasi-pasar-kerja', [App\Http\Controllers\InformasiPasarKerjaController::class, 'index'])->name('informasi_pasar_kerja.index');
 

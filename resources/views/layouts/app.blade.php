@@ -53,6 +53,7 @@
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="layananDropdown">
                             <li><a class="dropdown-item @if(request()->routeIs('virtual-karir.index')) active fw-bold @endif" href="{{ route('virtual-karir.index') }}">Virtual Karir</a></li>
+                            <li><a class="dropdown-item @if(request()->routeIs('career-boostday.index')) active fw-bold @endif" href="{{ route('career-boostday.index') }}">Career BoostDay</a></li>
                             <li><a class="dropdown-item" href="https://microlearning-paskerid.kemnaker.go.id/" target="_blank">Microlearning</a></li>
                             <li><a class="dropdown-item" href="https://paskerid.kemnaker.go.id/RIASEC/" target="_blank">Tes Minat & Karir</a></li>
                         </ul>

@@ -1,0 +1,205 @@
+@extends('layouts.app')
+
+@section('content')
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-10">
+            <div class="p-4 p-md-5 rounded-4 shadow-sm text-white mb-4" style="background: linear-gradient(135deg, #187C19 0%, #00A38A 100%);">
+                <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
+                    <div>
+                        <h1 class="h3 fw-bold mb-2">Career BoostDay</h1>
+                        <div class="opacity-90">Konsultasi karir untuk pencari kerja & informasi jadwal konsultasi.</div>
+                    </div>
+                    <div class="text-md-end small opacity-90">
+                        <div><i class="fa-solid fa-comments me-1"></i> Konsultasi</div>
+                        <div><i class="fa-solid fa-calendar-days me-1"></i> Jadwal</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-center mb-4">
+                <div class="btn-group" role="group" aria-label="Career BoostDay toggle">
+                    <a href="{{ route('career-boostday.index', ['tab' => 'form']) }}"
+                       class="btn {{ $tab === 'form' ? 'btn-success' : 'btn-outline-success' }}">
+                        Form Konsultasi Karir (Pencari Kerja)
+                    </a>
+                    <a href="{{ route('career-boostday.index', ['tab' => 'jadwal']) }}"
+                       class="btn {{ $tab === 'jadwal' ? 'btn-success' : 'btn-outline-success' }}">
+                        Jadwal Konsultasi
+                    </a>
+                </div>
+            </div>
+
+            @if(session('success'))
+                <div class="alert alert-success shadow-sm">{{ session('success') }}</div>
+            @endif
+
+            @if($tab === 'jadwal')
+                <div class="card shadow-sm rounded-4 mb-4">
+                    <div class="card-body p-4">
+                        <h2 class="h5 fw-bold mb-2"><i class="fa-solid fa-calendar-days me-2 text-success"></i>Jadwal Konsultasi</h2>
+                        <div class="text-muted mb-3">Pilih slot jadwal yang tersedia (Anda juga bisa memilihnya di form).</div>
+                        <div class="table-responsive">
+                            <table class="table table-bordered align-middle mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th style="width: 56px;">No</th>
+                                        <th>Slot Jadwal</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($konsultasiSlots as $idx => $slot)
+                                        <tr>
+                                            <td class="text-center">{{ $idx + 1 }}</td>
+                                            <td class="fw-semibold">{{ $slot }}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card shadow-sm rounded-4">
+                    <div class="card-body p-4">
+                        <h3 class="h6 fw-bold mb-2"><i class="fa-solid fa-list-check me-2 text-success"></i>Agenda Konsultasi (Jika Ada)</h3>
+                        <div class="text-muted mb-3">Agenda ini diambil dari data booking yang sudah disetujui dan mengandung kata “konsultasi”.</div>
+
+                        @if($konsultasiAgendas->count() === 0)
+                            <div class="text-muted">Belum ada agenda konsultasi yang terjadwal.</div>
+                        @else
+                            <div class="table-responsive">
+                                <table class="table table-bordered align-middle">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th style="width: 160px;">Tanggal</th>
+                                            <th>Kegiatan</th>
+                                            <th>Deskripsi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($konsultasiAgendas as $agenda)
+                                            @php $date = \Carbon\Carbon::parse($agenda->date); @endphp
+                                            <tr>
+                                                <td>{{ $date->format('d M Y') }}</td>
+                                                <td class="fw-semibold">{{ $agenda->title }}</td>
+                                                <td>{{ $agenda->description }}</td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+            @else
+                <div class="card shadow-sm rounded-4">
+                    <div class="card-body p-4 p-md-5">
+                        <h2 class="h5 fw-bold mb-1">Form Konsultasi Karir (Pencari Kerja)</h2>
+                        <div class="text-muted mb-4">Silakan isi data berikut. Tim kami akan menghubungi Anda melalui WhatsApp.</div>
+
+                        @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <div class="fw-bold mb-2">Mohon periksa kembali isian Anda:</div>
+                                <ul class="mb-0">
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+
+                        <form method="POST" action="{{ route('career-boostday.store') }}" enctype="multipart/form-data">
+                            @csrf
+
+                            <div class="row g-3">
+                                <div class="col-12 col-md-6">
+                                    <label class="form-label fw-semibold" for="name">Nama</label>
+                                    <input type="text" id="name" name="name" class="form-control" value="{{ old('name') }}" required>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <label class="form-label fw-semibold" for="whatsapp">Nomor WhatsApp</label>
+                                    <input type="text" id="whatsapp" name="whatsapp" class="form-control" value="{{ old('whatsapp') }}" placeholder="Contoh: 0822xxxx atau +62822xxxx" required>
+                                    <div class="form-text">Pastikan nomor aktif dan dapat dihubungi.</div>
+                                </div>
+
+                                <div class="col-12">
+                                    <label class="form-label fw-semibold">Apakah Saudara/i :</label>
+                                    <div class="d-flex flex-wrap gap-3">
+                                        @php
+                                            $statusOptions = [
+                                                'Fresh Graduate',
+                                                'Sudah bekerja & ingin pindah kerja',
+                                                'Lainnya',
+                                            ];
+                                        @endphp
+                                        @foreach($statusOptions as $opt)
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="status" id="status_{{ $loop->index }}" value="{{ $opt }}" {{ old('status') === $opt ? 'checked' : '' }} required>
+                                                <label class="form-check-label" for="status_{{ $loop->index }}">{{ $opt }}</label>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-6">
+                                    <label class="form-label fw-semibold" for="jenis_konseling">Jenis Konseling</label>
+                                    <select id="jenis_konseling" name="jenis_konseling" class="form-select" required>
+                                        @php
+                                            $jenisOptions = ['Online (Zoom)'];
+                                        @endphp
+                                        @foreach($jenisOptions as $opt)
+                                            <option value="{{ $opt }}" {{ old('jenis_konseling', 'Online (Zoom)') === $opt ? 'selected' : '' }}>{{ $opt }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div class="col-12 col-md-6">
+                                    <label class="form-label fw-semibold" for="jadwal_konseling">Jadwal Konseling</label>
+                                    <select id="jadwal_konseling" name="jadwal_konseling" class="form-select" required>
+                                        <option value="" disabled {{ old('jadwal_konseling') ? '' : 'selected' }}>Pilih jadwal</option>
+                                        @foreach($konsultasiSlots as $slot)
+                                            <option value="{{ $slot }}" {{ old('jadwal_konseling') === $slot ? 'selected' : '' }}>{{ $slot }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div class="col-12 col-md-6">
+                                    <label class="form-label fw-semibold" for="pendidikan_terakhir">Pendidikan Terakhir</label>
+                                    <select id="pendidikan_terakhir" name="pendidikan_terakhir" class="form-select">
+                                        @php
+                                            $pendidikanOptions = ['SMA/SMK', 'D1/D2', 'D3', 'S1', 'S2', 'S3', 'Lainnya'];
+                                            $pendidikanOld = old('pendidikan_terakhir');
+                                        @endphp
+                                        <option value="" {{ $pendidikanOld ? '' : 'selected' }}>Pilih (opsional)</option>
+                                        @foreach($pendidikanOptions as $opt)
+                                            <option value="{{ $opt }}" {{ $pendidikanOld === $opt ? 'selected' : '' }}>{{ $opt }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div class="col-12 col-md-6">
+                                    <label class="form-label fw-semibold" for="cv">Upload CV</label>
+                                    <input type="file" id="cv" name="cv" class="form-control" accept=".pdf,.doc,.docx">
+                                    <div class="form-text">Format: PDF/DOC/DOCX, maksimal 5MB.</div>
+                                </div>
+                            </div>
+
+                            <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mt-4">
+                                <div class="text-muted small">
+                                    Dengan mengirim form ini, Anda menyetujui data digunakan untuk proses konsultasi karir.
+                                </div>
+                                <button class="btn btn-success btn-lg px-4" type="submit">
+                                    <i class="fa-solid fa-paper-plane me-2"></i>Kirim
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            @endif
+        </div>
+    </div>
+</div>
+@endsection
+
+
