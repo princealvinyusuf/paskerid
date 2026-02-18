@@ -39,7 +39,7 @@ class CareerBoostdayController extends Controller
             'whatsapp' => ['required', 'string', 'max:30'],
             'status_choice' => ['required', 'string', 'max:20'],
             'status_other' => ['nullable', 'string', 'max:120'],
-            'jenis_konseling' => ['required', 'string', 'max:120'],
+            'jenis_konseling' => ['required', 'string', 'max:255'],
             'jadwal_konseling' => ['required', 'string', 'max:120'],
             'pendidikan_terakhir' => ['nullable', 'string', 'max:120'],
             'cv' => ['nullable', 'file', 'mimes:pdf,doc,docx', 'max:5120'],

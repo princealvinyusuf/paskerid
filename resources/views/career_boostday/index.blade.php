@@ -161,15 +161,22 @@
                                 </div>
 
                                 <div class="col-12 col-md-6">
-                                    <label class="form-label fw-semibold" for="jenis_konseling">Jenis Konseling</label>
-                                    <select id="jenis_konseling" name="jenis_konseling" class="form-select" required>
-                                        @php
-                                            $jenisOptions = ['Online (Zoom)'];
-                                        @endphp
-                                        @foreach($jenisOptions as $opt)
-                                            <option value="{{ $opt }}" {{ old('jenis_konseling', 'Online (Zoom)') === $opt ? 'selected' : '' }}>{{ $opt }}</option>
-                                        @endforeach
-                                    </select>
+                                    <label class="form-label fw-semibold">Jenis Konseling</label>
+                                    @php
+                                        $jenisOld = old('jenis_konseling', 'Online (Zoom)');
+                                        $jenisOnline = 'Online (Zoom)';
+                                        $jenisOffline = 'Offline (datang langsung ke kantor Pusat Pasar Kerja, Jl. Gatot Subroto No.44, Jakarta Selatan)';
+                                    @endphp
+                                    <div class="d-flex flex-column gap-2">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="jenis_konseling" id="jenis_online" value="{{ $jenisOnline }}" {{ $jenisOld === $jenisOnline ? 'checked' : '' }} required>
+                                            <label class="form-check-label" for="jenis_online">{{ $jenisOnline }}</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="jenis_konseling" id="jenis_offline" value="{{ $jenisOffline }}" {{ $jenisOld === $jenisOffline ? 'checked' : '' }} required>
+                                            <label class="form-check-label" for="jenis_offline">{{ $jenisOffline }}</label>
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <div class="col-12 col-md-6">
