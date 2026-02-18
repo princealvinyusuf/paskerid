@@ -132,18 +132,18 @@
 
                                     <div class="d-flex flex-column gap-2">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="status_choice" id="status_choice_fresh" value="Fresh Graduate" {{ $statusChoiceOld === 'Fresh Graduate' ? 'checked' : '' }} required>
+                                            <input class="form-check-input" type="radio" name="status_choice" id="status_choice_fresh" value="fresh" {{ $statusChoiceOld === 'fresh' ? 'checked' : '' }} required>
                                             <label class="form-check-label" for="status_choice_fresh">Fresh Graduate</label>
                                         </div>
 
                                         <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="status_choice" id="status_choice_pindah" value="Sudah bekerja & ingin pindah kerja" {{ $statusChoiceOld === 'Sudah bekerja & ingin pindah kerja' ? 'checked' : '' }} required>
+                                            <input class="form-check-input" type="radio" name="status_choice" id="status_choice_pindah" value="pindah" {{ $statusChoiceOld === 'pindah' ? 'checked' : '' }} required>
                                             <label class="form-check-label" for="status_choice_pindah">Sudah bekerja &amp; ingin pindah bekerja</label>
                                         </div>
 
                                         <div class="d-flex flex-column flex-md-row align-items-md-center gap-2">
                                             <div class="form-check m-0">
-                                                <input class="form-check-input" type="radio" name="status_choice" id="status_choice_other" value="Lainnya" {{ $statusChoiceOld === 'Lainnya' ? 'checked' : '' }} required>
+                                                <input class="form-check-input" type="radio" name="status_choice" id="status_choice_other" value="lainnya" {{ $statusChoiceOld === 'lainnya' ? 'checked' : '' }} required>
                                                 <label class="form-check-label" for="status_choice_other">Other:</label>
                                             </div>
                                             <input

@@ -37,7 +37,7 @@ class CareerBoostdayController extends Controller
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:120'],
             'whatsapp' => ['required', 'string', 'max:30'],
-            'status_choice' => ['required', 'string', 'max:20'],
+            'status_choice' => ['required', 'string', 'in:fresh,pindah,lainnya'],
             'status_other' => ['nullable', 'string', 'max:120'],
             'jenis_konseling' => ['required', 'string', 'max:255'],
             'jadwal_konseling' => ['required', 'string', 'max:120'],
@@ -48,7 +48,7 @@ class CareerBoostdayController extends Controller
 
         $statusChoice = $validated['status_choice'];
         $status = $statusChoice;
-        if ($statusChoice === 'Lainnya') {
+        if ($statusChoice === 'lainnya') {
             $other = trim((string)($validated['status_other'] ?? ''));
             if ($other === '') {
                 return back()
@@ -56,6 +56,10 @@ class CareerBoostdayController extends Controller
                     ->withInput();
             }
             $status = $other;
+        } elseif ($statusChoice === 'fresh') {
+            $status = 'Fresh Graduate';
+        } elseif ($statusChoice === 'pindah') {
+            $status = 'Sudah bekerja & ingin pindah kerja';
         }
 
         $pendidikan = null;
