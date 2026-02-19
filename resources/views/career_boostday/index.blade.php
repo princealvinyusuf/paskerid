@@ -7,7 +7,7 @@
             <div class="p-4 p-md-5 rounded-4 shadow-sm text-white mb-4" style="background: linear-gradient(135deg, #187C19 0%, #00A38A 100%);">
                 <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
                     <div>
-                        <h1 class="h3 fw-bold mb-2">Career BoostDay</h1>
+                        <h1 class="h3 fw-bold mb-2">Career Boost Day</h1>
                         <div class="opacity-90">Konsultasi karir untuk pencari kerja & informasi jadwal konsultasi.</div>
                     </div>
                     <div class="text-md-end small opacity-90">
@@ -18,7 +18,7 @@
             </div>
 
             <div class="d-flex justify-content-center mb-4">
-                <div class="btn-group" role="group" aria-label="Career BoostDay toggle">
+                <div class="btn-group" role="group" aria-label="Career Boost Day toggle">
                     <a href="{{ route('career-boostday.index', ['tab' => 'form']) }}"
                        class="btn {{ $tab === 'form' ? 'btn-success' : 'btn-outline-success' }}">
                         Form Konsultasi Karir (Pencari Kerja)

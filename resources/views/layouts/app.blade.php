@@ -77,7 +77,7 @@
                     </li> 
                     <li class="nav-item">
                         <a class="nav-link @if(request()->routeIs('career-boostday.index')) active fw-bold @endif" href="{{ route('career-boostday.index') }}">
-                            Career BoostDay
+                            Career Boost Day
                         </a>
                     </li>
                     <li class="nav-item">
