@@ -37,33 +37,8 @@
             @if($tab === 'jadwal')
                 <div class="card shadow-sm rounded-4 mb-4">
                     <div class="card-body p-4">
-                        <h2 class="h5 fw-bold mb-2"><i class="fa-solid fa-calendar-days me-2 text-success"></i>Jadwal Konsultasi</h2>
-                        <div class="text-muted mb-3">Pilih slot jadwal yang tersedia (Anda juga bisa memilihnya di form).</div>
-                        <div class="table-responsive">
-                            <table class="table table-bordered align-middle mb-0">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th style="width: 56px;">No</th>
-                                        <th>Slot Jadwal</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($konsultasiSlots as $idx => $slot)
-                                        <tr>
-                                            <td class="text-center">{{ $idx + 1 }}</td>
-                                            <td class="fw-semibold">{{ $slot }}</td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card shadow-sm rounded-4 mb-4">
-                    <div class="card-body p-4">
                         <h3 class="h6 fw-bold mb-2"><i class="fa-solid fa-user-check me-2 text-success"></i>Jadwal Konsultasi Terbooking</h3>
-                        <div class="text-muted mb-3">Berikut jadwal konsultasi yang sudah di-accept. Nama pencari kerja ditampilkan <b>disamarkan</b>.</div>
+                        <div class="text-muted mb-3">Berikut jadwal konsultasi yang sudah di-accept.</div>
 
                         @if(!$bookedFeatureAvailable)
                             <div class="alert alert-warning mb-0">
