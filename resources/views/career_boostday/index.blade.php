@@ -175,7 +175,7 @@
                                 <div class="col-12 col-md-6">
                                     <label class="form-label fw-semibold" for="pendidikan_terakhir">Pendidikan Terakhir</label>
                                     @php
-                                        $pendidikanOptions = ['SD', 'SMP', 'SMA', 'SMK', 'D1/D2', 'D3', 'D4', 'S1/D4', 'S2', 'S3', 'Lainnya'];
+                                        $pendidikanOptions = ['SD', 'SMP', 'SMA', 'SMK', 'D1/D2', 'D3', 'S1/D4', 'S2', 'S3', 'Lainnya'];
                                         $pendidikanChoiceOld = old('pendidikan_choice');
                                         $pendidikanOtherOld = old('pendidikan_other');
                                     @endphp
