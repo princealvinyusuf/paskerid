@@ -175,7 +175,7 @@
                                 <div class="col-12 col-md-6">
                                     <label class="form-label fw-semibold" for="pendidikan_terakhir">Pendidikan Terakhir</label>
                                     @php
-                                        $pendidikanOptions = ['SMA/SMK', 'D1/D2', 'D3', 'S1', 'S2', 'S3', 'Lainnya'];
+                                        $pendidikanOptions = ['SD', 'SMP', 'SMA', 'SMK', 'D1/D2', 'D3', 'D4', 'S1/D4', 'S2', 'S3', 'Lainnya'];
                                         $pendidikanChoiceOld = old('pendidikan_choice');
                                         $pendidikanOtherOld = old('pendidikan_other');
                                     @endphp
@@ -199,6 +199,18 @@
                                         >
                                         <div class="form-text" id="pendidikan_other_help">Isi field ini hanya jika memilih Lainnya.</div>
                                     </div>
+                                </div>
+
+                                <div class="col-12 col-md-6">
+                                    <label class="form-label fw-semibold" for="jurusan">Jurusan <span class="text-muted fw-normal">(opsional)</span></label>
+                                    <input
+                                        type="text"
+                                        id="jurusan"
+                                        name="jurusan"
+                                        class="form-control"
+                                        value="{{ old('jurusan') }}"
+                                        placeholder="Contoh: Teknik Informatika / Akuntansi / IPA"
+                                    >
                                 </div>
 
                                 <div class="col-12 col-md-6">

@@ -102,6 +102,7 @@ class CareerBoostdayController extends Controller
             'jadwal_konseling' => ['required', 'string', 'max:120'],
             'pendidikan_choice' => ['nullable', 'string', 'max:40'],
             'pendidikan_other' => ['nullable', 'string', 'max:120'],
+            'jurusan' => ['nullable', 'string', 'max:120'],
             'cv' => ['nullable', 'file', 'mimes:pdf,doc,docx', 'max:5120'],
         ]);
 
@@ -143,7 +144,13 @@ class CareerBoostdayController extends Controller
             $cvPath = $request->file('cv')->store('career_boostday/cv', 'public');
         }
 
-        CareerBoostdayConsultation::create([
+        $jurusan = null;
+        if (array_key_exists('jurusan', $validated)) {
+            $j = trim((string)$validated['jurusan']);
+            $jurusan = $j !== '' ? $j : null;
+        }
+
+        $payload = [
             'name' => $validated['name'],
             'whatsapp' => $validated['whatsapp'],
             'status' => $status,
@@ -152,7 +159,14 @@ class CareerBoostdayController extends Controller
             'pendidikan_terakhir' => $pendidikan,
             'cv_path' => $cvPath,
             'cv_original_name' => $cvOriginalName,
-        ]);
+        ];
+
+        // Backward compatible: only save if the column exists (migration may not be applied yet).
+        if (Schema::hasColumn('career_boostday_consultations', 'jurusan')) {
+            $payload['jurusan'] = $jurusan;
+        }
+
+        CareerBoostdayConsultation::create($payload);
 
         return redirect()
             ->route('career-boostday.index', ['tab' => 'form'])

@@ -16,6 +16,7 @@ class CareerBoostdayConsultation extends Model
         'jenis_konseling',
         'jadwal_konseling',
         'pendidikan_terakhir',
+        'jurusan',
         'cv_path',
         'cv_original_name',
     ];
