@@ -75,39 +75,6 @@
                         @endif
                     </div>
                 </div>
-
-                <div class="card shadow-sm rounded-4">
-                    <div class="card-body p-4">
-                        <h3 class="h6 fw-bold mb-2"><i class="fa-solid fa-list-check me-2 text-success"></i>Agenda Konsultasi (Jika Ada)</h3>
-                        <div class="text-muted mb-3">Agenda ini diambil dari data booking yang sudah disetujui dan mengandung kata “konsultasi”.</div>
-
-                        @if($konsultasiAgendas->count() === 0)
-                            <div class="text-muted">Belum ada agenda konsultasi yang terjadwal.</div>
-                        @else
-                            <div class="table-responsive">
-                                <table class="table table-bordered align-middle">
-                                    <thead class="table-light">
-                                        <tr>
-                                            <th style="width: 160px;">Tanggal</th>
-                                            <th>Kegiatan</th>
-                                            <th>Deskripsi</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach($konsultasiAgendas as $agenda)
-                                            @php $date = \Carbon\Carbon::parse($agenda->date); @endphp
-                                            <tr>
-                                                <td>{{ $date->format('d M Y') }}</td>
-                                                <td class="fw-semibold">{{ $agenda->title }}</td>
-                                                <td>{{ $agenda->description }}</td>
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
-                        @endif
-                    </div>
-                </div>
             @else
                 <div class="card shadow-sm rounded-4">
                     <div class="card-body p-4 p-md-5">
