@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\HighlightStatisticController;
 use App\Http\Controllers\Api\InformationController;
 use App\Http\Controllers\WalkinGalleryController;
 use App\Http\Controllers\CareerBoostdayController;
+use App\Http\Controllers\FormHasilKonselingController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -39,6 +40,10 @@ Route::get('/virtual-karir', [App\Http\Controllers\VirtualKarirController::class
 // Career Boost Day (public)
 Route::get('/career-boostday', [CareerBoostdayController::class, 'index'])->name('career-boostday.index');
 Route::post('/career-boostday/konsultasi', [CareerBoostdayController::class, 'store'])->name('career-boostday.store');
+
+// Form Hasil Konseling (public) - not linked in navbar
+Route::get('/form-hasil-konseling', [FormHasilKonselingController::class, 'index'])->name('form-hasil-konseling.index');
+Route::post('/form-hasil-konseling', [FormHasilKonselingController::class, 'store'])->name('form-hasil-konseling.store');
 
 Route::get('/informasi-pasar-kerja', [App\Http\Controllers\InformasiPasarKerjaController::class, 'index'])->name('informasi_pasar_kerja.index');
 
