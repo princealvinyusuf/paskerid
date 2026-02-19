@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\CounselingResult;
 use App\Models\CounselingResultEvidence;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Schema;
 
 class FormHasilKonselingController extends Controller
 {
@@ -34,6 +35,14 @@ class FormHasilKonselingController extends Controller
             'bukti.*' => ['file', 'max:10240', 'mimes:pdf,doc,docx,xls,xlsx,ppt,pptx,txt,jpg,jpeg,png,webp'],
         ]);
 
+        $files = $request->file('bukti', []);
+        $hasFiles = is_array($files) && collect($files)->filter()->isNotEmpty();
+        if ($hasFiles && !Schema::hasTable('counseling_result_evidences')) {
+            return back()
+                ->withErrors(['bukti' => 'Fitur upload bukti belum aktif di database. Silakan jalankan migrasi terlebih dahulu.'])
+                ->withInput();
+        }
+
         $result = CounselingResult::create([
             'nama_konselor' => $validated['nama_konselor'],
             'nama_konseli' => $validated['nama_konseli'],
@@ -43,7 +52,6 @@ class FormHasilKonselingController extends Controller
             'saran_untuk_pencaker' => $validated['saran_untuk_pencaker'],
         ]);
 
-        $files = $request->file('bukti', []);
         foreach ($files as $file) {
             if (!$file) {
                 continue;
