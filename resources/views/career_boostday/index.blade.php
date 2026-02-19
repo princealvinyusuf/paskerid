@@ -7,8 +7,8 @@
             <div class="p-4 p-md-5 rounded-4 shadow-sm text-white mb-4" style="background: linear-gradient(135deg, #187C19 0%, #00A38A 100%);">
                 <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
                     <div>
-                        <h1 class="h3 fw-bold mb-2">Career Boost Day</h1>
-                        <div class="opacity-90">Konsultasi karir untuk pencari kerja & informasi jadwal konsultasi.</div>
+                        <h1 class="h3 fw-bold mb-2">Career Boost Day : Curhat Peluang Kerja</h1>
+                        <div class="opacity-90">Unlock peluang kerja dan insight pasar kerja yang relevan buat kamu</div>
                     </div>
                     <div class="text-md-end small opacity-90">
                         <div><i class="fa-solid fa-comments me-1"></i> Konsultasi</div>
