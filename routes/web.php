@@ -44,6 +44,7 @@ Route::post('/career-boostday/konsultasi', [CareerBoostdayController::class, 'st
 // Form Hasil Konseling (public) - not linked in navbar
 Route::get('/form-hasil-konseling', [FormHasilKonselingController::class, 'index'])->name('form-hasil-konseling.index');
 Route::post('/form-hasil-konseling', [FormHasilKonselingController::class, 'store'])->name('form-hasil-konseling.store');
+Route::get('/form-hasil-konseling/prefill', [FormHasilKonselingController::class, 'prefill'])->name('form-hasil-konseling.prefill');
 
 Route::get('/informasi-pasar-kerja', [App\Http\Controllers\InformasiPasarKerjaController::class, 'index'])->name('informasi_pasar_kerja.index');
 

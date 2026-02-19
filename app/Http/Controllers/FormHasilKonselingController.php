@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\CounselingResult;
 use App\Models\CounselingResultEvidence;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 class FormHasilKonselingController extends Controller
@@ -19,7 +20,73 @@ class FormHasilKonselingController extends Controller
     public function index()
     {
         $jenisOptions = self::JENIS_KONSELING_OPTIONS;
-        return view('form_hasil_konseling.index', compact('jenisOptions'));
+
+        $konselorOptions = collect();
+        $konseliOptions = collect();
+        if (Schema::hasTable('counseling_results')) {
+            // Keep it light: only bring a reasonable number for datalist autocomplete.
+            $konselorOptions = DB::table('counseling_results')
+                ->select('nama_konselor')
+                ->whereNotNull('nama_konselor')
+                ->where('nama_konselor', '<>', '')
+                ->groupBy('nama_konselor')
+                ->orderBy('nama_konselor')
+                ->limit(500)
+                ->pluck('nama_konselor');
+
+            $konseliOptions = DB::table('counseling_results')
+                ->select('nama_konseli')
+                ->whereNotNull('nama_konseli')
+                ->where('nama_konseli', '<>', '')
+                ->groupBy('nama_konseli')
+                ->orderBy('nama_konseli')
+                ->limit(500)
+                ->pluck('nama_konseli');
+        }
+
+        return view('form_hasil_konseling.index', compact('jenisOptions', 'konselorOptions', 'konseliOptions'));
+    }
+
+    public function prefill(Request $request)
+    {
+        $validated = $request->validate([
+            'nama_konselor' => ['required', 'string', 'max:120'],
+            'nama_konseli' => ['required', 'string', 'max:120'],
+        ]);
+
+        if (!Schema::hasTable('counseling_results')) {
+            return response()->json(['found' => false]);
+        }
+
+        $row = DB::table('counseling_results')
+            ->where('nama_konselor', $validated['nama_konselor'])
+            ->where('nama_konseli', $validated['nama_konseli'])
+            ->orderBy('tanggal_konseling', 'desc')
+            ->orderBy('id', 'desc')
+            ->first([
+                'id',
+                'tanggal_konseling',
+                'jenis_konseling',
+                'hal_yang_dibahas',
+                'saran_untuk_pencaker',
+                'updated_at',
+            ]);
+
+        if (!$row) {
+            return response()->json(['found' => false]);
+        }
+
+        return response()->json([
+            'found' => true,
+            'data' => [
+                'id' => $row->id,
+                'tanggal_konseling' => $row->tanggal_konseling,
+                'jenis_konseling' => $row->jenis_konseling,
+                'hal_yang_dibahas' => $row->hal_yang_dibahas,
+                'saran_untuk_pencaker' => $row->saran_untuk_pencaker,
+                'updated_at' => $row->updated_at,
+            ],
+        ]);
     }
 
     public function store(Request $request)
