@@ -34,6 +34,29 @@
                     <form method="POST" action="{{ route('form-hasil-konseling.store') }}" enctype="multipart/form-data">
                         @csrf
 
+                        @if(!empty($bookedAvailable) && ($bookedOptions ?? collect())->count() > 0)
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold" for="booked_pick">Pilih Jadwal Booked (opsional)</label>
+                                <select class="form-select" id="booked_pick">
+                                    <option value="" selected>Pilih jadwal untuk auto-isi (khusus data accepted)</option>
+                                    @foreach($bookedOptions as $b)
+                                        @php
+                                            $label = trim(($b->tanggal_konseling ?: '') . ' ' . ($b->time ? '(' . $b->time . ')' : ''));
+                                            $label = ($label ? ($label . ' - ') : '') . ($b->nama_konseli ?: '-') . ' / Konselor: ' . ($b->nama_konselor ?: '-');
+                                        @endphp
+                                        <option
+                                            value="{{ $b->id }}"
+                                            data-nk="{{ $b->nama_konselor }}"
+                                            data-np="{{ $b->nama_konseli }}"
+                                            data-tgl="{{ $b->tanggal_konseling }}"
+                                            data-jenis="{{ $b->jenis_konseling }}"
+                                        >{{ $label }}</option>
+                                    @endforeach
+                                </select>
+                                <div class="form-text">Jika dipilih, field di bawah akan terisi otomatis dan masih bisa diedit.</div>
+                            </div>
+                        @endif
+
                         <div class="mb-3">
                             <label class="form-label fw-semibold" for="nama_konselor">Nama Konselor <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="nama_konselor" name="nama_konselor" value="{{ old('nama_konselor') }}" required list="konselor_list" autocomplete="off">
@@ -101,6 +124,7 @@
                         (function () {
                             var konselorEl = document.getElementById('nama_konselor');
                             var konseliEl = document.getElementById('nama_konseli');
+                            var bookedPickEl = document.getElementById('booked_pick');
                             var alertEl = document.getElementById('prefillAlert');
 
                             var tglEl = document.getElementById('tanggal_konseling');
@@ -114,6 +138,20 @@
                             function setAlert(show) {
                                 if (!alertEl) return;
                                 alertEl.classList.toggle('d-none', !show);
+                            }
+
+                            function fillFromBookedOption() {
+                                if (!bookedPickEl) return;
+                                var opt = bookedPickEl.selectedOptions && bookedPickEl.selectedOptions[0];
+                                if (!opt || !opt.dataset) return;
+                                if (!bookedPickEl.value) return;
+
+                                if (konselorEl) konselorEl.value = opt.dataset.nk || '';
+                                if (konseliEl) konseliEl.value = opt.dataset.np || '';
+                                if (tglEl) tglEl.value = opt.dataset.tgl || '';
+                                if (jenisEl) jenisEl.value = opt.dataset.jenis || '';
+
+                                setAlert(true);
                             }
 
                             async function tryPrefill() {
@@ -159,6 +197,10 @@
                                 if (konselorEl) konselorEl.addEventListener(evt, tryPrefill);
                                 if (konseliEl) konseliEl.addEventListener(evt, tryPrefill);
                             });
+
+                            if (bookedPickEl) {
+                                bookedPickEl.addEventListener('change', fillFromBookedOption);
+                            }
                         })();
                     </script>
                 </div>

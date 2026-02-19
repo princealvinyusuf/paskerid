@@ -7,6 +7,7 @@ use App\Models\CounselingResultEvidence;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Carbon\Carbon;
 
 class FormHasilKonselingController extends Controller
 {
@@ -44,7 +45,58 @@ class FormHasilKonselingController extends Controller
                 ->pluck('nama_konseli');
         }
 
-        return view('form_hasil_konseling.index', compact('jenisOptions', 'konselorOptions', 'konseliOptions'));
+        // Optional: allow picking from accepted/booked Career Boost Day sessions to prefill quickly
+        $bookedOptions = collect();
+        $bookedAvailable =
+            Schema::hasTable('career_boostday_consultations') &&
+            Schema::hasColumn('career_boostday_consultations', 'admin_status') &&
+            Schema::hasColumn('career_boostday_consultations', 'booked_date') &&
+            Schema::hasColumn('career_boostday_consultations', 'pic_id') &&
+            Schema::hasTable('career_boostday_pics');
+
+        if ($bookedAvailable) {
+            // For "hasil konseling" we usually need past sessions too.
+            $from = Carbon::today()->subDays(120)->toDateString();
+
+            $bookedOptions = DB::table('career_boostday_consultations as c')
+                ->leftJoin('career_boostday_pics as p', 'p.id', '=', 'c.pic_id')
+                ->where('c.admin_status', 'accepted')
+                ->whereNotNull('c.booked_date')
+                ->where('c.booked_date', '>=', $from)
+                ->orderBy('c.booked_date', 'desc')
+                ->orderBy('c.booked_time_start', 'desc')
+                ->limit(300)
+                ->get([
+                    'c.id',
+                    'c.name as nama_konseli',
+                    DB::raw('p.name as nama_konselor'),
+                    'c.booked_date',
+                    'c.booked_time_start',
+                    'c.booked_time_finish',
+                    'c.jenis_konseling as jenis_konseling_raw',
+                ])->map(function ($r) {
+                    $jenis = (string)($r->jenis_konseling_raw ?? '');
+                    $mapped = 'Konseling JKP';
+                    if (stripos($jenis, 'online') !== false) $mapped = 'Career Boost Day_Online';
+                    elseif (stripos($jenis, 'offline') !== false) $mapped = 'Konseling Karier_Offline';
+
+                    $time = null;
+                    if (!empty($r->booked_time_start) && !empty($r->booked_time_finish)) {
+                        $time = substr((string)$r->booked_time_start, 0, 5) . ' - ' . substr((string)$r->booked_time_finish, 0, 5);
+                    }
+
+                    return (object) [
+                        'id' => $r->id,
+                        'nama_konselor' => (string)($r->nama_konselor ?? ''),
+                        'nama_konseli' => (string)($r->nama_konseli ?? ''),
+                        'tanggal_konseling' => (string)($r->booked_date ?? ''),
+                        'jenis_konseling' => $mapped,
+                        'time' => $time,
+                    ];
+                });
+        }
+
+        return view('form_hasil_konseling.index', compact('jenisOptions', 'konselorOptions', 'konseliOptions', 'bookedOptions', 'bookedAvailable'));
     }
 
     public function prefill(Request $request)
@@ -58,9 +110,12 @@ class FormHasilKonselingController extends Controller
             return response()->json(['found' => false]);
         }
 
+        $nk = trim($validated['nama_konselor']);
+        $np = trim($validated['nama_konseli']);
+
         $row = DB::table('counseling_results')
-            ->where('nama_konselor', $validated['nama_konselor'])
-            ->where('nama_konseli', $validated['nama_konseli'])
+            ->whereRaw('TRIM(nama_konselor) = ?', [$nk])
+            ->whereRaw('TRIM(nama_konseli) = ?', [$np])
             ->orderBy('tanggal_konseling', 'desc')
             ->orderBy('id', 'desc')
             ->first([
