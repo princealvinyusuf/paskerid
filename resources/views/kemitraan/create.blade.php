@@ -707,18 +707,13 @@
                 <div class="walkin-agenda-meta-item">
                     <i class="fa fa-map-marker-alt"></i>
                     <div>
-                        <div class="small text-muted">Lokasi</div>
+                        <div class="small text-muted">Fasilitas</div>
                         <div class="fw-semibold" id="agendaModalLocation"></div>
                     </div>
                 </div>
             </div>
 
             <div class="mb-3" id="agendaModalRegistration"></div>
-
-            <div class="walkin-agenda-desc">
-                <div class="small text-muted mb-0">Deskripsi</div>
-                <div id="agendaModalDescription"></div>
-            </div>
         </div>
       </div>
     </div>
@@ -1053,8 +1048,6 @@
             } else {
                 document.getElementById('agendaModalRegistration').innerHTML = '';
             }
-            // Trim to avoid leading newlines/spaces creating large gaps (white-space: pre-wrap)
-            document.getElementById('agendaModalDescription').textContent = (button.getAttribute('data-description') || '').trim();
         });
     });
 
@@ -1767,23 +1760,6 @@
         width: 18px;
         text-align: center;
     }
-    .walkin-agenda-desc {
-        border: 1px solid rgba(15,23,42,0.10);
-        border-radius: 14px;
-        padding: 10px 12px;
-        background: #ffffff;
-        white-space: pre-wrap;
-        font-size: 0.98rem;
-        line-height: 1.5;
-        display: flex;
-        flex-direction: column;
-        gap: 6px;
-    }
-    .walkin-agenda-desc #agendaModalDescription {
-        margin-top: 0;
-        color: #0f172a;
-    }
-
     .grid-container {
     display: grid;
     grid-template-columns: repeat(3, 1fr); /* 2 kolom tetap */
