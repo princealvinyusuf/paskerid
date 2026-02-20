@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Validation\Rule;
 
 class CareerBoostdayController extends Controller
 {
@@ -15,12 +16,7 @@ class CareerBoostdayController extends Controller
     {
         $tab = $request->query('tab', 'form');
 
-        $konsultasiSlots = [
-            'Senin (pukul 09.00 s/d 11.00)',
-            'Senin (pukul 13.30 s/d 15.00)',
-            'Kamis (pukul 09.00 s/d 11.00)',
-            'Kamis (pukul 13.30 s/d 15.00)',
-        ];
+        $konsultasiSlots = $this->getKonsultasiSlots();
 
         // Reuse the same public agenda datasource as Virtual Karir, but filter to "konsultasi"
         $konsultasiAgendas = $this->getAgendasFromBookedDates()
@@ -93,13 +89,28 @@ class CareerBoostdayController extends Controller
 
     public function store(Request $request)
     {
+        $jadwalRule = ['required', 'string', 'max:120'];
+        if (Schema::hasTable('career_boostday_slots')) {
+            $allowed = DB::table('career_boostday_slots')
+                ->where('is_active', 1)
+                ->orderBy('sort_order')
+                ->limit(200)
+                ->pluck('label')
+                ->filter(fn ($v) => is_string($v) && trim($v) !== '')
+                ->values()
+                ->all();
+            if (!empty($allowed)) {
+                $jadwalRule[] = Rule::in($allowed);
+            }
+        }
+
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:120'],
             'whatsapp' => ['required', 'string', 'max:30'],
             'status_choice' => ['required', 'string', 'in:fresh,pindah,lainnya'],
             'status_other' => ['nullable', 'string', 'max:120'],
             'jenis_konseling' => ['required', 'string', 'max:255'],
-            'jadwal_konseling' => ['required', 'string', 'max:120'],
+            'jadwal_konseling' => $jadwalRule,
             'pendidikan_choice' => ['nullable', 'string', 'max:40'],
             'pendidikan_other' => ['nullable', 'string', 'max:120'],
             'jurusan' => ['nullable', 'string', 'max:120'],
@@ -266,6 +277,33 @@ class CareerBoostdayController extends Controller
         }
 
         return $agendas->sortBy('date')->values();
+    }
+
+    private function getKonsultasiSlots(): array
+    {
+        $defaults = [
+            'Senin (pukul 09.00 s/d 11.00)',
+            'Senin (pukul 13.30 s/d 15.00)',
+            'Kamis (pukul 09.00 s/d 11.00)',
+            'Kamis (pukul 13.30 s/d 15.00)',
+        ];
+
+        if (!Schema::hasTable('career_boostday_slots')) {
+            return $defaults;
+        }
+
+        $labels = DB::table('career_boostday_slots')
+            ->where('is_active', 1)
+            ->orderBy('sort_order')
+            ->orderBy('day_name')
+            ->orderBy('time_start')
+            ->limit(200)
+            ->pluck('label')
+            ->filter(fn ($v) => is_string($v) && trim($v) !== '')
+            ->values()
+            ->all();
+
+        return !empty($labels) ? $labels : $defaults;
     }
 
     private function maskPersonName(string $name): string
