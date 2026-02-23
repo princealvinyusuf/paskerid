@@ -553,6 +553,35 @@
                                     <button type="button" class="btn btn-outline-danger btn-sm btn-remove-lowongan">Hapus</button>
                                 </div>
                                 <div class="row g-3">
+                                    @php
+                                        $namaPerusahaanOld = $dl['nama_perusahaan'] ?? [];
+                                        if (!is_array($namaPerusahaanOld)) {
+                                            $namaPerusahaanOld = strlen((string) $namaPerusahaanOld) > 0 ? [(string) $namaPerusahaanOld] : [''];
+                                        } elseif (count($namaPerusahaanOld) < 1) {
+                                            $namaPerusahaanOld = [''];
+                                        }
+                                    @endphp
+                                    <div class="col-12 job-portal-company-group d-none">
+                                        <label class="form-label">Nama Perusahaan</label>
+                                        <div class="job-portal-company-list">
+                                            @foreach($namaPerusahaanOld as $companyIdx => $companyName)
+                                                <div class="input-group mb-2 job-portal-company-item">
+                                                    <input
+                                                        type="text"
+                                                        class="form-control"
+                                                        name="detail_lowongan[{{ $i }}][nama_perusahaan][]"
+                                                        data-name-template="detail_lowongan[__INDEX__][nama_perusahaan][]"
+                                                        placeholder="Masukkan nama perusahaan"
+                                                        value="{{ $companyName }}"
+                                                    >
+                                                    <button type="button" class="btn btn-outline-danger btn-remove-company-name">Hapus</button>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                        <button type="button" class="btn btn-outline-primary btn-sm btn-add-company-name">
+                                            <i class="bi bi-plus-circle me-1"></i>Tambah Nama Perusahaan
+                                        </button>
+                                    </div>
                                     <div class="col-md-6">
                                         <label class="form-label" data-for-template="dl___INDEX___jabatan_yang_dibuka" for="dl_{{ $i }}_jabatan_yang_dibuka">Jabatan Yang Dibuka</label>
                                         <input
@@ -679,6 +708,24 @@
                                 <button type="button" class="btn btn-outline-danger btn-sm btn-remove-lowongan">Hapus</button>
                             </div>
                             <div class="row g-3">
+                                <div class="col-12 job-portal-company-group d-none">
+                                    <label class="form-label">Nama Perusahaan</label>
+                                    <div class="job-portal-company-list">
+                                        <div class="input-group mb-2 job-portal-company-item">
+                                            <input
+                                                type="text"
+                                                class="form-control"
+                                                name="detail_lowongan[__INDEX__][nama_perusahaan][]"
+                                                data-name-template="detail_lowongan[__INDEX__][nama_perusahaan][]"
+                                                placeholder="Masukkan nama perusahaan"
+                                            >
+                                            <button type="button" class="btn btn-outline-danger btn-remove-company-name">Hapus</button>
+                                        </div>
+                                    </div>
+                                    <button type="button" class="btn btn-outline-primary btn-sm btn-add-company-name">
+                                        <i class="bi bi-plus-circle me-1"></i>Tambah Nama Perusahaan
+                                    </button>
+                                </div>
                                 <div class="col-md-6">
                                     <label class="form-label" data-for-template="dl___INDEX___jabatan_yang_dibuka" for="dl___INDEX___jabatan_yang_dibuka">Jabatan Yang Dibuka</label>
                                     <input type="text" class="form-control" id="dl___INDEX___jabatan_yang_dibuka" data-id-template="dl___INDEX___jabatan_yang_dibuka" name="detail_lowongan[__INDEX__][jabatan_yang_dibuka]" data-name-template="detail_lowongan[__INDEX__][jabatan_yang_dibuka]" placeholder="Contoh: Admin, Operator Produksi, Software Engineer" required>
@@ -1264,7 +1311,63 @@
         const list = document.getElementById('detailLowonganList');
         const btnAdd = document.getElementById('btnAddLowongan');
         const tpl = document.getElementById('detailLowonganTemplate');
+        const tipePenyelenggara = document.getElementById('tipe_penyelenggara');
+        const mainForm = document.querySelector('form[action="{{ route('kemitraan.store') }}"]');
         if (!list || !btnAdd || !tpl) return;
+
+        function isJobPortalSelected() {
+            return (tipePenyelenggara && tipePenyelenggara.value === 'Job Portal');
+        }
+
+        function updateCompanyItemRemoveButtons(item) {
+            const companyItems = item.querySelectorAll('.job-portal-company-item');
+            const canRemoveCompany = companyItems.length > 1;
+            companyItems.forEach((row) => {
+                const removeBtn = row.querySelector('.btn-remove-company-name');
+                if (removeBtn) removeBtn.style.display = canRemoveCompany ? '' : 'none';
+            });
+        }
+
+        function updateJobPortalCompanyVisibility() {
+            const isJobPortal = isJobPortalSelected();
+            const items = Array.from(list.querySelectorAll('.detail-lowongan-item'));
+            items.forEach((item) => {
+                const group = item.querySelector('.job-portal-company-group');
+                if (!group) return;
+                group.classList.toggle('d-none', !isJobPortal);
+                const companyInputs = group.querySelectorAll('input[name*="[nama_perusahaan]"]');
+                companyInputs.forEach((inputEl) => {
+                    if (isJobPortal) {
+                        inputEl.removeAttribute('disabled');
+                    } else {
+                        inputEl.setAttribute('disabled', 'disabled');
+                    }
+                });
+                updateCompanyItemRemoveButtons(item);
+            });
+        }
+
+        function addCompanyNameField(item) {
+            if (!item) return;
+            const listEl = item.querySelector('.job-portal-company-list');
+            if (!listEl) return;
+            const idx = item.dataset.index || '0';
+            const row = document.createElement('div');
+            row.className = 'input-group mb-2 job-portal-company-item';
+            row.innerHTML = `
+                <input
+                    type="text"
+                    class="form-control"
+                    name="detail_lowongan[${idx}][nama_perusahaan][]"
+                    data-name-template="detail_lowongan[__INDEX__][nama_perusahaan][]"
+                    placeholder="Masukkan nama perusahaan"
+                >
+                <button type="button" class="btn btn-outline-danger btn-remove-company-name">Hapus</button>
+            `;
+            listEl.appendChild(row);
+            updateCompanyItemRemoveButtons(item);
+            updateJobPortalCompanyVisibility();
+        }
 
         function reindex() {
             const items = Array.from(list.querySelectorAll('.detail-lowongan-item'));
@@ -1291,7 +1394,9 @@
             items.forEach((item) => {
                 const btn = item.querySelector('.btn-remove-lowongan');
                 if (btn) btn.style.display = canRemove ? '' : 'none';
+                updateCompanyItemRemoveButtons(item);
             });
+            updateJobPortalCompanyVisibility();
         }
 
         function addItem() {
@@ -1314,9 +1419,41 @@
                 if (item) item.remove();
                 reindex();
             }
+            if (target.classList.contains('btn-add-company-name')) {
+                const item = target.closest('.detail-lowongan-item');
+                addCompanyNameField(item);
+            }
+            if (target.classList.contains('btn-remove-company-name')) {
+                const item = target.closest('.detail-lowongan-item');
+                const companyRow = target.closest('.job-portal-company-item');
+                if (item && companyRow) {
+                    companyRow.remove();
+                    updateCompanyItemRemoveButtons(item);
+                }
+            }
         });
 
         btnAdd.addEventListener('click', addItem);
+        if (tipePenyelenggara) {
+            tipePenyelenggara.addEventListener('change', updateJobPortalCompanyVisibility);
+        }
+
+        if (mainForm) {
+            mainForm.addEventListener('submit', function (e) {
+                if (!isJobPortalSelected()) return;
+                const items = Array.from(list.querySelectorAll('.detail-lowongan-item'));
+                const hasInvalidItem = items.some((item) => {
+                    const inputs = Array.from(item.querySelectorAll('.job-portal-company-item input[name*="[nama_perusahaan]"]'));
+                    if (inputs.length === 0) return true;
+                    return !inputs.some((inputEl) => String(inputEl.value || '').trim().length > 0);
+                });
+                if (hasInvalidItem) {
+                    e.preventDefault();
+                    alert('Untuk Tipe Penyelenggara Job Portal, setiap Detail Lowongan wajib memiliki minimal satu Nama Perusahaan.');
+                }
+            });
+        }
+
         reindex();
     })();
 

@@ -21,6 +21,11 @@ class KemitraanDetailLowongan extends Model
         'kompetensi_yang_dibutuhkan',
         'tahapan_seleksi',
         'lokasi_penempatan',
+        'nama_perusahaan',
+    ];
+
+    protected $casts = [
+        'nama_perusahaan' => 'array',
     ];
 
     public function kemitraan()

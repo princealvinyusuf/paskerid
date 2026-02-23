@@ -75,6 +75,8 @@ class KemitraanController extends Controller
             'detail_lowongan.*.kompetensi_yang_dibutuhkan' => 'nullable|string',
             'detail_lowongan.*.tahapan_seleksi' => 'nullable|string',
             'detail_lowongan.*.lokasi_penempatan' => 'nullable|string|max:255',
+            'detail_lowongan.*.nama_perusahaan' => 'nullable|array',
+            'detail_lowongan.*.nama_perusahaan.*' => 'nullable|string|max:255',
             // Multi-select rooms and facilities
             'pasker_room_ids' => 'nullable|array',
             'pasker_room_ids.*' => 'integer|exists:pasker_room,id',
@@ -117,8 +119,30 @@ class KemitraanController extends Controller
         $validated['pasker_facility_id'] = !empty($facilityIds) ? (int) $facilityIds[0] : null;
 
         $detailLowongan = $request->input('detail_lowongan', []);
+        $isJobPortal = ($request->input('tipe_penyelenggara') === 'Job Portal');
 
-        DB::transaction(function () use ($validated, $roomIds, $facilityIds, $detailLowongan) {
+        if ($isJobPortal) {
+            foreach ($detailLowongan as $idx => $dl) {
+                $companyNames = $dl['nama_perusahaan'] ?? [];
+                if (!is_array($companyNames)) {
+                    $companyNames = [$companyNames];
+                }
+
+                $companyNames = array_values(array_filter(array_map(static function ($name) {
+                    return trim((string) $name);
+                }, $companyNames), static function ($name) {
+                    return $name !== '';
+                }));
+
+                if (count($companyNames) < 1) {
+                    return back()
+                        ->withErrors(["detail_lowongan.$idx.nama_perusahaan" => 'Untuk Tipe Penyelenggara Job Portal, setiap Detail Lowongan wajib memiliki minimal satu Nama Perusahaan.'])
+                        ->withInput();
+                }
+            }
+        }
+
+        DB::transaction(function () use ($validated, $roomIds, $facilityIds, $detailLowongan, $isJobPortal) {
             $kemitraan = Kemitraan::create($validated);
 
             if (!empty($roomIds)) {
@@ -130,6 +154,16 @@ class KemitraanController extends Controller
 
             // Persist Detail Lowongan (1 kemitraan can have many lowongan)
             foreach ($detailLowongan as $dl) {
+                $companyNames = $dl['nama_perusahaan'] ?? [];
+                if (!is_array($companyNames)) {
+                    $companyNames = [$companyNames];
+                }
+                $companyNames = array_values(array_unique(array_filter(array_map(static function ($name) {
+                    return trim((string) $name);
+                }, $companyNames), static function ($name) {
+                    return $name !== '';
+                })));
+
                 $kemitraan->detailLowongan()->create([
                     'jabatan_yang_dibuka' => $dl['jabatan_yang_dibuka'] ?? null,
                     'jumlah_kebutuhan' => isset($dl['jumlah_kebutuhan']) ? (int) $dl['jumlah_kebutuhan'] : null,
@@ -139,6 +173,7 @@ class KemitraanController extends Controller
                     'kompetensi_yang_dibutuhkan' => $dl['kompetensi_yang_dibutuhkan'] ?? null,
                     'tahapan_seleksi' => $dl['tahapan_seleksi'] ?? null,
                     'lokasi_penempatan' => $dl['lokasi_penempatan'] ?? null,
+                    'nama_perusahaan' => $isJobPortal ? $companyNames : null,
                 ]);
             }
         });
