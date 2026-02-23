@@ -142,19 +142,6 @@
                         </div>
                         <div class="walkin-panel p-3 p-md-4 mb-3">
                             <div class="mb-3">
-                                <label class="form-label" for="survey_walkin_initiator_name">Walk In Initiator <span class="text-danger">*</span></label>
-                                <input
-                                    type="text"
-                                    class="form-control"
-                                    id="survey_walkin_initiator_name"
-                                    value="{{ old('survey_walkin_initiator_name') }}"
-                                    placeholder="Pilih perusahaan terlebih dahulu"
-                                    readonly
-                                    required
-                                >
-                                <input type="hidden" id="survey_walkin_initiator_id" name="survey_walkin_initiator_id" value="{{ old('survey_walkin_initiator_id') }}" required>
-                            </div>
-                            <div class="mb-3">
                                 <label class="form-label" for="survey_applied_company">Perusahaan apa yang anda lamar? <span class="text-danger">*</span></label>
                                 <select class="form-select" id="survey_applied_company" name="survey_applied_company" required>
                                     <option value="">Pilih perusahaan</option>
@@ -172,6 +159,19 @@
                                         <option value="" disabled>Belum ada data perusahaan survey</option>
                                     @endif
                                 </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="survey_walkin_initiator_name">Walk In Initiator <span class="text-danger">*</span></label>
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    id="survey_walkin_initiator_name"
+                                    value="{{ old('survey_walkin_initiator_name') }}"
+                                    placeholder="Pilih perusahaan terlebih dahulu"
+                                    readonly
+                                    required
+                                >
+                                <input type="hidden" id="survey_walkin_initiator_id" name="survey_walkin_initiator_id" value="{{ old('survey_walkin_initiator_id') }}" required>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label" for="survey_walkin_date">Tanggal Mengikuti Walk In <span class="text-danger">*</span></label>
