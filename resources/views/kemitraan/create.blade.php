@@ -14,6 +14,7 @@
             <button type="button" class="walkin-seg-btn active" id="btnPanelGallery" aria-selected="true">Galeri Walk In</button>
             <button type="button" class="walkin-seg-btn" id="btnPanelForm" aria-selected="false">Form Pendaftaran Walk In (Pemberi Kerja)</button>
             <button type="button" class="walkin-seg-btn" id="btnPanelSchedule" aria-selected="false">Jadwal Walk In</button>
+            <button type="button" class="walkin-seg-btn" id="btnPanelSurvey" aria-selected="false">Survei Evaluasi</button>
         </div>
     </div>
 
@@ -94,6 +95,216 @@
                             </table>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Survei Evaluasi -->
+        <div class="col-12 d-none" id="panelSurvey">
+            <div class="card shadow-lg w-100">
+                <div class="card-body p-4">
+                    <div class="walkin-panel p-3 p-md-4 mb-3">
+                        <h4 class="mb-3">Survei Evaluasi Penyelenggaraan Walk In Interview di Pusat Pasar Kerja</h4>
+                        <p class="mb-1">Yth. Bapak/Ibu/Saudara/Saudari/Mas/Mba/Kakak/Adik,</p>
+                        <p class="mb-1">Mohon meluangkan waktu untuk mengisi form evaluasi ini sekitar 1-3 menit.</p>
+                        <p class="mb-1">Masukan Anda sangat berharga untuk meningkatkan kualitas penyelenggaraan acara di masa mendatang.</p>
+                        <p class="mb-2">Atas partisipasi dan kerjasamanya kami ucapkan terima kasih.</p>
+                        <p class="mb-0 fw-semibold"><em>#GetAJobLiveBetter</em></p>
+                    </div>
+
+                    <form class="walkin-survey-form" method="post" action="javascript:void(0);">
+                        <div class="walkin-panel p-3 p-md-4 mb-3">
+                            <div class="mb-3">
+                                <label class="form-label" for="survey_email">Email <span class="text-danger">*</span></label>
+                                <input type="email" class="form-control" id="survey_email" name="survey_email" placeholder="email@domain.com" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="survey_name">Nama <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="survey_name" name="survey_name" placeholder="Masukkan nama lengkap" required>
+                            </div>
+                            <div class="mb-0">
+                                <label class="form-label" for="survey_phone">No Handphone <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="survey_phone" name="survey_phone" placeholder="08xxxxxxxxxx" required>
+                            </div>
+                        </div>
+
+                        <div class="walkin-panel p-3 p-md-4 mb-3">
+                            <div class="mb-0">
+                                <div class="form-label">Domisili (Kab/Kota) <span class="text-danger">*</span></div>
+                                <div class="d-grid gap-2">
+                                    @php
+                                        $domisiliOptions = ['Jakarta Pusat', 'Jakarta Selatan', 'Jakarta Timur', 'Jakarta Utara', 'Jakarta Barat', 'Bogor', 'Bekasi', 'Tangerang', 'Tangerang Selatan', 'Depok'];
+                                    @endphp
+                                    @foreach($domisiliOptions as $idx => $option)
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="survey_domisili" id="survey_domisili_{{ $idx }}" value="{{ $option }}" required>
+                                            <label class="form-check-label" for="survey_domisili_{{ $idx }}">{{ $option }}</label>
+                                        </div>
+                                    @endforeach
+                                    <div class="d-flex align-items-center gap-2">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="survey_domisili" id="survey_domisili_other_radio" value="Other" required>
+                                            <label class="form-check-label" for="survey_domisili_other_radio">Other:</label>
+                                        </div>
+                                        <input type="text" class="form-control form-control-sm" name="survey_domisili_other" placeholder="Tuliskan domisili lainnya">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="walkin-panel p-3 p-md-4 mb-3">
+                            <div class="mb-3">
+                                <label class="form-label" for="survey_gender">Jenis Kelamin <span class="text-danger">*</span></label>
+                                <select class="form-select" id="survey_gender" name="survey_gender" required>
+                                    <option value="">Pilih jenis kelamin</option>
+                                    <option value="Laki-laki">Laki-laki</option>
+                                    <option value="Perempuan">Perempuan</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="survey_age">Umur <span class="text-danger">*</span></label>
+                                <select class="form-select" id="survey_age" name="survey_age" required>
+                                    <option value="">Pilih rentang usia</option>
+                                    <option value="18 - 27 tahun">18 - 27 tahun</option>
+                                    <option value="28 - 37 tahun">28 - 37 tahun</option>
+                                    <option value="38 - 47 tahun">38 - 47 tahun</option>
+                                    <option value="48 tahun ke atas">48 tahun ke atas</option>
+                                </select>
+                            </div>
+                            <div class="mb-0">
+                                <label class="form-label" for="survey_education">Pendidikan Terakhir <span class="text-danger">*</span></label>
+                                <select class="form-select" id="survey_education" name="survey_education" required>
+                                    <option value="">Pilih pendidikan terakhir</option>
+                                    <option value="SMP/Sederajat">SMP/Sederajat</option>
+                                    <option value="SMA/SMK/Sederajat">SMA/SMK/Sederajat</option>
+                                    <option value="D1/D2/D3">D1/D2/D3</option>
+                                    <option value="D4/S1">D4/S1</option>
+                                    <option value="S2/S3">S2/S3</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="walkin-panel p-3 p-md-4 mb-3">
+                            <div class="form-label">Dari mana Anda mengetahui <em>Walk in Interview</em> yang diadakan di Pusat Pasar Kerja? <span class="text-danger">*</span></div>
+                            <div class="d-grid gap-2 mb-0">
+                                @foreach(['Sosial media', 'Dinas Ketenagakerjaan', 'Teman/Keluarga/Kerabat', 'Sekolah / Universitas'] as $idx => $option)
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="survey_info_source[]" id="survey_info_source_{{ $idx }}" value="{{ $option }}">
+                                        <label class="form-check-label" for="survey_info_source_{{ $idx }}">{{ $option }}</label>
+                                    </div>
+                                @endforeach
+                                <div class="d-flex align-items-center gap-2">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="survey_info_source[]" id="survey_info_source_other_checkbox" value="Other">
+                                        <label class="form-check-label" for="survey_info_source_other_checkbox">Other:</label>
+                                    </div>
+                                    <input type="text" class="form-control form-control-sm" name="survey_info_source_other" placeholder="Tuliskan sumber lainnya">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="walkin-panel p-3 p-md-4 mb-3">
+                            <div class="form-label">Laman/aplikasi Job Portal yang paling sering Anda gunakan untuk mencari pekerjaan? (Boleh lebih dari satu jawaban) <span class="text-danger">*</span></div>
+                            <div class="d-grid gap-2 mb-0">
+                                @foreach(['SIAPkerja Karirhub', 'Jobstreet', 'Linkedin', 'Glints', 'Kalibrr', 'Glassdoor', 'Indeed', 'Dealls', 'Tech in Asia', 'Kitalulus'] as $idx => $option)
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="survey_job_portal[]" id="survey_job_portal_{{ $idx }}" value="{{ $option }}">
+                                        <label class="form-check-label" for="survey_job_portal_{{ $idx }}">{{ $option }}</label>
+                                    </div>
+                                @endforeach
+                                <div class="d-flex align-items-center gap-2">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="survey_job_portal[]" id="survey_job_portal_other_checkbox" value="Other">
+                                        <label class="form-check-label" for="survey_job_portal_other_checkbox">Other:</label>
+                                    </div>
+                                    <input type="text" class="form-control form-control-sm" name="survey_job_portal_other" placeholder="Tuliskan laman lainnya">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="walkin-panel p-3 p-md-4 mb-3">
+                            <div class="form-label">Menurut Anda, apa saja kelebihan yang dimiliki oleh situs/aplikasi KarirHub selama ini? <span class="text-danger">*</span></div>
+                            <div class="d-grid gap-2 mb-0">
+                                @foreach(['Gratis', 'Aplikasi mudah diakses', 'Memiliki data yang lengkap dan jelas', 'Lowongan pekerjaan banyak dan bervariasi', 'Fitur dan Tools mudah digunakan', 'Data terkini / up to date', 'Lowongan sesuai kebutuhan', 'Terdapat job fair', 'Terdapat lowongan luar negeri'] as $idx => $option)
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="survey_strengths[]" id="survey_strengths_{{ $idx }}" value="{{ $option }}">
+                                        <label class="form-check-label" for="survey_strengths_{{ $idx }}">{{ $option }}</label>
+                                    </div>
+                                @endforeach
+                                <div class="d-flex align-items-center gap-2">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="survey_strengths[]" id="survey_strengths_other_checkbox" value="Other">
+                                        <label class="form-check-label" for="survey_strengths_other_checkbox">Other:</label>
+                                    </div>
+                                    <input type="text" class="form-control form-control-sm" name="survey_strengths_other" placeholder="Tuliskan kelebihan lainnya">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="walkin-panel p-3 p-md-4 mb-3">
+                            <div class="form-label">Menurut Anda, informasi apa saja yang kurang/belum ada di Karirhub terkait pencarian kerja? <span class="text-danger">*</span></div>
+                            <div class="d-grid gap-2 mb-0">
+                                @foreach(['Update system diluar jam kerja', 'Cakupan perusahaan perlu dikembangkan', 'Info lowongan selalu diperbarui', 'Tampilan perlu disederhanakan', 'Sosialisasi ke Masyarakat tentang KarirHub', 'Informasi tentang progress lamaran kerja', 'Deskripsi lowongan kerja diperjelas', 'Akses OTP dibuat lebih mudah', 'Lowongan kurang sesuai'] as $idx => $option)
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="survey_missing_info[]" id="survey_missing_info_{{ $idx }}" value="{{ $option }}">
+                                        <label class="form-check-label" for="survey_missing_info_{{ $idx }}">{{ $option }}</label>
+                                    </div>
+                                @endforeach
+                                <div class="d-flex align-items-center gap-2">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="survey_missing_info[]" id="survey_missing_info_other_checkbox" value="Other">
+                                        <label class="form-check-label" for="survey_missing_info_other_checkbox">Other:</label>
+                                    </div>
+                                    <input type="text" class="form-control form-control-sm" name="survey_missing_info_other" placeholder="Tuliskan masukan lainnya">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="walkin-panel p-3 p-md-4 mb-3">
+                            <label class="form-label" for="survey_general_feedback">Berikan masukan Anda agar Karirhub dapat meningkatkan manfaat bagi pencari kerja <span class="text-danger">*</span></label>
+                            <textarea class="form-control" id="survey_general_feedback" name="survey_general_feedback" rows="3" placeholder="Tulis masukan Anda" required></textarea>
+                        </div>
+
+                        <div class="walkin-panel p-3 p-md-4 mb-3">
+                            <p class="mb-1">Cara menuliskan pendapat Bapak/Ibu/Saudara/Saudari pada pertanyaan di bawah ini adalah dengan memberikan pilihan jawaban setiap pernyataan yang tersedia, serta berikan komentar.</p>
+                            <div class="mb-0">
+                                <div>1 = Sangat buruk</div>
+                                <div>2 = Buruk</div>
+                                <div>3 = Cukup</div>
+                                <div>4 = Baik</div>
+                                <div>5 = Sangat Baik</div>
+                            </div>
+                        </div>
+
+                        @php
+                            $ratingBlocks = [
+                                ['key' => 'info', 'title' => 'Kelengkapan Informasi Sebelum Acara', 'feedback' => 'Kritik dan Saran Jawaban di Atas'],
+                                ['key' => 'facility', 'title' => 'Fasilitas dan Infrastruktur Acara', 'feedback' => 'Kritik dan Saran Jawaban Fasilitas dan Infrastruktur'],
+                                ['key' => 'registration', 'title' => 'Proses Registrasi dan Pendaftaran Pengunjung', 'feedback' => 'Kritik dan Saran Jawaban Proses Registrasi'],
+                            ];
+                        @endphp
+                        @foreach($ratingBlocks as $block)
+                            <div class="walkin-panel p-3 p-md-4 mb-3">
+                                <div class="form-label">{{ $block['title'] }} <span class="text-danger">*</span></div>
+                                <div class="d-flex flex-wrap gap-3">
+                                    @for($n = 1; $n <= 5; $n++)
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="survey_rating_{{ $block['key'] }}" id="survey_rating_{{ $block['key'] }}_{{ $n }}" value="{{ $n }}" required>
+                                            <label class="form-check-label" for="survey_rating_{{ $block['key'] }}_{{ $n }}">{{ $n }}</label>
+                                        </div>
+                                    @endfor
+                                </div>
+                            </div>
+                            <div class="walkin-panel p-3 p-md-4 mb-3">
+                                <label class="form-label" for="survey_feedback_{{ $block['key'] }}">{{ $block['feedback'] }} <span class="text-danger">*</span></label>
+                                <textarea class="form-control" id="survey_feedback_{{ $block['key'] }}" name="survey_feedback_{{ $block['key'] }}" rows="3" placeholder="Your answer" required></textarea>
+                            </div>
+                        @endforeach
+
+                        <div class="d-flex justify-content-end">
+                            <button type="submit" class="btn btn-primary px-4">Kirim Survei</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -1001,30 +1212,37 @@
         const btnForm = document.getElementById('btnPanelForm');
         const btnGallery = document.getElementById('btnPanelGallery');
         const btnSchedule = document.getElementById('btnPanelSchedule');
+        const btnSurvey = document.getElementById('btnPanelSurvey');
         const panelForm = document.getElementById('panelForm');
         const panelGallery = document.getElementById('panelGallery');
         const panelSchedule = document.getElementById('panelSchedule');
-        if (!btnForm || !btnGallery || !btnSchedule || !panelForm || !panelGallery || !panelSchedule) return;
+        const panelSurvey = document.getElementById('panelSurvey');
+        if (!btnForm || !btnGallery || !btnSchedule || !btnSurvey || !panelForm || !panelGallery || !panelSchedule || !panelSurvey) return;
 
         function setActive(which) {
             const isForm = which === 'form';
             const isGallery = which === 'gallery';
             const isSchedule = which === 'schedule';
+            const isSurvey = which === 'survey';
             btnForm.classList.toggle('active', isForm);
             btnGallery.classList.toggle('active', isGallery);
             btnSchedule.classList.toggle('active', isSchedule);
+            btnSurvey.classList.toggle('active', isSurvey);
             btnForm.setAttribute('aria-selected', isForm ? 'true' : 'false');
             btnGallery.setAttribute('aria-selected', isGallery ? 'true' : 'false');
             btnSchedule.setAttribute('aria-selected', isSchedule ? 'true' : 'false');
+            btnSurvey.setAttribute('aria-selected', isSurvey ? 'true' : 'false');
             panelForm.classList.toggle('d-none', !isForm);
             panelGallery.classList.toggle('d-none', !isGallery);
             panelSchedule.classList.toggle('d-none', !isSchedule);
+            panelSurvey.classList.toggle('d-none', !isSurvey);
             try { localStorage.setItem('walkin_panel', which); } catch (e) {}
         }
 
         btnForm.addEventListener('click', () => setActive('form'));
         btnGallery.addEventListener('click', () => setActive('gallery'));
         btnSchedule.addEventListener('click', () => setActive('schedule'));
+        btnSurvey.addEventListener('click', () => setActive('survey'));
 
         // default: ALWAYS Gallery on page load (do not restore from localStorage)
         setActive('gallery');
