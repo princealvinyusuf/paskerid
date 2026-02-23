@@ -342,8 +342,8 @@
                             <textarea class="form-control" id="survey_general_feedback" name="survey_general_feedback" rows="3" placeholder="Tulis masukan Anda" required></textarea>
                         </div>
 
-                        <div class="walkin-panel p-3 p-md-4 mb-3">
-                            <p class="mb-1">Cara menuliskan pendapat Bapak/Ibu/Saudara/Saudari pada pertanyaan di bawah ini adalah dengan memberikan pilihan jawaban setiap pernyataan yang tersedia, serta berikan komentar.</p>
+                        <div class="walkin-panel p-3 p-md-4 mb-3 survey-important-note">
+                            <p class="mb-1 fw-semibold"><i class="bi bi-exclamation-triangle-fill me-1"></i>Cara menuliskan pendapat Bapak/Ibu/Saudara/Saudari pada pertanyaan di bawah ini adalah dengan memberikan pilihan jawaban setiap pernyataan yang tersedia, serta berikan komentar.</p>
                             <div class="mb-0">
                                 <div>1 = Sangat buruk</div>
                                 <div>2 = Buruk</div>
@@ -2322,6 +2322,14 @@
     #panelSurvey .survey-submit-btn:hover {
         filter: brightness(1.03);
         box-shadow: 0 14px 30px rgba(37,99,235,0.34);
+    }
+    #panelSurvey .survey-important-note {
+        border: 1px solid rgba(245, 158, 11, 0.45);
+        background: linear-gradient(180deg, rgba(254, 243, 199, 0.70), rgba(255, 255, 255, 0.96));
+        box-shadow: 0 8px 22px rgba(245, 158, 11, 0.12);
+    }
+    #panelSurvey .survey-important-note p {
+        color: #92400e;
     }
     @media (max-width: 991.98px) {
         #panelSurvey .survey-progress-sticky {
