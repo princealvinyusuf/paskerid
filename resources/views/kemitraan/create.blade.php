@@ -480,13 +480,21 @@
                         </div>
                         <div class="form-text">Nomor aktif untuk keperluan komunikasi.</div>
                     </div>
-                    <div class="col-md-12">
+                    <div class="col-md-6">
                         <label for="foto_kartu_pegawai_pic" class="form-label">Upload Foto Kartu Pegawai (PIC) <span class="text-danger">*</span></label>
                         <input type="file" class="form-control" id="foto_kartu_pegawai_pic" name="foto_kartu_pegawai_pic" accept="image/png,image/jpeg" required>
                         <div class="form-text">Format gambar (PNG, JPG/JPEG). Maksimal 2MB.</div>
                         @error('foto_kartu_pegawai_pic')
                             <div class="text-danger mt-1">{{ $message }}</div>
                         @enderror
+                    </div>
+                    <div class="col-md-6">
+                        <label for="tipe_penyelenggara" class="form-label">Tipe Penyelenggara</label>
+                        <select name="tipe_penyelenggara" id="tipe_penyelenggara" class="form-select" required>
+                            <option value="">-- Pilih Tipe Penyelenggara --</option>
+                            <option value="Job Portal" {{ old('tipe_penyelenggara') == 'Job Portal' ? 'selected' : '' }}>Job Portal</option>
+                            <option value="Perusahaan" {{ old('tipe_penyelenggara') == 'Perusahaan' ? 'selected' : '' }}>Perusahaan</option>
+                        </select>
                     </div>
                 </div>
 
@@ -727,14 +735,6 @@
                                 @foreach ($dropdownPartnership as $type)
                                     <option value="{{ $type->id }}" {{ (old('type_of_partnership_id', $defaultTypeId ?? 1) == $type->id) ? 'selected' : '' }}>{{ $type->name }}</option>
                                 @endforeach
-                            </select>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="tipe_penyelenggara" class="form-label">Tipe Penyelenggara</label>
-                            <select name="tipe_penyelenggara" id="tipe_penyelenggara" class="form-select" required>
-                                <option value="">-- Pilih Tipe Penyelenggara --</option>
-                                <option value="Job Portal" {{ old('tipe_penyelenggara') == 'Job Portal' ? 'selected' : '' }}>Job Portal</option>
-                                <option value="Perusahaan" {{ old('tipe_penyelenggara') == 'Perusahaan' ? 'selected' : '' }}>Perusahaan</option>
                             </select>
                         </div>
                     </div>
