@@ -301,6 +301,60 @@
                             </div>
                         @endforeach
 
+                        @php
+                            $additionalRatingBlocks = [
+                                ['key' => 'quality_quantity', 'title' => 'Kualitas dan Kuantitas Perusahaan/Jabatan', 'feedback' => 'Kritik dan Saran Jawaban di Atas'],
+                                ['key' => 'committee_help', 'title' => 'Keramahan dan Bantuan Panitia', 'feedback' => 'Kritik dan Saran Jawaban di Atas'],
+                                ['key' => 'access_info', 'title' => 'Kemudahan akses informasi syarat pendaftaran akun KarirHub/Job Fair Virtual', 'feedback' => 'Kritik dan Saran Jawaban di Atas'],
+                            ];
+                        @endphp
+                        @foreach($additionalRatingBlocks as $block)
+                            <div class="walkin-panel p-3 p-md-4 mb-3">
+                                <div class="form-label">{{ $block['title'] }} <span class="text-danger">*</span></div>
+                                <div class="d-flex flex-wrap gap-3">
+                                    @for($n = 1; $n <= 5; $n++)
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="survey_rating_{{ $block['key'] }}" id="survey_rating_{{ $block['key'] }}_{{ $n }}" value="{{ $n }}" required>
+                                            <label class="form-check-label" for="survey_rating_{{ $block['key'] }}_{{ $n }}">{{ $n }}</label>
+                                        </div>
+                                    @endfor
+                                </div>
+                            </div>
+                            <div class="walkin-panel p-3 p-md-4 mb-3">
+                                <label class="form-label" for="survey_feedback_{{ $block['key'] }}">{{ $block['feedback'] }} <span class="text-danger">*</span></label>
+                                <textarea class="form-control" id="survey_feedback_{{ $block['key'] }}" name="survey_feedback_{{ $block['key'] }}" rows="3" placeholder="Your answer" required></textarea>
+                            </div>
+                        @endforeach
+
+                        <div class="walkin-panel p-3 p-md-4 mb-3">
+                            <div class="form-label">Seberapa Puas Anda Terhadap Penyelenggaraan <em>Walk in Interview</em> <span class="text-danger">*</span></div>
+                            <div class="d-flex flex-wrap gap-3">
+                                @for($n = 1; $n <= 5; $n++)
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="survey_rating_satisfaction" id="survey_rating_satisfaction_{{ $n }}" value="{{ $n }}" required>
+                                        <label class="form-check-label" for="survey_rating_satisfaction_{{ $n }}">{{ $n }}</label>
+                                    </div>
+                                @endfor
+                            </div>
+                        </div>
+
+                        <div class="walkin-panel p-3 p-md-4 mb-3">
+                            <div class="form-label">Aspek apa yang harus kami perbaiki untuk meningkatkan kepuasan anda? (Boleh lebih dari satu jawaban) <span class="text-danger">*</span></div>
+                            <div class="d-grid gap-2 mb-0">
+                                @foreach(['Persyaratan', 'Biaya', 'Prosedur', 'Waktu', 'Produk layanan', 'Kompetensi petugas', 'Perilaku petugas', 'Sarana dan prasarana', 'Layanan pengaduan'] as $idx => $option)
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="survey_improvement_aspects[]" id="survey_improvement_aspects_{{ $idx }}" value="{{ $option }}">
+                                        <label class="form-check-label" for="survey_improvement_aspects_{{ $idx }}">{{ $option }}</label>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+
+                        <div class="walkin-panel p-3 p-md-4 mb-3">
+                            <label class="form-label" for="survey_feedback_improvement_aspects">Kritik dan Saran Jawaban di Atas <span class="text-danger">*</span></label>
+                            <textarea class="form-control" id="survey_feedback_improvement_aspects" name="survey_feedback_improvement_aspects" rows="3" placeholder="Your answer" required></textarea>
+                        </div>
+
                         <div class="d-flex justify-content-end">
                             <button type="submit" class="btn btn-primary px-4">Kirim Survei</button>
                         </div>
