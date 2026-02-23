@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\KemitraanDetailLowongan;
 use App\Models\WalkinGalleryComment;
 use App\Models\WalkinGalleryItem;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Schema;
 
 class WalkinGalleryController extends Controller
 {
@@ -126,11 +128,46 @@ class WalkinGalleryController extends Controller
                 'created_at',
             ]);
 
+        $joinedCompanies = [];
+        if ($company !== 'Umum') {
+            $rawCompanyLists = KemitraanDetailLowongan::query()
+                ->whereHas('kemitraan', function ($q) use ($company) {
+                    $q->whereRaw('LOWER(institution_name) = ?', [mb_strtolower($company)])
+                      ->where('tipe_penyelenggara', 'Job Portal');
+
+                    if (Schema::hasColumn('kemitraan', 'status')) {
+                        $q->where('status', 'approved');
+                    }
+                })
+                ->pluck('nama_perusahaan')
+                ->all();
+
+            foreach ($rawCompanyLists as $rowValue) {
+                $names = [];
+                if (is_array($rowValue)) {
+                    $names = $rowValue;
+                } elseif (is_string($rowValue) && $rowValue !== '') {
+                    $decoded = json_decode($rowValue, true);
+                    $names = is_array($decoded) ? $decoded : [$rowValue];
+                }
+
+                foreach ($names as $name) {
+                    $name = trim((string) $name);
+                    if ($name !== '') {
+                        $joinedCompanies[] = $name;
+                    }
+                }
+            }
+
+            $joinedCompanies = array_values(array_unique($joinedCompanies));
+        }
+
         return response()->json([
             'mode' => 'company',
             'company_name' => $company,
             'items' => $items,
             'comments' => $comments,
+            'joined_companies' => $joinedCompanies,
         ]);
     }
 

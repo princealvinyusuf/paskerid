@@ -914,6 +914,15 @@
                         </div>
 
                         <div class="row g-3">
+                            <div class="col-12 d-none" id="walkinJoinedCompaniesSection">
+                                <div class="walkin-panel p-3 p-md-4">
+                                    <div class="d-flex align-items-center justify-content-between mb-2">
+                                        <div class="fw-semibold">Perusahaan yang bergabung dalam Walk In</div>
+                                        <div class="text-muted small">Berlaku untuk penyelenggara Job Portal</div>
+                                    </div>
+                                    <div id="walkinJoinedCompaniesList" class="d-flex flex-wrap gap-2"></div>
+                                </div>
+                            </div>
                             <div class="col-12 col-lg-8">
                                 <div class="walkin-panel p-3 p-md-4">
                                     <div class="d-flex align-items-center justify-content-between mb-3">
@@ -1589,6 +1598,8 @@
         const scheduleEmptyEl = document.getElementById('walkinCompanyScheduleEmpty');
         const scheduleWrapEl = document.getElementById('walkinCompanyScheduleWrap');
         const scheduleBodyEl = document.getElementById('walkinCompanyScheduleBody');
+        const joinedCompaniesSectionEl = document.getElementById('walkinJoinedCompaniesSection');
+        const joinedCompaniesListEl = document.getElementById('walkinJoinedCompaniesList');
 
         if (!loadingEl || !gridEl || !companiesEl || !companyDetailEl || !companyTitleEl || !companyBackBtn || !commentsWrapEl || !commentListEl || !alertEl || !commentCompanyInput) return;
 
@@ -1709,6 +1720,24 @@
                 `;
                 commentListEl.appendChild(card);
             });
+        }
+
+        function renderJoinedCompanies(companies) {
+            if (!joinedCompaniesSectionEl || !joinedCompaniesListEl) return;
+            const list = Array.isArray(companies)
+                ? Array.from(new Set(companies.map((name) => String(name || '').trim()).filter((name) => name.length > 0)))
+                : [];
+
+            if (list.length === 0) {
+                joinedCompaniesListEl.innerHTML = '';
+                joinedCompaniesSectionEl.classList.add('d-none');
+                return;
+            }
+
+            joinedCompaniesListEl.innerHTML = list
+                .map((name) => `<span class="badge text-bg-light border text-dark fw-normal px-3 py-2">${escapeHtml(name)}</span>`)
+                .join('');
+            joinedCompaniesSectionEl.classList.remove('d-none');
         }
 
         function escapeHtml(str) {
@@ -1848,6 +1877,7 @@
                 const data = await res.json();
                 lastFeed = data || { companies: [] };
                 loadingEl.classList.add('d-none');
+                renderJoinedCompanies([]);
                 setView('companies');
                 companiesEl.classList.remove('d-none');
                 renderCompanies(lastFeed.companies || []);
@@ -1875,6 +1905,7 @@
                 commentCompanyInput.value = company;
                 renderGrid(lastFeed.items || []);
                 renderComments(lastFeed.comments || []);
+                renderJoinedCompanies(lastFeed.joined_companies || []);
                 loadCompanySchedule(company);
             } catch (e) {
                 loadingEl.classList.add('d-none');
@@ -1901,6 +1932,7 @@
             commentCompanyInput.value = '';
             if (scheduleBodyEl) scheduleBodyEl.innerHTML = '';
             setScheduleState('empty');
+            renderJoinedCompanies([]);
             loadCompanies();
         });
 
