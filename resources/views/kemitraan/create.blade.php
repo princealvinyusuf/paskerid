@@ -115,6 +115,13 @@
                     <form class="walkin-survey-form" method="post" action="javascript:void(0);">
                         <div class="walkin-panel p-3 p-md-4 mb-3">
                             <div class="mb-3">
+                                <label class="form-label" for="survey_applied_company">Perusahaan apa yang anda lamar? <span class="text-danger">*</span></label>
+                                <select class="form-select" id="survey_applied_company" name="survey_applied_company" required>
+                                    <option value="">Pilih perusahaan</option>
+                                    <option value="" disabled>Data perusahaan akan dimuat dari database</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
                                 <label class="form-label" for="survey_email">Email <span class="text-danger">*</span></label>
                                 <input type="email" class="form-control" id="survey_email" name="survey_email" placeholder="email@domain.com" required>
                             </div>
