@@ -1515,6 +1515,14 @@
         const panelSurvey = document.getElementById('panelSurvey');
         if (!btnForm || !btnGallery || !btnSchedule || !btnSurvey || !panelForm || !panelGallery || !panelSchedule || !panelSurvey) return;
 
+        function syncPanelToUrl(which) {
+            try {
+                const url = new URL(window.location.href);
+                url.searchParams.set('panel', which);
+                window.history.replaceState({}, '', url.toString());
+            } catch (e) {}
+        }
+
         function setActive(which) {
             const isForm = which === 'form';
             const isGallery = which === 'gallery';
@@ -1533,6 +1541,7 @@
             panelSchedule.classList.toggle('d-none', !isSchedule);
             panelSurvey.classList.toggle('d-none', !isSurvey);
             try { localStorage.setItem('walkin_panel', which); } catch (e) {}
+            syncPanelToUrl(which);
         }
 
         btnForm.addEventListener('click', () => setActive('form'));
