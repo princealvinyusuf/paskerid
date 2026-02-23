@@ -112,13 +112,34 @@
                         <p class="mb-0 fw-semibold"><em>#GetAJobLiveBetter</em></p>
                     </div>
 
-                    <form class="walkin-survey-form" method="post" action="javascript:void(0);">
+                    @if(session('survey_success'))
+                        <div class="alert alert-success">{{ session('survey_success') }}</div>
+                    @endif
+                    @if($errors->survey->any())
+                        <div class="alert alert-danger">
+                            <ul class="mb-0">
+                                @foreach($errors->survey->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
+                    <form class="walkin-survey-form" method="post" action="{{ route('kemitraan.survey.store') }}">
+                        @csrf
                         <div class="walkin-panel p-3 p-md-4 mb-3">
                             <div class="mb-3">
                                 <label class="form-label" for="survey_applied_company">Perusahaan apa yang anda lamar? <span class="text-danger">*</span></label>
                                 <select class="form-select" id="survey_applied_company" name="survey_applied_company" required>
                                     <option value="">Pilih perusahaan</option>
-                                    <option value="" disabled>Data perusahaan akan dimuat dari database</option>
+                                    @foreach(($surveyCompanies ?? collect()) as $company)
+                                        <option value="{{ $company->id }}" {{ (string) old('survey_applied_company') === (string) $company->id ? 'selected' : '' }}>
+                                            {{ $company->company_name }}
+                                        </option>
+                                    @endforeach
+                                    @if(($surveyCompanies ?? collect())->isEmpty())
+                                        <option value="" disabled>Belum ada data perusahaan survey</option>
+                                    @endif
                                 </select>
                             </div>
                             <div class="mb-3">
@@ -1305,8 +1326,10 @@
         btnSchedule.addEventListener('click', () => setActive('schedule'));
         btnSurvey.addEventListener('click', () => setActive('survey'));
 
-        // default: ALWAYS Gallery on page load (do not restore from localStorage)
-        setActive('gallery');
+        const urlPanel = new URLSearchParams(window.location.search).get('panel');
+        const allowedPanels = ['form', 'gallery', 'schedule', 'survey'];
+        const initialPanel = allowedPanels.includes(urlPanel) ? urlPanel : 'gallery';
+        setActive(initialPanel);
     })();
 
     // Schedule detail modal (reuse virtual-karir style)

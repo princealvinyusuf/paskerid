@@ -8,6 +8,8 @@ use App\Models\BookedDate;
 use App\Models\companysector;
 use App\Models\PaskerRoom;
 use App\Models\PaskerFacility;
+use App\Models\WalkInSurveyCompany;
+use App\Models\WalkInSurveyResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
@@ -28,6 +30,14 @@ class KemitraanController extends Controller
 
         $walkinAgendas = $this->getWalkinAgendasFromBookedDates('upcoming');
         $walkinAgendasPast = $this->getWalkinAgendasFromBookedDates('past', 80);
+        $surveyCompanies = collect();
+        if (Schema::hasTable('company_walk_in_survey')) {
+            $surveyCompanies = WalkInSurveyCompany::query()
+                ->where('is_active', true)
+                ->orderBy('sort_order')
+                ->orderBy('company_name')
+                ->get(['id', 'company_name']);
+        }
 
         return view('kemitraan.create', compact(
             'dropdownPartnership',
@@ -37,7 +47,8 @@ class KemitraanController extends Controller
             'fullyBookedDates',
             'defaultTypeId',
             'walkinAgendas',
-            'walkinAgendasPast'
+            'walkinAgendasPast',
+            'surveyCompanies'
         ));
     }
 
@@ -144,6 +155,107 @@ class KemitraanController extends Controller
         $daysAhead = (int) $request->query('days', 180);
         $dates = $this->computeFullyBookedDates($typeId, $daysAhead);
         return response()->json($dates);
+    }
+
+    public function storeSurvey(Request $request)
+    {
+        if (!Schema::hasTable('company_walk_in_survey') || !Schema::hasTable('walk_in_survey_responses')) {
+            return redirect()
+                ->route('kemitraan.create', ['panel' => 'survey'])
+                ->withErrors(['survey' => 'Fitur survei belum aktif di database. Jalankan migrasi terlebih dahulu.'], 'survey')
+                ->withInput();
+        }
+
+        $validated = $request->validateWithBag('survey', [
+            'survey_applied_company' => 'required|integer|exists:company_walk_in_survey,id',
+            'survey_email' => 'required|email|max:255',
+            'survey_name' => 'required|string|max:255',
+            'survey_phone' => 'required|string|max:30',
+            'survey_domisili' => 'required|string|max:120',
+            'survey_domisili_other' => 'nullable|string|max:255',
+            'survey_gender' => 'required|string|max:50',
+            'survey_age' => 'required|string|max:50',
+            'survey_education' => 'required|string|max:100',
+
+            'survey_info_source' => 'required|array|min:1',
+            'survey_info_source.*' => 'string|max:255',
+            'survey_info_source_other' => 'nullable|string|max:255',
+
+            'survey_job_portal' => 'required|array|min:1',
+            'survey_job_portal.*' => 'string|max:255',
+            'survey_job_portal_other' => 'nullable|string|max:255',
+
+            'survey_strengths' => 'required|array|min:1',
+            'survey_strengths.*' => 'string|max:255',
+            'survey_strengths_other' => 'nullable|string|max:255',
+
+            'survey_missing_info' => 'required|array|min:1',
+            'survey_missing_info.*' => 'string|max:255',
+            'survey_missing_info_other' => 'nullable|string|max:255',
+
+            'survey_general_feedback' => 'required|string|max:5000',
+
+            'survey_rating_info' => 'required|integer|between:1,5',
+            'survey_feedback_info' => 'required|string|max:5000',
+            'survey_rating_facility' => 'required|integer|between:1,5',
+            'survey_feedback_facility' => 'required|string|max:5000',
+            'survey_rating_registration' => 'required|integer|between:1,5',
+            'survey_feedback_registration' => 'required|string|max:5000',
+            'survey_rating_quality_quantity' => 'required|integer|between:1,5',
+            'survey_feedback_quality_quantity' => 'required|string|max:5000',
+            'survey_rating_committee_help' => 'required|integer|between:1,5',
+            'survey_feedback_committee_help' => 'required|string|max:5000',
+            'survey_rating_access_info' => 'required|integer|between:1,5',
+            'survey_feedback_access_info' => 'required|string|max:5000',
+            'survey_rating_satisfaction' => 'required|integer|between:1,5',
+
+            'survey_improvement_aspects' => 'required|array|min:1',
+            'survey_improvement_aspects.*' => 'string|max:255',
+            'survey_feedback_improvement_aspects' => 'required|string|max:5000',
+        ]);
+
+        $company = WalkInSurveyCompany::query()->findOrFail((int) $validated['survey_applied_company']);
+
+        WalkInSurveyResponse::create([
+            'company_walk_in_survey_id' => (int) $company->id,
+            'company_name_snapshot' => (string) $company->company_name,
+            'email' => $validated['survey_email'],
+            'name' => $validated['survey_name'],
+            'phone' => $validated['survey_phone'],
+            'domisili' => $validated['survey_domisili'],
+            'domisili_other' => $validated['survey_domisili_other'] ?? null,
+            'gender' => $validated['survey_gender'],
+            'age_range' => $validated['survey_age'],
+            'education' => $validated['survey_education'],
+            'info_sources' => array_values(array_unique($validated['survey_info_source'] ?? [])),
+            'info_source_other' => $validated['survey_info_source_other'] ?? null,
+            'job_portals' => array_values(array_unique($validated['survey_job_portal'] ?? [])),
+            'job_portal_other' => $validated['survey_job_portal_other'] ?? null,
+            'strengths' => array_values(array_unique($validated['survey_strengths'] ?? [])),
+            'strengths_other' => $validated['survey_strengths_other'] ?? null,
+            'missing_infos' => array_values(array_unique($validated['survey_missing_info'] ?? [])),
+            'missing_info_other' => $validated['survey_missing_info_other'] ?? null,
+            'general_feedback' => $validated['survey_general_feedback'],
+            'rating_info' => (int) $validated['survey_rating_info'],
+            'feedback_info' => $validated['survey_feedback_info'],
+            'rating_facility' => (int) $validated['survey_rating_facility'],
+            'feedback_facility' => $validated['survey_feedback_facility'],
+            'rating_registration' => (int) $validated['survey_rating_registration'],
+            'feedback_registration' => $validated['survey_feedback_registration'],
+            'rating_quality_quantity' => (int) $validated['survey_rating_quality_quantity'],
+            'feedback_quality_quantity' => $validated['survey_feedback_quality_quantity'],
+            'rating_committee_help' => (int) $validated['survey_rating_committee_help'],
+            'feedback_committee_help' => $validated['survey_feedback_committee_help'],
+            'rating_access_info' => (int) $validated['survey_rating_access_info'],
+            'feedback_access_info' => $validated['survey_feedback_access_info'],
+            'rating_satisfaction' => (int) $validated['survey_rating_satisfaction'],
+            'improvement_aspects' => array_values(array_unique($validated['survey_improvement_aspects'] ?? [])),
+            'feedback_improvement_aspects' => $validated['survey_feedback_improvement_aspects'],
+        ]);
+
+        return redirect()
+            ->route('kemitraan.create', ['panel' => 'survey'])
+            ->with('survey_success', 'Terima kasih! Survei evaluasi berhasil dikirim.');
     }
 
     public function companyWalkinSchedule(Request $request)
