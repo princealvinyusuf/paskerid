@@ -326,7 +326,7 @@
                         @foreach($ratingBlocks as $block)
                             <div class="walkin-panel p-3 p-md-4 mb-3">
                                 <div class="form-label">{{ $block['title'] }} <span class="text-danger">*</span></div>
-                                <div class="d-flex flex-wrap gap-3">
+                                <div class="d-flex flex-wrap gap-2 survey-rating-group">
                                     @for($n = 1; $n <= 5; $n++)
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="survey_rating_{{ $block['key'] }}" id="survey_rating_{{ $block['key'] }}_{{ $n }}" value="{{ $n }}" required>
@@ -351,7 +351,7 @@
                         @foreach($additionalRatingBlocks as $block)
                             <div class="walkin-panel p-3 p-md-4 mb-3">
                                 <div class="form-label">{{ $block['title'] }} <span class="text-danger">*</span></div>
-                                <div class="d-flex flex-wrap gap-3">
+                                <div class="d-flex flex-wrap gap-2 survey-rating-group">
                                     @for($n = 1; $n <= 5; $n++)
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="survey_rating_{{ $block['key'] }}" id="survey_rating_{{ $block['key'] }}_{{ $n }}" value="{{ $n }}" required>
@@ -368,7 +368,7 @@
 
                         <div class="walkin-panel p-3 p-md-4 mb-3">
                             <div class="form-label">Seberapa Puas Anda Terhadap Penyelenggaraan <em>Walk in Interview</em> <span class="text-danger">*</span></div>
-                            <div class="d-flex flex-wrap gap-3">
+                            <div class="d-flex flex-wrap gap-2 survey-rating-group">
                                 @for($n = 1; $n <= 5; $n++)
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" name="survey_rating_satisfaction" id="survey_rating_satisfaction_{{ $n }}" value="{{ $n }}" required>
@@ -396,7 +396,7 @@
                         </div>
 
                         <div class="d-flex justify-content-end">
-                            <button type="submit" class="btn btn-primary px-4">Kirim Survei</button>
+                            <button type="submit" class="btn btn-primary px-4 survey-submit-btn">Kirim Survei</button>
                         </div>
                     </form>
                 </div>
@@ -1857,6 +1857,80 @@
         background: rgba(255,255,255,0.92);
         box-shadow: 0 10px 30px rgba(2,6,23,0.06);
         backdrop-filter: blur(8px);
+    }
+    /* Survey panel polish (scoped) */
+    #panelSurvey {
+        background: radial-gradient(1200px 260px at 10% -10%, rgba(37,99,235,0.10), transparent 70%),
+                    radial-gradient(900px 220px at 95% 5%, rgba(16,185,129,0.08), transparent 70%);
+        border-radius: 22px;
+    }
+    #panelSurvey .card {
+        border-radius: 20px;
+        overflow: hidden;
+    }
+    #panelSurvey .walkin-panel {
+        border: 1px solid rgba(59,130,246,0.16);
+        background: linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(248,250,252,0.97) 100%);
+        box-shadow: 0 12px 30px rgba(37,99,235,0.08);
+        transition: transform .16s ease, box-shadow .16s ease, border-color .16s ease;
+    }
+    #panelSurvey .walkin-panel:hover {
+        transform: translateY(-1px);
+        border-color: rgba(37,99,235,0.28);
+        box-shadow: 0 18px 40px rgba(37,99,235,0.12);
+    }
+    #panelSurvey .form-label {
+        font-weight: 600;
+        color: #0f172a;
+    }
+    #panelSurvey .form-control,
+    #panelSurvey .form-select {
+        border-radius: 12px;
+        border-color: rgba(15,23,42,0.16);
+        background: #ffffff;
+    }
+    #panelSurvey .form-control:focus,
+    #panelSurvey .form-select:focus {
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 0.2rem rgba(59,130,246,0.18);
+    }
+    #panelSurvey textarea.form-control {
+        min-height: 96px;
+    }
+    #panelSurvey .form-check {
+        border: 1px solid rgba(15,23,42,0.10);
+        border-radius: 12px;
+        padding: 8px 12px 8px 36px;
+        background: #ffffff;
+    }
+    #panelSurvey .form-check-input {
+        width: 1.15rem;
+        height: 1.15rem;
+        margin-top: 0.14rem;
+    }
+    #panelSurvey .form-check-input:checked + .form-check-label {
+        color: #1d4ed8;
+        font-weight: 600;
+    }
+    #panelSurvey .survey-rating-group .form-check {
+        min-width: 56px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding-left: 30px;
+    }
+    #panelSurvey .survey-submit-btn {
+        border-radius: 999px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        font-weight: 700;
+        background: linear-gradient(90deg, #2563eb, #0891b2);
+        border: none;
+        box-shadow: 0 10px 24px rgba(37,99,235,0.28);
+    }
+    #panelSurvey .survey-submit-btn:hover {
+        filter: brightness(1.03);
+        box-shadow: 0 14px 30px rgba(37,99,235,0.34);
     }
     .walkin-sticky {
         position: sticky;
