@@ -129,7 +129,33 @@ class WalkinGalleryController extends Controller
             ]);
 
         $joinedCompanies = [];
+        $openedPositions = [];
         if ($company !== 'Umum') {
+            $detailLowonganRows = KemitraanDetailLowongan::query()
+                ->whereHas('kemitraan', function ($q) use ($company) {
+                    $q->whereRaw('LOWER(institution_name) = ?', [mb_strtolower($company)]);
+
+                    if (Schema::hasColumn('kemitraan', 'status')) {
+                        $q->where('status', 'approved');
+                    }
+                })
+                ->get([
+                    'jabatan_yang_dibuka',
+                    'jumlah_kebutuhan',
+                    'nama_perusahaan',
+                ]);
+
+            foreach ($detailLowonganRows as $row) {
+                $jabatan = trim((string) ($row->jabatan_yang_dibuka ?? ''));
+                $jumlah = (int) ($row->jumlah_kebutuhan ?? 0);
+                if ($jabatan !== '' && $jumlah > 0) {
+                    $openedPositions[] = [
+                        'jabatan_yang_dibuka' => $jabatan,
+                        'jumlah_kebutuhan' => $jumlah,
+                    ];
+                }
+            }
+
             $rawCompanyLists = KemitraanDetailLowongan::query()
                 ->whereHas('kemitraan', function ($q) use ($company) {
                     $q->whereRaw('LOWER(institution_name) = ?', [mb_strtolower($company)])
@@ -160,6 +186,18 @@ class WalkinGalleryController extends Controller
             }
 
             $joinedCompanies = array_values(array_unique($joinedCompanies));
+
+            // Merge duplicated job titles by summing required amount.
+            $openedMap = [];
+            foreach ($openedPositions as $item) {
+                $key = mb_strtolower($item['jabatan_yang_dibuka']);
+                if (!isset($openedMap[$key])) {
+                    $openedMap[$key] = $item;
+                } else {
+                    $openedMap[$key]['jumlah_kebutuhan'] += (int) $item['jumlah_kebutuhan'];
+                }
+            }
+            $openedPositions = array_values($openedMap);
         }
 
         return response()->json([
@@ -168,6 +206,7 @@ class WalkinGalleryController extends Controller
             'items' => $items,
             'comments' => $comments,
             'joined_companies' => $joinedCompanies,
+            'opened_positions' => $openedPositions,
         ]);
     }
 

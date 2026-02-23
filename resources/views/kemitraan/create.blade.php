@@ -923,6 +923,25 @@
                                     <div id="walkinJoinedCompaniesList" class="d-flex flex-wrap gap-2"></div>
                                 </div>
                             </div>
+                            <div class="col-12 d-none" id="walkinOpenedPositionsSection">
+                                <div class="walkin-panel p-3 p-md-4">
+                                    <div class="d-flex align-items-center justify-content-between mb-2">
+                                        <div class="fw-semibold">Lowongan yang dibuka</div>
+                                        <div class="text-muted small">Detail Lowongan & Jumlah Kebutuhan</div>
+                                    </div>
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered align-middle mb-0">
+                                            <thead class="table-light">
+                                                <tr>
+                                                    <th>Lowongan yang dibuka</th>
+                                                    <th style="width: 200px;">Jumlah Kebutuhan</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="walkinOpenedPositionsBody"></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="col-12 col-lg-8">
                                 <div class="walkin-panel p-3 p-md-4">
                                     <div class="d-flex align-items-center justify-content-between mb-3">
@@ -1600,6 +1619,8 @@
         const scheduleBodyEl = document.getElementById('walkinCompanyScheduleBody');
         const joinedCompaniesSectionEl = document.getElementById('walkinJoinedCompaniesSection');
         const joinedCompaniesListEl = document.getElementById('walkinJoinedCompaniesList');
+        const openedPositionsSectionEl = document.getElementById('walkinOpenedPositionsSection');
+        const openedPositionsBodyEl = document.getElementById('walkinOpenedPositionsBody');
 
         if (!loadingEl || !gridEl || !companiesEl || !companyDetailEl || !companyTitleEl || !companyBackBtn || !commentsWrapEl || !commentListEl || !alertEl || !commentCompanyInput) return;
 
@@ -1740,6 +1761,33 @@
             joinedCompaniesSectionEl.classList.remove('d-none');
         }
 
+        function renderOpenedPositions(positions) {
+            if (!openedPositionsSectionEl || !openedPositionsBodyEl) return;
+            const list = Array.isArray(positions)
+                ? positions.filter((item) => String(item && item.jabatan_yang_dibuka ? item.jabatan_yang_dibuka : '').trim() !== '')
+                : [];
+
+            if (list.length === 0) {
+                openedPositionsBodyEl.innerHTML = '';
+                openedPositionsSectionEl.classList.add('d-none');
+                return;
+            }
+
+            openedPositionsBodyEl.innerHTML = list
+                .map((item) => {
+                    const jabatan = escapeHtml(item.jabatan_yang_dibuka || '-');
+                    const jumlah = Number(item.jumlah_kebutuhan || 0);
+                    return `
+                        <tr>
+                            <td>${jabatan}</td>
+                            <td>${escapeHtml(String(jumlah > 0 ? jumlah : '-'))}</td>
+                        </tr>
+                    `;
+                })
+                .join('');
+            openedPositionsSectionEl.classList.remove('d-none');
+        }
+
         function escapeHtml(str) {
             return String(str ?? '')
                 .replace(/&/g, '&amp;')
@@ -1878,6 +1926,7 @@
                 lastFeed = data || { companies: [] };
                 loadingEl.classList.add('d-none');
                 renderJoinedCompanies([]);
+                renderOpenedPositions([]);
                 setView('companies');
                 companiesEl.classList.remove('d-none');
                 renderCompanies(lastFeed.companies || []);
@@ -1906,6 +1955,7 @@
                 renderGrid(lastFeed.items || []);
                 renderComments(lastFeed.comments || []);
                 renderJoinedCompanies(lastFeed.joined_companies || []);
+                renderOpenedPositions(lastFeed.opened_positions || []);
                 loadCompanySchedule(company);
             } catch (e) {
                 loadingEl.classList.add('d-none');
@@ -1933,6 +1983,7 @@
             if (scheduleBodyEl) scheduleBodyEl.innerHTML = '';
             setScheduleState('empty');
             renderJoinedCompanies([]);
+            renderOpenedPositions([]);
             loadCompanies();
         });
 
