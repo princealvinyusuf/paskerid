@@ -5,29 +5,21 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class WalkInSurveyCompany extends Model
+class WalkInSurveyInitiator extends Model
 {
     use HasFactory;
 
-    protected $table = 'company_walk_in_survey';
+    protected $table = 'walk_in_survey_initiators';
 
     protected $fillable = [
-        'company_name',
-        'walk_in_initiator_id',
+        'initiator_name',
         'is_active',
         'sort_order',
     ];
 
     protected $casts = [
-        'walk_in_initiator_id' => 'integer',
         'is_active' => 'boolean',
         'sort_order' => 'integer',
     ];
-
-    public function initiator()
-    {
-        return $this->belongsTo(WalkInSurveyInitiator::class, 'walk_in_initiator_id');
-    }
 }
-
 

@@ -31,12 +31,23 @@ class KemitraanController extends Controller
         $walkinAgendas = $this->getWalkinAgendasFromBookedDates('upcoming');
         $walkinAgendasPast = $this->getWalkinAgendasFromBookedDates('past', 80);
         $surveyCompanies = collect();
+        $hasSurveyInitiatorTable = Schema::hasTable('walk_in_survey_initiators');
+        $hasInitiatorColumnOnCompany = Schema::hasTable('company_walk_in_survey') && Schema::hasColumn('company_walk_in_survey', 'walk_in_initiator_id');
         if (Schema::hasTable('company_walk_in_survey')) {
-            $surveyCompanies = WalkInSurveyCompany::query()
+            $query = WalkInSurveyCompany::query()
                 ->where('is_active', true)
                 ->orderBy('sort_order')
-                ->orderBy('company_name')
-                ->get(['id', 'company_name']);
+                ->orderBy('company_name');
+
+            if ($hasSurveyInitiatorTable && $hasInitiatorColumnOnCompany) {
+                $query->with(['initiator:id,initiator_name']);
+            }
+
+            $columns = ['id', 'company_name'];
+            if ($hasInitiatorColumnOnCompany) {
+                $columns[] = 'walk_in_initiator_id';
+            }
+            $surveyCompanies = $query->get($columns);
         }
 
         return view('kemitraan.create', compact(
@@ -194,7 +205,14 @@ class KemitraanController extends Controller
 
     public function storeSurvey(Request $request)
     {
-        if (!Schema::hasTable('company_walk_in_survey') || !Schema::hasTable('walk_in_survey_responses')) {
+        if (
+            !Schema::hasTable('company_walk_in_survey') ||
+            !Schema::hasTable('walk_in_survey_responses') ||
+            !Schema::hasTable('walk_in_survey_initiators') ||
+            !Schema::hasColumn('company_walk_in_survey', 'walk_in_initiator_id') ||
+            !Schema::hasColumn('walk_in_survey_responses', 'walk_in_initiator_id') ||
+            !Schema::hasColumn('walk_in_survey_responses', 'walkin_initiator_snapshot')
+        ) {
             return redirect()
                 ->route('kemitraan.create', ['panel' => 'survey'])
                 ->withErrors(['survey' => 'Fitur survei belum aktif di database. Jalankan migrasi terlebih dahulu.'], 'survey')
@@ -203,6 +221,7 @@ class KemitraanController extends Controller
 
         $validated = $request->validateWithBag('survey', [
             'survey_applied_company' => 'required|integer|exists:company_walk_in_survey,id',
+            'survey_walkin_initiator_id' => 'required|integer|exists:walk_in_survey_initiators,id',
             'survey_walkin_date' => 'nullable|date',
             'survey_email' => 'required|email|max:255',
             'survey_name' => 'required|string|max:255',
@@ -250,13 +269,25 @@ class KemitraanController extends Controller
             'survey_feedback_improvement_aspects' => 'required|string|max:5000',
         ]);
 
-        $company = WalkInSurveyCompany::query()->findOrFail((int) $validated['survey_applied_company']);
+        $company = WalkInSurveyCompany::query()
+            ->with(['initiator:id,initiator_name'])
+            ->findOrFail((int) $validated['survey_applied_company']);
+        $initiator = $company->initiator;
+
+        if (!$initiator || (int) $initiator->id !== (int) $validated['survey_walkin_initiator_id']) {
+            return redirect()
+                ->route('kemitraan.create', ['panel' => 'survey'])
+                ->withErrors(['survey_walkin_initiator_id' => 'Walk In Initiator tidak valid untuk perusahaan yang dipilih.'], 'survey')
+                ->withInput();
+        }
         $today = Carbon::today()->toDateString();
         $hasWalkinDateColumn = Schema::hasColumn('walk_in_survey_responses', 'walkin_date');
 
         $payload = [
             'company_walk_in_survey_id' => (int) $company->id,
+            'walk_in_initiator_id' => (int) $initiator->id,
             'company_name_snapshot' => (string) $company->company_name,
+            'walkin_initiator_snapshot' => (string) $initiator->initiator_name,
             'email' => $validated['survey_email'],
             'name' => $validated['survey_name'],
             'phone' => $validated['survey_phone'],

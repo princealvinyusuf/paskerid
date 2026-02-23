@@ -142,11 +142,29 @@
                         </div>
                         <div class="walkin-panel p-3 p-md-4 mb-3">
                             <div class="mb-3">
+                                <label class="form-label" for="survey_walkin_initiator_name">Walk In Initiator <span class="text-danger">*</span></label>
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    id="survey_walkin_initiator_name"
+                                    value="{{ old('survey_walkin_initiator_name') }}"
+                                    placeholder="Pilih perusahaan terlebih dahulu"
+                                    readonly
+                                    required
+                                >
+                                <input type="hidden" id="survey_walkin_initiator_id" name="survey_walkin_initiator_id" value="{{ old('survey_walkin_initiator_id') }}" required>
+                            </div>
+                            <div class="mb-3">
                                 <label class="form-label" for="survey_applied_company">Perusahaan apa yang anda lamar? <span class="text-danger">*</span></label>
                                 <select class="form-select" id="survey_applied_company" name="survey_applied_company" required>
                                     <option value="">Pilih perusahaan</option>
                                     @foreach(($surveyCompanies ?? collect()) as $company)
-                                        <option value="{{ $company->id }}" {{ (string) old('survey_applied_company') === (string) $company->id ? 'selected' : '' }}>
+                                        <option
+                                            value="{{ $company->id }}"
+                                            data-initiator-id="{{ $company->walk_in_initiator_id }}"
+                                            data-initiator-name="{{ $company->initiator?->initiator_name ?? '' }}"
+                                            {{ (string) old('survey_applied_company') === (string) $company->id ? 'selected' : '' }}
+                                        >
                                             {{ $company->company_name }}
                                         </option>
                                     @endforeach
@@ -1571,6 +1589,33 @@
         form.addEventListener('input', refreshProgress);
         form.addEventListener('change', refreshProgress);
         refreshProgress();
+    })();
+
+    // Survey: auto-fill Walk In Initiator from selected company
+    (function () {
+        const companySelect = document.getElementById('survey_applied_company');
+        const initiatorNameInput = document.getElementById('survey_walkin_initiator_name');
+        const initiatorIdInput = document.getElementById('survey_walkin_initiator_id');
+        if (!companySelect || !initiatorNameInput || !initiatorIdInput) return;
+
+        function syncInitiator() {
+            const selectedOption = companySelect.options[companySelect.selectedIndex];
+            if (!selectedOption || !selectedOption.value) {
+                initiatorNameInput.value = '';
+                initiatorIdInput.value = '';
+                initiatorNameInput.placeholder = 'Pilih perusahaan terlebih dahulu';
+                return;
+            }
+
+            const initiatorId = selectedOption.getAttribute('data-initiator-id') || '';
+            const initiatorName = selectedOption.getAttribute('data-initiator-name') || '';
+            initiatorIdInput.value = initiatorId;
+            initiatorNameInput.value = initiatorName;
+            initiatorNameInput.placeholder = initiatorName ? '' : 'Initiator belum diatur di admin';
+        }
+
+        companySelect.addEventListener('change', syncInitiator);
+        syncInitiator();
     })();
 
     // Schedule detail modal (reuse virtual-karir style)
