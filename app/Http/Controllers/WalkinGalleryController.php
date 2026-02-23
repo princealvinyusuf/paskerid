@@ -6,6 +6,7 @@ use App\Models\KemitraanDetailLowongan;
 use App\Models\WalkinGalleryComment;
 use App\Models\WalkinGalleryItem;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 class WalkinGalleryController extends Controller
@@ -130,6 +131,8 @@ class WalkinGalleryController extends Controller
 
         $joinedCompanies = [];
         $openedPositions = [];
+        $initiatorRating = null;
+        $joinedCompanyRatings = [];
         if ($company !== 'Umum') {
             $detailLowonganRows = KemitraanDetailLowongan::query()
                 ->whereHas('kemitraan', function ($q) use ($company) {
@@ -198,6 +201,65 @@ class WalkinGalleryController extends Controller
                 }
             }
             $openedPositions = array_values($openedMap);
+
+            if (Schema::hasTable('company_walk_in_survey') && Schema::hasTable('walk_in_survey_responses')) {
+                $companyRatingRows = DB::table('company_walk_in_survey as c')
+                    ->leftJoin('walk_in_survey_responses as r', 'r.company_walk_in_survey_id', '=', 'c.id')
+                    ->selectRaw('c.company_name, ROUND(AVG(r.rating_satisfaction), 2) AS avg_rating')
+                    ->groupBy('c.company_name')
+                    ->get();
+
+                $companyRatingMap = [];
+                foreach ($companyRatingRows as $row) {
+                    $name = trim((string) ($row->company_name ?? ''));
+                    if ($name === '') {
+                        continue;
+                    }
+                    $companyRatingMap[mb_strtolower($name)] = $row->avg_rating !== null ? (float) $row->avg_rating : null;
+                }
+
+                foreach ($joinedCompanies as $name) {
+                    $joinedCompanyRatings[] = [
+                        'name' => $name,
+                        'rating' => $companyRatingMap[mb_strtolower($name)] ?? null,
+                    ];
+                }
+
+                $initiatorName = $company;
+                $initiatorAvg = $companyRatingMap[mb_strtolower($company)] ?? null;
+
+                if (Schema::hasTable('walk_in_survey_initiators') && Schema::hasColumn('company_walk_in_survey', 'walk_in_initiator_id')) {
+                    $initiator = DB::table('walk_in_survey_initiators')
+                        ->whereRaw('LOWER(initiator_name) = ?', [mb_strtolower($company)])
+                        ->first(['id', 'initiator_name']);
+
+                    if (!$initiator) {
+                        $initiatorId = DB::table('company_walk_in_survey')
+                            ->whereRaw('LOWER(company_name) = ?', [mb_strtolower($company)])
+                            ->value('walk_in_initiator_id');
+                        if ($initiatorId) {
+                            $initiator = DB::table('walk_in_survey_initiators')
+                                ->where('id', (int) $initiatorId)
+                                ->first(['id', 'initiator_name']);
+                        }
+                    }
+
+                    if ($initiator && isset($initiator->id)) {
+                        $initiatorName = trim((string) ($initiator->initiator_name ?? $company)) ?: $company;
+                        $initiatorAvgRaw = DB::table('company_walk_in_survey as c')
+                            ->leftJoin('walk_in_survey_responses as r', 'r.company_walk_in_survey_id', '=', 'c.id')
+                            ->where('c.walk_in_initiator_id', (int) $initiator->id)
+                            ->selectRaw('ROUND(AVG(r.rating_satisfaction), 2) AS avg_rating')
+                            ->value('avg_rating');
+                        $initiatorAvg = $initiatorAvgRaw !== null ? (float) $initiatorAvgRaw : null;
+                    }
+                }
+
+                $initiatorRating = [
+                    'name' => $initiatorName,
+                    'rating' => $initiatorAvg,
+                ];
+            }
         }
 
         return response()->json([
@@ -207,6 +269,8 @@ class WalkinGalleryController extends Controller
             'comments' => $comments,
             'joined_companies' => $joinedCompanies,
             'opened_positions' => $openedPositions,
+            'initiator_rating' => $initiatorRating,
+            'joined_company_ratings' => $joinedCompanyRatings,
         ]);
     }
 

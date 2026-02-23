@@ -941,6 +941,16 @@
                                     <div id="walkinJoinedCompaniesList" class="d-flex flex-wrap gap-2"></div>
                                 </div>
                             </div>
+                            <div class="col-12 d-none" id="walkinRatingsSection">
+                                <div class="walkin-panel p-3 p-md-4">
+                                    <div class="d-flex align-items-center justify-content-between mb-2">
+                                        <div class="fw-semibold">Star Ratings</div>
+                                        <div class="text-muted small">Rating kepuasan survei</div>
+                                    </div>
+                                    <div id="walkinInitiatorRating" class="walkin-rating-initiator mb-3"></div>
+                                    <div id="walkinCompanyRatingsList" class="d-flex flex-column gap-2"></div>
+                                </div>
+                            </div>
                             <div class="col-12 d-none" id="walkinOpenedPositionsSection">
                                 <div class="walkin-panel p-3 p-md-4">
                                     <div class="d-flex align-items-center justify-content-between mb-2">
@@ -1673,6 +1683,9 @@
         const scheduleBodyEl = document.getElementById('walkinCompanyScheduleBody');
         const joinedCompaniesSectionEl = document.getElementById('walkinJoinedCompaniesSection');
         const joinedCompaniesListEl = document.getElementById('walkinJoinedCompaniesList');
+        const ratingsSectionEl = document.getElementById('walkinRatingsSection');
+        const initiatorRatingEl = document.getElementById('walkinInitiatorRating');
+        const companyRatingsListEl = document.getElementById('walkinCompanyRatingsList');
         const openedPositionsSectionEl = document.getElementById('walkinOpenedPositionsSection');
         const openedPositionsBodyEl = document.getElementById('walkinOpenedPositionsBody');
 
@@ -1842,6 +1855,58 @@
             openedPositionsSectionEl.classList.remove('d-none');
         }
 
+        function makeStars(rating, large = false) {
+            const numeric = Number(rating);
+            if (!Number.isFinite(numeric) || numeric <= 0) {
+                return `<span class="text-muted small">Belum ada rating</span>`;
+            }
+            const rounded = Math.max(0, Math.min(5, Math.round(numeric)));
+            let stars = '';
+            for (let i = 1; i <= 5; i++) {
+                stars += `<i class="bi ${i <= rounded ? 'bi-star-fill' : 'bi-star'} ${large ? 'walkin-star-lg' : 'walkin-star-sm'}"></i>`;
+            }
+            return `${stars}<span class="${large ? 'walkin-rating-value-lg' : 'walkin-rating-value-sm'}">${escapeHtml(numeric.toFixed(2))}/5</span>`;
+        }
+
+        function renderRatings(initiatorRating, companyRatings) {
+            if (!ratingsSectionEl || !initiatorRatingEl || !companyRatingsListEl) return;
+
+            const hasInitiator = !!(initiatorRating && initiatorRating.name);
+            const companies = Array.isArray(companyRatings) ? companyRatings : [];
+            const hasCompanyRatings = companies.length > 0;
+
+            if (!hasInitiator && !hasCompanyRatings) {
+                initiatorRatingEl.innerHTML = '';
+                companyRatingsListEl.innerHTML = '';
+                ratingsSectionEl.classList.add('d-none');
+                return;
+            }
+
+            if (hasInitiator) {
+                initiatorRatingEl.innerHTML = `
+                    <div class="walkin-rating-initiator-title">Initiator: ${escapeHtml(initiatorRating.name || '')}</div>
+                    <div class="walkin-rating-stars-wrap">${makeStars(initiatorRating.rating, true)}</div>
+                `;
+            } else {
+                initiatorRatingEl.innerHTML = '';
+            }
+
+            if (hasCompanyRatings) {
+                companyRatingsListEl.innerHTML = companies
+                    .map((row) => `
+                        <div class="walkin-rating-company-row">
+                            <div class="walkin-rating-company-name">${escapeHtml(row && row.name ? row.name : '-')}</div>
+                            <div class="walkin-rating-stars-wrap">${makeStars(row ? row.rating : null, false)}</div>
+                        </div>
+                    `)
+                    .join('');
+            } else {
+                companyRatingsListEl.innerHTML = '';
+            }
+
+            ratingsSectionEl.classList.remove('d-none');
+        }
+
         function escapeHtml(str) {
             return String(str ?? '')
                 .replace(/&/g, '&amp;')
@@ -1980,6 +2045,7 @@
                 lastFeed = data || { companies: [] };
                 loadingEl.classList.add('d-none');
                 renderJoinedCompanies([]);
+                renderRatings(null, []);
                 renderOpenedPositions([]);
                 setView('companies');
                 companiesEl.classList.remove('d-none');
@@ -2009,6 +2075,7 @@
                 renderGrid(lastFeed.items || []);
                 renderComments(lastFeed.comments || []);
                 renderJoinedCompanies(lastFeed.joined_companies || []);
+                renderRatings(lastFeed.initiator_rating || null, lastFeed.joined_company_ratings || []);
                 renderOpenedPositions(lastFeed.opened_positions || []);
                 loadCompanySchedule(company);
             } catch (e) {
@@ -2037,6 +2104,7 @@
             if (scheduleBodyEl) scheduleBodyEl.innerHTML = '';
             setScheduleState('empty');
             renderJoinedCompanies([]);
+            renderRatings(null, []);
             renderOpenedPositions([]);
             loadCompanies();
         });
@@ -2449,6 +2517,58 @@
         color: #1d4ed8;
         border: 1px solid rgba(37,99,235,0.15);
         flex: 0 0 auto;
+    }
+    .walkin-rating-initiator {
+        border: 1px solid rgba(59,130,246,0.25);
+        border-radius: 14px;
+        padding: 12px;
+        background: linear-gradient(180deg, rgba(239,246,255,0.95), rgba(255,255,255,1));
+    }
+    .walkin-rating-initiator-title {
+        font-weight: 700;
+        color: #1e3a8a;
+        margin-bottom: 6px;
+    }
+    .walkin-rating-company-row {
+        border: 1px solid rgba(15,23,42,0.10);
+        border-radius: 12px;
+        padding: 10px 12px;
+        background: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+    }
+    .walkin-rating-company-name {
+        font-weight: 600;
+        color: #0f172a;
+    }
+    .walkin-rating-stars-wrap {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+    }
+    .walkin-star-lg,
+    .walkin-star-sm {
+        color: #f59e0b;
+    }
+    .walkin-star-lg {
+        font-size: 1.35rem;
+    }
+    .walkin-star-sm {
+        font-size: 1rem;
+    }
+    .walkin-rating-value-lg,
+    .walkin-rating-value-sm {
+        margin-left: 6px;
+        color: #0f172a;
+        font-weight: 700;
+    }
+    .walkin-rating-value-lg {
+        font-size: 1.05rem;
+    }
+    .walkin-rating-value-sm {
+        font-size: 0.92rem;
     }
 
     .walkin-comment-compose textarea.form-control {
