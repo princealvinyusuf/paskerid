@@ -143,6 +143,18 @@
                                 </select>
                             </div>
                             <div class="mb-3">
+                                <label class="form-label" for="survey_walkin_date">Tanggal Mengikuti Walk In <span class="text-danger">*</span></label>
+                                <input
+                                    type="date"
+                                    class="form-control"
+                                    id="survey_walkin_date"
+                                    name="survey_walkin_date"
+                                    value="{{ old('survey_walkin_date', now()->format('Y-m-d')) }}"
+                                    readonly
+                                    required
+                                >
+                            </div>
+                            <div class="mb-3">
                                 <label class="form-label" for="survey_email">Email <span class="text-danger">*</span></label>
                                 <input type="email" class="form-control" id="survey_email" name="survey_email" placeholder="email@domain.com" required>
                             </div>

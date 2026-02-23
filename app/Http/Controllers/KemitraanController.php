@@ -168,6 +168,7 @@ class KemitraanController extends Controller
 
         $validated = $request->validateWithBag('survey', [
             'survey_applied_company' => 'required|integer|exists:company_walk_in_survey,id',
+            'survey_walkin_date' => 'nullable|date',
             'survey_email' => 'required|email|max:255',
             'survey_name' => 'required|string|max:255',
             'survey_phone' => 'required|string|max:30',
@@ -215,8 +216,10 @@ class KemitraanController extends Controller
         ]);
 
         $company = WalkInSurveyCompany::query()->findOrFail((int) $validated['survey_applied_company']);
+        $today = Carbon::today()->toDateString();
+        $hasWalkinDateColumn = Schema::hasColumn('walk_in_survey_responses', 'walkin_date');
 
-        WalkInSurveyResponse::create([
+        $payload = [
             'company_walk_in_survey_id' => (int) $company->id,
             'company_name_snapshot' => (string) $company->company_name,
             'email' => $validated['survey_email'],
@@ -251,7 +254,13 @@ class KemitraanController extends Controller
             'rating_satisfaction' => (int) $validated['survey_rating_satisfaction'],
             'improvement_aspects' => array_values(array_unique($validated['survey_improvement_aspects'] ?? [])),
             'feedback_improvement_aspects' => $validated['survey_feedback_improvement_aspects'],
-        ]);
+        ];
+        if ($hasWalkinDateColumn) {
+            // System-filled date to keep field read-only and tamper-resistant.
+            $payload['walkin_date'] = $today;
+        }
+
+        WalkInSurveyResponse::create($payload);
 
         return redirect()
             ->route('kemitraan.create', ['panel' => 'survey'])

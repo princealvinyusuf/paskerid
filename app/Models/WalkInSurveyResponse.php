@@ -14,6 +14,7 @@ class WalkInSurveyResponse extends Model
     protected $fillable = [
         'company_walk_in_survey_id',
         'company_name_snapshot',
+        'walkin_date',
         'email',
         'name',
         'phone',
@@ -50,6 +51,7 @@ class WalkInSurveyResponse extends Model
 
     protected $casts = [
         'company_walk_in_survey_id' => 'integer',
+        'walkin_date' => 'date',
         'info_sources' => 'array',
         'job_portals' => 'array',
         'strengths' => 'array',
