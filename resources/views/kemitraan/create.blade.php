@@ -127,6 +127,19 @@
 
                     <form class="walkin-survey-form" method="post" action="{{ route('kemitraan.survey.store') }}">
                         @csrf
+                        <div class="survey-progress-sticky mb-3">
+                            <div class="survey-progress-head d-flex justify-content-between align-items-center">
+                                <span class="survey-section-tag survey-tag-progress">Progress Pengisian</span>
+                                <span class="small fw-semibold" id="surveyProgressText">0%</span>
+                            </div>
+                            <div class="progress mt-2" role="progressbar" aria-label="Survey completion">
+                                <div class="progress-bar" id="surveyProgressBar" style="width: 0%"></div>
+                            </div>
+                        </div>
+
+                        <div class="survey-section-title">
+                            <span class="survey-section-tag survey-tag-demografi">Demografi</span>
+                        </div>
                         <div class="walkin-panel p-3 p-md-4 mb-3">
                             <div class="mb-3">
                                 <label class="form-label" for="survey_applied_company">Perusahaan apa yang anda lamar? <span class="text-danger">*</span></label>
@@ -168,6 +181,9 @@
                             </div>
                         </div>
 
+                        <div class="survey-section-title">
+                            <span class="survey-section-tag survey-tag-preferensi">Preferensi</span>
+                        </div>
                         <div class="walkin-panel p-3 p-md-4 mb-3">
                             <div class="mb-0">
                                 <div class="form-label">Domisili (Kab/Kota) <span class="text-danger">*</span></div>
@@ -192,6 +208,9 @@
                             </div>
                         </div>
 
+                        <div class="survey-section-title">
+                            <span class="survey-section-tag survey-tag-penilaian">Penilaian</span>
+                        </div>
                         <div class="walkin-panel p-3 p-md-4 mb-3">
                             <div class="mb-3">
                                 <label class="form-label" for="survey_gender">Jenis Kelamin <span class="text-danger">*</span></label>
@@ -1344,6 +1363,51 @@
         setActive(initialPanel);
     })();
 
+    // Survey mini progress indicator
+    (function () {
+        const form = document.querySelector('#panelSurvey .walkin-survey-form');
+        const bar = document.getElementById('surveyProgressBar');
+        const text = document.getElementById('surveyProgressText');
+        if (!form || !bar || !text) return;
+
+        const requiredFields = Array.from(form.querySelectorAll('[required]'));
+        if (requiredFields.length === 0) return;
+
+        function isFieldFilled(el) {
+            const type = (el.type || '').toLowerCase();
+            if (type === 'radio') {
+                if (!el.name) return false;
+                return !!form.querySelector(`input[type="radio"][name="${el.name}"]:checked`);
+            }
+            if (type === 'checkbox') return el.checked;
+            if (el.tagName === 'SELECT') return !!el.value;
+            return String(el.value || '').trim() !== '';
+        }
+
+        function refreshProgress() {
+            const uniqueNames = new Set();
+            const checkpoints = [];
+            requiredFields.forEach((el) => {
+                const type = (el.type || '').toLowerCase();
+                const key = (type === 'radio' || type === 'checkbox') && el.name ? `${type}:${el.name}` : `${el.id || el.name || Math.random()}`;
+                if (!uniqueNames.has(key)) {
+                    uniqueNames.add(key);
+                    checkpoints.push(el);
+                }
+            });
+
+            let filled = 0;
+            checkpoints.forEach((el) => { if (isFieldFilled(el)) filled += 1; });
+            const pct = Math.max(0, Math.min(100, Math.round((filled / checkpoints.length) * 100)));
+            bar.style.width = pct + '%';
+            text.textContent = pct + '%';
+        }
+
+        form.addEventListener('input', refreshProgress);
+        form.addEventListener('change', refreshProgress);
+        refreshProgress();
+    })();
+
     // Schedule detail modal (reuse virtual-karir style)
     document.addEventListener('DOMContentLoaded', function () {
         const agendaModal = document.getElementById('agendaDetailModal');
@@ -1879,6 +1943,59 @@
         border-color: rgba(37,99,235,0.28);
         box-shadow: 0 18px 40px rgba(37,99,235,0.12);
     }
+    #panelSurvey .survey-section-title {
+        margin: 6px 0 10px;
+    }
+    #panelSurvey .survey-section-tag {
+        display: inline-flex;
+        align-items: center;
+        border-radius: 999px;
+        padding: 6px 12px;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: .02em;
+        border: 1px solid transparent;
+    }
+    #panelSurvey .survey-tag-demografi {
+        color: #1d4ed8;
+        background: rgba(37,99,235,0.12);
+        border-color: rgba(37,99,235,0.22);
+    }
+    #panelSurvey .survey-tag-preferensi {
+        color: #0f766e;
+        background: rgba(20,184,166,0.12);
+        border-color: rgba(20,184,166,0.24);
+    }
+    #panelSurvey .survey-tag-penilaian {
+        color: #7c2d12;
+        background: rgba(251,146,60,0.16);
+        border-color: rgba(251,146,60,0.24);
+    }
+    #panelSurvey .survey-tag-progress {
+        color: #0f172a;
+        background: rgba(15,23,42,0.08);
+        border-color: rgba(15,23,42,0.18);
+    }
+    #panelSurvey .survey-progress-sticky {
+        position: sticky;
+        top: 82px;
+        z-index: 7;
+        background: rgba(255,255,255,0.95);
+        border: 1px solid rgba(15,23,42,0.10);
+        border-radius: 14px;
+        padding: 10px 12px;
+        backdrop-filter: blur(6px);
+    }
+    #panelSurvey .survey-progress-sticky .progress {
+        height: 8px;
+        border-radius: 999px;
+        background: rgba(148,163,184,0.25);
+    }
+    #panelSurvey .survey-progress-sticky .progress-bar {
+        border-radius: 999px;
+        background: linear-gradient(90deg, #2563eb, #06b6d4);
+        transition: width .2s ease;
+    }
     #panelSurvey .form-label {
         font-weight: 600;
         color: #0f172a;
@@ -1931,6 +2048,11 @@
     #panelSurvey .survey-submit-btn:hover {
         filter: brightness(1.03);
         box-shadow: 0 14px 30px rgba(37,99,235,0.34);
+    }
+    @media (max-width: 991.98px) {
+        #panelSurvey .survey-progress-sticky {
+            top: 12px;
+        }
     }
     .walkin-sticky {
         position: sticky;
