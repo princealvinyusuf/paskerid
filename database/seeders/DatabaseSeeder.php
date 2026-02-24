@@ -41,6 +41,7 @@ class DatabaseSeeder extends Seeder
             InformasiSection2TableSeeder::class,
             InformasiSection3TableSeeder::class,
             InformasiSection4TableSeeder::class,
+            MiniJobiJobsTableSeeder::class,
             // \Database\Seeders\DashboardTrendSeeder::class,
         ]);
     }

@@ -1,0 +1,173 @@
+<?php
+
+namespace Database\Seeders;
+
+use Carbon\Carbon;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+
+class MiniJobiJobsTableSeeder extends Seeder
+{
+    public function run(): void
+    {
+        if (DB::table('mini_jobi_jobs')->count() > 0) {
+            return;
+        }
+
+        $now = Carbon::now();
+
+        DB::table('mini_jobi_jobs')->insert([
+            [
+                'title' => 'Frontend Developer (React)',
+                'company_name' => 'PT Nusantara Digital Solusi',
+                'location' => 'Jakarta Selatan',
+                'employment_type' => 'Full-time',
+                'category' => 'Teknologi Informasi',
+                'salary_range' => 'Rp 8.000.000 - Rp 12.000.000',
+                'description' => 'Membangun antarmuka web modern dan kolaborasi dengan tim backend untuk integrasi API.',
+                'requirements' => 'Pengalaman React minimal 2 tahun, memahami JavaScript ES6+, Git, dan responsive design.',
+                'apply_url' => 'https://example.com/jobs/frontend-react',
+                'deadline_date' => '2026-04-15',
+                'is_active' => true,
+                'created_at' => $now,
+                'updated_at' => $now,
+            ],
+            [
+                'title' => 'Backend Engineer (Laravel)',
+                'company_name' => 'PT Inovasi Talenta Indonesia',
+                'location' => 'Bandung',
+                'employment_type' => 'Full-time',
+                'category' => 'Teknologi Informasi',
+                'salary_range' => 'Rp 9.000.000 - Rp 14.000.000',
+                'description' => 'Mengembangkan layanan backend, optimasi query database, dan menjaga kualitas API production.',
+                'requirements' => 'Menguasai PHP Laravel, MySQL, REST API, dan basic cloud deployment.',
+                'apply_url' => 'https://example.com/jobs/backend-laravel',
+                'deadline_date' => '2026-04-20',
+                'is_active' => true,
+                'created_at' => $now,
+                'updated_at' => $now,
+            ],
+            [
+                'title' => 'Data Analyst',
+                'company_name' => 'PT Cipta Data Cemerlang',
+                'location' => 'Yogyakarta',
+                'employment_type' => 'Full-time',
+                'category' => 'Data & Analytics',
+                'salary_range' => 'Rp 7.500.000 - Rp 11.000.000',
+                'description' => 'Mengolah data ketenagakerjaan dan menyusun dashboard analitik untuk kebutuhan bisnis.',
+                'requirements' => 'SQL, Excel/Spreadsheet tingkat lanjut, dan kemampuan visualisasi data.',
+                'apply_url' => 'https://example.com/jobs/data-analyst',
+                'deadline_date' => '2026-04-22',
+                'is_active' => true,
+                'created_at' => $now,
+                'updated_at' => $now,
+            ],
+            [
+                'title' => 'UI/UX Designer',
+                'company_name' => 'CV Kreatif Studio Indonesia',
+                'location' => 'Surabaya',
+                'employment_type' => 'Contract',
+                'category' => 'Desain',
+                'salary_range' => 'Rp 6.000.000 - Rp 9.500.000',
+                'description' => 'Merancang pengalaman pengguna dan prototipe antarmuka untuk aplikasi web dan mobile.',
+                'requirements' => 'Menguasai Figma, design system, dan user research dasar.',
+                'apply_url' => 'https://example.com/jobs/ui-ux-designer',
+                'deadline_date' => '2026-04-10',
+                'is_active' => true,
+                'created_at' => $now,
+                'updated_at' => $now,
+            ],
+            [
+                'title' => 'Digital Marketing Specialist',
+                'company_name' => 'PT Akselerasi Bisnis Mandiri',
+                'location' => 'Jakarta Pusat',
+                'employment_type' => 'Full-time',
+                'category' => 'Pemasaran',
+                'salary_range' => 'Rp 6.500.000 - Rp 10.000.000',
+                'description' => 'Menyusun strategi kampanye digital dan optimasi performa iklan di berbagai platform.',
+                'requirements' => 'Pengalaman Google Ads/Meta Ads, analisis campaign, dan copywriting.',
+                'apply_url' => 'https://example.com/jobs/digital-marketing',
+                'deadline_date' => '2026-04-30',
+                'is_active' => true,
+                'created_at' => $now,
+                'updated_at' => $now,
+            ],
+            [
+                'title' => 'Customer Support Officer',
+                'company_name' => 'PT Layanan Prima Nusantara',
+                'location' => 'Semarang',
+                'employment_type' => 'Shift',
+                'category' => 'Layanan Pelanggan',
+                'salary_range' => 'Rp 4.500.000 - Rp 6.000.000',
+                'description' => 'Memberikan layanan pelanggan melalui chat, email, dan telepon secara profesional.',
+                'requirements' => 'Komunikasi baik, mampu bekerja shift, dan familiar dengan CRM.',
+                'apply_url' => 'https://example.com/jobs/customer-support',
+                'deadline_date' => '2026-04-12',
+                'is_active' => true,
+                'created_at' => $now,
+                'updated_at' => $now,
+            ],
+            [
+                'title' => 'Admin Operasional',
+                'company_name' => 'PT Mitra Operasional Jaya',
+                'location' => 'Medan',
+                'employment_type' => 'Full-time',
+                'category' => 'Administrasi',
+                'salary_range' => 'Rp 4.200.000 - Rp 5.800.000',
+                'description' => 'Mengelola dokumen operasional dan koordinasi administrasi antar tim.',
+                'requirements' => 'Teliti, menguasai Ms Office, dan mampu mengelola data secara rapi.',
+                'apply_url' => 'https://example.com/jobs/admin-operasional',
+                'deadline_date' => '2026-04-18',
+                'is_active' => true,
+                'created_at' => $now,
+                'updated_at' => $now,
+            ],
+            [
+                'title' => 'Graphic Designer (Freelance)',
+                'company_name' => 'PT Visual Kreativa',
+                'location' => 'Remote',
+                'employment_type' => 'Freelance',
+                'category' => 'Desain',
+                'salary_range' => 'Rp 250.000 - Rp 500.000 / desain',
+                'description' => 'Membuat aset visual kampanye promosi dan kebutuhan branding perusahaan.',
+                'requirements' => 'Portofolio desain, Adobe Illustrator/Photoshop, dan ketepatan deadline.',
+                'apply_url' => 'https://example.com/jobs/graphic-designer-freelance',
+                'deadline_date' => '2026-05-05',
+                'is_active' => true,
+                'created_at' => $now,
+                'updated_at' => $now,
+            ],
+            [
+                'title' => 'Sales Executive',
+                'company_name' => 'PT Niaga Tumbuh Bersama',
+                'location' => 'Makassar',
+                'employment_type' => 'Full-time',
+                'category' => 'Penjualan',
+                'salary_range' => 'Rp 5.000.000 + insentif',
+                'description' => 'Mengembangkan relasi klien baru dan menjaga pencapaian target penjualan bulanan.',
+                'requirements' => 'Memiliki pengalaman sales B2B/B2C dan komunikasi negosiasi yang baik.',
+                'apply_url' => 'https://example.com/jobs/sales-executive',
+                'deadline_date' => '2026-04-28',
+                'is_active' => true,
+                'created_at' => $now,
+                'updated_at' => $now,
+            ],
+            [
+                'title' => 'HR Recruitment Staff',
+                'company_name' => 'PT Sumber Daya Berkarya',
+                'location' => 'Bekasi',
+                'employment_type' => 'Full-time',
+                'category' => 'Human Resources',
+                'salary_range' => 'Rp 6.000.000 - Rp 8.500.000',
+                'description' => 'Menjalankan proses rekrutmen end-to-end mulai dari sourcing hingga offering.',
+                'requirements' => 'Pengalaman rekrutmen minimal 1 tahun dan familiar dengan ATS.',
+                'apply_url' => 'https://example.com/jobs/hr-recruitment-staff',
+                'deadline_date' => '2026-04-25',
+                'is_active' => true,
+                'created_at' => $now,
+                'updated_at' => $now,
+            ],
+        ]);
+    }
+}
+
