@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MiniVideoController;
+use App\Http\Controllers\MiniJobiController;
 use App\Http\Controllers\Api\HighlightStatisticController;
 use App\Http\Controllers\Api\InformationController;
 use App\Http\Controllers\WalkinGalleryController;
@@ -85,6 +86,8 @@ Route::get('/datasets', [App\Http\Controllers\DatasetController::class, 'index']
 Route::get('/media-sosial', function () {
     return view('media_sosial');
 })->name('media_sosial');
+
+Route::get('/miniJobi', [MiniJobiController::class, 'index'])->name('minijobi.index');
 
 Route::get('/publikasi', [App\Http\Controllers\PublikasiController::class, 'index'])->name('publikasi.index');
 

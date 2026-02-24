@@ -47,6 +47,9 @@
                     <li class="nav-item">
                         <a class="nav-link @if(request()->routeIs('informasi_pasar_kerja.index')) active fw-bold @endif" href="{{ route('informasi_pasar_kerja.index') }}">Informasi Pasar Kerja</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link @if(request()->routeIs('minijobi.index')) active fw-bold @endif" href="{{ route('minijobi.index') }}">miniJobi</a>
+                    </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle @if(request()->routeIs('virtual-karir.index')) active fw-bold @endif" href="#" id="layananDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Layanan
@@ -125,6 +128,7 @@
                     </div>
                     <div class="col-6 col-md-3 mb-3 mb-md-0">
                         <div class="fw-bold mb-2">Layanan</div>
+                        <div><a href="{{ route('minijobi.index') }}" class="text-white text-decoration-none">miniJobi</a></div>
                         <div><a href="{{ route('virtual-karir.index') }}" class="text-white text-decoration-none">Virtual Karir</a></div>
                         
                         <!-- <div><a href="{{ route('informasi.index') }}" class="text-white text-decoration-none">Data</a></div> -->
