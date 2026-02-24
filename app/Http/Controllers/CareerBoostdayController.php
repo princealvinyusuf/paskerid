@@ -84,7 +84,9 @@ class CareerBoostdayController extends Controller
             });
         }
 
-        return view('career_boostday.index', compact('tab', 'konsultasiSlots', 'konsultasiAgendas', 'bookedKonsultasi', 'bookedFeatureAvailable'));
+        $stats = $this->buildStatistics();
+
+        return view('career_boostday.index', compact('tab', 'konsultasiSlots', 'konsultasiAgendas', 'bookedKonsultasi', 'bookedFeatureAvailable', 'stats'));
     }
 
     public function store(Request $request)
@@ -339,6 +341,199 @@ class CareerBoostdayController extends Controller
         }
 
         return implode(' ', $maskedParts);
+    }
+
+    private function buildStatistics(): array
+    {
+        if (!Schema::hasTable('career_boostday_consultations')) {
+            return [
+                'available' => false,
+                'totals' => [
+                    'total' => 0,
+                    'accepted' => 0,
+                    'pending' => 0,
+                    'rejected' => 0,
+                    'booked' => 0,
+                    'with_cv' => 0,
+                    'with_jurusan' => 0,
+                ],
+                'statusBreakdown' => [],
+                'adminStatusBreakdown' => [],
+                'jenisBreakdown' => [],
+                'pendidikanBreakdown' => [],
+                'jadwalBreakdown' => [],
+                'jurusanBreakdown' => [],
+                'monthlyTrend' => [],
+                'topJurusan' => [],
+                'latestAcceptedDate' => null,
+            ];
+        }
+
+        $total = (int) DB::table('career_boostday_consultations')->count();
+        $hasAdminStatus = Schema::hasColumn('career_boostday_consultations', 'admin_status');
+        $hasBookedDate = Schema::hasColumn('career_boostday_consultations', 'booked_date');
+        $hasCvPath = Schema::hasColumn('career_boostday_consultations', 'cv_path');
+        $hasJurusan = Schema::hasColumn('career_boostday_consultations', 'jurusan');
+
+        $accepted = $hasAdminStatus
+            ? (int) DB::table('career_boostday_consultations')->where('admin_status', 'accepted')->count()
+            : 0;
+        $pending = $hasAdminStatus
+            ? (int) DB::table('career_boostday_consultations')->where('admin_status', 'pending')->count()
+            : 0;
+        $rejected = $hasAdminStatus
+            ? (int) DB::table('career_boostday_consultations')->where('admin_status', 'rejected')->count()
+            : 0;
+        $booked = ($hasAdminStatus && $hasBookedDate)
+            ? (int) DB::table('career_boostday_consultations')
+                ->where('admin_status', 'accepted')
+                ->whereNotNull('booked_date')
+                ->count()
+            : 0;
+        $withCv = $hasCvPath
+            ? (int) DB::table('career_boostday_consultations')
+                ->whereNotNull('cv_path')
+                ->where('cv_path', '<>', '')
+                ->count()
+            : 0;
+        $withJurusan = $hasJurusan
+            ? (int) DB::table('career_boostday_consultations')
+                ->whereNotNull('jurusan')
+                ->where('jurusan', '<>', '')
+                ->count()
+            : 0;
+
+        $statusBreakdown = DB::table('career_boostday_consultations')
+            ->selectRaw('status as label, COUNT(*) as total')
+            ->whereNotNull('status')
+            ->where('status', '<>', '')
+            ->groupBy('status')
+            ->orderByDesc('total')
+            ->limit(20)
+            ->get()
+            ->map(fn ($r) => ['label' => (string) $r->label, 'total' => (int) $r->total])
+            ->values()
+            ->all();
+
+        $adminStatusBreakdown = $hasAdminStatus
+            ? DB::table('career_boostday_consultations')
+                ->selectRaw('admin_status as label, COUNT(*) as total')
+                ->whereNotNull('admin_status')
+                ->where('admin_status', '<>', '')
+                ->groupBy('admin_status')
+                ->orderByDesc('total')
+                ->get()
+                ->map(fn ($r) => ['label' => (string) $r->label, 'total' => (int) $r->total])
+                ->values()
+                ->all()
+            : [];
+
+        $jenisBreakdown = DB::table('career_boostday_consultations')
+            ->selectRaw('jenis_konseling as label, COUNT(*) as total')
+            ->whereNotNull('jenis_konseling')
+            ->where('jenis_konseling', '<>', '')
+            ->groupBy('jenis_konseling')
+            ->orderByDesc('total')
+            ->limit(10)
+            ->get()
+            ->map(fn ($r) => ['label' => (string) $r->label, 'total' => (int) $r->total])
+            ->values()
+            ->all();
+
+        $pendidikanBreakdown = DB::table('career_boostday_consultations')
+            ->selectRaw('pendidikan_terakhir as label, COUNT(*) as total')
+            ->whereNotNull('pendidikan_terakhir')
+            ->where('pendidikan_terakhir', '<>', '')
+            ->groupBy('pendidikan_terakhir')
+            ->orderByDesc('total')
+            ->limit(12)
+            ->get()
+            ->map(fn ($r) => ['label' => (string) $r->label, 'total' => (int) $r->total])
+            ->values()
+            ->all();
+
+        $jadwalBreakdown = DB::table('career_boostday_consultations')
+            ->selectRaw('jadwal_konseling as label, COUNT(*) as total')
+            ->whereNotNull('jadwal_konseling')
+            ->where('jadwal_konseling', '<>', '')
+            ->groupBy('jadwal_konseling')
+            ->orderByDesc('total')
+            ->limit(10)
+            ->get()
+            ->map(fn ($r) => ['label' => (string) $r->label, 'total' => (int) $r->total])
+            ->values()
+            ->all();
+
+        $jurusanBreakdown = $hasJurusan
+            ? DB::table('career_boostday_consultations')
+                ->selectRaw('jurusan as label, COUNT(*) as total')
+                ->whereNotNull('jurusan')
+                ->where('jurusan', '<>', '')
+                ->groupBy('jurusan')
+                ->orderByDesc('total')
+                ->limit(25)
+                ->get()
+                ->map(fn ($r) => ['label' => (string) $r->label, 'total' => (int) $r->total])
+                ->values()
+                ->all()
+            : [];
+
+        $monthlyTrend = DB::table('career_boostday_consultations')
+            ->selectRaw("DATE_FORMAT(created_at, '%Y-%m') as ym, COUNT(*) as total")
+            ->whereNotNull('created_at')
+            ->groupBy('ym')
+            ->orderBy('ym', 'asc')
+            ->limit(24)
+            ->get()
+            ->map(function ($r) {
+                $ym = (string) ($r->ym ?? '');
+                $label = $ym;
+                if (preg_match('/^\d{4}-\d{2}$/', $ym)) {
+                    try {
+                        $label = Carbon::createFromFormat('Y-m', $ym)->translatedFormat('M Y');
+                    } catch (\Throwable $e) {
+                        $label = $ym;
+                    }
+                }
+                return [
+                    'label' => $label,
+                    'total' => (int) $r->total,
+                ];
+            })
+            ->values()
+            ->all();
+
+        $latestAcceptedDate = null;
+        if ($hasAdminStatus && $hasBookedDate) {
+            $latestAcceptedDate = DB::table('career_boostday_consultations')
+                ->where('admin_status', 'accepted')
+                ->whereNotNull('booked_date')
+                ->max('booked_date');
+        }
+
+        $topJurusan = array_slice($jurusanBreakdown, 0, 8);
+
+        return [
+            'available' => true,
+            'totals' => [
+                'total' => $total,
+                'accepted' => $accepted,
+                'pending' => $pending,
+                'rejected' => $rejected,
+                'booked' => $booked,
+                'with_cv' => $withCv,
+                'with_jurusan' => $withJurusan,
+            ],
+            'statusBreakdown' => $statusBreakdown,
+            'adminStatusBreakdown' => $adminStatusBreakdown,
+            'jenisBreakdown' => $jenisBreakdown,
+            'pendidikanBreakdown' => $pendidikanBreakdown,
+            'jadwalBreakdown' => $jadwalBreakdown,
+            'jurusanBreakdown' => $jurusanBreakdown,
+            'monthlyTrend' => $monthlyTrend,
+            'topJurusan' => $topJurusan,
+            'latestAcceptedDate' => $latestAcceptedDate,
+        ];
     }
 }
 

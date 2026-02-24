@@ -27,6 +27,10 @@
                        class="btn {{ $tab === 'jadwal' ? 'btn-success' : 'btn-outline-success' }}">
                         Jadwal Konsultasi
                     </a>
+                    <a href="{{ route('career-boostday.index', ['tab' => 'statistik']) }}"
+                       class="btn {{ $tab === 'statistik' ? 'btn-success' : 'btn-outline-success' }}">
+                        Statistik
+                    </a>
                 </div>
             </div>
 
@@ -75,6 +79,425 @@
                         @endif
                     </div>
                 </div>
+            @elseif($tab === 'statistik')
+                @php
+                    $total = (int)($stats['totals']['total'] ?? 0);
+                    $accepted = (int)($stats['totals']['accepted'] ?? 0);
+                    $pending = (int)($stats['totals']['pending'] ?? 0);
+                    $rejected = (int)($stats['totals']['rejected'] ?? 0);
+                    $booked = (int)($stats['totals']['booked'] ?? 0);
+                    $withCv = (int)($stats['totals']['with_cv'] ?? 0);
+                    $withJurusan = (int)($stats['totals']['with_jurusan'] ?? 0);
+
+                    $acceptedRate = $total > 0 ? round(($accepted / $total) * 100, 1) : 0;
+                    $cvRate = $total > 0 ? round(($withCv / $total) * 100, 1) : 0;
+                    $jurusanRate = $total > 0 ? round(($withJurusan / $total) * 100, 1) : 0;
+                @endphp
+
+                <div class="card shadow-sm rounded-4 mb-4">
+                    <div class="card-body p-4">
+                        <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-2 mb-3">
+                            <h2 class="h5 fw-bold mb-0">
+                                <i class="fa-solid fa-chart-line me-2 text-success"></i>
+                                Statistik Career Boost Day
+                            </h2>
+                            <div class="small text-muted">
+                                Data diperbarui otomatis dari tabel konsultasi.
+                            </div>
+                        </div>
+
+                        @if(!($stats['available'] ?? false))
+                            <div class="alert alert-warning mb-0">
+                                Data statistik belum tersedia karena tabel konsultasi belum ditemukan.
+                            </div>
+                        @else
+                            <div class="row g-3 mb-1">
+                                <div class="col-6 col-lg-3">
+                                    <div class="border rounded-3 p-3 h-100 bg-light">
+                                        <div class="small text-muted mb-1">Total Pendaftar</div>
+                                        <div class="h4 fw-bold mb-0">{{ number_format($total) }}</div>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-lg-3">
+                                    <div class="border rounded-3 p-3 h-100 bg-light">
+                                        <div class="small text-muted mb-1">Accepted</div>
+                                        <div class="h4 fw-bold text-success mb-0">{{ number_format($accepted) }}</div>
+                                        <div class="small text-muted">{{ $acceptedRate }}%</div>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-lg-3">
+                                    <div class="border rounded-3 p-3 h-100 bg-light">
+                                        <div class="small text-muted mb-1">Pending</div>
+                                        <div class="h4 fw-bold text-warning mb-0">{{ number_format($pending) }}</div>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-lg-3">
+                                    <div class="border rounded-3 p-3 h-100 bg-light">
+                                        <div class="small text-muted mb-1">Rejected</div>
+                                        <div class="h4 fw-bold text-danger mb-0">{{ number_format($rejected) }}</div>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-lg-4">
+                                    <div class="border rounded-3 p-3 h-100">
+                                        <div class="small text-muted mb-1">Sudah Terbooking</div>
+                                        <div class="h5 fw-bold mb-0">{{ number_format($booked) }}</div>
+                                        <div class="small text-muted">
+                                            @if(!empty($stats['latestAcceptedDate']))
+                                                Terakhir: {{ \Carbon\Carbon::parse($stats['latestAcceptedDate'])->format('d M Y') }}
+                                            @else
+                                                Belum ada jadwal accepted yang terbooking.
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-lg-4">
+                                    <div class="border rounded-3 p-3 h-100">
+                                        <div class="small text-muted mb-1">Upload CV</div>
+                                        <div class="h5 fw-bold mb-0">{{ number_format($withCv) }}</div>
+                                        <div class="small text-muted">{{ $cvRate }}% dari total pendaftar</div>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-lg-4">
+                                    <div class="border rounded-3 p-3 h-100">
+                                        <div class="small text-muted mb-1">Isi Jurusan</div>
+                                        <div class="h5 fw-bold mb-0">{{ number_format($withJurusan) }}</div>
+                                        <div class="small text-muted">{{ $jurusanRate }}% dari total pendaftar</div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+
+                @if($stats['available'] ?? false)
+                    <div class="row g-4 mb-4">
+                        <div class="col-12 col-xl-8">
+                            <div class="card shadow-sm rounded-4 h-100">
+                                <div class="card-body p-4">
+                                    <h3 class="h6 fw-bold mb-3">Tren Pendaftar per Bulan</h3>
+                                    <canvas id="cbd-monthly-trend" height="115"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-xl-4">
+                            <div class="card shadow-sm rounded-4 h-100">
+                                <div class="card-body p-4">
+                                    <h3 class="h6 fw-bold mb-3">Status Admin</h3>
+                                    <canvas id="cbd-admin-status" height="210"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6">
+                            <div class="card shadow-sm rounded-4 h-100">
+                                <div class="card-body p-4">
+                                    <h3 class="h6 fw-bold mb-3">Jenis Konseling</h3>
+                                    <canvas id="cbd-jenis-chart" height="180"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6">
+                            <div class="card shadow-sm rounded-4 h-100">
+                                <div class="card-body p-4">
+                                    <h3 class="h6 fw-bold mb-3">Pendidikan Terakhir</h3>
+                                    <canvas id="cbd-pendidikan-chart" height="180"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card shadow-sm rounded-4 mb-4">
+                        <div class="card-body p-4">
+                            <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3 mb-3">
+                                <h3 class="h6 fw-bold mb-0">Distribusi Jurusan (Interaktif)</h3>
+                                <div class="d-flex flex-column flex-sm-row gap-2">
+                                    <input
+                                        type="text"
+                                        id="jurusan-search"
+                                        class="form-control form-control-sm"
+                                        style="min-width: 240px;"
+                                        placeholder="Cari jurusan..."
+                                    >
+                                    <select id="jurusan-limit" class="form-select form-select-sm">
+                                        <option value="5">Top 5</option>
+                                        <option value="10" selected>Top 10</option>
+                                        <option value="15">Top 15</option>
+                                        <option value="25">Top 25</option>
+                                        <option value="0">Semua</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="row g-4">
+                                <div class="col-12 col-xl-7">
+                                    <canvas id="cbd-jurusan-chart" height="200"></canvas>
+                                </div>
+                                <div class="col-12 col-xl-5">
+                                    <div class="table-responsive" style="max-height: 320px;">
+                                        <table class="table table-sm align-middle mb-0">
+                                            <thead class="table-light position-sticky top-0">
+                                                <tr>
+                                                    <th>Jurusan</th>
+                                                    <th class="text-end">Total</th>
+                                                    <th class="text-end">% Total</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="jurusan-table-body"></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row g-4 mb-4">
+                        <div class="col-12 col-lg-6">
+                            <div class="card shadow-sm rounded-4 h-100">
+                                <div class="card-body p-4">
+                                    <h3 class="h6 fw-bold mb-3">Status Karir Peserta</h3>
+                                    @if(empty($stats['statusBreakdown']))
+                                        <div class="text-muted">Belum ada data status peserta.</div>
+                                    @else
+                                        <div class="table-responsive">
+                                            <table class="table table-sm align-middle mb-0">
+                                                <thead class="table-light">
+                                                    <tr>
+                                                        <th>Status</th>
+                                                        <th class="text-end">Total</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach($stats['statusBreakdown'] as $row)
+                                                        <tr>
+                                                            <td>{{ $row['label'] }}</td>
+                                                            <td class="text-end fw-semibold">{{ number_format($row['total']) }}</td>
+                                                        </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6">
+                            <div class="card shadow-sm rounded-4 h-100">
+                                <div class="card-body p-4">
+                                    <h3 class="h6 fw-bold mb-3">Jadwal Konseling Paling Diminati</h3>
+                                    @if(empty($stats['jadwalBreakdown']))
+                                        <div class="text-muted">Belum ada data jadwal.</div>
+                                    @else
+                                        <div class="table-responsive">
+                                            <table class="table table-sm align-middle mb-0">
+                                                <thead class="table-light">
+                                                    <tr>
+                                                        <th>Jadwal</th>
+                                                        <th class="text-end">Total</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach($stats['jadwalBreakdown'] as $row)
+                                                        <tr>
+                                                            <td>{{ $row['label'] }}</td>
+                                                            <td class="text-end fw-semibold">{{ number_format($row['total']) }}</td>
+                                                        </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                    <script>
+                        (function () {
+                            var stats = @json($stats);
+                            var total = Number((stats.totals && stats.totals.total) || 0);
+
+                            function toLabels(rows) {
+                                return (rows || []).map(function (r) { return r.label; });
+                            }
+
+                            function toValues(rows) {
+                                return (rows || []).map(function (r) { return Number(r.total || 0); });
+                            }
+
+                            function renderBarChart(id, rows, color) {
+                                var el = document.getElementById(id);
+                                if (!el || !rows || rows.length === 0) return null;
+                                return new Chart(el, {
+                                    type: 'bar',
+                                    data: {
+                                        labels: toLabels(rows),
+                                        datasets: [{
+                                            data: toValues(rows),
+                                            backgroundColor: color
+                                        }]
+                                    },
+                                    options: {
+                                        responsive: true,
+                                        maintainAspectRatio: false,
+                                        plugins: {
+                                            legend: { display: false }
+                                        },
+                                        scales: {
+                                            y: {
+                                                beginAtZero: true,
+                                                ticks: { precision: 0 }
+                                            }
+                                        }
+                                    }
+                                });
+                            }
+
+                            function renderDoughnutChart(id, rows, colors) {
+                                var el = document.getElementById(id);
+                                if (!el || !rows || rows.length === 0) return null;
+                                return new Chart(el, {
+                                    type: 'doughnut',
+                                    data: {
+                                        labels: toLabels(rows),
+                                        datasets: [{
+                                            data: toValues(rows),
+                                            backgroundColor: colors
+                                        }]
+                                    },
+                                    options: {
+                                        responsive: true,
+                                        maintainAspectRatio: false,
+                                        plugins: {
+                                            legend: { position: 'bottom' }
+                                        }
+                                    }
+                                });
+                            }
+
+                            var monthlyTrend = stats.monthlyTrend || [];
+                            var monthlyEl = document.getElementById('cbd-monthly-trend');
+                            if (monthlyEl && monthlyTrend.length > 0) {
+                                new Chart(monthlyEl, {
+                                    type: 'line',
+                                    data: {
+                                        labels: toLabels(monthlyTrend),
+                                        datasets: [{
+                                            label: 'Pendaftar',
+                                            data: toValues(monthlyTrend),
+                                            borderColor: '#198754',
+                                            backgroundColor: 'rgba(25, 135, 84, 0.15)',
+                                            fill: true,
+                                            tension: 0.25,
+                                            pointRadius: 3
+                                        }]
+                                    },
+                                    options: {
+                                        responsive: true,
+                                        maintainAspectRatio: false,
+                                        plugins: { legend: { display: false } },
+                                        scales: {
+                                            y: {
+                                                beginAtZero: true,
+                                                ticks: { precision: 0 }
+                                            }
+                                        }
+                                    }
+                                });
+                            }
+
+                            renderDoughnutChart('cbd-admin-status', stats.adminStatusBreakdown || [], [
+                                '#198754', '#ffc107', '#dc3545', '#0d6efd', '#6c757d'
+                            ]);
+                            renderBarChart('cbd-jenis-chart', stats.jenisBreakdown || [], '#20c997');
+                            renderBarChart('cbd-pendidikan-chart', stats.pendidikanBreakdown || [], '#0dcaf0');
+
+                            var jurusanRows = (stats.jurusanBreakdown || []).slice();
+                            var jurusanTableBody = document.getElementById('jurusan-table-body');
+                            var jurusanSearch = document.getElementById('jurusan-search');
+                            var jurusanLimit = document.getElementById('jurusan-limit');
+                            var jurusanChart = null;
+
+                            function destroyJurusanChart() {
+                                if (jurusanChart) {
+                                    jurusanChart.destroy();
+                                    jurusanChart = null;
+                                }
+                            }
+
+                            function drawJurusanChart(rows) {
+                                destroyJurusanChart();
+                                var el = document.getElementById('cbd-jurusan-chart');
+                                if (!el || rows.length === 0) return;
+                                jurusanChart = new Chart(el, {
+                                    type: 'bar',
+                                    data: {
+                                        labels: rows.map(function (r) { return r.label; }),
+                                        datasets: [{
+                                            label: 'Jumlah',
+                                            data: rows.map(function (r) { return Number(r.total || 0); }),
+                                            backgroundColor: '#6610f2'
+                                        }]
+                                    },
+                                    options: {
+                                        indexAxis: 'y',
+                                        responsive: true,
+                                        maintainAspectRatio: false,
+                                        plugins: { legend: { display: false } },
+                                        scales: {
+                                            x: { beginAtZero: true, ticks: { precision: 0 } }
+                                        }
+                                    }
+                                });
+                            }
+
+                            function renderJurusanTable(rows) {
+                                if (!jurusanTableBody) return;
+                                if (!rows.length) {
+                                    jurusanTableBody.innerHTML = '<tr><td colspan="3" class="text-muted">Data jurusan tidak ditemukan.</td></tr>';
+                                    return;
+                                }
+                                jurusanTableBody.innerHTML = rows.map(function (r) {
+                                    var val = Number(r.total || 0);
+                                    var pct = total > 0 ? ((val / total) * 100).toFixed(1) : '0.0';
+                                    return '<tr>' +
+                                        '<td>' + (r.label || '-') + '</td>' +
+                                        '<td class="text-end fw-semibold">' + val.toLocaleString('id-ID') + '</td>' +
+                                        '<td class="text-end text-muted">' + pct + '%</td>' +
+                                        '</tr>';
+                                }).join('');
+                            }
+
+                            function getFilteredJurusan() {
+                                var keyword = (jurusanSearch && jurusanSearch.value ? jurusanSearch.value : '').toLowerCase().trim();
+                                var limit = Number(jurusanLimit && jurusanLimit.value ? jurusanLimit.value : 10);
+
+                                var rows = jurusanRows.filter(function (r) {
+                                    if (!keyword) return true;
+                                    return String(r.label || '').toLowerCase().indexOf(keyword) !== -1;
+                                });
+
+                                if (limit > 0) {
+                                    rows = rows.slice(0, limit);
+                                }
+                                return rows;
+                            }
+
+                            function renderJurusanWidgets() {
+                                var rows = getFilteredJurusan();
+                                renderJurusanTable(rows);
+                                drawJurusanChart(rows);
+                            }
+
+                            if (jurusanSearch) {
+                                jurusanSearch.addEventListener('input', renderJurusanWidgets);
+                            }
+                            if (jurusanLimit) {
+                                jurusanLimit.addEventListener('change', renderJurusanWidgets);
+                            }
+                            renderJurusanWidgets();
+                        })();
+                    </script>
+                @endif
             @else
                 <div class="card shadow-sm rounded-4">
                     <div class="card-body p-4 p-md-5">
