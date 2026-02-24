@@ -813,11 +813,16 @@ class KemitraanController extends Controller
             return [];
         }
 
+        $safeColumn = preg_replace('/[^a-zA-Z0-9_]/', '', $column);
+        if ($safeColumn === '') {
+            return [];
+        }
+
         $rows = DB::table($table)
-            ->selectRaw("TRIM(COALESCE({$column}, '')) AS label, COUNT(*) AS total")
-            ->whereNotNull($column)
+            ->selectRaw("TRIM(COALESCE({$safeColumn}, '')) AS label, COUNT(*) AS total")
+            ->whereNotNull($safeColumn)
+            ->whereRaw("TRIM(COALESCE({$safeColumn}, '')) <> ''")
             ->groupBy('label')
-            ->havingRaw("TRIM(COALESCE({$column}, '')) <> ''")
             ->orderByDesc('total')
             ->get();
 
