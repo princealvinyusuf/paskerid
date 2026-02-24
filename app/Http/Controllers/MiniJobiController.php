@@ -63,5 +63,25 @@ class MiniJobiController extends Controller
 
         return view('jobs.index', compact('jobs', 'locations', 'employmentTypes', 'categories'));
     }
+
+    public function show(int $id)
+    {
+        $job = MiniJobiJob::query()
+            ->where('is_active', true)
+            ->findOrFail($id);
+
+        $relatedJobs = MiniJobiJob::query()
+            ->where('is_active', true)
+            ->where('id', '<>', $job->id)
+            ->where(function ($query) use ($job) {
+                $query->where('category', $job->category)
+                    ->orWhere('location', $job->location);
+            })
+            ->orderByDesc('created_at')
+            ->limit(4)
+            ->get();
+
+        return view('jobs.show', compact('job', 'relatedJobs'));
+    }
 }
 

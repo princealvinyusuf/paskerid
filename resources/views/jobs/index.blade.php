@@ -84,11 +84,7 @@
                         @endif
 
                         <div class="mt-auto">
-                            @if($job->apply_url)
-                                <a href="{{ $job->apply_url }}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-success btn-sm">Lamar Sekarang</a>
-                            @else
-                                <button class="btn btn-outline-secondary btn-sm" disabled>Link lamaran belum tersedia</button>
-                            @endif
+                            <a href="{{ route('minijobi.show', $job->id) }}" class="btn btn-outline-success btn-sm">Lihat Detail</a>
                         </div>
                     </div>
                 </div>

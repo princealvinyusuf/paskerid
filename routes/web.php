@@ -88,6 +88,9 @@ Route::get('/media-sosial', function () {
 })->name('media_sosial');
 
 Route::get('/miniJobi', [MiniJobiController::class, 'index'])->name('minijobi.index');
+Route::get('/miniJobi/{id}', [MiniJobiController::class, 'show'])
+    ->whereNumber('id')
+    ->name('minijobi.show');
 
 Route::get('/publikasi', [App\Http\Controllers\PublikasiController::class, 'index'])->name('publikasi.index');
 
