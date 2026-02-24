@@ -82,14 +82,10 @@
             @elseif($tab === 'statistik')
                 @php
                     $total = (int)($stats['totals']['total'] ?? 0);
-                    $accepted = (int)($stats['totals']['accepted'] ?? 0);
-                    $pending = (int)($stats['totals']['pending'] ?? 0);
-                    $rejected = (int)($stats['totals']['rejected'] ?? 0);
                     $booked = (int)($stats['totals']['booked'] ?? 0);
                     $withCv = (int)($stats['totals']['with_cv'] ?? 0);
                     $withJurusan = (int)($stats['totals']['with_jurusan'] ?? 0);
 
-                    $acceptedRate = $total > 0 ? round(($accepted / $total) * 100, 1) : 0;
                     $cvRate = $total > 0 ? round(($withCv / $total) * 100, 1) : 0;
                     $jurusanRate = $total > 0 ? round(($withJurusan / $total) * 100, 1) : 0;
                 @endphp
@@ -112,42 +108,17 @@
                             </div>
                         @else
                             <div class="row g-3 mb-1">
-                                <div class="col-6 col-lg-3">
+                                <div class="col-6 col-lg-4">
                                     <div class="border rounded-3 p-3 h-100 bg-light">
                                         <div class="small text-muted mb-1">Total Pendaftar</div>
                                         <div class="h4 fw-bold mb-0">{{ number_format($total) }}</div>
-                                    </div>
-                                </div>
-                                <div class="col-6 col-lg-3">
-                                    <div class="border rounded-3 p-3 h-100 bg-light">
-                                        <div class="small text-muted mb-1">Accepted</div>
-                                        <div class="h4 fw-bold text-success mb-0">{{ number_format($accepted) }}</div>
-                                        <div class="small text-muted">{{ $acceptedRate }}%</div>
-                                    </div>
-                                </div>
-                                <div class="col-6 col-lg-3">
-                                    <div class="border rounded-3 p-3 h-100 bg-light">
-                                        <div class="small text-muted mb-1">Pending</div>
-                                        <div class="h4 fw-bold text-warning mb-0">{{ number_format($pending) }}</div>
-                                    </div>
-                                </div>
-                                <div class="col-6 col-lg-3">
-                                    <div class="border rounded-3 p-3 h-100 bg-light">
-                                        <div class="small text-muted mb-1">Rejected</div>
-                                        <div class="h4 fw-bold text-danger mb-0">{{ number_format($rejected) }}</div>
                                     </div>
                                 </div>
                                 <div class="col-6 col-lg-4">
                                     <div class="border rounded-3 p-3 h-100">
                                         <div class="small text-muted mb-1">Sudah Terbooking</div>
                                         <div class="h5 fw-bold mb-0">{{ number_format($booked) }}</div>
-                                        <div class="small text-muted">
-                                            @if(!empty($stats['latestAcceptedDate']))
-                                                Terakhir: {{ \Carbon\Carbon::parse($stats['latestAcceptedDate'])->format('d M Y') }}
-                                            @else
-                                                Belum ada jadwal accepted yang terbooking.
-                                            @endif
-                                        </div>
+                                        <div class="small text-muted">Jadwal konsultasi yang sudah dipastikan.</div>
                                     </div>
                                 </div>
                                 <div class="col-6 col-lg-4">
@@ -171,19 +142,13 @@
 
                 @if($stats['available'] ?? false)
                     <div class="row g-4 mb-4">
-                        <div class="col-12 col-xl-8">
-                            <div class="card shadow-sm rounded-4 h-100">
+                        <div class="col-12">
+                            <div class="card shadow-sm rounded-4">
                                 <div class="card-body p-4">
                                     <h3 class="h6 fw-bold mb-3">Tren Pendaftar per Bulan</h3>
-                                    <canvas id="cbd-monthly-trend" height="115"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12 col-xl-4">
-                            <div class="card shadow-sm rounded-4 h-100">
-                                <div class="card-body p-4">
-                                    <h3 class="h6 fw-bold mb-3">Status Admin</h3>
-                                    <canvas id="cbd-admin-status" height="210"></canvas>
+                                    <div style="position: relative; height: 280px;">
+                                        <canvas id="cbd-monthly-trend"></canvas>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -191,7 +156,9 @@
                             <div class="card shadow-sm rounded-4 h-100">
                                 <div class="card-body p-4">
                                     <h3 class="h6 fw-bold mb-3">Jenis Konseling</h3>
-                                    <canvas id="cbd-jenis-chart" height="180"></canvas>
+                                    <div style="position: relative; height: 260px;">
+                                        <canvas id="cbd-jenis-chart"></canvas>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -199,7 +166,9 @@
                             <div class="card shadow-sm rounded-4 h-100">
                                 <div class="card-body p-4">
                                     <h3 class="h6 fw-bold mb-3">Pendidikan Terakhir</h3>
-                                    <canvas id="cbd-pendidikan-chart" height="180"></canvas>
+                                    <div style="position: relative; height: 260px;">
+                                        <canvas id="cbd-pendidikan-chart"></canvas>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -229,7 +198,9 @@
 
                             <div class="row g-4">
                                 <div class="col-12 col-xl-7">
-                                    <canvas id="cbd-jurusan-chart" height="200"></canvas>
+                                    <div style="position: relative; height: 320px;">
+                                        <canvas id="cbd-jurusan-chart"></canvas>
+                                    </div>
                                 </div>
                                 <div class="col-12 col-xl-5">
                                     <div class="table-responsive" style="max-height: 320px;">
@@ -339,6 +310,7 @@
                                     options: {
                                         responsive: true,
                                         maintainAspectRatio: false,
+                                        animation: false,
                                         plugins: {
                                             legend: { display: false }
                                         },
@@ -367,6 +339,7 @@
                                     options: {
                                         responsive: true,
                                         maintainAspectRatio: false,
+                                        animation: false,
                                         plugins: {
                                             legend: { position: 'bottom' }
                                         }
@@ -394,6 +367,7 @@
                                     options: {
                                         responsive: true,
                                         maintainAspectRatio: false,
+                                        animation: false,
                                         plugins: { legend: { display: false } },
                                         scales: {
                                             y: {
@@ -405,9 +379,6 @@
                                 });
                             }
 
-                            renderDoughnutChart('cbd-admin-status', stats.adminStatusBreakdown || [], [
-                                '#198754', '#ffc107', '#dc3545', '#0d6efd', '#6c757d'
-                            ]);
                             renderBarChart('cbd-jenis-chart', stats.jenisBreakdown || [], '#20c997');
                             renderBarChart('cbd-pendidikan-chart', stats.pendidikanBreakdown || [], '#0dcaf0');
 
@@ -442,6 +413,7 @@
                                         indexAxis: 'y',
                                         responsive: true,
                                         maintainAspectRatio: false,
+                                        animation: false,
                                         plugins: { legend: { display: false } },
                                         scales: {
                                             x: { beginAtZero: true, ticks: { precision: 0 } }

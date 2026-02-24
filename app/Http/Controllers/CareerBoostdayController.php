@@ -350,22 +350,17 @@ class CareerBoostdayController extends Controller
                 'available' => false,
                 'totals' => [
                     'total' => 0,
-                    'accepted' => 0,
-                    'pending' => 0,
-                    'rejected' => 0,
                     'booked' => 0,
                     'with_cv' => 0,
                     'with_jurusan' => 0,
                 ],
                 'statusBreakdown' => [],
-                'adminStatusBreakdown' => [],
                 'jenisBreakdown' => [],
                 'pendidikanBreakdown' => [],
                 'jadwalBreakdown' => [],
                 'jurusanBreakdown' => [],
                 'monthlyTrend' => [],
                 'topJurusan' => [],
-                'latestAcceptedDate' => null,
             ];
         }
 
@@ -375,15 +370,6 @@ class CareerBoostdayController extends Controller
         $hasCvPath = Schema::hasColumn('career_boostday_consultations', 'cv_path');
         $hasJurusan = Schema::hasColumn('career_boostday_consultations', 'jurusan');
 
-        $accepted = $hasAdminStatus
-            ? (int) DB::table('career_boostday_consultations')->where('admin_status', 'accepted')->count()
-            : 0;
-        $pending = $hasAdminStatus
-            ? (int) DB::table('career_boostday_consultations')->where('admin_status', 'pending')->count()
-            : 0;
-        $rejected = $hasAdminStatus
-            ? (int) DB::table('career_boostday_consultations')->where('admin_status', 'rejected')->count()
-            : 0;
         $booked = ($hasAdminStatus && $hasBookedDate)
             ? (int) DB::table('career_boostday_consultations')
                 ->where('admin_status', 'accepted')
@@ -414,19 +400,6 @@ class CareerBoostdayController extends Controller
             ->map(fn ($r) => ['label' => (string) $r->label, 'total' => (int) $r->total])
             ->values()
             ->all();
-
-        $adminStatusBreakdown = $hasAdminStatus
-            ? DB::table('career_boostday_consultations')
-                ->selectRaw('admin_status as label, COUNT(*) as total')
-                ->whereNotNull('admin_status')
-                ->where('admin_status', '<>', '')
-                ->groupBy('admin_status')
-                ->orderByDesc('total')
-                ->get()
-                ->map(fn ($r) => ['label' => (string) $r->label, 'total' => (int) $r->total])
-                ->values()
-                ->all()
-            : [];
 
         $jenisBreakdown = DB::table('career_boostday_consultations')
             ->selectRaw('jenis_konseling as label, COUNT(*) as total')
@@ -503,36 +476,23 @@ class CareerBoostdayController extends Controller
             ->values()
             ->all();
 
-        $latestAcceptedDate = null;
-        if ($hasAdminStatus && $hasBookedDate) {
-            $latestAcceptedDate = DB::table('career_boostday_consultations')
-                ->where('admin_status', 'accepted')
-                ->whereNotNull('booked_date')
-                ->max('booked_date');
-        }
-
         $topJurusan = array_slice($jurusanBreakdown, 0, 8);
 
         return [
             'available' => true,
             'totals' => [
                 'total' => $total,
-                'accepted' => $accepted,
-                'pending' => $pending,
-                'rejected' => $rejected,
                 'booked' => $booked,
                 'with_cv' => $withCv,
                 'with_jurusan' => $withJurusan,
             ],
             'statusBreakdown' => $statusBreakdown,
-            'adminStatusBreakdown' => $adminStatusBreakdown,
             'jenisBreakdown' => $jenisBreakdown,
             'pendidikanBreakdown' => $pendidikanBreakdown,
             'jadwalBreakdown' => $jadwalBreakdown,
             'jurusanBreakdown' => $jurusanBreakdown,
             'monthlyTrend' => $monthlyTrend,
             'topJurusan' => $topJurusan,
-            'latestAcceptedDate' => $latestAcceptedDate,
         ];
     }
 }
