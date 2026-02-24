@@ -96,12 +96,6 @@
                         </ul>
                     </li>
                     @else
-                    <li class="nav-item">
-                        <a class="nav-link @if(request()->routeIs('login')) active fw-bold @endif" href="{{ route('login') }}">Login</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link @if(request()->routeIs('register')) active fw-bold @endif" href="{{ route('register') }}">Register</a>
-                    </li>
                     @endauth
                     <li class="nav-item">
                         <a class="nav-link @if(request()->routeIs('about')) active fw-bold @endif" href="{{ route('about') }}">Tentang Kami</a>
