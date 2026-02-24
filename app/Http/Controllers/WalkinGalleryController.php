@@ -133,6 +133,10 @@ class WalkinGalleryController extends Controller
         $openedPositions = [];
         $initiatorRating = null;
         $joinedCompanyRatings = [];
+        $joinedCompanyParticipants = [];
+        $companyPesertaHadir = null;
+        $totalPeserta = null;
+        $isJobPortalData = false;
         if ($company !== 'Umum') {
             $detailLowonganRows = KemitraanDetailLowongan::query()
                 ->whereHas('kemitraan', function ($q) use ($company) {
@@ -189,6 +193,7 @@ class WalkinGalleryController extends Controller
             }
 
             $joinedCompanies = array_values(array_unique($joinedCompanies));
+            $isJobPortalData = count($joinedCompanies) > 0;
 
             // Merge duplicated job titles by summing required amount.
             $openedMap = [];
@@ -203,6 +208,32 @@ class WalkinGalleryController extends Controller
             $openedPositions = array_values($openedMap);
 
             if (Schema::hasTable('company_walk_in_survey') && Schema::hasTable('walk_in_survey_responses')) {
+                $companyParticipantRows = DB::table('company_walk_in_survey as c')
+                    ->leftJoin('walk_in_survey_responses as r', 'r.company_walk_in_survey_id', '=', 'c.id')
+                    ->selectRaw('c.company_name, COUNT(r.id) AS peserta_hadir')
+                    ->groupBy('c.company_name')
+                    ->get();
+
+                $companyParticipantMap = [];
+                foreach ($companyParticipantRows as $row) {
+                    $name = trim((string) ($row->company_name ?? ''));
+                    if ($name === '') {
+                        continue;
+                    }
+                    $companyParticipantMap[mb_strtolower($name)] = (int) ($row->peserta_hadir ?? 0);
+                }
+
+                if ($isJobPortalData) {
+                    foreach ($joinedCompanies as $name) {
+                        $joinedCompanyParticipants[] = [
+                            'name' => $name,
+                            'peserta_hadir' => $companyParticipantMap[mb_strtolower($name)] ?? 0,
+                        ];
+                    }
+                } else {
+                    $companyPesertaHadir = $companyParticipantMap[mb_strtolower($company)] ?? 0;
+                }
+
                 $companyRatingRows = DB::table('company_walk_in_survey as c')
                     ->leftJoin('walk_in_survey_responses as r', 'r.company_walk_in_survey_id', '=', 'c.id')
                     ->selectRaw('c.company_name, ROUND(AVG(r.rating_satisfaction), 2) AS avg_rating')
@@ -227,6 +258,7 @@ class WalkinGalleryController extends Controller
 
                 $initiatorName = $company;
                 $initiatorAvg = $companyRatingMap[mb_strtolower($company)] ?? null;
+                $initiatorIdForTotal = null;
 
                 if (Schema::hasTable('walk_in_survey_initiators') && Schema::hasColumn('company_walk_in_survey', 'walk_in_initiator_id')) {
                     $initiator = DB::table('walk_in_survey_initiators')
@@ -246,6 +278,7 @@ class WalkinGalleryController extends Controller
 
                     if ($initiator && isset($initiator->id)) {
                         $initiatorName = trim((string) ($initiator->initiator_name ?? $company)) ?: $company;
+                        $initiatorIdForTotal = (int) $initiator->id;
                         $initiatorAvgRaw = DB::table('company_walk_in_survey as c')
                             ->leftJoin('walk_in_survey_responses as r', 'r.company_walk_in_survey_id', '=', 'c.id')
                             ->where('c.walk_in_initiator_id', (int) $initiator->id)
@@ -253,6 +286,15 @@ class WalkinGalleryController extends Controller
                             ->value('avg_rating');
                         $initiatorAvg = $initiatorAvgRaw !== null ? (float) $initiatorAvgRaw : null;
                     }
+                }
+
+                if ($isJobPortalData && $initiatorIdForTotal !== null) {
+                    $totalPesertaRaw = DB::table('company_walk_in_survey as c')
+                        ->leftJoin('walk_in_survey_responses as r', 'r.company_walk_in_survey_id', '=', 'c.id')
+                        ->where('c.walk_in_initiator_id', $initiatorIdForTotal)
+                        ->selectRaw('COUNT(r.id) AS total_peserta')
+                        ->value('total_peserta');
+                    $totalPeserta = (int) ($totalPesertaRaw ?? 0);
                 }
 
                 $initiatorRating = [
@@ -271,6 +313,10 @@ class WalkinGalleryController extends Controller
             'opened_positions' => $openedPositions,
             'initiator_rating' => $initiatorRating,
             'joined_company_ratings' => $joinedCompanyRatings,
+            'is_job_portal' => $isJobPortalData,
+            'joined_company_participants' => $joinedCompanyParticipants,
+            'company_peserta_hadir' => $companyPesertaHadir,
+            'total_peserta' => $totalPeserta,
         ]);
     }
 

@@ -951,6 +951,26 @@
                                     <div id="walkinCompanyRatingsList" class="d-flex flex-column gap-2"></div>
                                 </div>
                             </div>
+                            <div class="col-12 d-none" id="walkinParticipantsSection">
+                                <div class="walkin-panel p-3 p-md-4">
+                                    <div class="d-flex align-items-center justify-content-between mb-2">
+                                        <div class="fw-semibold">Peserta Yang Menghadiri</div>
+                                        <div class="text-muted small">Data peserta hadir dari survei</div>
+                                    </div>
+                                    <div id="walkinParticipantsTotal" class="small fw-semibold text-primary mb-2 d-none"></div>
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered align-middle mb-0">
+                                            <thead class="table-light">
+                                                <tr>
+                                                    <th>Perusahaan</th>
+                                                    <th style="width:220px;">Peserta Hadir</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="walkinParticipantsBody"></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="col-12 d-none" id="walkinOpenedPositionsSection">
                                 <div class="walkin-panel p-3 p-md-4">
                                     <div class="d-flex align-items-center justify-content-between mb-2">
@@ -1686,6 +1706,9 @@
         const ratingsSectionEl = document.getElementById('walkinRatingsSection');
         const initiatorRatingEl = document.getElementById('walkinInitiatorRating');
         const companyRatingsListEl = document.getElementById('walkinCompanyRatingsList');
+        const participantsSectionEl = document.getElementById('walkinParticipantsSection');
+        const participantsTotalEl = document.getElementById('walkinParticipantsTotal');
+        const participantsBodyEl = document.getElementById('walkinParticipantsBody');
         const openedPositionsSectionEl = document.getElementById('walkinOpenedPositionsSection');
         const openedPositionsBodyEl = document.getElementById('walkinOpenedPositionsBody');
 
@@ -1907,6 +1930,55 @@
             ratingsSectionEl.classList.remove('d-none');
         }
 
+        function renderParticipants(isJobPortal, joinedCompanyParticipants, companyPesertaHadir, selectedCompany, totalPeserta) {
+            if (!participantsSectionEl || !participantsBodyEl || !participantsTotalEl) return;
+
+            let rows = [];
+            if (isJobPortal) {
+                rows = Array.isArray(joinedCompanyParticipants)
+                    ? joinedCompanyParticipants.map((row) => ({
+                        name: String(row && row.name ? row.name : '').trim(),
+                        peserta_hadir: Number(row && row.peserta_hadir ? row.peserta_hadir : 0),
+                    })).filter((row) => row.name !== '')
+                    : [];
+
+                if (rows.length === 0) {
+                    participantsSectionEl.classList.add('d-none');
+                    participantsBodyEl.innerHTML = '';
+                    participantsTotalEl.classList.add('d-none');
+                    participantsTotalEl.textContent = '';
+                    return;
+                }
+
+                const total = Number.isFinite(Number(totalPeserta)) ? Number(totalPeserta) : 0;
+                participantsTotalEl.textContent = `Total Peserta (Initiator): ${total}`;
+                participantsTotalEl.classList.remove('d-none');
+            } else {
+                const companyName = String(selectedCompany || '').trim();
+                if (companyName === '' || companyName === 'Umum') {
+                    participantsSectionEl.classList.add('d-none');
+                    participantsBodyEl.innerHTML = '';
+                    participantsTotalEl.classList.add('d-none');
+                    participantsTotalEl.textContent = '';
+                    return;
+                }
+                const hadir = Number.isFinite(Number(companyPesertaHadir)) ? Number(companyPesertaHadir) : 0;
+                rows = [{ name: companyName, peserta_hadir: hadir }];
+                participantsTotalEl.classList.add('d-none');
+                participantsTotalEl.textContent = '';
+            }
+
+            participantsBodyEl.innerHTML = rows
+                .map((row) => `
+                    <tr>
+                        <td>${escapeHtml(row.name)}</td>
+                        <td>${escapeHtml(String(row.peserta_hadir))}</td>
+                    </tr>
+                `)
+                .join('');
+            participantsSectionEl.classList.remove('d-none');
+        }
+
         function escapeHtml(str) {
             return String(str ?? '')
                 .replace(/&/g, '&amp;')
@@ -2046,6 +2118,7 @@
                 loadingEl.classList.add('d-none');
                 renderJoinedCompanies([]);
                 renderRatings(null, []);
+                renderParticipants(false, [], null, '', null);
                 renderOpenedPositions([]);
                 setView('companies');
                 companiesEl.classList.remove('d-none');
@@ -2076,6 +2149,13 @@
                 renderComments(lastFeed.comments || []);
                 renderJoinedCompanies(lastFeed.joined_companies || []);
                 renderRatings(lastFeed.initiator_rating || null, lastFeed.joined_company_ratings || []);
+                renderParticipants(
+                    !!lastFeed.is_job_portal,
+                    lastFeed.joined_company_participants || [],
+                    lastFeed.company_peserta_hadir,
+                    company,
+                    lastFeed.total_peserta
+                );
                 renderOpenedPositions(lastFeed.opened_positions || []);
                 loadCompanySchedule(company);
             } catch (e) {
@@ -2105,6 +2185,7 @@
             setScheduleState('empty');
             renderJoinedCompanies([]);
             renderRatings(null, []);
+            renderParticipants(false, [], null, '', null);
             renderOpenedPositions([]);
             loadCompanies();
         });
