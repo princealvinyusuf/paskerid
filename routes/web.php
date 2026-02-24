@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MiniVideoController;
 use App\Http\Controllers\MiniJobiController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\MiniJobiApplicationController;
 use App\Http\Controllers\Api\HighlightStatisticController;
 use App\Http\Controllers\Api\InformationController;
 use App\Http\Controllers\WalkinGalleryController;
@@ -91,6 +93,27 @@ Route::get('/miniJobi', [MiniJobiController::class, 'index'])->name('minijobi.in
 Route::get('/miniJobi/{id}', [MiniJobiController::class, 'show'])
     ->whereNumber('id')
     ->name('minijobi.show');
+Route::post('/miniJobi/{id}/apply', [MiniJobiApplicationController::class, 'store'])
+    ->middleware('auth')
+    ->whereNumber('id')
+    ->name('minijobi.apply');
+
+Route::middleware('guest')->group(function () {
+    Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
+    Route::post('/register', [AuthController::class, 'register'])->name('register.store');
+    Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
+    Route::post('/login', [AuthController::class, 'login'])->name('login.store');
+});
+
+Route::post('/logout', [AuthController::class, 'logout'])
+    ->middleware('auth')
+    ->name('logout');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [App\Http\Controllers\ProfileController::class, 'destroy'])->name('profile.destroy');
+});
 
 Route::get('/publikasi', [App\Http\Controllers\PublikasiController::class, 'index'])->name('publikasi.index');
 

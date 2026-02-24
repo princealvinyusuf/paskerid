@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\MiniJobiJob;
+use App\Models\MiniJobiJobApplication;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class MiniJobiController extends Controller
 {
@@ -70,6 +72,14 @@ class MiniJobiController extends Controller
             ->where('is_active', true)
             ->findOrFail($id);
 
+        $hasApplied = false;
+        if (Auth::check()) {
+            $hasApplied = MiniJobiJobApplication::query()
+                ->where('mini_jobi_job_id', $job->id)
+                ->where('user_id', Auth::id())
+                ->exists();
+        }
+
         $relatedJobs = MiniJobiJob::query()
             ->where('is_active', true)
             ->where('id', '<>', $job->id)
@@ -81,7 +91,7 @@ class MiniJobiController extends Controller
             ->limit(4)
             ->get();
 
-        return view('jobs.show', compact('job', 'relatedJobs'));
+        return view('jobs.show', compact('job', 'relatedJobs', 'hasApplied'));
     }
 }
 

@@ -83,6 +83,29 @@
                             Career Boost Day
                         </a>
                     </li>
+                    @auth
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="akunDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Akun
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="akunDropdown">
+                            <li><a class="dropdown-item" href="{{ route('profile.edit') }}">Profil Saya</a></li>
+                            <li>
+                                <form method="POST" action="{{ route('logout') }}">
+                                    @csrf
+                                    <button type="submit" class="dropdown-item">Logout</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
+                    @else
+                    <li class="nav-item">
+                        <a class="nav-link @if(request()->routeIs('login')) active fw-bold @endif" href="{{ route('login') }}">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @if(request()->routeIs('register')) active fw-bold @endif" href="{{ route('register') }}">Register</a>
+                    </li>
+                    @endauth
                     <li class="nav-item">
                         <a class="nav-link @if(request()->routeIs('about')) active fw-bold @endif" href="{{ route('about') }}">Tentang Kami</a>
                     </li>
@@ -99,6 +122,11 @@
             </button>
         </div>
     </nav>
+    @if(session('success'))
+        <div class="container mt-3">
+            <div class="alert alert-success mb-0">{{ session('success') }}</div>
+        </div>
+    @endif
     <main>
         @yield('content')
         <!-- Back to Top Button -->

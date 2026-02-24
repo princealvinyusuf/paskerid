@@ -68,13 +68,19 @@
                         <div class="small mb-3"><strong>Batas Lamar:</strong> {{ $job->deadline_date->format('d M Y') }}</div>
                     @endif
 
-                    @if($job->apply_url)
-                        <a href="{{ $job->apply_url }}" target="_blank" rel="noopener noreferrer" class="btn btn-success w-100">
-                            Lamar Sekarang
-                        </a>
+                    @auth
+                        @if($hasApplied)
+                            <button class="btn btn-outline-secondary w-100" disabled>Sudah Dilamar</button>
+                        @else
+                            <form method="POST" action="{{ route('minijobi.apply', $job->id) }}">
+                                @csrf
+                                <button class="btn btn-success w-100" type="submit">Lamar Sekarang</button>
+                            </form>
+                        @endif
                     @else
-                        <button class="btn btn-outline-secondary w-100" disabled>Link lamaran belum tersedia</button>
-                    @endif
+                        <a href="{{ route('register', ['job' => $job->id]) }}" class="btn btn-success w-100">Lamar Sekarang</a>
+                        <small class="d-block text-muted mt-2">Untuk melamar, Anda harus register lalu login terlebih dahulu.</small>
+                    @endauth
                 </div>
             </div>
 
