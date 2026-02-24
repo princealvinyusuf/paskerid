@@ -30,6 +30,7 @@ class KemitraanController extends Controller
 
         $walkinAgendas = $this->getWalkinAgendasFromBookedDates('upcoming');
         $walkinAgendasPast = $this->getWalkinAgendasFromBookedDates('past', 80);
+        $walkinStats = $this->buildWalkinStatistics();
         $surveyCompanies = collect();
         $hasSurveyInitiatorTable = Schema::hasTable('walk_in_survey_initiators');
         $hasInitiatorColumnOnCompany = Schema::hasTable('company_walk_in_survey') && Schema::hasColumn('company_walk_in_survey', 'walk_in_initiator_id');
@@ -59,7 +60,8 @@ class KemitraanController extends Controller
             'defaultTypeId',
             'walkinAgendas',
             'walkinAgendasPast',
-            'surveyCompanies'
+            'surveyCompanies',
+            'walkinStats'
         ));
     }
 
@@ -621,5 +623,211 @@ class KemitraanController extends Controller
             'organizer' => $kemitraan->institution_name ?? '-',
             'registration_url' => null,
         ];
+    }
+
+    private function buildWalkinStatistics(): array
+    {
+        $empty = [
+            'ready' => false,
+            'summary' => [
+                'total_responses' => 0,
+                'avg_rating' => 0,
+                'responses_today' => 0,
+                'responses_month' => 0,
+                'active_companies' => 0,
+                'active_initiators' => 0,
+            ],
+            'trend' => [],
+            'rating_distribution' => [],
+            'gender_distribution' => [],
+            'age_distribution' => [],
+            'education_distribution' => [],
+            'domisili_distribution' => [],
+            'top_companies' => [],
+            'top_initiators' => [],
+            'info_sources' => [],
+            'job_portals' => [],
+        ];
+
+        if (!Schema::hasTable('walk_in_survey_responses')) {
+            return $empty;
+        }
+
+        $hasWalkinDate = Schema::hasColumn('walk_in_survey_responses', 'walkin_date');
+        $dateExpr = $hasWalkinDate ? 'COALESCE(walkin_date, DATE(created_at))' : 'DATE(created_at)';
+
+        $today = Carbon::today();
+        $monthStart = $today->copy()->startOfMonth();
+
+        $totalResponses = (int) DB::table('walk_in_survey_responses')->count();
+        $avgRatingRaw = DB::table('walk_in_survey_responses')->avg('rating_satisfaction');
+        $responsesToday = (int) DB::table('walk_in_survey_responses')->whereDate(DB::raw($dateExpr), $today->toDateString())->count();
+        $responsesMonth = (int) DB::table('walk_in_survey_responses')->whereDate(DB::raw($dateExpr), '>=', $monthStart->toDateString())->count();
+
+        $activeCompanies = 0;
+        if (Schema::hasTable('company_walk_in_survey')) {
+            $activeCompanies = (int) DB::table('company_walk_in_survey')
+                ->where('is_active', 1)
+                ->count();
+        }
+
+        $activeInitiators = 0;
+        if (Schema::hasTable('walk_in_survey_initiators')) {
+            $activeInitiators = (int) DB::table('walk_in_survey_initiators')
+                ->where('is_active', 1)
+                ->count();
+        }
+
+        $trendRows = DB::table('walk_in_survey_responses')
+            ->selectRaw("DATE({$dateExpr}) AS d, COUNT(*) AS total, ROUND(AVG(rating_satisfaction), 2) AS avg_rating")
+            ->whereDate(DB::raw($dateExpr), '>=', $today->copy()->subDays(89)->toDateString())
+            ->groupBy('d')
+            ->orderBy('d', 'asc')
+            ->get();
+        $trendMap = [];
+        foreach ($trendRows as $row) {
+            $trendMap[(string) $row->d] = [
+                'date' => (string) $row->d,
+                'total' => (int) ($row->total ?? 0),
+                'avg_rating' => $row->avg_rating !== null ? (float) $row->avg_rating : null,
+            ];
+        }
+        $trend = [];
+        for ($i = 89; $i >= 0; $i--) {
+            $d = $today->copy()->subDays($i)->toDateString();
+            $trend[] = $trendMap[$d] ?? ['date' => $d, 'total' => 0, 'avg_rating' => null];
+        }
+
+        $ratingDistribution = [];
+        $ratingRows = DB::table('walk_in_survey_responses')
+            ->selectRaw('rating_satisfaction AS label, COUNT(*) AS total')
+            ->groupBy('rating_satisfaction')
+            ->orderBy('rating_satisfaction', 'asc')
+            ->get();
+        foreach ($ratingRows as $row) {
+            $ratingDistribution[] = [
+                'label' => (string) ($row->label ?? '-'),
+                'total' => (int) ($row->total ?? 0),
+            ];
+        }
+
+        $genderDistribution = $this->buildDistribution('walk_in_survey_responses', 'gender');
+        $ageDistribution = $this->buildDistribution('walk_in_survey_responses', 'age_range');
+        $educationDistribution = $this->buildDistribution('walk_in_survey_responses', 'education');
+        $domisiliDistribution = $this->buildDistribution('walk_in_survey_responses', 'domisili');
+
+        $topCompanies = [];
+        if (Schema::hasTable('company_walk_in_survey')) {
+            $companyRows = DB::table('company_walk_in_survey as c')
+                ->leftJoin('walk_in_survey_responses as r', 'r.company_walk_in_survey_id', '=', 'c.id')
+                ->selectRaw('c.company_name, COUNT(r.id) AS peserta_hadir, ROUND(AVG(r.rating_satisfaction), 2) AS avg_rating')
+                ->groupBy('c.id', 'c.company_name')
+                ->orderByDesc('peserta_hadir')
+                ->orderBy('c.company_name')
+                ->limit(30)
+                ->get();
+            foreach ($companyRows as $row) {
+                $topCompanies[] = [
+                    'name' => trim((string) ($row->company_name ?? '-')),
+                    'peserta_hadir' => (int) ($row->peserta_hadir ?? 0),
+                    'avg_rating' => $row->avg_rating !== null ? (float) $row->avg_rating : null,
+                ];
+            }
+        }
+
+        $topInitiators = [];
+        if (
+            Schema::hasTable('walk_in_survey_initiators') &&
+            Schema::hasTable('company_walk_in_survey') &&
+            Schema::hasColumn('company_walk_in_survey', 'walk_in_initiator_id')
+        ) {
+            $initiatorRows = DB::table('walk_in_survey_initiators as i')
+                ->leftJoin('company_walk_in_survey as c', 'c.walk_in_initiator_id', '=', 'i.id')
+                ->leftJoin('walk_in_survey_responses as r', 'r.company_walk_in_survey_id', '=', 'c.id')
+                ->selectRaw('i.initiator_name, COUNT(DISTINCT c.id) AS company_count, COUNT(r.id) AS peserta_hadir, ROUND(AVG(r.rating_satisfaction), 2) AS avg_rating')
+                ->groupBy('i.id', 'i.initiator_name')
+                ->orderByDesc('peserta_hadir')
+                ->orderBy('i.initiator_name')
+                ->limit(30)
+                ->get();
+            foreach ($initiatorRows as $row) {
+                $topInitiators[] = [
+                    'name' => trim((string) ($row->initiator_name ?? '-')),
+                    'company_count' => (int) ($row->company_count ?? 0),
+                    'peserta_hadir' => (int) ($row->peserta_hadir ?? 0),
+                    'avg_rating' => $row->avg_rating !== null ? (float) $row->avg_rating : null,
+                ];
+            }
+        }
+
+        $infoSourceCounts = [];
+        $jobPortalCounts = [];
+        $sourceRows = DB::table('walk_in_survey_responses')->select('info_sources', 'job_portals')->get();
+        foreach ($sourceRows as $row) {
+            foreach ((array) json_decode((string) ($row->info_sources ?? '[]'), true) as $value) {
+                $k = trim((string) $value);
+                if ($k !== '') $infoSourceCounts[$k] = ($infoSourceCounts[$k] ?? 0) + 1;
+            }
+            foreach ((array) json_decode((string) ($row->job_portals ?? '[]'), true) as $value) {
+                $k = trim((string) $value);
+                if ($k !== '') $jobPortalCounts[$k] = ($jobPortalCounts[$k] ?? 0) + 1;
+            }
+        }
+        arsort($infoSourceCounts);
+        arsort($jobPortalCounts);
+        $infoSources = [];
+        foreach (array_slice($infoSourceCounts, 0, 20, true) as $label => $total) {
+            $infoSources[] = ['label' => $label, 'total' => (int) $total];
+        }
+        $jobPortals = [];
+        foreach (array_slice($jobPortalCounts, 0, 20, true) as $label => $total) {
+            $jobPortals[] = ['label' => $label, 'total' => (int) $total];
+        }
+
+        return [
+            'ready' => true,
+            'summary' => [
+                'total_responses' => $totalResponses,
+                'avg_rating' => $avgRatingRaw !== null ? round((float) $avgRatingRaw, 2) : 0,
+                'responses_today' => $responsesToday,
+                'responses_month' => $responsesMonth,
+                'active_companies' => $activeCompanies,
+                'active_initiators' => $activeInitiators,
+            ],
+            'trend' => $trend,
+            'rating_distribution' => $ratingDistribution,
+            'gender_distribution' => $genderDistribution,
+            'age_distribution' => $ageDistribution,
+            'education_distribution' => $educationDistribution,
+            'domisili_distribution' => $domisiliDistribution,
+            'top_companies' => $topCompanies,
+            'top_initiators' => $topInitiators,
+            'info_sources' => $infoSources,
+            'job_portals' => $jobPortals,
+        ];
+    }
+
+    private function buildDistribution(string $table, string $column): array
+    {
+        if (!Schema::hasColumn($table, $column)) {
+            return [];
+        }
+
+        $rows = DB::table($table)
+            ->selectRaw("TRIM(COALESCE({$column}, '')) AS label, COUNT(*) AS total")
+            ->whereNotNull($column)
+            ->groupBy('label')
+            ->havingRaw("TRIM(COALESCE({$column}, '')) <> ''")
+            ->orderByDesc('total')
+            ->get();
+
+        $out = [];
+        foreach ($rows as $row) {
+            $out[] = [
+                'label' => (string) ($row->label ?? '-'),
+                'total' => (int) ($row->total ?? 0),
+            ];
+        }
+        return $out;
     }
 } 

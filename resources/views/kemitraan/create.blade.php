@@ -15,6 +15,7 @@
             <button type="button" class="walkin-seg-btn" id="btnPanelForm" aria-selected="false">Form Pendaftaran Walk In (Pemberi Kerja)</button>
             <button type="button" class="walkin-seg-btn" id="btnPanelSchedule" aria-selected="false">Jadwal Walk In</button>
             <button type="button" class="walkin-seg-btn" id="btnPanelSurvey" aria-selected="false">Survei Evaluasi</button>
+            <button type="button" class="walkin-seg-btn" id="btnPanelStatistik" aria-selected="false">Statistik</button>
         </div>
     </div>
 
@@ -95,6 +96,182 @@
                             </table>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistik -->
+        <div class="col-12 d-none" id="panelStatistik">
+            <div class="card shadow-lg w-100">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <div>
+                            <h5 class="mb-0"><i class="bi bi-graph-up-arrow me-2"></i>Statistik Walk In</h5>
+                            <div class="text-muted small">Dashboard interaktif dari data survei, peserta hadir, company, dan initiator.</div>
+                        </div>
+                    </div>
+
+                    @if(!($walkinStats['ready'] ?? false))
+                        <div class="alert alert-info mb-0">Data statistik belum tersedia. Pastikan tabel survei sudah terisi.</div>
+                    @else
+                        @php $statsSummary = $walkinStats['summary'] ?? []; @endphp
+                        <div class="row g-3 mb-3">
+                            <div class="col-6 col-lg-2">
+                                <div class="walkin-stat-card">
+                                    <div class="walkin-stat-label">Total Responses</div>
+                                    <div class="walkin-stat-value">{{ number_format((int) ($statsSummary['total_responses'] ?? 0)) }}</div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-lg-2">
+                                <div class="walkin-stat-card">
+                                    <div class="walkin-stat-label">Avg Rating</div>
+                                    <div class="walkin-stat-value">{{ number_format((float) ($statsSummary['avg_rating'] ?? 0), 2) }}/5</div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-lg-2">
+                                <div class="walkin-stat-card">
+                                    <div class="walkin-stat-label">Responses Today</div>
+                                    <div class="walkin-stat-value">{{ number_format((int) ($statsSummary['responses_today'] ?? 0)) }}</div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-lg-2">
+                                <div class="walkin-stat-card">
+                                    <div class="walkin-stat-label">Responses Month</div>
+                                    <div class="walkin-stat-value">{{ number_format((int) ($statsSummary['responses_month'] ?? 0)) }}</div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-lg-2">
+                                <div class="walkin-stat-card">
+                                    <div class="walkin-stat-label">Active Companies</div>
+                                    <div class="walkin-stat-value">{{ number_format((int) ($statsSummary['active_companies'] ?? 0)) }}</div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-lg-2">
+                                <div class="walkin-stat-card">
+                                    <div class="walkin-stat-label">Active Initiators</div>
+                                    <div class="walkin-stat-value">{{ number_format((int) ($statsSummary['active_initiators'] ?? 0)) }}</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mb-3">
+                            <div class="col-12 col-lg-4">
+                                <label class="form-label mb-1">Range Trend</label>
+                                <select class="form-select" id="statsTrendRange">
+                                    <option value="7">7 Hari</option>
+                                    <option value="30" selected>30 Hari</option>
+                                    <option value="90">90 Hari</option>
+                                    <option value="all">Semua Data Trend</option>
+                                </select>
+                            </div>
+                            <div class="col-12 col-lg-4">
+                                <label class="form-label mb-1">Top Data</label>
+                                <select class="form-select" id="statsTopLimit">
+                                    <option value="5">Top 5</option>
+                                    <option value="10" selected>Top 10</option>
+                                    <option value="20">Top 20</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mb-3">
+                            <div class="col-12 col-lg-8">
+                                <div class="walkin-panel p-3">
+                                    <div class="fw-semibold mb-2">Trend Peserta Hadir</div>
+                                    <canvas id="statsTrendChart" height="120"></canvas>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-4">
+                                <div class="walkin-panel p-3">
+                                    <div class="fw-semibold mb-2">Distribusi Rating Kepuasan</div>
+                                    <canvas id="statsRatingChart" height="120"></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mb-3">
+                            <div class="col-12 col-lg-6">
+                                <div class="walkin-panel p-3">
+                                    <div class="fw-semibold mb-2">Top Perusahaan (Peserta Hadir)</div>
+                                    <canvas id="statsCompanyChart" height="140"></canvas>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-6">
+                                <div class="walkin-panel p-3">
+                                    <div class="fw-semibold mb-2">Top Initiator (Peserta Hadir)</div>
+                                    <canvas id="statsInitiatorChart" height="140"></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mb-3">
+                            <div class="col-12 col-lg-6">
+                                <div class="walkin-panel p-3">
+                                    <div class="fw-semibold mb-2">Demografi Gender</div>
+                                    <canvas id="statsGenderChart" height="150"></canvas>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-6">
+                                <div class="walkin-panel p-3">
+                                    <div class="fw-semibold mb-2">Demografi Pendidikan</div>
+                                    <canvas id="statsEducationChart" height="150"></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mb-3">
+                            <div class="col-12 col-lg-6">
+                                <div class="walkin-panel p-3">
+                                    <div class="fw-semibold mb-2">Top Company Detail</div>
+                                    <div class="table-responsive">
+                                        <table class="table table-sm table-bordered align-middle mb-0">
+                                            <thead class="table-light">
+                                                <tr>
+                                                    <th>Perusahaan</th>
+                                                    <th style="width:140px;">Peserta</th>
+                                                    <th style="width:120px;">Rating</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="statsCompanyTableBody"></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-6">
+                                <div class="walkin-panel p-3">
+                                    <div class="fw-semibold mb-2">Top Initiator Detail</div>
+                                    <div class="table-responsive">
+                                        <table class="table table-sm table-bordered align-middle mb-0">
+                                            <thead class="table-light">
+                                                <tr>
+                                                    <th>Initiator</th>
+                                                    <th style="width:95px;">Company</th>
+                                                    <th style="width:95px;">Peserta</th>
+                                                    <th style="width:120px;">Rating</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="statsInitiatorTableBody"></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row g-3">
+                            <div class="col-12 col-lg-6">
+                                <div class="walkin-panel p-3">
+                                    <div class="fw-semibold mb-2">Sumber Informasi Terpopuler</div>
+                                    <div id="statsInfoSourcesList" class="d-flex flex-wrap gap-2"></div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-6">
+                                <div class="walkin-panel p-3">
+                                    <div class="fw-semibold mb-2">Job Portal Terpopuler</div>
+                                    <div id="statsJobPortalsList" class="d-flex flex-wrap gap-2"></div>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>
@@ -1216,6 +1393,7 @@
 
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     // Move the GET form visually into the placeholder
     document.addEventListener('DOMContentLoaded', function() {
@@ -1539,11 +1717,13 @@
         const btnGallery = document.getElementById('btnPanelGallery');
         const btnSchedule = document.getElementById('btnPanelSchedule');
         const btnSurvey = document.getElementById('btnPanelSurvey');
+        const btnStatistik = document.getElementById('btnPanelStatistik');
         const panelForm = document.getElementById('panelForm');
         const panelGallery = document.getElementById('panelGallery');
         const panelSchedule = document.getElementById('panelSchedule');
         const panelSurvey = document.getElementById('panelSurvey');
-        if (!btnForm || !btnGallery || !btnSchedule || !btnSurvey || !panelForm || !panelGallery || !panelSchedule || !panelSurvey) return;
+        const panelStatistik = document.getElementById('panelStatistik');
+        if (!btnForm || !btnGallery || !btnSchedule || !btnSurvey || !btnStatistik || !panelForm || !panelGallery || !panelSchedule || !panelSurvey || !panelStatistik) return;
 
         function syncPanelToUrl(which) {
             try {
@@ -1558,18 +1738,22 @@
             const isGallery = which === 'gallery';
             const isSchedule = which === 'schedule';
             const isSurvey = which === 'survey';
+            const isStatistik = which === 'statistik';
             btnForm.classList.toggle('active', isForm);
             btnGallery.classList.toggle('active', isGallery);
             btnSchedule.classList.toggle('active', isSchedule);
             btnSurvey.classList.toggle('active', isSurvey);
+            btnStatistik.classList.toggle('active', isStatistik);
             btnForm.setAttribute('aria-selected', isForm ? 'true' : 'false');
             btnGallery.setAttribute('aria-selected', isGallery ? 'true' : 'false');
             btnSchedule.setAttribute('aria-selected', isSchedule ? 'true' : 'false');
             btnSurvey.setAttribute('aria-selected', isSurvey ? 'true' : 'false');
+            btnStatistik.setAttribute('aria-selected', isStatistik ? 'true' : 'false');
             panelForm.classList.toggle('d-none', !isForm);
             panelGallery.classList.toggle('d-none', !isGallery);
             panelSchedule.classList.toggle('d-none', !isSchedule);
             panelSurvey.classList.toggle('d-none', !isSurvey);
+            panelStatistik.classList.toggle('d-none', !isStatistik);
             try { localStorage.setItem('walkin_panel', which); } catch (e) {}
             syncPanelToUrl(which);
         }
@@ -1578,11 +1762,245 @@
         btnGallery.addEventListener('click', () => setActive('gallery'));
         btnSchedule.addEventListener('click', () => setActive('schedule'));
         btnSurvey.addEventListener('click', () => setActive('survey'));
+        btnStatistik.addEventListener('click', () => setActive('statistik'));
 
         const urlPanel = new URLSearchParams(window.location.search).get('panel');
-        const allowedPanels = ['form', 'gallery', 'schedule', 'survey'];
+        const allowedPanels = ['form', 'gallery', 'schedule', 'survey', 'statistik'];
         const initialPanel = allowedPanels.includes(urlPanel) ? urlPanel : 'gallery';
         setActive(initialPanel);
+    })();
+
+    // Statistik panel
+    (function () {
+        const panel = document.getElementById('panelStatistik');
+        if (!panel || typeof Chart === 'undefined') return;
+
+        const stats = @json($walkinStats ?? []);
+        if (!stats || !stats.ready) return;
+
+        const trendRangeEl = document.getElementById('statsTrendRange');
+        const topLimitEl = document.getElementById('statsTopLimit');
+        const companyTableBodyEl = document.getElementById('statsCompanyTableBody');
+        const initiatorTableBodyEl = document.getElementById('statsInitiatorTableBody');
+        const infoSourcesListEl = document.getElementById('statsInfoSourcesList');
+        const jobPortalsListEl = document.getElementById('statsJobPortalsList');
+
+        const trendCanvas = document.getElementById('statsTrendChart');
+        const ratingCanvas = document.getElementById('statsRatingChart');
+        const companyCanvas = document.getElementById('statsCompanyChart');
+        const initiatorCanvas = document.getElementById('statsInitiatorChart');
+        const genderCanvas = document.getElementById('statsGenderChart');
+        const educationCanvas = document.getElementById('statsEducationChart');
+        if (!trendCanvas || !ratingCanvas || !companyCanvas || !initiatorCanvas || !genderCanvas || !educationCanvas) return;
+
+        const trendData = Array.isArray(stats.trend) ? stats.trend : [];
+        const ratingDist = Array.isArray(stats.rating_distribution) ? stats.rating_distribution : [];
+        const topCompanies = Array.isArray(stats.top_companies) ? stats.top_companies : [];
+        const topInitiators = Array.isArray(stats.top_initiators) ? stats.top_initiators : [];
+        const genderDist = Array.isArray(stats.gender_distribution) ? stats.gender_distribution : [];
+        const educationDist = Array.isArray(stats.education_distribution) ? stats.education_distribution : [];
+        const infoSources = Array.isArray(stats.info_sources) ? stats.info_sources : [];
+        const jobPortals = Array.isArray(stats.job_portals) ? stats.job_portals : [];
+
+        const charts = {};
+        const colorSet = ['#2563eb', '#0ea5e9', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#14b8a6', '#f97316', '#64748b', '#22c55e'];
+
+        function shortDate(ymd) {
+            const p = String(ymd || '').split('-');
+            if (p.length !== 3) return String(ymd || '');
+            return `${p[2]}/${p[1]}`;
+        }
+
+        function drawOrUpdate(name, canvas, config) {
+            if (charts[name]) {
+                charts[name].data = config.data;
+                charts[name].options = config.options;
+                charts[name].update();
+                return;
+            }
+            charts[name] = new Chart(canvas, config);
+        }
+
+        function renderCloud(container, rows) {
+            if (!container) return;
+            if (!rows || rows.length === 0) {
+                container.innerHTML = '<span class="text-muted small">Belum ada data.</span>';
+                return;
+            }
+            container.innerHTML = rows.slice(0, 20).map((item) => {
+                const label = String(item && item.label ? item.label : '-');
+                const total = Number(item && item.total ? item.total : 0);
+                return `<span class="badge text-bg-light border text-dark fw-normal px-3 py-2">${label} (${total})</span>`;
+            }).join('');
+        }
+
+        function renderTrend(rangeValue) {
+            let list = trendData.slice();
+            if (rangeValue !== 'all') {
+                const n = Math.max(1, parseInt(rangeValue, 10) || 30);
+                list = list.slice(-n);
+            }
+            const labels = list.map((it) => shortDate(it.date));
+            const totals = list.map((it) => Number(it.total || 0));
+            const avgRatings = list.map((it) => (it.avg_rating == null ? null : Number(it.avg_rating)));
+
+            drawOrUpdate('trend', trendCanvas, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Peserta Hadir',
+                            data: totals,
+                            borderColor: '#2563eb',
+                            backgroundColor: 'rgba(37,99,235,0.15)',
+                            fill: true,
+                            tension: 0.25,
+                            yAxisID: 'y',
+                        },
+                        {
+                            label: 'Avg Rating',
+                            data: avgRatings,
+                            borderColor: '#f59e0b',
+                            backgroundColor: 'rgba(245,158,11,0.10)',
+                            fill: false,
+                            tension: 0.25,
+                            yAxisID: 'y1',
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { beginAtZero: true, title: { display: true, text: 'Peserta' } },
+                        y1: {
+                            beginAtZero: true,
+                            max: 5,
+                            position: 'right',
+                            grid: { drawOnChartArea: false },
+                            title: { display: true, text: 'Rating' }
+                        }
+                    }
+                }
+            });
+        }
+
+        function renderRatingDistribution() {
+            drawOrUpdate('rating', ratingCanvas, {
+                type: 'doughnut',
+                data: {
+                    labels: ratingDist.map((it) => `${it.label}/5`),
+                    datasets: [{
+                        data: ratingDist.map((it) => Number(it.total || 0)),
+                        backgroundColor: colorSet,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                }
+            });
+        }
+
+        function renderDemographyCharts() {
+            drawOrUpdate('gender', genderCanvas, {
+                type: 'pie',
+                data: {
+                    labels: genderDist.map((it) => String(it.label || '-')),
+                    datasets: [{ data: genderDist.map((it) => Number(it.total || 0)), backgroundColor: colorSet }]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+
+            const topEducation = educationDist.slice(0, 10);
+            drawOrUpdate('education', educationCanvas, {
+                type: 'bar',
+                data: {
+                    labels: topEducation.map((it) => String(it.label || '-')),
+                    datasets: [{ label: 'Jumlah', data: topEducation.map((it) => Number(it.total || 0)), backgroundColor: '#0ea5e9' }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y',
+                    scales: { x: { beginAtZero: true } }
+                }
+            });
+        }
+
+        function renderTopData(limitValue) {
+            const n = Math.max(1, parseInt(limitValue, 10) || 10);
+            const cRows = topCompanies.slice(0, n);
+            const iRows = topInitiators.slice(0, n);
+
+            drawOrUpdate('company', companyCanvas, {
+                type: 'bar',
+                data: {
+                    labels: cRows.map((it) => String(it.name || '-')),
+                    datasets: [{ label: 'Peserta Hadir', data: cRows.map((it) => Number(it.peserta_hadir || 0)), backgroundColor: '#2563eb' }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y',
+                    scales: { x: { beginAtZero: true } }
+                }
+            });
+
+            drawOrUpdate('initiator', initiatorCanvas, {
+                type: 'bar',
+                data: {
+                    labels: iRows.map((it) => String(it.name || '-')),
+                    datasets: [{ label: 'Peserta Hadir', data: iRows.map((it) => Number(it.peserta_hadir || 0)), backgroundColor: '#10b981' }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y',
+                    scales: { x: { beginAtZero: true } }
+                }
+            });
+
+            if (companyTableBodyEl) {
+                companyTableBodyEl.innerHTML = cRows.map((it) => `
+                    <tr>
+                        <td>${String(it.name || '-')}</td>
+                        <td>${Number(it.peserta_hadir || 0)}</td>
+                        <td>${it.avg_rating == null ? '-' : (Number(it.avg_rating).toFixed(2) + '/5')}</td>
+                    </tr>
+                `).join('');
+            }
+
+            if (initiatorTableBodyEl) {
+                initiatorTableBodyEl.innerHTML = iRows.map((it) => `
+                    <tr>
+                        <td>${String(it.name || '-')}</td>
+                        <td>${Number(it.company_count || 0)}</td>
+                        <td>${Number(it.peserta_hadir || 0)}</td>
+                        <td>${it.avg_rating == null ? '-' : (Number(it.avg_rating).toFixed(2) + '/5')}</td>
+                    </tr>
+                `).join('');
+            }
+        }
+
+        renderTrend(trendRangeEl ? trendRangeEl.value : '30');
+        renderRatingDistribution();
+        renderDemographyCharts();
+        renderTopData(topLimitEl ? topLimitEl.value : '10');
+        renderCloud(infoSourcesListEl, infoSources);
+        renderCloud(jobPortalsListEl, jobPortals);
+
+        if (trendRangeEl) {
+            trendRangeEl.addEventListener('change', function () {
+                renderTrend(trendRangeEl.value);
+            });
+        }
+        if (topLimitEl) {
+            topLimitEl.addEventListener('change', function () {
+                renderTopData(topLimitEl.value);
+            });
+        }
     })();
 
     // Survey mini progress indicator
@@ -2344,6 +2762,28 @@
         background: rgba(255,255,255,0.92);
         box-shadow: 0 10px 30px rgba(2,6,23,0.06);
         backdrop-filter: blur(8px);
+    }
+    #panelStatistik .walkin-stat-card {
+        border: 1px solid rgba(37,99,235,0.20);
+        border-radius: 14px;
+        background: linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(239,246,255,0.95) 100%);
+        padding: 12px 14px;
+        height: 100%;
+    }
+    #panelStatistik .walkin-stat-label {
+        font-size: 12px;
+        color: #475569;
+        margin-bottom: 6px;
+        font-weight: 600;
+    }
+    #panelStatistik .walkin-stat-value {
+        font-size: 1.25rem;
+        line-height: 1.1;
+        font-weight: 800;
+        color: #0f172a;
+    }
+    #panelStatistik canvas {
+        max-height: 320px;
     }
     /* Survey panel polish (scoped) */
     #panelSurvey {
