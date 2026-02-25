@@ -21,11 +21,11 @@
                 <div class="btn-group" role="group" aria-label="Career Boost Day toggle">
                     <a href="{{ route('career-boostday.index', ['tab' => 'form']) }}"
                        class="btn {{ $tab === 'form' ? 'btn-success' : 'btn-outline-success' }}">
-                        Form Konsultasi Karir (Pencari Kerja)
+                        Form Curhat Peluang Kerja
                     </a>
                     <a href="{{ route('career-boostday.index', ['tab' => 'jadwal']) }}"
                        class="btn {{ $tab === 'jadwal' ? 'btn-success' : 'btn-outline-success' }}">
-                        Jadwal Konsultasi
+                        Jadwal Curhat
                     </a>
                     <a href="{{ route('career-boostday.index', ['tab' => 'statistik']) }}"
                        class="btn {{ $tab === 'statistik' ? 'btn-success' : 'btn-outline-success' }}">
@@ -41,15 +41,15 @@
             @if($tab === 'jadwal')
                 <div class="card shadow-sm rounded-4 mb-4">
                     <div class="card-body p-4">
-                        <h3 class="h6 fw-bold mb-2"><i class="fa-solid fa-user-check me-2 text-success"></i>Jadwal Konsultasi Terbooking</h3>
-                        <div class="text-muted mb-3">Berikut jadwal konsultasi yang sudah di-accept.</div>
+                        <h3 class="h6 fw-bold mb-2"><i class="fa-solid fa-user-check me-2 text-success"></i>Jadwal Curhat Terbooking</h3>
+                        <div class="text-muted mb-3">Berikut jadwal curhat yang sudah di-accept.</div>
 
                         @if(!$bookedFeatureAvailable)
                             <div class="alert alert-warning mb-0">
                                 Fitur “Terbooking” belum aktif (tabel/kolom belum tersedia di database).
                             </div>
                         @elseif($bookedKonsultasi->count() === 0)
-                            <div class="text-muted">Belum ada jadwal konsultasi yang terbooking.</div>
+                            <div class="text-muted">Belum ada jadwal curhat yang terbooking.</div>
                         @else
                             <div class="table-responsive">
                                 <table class="table table-bordered align-middle mb-0">
@@ -236,7 +236,7 @@
                                     <div class="border rounded-3 p-3 h-100">
                                         <div class="small text-muted mb-1">Sudah Terbooking</div>
                                         <div class="h5 fw-bold mb-0">{{ number_format($booked) }}</div>
-                                        <div class="small text-muted">Jadwal konsultasi yang sudah dipastikan.</div>
+                                        <div class="small text-muted">Jadwal curhat yang sudah dipastikan.</div>
                                     </div>
                                 </div>
                                 <div class="col-6 col-lg-4">
@@ -273,7 +273,7 @@
                         <div class="col-12 col-lg-6">
                             <div class="card shadow-sm rounded-4 h-100">
                                 <div class="card-body p-4">
-                                    <h3 class="h6 fw-bold mb-3">Jenis Konseling</h3>
+                                    <h3 class="h6 fw-bold mb-3">Metode Curhat</h3>
                                     <div style="position: relative; height: 260px;">
                                         <canvas id="cbd-jenis-chart"></canvas>
                                     </div>
@@ -371,7 +371,7 @@
                         <div class="col-12 col-lg-6">
                             <div class="card shadow-sm rounded-4 h-100">
                                 <div class="card-body p-4">
-                                    <h3 class="h6 fw-bold mb-3">Jadwal Konseling Paling Diminati</h3>
+                                    <h3 class="h6 fw-bold mb-3">Jadwal Curhat Paling Diminati</h3>
                                     @if(empty($stats['jadwalBreakdown']))
                                         <div class="text-muted">Belum ada data jadwal.</div>
                                     @else
@@ -591,7 +591,7 @@
             @else
                 <div class="card shadow-sm rounded-4">
                     <div class="card-body p-4 p-md-5">
-                        <h2 class="h5 fw-bold mb-1">Form Konsultasi Karir (Pencari Kerja)</h2>
+                        <h2 class="h5 fw-bold mb-1">Form Curhat Peluang Kerja</h2>
                         <div class="text-muted mb-4">Silakan isi data berikut. Tim kami akan menghubungi Anda melalui WhatsApp.</div>
 
                         @if ($errors->any())
@@ -620,7 +620,7 @@
                                 </div>
 
                                 <div class="col-12">
-                                    <label class="form-label fw-semibold">Apakah Saudara/i :</label>
+                                    <label class="form-label fw-semibold">Apakah Jobers :</label>
                                     @php
                                         $statusChoiceOld = old('status_choice');
                                         $statusOtherOld = old('status_other');
@@ -657,7 +657,7 @@
                                 </div>
 
                                 <div class="col-12 col-md-6">
-                                    <label class="form-label fw-semibold">Jenis Konseling</label>
+                                    <label class="form-label fw-semibold">Metode Curhat</label>
                                     @php
                                         $jenisOld = old('jenis_konseling', 'Online (Zoom)');
                                         $jenisOnline = 'Online (Zoom)';
@@ -676,7 +676,7 @@
                                 </div>
 
                                 <div class="col-12 col-md-6">
-                                    <label class="form-label fw-semibold" for="jadwal_konseling">Jadwal Konseling</label>
+                                    <label class="form-label fw-semibold" for="jadwal_konseling">Jadwal Curhat</label>
                                     <select id="jadwal_konseling" name="jadwal_konseling" class="form-select" required>
                                         <option value="" disabled {{ old('jadwal_konseling') ? '' : 'selected' }}>Pilih jadwal</option>
                                         @foreach($konsultasiSlots as $slot)
