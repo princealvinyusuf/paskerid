@@ -43,6 +43,7 @@ Route::get('/virtual-karir', [App\Http\Controllers\VirtualKarirController::class
 // Career Boost Day (public)
 Route::get('/career-boostday', [CareerBoostdayController::class, 'index'])->name('career-boostday.index');
 Route::post('/career-boostday/konsultasi', [CareerBoostdayController::class, 'store'])->name('career-boostday.store');
+Route::post('/career-boostday/konfirmasi-kehadiran', [CareerBoostdayController::class, 'confirmAttendance'])->name('career-boostday.confirm-attendance');
 
 // Form Hasil Konseling (public) - not linked in navbar
 Route::get('/form-hasil-konseling', [FormHasilKonselingController::class, 'index'])->name('form-hasil-konseling.index');

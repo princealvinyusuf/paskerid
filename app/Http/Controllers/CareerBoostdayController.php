@@ -30,6 +30,9 @@ class CareerBoostdayController extends Controller
             Schema::hasTable('career_boostday_consultations') &&
             Schema::hasColumn('career_boostday_consultations', 'admin_status') &&
             Schema::hasColumn('career_boostday_consultations', 'booked_date');
+        $hasAttendanceConfirmedColumn =
+            Schema::hasTable('career_boostday_consultations') &&
+            Schema::hasColumn('career_boostday_consultations', 'attendance_confirmed_at');
 
         $hasPicRelation =
             Schema::hasColumn('career_boostday_consultations', 'pic_id') &&
@@ -44,10 +47,12 @@ class CareerBoostdayController extends Controller
             }
 
             $select = [
+                'c.id',
                 'c.booked_date',
                 'c.booked_time_start',
                 'c.booked_time_finish',
                 'c.name',
+                'c.whatsapp',
                 'c.jenis_konseling',
                 'c.jadwal_konseling',
             ];
@@ -55,6 +60,11 @@ class CareerBoostdayController extends Controller
                 $select[] = DB::raw('p.name as konselor_name');
             } else {
                 $select[] = DB::raw("'-' as konselor_name");
+            }
+            if ($hasAttendanceConfirmedColumn) {
+                $select[] = 'c.attendance_confirmed_at';
+            } else {
+                $select[] = DB::raw('NULL as attendance_confirmed_at');
             }
 
             $rows = $q
@@ -74,12 +84,15 @@ class CareerBoostdayController extends Controller
                 }
 
                 return (object) [
+                    'id' => (int) $r->id,
                     'booked_date' => $r->booked_date,
                     'time' => $time,
                     'masked_name' => $this->maskPersonName((string)($r->name ?? '')),
+                    'masked_contact' => $this->maskPhoneNumber((string)($r->whatsapp ?? '')),
                     'konselor_name' => (string)($r->konselor_name ?? '-'),
                     'jenis_konseling' => (string)($r->jenis_konseling ?? ''),
                     'jadwal_konseling' => (string)($r->jadwal_konseling ?? ''),
+                    'attendance_confirmed' => !empty($r->attendance_confirmed_at),
                 ];
             });
         }
@@ -184,6 +197,72 @@ class CareerBoostdayController extends Controller
         return redirect()
             ->route('career-boostday.index', ['tab' => 'form'])
             ->with('success', 'Terima kasih! Form konsultasi karir Anda sudah terkirim.');
+    }
+
+    public function confirmAttendance(Request $request)
+    {
+        $hasRequiredColumns =
+            Schema::hasTable('career_boostday_consultations') &&
+            Schema::hasColumn('career_boostday_consultations', 'id') &&
+            Schema::hasColumn('career_boostday_consultations', 'whatsapp') &&
+            Schema::hasColumn('career_boostday_consultations', 'admin_status') &&
+            Schema::hasColumn('career_boostday_consultations', 'booked_date');
+
+        if (!$hasRequiredColumns) {
+            return redirect()
+                ->route('career-boostday.index', ['tab' => 'jadwal'])
+                ->withErrors([
+                    'consultation_id' => 'Fitur konfirmasi kehadiran belum tersedia.',
+                ], 'confirmAttendance');
+        }
+
+        $validated = $request->validateWithBag('confirmAttendance', [
+            'consultation_id' => ['required', 'integer'],
+            'phone_confirmation' => ['required', 'string', 'max:30'],
+        ]);
+
+        $consultation = DB::table('career_boostday_consultations')
+            ->select(['id', 'name', 'whatsapp', 'admin_status', 'booked_date'])
+            ->where('id', (int) $validated['consultation_id'])
+            ->first();
+
+        if (
+            !$consultation ||
+            (string) ($consultation->admin_status ?? '') !== 'accepted' ||
+            empty($consultation->booked_date)
+        ) {
+            return redirect()
+                ->route('career-boostday.index', ['tab' => 'jadwal'])
+                ->withErrors([
+                    'consultation_id' => 'Data konsultasi tidak valid atau belum terbooking.',
+                ], 'confirmAttendance')
+                ->withInput();
+        }
+
+        $inputPhone = $this->normalizePhoneNumber((string) $validated['phone_confirmation']);
+        $dbPhone = $this->normalizePhoneNumber((string) ($consultation->whatsapp ?? ''));
+
+        if ($inputPhone === '' || $dbPhone === '' || $inputPhone !== $dbPhone) {
+            return redirect()
+                ->route('career-boostday.index', ['tab' => 'jadwal'])
+                ->withErrors([
+                    'phone_confirmation' => 'Nomor handphone tidak sesuai dengan data pendaftaran.',
+                ], 'confirmAttendance')
+                ->withInput();
+        }
+
+        if (Schema::hasColumn('career_boostday_consultations', 'attendance_confirmed_at')) {
+            DB::table('career_boostday_consultations')
+                ->where('id', (int) $consultation->id)
+                ->update([
+                    'attendance_confirmed_at' => Carbon::now(),
+                    'updated_at' => Carbon::now(),
+                ]);
+        }
+
+        return redirect()
+            ->route('career-boostday.index', ['tab' => 'jadwal'])
+            ->with('success', 'Konfirmasi kehadiran berhasil dikirim.');
     }
 
     private function getAgendasFromBookedDates()
@@ -341,6 +420,41 @@ class CareerBoostdayController extends Controller
         }
 
         return implode(' ', $maskedParts);
+    }
+
+    private function maskPhoneNumber(string $phone): string
+    {
+        $phone = trim($phone);
+        if ($phone === '') {
+            return '';
+        }
+
+        $len = mb_strlen($phone, 'UTF-8');
+        if ($len <= 4) {
+            return str_repeat('*', $len);
+        }
+
+        $prefix = mb_substr($phone, 0, 2, 'UTF-8');
+        $suffix = mb_substr($phone, $len - 2, 2, 'UTF-8');
+        $maskedLen = max(4, $len - 4);
+
+        return $prefix . str_repeat('*', $maskedLen) . $suffix;
+    }
+
+    private function normalizePhoneNumber(string $phone): string
+    {
+        $digits = preg_replace('/\D+/', '', $phone) ?? '';
+        $digits = ltrim($digits, '0');
+
+        if ($digits === '') {
+            return '';
+        }
+
+        if (str_starts_with($digits, '62')) {
+            return $digits;
+        }
+
+        return '62' . $digits;
     }
 
     private function buildStatistics(): array

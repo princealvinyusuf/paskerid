@@ -58,6 +58,7 @@
                                             <th style="width: 160px;">Tanggal</th>
                                             <th style="width: 140px;">Waktu</th>
                                             <th>Nama (disamarkan)</th>
+                                            <th style="width: 180px;">Kontak (disamarkan)</th>
                                             <th style="width: 160px;">Konselor</th>
                                             <th style="width: 220px;">Jenis</th>
                                         </tr>
@@ -69,6 +70,7 @@
                                                 <td class="fw-semibold">{{ $date->format('d M Y') }}</td>
                                                 <td>{{ $b->time ?: '-' }}</td>
                                                 <td class="fw-semibold">{{ $b->masked_name }}</td>
+                                                <td class="fw-semibold">{{ $b->masked_contact ?: '-' }}</td>
                                                 <td class="fw-semibold">{{ $b->konselor_name }}</td>
                                                 <td>{{ $b->jenis_konseling }}</td>
                                             </tr>
@@ -76,6 +78,99 @@
                                     </tbody>
                                 </table>
                             </div>
+
+                            <div class="mt-3 d-flex justify-content-end">
+                                <button
+                                    type="button"
+                                    class="btn btn-success"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#attendanceConfirmModal"
+                                >
+                                    Isi Form Konfirmasi Kehadiran
+                                </button>
+                            </div>
+
+                            <div class="modal fade" id="attendanceConfirmModal" tabindex="-1" aria-labelledby="attendanceConfirmModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <form method="POST" action="{{ route('career-boostday.confirm-attendance') }}" id="attendance-confirm-form">
+                                            @csrf
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="attendanceConfirmModalLabel">Konfirmasi Kehadiran</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                @if($errors->confirmAttendance->any())
+                                                    <div class="alert alert-danger">
+                                                        <ul class="mb-0">
+                                                            @foreach($errors->confirmAttendance->all() as $error)
+                                                                <li>{{ $error }}</li>
+                                                            @endforeach
+                                                        </ul>
+                                                    </div>
+                                                @endif
+
+                                                <div class="mb-3">
+                                                    <label class="form-label fw-semibold" for="consultation_id">Nama (disamarkan)</label>
+                                                    <select class="form-select @error('consultation_id', 'confirmAttendance') is-invalid @enderror" id="consultation_id" name="consultation_id" required>
+                                                        <option value="" selected disabled>Pilih nama</option>
+                                                        @foreach($bookedKonsultasi as $b)
+                                                            <option value="{{ $b->id }}" {{ (string) old('consultation_id') === (string) $b->id ? 'selected' : '' }}>
+                                                                {{ $b->masked_name }} — {{ \Carbon\Carbon::parse($b->booked_date)->format('d M Y') }}{{ $b->time ? ' (' . $b->time . ')' : '' }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+
+                                                <div class="mb-1">
+                                                    <label class="form-label fw-semibold" for="phone_confirmation">Konfirmasi Nomor Handphone</label>
+                                                    <input
+                                                        type="text"
+                                                        class="form-control @error('phone_confirmation', 'confirmAttendance') is-invalid @enderror"
+                                                        id="phone_confirmation"
+                                                        name="phone_confirmation"
+                                                        value="{{ old('phone_confirmation') }}"
+                                                        placeholder="Masukkan nomor sesuai data pendaftaran"
+                                                        required
+                                                    >
+                                                    <div class="form-text">Nomor harus sama dengan nomor yang terdaftar di database.</div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Batal</button>
+                                                <button type="submit" class="btn btn-success" id="attendance-confirm-submit" disabled>Konfirmasi Hadir</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <script>
+                                (function () {
+                                    var consultationSelect = document.getElementById('consultation_id');
+                                    var phoneInput = document.getElementById('phone_confirmation');
+                                    var submitBtn = document.getElementById('attendance-confirm-submit');
+                                    var modalEl = document.getElementById('attendanceConfirmModal');
+
+                                    function syncAttendanceSubmitState() {
+                                        if (!submitBtn || !consultationSelect || !phoneInput) return;
+                                        var hasConsultation = !!consultationSelect.value;
+                                        var hasPhone = String(phoneInput.value || '').trim() !== '';
+                                        submitBtn.disabled = !(hasConsultation && hasPhone);
+                                    }
+
+                                    if (consultationSelect) consultationSelect.addEventListener('change', syncAttendanceSubmitState);
+                                    if (phoneInput) phoneInput.addEventListener('input', syncAttendanceSubmitState);
+                                    syncAttendanceSubmitState();
+
+                                    @if($errors->confirmAttendance->any())
+                                        if (modalEl && window.bootstrap && bootstrap.Modal) {
+                                            var modal = new bootstrap.Modal(modalEl);
+                                            modal.show();
+                                        }
+                                    @endif
+                                })();
+                            </script>
                         @endif
                     </div>
                 </div>
