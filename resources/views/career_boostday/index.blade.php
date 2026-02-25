@@ -151,6 +151,8 @@
                                     var phoneInput = document.getElementById('phone_confirmation');
                                     var submitBtn = document.getElementById('attendance-confirm-submit');
                                     var modalEl = document.getElementById('attendanceConfirmModal');
+                                    var hasConfirmErrors = {{ $errors->confirmAttendance->any() ? 'true' : 'false' }};
+                                    var phoneMismatchMessage = @json($errors->confirmAttendance->first('phone_confirmation'));
 
                                     function syncAttendanceSubmitState() {
                                         if (!submitBtn || !consultationSelect || !phoneInput) return;
@@ -159,16 +161,37 @@
                                         submitBtn.disabled = !(hasConsultation && hasPhone);
                                     }
 
-                                    if (consultationSelect) consultationSelect.addEventListener('change', syncAttendanceSubmitState);
-                                    if (phoneInput) phoneInput.addEventListener('input', syncAttendanceSubmitState);
-                                    syncAttendanceSubmitState();
+                                    function forceShowModalFallback() {
+                                        // Fallback when bootstrap JS loads later than this script block.
+                                        if (!modalEl) return;
+                                        modalEl.classList.add('show');
+                                        modalEl.style.display = 'block';
+                                        modalEl.removeAttribute('aria-hidden');
+                                        modalEl.setAttribute('aria-modal', 'true');
+                                        document.body.classList.add('modal-open');
+                                    }
 
-                                    @if($errors->confirmAttendance->any())
-                                        if (modalEl && window.bootstrap && bootstrap.Modal) {
-                                            var modal = new bootstrap.Modal(modalEl);
+                                    function showConfirmModalIfError() {
+                                        if (!hasConfirmErrors || !modalEl) return;
+
+                                        if (window.bootstrap && bootstrap.Modal) {
+                                            var modal = bootstrap.Modal.getOrCreateInstance(modalEl);
                                             modal.show();
+                                        } else {
+                                            forceShowModalFallback();
                                         }
-                                    @endif
+
+                                        if (phoneMismatchMessage) {
+                                            alert(phoneMismatchMessage);
+                                        }
+                                    }
+
+                                    document.addEventListener('DOMContentLoaded', function () {
+                                        if (consultationSelect) consultationSelect.addEventListener('change', syncAttendanceSubmitState);
+                                        if (phoneInput) phoneInput.addEventListener('input', syncAttendanceSubmitState);
+                                        syncAttendanceSubmitState();
+                                        showConfirmModalIfError();
+                                    });
                                 })();
                             </script>
                         @endif
