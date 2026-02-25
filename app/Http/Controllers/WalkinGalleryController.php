@@ -259,11 +259,15 @@ class WalkinGalleryController extends Controller
                 $initiatorName = $company;
                 $initiatorAvg = $companyRatingMap[mb_strtolower($company)] ?? null;
                 $initiatorIdForTotal = null;
+                $selectedAsInitiator = false;
 
                 if (Schema::hasTable('walk_in_survey_initiators') && Schema::hasColumn('company_walk_in_survey', 'walk_in_initiator_id')) {
                     $initiator = DB::table('walk_in_survey_initiators')
                         ->whereRaw('LOWER(initiator_name) = ?', [mb_strtolower($company)])
                         ->first(['id', 'initiator_name']);
+                    if ($initiator && isset($initiator->id)) {
+                        $selectedAsInitiator = true;
+                    }
 
                     if (!$initiator) {
                         $initiatorId = DB::table('company_walk_in_survey')
@@ -295,6 +299,46 @@ class WalkinGalleryController extends Controller
                         ->selectRaw('COUNT(r.id) AS total_peserta')
                         ->value('total_peserta');
                     $totalPeserta = (int) ($totalPesertaRaw ?? 0);
+                }
+
+                // If the selected gallery entity is an initiator name, use initiator-company mapping
+                // from backoffice tables so participant counts match admin pages.
+                if ($selectedAsInitiator && $initiatorIdForTotal !== null) {
+                    $initiatorCompanyRows = DB::table('company_walk_in_survey as c')
+                        ->leftJoin('walk_in_survey_responses as r', 'r.company_walk_in_survey_id', '=', 'c.id')
+                        ->where('c.walk_in_initiator_id', $initiatorIdForTotal)
+                        ->selectRaw('c.company_name, COUNT(r.id) AS peserta_hadir, ROUND(AVG(r.rating_satisfaction), 2) AS avg_rating')
+                        ->groupBy('c.id', 'c.company_name')
+                        ->orderBy('c.sort_order', 'asc')
+                        ->orderBy('c.company_name', 'asc')
+                        ->get();
+
+                    $joinedCompanyParticipants = [];
+                    $joinedCompanyRatings = [];
+                    $computedTotal = 0;
+
+                    foreach ($initiatorCompanyRows as $row) {
+                        $name = trim((string) ($row->company_name ?? ''));
+                        if ($name === '') {
+                            continue;
+                        }
+                        $peserta = (int) ($row->peserta_hadir ?? 0);
+                        $joinedCompanyParticipants[] = [
+                            'name' => $name,
+                            'peserta_hadir' => $peserta,
+                        ];
+                        $joinedCompanyRatings[] = [
+                            'name' => $name,
+                            'rating' => $row->avg_rating !== null ? (float) $row->avg_rating : null,
+                        ];
+                        $computedTotal += $peserta;
+                    }
+
+                    if (!empty($joinedCompanyParticipants)) {
+                        $isJobPortalData = true;
+                        $totalPeserta = $computedTotal;
+                        $companyPesertaHadir = null;
+                    }
                 }
 
                 $initiatorRating = [
