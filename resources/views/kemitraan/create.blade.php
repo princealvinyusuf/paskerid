@@ -1718,6 +1718,9 @@
         const btnSchedule = document.getElementById('btnPanelSchedule');
         const btnSurvey = document.getElementById('btnPanelSurvey');
         const btnStatistik = document.getElementById('btnPanelStatistik');
+        const surveyPasscodeEnabled = @json((bool) ($surveyPasscodeEnabled ?? false));
+        const verifyPasscodeUrl = @json(route('kemitraan.survey.verify-passcode'));
+        const csrf = @json(csrf_token());
         const panelForm = document.getElementById('panelForm');
         const panelGallery = document.getElementById('panelGallery');
         const panelSchedule = document.getElementById('panelSchedule');
@@ -1758,16 +1761,61 @@
             syncPanelToUrl(which);
         }
 
+        async function ensureSurveyUnlocked() {
+            if (!surveyPasscodeEnabled) return true;
+            try {
+                if (sessionStorage.getItem('walkin_survey_unlocked') === '1') {
+                    return true;
+                }
+            } catch (e) {}
+
+            const passcode = window.prompt('Masukkan passcode untuk membuka Survei Evaluasi:');
+            if (passcode === null) return false;
+            if (String(passcode).trim() === '') {
+                alert('Passcode wajib diisi.');
+                return false;
+            }
+
+            try {
+                const res = await fetch(verifyPasscodeUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrf,
+                    },
+                    body: JSON.stringify({ passcode: String(passcode).trim() }),
+                });
+                const data = await res.json().catch(() => ({}));
+                if (res.ok && data && data.ok) {
+                    try { sessionStorage.setItem('walkin_survey_unlocked', '1'); } catch (e) {}
+                    return true;
+                }
+                alert((data && data.message) ? data.message : 'Passcode tidak valid.');
+                return false;
+            } catch (e) {
+                alert('Gagal verifikasi passcode. Coba lagi.');
+                return false;
+            }
+        }
+
         btnForm.addEventListener('click', () => setActive('form'));
         btnGallery.addEventListener('click', () => setActive('gallery'));
         btnSchedule.addEventListener('click', () => setActive('schedule'));
-        btnSurvey.addEventListener('click', () => setActive('survey'));
+        btnSurvey.addEventListener('click', async () => {
+            const ok = await ensureSurveyUnlocked();
+            if (ok) setActive('survey');
+        });
         btnStatistik.addEventListener('click', () => setActive('statistik'));
 
         const urlPanel = new URLSearchParams(window.location.search).get('panel');
         const allowedPanels = ['form', 'gallery', 'schedule', 'survey', 'statistik'];
         const initialPanel = allowedPanels.includes(urlPanel) ? urlPanel : 'gallery';
-        setActive(initialPanel);
+        if (initialPanel === 'survey') {
+            ensureSurveyUnlocked().then((ok) => setActive(ok ? 'survey' : 'gallery'));
+        } else {
+            setActive(initialPanel);
+        }
     })();
 
     // Statistik panel

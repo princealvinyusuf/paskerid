@@ -61,6 +61,9 @@ Route::get('kemitraan/under_construction', function() {
 Route::get('kemitraan/create', [App\Http\Controllers\KemitraanController::class, 'create'])->name('kemitraan.create');
 Route::post('kemitraan', [App\Http\Controllers\KemitraanController::class, 'store'])->name('kemitraan.store');
 Route::post('kemitraan/survey', [App\Http\Controllers\KemitraanController::class, 'storeSurvey'])->name('kemitraan.survey.store');
+Route::post('kemitraan/survey/verify-passcode', [App\Http\Controllers\KemitraanController::class, 'verifySurveyPasscode'])
+    ->middleware('throttle:10,1')
+    ->name('kemitraan.survey.verify-passcode');
 Route::get('kemitraan/fully-booked-dates', [App\Http\Controllers\KemitraanController::class, 'fullyBookedDates'])->name('kemitraan.fullyBookedDates');
 
 // Walk-in Interview Gallery (public)
