@@ -115,11 +115,26 @@
                                                     <select class="form-select @error('consultation_id', 'confirmAttendance') is-invalid @enderror" id="consultation_id" name="consultation_id" required>
                                                         <option value="" selected disabled>Pilih nama</option>
                                                         @foreach($bookedKonsultasi as $b)
-                                                            <option value="{{ $b->id }}" {{ (string) old('consultation_id') === (string) $b->id ? 'selected' : '' }}>
+                                                            <option
+                                                                value="{{ $b->id }}"
+                                                                data-booked-date="{{ $b->booked_date }}"
+                                                                {{ (string) old('consultation_id') === (string) $b->id ? 'selected' : '' }}
+                                                            >
                                                                 {{ $b->masked_name }} — {{ \Carbon\Carbon::parse($b->booked_date)->format('d M Y') }}{{ $b->time ? ' (' . $b->time . ')' : '' }}
                                                             </option>
                                                         @endforeach
                                                     </select>
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label class="form-label fw-semibold" for="booked_date_confirmation">Apakah kamu bersedia hadir pada:</label>
+                                                    <input
+                                                        type="text"
+                                                        class="form-control"
+                                                        id="booked_date_confirmation"
+                                                        value="-"
+                                                        readonly
+                                                    >
                                                 </div>
 
                                                 <div class="mb-1">
@@ -148,11 +163,32 @@
                             <script>
                                 (function () {
                                     var consultationSelect = document.getElementById('consultation_id');
+                                    var bookedDateInput = document.getElementById('booked_date_confirmation');
                                     var phoneInput = document.getElementById('phone_confirmation');
                                     var submitBtn = document.getElementById('attendance-confirm-submit');
                                     var modalEl = document.getElementById('attendanceConfirmModal');
                                     var hasConfirmErrors = {{ $errors->confirmAttendance->any() ? 'true' : 'false' }};
                                     var phoneMismatchMessage = @json($errors->confirmAttendance->first('phone_confirmation'));
+
+                                    function formatBookedDate(dateStr) {
+                                        var val = String(dateStr || '').trim();
+                                        if (!val) return '-';
+                                        var d = new Date(val + 'T00:00:00');
+                                        if (isNaN(d.getTime())) return val;
+                                        return d.toLocaleDateString('id-ID', {
+                                            weekday: 'long',
+                                            day: '2-digit',
+                                            month: 'long',
+                                            year: 'numeric'
+                                        });
+                                    }
+
+                                    function syncBookedDateFromSelection() {
+                                        if (!consultationSelect || !bookedDateInput) return;
+                                        var selectedOption = consultationSelect.options[consultationSelect.selectedIndex];
+                                        var bookedDate = selectedOption ? selectedOption.getAttribute('data-booked-date') : '';
+                                        bookedDateInput.value = formatBookedDate(bookedDate);
+                                    }
 
                                     function syncAttendanceSubmitState() {
                                         if (!submitBtn || !consultationSelect || !phoneInput) return;
@@ -187,8 +223,14 @@
                                     }
 
                                     document.addEventListener('DOMContentLoaded', function () {
-                                        if (consultationSelect) consultationSelect.addEventListener('change', syncAttendanceSubmitState);
+                                        if (consultationSelect) {
+                                            consultationSelect.addEventListener('change', function () {
+                                                syncBookedDateFromSelection();
+                                                syncAttendanceSubmitState();
+                                            });
+                                        }
                                         if (phoneInput) phoneInput.addEventListener('input', syncAttendanceSubmitState);
+                                        syncBookedDateFromSelection();
                                         syncAttendanceSubmitState();
                                         showConfirmModalIfError();
                                     });
