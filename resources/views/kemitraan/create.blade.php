@@ -283,6 +283,12 @@
                                     <div class="walkin-stat-value">{{ number_format((int) ($statsSummary['active_initiators'] ?? 0)) }}</div>
                                 </div>
                             </div>
+                            <div class="col-6 col-lg-2">
+                                <div class="walkin-stat-card">
+                                    <div class="walkin-stat-label">Total Walk In Interview Dalam Setahun</div>
+                                    <div class="walkin-stat-value">{{ number_format((int) ($statsSummary['total_walkin_year'] ?? 0)) }}</div>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="row g-3 mb-3">

@@ -741,6 +741,7 @@ class KemitraanController extends Controller
                 'responses_month' => 0,
                 'active_companies' => 0,
                 'active_initiators' => 0,
+                'total_walkin_year' => 0,
             ],
             'trend' => [],
             'rating_distribution' => [],
@@ -781,6 +782,39 @@ class KemitraanController extends Controller
             $activeInitiators = (int) DB::table('walk_in_survey_initiators')
                 ->where('is_active', 1)
                 ->count();
+        }
+
+        $totalWalkinYear = 0;
+        if (Schema::hasTable('booked_date') && Schema::hasTable('kemitraan') && Schema::hasTable('type_of_partnership')) {
+            $yearStart = $today->copy()->startOfYear();
+            $yearEnd = $today->copy()->endOfYear();
+            $hasBookedDateStart = Schema::hasColumn('booked_date', 'booked_date_start');
+            
+            $query = DB::table('booked_date as bd')
+                ->join('kemitraan as k', 'bd.kemitraan_id', '=', 'k.id')
+                ->leftJoin('type_of_partnership as top', 'k.type_of_partnership_id', '=', 'top.id')
+                ->where(function($q) use ($yearStart, $yearEnd, $hasBookedDateStart) {
+                    if ($hasBookedDateStart) {
+                        // Use booked_date_start if available, otherwise fall back to booked_date
+                        $q->where(function($subQ) use ($yearStart, $yearEnd) {
+                            $subQ->whereBetween('bd.booked_date_start', [$yearStart->toDateString(), $yearEnd->toDateString()])
+                                 ->orWhere(function($orQ) use ($yearStart, $yearEnd) {
+                                     $orQ->whereNull('bd.booked_date_start')
+                                         ->whereBetween('bd.booked_date', [$yearStart->toDateString(), $yearEnd->toDateString()]);
+                                 });
+                        });
+                    } else {
+                        $q->whereBetween('bd.booked_date', [$yearStart->toDateString(), $yearEnd->toDateString()]);
+                    }
+                })
+                ->where(function($q) {
+                    // Filter for walk-in related entries (matching buildWalkinAgendaFromBookedDate logic)
+                    $q->whereRaw("LOWER(COALESCE(top.name, '')) LIKE '%walk%'")
+                      ->orWhereRaw("LOWER(COALESCE(top.name, '')) LIKE '%interview%'")
+                      ->orWhereRaw("LOWER(COALESCE(top.name, '')) LIKE '%wawancara%'");
+                });
+            
+            $totalWalkinYear = (int) $query->count();
         }
 
         $trendRows = DB::table('walk_in_survey_responses')
@@ -898,6 +932,7 @@ class KemitraanController extends Controller
                 'responses_month' => $responsesMonth,
                 'active_companies' => $activeCompanies,
                 'active_initiators' => $activeInitiators,
+                'total_walkin_year' => $totalWalkinYear,
             ],
             'trend' => $trend,
             'rating_distribution' => $ratingDistribution,
