@@ -34,6 +34,18 @@ class KemitraanController extends Controller
         $surveyPasscodeEnabled = $this->isSurveyPasscodeEnabled();
         $formPasscodeEnabled = $this->isFormPasscodeEnabled();
         $surveyCompanies = collect();
+        
+        // Fetch unique institution names from kemitraan for autocomplete
+        $availableInstitutions = [];
+        if (Schema::hasTable('kemitraan')) {
+            $availableInstitutions = DB::table('kemitraan')
+                ->whereNotNull('institution_name')
+                ->where('institution_name', '!=', '')
+                ->distinct()
+                ->orderBy('institution_name')
+                ->pluck('institution_name')
+                ->toArray();
+        }
         $hasSurveyInitiatorTable = Schema::hasTable('walk_in_survey_initiators');
         $hasInitiatorColumnOnCompany = Schema::hasTable('company_walk_in_survey') && Schema::hasColumn('company_walk_in_survey', 'walk_in_initiator_id');
         if (Schema::hasTable('company_walk_in_survey')) {
@@ -65,7 +77,8 @@ class KemitraanController extends Controller
             'surveyCompanies',
             'walkinStats',
             'surveyPasscodeEnabled',
-            'formPasscodeEnabled'
+            'formPasscodeEnabled',
+            'availableInstitutions'
         ));
     }
 

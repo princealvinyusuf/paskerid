@@ -849,7 +849,15 @@
                     </div>
                     <div class="col-md-6">
                         <label for="institution_name" class="form-label">Nama Perusahaan</label>
-                        <input type="text" class="form-control" id="institution_name" name="institution_name" placeholder="Masukkan nama perusahaan" value="{{ old('institution_name') }}" required>
+                        <input type="text" class="form-control" id="institution_name" name="institution_name" list="institution_names_list" placeholder="Masukkan nama perusahaan" value="{{ old('institution_name') }}" required>
+                        @if(!empty($availableInstitutions))
+                            <datalist id="institution_names_list">
+                                @foreach($availableInstitutions as $inst)
+                                    <option value="{{ $inst }}">
+                                @endforeach
+                            </datalist>
+                            <div class="form-text">Pilih dari daftar atau ketik manual</div>
+                        @endif
                     </div>
                     <div class="col-md-6">
                         <label for="business_sector" class="form-label">Sektor Lapangan Usaha</label>
