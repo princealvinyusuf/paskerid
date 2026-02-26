@@ -3067,6 +3067,7 @@
         box-shadow: 0 10px 30px rgba(2,6,23,0.06);
         backdrop-filter: blur(8px);
     }
+    #panelInfo .walkin-schedule-intro-hero,
     #panelSchedule .walkin-schedule-intro-hero {
         border: 1px solid rgba(37,99,235,0.18);
         border-radius: 14px;
@@ -3074,6 +3075,7 @@
         box-shadow: 0 12px 28px rgba(37,99,235,0.10);
         padding: 14px 16px;
     }
+    #panelInfo .walkin-schedule-intro-icon,
     #panelSchedule .walkin-schedule-intro-icon {
         width: 42px;
         height: 42px;
@@ -3086,16 +3088,19 @@
         font-size: 1.2rem;
         flex-shrink: 0;
     }
+    #panelInfo .walkin-schedule-intro-title,
     #panelSchedule .walkin-schedule-intro-title {
         font-size: 1rem;
         font-weight: 800;
         color: #0f172a;
         margin-bottom: 4px;
     }
+    #panelInfo .walkin-schedule-intro-desc,
     #panelSchedule .walkin-schedule-intro-desc {
         color: #334155;
         line-height: 1.5;
     }
+    #panelInfo .walkin-schedule-intro-card,
     #panelSchedule .walkin-schedule-intro-card {
         border: 1px solid rgba(15,23,42,0.12);
         border-radius: 14px;
@@ -3103,10 +3108,12 @@
         box-shadow: 0 8px 22px rgba(2,6,23,0.06);
         padding: 14px 16px;
     }
+    #panelInfo .walkin-schedule-intro-card-warning,
     #panelSchedule .walkin-schedule-intro-card-warning {
         border-color: rgba(245, 158, 11, 0.35);
         background: linear-gradient(180deg, rgba(255, 247, 237, 0.85), rgba(255,255,255,0.98));
     }
+    #panelInfo .walkin-schedule-intro-card-title,
     #panelSchedule .walkin-schedule-intro-card-title {
         font-weight: 800;
         color: #0f172a;
@@ -3114,27 +3121,32 @@
         display: flex;
         align-items: center;
     }
+    #panelInfo .walkin-schedule-flow-image-wrap,
     #panelSchedule .walkin-schedule-flow-image-wrap {
         border: 1px solid rgba(15,23,42,0.12);
         border-radius: 12px;
         overflow: hidden;
         background: #f8fafc;
     }
+    #panelInfo .walkin-schedule-flow-image,
     #panelSchedule .walkin-schedule-flow-image {
         width: 100%;
         height: auto;
         display: block;
         object-fit: cover;
     }
+    #panelInfo .walkin-schedule-list,
     #panelSchedule .walkin-schedule-list {
         padding-left: 1.1rem;
         margin: 0;
     }
+    #panelInfo .walkin-schedule-list li,
     #panelSchedule .walkin-schedule-list li {
         color: #334155;
         margin-bottom: 6px;
         line-height: 1.45;
     }
+    #panelInfo .walkin-schedule-list li:last-child,
     #panelSchedule .walkin-schedule-list li:last-child {
         margin-bottom: 0;
     }
