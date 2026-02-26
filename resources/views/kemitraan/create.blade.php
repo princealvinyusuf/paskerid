@@ -31,20 +31,6 @@
                 </div>
 
                 <div class="walkin-schedule-intro">
-                    <div class="walkin-schedule-intro-card mb-3">
-                        <div class="walkin-schedule-intro-card-title mb-2">
-                            <i class="bi bi-diagram-3 me-2"></i>Alur Walk In Interview
-                        </div>
-                        <div class="walkin-schedule-flow-image-wrap">
-                            <img
-                                src="{{ asset('images/alur pemberi kerja.jpeg') }}"
-                                alt="Alur Walk In Interview Pemberi Kerja"
-                                class="img-fluid walkin-schedule-flow-image"
-                                loading="lazy"
-                            >
-                        </div>
-                    </div>
-
                     <div class="walkin-schedule-intro-hero mb-3">
                         <div class="d-flex align-items-start gap-3">
                             <div class="walkin-schedule-intro-icon">
@@ -108,6 +94,20 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+
+                    <div class="walkin-schedule-intro-card mt-3">
+                        <div class="walkin-schedule-intro-card-title mb-2">
+                            <i class="bi bi-diagram-3 me-2"></i>Alur Walk In Interview
+                        </div>
+                        <div class="walkin-schedule-flow-image-wrap">
+                            <img
+                                src="{{ asset('images/alur pemberi kerja.jpeg') }}"
+                                alt="Alur Walk In Interview Pemberi Kerja"
+                                class="img-fluid walkin-schedule-flow-image"
+                                loading="lazy"
+                            >
                         </div>
                     </div>
                 </div>
