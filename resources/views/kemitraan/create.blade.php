@@ -1892,7 +1892,9 @@
         const btnSurvey = document.getElementById('btnPanelSurvey');
         const btnStatistik = document.getElementById('btnPanelStatistik');
         const surveyPasscodeEnabled = @json((bool) ($surveyPasscodeEnabled ?? false));
-        const verifyPasscodeUrl = @json(route('kemitraan.survey.verify-passcode'));
+        const formPasscodeEnabled = @json((bool) ($formPasscodeEnabled ?? false));
+        const verifySurveyPasscodeUrl = @json(route('kemitraan.survey.verify-passcode'));
+        const verifyFormPasscodeUrl = @json(route('kemitraan.form.verify-passcode'));
         const csrf = @json(csrf_token());
         const panelInfo = document.getElementById('panelInfo');
         const panelForm = document.getElementById('panelForm');
@@ -1955,7 +1957,7 @@
             }
 
             try {
-                const res = await fetch(verifyPasscodeUrl, {
+                const res = await fetch(verifySurveyPasscodeUrl, {
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json',
@@ -1977,8 +1979,49 @@
             }
         }
 
+        async function ensureFormUnlocked() {
+            if (!formPasscodeEnabled) return true;
+            try {
+                if (sessionStorage.getItem('walkin_form_unlocked') === '1') {
+                    return true;
+                }
+            } catch (e) {}
+
+            const passcode = window.prompt('Masukkan passcode untuk membuka Form Pendaftaran Walk In:');
+            if (passcode === null) return false;
+            if (String(passcode).trim() === '') {
+                alert('Passcode wajib diisi.');
+                return false;
+            }
+
+            try {
+                const res = await fetch(verifyFormPasscodeUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrf,
+                    },
+                    body: JSON.stringify({ passcode: String(passcode).trim() }),
+                });
+                const data = await res.json().catch(() => ({}));
+                if (res.ok && data && data.ok) {
+                    try { sessionStorage.setItem('walkin_form_unlocked', '1'); } catch (e) {}
+                    return true;
+                }
+                alert((data && data.message) ? data.message : 'Passcode tidak valid.');
+                return false;
+            } catch (e) {
+                alert('Gagal verifikasi passcode. Coba lagi.');
+                return false;
+            }
+        }
+
         btnInfo.addEventListener('click', () => setActive('info'));
-        btnForm.addEventListener('click', () => setActive('form'));
+        btnForm.addEventListener('click', async () => {
+            const ok = await ensureFormUnlocked();
+            if (ok) setActive('form');
+        });
         btnGallery.addEventListener('click', () => setActive('gallery'));
         btnSchedule.addEventListener('click', () => setActive('schedule'));
         btnSurvey.addEventListener('click', async () => {
@@ -1992,6 +2035,8 @@
         const initialPanel = allowedPanels.includes(urlPanel) ? urlPanel : 'info';
         if (initialPanel === 'survey') {
             ensureSurveyUnlocked().then((ok) => setActive(ok ? 'survey' : 'info'));
+        } else if (initialPanel === 'form') {
+            ensureFormUnlocked().then((ok) => setActive(ok ? 'form' : 'info'));
         } else {
             setActive(initialPanel);
         }

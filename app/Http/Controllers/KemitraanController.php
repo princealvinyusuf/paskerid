@@ -32,6 +32,7 @@ class KemitraanController extends Controller
         $walkinAgendasPast = $this->getWalkinAgendasFromBookedDates('past', 80);
         $walkinStats = $this->buildWalkinStatistics();
         $surveyPasscodeEnabled = $this->isSurveyPasscodeEnabled();
+        $formPasscodeEnabled = $this->isFormPasscodeEnabled();
         $surveyCompanies = collect();
         $hasSurveyInitiatorTable = Schema::hasTable('walk_in_survey_initiators');
         $hasInitiatorColumnOnCompany = Schema::hasTable('company_walk_in_survey') && Schema::hasColumn('company_walk_in_survey', 'walk_in_initiator_id');
@@ -63,7 +64,8 @@ class KemitraanController extends Controller
             'walkinAgendasPast',
             'surveyCompanies',
             'walkinStats',
-            'surveyPasscodeEnabled'
+            'surveyPasscodeEnabled',
+            'formPasscodeEnabled'
         ));
     }
 
@@ -89,6 +91,31 @@ class KemitraanController extends Controller
             'ok' => false,
             'enabled' => true,
             'message' => 'Passcode Survei Evaluasi tidak valid.',
+        ], 422);
+    }
+
+    public function verifyFormPasscode(Request $request)
+    {
+        $validated = $request->validate([
+            'passcode' => 'required|string|max:255',
+        ]);
+
+        $settings = $this->getFormAccessSettingsRow();
+        if (!$settings || (int) ($settings->is_enabled ?? 0) !== 1) {
+            return response()->json(['ok' => true, 'enabled' => false]);
+        }
+
+        $input = (string) $validated['passcode'];
+        $hash = (string) ($settings->passcode_hash ?? '');
+
+        if ($hash !== '' && password_verify($input, $hash)) {
+            return response()->json(['ok' => true, 'enabled' => true]);
+        }
+
+        return response()->json([
+            'ok' => false,
+            'enabled' => true,
+            'message' => 'Passcode Form Pendaftaran tidak valid.',
         ], 422);
     }
 
@@ -914,6 +941,23 @@ class KemitraanController extends Controller
         }
 
         return DB::table('walkin_survey_access_settings')
+            ->where('id', 1)
+            ->first(['id', 'is_enabled', 'passcode_hash']);
+    }
+
+    private function isFormPasscodeEnabled(): bool
+    {
+        $settings = $this->getFormAccessSettingsRow();
+        return $settings && (int) ($settings->is_enabled ?? 0) === 1;
+    }
+
+    private function getFormAccessSettingsRow(): ?object
+    {
+        if (!Schema::hasTable('walkin_form_access_settings')) {
+            return null;
+        }
+
+        return DB::table('walkin_form_access_settings')
             ->where('id', 1)
             ->first(['id', 'is_enabled', 'passcode_hash']);
     }
