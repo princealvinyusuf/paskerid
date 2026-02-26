@@ -22,6 +22,83 @@
     <div class="row g-4">
         <!-- Schedule -->
         <div class="col-12" id="panelSchedule">
+            <div class="walkin-panel p-3 p-md-4 mb-3">
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <div>
+                        <h5 class="mb-0"><i class="bi bi-info-circle me-2"></i>Informasi Walk-In Interview</h5>
+                        <div class="text-muted small">Pengenalan singkat tentang program Walk-In Interview.</div>
+                    </div>
+                </div>
+
+                <div class="walkin-schedule-intro">
+                    <div class="walkin-schedule-intro-hero mb-3">
+                        <div class="d-flex align-items-start gap-3">
+                            <div class="walkin-schedule-intro-icon">
+                                <i class="bi bi-lightbulb"></i>
+                            </div>
+                            <div>
+                                <div class="walkin-schedule-intro-title">Apa Itu Walk-In Interview?</div>
+                                <div class="walkin-schedule-intro-desc">
+                                    Walk-In Interview adalah proses rekrutmen di mana pencari kerja dapat langsung datang ke lokasi untuk langsung melakukan proses interview sesuai jadwal yang telah ditentukan.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row g-3">
+                        <div class="col-12 col-lg-6">
+                            <div class="walkin-schedule-intro-card h-100">
+                                <div class="walkin-schedule-intro-card-title">
+                                    <i class="bi bi-bullseye me-2"></i>Tujuan Program Walk-In Interview
+                                </div>
+                                <ul class="walkin-schedule-list mb-0">
+                                    <li>Mempercepat proses rekrutmen</li>
+                                    <li>Mempertemukan pencari kerja dan perusahaan secara langsung</li>
+                                    <li>Mengurangi waktu tunggu seleksi</li>
+                                    <li>Mendukung penyerapan tenaga kerja secara cepat</li>
+                                    <li>Mendukung program penempatan tenaga kerja nasional</li>
+                                    <li>Meningkatkan transparansi proses rekrutmen</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6">
+                            <div class="walkin-schedule-intro-card h-100">
+                                <div class="walkin-schedule-intro-card-title">
+                                    <i class="bi bi-people me-2"></i>Siapa yang Bisa Mengikuti?
+                                </div>
+                                <ul class="walkin-schedule-list mb-0">
+                                    <li>Pencari kerja yang memenuhi kualifikasi lowongan</li>
+                                    <li>Telah memiliki akun di platform SIAPkerja</li>
+                                    <li>Membawa dokumen pendukung (CV)</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="walkin-schedule-intro-card walkin-schedule-intro-card-warning">
+                                <div class="walkin-schedule-intro-card-title">
+                                    <i class="bi bi-exclamation-triangle me-2"></i>Hal yang Perlu Diperhatikan
+                                </div>
+                                <div class="row g-2">
+                                    <div class="col-12 col-md-6">
+                                        <ul class="walkin-schedule-list mb-0">
+                                            <li>Datang tepat waktu</li>
+                                            <li>Gunakan pakaian formal/rapi</li>
+                                            <li>Pastikan memenuhi kualifikasi</li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <ul class="walkin-schedule-list mb-0">
+                                            <li>Cek kembali lokasi dan jam kegiatan</li>
+                                            <li>Periksa kuota peserta</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="card shadow-lg w-100">
                 <div class="card-body p-4">
                     <div class="d-flex align-items-center justify-content-between mb-3">
@@ -37,74 +114,6 @@
                     </div>
 
                     <div class="walkin-panel p-3 p-md-4">
-                        <div class="walkin-schedule-intro mb-4">
-                            <div class="walkin-schedule-intro-hero mb-3">
-                                <div class="d-flex align-items-start gap-3">
-                                    <div class="walkin-schedule-intro-icon">
-                                        <i class="bi bi-lightbulb"></i>
-                                    </div>
-                                    <div>
-                                        <div class="walkin-schedule-intro-title">Apa Itu Walk-In Interview?</div>
-                                        <div class="walkin-schedule-intro-desc">
-                                            Walk-In Interview adalah proses rekrutmen di mana pencari kerja dapat langsung datang ke lokasi untuk langsung melakukan proses interview sesuai jadwal yang telah ditentukan.
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row g-3">
-                                <div class="col-12 col-lg-6">
-                                    <div class="walkin-schedule-intro-card h-100">
-                                        <div class="walkin-schedule-intro-card-title">
-                                            <i class="bi bi-bullseye me-2"></i>Tujuan Program Walk-In Interview
-                                        </div>
-                                        <ul class="walkin-schedule-list mb-0">
-                                            <li>Mempercepat proses rekrutmen</li>
-                                            <li>Mempertemukan pencari kerja dan perusahaan secara langsung</li>
-                                            <li>Mengurangi waktu tunggu seleksi</li>
-                                            <li>Mendukung penyerapan tenaga kerja secara cepat</li>
-                                            <li>Mendukung program penempatan tenaga kerja nasional</li>
-                                            <li>Meningkatkan transparansi proses rekrutmen</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="col-12 col-lg-6">
-                                    <div class="walkin-schedule-intro-card h-100">
-                                        <div class="walkin-schedule-intro-card-title">
-                                            <i class="bi bi-people me-2"></i>Siapa yang Bisa Mengikuti?
-                                        </div>
-                                        <ul class="walkin-schedule-list mb-0">
-                                            <li>Pencari kerja yang memenuhi kualifikasi lowongan</li>
-                                            <li>Telah memiliki akun di platform SIAPkerja</li>
-                                            <li>Membawa dokumen pendukung (CV)</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="col-12">
-                                    <div class="walkin-schedule-intro-card walkin-schedule-intro-card-warning">
-                                        <div class="walkin-schedule-intro-card-title">
-                                            <i class="bi bi-exclamation-triangle me-2"></i>Hal yang Perlu Diperhatikan
-                                        </div>
-                                        <div class="row g-2">
-                                            <div class="col-12 col-md-6">
-                                                <ul class="walkin-schedule-list mb-0">
-                                                    <li>Datang tepat waktu</li>
-                                                    <li>Gunakan pakaian formal/rapi</li>
-                                                    <li>Pastikan memenuhi kualifikasi</li>
-                                                </ul>
-                                            </div>
-                                            <div class="col-12 col-md-6">
-                                                <ul class="walkin-schedule-list mb-0">
-                                                    <li>Cek kembali lokasi dan jam kegiatan</li>
-                                                    <li>Periksa kuota peserta</li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
                         <div class="table-responsive">
                             <table class="table table-bordered align-middle walkin-schedule-table">
                                 <thead class="table-light">
