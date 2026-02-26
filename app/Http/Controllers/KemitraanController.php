@@ -742,6 +742,7 @@ class KemitraanController extends Controller
                 'active_companies' => 0,
                 'active_initiators' => 0,
                 'total_walkin_year' => 0,
+                'total_perusahaan_walkin_year' => 0,
             ],
             'trend' => [],
             'rating_distribution' => [],
@@ -812,6 +813,42 @@ class KemitraanController extends Controller
                 });
             
             $totalWalkinYear = (int) $query->count();
+        }
+
+        // Count unique companies (institution_name) with tipe_penyelenggara = 'Perusahaan' that have walk-in interviews in the current year
+        $totalPerusahaanWalkinYear = 0;
+        if (Schema::hasTable('booked_date') && Schema::hasTable('kemitraan') && Schema::hasTable('type_of_partnership')) {
+            $yearStart = $today->copy()->startOfYear();
+            $yearEnd = $today->copy()->endOfYear();
+            $hasBookedDateStart = Schema::hasColumn('booked_date', 'booked_date_start');
+            $hasBookedDate = Schema::hasColumn('booked_date', 'booked_date');
+            $hasTipePenyelenggara = Schema::hasColumn('kemitraan', 'tipe_penyelenggara');
+            
+            if ($hasTipePenyelenggara) {
+                $result = DB::table('booked_date as bd')
+                    ->join('kemitraan as k', 'bd.kemitraan_id', '=', 'k.id')
+                    ->leftJoin('type_of_partnership as top', 'k.type_of_partnership_id', '=', 'top.id')
+                    ->where('k.tipe_penyelenggara', 'Perusahaan')
+                    ->where(function($q) use ($yearStart, $yearEnd, $hasBookedDateStart, $hasBookedDate) {
+                        if ($hasBookedDateStart) {
+                            $q->whereBetween('bd.booked_date_start', [$yearStart->toDateString(), $yearEnd->toDateString()]);
+                        } elseif ($hasBookedDate) {
+                            $q->whereBetween('bd.booked_date', [$yearStart->toDateString(), $yearEnd->toDateString()]);
+                        }
+                    })
+                    ->where(function($q) {
+                        // Filter for walk-in related entries
+                        $q->whereRaw("LOWER(COALESCE(top.name, '')) LIKE '%walk%'")
+                          ->orWhereRaw("LOWER(COALESCE(top.name, '')) LIKE '%interview%'")
+                          ->orWhereRaw("LOWER(COALESCE(top.name, '')) LIKE '%wawancara%'");
+                    })
+                    ->whereNotNull('k.institution_name')
+                    ->where('k.institution_name', '!=', '')
+                    ->selectRaw('COUNT(DISTINCT k.institution_name) as total')
+                    ->first();
+                
+                $totalPerusahaanWalkinYear = $result ? (int) ($result->total ?? 0) : 0;
+            }
         }
 
         $trendRows = DB::table('walk_in_survey_responses')
@@ -930,6 +967,7 @@ class KemitraanController extends Controller
                 'active_companies' => $activeCompanies,
                 'active_initiators' => $activeInitiators,
                 'total_walkin_year' => $totalWalkinYear,
+                'total_perusahaan_walkin_year' => $totalPerusahaanWalkinYear,
             ],
             'trend' => $trend,
             'rating_distribution' => $ratingDistribution,
