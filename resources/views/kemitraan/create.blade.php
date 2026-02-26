@@ -11,9 +11,9 @@
     <!-- Segmented toggle (top) -->
     <div class="mb-3">
         <div class="walkin-segmented" role="tablist" aria-label="Pilih tampilan">
-            <button type="button" class="walkin-seg-btn active" id="btnPanelGallery" aria-selected="true">Galeri Walk In</button>
+            <button type="button" class="walkin-seg-btn active" id="btnPanelSchedule" aria-selected="true">Jadwal Walk In</button>
+            <button type="button" class="walkin-seg-btn" id="btnPanelGallery" aria-selected="false">Galeri Walk In</button>
             <button type="button" class="walkin-seg-btn" id="btnPanelForm" aria-selected="false">Form Pendaftaran Walk In (Pemberi Kerja)</button>
-            <button type="button" class="walkin-seg-btn" id="btnPanelSchedule" aria-selected="false">Jadwal Walk In</button>
             <button type="button" class="walkin-seg-btn" id="btnPanelSurvey" aria-selected="false">Survei Evaluasi</button>
             <button type="button" class="walkin-seg-btn" id="btnPanelStatistik" aria-selected="false">Statistik</button>
         </div>
@@ -21,7 +21,7 @@
 
     <div class="row g-4">
         <!-- Schedule -->
-        <div class="col-12 d-none" id="panelSchedule">
+        <div class="col-12" id="panelSchedule">
             <div class="card shadow-lg w-100">
                 <div class="card-body p-4">
                     <div class="d-flex align-items-center justify-content-between mb-3">
@@ -1073,7 +1073,7 @@
         </div>
 
         <!-- Gallery (Big View) -->
-        <div class="col-12" id="panelGallery">
+        <div class="col-12 d-none" id="panelGallery">
             <div class="card shadow-lg w-100 h-100">
                 <div class="card-body p-4">
                     <div class="d-flex align-items-center justify-content-between mb-2">
@@ -1810,9 +1810,9 @@
 
         const urlPanel = new URLSearchParams(window.location.search).get('panel');
         const allowedPanels = ['form', 'gallery', 'schedule', 'survey', 'statistik'];
-        const initialPanel = allowedPanels.includes(urlPanel) ? urlPanel : 'gallery';
+        const initialPanel = allowedPanels.includes(urlPanel) ? urlPanel : 'schedule';
         if (initialPanel === 'survey') {
-            ensureSurveyUnlocked().then((ok) => setActive(ok ? 'survey' : 'gallery'));
+            ensureSurveyUnlocked().then((ok) => setActive(ok ? 'survey' : 'schedule'));
         } else {
             setActive(initialPanel);
         }
