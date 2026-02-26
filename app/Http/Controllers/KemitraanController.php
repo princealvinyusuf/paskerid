@@ -593,6 +593,11 @@ class KemitraanController extends Controller
 
     private function buildWalkinAgendaFromBookedDate(BookedDate $bookedDate, bool $hasRange, bool $hasTimeRange): ?object
     {
+        static $hasInformasiLainnyaColumn = null;
+        if ($hasInformasiLainnyaColumn === null) {
+            $hasInformasiLainnyaColumn = Schema::hasColumn('booked_date', 'informasi_lainnya');
+        }
+
         $kemitraan = $bookedDate->kemitraan;
         if (!$kemitraan) return null;
 
@@ -649,6 +654,9 @@ class KemitraanController extends Controller
             'location' => $location ?: '-',
             'organizer' => $kemitraan->institution_name ?? '-',
             'registration_url' => null,
+            'informasi_lainnya' => $hasInformasiLainnyaColumn
+                ? (trim((string) ($bookedDate->informasi_lainnya ?? '')) !== '' ? trim((string) $bookedDate->informasi_lainnya) : null)
+                : null,
         ];
     }
 

@@ -19,6 +19,7 @@ class BookedDate extends Model
         'booked_date_finish',
         'booked_time_start',
         'booked_time_finish',
+        'informasi_lainnya',
         'type_of_partnership_id',
     ];
 

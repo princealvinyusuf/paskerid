@@ -135,6 +135,7 @@
                                         <th style="width: 160px;">Tanggal</th>
                                         <th style="min-width: 360px;">Kegiatan</th>
                                         <th>Deskripsi</th>
+                                        <th style="width: 210px;">Informasi Lainnya</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -170,14 +171,35 @@
                                                         data-date="{{ $date->format('d M Y') }}"
                                                         data-location="{{ e($agenda->location) }}"
                                                         data-registration="{{ $agenda->registration_url }}"
+                                                        data-info-lainnya="{{ e($agenda->informasi_lainnya ?? '') }}"
                                                         data-description="{{ e($agenda->description) }}"
                                                     >Detail</button>
+                                                </td>
+                                                <td>
+                                                    @php
+                                                        $infoLainnya = trim((string)($agenda->informasi_lainnya ?? ''));
+                                                        $infoPath = parse_url($infoLainnya, PHP_URL_PATH);
+                                                        $infoExt = strtolower(pathinfo((string)$infoPath, PATHINFO_EXTENSION));
+                                                        $infoIsImage = in_array($infoExt, ['jpg', 'jpeg', 'png', 'gif', 'webp'], true);
+                                                        $infoIsPdf = $infoExt === 'pdf';
+                                                        $infoIsExternal = preg_match('/^https?:\/\//i', $infoLainnya) === 1;
+                                                        $infoHref = $infoLainnya !== '' ? ($infoIsExternal ? $infoLainnya : asset(ltrim($infoLainnya, '/'))) : '';
+                                                    @endphp
+                                                    @if($infoLainnya === '')
+                                                        <span class="text-muted">-</span>
+                                                    @elseif($infoIsImage)
+                                                        <a href="{{ $infoHref }}" target="_blank" rel="noopener" class="btn btn-outline-info btn-sm">Lihat Gambar</a>
+                                                    @elseif($infoIsPdf)
+                                                        <a href="{{ $infoHref }}" target="_blank" rel="noopener" class="btn btn-outline-danger btn-sm">Lihat PDF</a>
+                                                    @else
+                                                        <a href="{{ $infoHref }}" target="_blank" rel="noopener" class="btn btn-outline-success btn-sm">Buka Link</a>
+                                                    @endif
                                                 </td>
                                             </tr>
                                         @endforeach
                                     @else
                                         <tr>
-                                            <td colspan="3" class="text-center text-muted py-4">
+                                            <td colspan="4" class="text-center text-muted py-4">
                                                 <i class="fas fa-calendar-times fa-2x mb-2"></i><br>
                                                 Belum ada jadwal Walk In yang tersedia.
                                             </td>
@@ -1318,6 +1340,7 @@
                                                         <th style="width:160px">Tanggal</th>
                                                         <th style="min-width:360px">Kegiatan</th>
                                                         <th>Deskripsi</th>
+                                                        <th style="width: 210px;">Informasi Lainnya</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody id="walkinCompanyScheduleBody"></tbody>
@@ -1354,6 +1377,7 @@
                             <th style="width: 160px;">Tanggal</th>
                             <th style="min-width: 360px;">Kegiatan</th>
                             <th>Deskripsi</th>
+                            <th style="width: 210px;">Informasi Lainnya</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -1377,14 +1401,35 @@
                                             data-date="{{ $date->format('d M Y') }}"
                                             data-location="{{ e($agenda->location) }}"
                                             data-registration="{{ $agenda->registration_url }}"
+                                            data-info-lainnya="{{ e($agenda->informasi_lainnya ?? '') }}"
                                             data-description="{{ e($agenda->description) }}"
                                         >Detail</button>
+                                    </td>
+                                    <td>
+                                        @php
+                                            $infoLainnya = trim((string)($agenda->informasi_lainnya ?? ''));
+                                            $infoPath = parse_url($infoLainnya, PHP_URL_PATH);
+                                            $infoExt = strtolower(pathinfo((string)$infoPath, PATHINFO_EXTENSION));
+                                            $infoIsImage = in_array($infoExt, ['jpg', 'jpeg', 'png', 'gif', 'webp'], true);
+                                            $infoIsPdf = $infoExt === 'pdf';
+                                            $infoIsExternal = preg_match('/^https?:\/\//i', $infoLainnya) === 1;
+                                            $infoHref = $infoLainnya !== '' ? ($infoIsExternal ? $infoLainnya : asset(ltrim($infoLainnya, '/'))) : '';
+                                        @endphp
+                                        @if($infoLainnya === '')
+                                            <span class="text-muted">-</span>
+                                        @elseif($infoIsImage)
+                                            <a href="{{ $infoHref }}" target="_blank" rel="noopener" class="btn btn-outline-info btn-sm">Lihat Gambar</a>
+                                        @elseif($infoIsPdf)
+                                            <a href="{{ $infoHref }}" target="_blank" rel="noopener" class="btn btn-outline-danger btn-sm">Lihat PDF</a>
+                                        @else
+                                            <a href="{{ $infoHref }}" target="_blank" rel="noopener" class="btn btn-outline-success btn-sm">Buka Link</a>
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach
                         @else
                             <tr>
-                                <td colspan="3" class="text-center text-muted py-4">
+                                <td colspan="4" class="text-center text-muted py-4">
                                     Belum ada data Walk In terdahulu.
                                 </td>
                             </tr>
@@ -1429,6 +1474,7 @@
             </div>
 
             <div class="mb-3" id="agendaModalRegistration"></div>
+            <div class="mb-1" id="agendaModalInfoLainnya"></div>
         </div>
       </div>
     </div>
@@ -2226,11 +2272,33 @@
             document.getElementById('agendaModalDate').textContent = button.getAttribute('data-date') || '';
             document.getElementById('agendaModalLocation').textContent = button.getAttribute('data-location') || '';
             const regUrl = button.getAttribute('data-registration');
+            const infoLainnya = (button.getAttribute('data-info-lainnya') || '').trim();
+            const infoEl = document.getElementById('agendaModalInfoLainnya');
+            function buildInfoHtml(raw) {
+                const value = String(raw || '').trim();
+                if (!value) return '';
+                const pathOnly = value.split('?')[0].split('#')[0].toLowerCase();
+                const isImage = /\.(jpg|jpeg|png|gif|webp)$/i.test(pathOnly);
+                const isPdf = /\.pdf$/i.test(pathOnly);
+                const isExternal = /^https?:\/\//i.test(value);
+                const href = isExternal ? value : '/' + value.replace(/^\/+/, '');
+                if (isImage) {
+                    return '<a href="' + href + '" target="_blank" class="btn btn-outline-info btn-sm"><i class="fa fa-image me-1"></i>Lihat Gambar</a>';
+                }
+                if (isPdf) {
+                    return '<a href="' + href + '" target="_blank" class="btn btn-outline-danger btn-sm"><i class="fa fa-file-pdf me-1"></i>Lihat PDF</a>';
+                }
+                return '<a href="' + href + '" target="_blank" class="btn btn-outline-success btn-sm"><i class="fa fa-link me-1"></i>Buka Link</a>';
+            }
             if (regUrl) {
                 document.getElementById('agendaModalRegistration').innerHTML =
                     '<a href="' + regUrl + '" target="_blank" class="btn btn-success btn-sm mb-2"><i class="fa fa-link me-1"></i> Link Pendaftaran</a>';
             } else {
                 document.getElementById('agendaModalRegistration').innerHTML = '';
+            }
+            if (infoEl) {
+                const html = buildInfoHtml(infoLainnya);
+                infoEl.innerHTML = html ? ('<div class="small text-muted mb-1">Informasi Lainnya</div>' + html) : '';
             }
         });
     });
@@ -2597,6 +2665,19 @@
             });
 
             rows.forEach((a, idx) => {
+                const infoValue = String(a.informasi_lainnya || '').trim();
+                const infoPath = infoValue.split('?')[0].split('#')[0].toLowerCase();
+                const infoIsImage = /\.(jpg|jpeg|png|gif|webp)$/i.test(infoPath);
+                const infoIsPdf = /\.pdf$/i.test(infoPath);
+                const infoIsExternal = /^https?:\/\//i.test(infoValue);
+                const infoHref = infoIsExternal ? infoValue : ('/' + infoValue.replace(/^\/+/, ''));
+                const infoCellHtml = !infoValue
+                    ? '<span class="text-muted">-</span>'
+                    : (infoIsImage
+                        ? `<a href="${escapeHtml(infoHref)}" target="_blank" class="btn btn-outline-info btn-sm">Lihat Gambar</a>`
+                        : (infoIsPdf
+                            ? `<a href="${escapeHtml(infoHref)}" target="_blank" class="btn btn-outline-danger btn-sm">Lihat PDF</a>`
+                            : `<a href="${escapeHtml(infoHref)}" target="_blank" class="btn btn-outline-success btn-sm">Buka Link</a>`));
                 const isUpcoming = a._bucket === 'upcoming';
                 const { dayMonth, year } = formatDateParts(a.date);
                 const tr = document.createElement('tr');
@@ -2619,11 +2700,13 @@
                                 data-date="${escapeHtml(formatLongDate(a.date))}"
                                 data-location="${escapeHtml(a.location || '')}"
                                 data-registration="${escapeHtml(a.registration_url || '')}"
+                                data-info-lainnya="${escapeHtml(a.informasi_lainnya || '')}"
                                 data-description="${escapeHtml(a.description || '')}"
                             >Detail</button>
                             ${isUpcoming ? `<span class="badge text-bg-primary">Akan datang</span>` : `<span class="badge text-bg-secondary">Terdahulu</span>`}
                         </div>
                     </td>
+                    <td>${infoCellHtml}</td>
                 `;
                 scheduleBodyEl.appendChild(tr);
             });
