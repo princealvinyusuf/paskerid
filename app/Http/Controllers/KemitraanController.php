@@ -743,6 +743,7 @@ class KemitraanController extends Controller
                 'active_initiators' => 0,
                 'total_walkin_year' => 0,
                 'total_perusahaan_walkin_year' => 0,
+                'total_kehadiran_pencaker' => 0,
             ],
             'trend' => [],
             'rating_distribution' => [],
@@ -765,11 +766,13 @@ class KemitraanController extends Controller
 
         $today = Carbon::today();
         $monthStart = $today->copy()->startOfMonth();
+        $yearStart = $today->copy()->startOfYear();
 
         $totalResponses = (int) DB::table('walk_in_survey_responses')->count();
         $avgRatingRaw = DB::table('walk_in_survey_responses')->avg('rating_satisfaction');
         $responsesToday = (int) DB::table('walk_in_survey_responses')->whereDate(DB::raw($dateExpr), $today->toDateString())->count();
         $responsesMonth = (int) DB::table('walk_in_survey_responses')->whereDate(DB::raw($dateExpr), '>=', $monthStart->toDateString())->count();
+        $totalKehadiranPencaker = (int) DB::table('walk_in_survey_responses')->whereDate(DB::raw($dateExpr), '>=', $yearStart->toDateString())->count();
 
         $activeCompanies = 0;
         if (Schema::hasTable('company_walk_in_survey')) {
@@ -968,6 +971,7 @@ class KemitraanController extends Controller
                 'active_initiators' => $activeInitiators,
                 'total_walkin_year' => $totalWalkinYear,
                 'total_perusahaan_walkin_year' => $totalPerusahaanWalkinYear,
+                'total_kehadiran_pencaker' => $totalKehadiranPencaker,
             ],
             'trend' => $trend,
             'rating_distribution' => $ratingDistribution,
