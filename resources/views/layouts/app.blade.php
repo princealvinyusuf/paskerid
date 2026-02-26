@@ -115,7 +115,13 @@
     </nav>
     @if(session('success'))
         <div class="container mt-3">
-            <div class="alert alert-success mb-0">{{ session('success') }}</div>
+            <div class="alert alert-success mb-0">
+                @if(is_string(session('success')))
+                    {{ session('success') }}
+                @else
+                    Operasi berhasil dilakukan.
+                @endif
+            </div>
         </div>
     @endif
     <main>

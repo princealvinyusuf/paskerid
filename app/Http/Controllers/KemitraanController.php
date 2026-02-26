@@ -258,7 +258,7 @@ class KemitraanController extends Controller
             }
         });
 
-        return redirect()->route('kemitraan.create')->with('success', true);
+        return redirect()->route('kemitraan.create')->with('success', 'Pendaftaran kemitraan Anda telah berhasil dikirim. Tim kami akan segera meninjau pengajuan Anda.');
     }
 
     public function fullyBookedDates(Request $request)
