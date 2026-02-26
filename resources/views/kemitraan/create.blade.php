@@ -1202,11 +1202,31 @@
                         </div>
                     </div>
                     <div class="d-grid mt-4">
-                        <button type="submit" class="btn btn-primary btn-lg">
+                        <button type="button" class="btn btn-primary btn-lg" id="btnSubmitKemitraan">
                             <i class="bi bi-send-check me-2"></i>Kirim Pendaftaran
                         </button>
                     </div>
                 </form>
+                
+                <!-- Confirmation Modal -->
+                <div class="modal fade" id="confirmSubmitModal" tabindex="-1" aria-labelledby="confirmSubmitModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="confirmSubmitModalLabel">Konfirmasi Pengiriman</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p class="mb-3"><strong>Apakah anda yakin ingin mengirimkan formulir ini?</strong></p>
+                                <p class="text-muted mb-0">Saya yakin seluruh informasi yang dimasukkan sudah benar</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" id="btnBelumYakin">Belum Yakin (Periksa Kembali)</button>
+                                <button type="button" class="btn btn-primary" id="btnSayaYakin">Saya yakin (Kirim)</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 </div>
             </div>
         </div>
@@ -1710,6 +1730,61 @@
                 }
             });
         }
+        
+        // Confirmation modal before submit
+        (function() {
+            const btnSubmitKemitraan = document.getElementById('btnSubmitKemitraan');
+            const confirmModal = document.getElementById('confirmSubmitModal');
+            const btnSayaYakin = document.getElementById('btnSayaYakin');
+            const btnBelumYakin = document.getElementById('btnBelumYakin');
+            const mainFormForConfirm = document.querySelector('form[action="{{ route('kemitraan.store') }}"]');
+            
+            if (!btnSubmitKemitraan || !mainFormForConfirm || !confirmModal) return;
+            
+            btnSubmitKemitraan.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Run basic validation first
+                var schedule = document.getElementById('schedule');
+                var fotoKartuPegawai = document.getElementById('foto_kartu_pegawai_pic');
+                var isValid = true;
+                
+                if (!schedule || !schedule.value.trim()) {
+                    alert('Field "Usulan Jadwal Kegiatan" wajib diisi.');
+                    if (schedule) schedule.focus();
+                    isValid = false;
+                } else if (!fotoKartuPegawai || !fotoKartuPegawai.files || fotoKartuPegawai.files.length === 0) {
+                    alert('Field "Upload Foto Kartu Pegawai (PIC)" wajib diisi.');
+                    if (fotoKartuPegawai) fotoKartuPegawai.focus();
+                    isValid = false;
+                }
+                
+                if (!isValid) return;
+                
+                // Show confirmation modal
+                const modal = new bootstrap.Modal(confirmModal);
+                modal.show();
+            });
+            
+            if (btnSayaYakin) {
+                btnSayaYakin.addEventListener('click', function() {
+                    // Close modal and submit form
+                    // The existing submit listeners will handle additional validation
+                    const modalInstance = bootstrap.Modal.getInstance(confirmModal);
+                    if (modalInstance) modalInstance.hide();
+                    mainFormForConfirm.submit();
+                });
+            }
+            
+            if (btnBelumYakin) {
+                btnBelumYakin.addEventListener('click', function() {
+                    // Close modal and scroll to top
+                    const modalInstance = bootstrap.Modal.getInstance(confirmModal);
+                    if (modalInstance) modalInstance.hide();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+            }
+        })();
     });
 
     function toggleOtherroomText(input) {
