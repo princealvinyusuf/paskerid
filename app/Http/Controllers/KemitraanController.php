@@ -644,6 +644,10 @@ class KemitraanController extends Controller
             elseif ($timeStart) $timeInfo = $timeStart;
         }
 
+        $informasiLainnyaItems = $hasInformasiLainnyaColumn
+            ? $this->parseInformasiLainnyaItems($bookedDate->informasi_lainnya)
+            : [];
+
         return (object) [
             'id' => (int) $bookedDate->id,
             'title' => $partnershipTypeName . ($kemitraan->institution_name ? ' - ' . $kemitraan->institution_name : ''),
@@ -654,10 +658,36 @@ class KemitraanController extends Controller
             'location' => $location ?: '-',
             'organizer' => $kemitraan->institution_name ?? '-',
             'registration_url' => null,
-            'informasi_lainnya' => $hasInformasiLainnyaColumn
-                ? (trim((string) ($bookedDate->informasi_lainnya ?? '')) !== '' ? trim((string) $bookedDate->informasi_lainnya) : null)
-                : null,
+            'informasi_lainnya' => !empty($informasiLainnyaItems) ? $informasiLainnyaItems[0] : null,
+            'informasi_lainnya_items' => $informasiLainnyaItems,
         ];
+    }
+
+    private function parseInformasiLainnyaItems($raw): array
+    {
+        $value = trim((string) ($raw ?? ''));
+        if ($value === '') {
+            return [];
+        }
+
+        $items = [];
+        if (str_starts_with($value, '[')) {
+            $decoded = json_decode($value, true);
+            if (is_array($decoded)) {
+                foreach ($decoded as $v) {
+                    $s = trim((string) $v);
+                    if ($s !== '') {
+                        $items[] = $s;
+                    }
+                }
+            }
+        }
+
+        if (empty($items)) {
+            $items[] = $value;
+        }
+
+        return array_values(array_unique($items));
     }
 
     private function buildWalkinStatistics(): array

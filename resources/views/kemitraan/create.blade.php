@@ -153,6 +153,13 @@
                                                 $date = \Carbon\Carbon::parse($agenda->date);
                                                 $isUpcoming = $idx === $nextIdx;
                                                 $rowClass = $isUpcoming ? 'walkin-schedule-upcoming' : ($idx % 2 === 1 ? 'walkin-schedule-odd' : '');
+                                                $infoItems = (array)($agenda->informasi_lainnya_items ?? []);
+                                                if (empty($infoItems)) {
+                                                    $legacyInfo = trim((string)($agenda->informasi_lainnya ?? ''));
+                                                    if ($legacyInfo !== '') {
+                                                        $infoItems = [$legacyInfo];
+                                                    }
+                                                }
                                             @endphp
                                             <tr class="{{ $rowClass }}">
                                                 <td class="fw-semibold">
@@ -171,30 +178,35 @@
                                                         data-date="{{ $date->format('d M Y') }}"
                                                         data-location="{{ e($agenda->location) }}"
                                                         data-registration="{{ $agenda->registration_url }}"
-                                                        data-info-lainnya="{{ e($agenda->informasi_lainnya ?? '') }}"
+                                                        data-info-lainnya='@json($infoItems)'
                                                         data-description="{{ e($agenda->description) }}"
                                                     >Detail</button>
                                                 </td>
                                                 <td>
-                                                    @php
-                                                        $infoLainnya = trim((string)($agenda->informasi_lainnya ?? ''));
-                                                        $infoPath = parse_url($infoLainnya, PHP_URL_PATH);
-                                                        $infoExt = strtolower(pathinfo((string)$infoPath, PATHINFO_EXTENSION));
-                                                        $infoIsImage = in_array($infoExt, ['jpg', 'jpeg', 'png', 'gif', 'webp'], true);
-                                                        $infoIsPdf = $infoExt === 'pdf';
-                                                        $infoIsExternal = preg_match('/^https?:\/\//i', $infoLainnya) === 1;
-                                                        $infoHref = $infoLainnya !== '' ? ($infoIsExternal ? $infoLainnya : asset(ltrim($infoLainnya, '/'))) : '';
-                                                    @endphp
-                                                    @if($infoLainnya === '')
+                                                    @if(empty($infoItems))
                                                         <span class="text-muted">-</span>
-                                                    @elseif($infoIsImage)
-                                                        <a href="{{ $infoHref }}" target="_blank" rel="noopener" class="walkin-info-thumb-link" title="Lihat Gambar">
-                                                            <img src="{{ $infoHref }}" alt="Informasi Lainnya" class="walkin-info-thumb">
-                                                        </a>
-                                                    @elseif($infoIsPdf)
-                                                        <a href="{{ $infoHref }}" target="_blank" rel="noopener" class="btn btn-outline-danger btn-sm">Lihat PDF</a>
                                                     @else
-                                                        <a href="{{ $infoHref }}" target="_blank" rel="noopener" class="btn btn-outline-success btn-sm">Buka Link</a>
+                                                        <div class="d-flex flex-wrap gap-1">
+                                                            @foreach($infoItems as $infoOne)
+                                                                @php
+                                                                    $infoPath = parse_url($infoOne, PHP_URL_PATH);
+                                                                    $infoExt = strtolower(pathinfo((string)$infoPath, PATHINFO_EXTENSION));
+                                                                    $infoIsImage = in_array($infoExt, ['jpg', 'jpeg', 'png', 'gif', 'webp'], true);
+                                                                    $infoIsPdf = $infoExt === 'pdf';
+                                                                    $infoIsExternal = preg_match('/^https?:\/\//i', $infoOne) === 1;
+                                                                    $infoHref = $infoIsExternal ? $infoOne : asset(ltrim($infoOne, '/'));
+                                                                @endphp
+                                                                @if($infoIsImage)
+                                                                    <a href="{{ $infoHref }}" target="_blank" rel="noopener" class="walkin-info-thumb-link" title="Lihat Gambar">
+                                                                        <img src="{{ $infoHref }}" alt="Informasi Lainnya" class="walkin-info-thumb">
+                                                                    </a>
+                                                                @elseif($infoIsPdf)
+                                                                    <a href="{{ $infoHref }}" target="_blank" rel="noopener" class="btn btn-outline-danger btn-sm">Lihat PDF</a>
+                                                                @else
+                                                                    <a href="{{ $infoHref }}" target="_blank" rel="noopener" class="btn btn-outline-success btn-sm">Buka Link</a>
+                                                                @endif
+                                                            @endforeach
+                                                        </div>
                                                     @endif
                                                 </td>
                                             </tr>
@@ -1385,7 +1397,16 @@
                     <tbody>
                         @if(isset($walkinAgendasPast) && $walkinAgendasPast->count() > 0)
                             @foreach($walkinAgendasPast as $idx => $agenda)
-                                @php $date = \Carbon\Carbon::parse($agenda->date); @endphp
+                                @php
+                                    $date = \Carbon\Carbon::parse($agenda->date);
+                                    $infoItems = (array)($agenda->informasi_lainnya_items ?? []);
+                                    if (empty($infoItems)) {
+                                        $legacyInfo = trim((string)($agenda->informasi_lainnya ?? ''));
+                                        if ($legacyInfo !== '') {
+                                            $infoItems = [$legacyInfo];
+                                        }
+                                    }
+                                @endphp
                                 <tr class="{{ $idx % 2 === 1 ? 'walkin-schedule-odd' : '' }}">
                                     <td class="fw-semibold">
                                         <div class="walkin-schedule-date">{{ $date->format('d M') }}</div>
@@ -1403,30 +1424,35 @@
                                             data-date="{{ $date->format('d M Y') }}"
                                             data-location="{{ e($agenda->location) }}"
                                             data-registration="{{ $agenda->registration_url }}"
-                                            data-info-lainnya="{{ e($agenda->informasi_lainnya ?? '') }}"
+                                            data-info-lainnya='@json($infoItems)'
                                             data-description="{{ e($agenda->description) }}"
                                         >Detail</button>
                                     </td>
                                     <td>
-                                        @php
-                                            $infoLainnya = trim((string)($agenda->informasi_lainnya ?? ''));
-                                            $infoPath = parse_url($infoLainnya, PHP_URL_PATH);
-                                            $infoExt = strtolower(pathinfo((string)$infoPath, PATHINFO_EXTENSION));
-                                            $infoIsImage = in_array($infoExt, ['jpg', 'jpeg', 'png', 'gif', 'webp'], true);
-                                            $infoIsPdf = $infoExt === 'pdf';
-                                            $infoIsExternal = preg_match('/^https?:\/\//i', $infoLainnya) === 1;
-                                            $infoHref = $infoLainnya !== '' ? ($infoIsExternal ? $infoLainnya : asset(ltrim($infoLainnya, '/'))) : '';
-                                        @endphp
-                                        @if($infoLainnya === '')
+                                        @if(empty($infoItems))
                                             <span class="text-muted">-</span>
-                                        @elseif($infoIsImage)
-                                            <a href="{{ $infoHref }}" target="_blank" rel="noopener" class="walkin-info-thumb-link" title="Lihat Gambar">
-                                                <img src="{{ $infoHref }}" alt="Informasi Lainnya" class="walkin-info-thumb">
-                                            </a>
-                                        @elseif($infoIsPdf)
-                                            <a href="{{ $infoHref }}" target="_blank" rel="noopener" class="btn btn-outline-danger btn-sm">Lihat PDF</a>
                                         @else
-                                            <a href="{{ $infoHref }}" target="_blank" rel="noopener" class="btn btn-outline-success btn-sm">Buka Link</a>
+                                            <div class="d-flex flex-wrap gap-1">
+                                                @foreach($infoItems as $infoOne)
+                                                    @php
+                                                        $infoPath = parse_url($infoOne, PHP_URL_PATH);
+                                                        $infoExt = strtolower(pathinfo((string)$infoPath, PATHINFO_EXTENSION));
+                                                        $infoIsImage = in_array($infoExt, ['jpg', 'jpeg', 'png', 'gif', 'webp'], true);
+                                                        $infoIsPdf = $infoExt === 'pdf';
+                                                        $infoIsExternal = preg_match('/^https?:\/\//i', $infoOne) === 1;
+                                                        $infoHref = $infoIsExternal ? $infoOne : asset(ltrim($infoOne, '/'));
+                                                    @endphp
+                                                    @if($infoIsImage)
+                                                        <a href="{{ $infoHref }}" target="_blank" rel="noopener" class="walkin-info-thumb-link" title="Lihat Gambar">
+                                                            <img src="{{ $infoHref }}" alt="Informasi Lainnya" class="walkin-info-thumb">
+                                                        </a>
+                                                    @elseif($infoIsPdf)
+                                                        <a href="{{ $infoHref }}" target="_blank" rel="noopener" class="btn btn-outline-danger btn-sm">Lihat PDF</a>
+                                                    @else
+                                                        <a href="{{ $infoHref }}" target="_blank" rel="noopener" class="btn btn-outline-success btn-sm">Buka Link</a>
+                                                    @endif
+                                                @endforeach
+                                            </div>
                                         @endif
                                     </td>
                                 </tr>
@@ -2276,23 +2302,31 @@
             document.getElementById('agendaModalDate').textContent = button.getAttribute('data-date') || '';
             document.getElementById('agendaModalLocation').textContent = button.getAttribute('data-location') || '';
             const regUrl = button.getAttribute('data-registration');
-            const infoLainnya = (button.getAttribute('data-info-lainnya') || '').trim();
+            const infoRawAttr = button.getAttribute('data-info-lainnya') || '[]';
+            let infoLainnyaItems = [];
+            try {
+                const parsed = JSON.parse(infoRawAttr);
+                if (Array.isArray(parsed)) {
+                    infoLainnyaItems = parsed.map((it) => String(it || '').trim()).filter(Boolean);
+                }
+            } catch (e) {
+                const fallback = String(infoRawAttr || '').trim();
+                infoLainnyaItems = fallback ? [fallback] : [];
+            }
             const infoEl = document.getElementById('agendaModalInfoLainnya');
-            function buildInfoHtml(raw) {
-                const value = String(raw || '').trim();
-                if (!value) return '';
-                const pathOnly = value.split('?')[0].split('#')[0].toLowerCase();
+            function buildInfoItemHtml(value) {
+                const pathOnly = String(value || '').split('?')[0].split('#')[0].toLowerCase();
                 const isImage = /\.(jpg|jpeg|png|gif|webp)$/i.test(pathOnly);
                 const isPdf = /\.pdf$/i.test(pathOnly);
                 const isExternal = /^https?:\/\//i.test(value);
                 const href = isExternal ? value : '/' + value.replace(/^\/+/, '');
                 if (isImage) {
-                    return '<a href="' + href + '" target="_blank" class="btn btn-outline-info btn-sm"><i class="fa fa-image me-1"></i>Lihat Gambar</a>';
+                    return '<a href="' + href + '" target="_blank" class="walkin-info-thumb-link me-1 mb-1" title="Lihat Gambar"><img src="' + href + '" alt="Informasi Lainnya" class="walkin-info-thumb"></a>';
                 }
                 if (isPdf) {
-                    return '<a href="' + href + '" target="_blank" class="btn btn-outline-danger btn-sm"><i class="fa fa-file-pdf me-1"></i>Lihat PDF</a>';
+                    return '<a href="' + href + '" target="_blank" class="btn btn-outline-danger btn-sm me-1 mb-1"><i class="fa fa-file-pdf me-1"></i>Lihat PDF</a>';
                 }
-                return '<a href="' + href + '" target="_blank" class="btn btn-outline-success btn-sm"><i class="fa fa-link me-1"></i>Buka Link</a>';
+                return '<a href="' + href + '" target="_blank" class="btn btn-outline-success btn-sm me-1 mb-1"><i class="fa fa-link me-1"></i>Buka Link</a>';
             }
             if (regUrl) {
                 document.getElementById('agendaModalRegistration').innerHTML =
@@ -2301,8 +2335,8 @@
                 document.getElementById('agendaModalRegistration').innerHTML = '';
             }
             if (infoEl) {
-                const html = buildInfoHtml(infoLainnya);
-                infoEl.innerHTML = html ? ('<div class="small text-muted mb-1">Informasi Lainnya</div>' + html) : '';
+                const html = infoLainnyaItems.map((v) => buildInfoItemHtml(String(v))).join('');
+                infoEl.innerHTML = html ? ('<div class="small text-muted mb-1">Informasi Lainnya</div><div class="d-flex flex-wrap">' + html + '</div>') : '';
             }
         });
     });
@@ -2669,19 +2703,28 @@
             });
 
             rows.forEach((a, idx) => {
-                const infoValue = String(a.informasi_lainnya || '').trim();
-                const infoPath = infoValue.split('?')[0].split('#')[0].toLowerCase();
-                const infoIsImage = /\.(jpg|jpeg|png|gif|webp)$/i.test(infoPath);
-                const infoIsPdf = /\.pdf$/i.test(infoPath);
-                const infoIsExternal = /^https?:\/\//i.test(infoValue);
-                const infoHref = infoIsExternal ? infoValue : ('/' + infoValue.replace(/^\/+/, ''));
-                const infoCellHtml = !infoValue
+                let infoItems = Array.isArray(a.informasi_lainnya_items) ? a.informasi_lainnya_items.slice() : [];
+                if (infoItems.length === 0) {
+                    const fallback = String(a.informasi_lainnya || '').trim();
+                    if (fallback) infoItems = [fallback];
+                }
+                const infoCellHtml = infoItems.length === 0
                     ? '<span class="text-muted">-</span>'
-                    : (infoIsImage
-                        ? `<a href="${escapeHtml(infoHref)}" target="_blank" class="walkin-info-thumb-link" title="Lihat Gambar"><img src="${escapeHtml(infoHref)}" alt="Informasi Lainnya" class="walkin-info-thumb"></a>`
-                        : (infoIsPdf
-                            ? `<a href="${escapeHtml(infoHref)}" target="_blank" class="btn btn-outline-danger btn-sm">Lihat PDF</a>`
-                            : `<a href="${escapeHtml(infoHref)}" target="_blank" class="btn btn-outline-success btn-sm">Buka Link</a>`));
+                    : `<div class="d-flex flex-wrap gap-1">${infoItems.map((v) => {
+                        const value = String(v || '').trim();
+                        const path = value.split('?')[0].split('#')[0].toLowerCase();
+                        const isImage = /\.(jpg|jpeg|png|gif|webp)$/i.test(path);
+                        const isPdf = /\.pdf$/i.test(path);
+                        const isExternal = /^https?:\/\//i.test(value);
+                        const href = isExternal ? value : ('/' + value.replace(/^\/+/, ''));
+                        if (isImage) {
+                            return `<a href="${escapeHtml(href)}" target="_blank" class="walkin-info-thumb-link" title="Lihat Gambar"><img src="${escapeHtml(href)}" alt="Informasi Lainnya" class="walkin-info-thumb"></a>`;
+                        }
+                        if (isPdf) {
+                            return `<a href="${escapeHtml(href)}" target="_blank" class="btn btn-outline-danger btn-sm">Lihat PDF</a>`;
+                        }
+                        return `<a href="${escapeHtml(href)}" target="_blank" class="btn btn-outline-success btn-sm">Buka Link</a>`;
+                    }).join('')}</div>`;
                 const isUpcoming = a._bucket === 'upcoming';
                 const { dayMonth, year } = formatDateParts(a.date);
                 const tr = document.createElement('tr');
@@ -2704,7 +2747,7 @@
                                 data-date="${escapeHtml(formatLongDate(a.date))}"
                                 data-location="${escapeHtml(a.location || '')}"
                                 data-registration="${escapeHtml(a.registration_url || '')}"
-                                data-info-lainnya="${escapeHtml(a.informasi_lainnya || '')}"
+                                data-info-lainnya='${escapeHtml(JSON.stringify(infoItems))}'
                                 data-description="${escapeHtml(a.description || '')}"
                             >Detail</button>
                             ${isUpcoming ? `<span class="badge text-bg-primary">Akan datang</span>` : `<span class="badge text-bg-secondary">Terdahulu</span>`}
