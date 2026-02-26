@@ -188,7 +188,9 @@
                                                     @if($infoLainnya === '')
                                                         <span class="text-muted">-</span>
                                                     @elseif($infoIsImage)
-                                                        <a href="{{ $infoHref }}" target="_blank" rel="noopener" class="btn btn-outline-info btn-sm">Lihat Gambar</a>
+                                                        <a href="{{ $infoHref }}" target="_blank" rel="noopener" class="walkin-info-thumb-link" title="Lihat Gambar">
+                                                            <img src="{{ $infoHref }}" alt="Informasi Lainnya" class="walkin-info-thumb">
+                                                        </a>
                                                     @elseif($infoIsPdf)
                                                         <a href="{{ $infoHref }}" target="_blank" rel="noopener" class="btn btn-outline-danger btn-sm">Lihat PDF</a>
                                                     @else
@@ -1418,7 +1420,9 @@
                                         @if($infoLainnya === '')
                                             <span class="text-muted">-</span>
                                         @elseif($infoIsImage)
-                                            <a href="{{ $infoHref }}" target="_blank" rel="noopener" class="btn btn-outline-info btn-sm">Lihat Gambar</a>
+                                            <a href="{{ $infoHref }}" target="_blank" rel="noopener" class="walkin-info-thumb-link" title="Lihat Gambar">
+                                                <img src="{{ $infoHref }}" alt="Informasi Lainnya" class="walkin-info-thumb">
+                                            </a>
                                         @elseif($infoIsPdf)
                                             <a href="{{ $infoHref }}" target="_blank" rel="noopener" class="btn btn-outline-danger btn-sm">Lihat PDF</a>
                                         @else
@@ -2674,7 +2678,7 @@
                 const infoCellHtml = !infoValue
                     ? '<span class="text-muted">-</span>'
                     : (infoIsImage
-                        ? `<a href="${escapeHtml(infoHref)}" target="_blank" class="btn btn-outline-info btn-sm">Lihat Gambar</a>`
+                        ? `<a href="${escapeHtml(infoHref)}" target="_blank" class="walkin-info-thumb-link" title="Lihat Gambar"><img src="${escapeHtml(infoHref)}" alt="Informasi Lainnya" class="walkin-info-thumb"></a>`
                         : (infoIsPdf
                             ? `<a href="${escapeHtml(infoHref)}" target="_blank" class="btn btn-outline-danger btn-sm">Lihat PDF</a>`
                             : `<a href="${escapeHtml(infoHref)}" target="_blank" class="btn btn-outline-success btn-sm">Buka Link</a>`));
@@ -3454,6 +3458,21 @@
     }
     .walkin-schedule-upcoming {
         background: rgba(37,99,235,0.10) !important;
+    }
+    .walkin-info-thumb-link {
+        display: inline-flex;
+        border: 1px solid rgba(37,99,235,0.25);
+        border-radius: 8px;
+        padding: 2px;
+        background: #fff;
+        text-decoration: none;
+    }
+    .walkin-info-thumb {
+        width: 54px;
+        height: 54px;
+        object-fit: cover;
+        border-radius: 6px;
+        display: block;
     }
     #pastWalkinModal .modal-body {
         padding: 14px;
