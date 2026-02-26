@@ -789,21 +789,18 @@ class KemitraanController extends Controller
             $yearStart = $today->copy()->startOfYear();
             $yearEnd = $today->copy()->endOfYear();
             $hasBookedDateStart = Schema::hasColumn('booked_date', 'booked_date_start');
+            $hasBookedDate = Schema::hasColumn('booked_date', 'booked_date');
             
             $query = DB::table('booked_date as bd')
                 ->join('kemitraan as k', 'bd.kemitraan_id', '=', 'k.id')
                 ->leftJoin('type_of_partnership as top', 'k.type_of_partnership_id', '=', 'top.id')
-                ->where(function($q) use ($yearStart, $yearEnd, $hasBookedDateStart) {
+                ->where(function($q) use ($yearStart, $yearEnd, $hasBookedDateStart, $hasBookedDate) {
+                    // After migration, booked_date was renamed to booked_date_start
+                    // So we check for booked_date_start first, then fallback to booked_date if it still exists
                     if ($hasBookedDateStart) {
-                        // Use booked_date_start if available, otherwise fall back to booked_date
-                        $q->where(function($subQ) use ($yearStart, $yearEnd) {
-                            $subQ->whereBetween('bd.booked_date_start', [$yearStart->toDateString(), $yearEnd->toDateString()])
-                                 ->orWhere(function($orQ) use ($yearStart, $yearEnd) {
-                                     $orQ->whereNull('bd.booked_date_start')
-                                         ->whereBetween('bd.booked_date', [$yearStart->toDateString(), $yearEnd->toDateString()]);
-                                 });
-                        });
-                    } else {
+                        $q->whereBetween('bd.booked_date_start', [$yearStart->toDateString(), $yearEnd->toDateString()]);
+                    } elseif ($hasBookedDate) {
+                        // Legacy: if booked_date_start doesn't exist but booked_date does
                         $q->whereBetween('bd.booked_date', [$yearStart->toDateString(), $yearEnd->toDateString()]);
                     }
                 })
