@@ -11,7 +11,8 @@
     <!-- Segmented toggle (top) -->
     <div class="mb-3">
         <div class="walkin-segmented" role="tablist" aria-label="Pilih tampilan">
-            <button type="button" class="walkin-seg-btn active" id="btnPanelSchedule" aria-selected="true">Jadwal Walk In</button>
+            <button type="button" class="walkin-seg-btn active" id="btnPanelInfo" aria-selected="true">Info & Tata Cara</button>
+            <button type="button" class="walkin-seg-btn" id="btnPanelSchedule" aria-selected="false">Jadwal Walk In</button>
             <button type="button" class="walkin-seg-btn" id="btnPanelGallery" aria-selected="false">Galeri Walk In</button>
             <button type="button" class="walkin-seg-btn" id="btnPanelForm" aria-selected="false">Form Pendaftaran Walk In (Pemberi Kerja)</button>
             <button type="button" class="walkin-seg-btn" id="btnPanelSurvey" aria-selected="false">Survei Evaluasi</button>
@@ -20,8 +21,8 @@
     </div>
 
     <div class="row g-4">
-        <!-- Schedule -->
-        <div class="col-12" id="panelSchedule">
+        <!-- Info & Tata Cara -->
+        <div class="col-12" id="panelInfo">
             <div class="walkin-panel p-3 p-md-4 mb-3">
                 <div class="d-flex align-items-center justify-content-between mb-3">
                     <div>
@@ -112,7 +113,10 @@
                     </div>
                 </div>
             </div>
+        </div>
 
+        <!-- Schedule -->
+        <div class="col-12 d-none" id="panelSchedule">
             <div class="card shadow-lg w-100">
                 <div class="card-body p-4">
                     <div class="d-flex align-items-center justify-content-between mb-3">
@@ -1881,6 +1885,7 @@
 
     // Mobile segmented toggle: Form vs Galeri
     (function () {
+        const btnInfo = document.getElementById('btnPanelInfo');
         const btnForm = document.getElementById('btnPanelForm');
         const btnGallery = document.getElementById('btnPanelGallery');
         const btnSchedule = document.getElementById('btnPanelSchedule');
@@ -1889,12 +1894,13 @@
         const surveyPasscodeEnabled = @json((bool) ($surveyPasscodeEnabled ?? false));
         const verifyPasscodeUrl = @json(route('kemitraan.survey.verify-passcode'));
         const csrf = @json(csrf_token());
+        const panelInfo = document.getElementById('panelInfo');
         const panelForm = document.getElementById('panelForm');
         const panelGallery = document.getElementById('panelGallery');
         const panelSchedule = document.getElementById('panelSchedule');
         const panelSurvey = document.getElementById('panelSurvey');
         const panelStatistik = document.getElementById('panelStatistik');
-        if (!btnForm || !btnGallery || !btnSchedule || !btnSurvey || !btnStatistik || !panelForm || !panelGallery || !panelSchedule || !panelSurvey || !panelStatistik) return;
+        if (!btnInfo || !btnForm || !btnGallery || !btnSchedule || !btnSurvey || !btnStatistik || !panelInfo || !panelForm || !panelGallery || !panelSchedule || !panelSurvey || !panelStatistik) return;
 
         function syncPanelToUrl(which) {
             try {
@@ -1905,21 +1911,25 @@
         }
 
         function setActive(which) {
+            const isInfo = which === 'info';
             const isForm = which === 'form';
             const isGallery = which === 'gallery';
             const isSchedule = which === 'schedule';
             const isSurvey = which === 'survey';
             const isStatistik = which === 'statistik';
+            btnInfo.classList.toggle('active', isInfo);
             btnForm.classList.toggle('active', isForm);
             btnGallery.classList.toggle('active', isGallery);
             btnSchedule.classList.toggle('active', isSchedule);
             btnSurvey.classList.toggle('active', isSurvey);
             btnStatistik.classList.toggle('active', isStatistik);
+            btnInfo.setAttribute('aria-selected', isInfo ? 'true' : 'false');
             btnForm.setAttribute('aria-selected', isForm ? 'true' : 'false');
             btnGallery.setAttribute('aria-selected', isGallery ? 'true' : 'false');
             btnSchedule.setAttribute('aria-selected', isSchedule ? 'true' : 'false');
             btnSurvey.setAttribute('aria-selected', isSurvey ? 'true' : 'false');
             btnStatistik.setAttribute('aria-selected', isStatistik ? 'true' : 'false');
+            panelInfo.classList.toggle('d-none', !isInfo);
             panelForm.classList.toggle('d-none', !isForm);
             panelGallery.classList.toggle('d-none', !isGallery);
             panelSchedule.classList.toggle('d-none', !isSchedule);
@@ -1967,6 +1977,7 @@
             }
         }
 
+        btnInfo.addEventListener('click', () => setActive('info'));
         btnForm.addEventListener('click', () => setActive('form'));
         btnGallery.addEventListener('click', () => setActive('gallery'));
         btnSchedule.addEventListener('click', () => setActive('schedule'));
@@ -1977,10 +1988,10 @@
         btnStatistik.addEventListener('click', () => setActive('statistik'));
 
         const urlPanel = new URLSearchParams(window.location.search).get('panel');
-        const allowedPanels = ['form', 'gallery', 'schedule', 'survey', 'statistik'];
-        const initialPanel = allowedPanels.includes(urlPanel) ? urlPanel : 'schedule';
+        const allowedPanels = ['info', 'form', 'gallery', 'schedule', 'survey', 'statistik'];
+        const initialPanel = allowedPanels.includes(urlPanel) ? urlPanel : 'info';
         if (initialPanel === 'survey') {
-            ensureSurveyUnlocked().then((ok) => setActive(ok ? 'survey' : 'schedule'));
+            ensureSurveyUnlocked().then((ok) => setActive(ok ? 'survey' : 'info'));
         } else {
             setActive(initialPanel);
         }
