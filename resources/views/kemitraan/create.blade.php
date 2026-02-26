@@ -2546,10 +2546,33 @@
             if (!Number.isFinite(numeric) || numeric <= 0) {
                 return `<span class="text-muted small">Belum ada rating</span>`;
             }
-            const rounded = Math.max(0, Math.min(5, Math.round(numeric)));
+            const clamped = Math.max(0, Math.min(5, numeric));
+            const fullStars = Math.floor(clamped);
+            const decimal = clamped - fullStars;
+            
+            // Determine if we need a half star or should round up
+            let actualFullStars = fullStars;
+            let showHalfStar = false;
+            
+            if (decimal >= 0.75) {
+                // Round up to next full star
+                actualFullStars = Math.min(5, fullStars + 1);
+            } else if (decimal >= 0.25) {
+                // Show half star
+                showHalfStar = true;
+            }
+            
             let stars = '';
+            const starClass = large ? 'walkin-star-lg' : 'walkin-star-sm';
+            
             for (let i = 1; i <= 5; i++) {
-                stars += `<i class="bi ${i <= rounded ? 'bi-star-fill' : 'bi-star'} ${large ? 'walkin-star-lg' : 'walkin-star-sm'}"></i>`;
+                if (i <= actualFullStars) {
+                    stars += `<i class="bi bi-star-fill ${starClass}"></i>`;
+                } else if (i === actualFullStars + 1 && showHalfStar) {
+                    stars += `<i class="bi bi-star-half ${starClass}"></i>`;
+                } else {
+                    stars += `<i class="bi bi-star ${starClass}"></i>`;
+                }
             }
             return `${stars}<span class="${large ? 'walkin-rating-value-lg' : 'walkin-rating-value-sm'}">${escapeHtml(numeric.toFixed(2))}/5</span>`;
         }
