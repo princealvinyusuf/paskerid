@@ -37,6 +37,74 @@
                     </div>
 
                     <div class="walkin-panel p-3 p-md-4">
+                        <div class="walkin-schedule-intro mb-4">
+                            <div class="walkin-schedule-intro-hero mb-3">
+                                <div class="d-flex align-items-start gap-3">
+                                    <div class="walkin-schedule-intro-icon">
+                                        <i class="bi bi-lightbulb"></i>
+                                    </div>
+                                    <div>
+                                        <div class="walkin-schedule-intro-title">Apa Itu Walk-In Interview?</div>
+                                        <div class="walkin-schedule-intro-desc">
+                                            Walk-In Interview adalah proses rekrutmen di mana pencari kerja dapat langsung datang ke lokasi untuk langsung melakukan proses interview sesuai jadwal yang telah ditentukan.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row g-3">
+                                <div class="col-12 col-lg-6">
+                                    <div class="walkin-schedule-intro-card h-100">
+                                        <div class="walkin-schedule-intro-card-title">
+                                            <i class="bi bi-bullseye me-2"></i>Tujuan Program Walk-In Interview
+                                        </div>
+                                        <ul class="walkin-schedule-list mb-0">
+                                            <li>Mempercepat proses rekrutmen</li>
+                                            <li>Mempertemukan pencari kerja dan perusahaan secara langsung</li>
+                                            <li>Mengurangi waktu tunggu seleksi</li>
+                                            <li>Mendukung penyerapan tenaga kerja secara cepat</li>
+                                            <li>Mendukung program penempatan tenaga kerja nasional</li>
+                                            <li>Meningkatkan transparansi proses rekrutmen</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-lg-6">
+                                    <div class="walkin-schedule-intro-card h-100">
+                                        <div class="walkin-schedule-intro-card-title">
+                                            <i class="bi bi-people me-2"></i>Siapa yang Bisa Mengikuti?
+                                        </div>
+                                        <ul class="walkin-schedule-list mb-0">
+                                            <li>Pencari kerja yang memenuhi kualifikasi lowongan</li>
+                                            <li>Telah memiliki akun di platform SIAPkerja</li>
+                                            <li>Membawa dokumen pendukung (CV)</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="walkin-schedule-intro-card walkin-schedule-intro-card-warning">
+                                        <div class="walkin-schedule-intro-card-title">
+                                            <i class="bi bi-exclamation-triangle me-2"></i>Hal yang Perlu Diperhatikan
+                                        </div>
+                                        <div class="row g-2">
+                                            <div class="col-12 col-md-6">
+                                                <ul class="walkin-schedule-list mb-0">
+                                                    <li>Datang tepat waktu</li>
+                                                    <li>Gunakan pakaian formal/rapi</li>
+                                                    <li>Pastikan memenuhi kualifikasi</li>
+                                                </ul>
+                                            </div>
+                                            <div class="col-12 col-md-6">
+                                                <ul class="walkin-schedule-list mb-0">
+                                                    <li>Cek kembali lokasi dan jam kegiatan</li>
+                                                    <li>Periksa kuota peserta</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="table-responsive">
                             <table class="table table-bordered align-middle walkin-schedule-table">
                                 <thead class="table-light">
@@ -2810,6 +2878,65 @@
         background: rgba(255,255,255,0.92);
         box-shadow: 0 10px 30px rgba(2,6,23,0.06);
         backdrop-filter: blur(8px);
+    }
+    #panelSchedule .walkin-schedule-intro-hero {
+        border: 1px solid rgba(37,99,235,0.18);
+        border-radius: 14px;
+        background: linear-gradient(135deg, rgba(239,246,255,0.95), rgba(255,255,255,0.98));
+        box-shadow: 0 12px 28px rgba(37,99,235,0.10);
+        padding: 14px 16px;
+    }
+    #panelSchedule .walkin-schedule-intro-icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 12px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(37,99,235,0.14);
+        color: #1d4ed8;
+        font-size: 1.2rem;
+        flex-shrink: 0;
+    }
+    #panelSchedule .walkin-schedule-intro-title {
+        font-size: 1rem;
+        font-weight: 800;
+        color: #0f172a;
+        margin-bottom: 4px;
+    }
+    #panelSchedule .walkin-schedule-intro-desc {
+        color: #334155;
+        line-height: 1.5;
+    }
+    #panelSchedule .walkin-schedule-intro-card {
+        border: 1px solid rgba(15,23,42,0.12);
+        border-radius: 14px;
+        background: #ffffff;
+        box-shadow: 0 8px 22px rgba(2,6,23,0.06);
+        padding: 14px 16px;
+    }
+    #panelSchedule .walkin-schedule-intro-card-warning {
+        border-color: rgba(245, 158, 11, 0.35);
+        background: linear-gradient(180deg, rgba(255, 247, 237, 0.85), rgba(255,255,255,0.98));
+    }
+    #panelSchedule .walkin-schedule-intro-card-title {
+        font-weight: 800;
+        color: #0f172a;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+    }
+    #panelSchedule .walkin-schedule-list {
+        padding-left: 1.1rem;
+        margin: 0;
+    }
+    #panelSchedule .walkin-schedule-list li {
+        color: #334155;
+        margin-bottom: 6px;
+        line-height: 1.45;
+    }
+    #panelSchedule .walkin-schedule-list li:last-child {
+        margin-bottom: 0;
     }
     #panelStatistik .walkin-stat-card {
         border: 1px solid rgba(37,99,235,0.20);
