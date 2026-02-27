@@ -17,18 +17,24 @@
                 </div>
             </div>
 
-            <div class="d-flex justify-content-center mb-4">
-                <div class="btn-group" role="group" aria-label="Career Boost Day toggle">
+            <div class="mb-4">
+                <div class="career-boostday-segmented" role="tablist" aria-label="Career Boost Day toggle">
                     <a href="{{ route('career-boostday.index', ['tab' => 'form']) }}"
-                       class="btn {{ $tab === 'form' ? 'btn-success' : 'btn-outline-success' }}">
+                       class="career-boostday-seg-btn {{ $tab === 'form' ? 'active' : '' }}"
+                       role="tab"
+                       aria-selected="{{ $tab === 'form' ? 'true' : 'false' }}">
                         Form Curhat Peluang Kerja
                     </a>
                     <a href="{{ route('career-boostday.index', ['tab' => 'jadwal']) }}"
-                       class="btn {{ $tab === 'jadwal' ? 'btn-success' : 'btn-outline-success' }}">
+                       class="career-boostday-seg-btn {{ $tab === 'jadwal' ? 'active' : '' }}"
+                       role="tab"
+                       aria-selected="{{ $tab === 'jadwal' ? 'true' : 'false' }}">
                         Jadwal Curhat
                     </a>
                     <a href="{{ route('career-boostday.index', ['tab' => 'statistik']) }}"
-                       class="btn {{ $tab === 'statistik' ? 'btn-success' : 'btn-outline-success' }}">
+                       class="career-boostday-seg-btn {{ $tab === 'statistik' ? 'active' : '' }}"
+                       role="tab"
+                       aria-selected="{{ $tab === 'statistik' ? 'true' : 'false' }}">
                         Statistik
                     </a>
                 </div>
@@ -837,5 +843,73 @@
     </div>
 </div>
 @endsection
+
+@push('styles')
+<style>
+    .career-boostday-segmented {
+        display: inline-flex;
+        width: 100%;
+        background: #eef2f7;
+        border-radius: 999px;
+        padding: 6px;
+        box-shadow: inset 0 0 0 1px rgba(0,0,0,0.06);
+        gap: 6px;
+    }
+    .career-boostday-seg-btn {
+        flex: 1;
+        border: 0;
+        border-radius: 999px;
+        padding: 10px 12px;
+        font-weight: 600;
+        background: transparent;
+        color: #475569;
+        text-align: center;
+        white-space: nowrap;
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+    .career-boostday-seg-btn:hover {
+        color: #111827;
+        text-decoration: none;
+    }
+    .career-boostday-seg-btn.active {
+        background: #ffffff;
+        color: #111827;
+        box-shadow: 0 6px 16px rgba(2,6,23,0.10);
+    }
+    /* Responsive toggle: stack buttons on small screens (prevents cramped layout) */
+    @media (max-width: 576px) {
+        .career-boostday-segmented {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+            padding: 0;
+            background: transparent;
+            box-shadow: none;
+        }
+        .career-boostday-seg-btn {
+            border-radius: 16px;
+            padding: 12px 14px;
+            background: #eef2f7;
+            border: 1px solid rgba(15,23,42,0.10);
+            white-space: normal;
+            line-height: 1.2;
+        }
+        .career-boostday-seg-btn:hover {
+            background: #e2e8f0;
+        }
+        .career-boostday-seg-btn.active {
+            background: #198754;
+            color: #ffffff;
+            border-color: rgba(25,135,84,0.12);
+            box-shadow: 0 10px 22px rgba(2,6,23,0.16);
+        }
+        .career-boostday-seg-btn.active:hover {
+            background: #157347;
+            color: #ffffff;
+        }
+    }
+</style>
+@endpush
 
 
