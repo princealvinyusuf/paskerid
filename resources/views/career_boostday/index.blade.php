@@ -279,12 +279,14 @@
                                                             $photoUrl = '/' . ltrim($photoUrl, '/');
                                                         }
                                                     @endphp
-                                                    <img src="{{ $photoUrl }}" alt="{{ $testimonial->name }}" class="testimonial-avatar rounded-circle" style="width: 64px; height: 64px; object-fit: cover; border: 3px solid #198754;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                                                    <div class="testimonial-avatar-placeholder rounded-circle d-flex align-items-center justify-content-center" style="width: 64px; height: 64px; background: linear-gradient(135deg, #198754, #20c997); color: #fff; font-size: 1.5rem; font-weight: bold; display: none;">
-                                                        {{ strtoupper(substr($testimonial->name, 0, 1)) }}
+                                                    <div style="position: relative; width: 64px; height: 64px; flex-shrink: 0;">
+                                                        <img src="{{ $photoUrl }}" alt="{{ $testimonial->name }}" class="testimonial-avatar rounded-circle" style="width: 64px; height: 64px; object-fit: cover; border: 3px solid #198754; display: block; position: relative; z-index: 1;" onload="this.nextElementSibling.style.display='none';" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                                        <div class="testimonial-avatar-placeholder rounded-circle d-flex align-items-center justify-content-center" style="width: 64px; height: 64px; background: linear-gradient(135deg, #198754, #20c997); color: #fff; font-size: 1.5rem; font-weight: bold; display: none; position: absolute; top: 0; left: 0; z-index: 0;">
+                                                            {{ strtoupper(substr($testimonial->name, 0, 1)) }}
+                                                        </div>
                                                     </div>
                                                 @else
-                                                    <div class="testimonial-avatar-placeholder rounded-circle d-flex align-items-center justify-content-center" style="width: 64px; height: 64px; background: linear-gradient(135deg, #198754, #20c997); color: #fff; font-size: 1.5rem; font-weight: bold;">
+                                                    <div class="testimonial-avatar-placeholder rounded-circle d-flex align-items-center justify-content-center" style="width: 64px; height: 64px; background: linear-gradient(135deg, #198754, #20c997); color: #fff; font-size: 1.5rem; font-weight: bold; flex-shrink: 0;">
                                                         {{ strtoupper(substr($testimonial->name, 0, 1)) }}
                                                     </div>
                                                 @endif
