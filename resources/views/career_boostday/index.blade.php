@@ -844,7 +844,7 @@
 </div>
 @endsection
 
-@push('styles')
+@push('head')
 <style>
     .career-boostday-segmented {
         display: inline-flex;
