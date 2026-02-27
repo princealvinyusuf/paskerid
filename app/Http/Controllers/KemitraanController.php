@@ -1076,6 +1076,13 @@ class KemitraanController extends Controller
             'active_initiators' => 0,
             'jumlah_lowongan_dibuka' => 0,
             'total_jumlah_kebutuhan' => 0,
+            'rating_distribution' => [],
+            'gender_distribution' => [],
+            'education_distribution' => [],
+            'top_companies' => [],
+            'top_initiators' => [],
+            'info_sources' => [],
+            'job_portals' => [],
         ];
 
         if (!Schema::hasTable('walk_in_survey_responses')) {
@@ -1085,19 +1092,67 @@ class KemitraanController extends Controller
         $hasWalkinDate = Schema::hasColumn('walk_in_survey_responses', 'walkin_date');
         $dateExpr = $hasWalkinDate ? 'COALESCE(walkin_date, DATE(created_at))' : 'DATE(created_at)';
 
-        // Filter for Total Responses and Avg Rating
-        $query = DB::table('walk_in_survey_responses');
+        // Base query with date filter
+        $baseQuery = DB::table('walk_in_survey_responses');
         if ($startDate && $endDate) {
-            $query->whereBetween(DB::raw($dateExpr), [$startDate, $endDate]);
+            $baseQuery->whereBetween(DB::raw($dateExpr), [$startDate, $endDate]);
         } elseif ($startDate) {
-            $query->whereDate(DB::raw($dateExpr), '>=', $startDate);
+            $baseQuery->whereDate(DB::raw($dateExpr), '>=', $startDate);
         } elseif ($endDate) {
-            $query->whereDate(DB::raw($dateExpr), '<=', $endDate);
+            $baseQuery->whereDate(DB::raw($dateExpr), '<=', $endDate);
         }
 
-        $result['total_responses'] = (int) $query->count();
-        $avgRatingRaw = (clone $query)->avg('rating_satisfaction');
+        // Filter for Total Responses and Avg Rating
+        $result['total_responses'] = (int) (clone $baseQuery)->count();
+        $avgRatingRaw = (clone $baseQuery)->avg('rating_satisfaction');
         $result['avg_rating'] = $avgRatingRaw !== null ? round((float) $avgRatingRaw, 2) : 0;
+
+        // Rating Distribution
+        $ratingRows = (clone $baseQuery)
+            ->selectRaw('rating_satisfaction AS label, COUNT(*) AS total')
+            ->groupBy('rating_satisfaction')
+            ->orderBy('rating_satisfaction', 'asc')
+            ->get();
+        foreach ($ratingRows as $row) {
+            $result['rating_distribution'][] = [
+                'label' => (string) ($row->label ?? '-'),
+                'total' => (int) ($row->total ?? 0),
+            ];
+        }
+
+        // Gender Distribution
+        if (Schema::hasColumn('walk_in_survey_responses', 'gender')) {
+            $genderRows = (clone $baseQuery)
+                ->selectRaw("TRIM(COALESCE(gender, '')) AS label, COUNT(*) AS total")
+                ->whereNotNull('gender')
+                ->whereRaw("TRIM(COALESCE(gender, '')) <> ''")
+                ->groupBy('label')
+                ->orderByDesc('total')
+                ->get();
+            foreach ($genderRows as $row) {
+                $result['gender_distribution'][] = [
+                    'label' => (string) ($row->label ?? '-'),
+                    'total' => (int) ($row->total ?? 0),
+                ];
+            }
+        }
+
+        // Education Distribution
+        if (Schema::hasColumn('walk_in_survey_responses', 'education')) {
+            $educationRows = (clone $baseQuery)
+                ->selectRaw("TRIM(COALESCE(education, '')) AS label, COUNT(*) AS total")
+                ->whereNotNull('education')
+                ->whereRaw("TRIM(COALESCE(education, '')) <> ''")
+                ->groupBy('label')
+                ->orderByDesc('total')
+                ->get();
+            foreach ($educationRows as $row) {
+                $result['education_distribution'][] = [
+                    'label' => (string) ($row->label ?? '-'),
+                    'total' => (int) ($row->total ?? 0),
+                ];
+            }
+        }
 
         // Active Companies - this is not date-dependent, but we'll keep it as is
         if (Schema::hasTable('company_walk_in_survey')) {
@@ -1111,6 +1166,93 @@ class KemitraanController extends Controller
             $result['active_initiators'] = (int) DB::table('walk_in_survey_initiators')
                 ->where('is_active', 1)
                 ->count();
+        }
+
+        // Top Companies with date filter
+        if (Schema::hasTable('company_walk_in_survey')) {
+            $companyQuery = DB::table('company_walk_in_survey as c')
+                ->leftJoin('walk_in_survey_responses as r', 'r.company_walk_in_survey_id', '=', 'c.id');
+            
+            if ($startDate && $endDate) {
+                $companyQuery->whereBetween(DB::raw($hasWalkinDate ? 'COALESCE(r.walkin_date, DATE(r.created_at))' : 'DATE(r.created_at)'), [$startDate, $endDate]);
+            } elseif ($startDate) {
+                $companyQuery->whereDate(DB::raw($hasWalkinDate ? 'COALESCE(r.walkin_date, DATE(r.created_at))' : 'DATE(r.created_at)'), '>=', $startDate);
+            } elseif ($endDate) {
+                $companyQuery->whereDate(DB::raw($hasWalkinDate ? 'COALESCE(r.walkin_date, DATE(r.created_at))' : 'DATE(r.created_at)'), '<=', $endDate);
+            }
+
+            $companyRows = $companyQuery
+                ->selectRaw('c.company_name, COUNT(r.id) AS peserta_hadir, ROUND(AVG(r.rating_satisfaction), 2) AS avg_rating')
+                ->groupBy('c.id', 'c.company_name')
+                ->orderByDesc('peserta_hadir')
+                ->orderBy('c.company_name')
+                ->limit(30)
+                ->get();
+            foreach ($companyRows as $row) {
+                $result['top_companies'][] = [
+                    'name' => trim((string) ($row->company_name ?? '-')),
+                    'peserta_hadir' => (int) ($row->peserta_hadir ?? 0),
+                    'avg_rating' => $row->avg_rating !== null ? (float) $row->avg_rating : null,
+                ];
+            }
+        }
+
+        // Top Initiators with date filter
+        if (
+            Schema::hasTable('walk_in_survey_initiators') &&
+            Schema::hasTable('company_walk_in_survey') &&
+            Schema::hasColumn('company_walk_in_survey', 'walk_in_initiator_id')
+        ) {
+            $initiatorQuery = DB::table('walk_in_survey_initiators as i')
+                ->leftJoin('company_walk_in_survey as c', 'c.walk_in_initiator_id', '=', 'i.id')
+                ->leftJoin('walk_in_survey_responses as r', 'r.company_walk_in_survey_id', '=', 'c.id');
+            
+            if ($startDate && $endDate) {
+                $initiatorQuery->whereBetween(DB::raw($hasWalkinDate ? 'COALESCE(r.walkin_date, DATE(r.created_at))' : 'DATE(r.created_at)'), [$startDate, $endDate]);
+            } elseif ($startDate) {
+                $initiatorQuery->whereDate(DB::raw($hasWalkinDate ? 'COALESCE(r.walkin_date, DATE(r.created_at))' : 'DATE(r.created_at)'), '>=', $startDate);
+            } elseif ($endDate) {
+                $initiatorQuery->whereDate(DB::raw($hasWalkinDate ? 'COALESCE(r.walkin_date, DATE(r.created_at))' : 'DATE(r.created_at)'), '<=', $endDate);
+            }
+
+            $initiatorRows = $initiatorQuery
+                ->selectRaw('i.initiator_name, COUNT(DISTINCT c.id) AS company_count, COUNT(r.id) AS peserta_hadir, ROUND(AVG(r.rating_satisfaction), 2) AS avg_rating')
+                ->groupBy('i.id', 'i.initiator_name')
+                ->orderByDesc('peserta_hadir')
+                ->orderBy('i.initiator_name')
+                ->limit(30)
+                ->get();
+            foreach ($initiatorRows as $row) {
+                $result['top_initiators'][] = [
+                    'name' => trim((string) ($row->initiator_name ?? '-')),
+                    'company_count' => (int) ($row->company_count ?? 0),
+                    'peserta_hadir' => (int) ($row->peserta_hadir ?? 0),
+                    'avg_rating' => $row->avg_rating !== null ? (float) $row->avg_rating : null,
+                ];
+            }
+        }
+
+        // Info Sources and Job Portals with date filter
+        $sourceRows = (clone $baseQuery)->select('info_sources', 'job_portals')->get();
+        $infoSourceCounts = [];
+        $jobPortalCounts = [];
+        foreach ($sourceRows as $row) {
+            foreach ((array) json_decode((string) ($row->info_sources ?? '[]'), true) as $value) {
+                $k = trim((string) $value);
+                if ($k !== '') $infoSourceCounts[$k] = ($infoSourceCounts[$k] ?? 0) + 1;
+            }
+            foreach ((array) json_decode((string) ($row->job_portals ?? '[]'), true) as $value) {
+                $k = trim((string) $value);
+                if ($k !== '') $jobPortalCounts[$k] = ($jobPortalCounts[$k] ?? 0) + 1;
+            }
+        }
+        arsort($infoSourceCounts);
+        arsort($jobPortalCounts);
+        foreach (array_slice($infoSourceCounts, 0, 20, true) as $label => $total) {
+            $result['info_sources'][] = ['label' => $label, 'total' => (int) $total];
+        }
+        foreach (array_slice($jobPortalCounts, 0, 20, true) as $label => $total) {
+            $result['job_portals'][] = ['label' => $label, 'total' => (int) $total];
         }
 
         // Get statistics from kemitraan_detail_lowongan with date filter

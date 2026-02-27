@@ -2472,6 +2472,7 @@
             fetch(`{{ route('kemitraan.statistics.row1') }}?${params.toString()}`)
                 .then(response => response.json())
                 .then(data => {
+                    // Update Row 1 statistics
                     const totalResponsesEl = document.getElementById('statTotalResponses');
                     const avgRatingEl = document.getElementById('statAvgRating');
                     const activeCompaniesEl = document.getElementById('statActiveCompanies');
@@ -2485,6 +2486,123 @@
                     if (activeInitiatorsEl) activeInitiatorsEl.textContent = new Intl.NumberFormat('id-ID').format(data.active_initiators || 0);
                     if (jumlahLowonganEl) jumlahLowonganEl.textContent = new Intl.NumberFormat('id-ID').format(data.jumlah_lowongan_dibuka || 0);
                     if (totalKebutuhanEl) totalKebutuhanEl.textContent = new Intl.NumberFormat('id-ID').format(data.total_jumlah_kebutuhan || 0);
+
+                    // Update Rating Distribution Chart
+                    const ratingDist = Array.isArray(data.rating_distribution) ? data.rating_distribution : [];
+                    if (charts.rating && ratingCanvas) {
+                        drawOrUpdate('rating', ratingCanvas, {
+                            type: 'doughnut',
+                            data: {
+                                labels: ratingDist.map((it) => `${it.label}/5`),
+                                datasets: [{
+                                    data: ratingDist.map((it) => Number(it.total || 0)),
+                                    backgroundColor: colorSet,
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                            }
+                        });
+                    }
+
+                    // Update Gender Distribution Chart
+                    const genderDist = Array.isArray(data.gender_distribution) ? data.gender_distribution : [];
+                    if (charts.gender && genderCanvas) {
+                        drawOrUpdate('gender', genderCanvas, {
+                            type: 'pie',
+                            data: {
+                                labels: genderDist.map((it) => String(it.label || '-')),
+                                datasets: [{ data: genderDist.map((it) => Number(it.total || 0)), backgroundColor: colorSet }]
+                            },
+                            options: { responsive: true, maintainAspectRatio: false }
+                        });
+                    }
+
+                    // Update Education Distribution Chart
+                    const educationDist = Array.isArray(data.education_distribution) ? data.education_distribution : [];
+                    const topEducation = educationDist.slice(0, 10);
+                    if (charts.education && educationCanvas) {
+                        drawOrUpdate('education', educationCanvas, {
+                            type: 'bar',
+                            data: {
+                                labels: topEducation.map((it) => String(it.label || '-')),
+                                datasets: [{ label: 'Jumlah', data: topEducation.map((it) => Number(it.total || 0)), backgroundColor: '#0ea5e9' }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                indexAxis: 'y',
+                                scales: { x: { beginAtZero: true } }
+                            }
+                        });
+                    }
+
+                    // Update Top Companies Chart and Table
+                    const topCompanies = Array.isArray(data.top_companies) ? data.top_companies : [];
+                    const n = Math.max(1, parseInt(topLimitEl ? topLimitEl.value : '10', 10) || 10);
+                    const cRows = topCompanies.slice(0, n);
+                    if (charts.company && companyCanvas) {
+                        drawOrUpdate('company', companyCanvas, {
+                            type: 'bar',
+                            data: {
+                                labels: cRows.map((it) => String(it.name || '-')),
+                                datasets: [{ label: 'Peserta Hadir', data: cRows.map((it) => Number(it.peserta_hadir || 0)), backgroundColor: '#2563eb' }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                indexAxis: 'y',
+                                scales: { x: { beginAtZero: true } }
+                            }
+                        });
+                    }
+                    if (companyTableBodyEl) {
+                        companyTableBodyEl.innerHTML = cRows.map((it) => `
+                            <tr>
+                                <td>${String(it.name || '-')}</td>
+                                <td>${Number(it.peserta_hadir || 0)}</td>
+                                <td>${it.avg_rating == null ? '-' : (Number(it.avg_rating).toFixed(2) + '/5')}</td>
+                            </tr>
+                        `).join('');
+                    }
+
+                    // Update Top Initiators Chart and Table
+                    const topInitiators = Array.isArray(data.top_initiators) ? data.top_initiators : [];
+                    const iRows = topInitiators.slice(0, n);
+                    if (charts.initiator && initiatorCanvas) {
+                        drawOrUpdate('initiator', initiatorCanvas, {
+                            type: 'bar',
+                            data: {
+                                labels: iRows.map((it) => String(it.name || '-')),
+                                datasets: [{ label: 'Peserta Hadir', data: iRows.map((it) => Number(it.peserta_hadir || 0)), backgroundColor: '#10b981' }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                indexAxis: 'y',
+                                scales: { x: { beginAtZero: true } }
+                            }
+                        });
+                    }
+                    if (initiatorTableBodyEl) {
+                        initiatorTableBodyEl.innerHTML = iRows.map((it) => `
+                            <tr>
+                                <td>${String(it.name || '-')}</td>
+                                <td>${Number(it.company_count || 0)}</td>
+                                <td>${Number(it.peserta_hadir || 0)}</td>
+                                <td>${it.avg_rating == null ? '-' : (Number(it.avg_rating).toFixed(2) + '/5')}</td>
+                            </tr>
+                        `).join('');
+                    }
+
+                    // Update Info Sources
+                    const infoSources = Array.isArray(data.info_sources) ? data.info_sources : [];
+                    renderCloud(infoSourcesListEl, infoSources);
+
+                    // Update Job Portals
+                    const jobPortals = Array.isArray(data.job_portals) ? data.job_portals : [];
+                    renderCloud(jobPortalsListEl, jobPortals);
                 })
                 .catch(error => {
                     console.error('Error fetching filtered statistics:', error);
