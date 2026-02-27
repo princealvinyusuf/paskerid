@@ -35,6 +35,36 @@
                     <div class="walkin-schedule-intro-hero mb-3">
                         <div class="d-flex align-items-start gap-3">
                             <div class="walkin-schedule-intro-icon">
+                                <i class="bi bi-briefcase"></i>
+                            </div>
+                            <div>
+                                <div class="walkin-schedule-intro-title">Rekrutmen Profesional Jadi Lebih Mudah dan Efisien</div>
+                                <div class="walkin-schedule-intro-desc">
+                                    Pusat Pasar Kerja hadir sebagai jembatan antara kebutuhan industri dan potensi anak bangsa. Melalui layanan Walk-in Interview, kami memberikan dukungan penuh bagi perusahaan untuk melakukan pemenuhan tenaga kerja profesional secara langsung.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="walkin-schedule-intro-hero mb-3">
+                        <div class="d-flex align-items-start gap-3">
+                            <div class="walkin-schedule-intro-icon">
+                                <i class="bi bi-star"></i>
+                            </div>
+                            <div>
+                                <div class="walkin-schedule-intro-title">Kenapa Bergabung dengan Kami?</div>
+                                <ul class="walkin-schedule-list mb-0">
+                                    <li><strong>Akses Gratis:</strong> Gunakan sarana & prasarana Gedung Pusat Pasar Kerja tanpa biaya.</li>
+                                    <li><strong>Target Terukur:</strong> Pertemuan langsung dengan kandidat yang sesuai kualifikasi.</li>
+                                    <li><strong>Dukungan Penuh:</strong> Fasilitas lengkap dan nyaman untuk kelancaran proses wawancara.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="walkin-schedule-intro-hero mb-3">
+                        <div class="d-flex align-items-start gap-3">
+                            <div class="walkin-schedule-intro-icon">
                                 <i class="bi bi-lightbulb"></i>
                             </div>
                             <div>
@@ -1233,7 +1263,7 @@
                             <div class="modal-header">
                                 <h5 class="modal-title" id="confirmSubmitModalLabel">Konfirmasi Pengiriman</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
+</div>
                             <div class="modal-body">
                                 <p class="mb-3"><strong>Apakah anda yakin ingin mengirimkan formulir ini?</strong></p>
                                 <p class="text-muted mb-0">Saya yakin seluruh informasi yang dimasukkan sudah benar</p>
