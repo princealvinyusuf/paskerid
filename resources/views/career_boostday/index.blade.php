@@ -31,6 +31,12 @@
                        aria-selected="{{ $tab === 'jadwal' ? 'true' : 'false' }}">
                         Jadwal Curhat
                     </a>
+                    <a href="{{ route('career-boostday.index', ['tab' => 'testimoni']) }}"
+                       class="career-boostday-seg-btn {{ $tab === 'testimoni' ? 'active' : '' }}"
+                       role="tab"
+                       aria-selected="{{ $tab === 'testimoni' ? 'true' : 'false' }}">
+                        Testimoni
+                    </a>
                     <a href="{{ route('career-boostday.index', ['tab' => 'statistik']) }}"
                        class="career-boostday-seg-btn {{ $tab === 'statistik' ? 'active' : '' }}"
                        role="tab"
@@ -242,6 +248,52 @@
                                     });
                                 })();
                             </script>
+                        @endif
+                    </div>
+                </div>
+            @elseif($tab === 'testimoni')
+                <div class="card shadow-sm rounded-4 mb-4">
+                    <div class="card-body p-4">
+                        <h3 class="h5 fw-bold mb-3"><i class="fa-solid fa-quote-left me-2 text-success"></i>Testimoni Peserta Career Boost Day</h3>
+                        <div class="text-muted mb-4">Cerita sukses dari peserta yang telah mengikuti program konsultasi karir kami.</div>
+
+                        @if($testimonials->count() === 0)
+                            <div class="text-center text-muted py-5">
+                                <i class="fa-solid fa-comments" style="font-size: 3rem; opacity: 0.3;"></i>
+                                <p class="mt-3 mb-0">Belum ada testimoni yang tersedia.</p>
+                            </div>
+                        @else
+                            <div class="row g-4">
+                                @foreach($testimonials as $testimonial)
+                                    <div class="col-12 col-md-6">
+                                        <div class="testimonial-card h-100 p-4 rounded-4 bg-light border position-relative">
+                                            <div class="testimonial-quote-icon">
+                                                <i class="fa-solid fa-quote-left text-success opacity-25" style="font-size: 2rem;"></i>
+                                            </div>
+                                            <div class="d-flex align-items-start gap-3 mb-3">
+                                                @if($testimonial->photo_url)
+                                                    <img src="{{ $testimonial->photo_url }}" alt="{{ $testimonial->name }}" class="testimonial-avatar rounded-circle" style="width: 64px; height: 64px; object-fit: cover; border: 3px solid #198754;">
+                                                @else
+                                                    <div class="testimonial-avatar-placeholder rounded-circle d-flex align-items-center justify-content-center" style="width: 64px; height: 64px; background: linear-gradient(135deg, #198754, #20c997); color: #fff; font-size: 1.5rem; font-weight: bold;">
+                                                        {{ strtoupper(substr($testimonial->name, 0, 1)) }}
+                                                    </div>
+                                                @endif
+                                                <div class="flex-grow-1">
+                                                    <h4 class="h6 fw-bold mb-1">{{ $testimonial->name }}</h4>
+                                                    @if($testimonial->job_title)
+                                                        <div class="small text-success fw-semibold">
+                                                            <i class="fa-solid fa-briefcase me-1"></i>{{ $testimonial->job_title }}
+                                                        </div>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                            <p class="mb-0 text-muted" style="line-height: 1.7;">
+                                                "{{ $testimonial->testimony }}"
+                                            </p>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
                         @endif
                     </div>
                 </div>
@@ -908,6 +960,20 @@
             background: #157347;
             color: #ffffff;
         }
+    }
+
+    /* Testimonial card styles */
+    .testimonial-card {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .testimonial-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    }
+    .testimonial-quote-icon {
+        position: absolute;
+        top: 16px;
+        right: 20px;
     }
 </style>
 @endpush

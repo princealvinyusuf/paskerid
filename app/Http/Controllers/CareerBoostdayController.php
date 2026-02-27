@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\BookedDate;
 use App\Models\CareerBoostdayConsultation;
+use App\Models\CareerBoostdayTestimonial;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -99,7 +100,17 @@ class CareerBoostdayController extends Controller
 
         $stats = $this->buildStatistics();
 
-        return view('career_boostday.index', compact('tab', 'konsultasiSlots', 'konsultasiAgendas', 'bookedKonsultasi', 'bookedFeatureAvailable', 'stats'));
+        // Fetch testimonials
+        $testimonials = collect();
+        if (Schema::hasTable('career_boostday_testimonials')) {
+            $testimonials = CareerBoostdayTestimonial::where('is_active', true)
+                ->orderBy('sort_order', 'asc')
+                ->orderBy('id', 'desc')
+                ->limit(20)
+                ->get();
+        }
+
+        return view('career_boostday.index', compact('tab', 'konsultasiSlots', 'konsultasiAgendas', 'bookedKonsultasi', 'bookedFeatureAvailable', 'stats', 'testimonials'));
     }
 
     public function store(Request $request)
