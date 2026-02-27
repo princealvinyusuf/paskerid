@@ -744,6 +744,8 @@ class KemitraanController extends Controller
                 'total_walkin_year' => 0,
                 'total_perusahaan_walkin_year' => 0,
                 'total_kehadiran_pencaker' => 0,
+                'jumlah_lowongan_dibuka' => 0,
+                'total_jumlah_kebutuhan' => 0,
             ],
             'trend' => [],
             'rating_distribution' => [],
@@ -852,6 +854,17 @@ class KemitraanController extends Controller
                 
                 $totalPerusahaanWalkinYear = $result ? (int) ($result->total ?? 0) : 0;
             }
+        }
+
+        // Get statistics from kemitraan_detail_lowongan
+        $jumlahLowonganDibuka = 0;
+        $totalJumlahKebutuhan = 0;
+        if (Schema::hasTable('kemitraan_detail_lowongan')) {
+            $jumlahLowonganDibuka = (int) DB::table('kemitraan_detail_lowongan')->count();
+            $totalJumlahKebutuhanResult = DB::table('kemitraan_detail_lowongan')
+                ->selectRaw('COALESCE(SUM(jumlah_kebutuhan), 0) as total')
+                ->first();
+            $totalJumlahKebutuhan = $totalJumlahKebutuhanResult ? (int) ($totalJumlahKebutuhanResult->total ?? 0) : 0;
         }
 
         $trendRows = DB::table('walk_in_survey_responses')
@@ -972,6 +985,8 @@ class KemitraanController extends Controller
                 'total_walkin_year' => $totalWalkinYear,
                 'total_perusahaan_walkin_year' => $totalPerusahaanWalkinYear,
                 'total_kehadiran_pencaker' => $totalKehadiranPencaker,
+                'jumlah_lowongan_dibuka' => $jumlahLowonganDibuka,
+                'total_jumlah_kebutuhan' => $totalJumlahKebutuhan,
             ],
             'trend' => $trend,
             'rating_distribution' => $ratingDistribution,

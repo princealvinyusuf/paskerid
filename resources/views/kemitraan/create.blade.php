@@ -331,6 +331,18 @@
                                     <div class="walkin-stat-value">{{ number_format((int) ($statsSummary['total_kehadiran_pencaker'] ?? 0)) }}</div>
                                 </div>
                             </div>
+                            <div class="col-6 col-lg-2">
+                                <div class="walkin-stat-card">
+                                    <div class="walkin-stat-label">Jumlah Lowongan Dibuka</div>
+                                    <div class="walkin-stat-value">{{ number_format((int) ($statsSummary['jumlah_lowongan_dibuka'] ?? 0)) }}</div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-lg-2">
+                                <div class="walkin-stat-card">
+                                    <div class="walkin-stat-label">Total Jumlah Kebutuhan</div>
+                                    <div class="walkin-stat-value">{{ number_format((int) ($statsSummary['total_jumlah_kebutuhan'] ?? 0)) }}</div>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="row g-3 mb-3">
