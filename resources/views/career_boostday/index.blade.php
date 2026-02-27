@@ -272,7 +272,17 @@
                                             </div>
                                             <div class="d-flex align-items-start gap-3 mb-3">
                                                 @if($testimonial->photo_url)
-                                                    <img src="{{ $testimonial->photo_url }}" alt="{{ $testimonial->name }}" class="testimonial-avatar rounded-circle" style="width: 64px; height: 64px; object-fit: cover; border: 3px solid #198754;">
+                                                    @php
+                                                        $photoUrl = $testimonial->photo_url;
+                                                        // If it's not a full URL (http/https), prepend / for relative paths
+                                                        if (!preg_match('/^https?:\/\//', $photoUrl)) {
+                                                            $photoUrl = '/' . ltrim($photoUrl, '/');
+                                                        }
+                                                    @endphp
+                                                    <img src="{{ $photoUrl }}" alt="{{ $testimonial->name }}" class="testimonial-avatar rounded-circle" style="width: 64px; height: 64px; object-fit: cover; border: 3px solid #198754;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                                    <div class="testimonial-avatar-placeholder rounded-circle d-flex align-items-center justify-content-center" style="width: 64px; height: 64px; background: linear-gradient(135deg, #198754, #20c997); color: #fff; font-size: 1.5rem; font-weight: bold; display: none;">
+                                                        {{ strtoupper(substr($testimonial->name, 0, 1)) }}
+                                                    </div>
                                                 @else
                                                     <div class="testimonial-avatar-placeholder rounded-circle d-flex align-items-center justify-content-center" style="width: 64px; height: 64px; background: linear-gradient(135deg, #198754, #20c997); color: #fff; font-size: 1.5rem; font-weight: bold;">
                                                         {{ strtoupper(substr($testimonial->name, 0, 1)) }}
