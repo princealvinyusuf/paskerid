@@ -384,6 +384,7 @@
                             <div class="col-12 col-lg-4">
                                 <label class="form-label mb-1">Range Trend</label>
                                 <select class="form-select" id="statsTrendRange">
+                                    <option value="1">1 Hari</option>
                                     <option value="7">7 Hari</option>
                                     <option value="30" selected>30 Hari</option>
                                     <option value="90">90 Hari</option>
