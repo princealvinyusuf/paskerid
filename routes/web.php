@@ -68,6 +68,7 @@ Route::post('kemitraan/form/verify-passcode', [App\Http\Controllers\KemitraanCon
     ->middleware('throttle:10,1')
     ->name('kemitraan.form.verify-passcode');
 Route::get('kemitraan/fully-booked-dates', [App\Http\Controllers\KemitraanController::class, 'fullyBookedDates'])->name('kemitraan.fullyBookedDates');
+Route::get('kemitraan/statistics/row1', [App\Http\Controllers\KemitraanController::class, 'getFilteredRow1Statistics'])->name('kemitraan.statistics.row1');
 
 // Walk-in Interview Gallery (public)
 Route::get('/walkin-gallery/feed', [WalkinGalleryController::class, 'feed'])->name('walkin-gallery.feed');

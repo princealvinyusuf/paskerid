@@ -276,42 +276,69 @@
                         <div class="alert alert-info mb-0">Data statistik belum tersedia. Pastikan tabel survei sudah terisi.</div>
                     @else
                         @php $statsSummary = $walkinStats['summary'] ?? []; @endphp
-                        <!-- Row 1 -->
+                        <!-- Date Range Filter for Row 1 -->
                         <div class="row g-3 mb-3">
+                            <div class="col-12 col-lg-6">
+                                <label class="form-label mb-1">Filter Tanggal (Row 1)</label>
+                                <div class="d-flex gap-2 align-items-end">
+                                    <div class="flex-grow-1">
+                                        <label class="form-label small mb-1">Dari Tanggal</label>
+                                        <input type="date" class="form-control" id="row1StartDate" value="">
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <label class="form-label small mb-1">Sampai Tanggal</label>
+                                        <input type="date" class="form-control" id="row1EndDate" value="">
+                                    </div>
+                                    <div>
+                                        <button type="button" class="btn btn-primary" id="row1FilterBtn">
+                                            <i class="bi bi-funnel me-1"></i>Filter
+                                        </button>
+                                    </div>
+                                    <div>
+                                        <button type="button" class="btn btn-outline-secondary" id="row1ResetBtn">
+                                            <i class="bi bi-arrow-counterclockwise me-1"></i>Reset
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Row 1 -->
+                        <div class="row g-3 mb-3" id="row1Stats">
                             <div class="col-6 col-lg-2">
                                 <div class="walkin-stat-card">
                                     <div class="walkin-stat-label">Total Responses</div>
-                                    <div class="walkin-stat-value">{{ number_format((int) ($statsSummary['total_responses'] ?? 0)) }}</div>
+                                    <div class="walkin-stat-value" id="statTotalResponses">{{ number_format((int) ($statsSummary['total_responses'] ?? 0)) }}</div>
                                 </div>
                             </div>
                             <div class="col-6 col-lg-2">
                                 <div class="walkin-stat-card">
                                     <div class="walkin-stat-label">Avg Rating</div>
-                                    <div class="walkin-stat-value">{{ number_format((float) ($statsSummary['avg_rating'] ?? 0), 2) }}/5</div>
+                                    <div class="walkin-stat-value" id="statAvgRating">{{ number_format((float) ($statsSummary['avg_rating'] ?? 0), 2) }}/5</div>
                                 </div>
                             </div>
                             <div class="col-6 col-lg-2">
                                 <div class="walkin-stat-card">
                                     <div class="walkin-stat-label">Active Companies</div>
-                                    <div class="walkin-stat-value">{{ number_format((int) ($statsSummary['active_companies'] ?? 0)) }}</div>
+                                    <div class="walkin-stat-value" id="statActiveCompanies">{{ number_format((int) ($statsSummary['active_companies'] ?? 0)) }}</div>
                                 </div>
                             </div>
                             <div class="col-6 col-lg-2">
                                 <div class="walkin-stat-card">
                                     <div class="walkin-stat-label">Active Initiators</div>
-                                    <div class="walkin-stat-value">{{ number_format((int) ($statsSummary['active_initiators'] ?? 0)) }}</div>
+                                    <div class="walkin-stat-value" id="statActiveInitiators">{{ number_format((int) ($statsSummary['active_initiators'] ?? 0)) }}</div>
                                 </div>
                             </div>
                             <div class="col-6 col-lg-2">
                                 <div class="walkin-stat-card">
                                     <div class="walkin-stat-label">Jumlah Lowongan Dibuka</div>
-                                    <div class="walkin-stat-value">{{ number_format((int) ($statsSummary['jumlah_lowongan_dibuka'] ?? 0)) }}</div>
+                                    <div class="walkin-stat-value" id="statJumlahLowongan">{{ number_format((int) ($statsSummary['jumlah_lowongan_dibuka'] ?? 0)) }}</div>
                                 </div>
                             </div>
                             <div class="col-6 col-lg-2">
                                 <div class="walkin-stat-card">
                                     <div class="walkin-stat-label">Total Jumlah Kebutuhan</div>
-                                    <div class="walkin-stat-value">{{ number_format((int) ($statsSummary['total_jumlah_kebutuhan'] ?? 0)) }}</div>
+                                    <div class="walkin-stat-value" id="statTotalKebutuhan">{{ number_format((int) ($statsSummary['total_jumlah_kebutuhan'] ?? 0)) }}</div>
                                 </div>
                             </div>
                         </div>
@@ -2422,6 +2449,71 @@
         if (topLimitEl) {
             topLimitEl.addEventListener('change', function () {
                 renderTopData(topLimitEl.value);
+            });
+        }
+
+        // Row 1 Date Range Filter
+        const row1StartDateEl = document.getElementById('row1StartDate');
+        const row1EndDateEl = document.getElementById('row1EndDate');
+        const row1FilterBtn = document.getElementById('row1FilterBtn');
+        const row1ResetBtn = document.getElementById('row1ResetBtn');
+
+        function updateRow1Stats(startDate, endDate) {
+            if (!row1FilterBtn) return;
+            
+            row1FilterBtn.disabled = true;
+            row1FilterBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>Loading...';
+
+            const params = new URLSearchParams();
+            if (startDate) params.append('start_date', startDate);
+            if (endDate) params.append('end_date', endDate);
+
+            fetch(`{{ route('kemitraan.statistics.row1') }}?${params.toString()}`)
+                .then(response => response.json())
+                .then(data => {
+                    const totalResponsesEl = document.getElementById('statTotalResponses');
+                    const avgRatingEl = document.getElementById('statAvgRating');
+                    const activeCompaniesEl = document.getElementById('statActiveCompanies');
+                    const activeInitiatorsEl = document.getElementById('statActiveInitiators');
+                    const jumlahLowonganEl = document.getElementById('statJumlahLowongan');
+                    const totalKebutuhanEl = document.getElementById('statTotalKebutuhan');
+
+                    if (totalResponsesEl) totalResponsesEl.textContent = new Intl.NumberFormat('id-ID').format(data.total_responses || 0);
+                    if (avgRatingEl) avgRatingEl.textContent = (data.avg_rating || 0).toFixed(2) + '/5';
+                    if (activeCompaniesEl) activeCompaniesEl.textContent = new Intl.NumberFormat('id-ID').format(data.active_companies || 0);
+                    if (activeInitiatorsEl) activeInitiatorsEl.textContent = new Intl.NumberFormat('id-ID').format(data.active_initiators || 0);
+                    if (jumlahLowonganEl) jumlahLowonganEl.textContent = new Intl.NumberFormat('id-ID').format(data.jumlah_lowongan_dibuka || 0);
+                    if (totalKebutuhanEl) totalKebutuhanEl.textContent = new Intl.NumberFormat('id-ID').format(data.total_jumlah_kebutuhan || 0);
+                })
+                .catch(error => {
+                    console.error('Error fetching filtered statistics:', error);
+                    alert('Terjadi kesalahan saat memuat data. Silakan coba lagi.');
+                })
+                .finally(() => {
+                    row1FilterBtn.disabled = false;
+                    row1FilterBtn.innerHTML = '<i class="bi bi-funnel me-1"></i>Filter';
+                });
+        }
+
+        if (row1FilterBtn) {
+            row1FilterBtn.addEventListener('click', function () {
+                const startDate = row1StartDateEl ? row1StartDateEl.value : '';
+                const endDate = row1EndDateEl ? row1EndDateEl.value : '';
+                
+                if (startDate && endDate && startDate > endDate) {
+                    alert('Tanggal mulai tidak boleh lebih besar dari tanggal akhir.');
+                    return;
+                }
+                
+                updateRow1Stats(startDate, endDate);
+            });
+        }
+
+        if (row1ResetBtn) {
+            row1ResetBtn.addEventListener('click', function () {
+                if (row1StartDateEl) row1StartDateEl.value = '';
+                if (row1EndDateEl) row1EndDateEl.value = '';
+                updateRow1Stats('', '');
             });
         }
     })();

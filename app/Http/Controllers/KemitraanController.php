@@ -1063,4 +1063,76 @@ class KemitraanController extends Controller
             ->where('id', 1)
             ->first(['id', 'is_enabled', 'passcode_hash']);
     }
+
+    public function getFilteredRow1Statistics(Request $request)
+    {
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
+
+        $result = [
+            'total_responses' => 0,
+            'avg_rating' => 0,
+            'active_companies' => 0,
+            'active_initiators' => 0,
+            'jumlah_lowongan_dibuka' => 0,
+            'total_jumlah_kebutuhan' => 0,
+        ];
+
+        if (!Schema::hasTable('walk_in_survey_responses')) {
+            return response()->json($result);
+        }
+
+        $hasWalkinDate = Schema::hasColumn('walk_in_survey_responses', 'walkin_date');
+        $dateExpr = $hasWalkinDate ? 'COALESCE(walkin_date, DATE(created_at))' : 'DATE(created_at)';
+
+        // Filter for Total Responses and Avg Rating
+        $query = DB::table('walk_in_survey_responses');
+        if ($startDate && $endDate) {
+            $query->whereBetween(DB::raw($dateExpr), [$startDate, $endDate]);
+        } elseif ($startDate) {
+            $query->whereDate(DB::raw($dateExpr), '>=', $startDate);
+        } elseif ($endDate) {
+            $query->whereDate(DB::raw($dateExpr), '<=', $endDate);
+        }
+
+        $result['total_responses'] = (int) $query->count();
+        $avgRatingRaw = (clone $query)->avg('rating_satisfaction');
+        $result['avg_rating'] = $avgRatingRaw !== null ? round((float) $avgRatingRaw, 2) : 0;
+
+        // Active Companies - this is not date-dependent, but we'll keep it as is
+        if (Schema::hasTable('company_walk_in_survey')) {
+            $result['active_companies'] = (int) DB::table('company_walk_in_survey')
+                ->where('is_active', 1)
+                ->count();
+        }
+
+        // Active Initiators - this is not date-dependent, but we'll keep it as is
+        if (Schema::hasTable('walk_in_survey_initiators')) {
+            $result['active_initiators'] = (int) DB::table('walk_in_survey_initiators')
+                ->where('is_active', 1)
+                ->count();
+        }
+
+        // Get statistics from kemitraan_detail_lowongan with date filter
+        if (Schema::hasTable('kemitraan_detail_lowongan')) {
+            $lowonganQuery = DB::table('kemitraan_detail_lowongan as kdl')
+                ->join('kemitraan as k', 'kdl.kemitraan_id', '=', 'k.id');
+            
+            if ($startDate && $endDate) {
+                $lowonganQuery->whereBetween('kdl.created_at', [$startDate . ' 00:00:00', $endDate . ' 23:59:59']);
+            } elseif ($startDate) {
+                $lowonganQuery->where('kdl.created_at', '>=', $startDate . ' 00:00:00');
+            } elseif ($endDate) {
+                $lowonganQuery->where('kdl.created_at', '<=', $endDate . ' 23:59:59');
+            }
+
+            $result['jumlah_lowongan_dibuka'] = (int) (clone $lowonganQuery)->count();
+            $totalKebutuhanResult = (clone $lowonganQuery)
+                ->selectRaw('COALESCE(SUM(kdl.jumlah_kebutuhan), 0) as total')
+                ->first();
+            $result['total_jumlah_kebutuhan'] = $totalKebutuhanResult ? (int) ($totalKebutuhanResult->total ?? 0) : 0;
+        }
+
+        return response()->json($result);
+    }
 } 
