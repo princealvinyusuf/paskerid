@@ -276,6 +276,7 @@
                         <div class="alert alert-info mb-0">Data statistik belum tersedia. Pastikan tabel survei sudah terisi.</div>
                     @else
                         @php $statsSummary = $walkinStats['summary'] ?? []; @endphp
+                        <!-- Row 1 -->
                         <div class="row g-3 mb-3">
                             <div class="col-6 col-lg-2">
                                 <div class="walkin-stat-card">
@@ -291,18 +292,6 @@
                             </div>
                             <div class="col-6 col-lg-2">
                                 <div class="walkin-stat-card">
-                                    <div class="walkin-stat-label">Responses Today</div>
-                                    <div class="walkin-stat-value">{{ number_format((int) ($statsSummary['responses_today'] ?? 0)) }}</div>
-                                </div>
-                            </div>
-                            <div class="col-6 col-lg-2">
-                                <div class="walkin-stat-card">
-                                    <div class="walkin-stat-label">Responses Month</div>
-                                    <div class="walkin-stat-value">{{ number_format((int) ($statsSummary['responses_month'] ?? 0)) }}</div>
-                                </div>
-                            </div>
-                            <div class="col-6 col-lg-2">
-                                <div class="walkin-stat-card">
                                     <div class="walkin-stat-label">Active Companies</div>
                                     <div class="walkin-stat-value">{{ number_format((int) ($statsSummary['active_companies'] ?? 0)) }}</div>
                                 </div>
@@ -311,6 +300,37 @@
                                 <div class="walkin-stat-card">
                                     <div class="walkin-stat-label">Active Initiators</div>
                                     <div class="walkin-stat-value">{{ number_format((int) ($statsSummary['active_initiators'] ?? 0)) }}</div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-lg-2">
+                                <div class="walkin-stat-card">
+                                    <div class="walkin-stat-label">Jumlah Lowongan Dibuka</div>
+                                    <div class="walkin-stat-value">{{ number_format((int) ($statsSummary['jumlah_lowongan_dibuka'] ?? 0)) }}</div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-lg-2">
+                                <div class="walkin-stat-card">
+                                    <div class="walkin-stat-label">Total Jumlah Kebutuhan</div>
+                                    <div class="walkin-stat-value">{{ number_format((int) ($statsSummary['total_jumlah_kebutuhan'] ?? 0)) }}</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Separator Line -->
+                        <hr class="my-4">
+                        
+                        <!-- Row 2 -->
+                        <div class="row g-3 mb-3">
+                            <div class="col-6 col-lg-2">
+                                <div class="walkin-stat-card">
+                                    <div class="walkin-stat-label">Responses Today</div>
+                                    <div class="walkin-stat-value">{{ number_format((int) ($statsSummary['responses_today'] ?? 0)) }}</div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-lg-2">
+                                <div class="walkin-stat-card">
+                                    <div class="walkin-stat-label">Responses Month</div>
+                                    <div class="walkin-stat-value">{{ number_format((int) ($statsSummary['responses_month'] ?? 0)) }}</div>
                                 </div>
                             </div>
                             <div class="col-6 col-lg-2">
@@ -329,18 +349,6 @@
                                 <div class="walkin-stat-card">
                                     <div class="walkin-stat-label">Total Kehadiran Pencaker</div>
                                     <div class="walkin-stat-value">{{ number_format((int) ($statsSummary['total_kehadiran_pencaker'] ?? 0)) }}</div>
-                                </div>
-                            </div>
-                            <div class="col-6 col-lg-2">
-                                <div class="walkin-stat-card">
-                                    <div class="walkin-stat-label">Jumlah Lowongan Dibuka</div>
-                                    <div class="walkin-stat-value">{{ number_format((int) ($statsSummary['jumlah_lowongan_dibuka'] ?? 0)) }}</div>
-                                </div>
-                            </div>
-                            <div class="col-6 col-lg-2">
-                                <div class="walkin-stat-card">
-                                    <div class="walkin-stat-label">Total Jumlah Kebutuhan</div>
-                                    <div class="walkin-stat-value">{{ number_format((int) ($statsSummary['total_jumlah_kebutuhan'] ?? 0)) }}</div>
                                 </div>
                             </div>
                         </div>
