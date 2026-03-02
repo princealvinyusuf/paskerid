@@ -1458,15 +1458,14 @@
                                     <div class="d-flex align-items-center justify-content-between mb-3">
                                         <div>
                                             <div class="fw-semibold">Komentar</div>
-                                            <div class="text-muted small">Setelah disetujui admin</div>
                                         </div>
-                                        <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#walkinCommentModal">
+                                        <button type="button" class="btn btn-outline-primary btn-sm walkin-btn-compact" data-bs-toggle="modal" data-bs-target="#walkinCommentModal">
                                             <i class="bi bi-plus-lg me-1"></i>Tambahkan Komentar
                                         </button>
                                     </div>
 
                                     <div class="text-muted small mb-2" id="walkinCommentCount"></div>
-                                    <div id="walkinGalleryCommentList" class="d-flex flex-column gap-2"></div>
+                                    <div id="walkinGalleryCommentList" class="d-flex flex-column gap-2 walkin-comment-list-scroll"></div>
                                 </div>
                             </div>
 
@@ -1691,7 +1690,10 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content rounded-4">
       <div class="modal-header">
-        <h5 class="modal-title" id="walkinCommentModalLabel">Tambahkan Komentar</h5>
+        <div>
+            <h5 class="modal-title" id="walkinCommentModalLabel">Tambahkan Komentar</h5>
+            <div class="text-muted small">Setelah disetujui admin</div>
+        </div>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -4073,6 +4075,15 @@
         background: #ffffff;
         padding: 10px 10px;
         box-shadow: 0 6px 16px rgba(2,6,23,0.05);
+    }
+    .walkin-btn-compact {
+        font-size: 0.78rem;
+        padding: 0.2rem 0.5rem;
+    }
+    .walkin-comment-list-scroll {
+        max-height: 292px;
+        overflow-y: auto;
+        padding-right: 4px;
     }
     .walkin-avatar {
         width: 34px;
