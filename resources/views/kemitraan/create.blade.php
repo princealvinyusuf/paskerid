@@ -1366,6 +1366,12 @@
 
                     <!-- Company cards -->
                     <div id="walkinGalleryCompanies" class="row g-2 d-none"></div>
+                    <div id="walkinGalleryPaginationWrap" class="d-none mt-3">
+                        <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
+                            <div id="walkinGalleryPaginationInfo" class="text-muted small"></div>
+                            <div id="walkinGalleryPaginationControls" class="btn-group btn-group-sm" role="group" aria-label="Navigasi halaman galeri"></div>
+                        </div>
+                    </div>
 
                     <!-- Company detail -->
                     <div id="walkinGalleryCompanyDetail" class="d-none">
@@ -2795,6 +2801,9 @@
         const searchWrapEl = document.getElementById('walkinGallerySearchWrap');
         const searchInputEl = document.getElementById('walkinGallerySearchInput');
         const searchClearBtnEl = document.getElementById('btnGallerySearchClear');
+        const paginationWrapEl = document.getElementById('walkinGalleryPaginationWrap');
+        const paginationInfoEl = document.getElementById('walkinGalleryPaginationInfo');
+        const paginationControlsEl = document.getElementById('walkinGalleryPaginationControls');
         const refreshBtn = document.getElementById('btnGalleryRefresh');
         const commentForm = document.getElementById('walkinGalleryCommentForm');
         const commentCompanyInput = document.getElementById('walkinGalleryCommentCompany');
@@ -3267,23 +3276,67 @@
         let currentCompany = '';
         let lastFeed = { items: [], comments: [], companies: [] };
         let gallerySearchQuery = '';
+        let galleryPage = 1;
+        const galleryPerPage = 6;
 
-        function applyCompanyFilter() {
+        function getFilteredCompanies() {
             const source = Array.isArray(lastFeed.companies) ? lastFeed.companies : [];
             const keyword = String(gallerySearchQuery || '').trim().toLowerCase();
-            const filtered = !keyword
+            return !keyword
                 ? source
                 : source.filter((company) => {
                     const name = String(company && company.company_name ? company.company_name : 'Umum').toLowerCase();
                     return name.includes(keyword);
                 });
+        }
 
-            if (keyword && filtered.length === 0) {
-                companiesEl.innerHTML = `<div class="text-muted small">Perusahaan tidak ditemukan.</div>`;
+        function renderCompanyPagination(totalItems, totalPages) {
+            if (!paginationWrapEl || !paginationInfoEl || !paginationControlsEl) return;
+
+            if (totalItems <= 0 || totalPages <= 1) {
+                paginationWrapEl.classList.add('d-none');
+                paginationInfoEl.textContent = '';
+                paginationControlsEl.innerHTML = '';
                 return;
             }
 
-            renderCompanies(filtered);
+            const safePage = Math.max(1, Math.min(galleryPage, totalPages));
+            const start = ((safePage - 1) * galleryPerPage) + 1;
+            const end = Math.min(safePage * galleryPerPage, totalItems);
+
+            paginationInfoEl.textContent = `Menampilkan ${start}-${end} dari ${totalItems} perusahaan`;
+            paginationControlsEl.innerHTML = `
+                <button type="button" class="btn btn-outline-secondary" data-page-action="prev" ${safePage <= 1 ? 'disabled' : ''}>Sebelumnya</button>
+                <button type="button" class="btn btn-outline-secondary disabled" disabled>Hal. ${safePage}/${totalPages}</button>
+                <button type="button" class="btn btn-outline-secondary" data-page-action="next" ${safePage >= totalPages ? 'disabled' : ''}>Berikutnya</button>
+            `;
+            paginationWrapEl.classList.remove('d-none');
+        }
+
+        function applyCompanyFilter() {
+            const filtered = getFilteredCompanies();
+            const keyword = String(gallerySearchQuery || '').trim();
+
+            if (keyword && filtered.length === 0) {
+                companiesEl.innerHTML = `<div class="text-muted small">Perusahaan tidak ditemukan.</div>`;
+                if (paginationWrapEl) paginationWrapEl.classList.add('d-none');
+                return;
+            }
+
+            if (!keyword && filtered.length === 0) {
+                renderCompanies(filtered);
+                if (paginationWrapEl) paginationWrapEl.classList.add('d-none');
+                return;
+            }
+
+            const totalPages = Math.max(1, Math.ceil(filtered.length / galleryPerPage));
+            if (galleryPage > totalPages) galleryPage = totalPages;
+            if (galleryPage < 1) galleryPage = 1;
+
+            const startIdx = (galleryPage - 1) * galleryPerPage;
+            const pageItems = filtered.slice(startIdx, startIdx + galleryPerPage);
+            renderCompanies(pageItems);
+            renderCompanyPagination(filtered.length, totalPages);
         }
 
         function setView(mode) {
@@ -3300,6 +3353,7 @@
                 commentsWrapEl.classList.remove('d-none');
                 companyBackBtn.classList.remove('d-none');
                 if (searchWrapEl) searchWrapEl.classList.add('d-none');
+                if (paginationWrapEl) paginationWrapEl.classList.add('d-none');
             }
         }
 
@@ -3312,6 +3366,7 @@
                 const res = await fetch(feedUrl, { headers: { 'Accept': 'application/json' } });
                 const data = await res.json();
                 lastFeed = data || { companies: [] };
+                galleryPage = 1;
                 loadingEl.classList.add('d-none');
                 renderJoinedCompanies([]);
                 renderRatings(null, []);
@@ -3369,6 +3424,7 @@
         if (searchInputEl) {
             searchInputEl.addEventListener('input', (e) => {
                 gallerySearchQuery = String(e && e.target ? e.target.value : '');
+                galleryPage = 1;
                 applyCompanyFilter();
             });
         }
@@ -3376,9 +3432,26 @@
         if (searchClearBtnEl) {
             searchClearBtnEl.addEventListener('click', () => {
                 gallerySearchQuery = '';
+                galleryPage = 1;
                 if (searchInputEl) {
                     searchInputEl.value = '';
                     searchInputEl.focus();
+                }
+                applyCompanyFilter();
+            });
+        }
+
+        if (paginationControlsEl) {
+            paginationControlsEl.addEventListener('click', (e) => {
+                const btn = e.target && e.target.closest ? e.target.closest('button[data-page-action]') : null;
+                if (!btn) return;
+                const action = btn.getAttribute('data-page-action');
+                const filtered = getFilteredCompanies();
+                const totalPages = Math.max(1, Math.ceil(filtered.length / galleryPerPage));
+                if (action === 'prev' && galleryPage > 1) {
+                    galleryPage -= 1;
+                } else if (action === 'next' && galleryPage < totalPages) {
+                    galleryPage += 1;
                 }
                 applyCompanyFilter();
             });
