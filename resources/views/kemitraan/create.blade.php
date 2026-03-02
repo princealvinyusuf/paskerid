@@ -2945,6 +2945,7 @@
                 const date = c.created_at ? String(c.created_at).slice(0, 10) : '';
                 const name = (c.name || '').trim();
                 const initial = name ? name.slice(0, 1).toUpperCase() : '?';
+                const company = String(c.company_name || '').trim();
                 card.innerHTML = `
                     <div class="d-flex align-items-start gap-2">
                         <div class="walkin-avatar">${escapeHtml(initial)}</div>
@@ -2953,6 +2954,7 @@
                                 <div class="fw-semibold">${escapeHtml(name)}</div>
                                 <div class="text-muted small">${escapeHtml(date)}</div>
                             </div>
+                            ${company ? `<div class="walkin-comment-company small">${escapeHtml(company)}</div>` : ``}
                             <div class="small mt-1">${escapeHtml(c.comment || '')}</div>
                         </div>
                     </div>
@@ -4075,6 +4077,10 @@
         background: #ffffff;
         padding: 10px 10px;
         box-shadow: 0 6px 16px rgba(2,6,23,0.05);
+    }
+    .walkin-comment-company {
+        color: #64748b;
+        font-weight: 500;
     }
     .walkin-btn-compact {
         font-size: 0.78rem;

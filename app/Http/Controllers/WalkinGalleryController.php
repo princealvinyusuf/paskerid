@@ -110,24 +110,7 @@ class WalkinGalleryController extends Controller
             'created_at',
         ]);
 
-        $comments = WalkinGalleryComment::query()
-            ->where('status', 'approved')
-            ->where(function ($q) use ($company) {
-                $q->where('company_name', $company);
-                if ($company === 'Umum') {
-                    $q->orWhereNull('company_name')->orWhere('company_name', '');
-                }
-            })
-            ->orderByDesc('created_at')
-            ->limit(50)
-            ->get([
-                'id',
-                'walkin_gallery_item_id',
-                'company_name',
-                'name',
-                'comment',
-                'created_at',
-            ]);
+        $comments = collect();
 
         $joinedCompanies = [];
         $openedPositions = [];
@@ -350,6 +333,46 @@ class WalkinGalleryController extends Controller
                 ];
             }
         }
+
+        // Comment scope:
+        // - Umum: show comments without specific company.
+        // - Specific company: show company comments.
+        // - Job Portal/Initiator view: include joined company comments as well.
+        $commentCompanyNames = [$company];
+        if ($isJobPortalData && !empty($joinedCompanies)) {
+            $commentCompanyNames = array_values(array_unique(array_merge($commentCompanyNames, $joinedCompanies)));
+        }
+        $commentCompanyNames = array_values(array_filter(array_map(static function ($name) {
+            return trim((string) $name);
+        }, $commentCompanyNames), static function ($name) {
+            return $name !== '';
+        }));
+        $commentCompanyNamesLower = array_values(array_unique(array_map(static function ($name) {
+            return mb_strtolower($name);
+        }, $commentCompanyNames)));
+
+        $commentsQuery = WalkinGalleryComment::query()
+            ->where('status', 'approved')
+            ->orderByDesc('created_at');
+
+        if ($company === 'Umum') {
+            $commentsQuery->where(function ($q) {
+                $q->whereNull('company_name')->orWhere('company_name', '');
+            });
+        } elseif (!empty($commentCompanyNamesLower)) {
+            $commentsQuery->whereIn(DB::raw('LOWER(company_name)'), $commentCompanyNamesLower);
+        } else {
+            $commentsQuery->whereRaw('1 = 0');
+        }
+
+        $comments = $commentsQuery->limit(50)->get([
+            'id',
+            'walkin_gallery_item_id',
+            'company_name',
+            'name',
+            'comment',
+            'created_at',
+        ]);
 
         return response()->json([
             'mode' => 'company',
