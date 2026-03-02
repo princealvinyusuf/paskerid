@@ -315,6 +315,7 @@ class WalkinGalleryController extends Controller
 
                     $joinedCompanyParticipants = [];
                     $joinedCompanyRatings = [];
+                    $joinedCompanies = [];
                     $computedTotal = 0;
 
                     foreach ($initiatorCompanyRows as $row) {
@@ -322,6 +323,7 @@ class WalkinGalleryController extends Controller
                         if ($name === '') {
                             continue;
                         }
+                        $joinedCompanies[] = $name;
                         $peserta = (int) ($row->peserta_hadir ?? 0);
                         $joinedCompanyParticipants[] = [
                             'name' => $name,
@@ -335,6 +337,7 @@ class WalkinGalleryController extends Controller
                     }
 
                     if (!empty($joinedCompanyParticipants)) {
+                        $joinedCompanies = array_values(array_unique($joinedCompanies));
                         $isJobPortalData = true;
                         $totalPeserta = $computedTotal;
                         $companyPesertaHadir = null;
