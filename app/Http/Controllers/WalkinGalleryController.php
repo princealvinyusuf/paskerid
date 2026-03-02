@@ -15,6 +15,14 @@ class WalkinGalleryController extends Controller
     {
         $type = $request->query('type'); // all|photo|video|comment (UI convenience)
         $company = trim((string) $request->query('company', ''));
+        $dateFrom = trim((string) $request->query('date_from', ''));
+        $dateTo = trim((string) $request->query('date_to', ''));
+
+        $dateFrom = preg_match('/^\d{4}-\d{2}-\d{2}$/', $dateFrom) ? $dateFrom : '';
+        $dateTo = preg_match('/^\d{4}-\d{2}-\d{2}$/', $dateTo) ? $dateTo : '';
+        if ($dateFrom !== '' && $dateTo !== '' && $dateFrom > $dateTo) {
+            [$dateFrom, $dateTo] = [$dateTo, $dateFrom];
+        }
 
         // If no company specified: return company cards
         if ($company === '') {
@@ -95,6 +103,14 @@ class WalkinGalleryController extends Controller
             $itemQuery->whereIn('type', ['video_upload', 'video_embed']);
         } elseif (is_string($type) && in_array($type, ['video_upload', 'video_embed'], true)) {
             $itemQuery->where('type', $type);
+        }
+
+        if ($dateFrom !== '' && $dateTo !== '') {
+            $itemQuery->whereBetween(DB::raw('DATE(created_at)'), [$dateFrom, $dateTo]);
+        } elseif ($dateFrom !== '') {
+            $itemQuery->whereDate('created_at', '>=', $dateFrom);
+        } elseif ($dateTo !== '') {
+            $itemQuery->whereDate('created_at', '<=', $dateTo);
         }
 
         $items = $itemQuery->limit(60)->get([
@@ -363,6 +379,14 @@ class WalkinGalleryController extends Controller
             $commentsQuery->whereIn(DB::raw('LOWER(company_name)'), $commentCompanyNamesLower);
         } else {
             $commentsQuery->whereRaw('1 = 0');
+        }
+
+        if ($dateFrom !== '' && $dateTo !== '') {
+            $commentsQuery->whereBetween(DB::raw('DATE(created_at)'), [$dateFrom, $dateTo]);
+        } elseif ($dateFrom !== '') {
+            $commentsQuery->whereDate('created_at', '>=', $dateFrom);
+        } elseif ($dateTo !== '') {
+            $commentsQuery->whereDate('created_at', '<=', $dateTo);
         }
 
         $comments = $commentsQuery->limit(50)->get([

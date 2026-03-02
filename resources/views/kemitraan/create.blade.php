@@ -1382,6 +1382,22 @@
                             </div>
                             <div class="text-muted small d-none d-md-block">Klik item untuk melihat detail.</div>
                         </div>
+                        <div id="walkinGalleryDateFilterWrap" class="walkin-panel p-3 mb-3">
+                            <div class="d-flex flex-wrap align-items-end gap-2">
+                                <div>
+                                    <label class="form-label small text-muted mb-1">Dari Tanggal</label>
+                                    <input type="date" class="form-control form-control-sm" id="walkinGalleryDateFrom">
+                                </div>
+                                <div>
+                                    <label class="form-label small text-muted mb-1">Sampai Tanggal</label>
+                                    <input type="date" class="form-control form-control-sm" id="walkinGalleryDateTo">
+                                </div>
+                                <button type="button" class="btn btn-primary btn-sm" id="btnGalleryDateApply">
+                                    <i class="bi bi-funnel me-1"></i>Terapkan
+                                </button>
+                                <button type="button" class="btn btn-outline-secondary btn-sm" id="btnGalleryDateReset">Reset</button>
+                            </div>
+                        </div>
 
                         <div class="row g-3">
                             <div class="col-12 d-none" id="walkinJoinedCompaniesSection">
@@ -2820,6 +2836,10 @@
         const paginationInfoEl = document.getElementById('walkinGalleryPaginationInfo');
         const paginationControlsEl = document.getElementById('walkinGalleryPaginationControls');
         const refreshBtn = document.getElementById('btnGalleryRefresh');
+        const dateFromEl = document.getElementById('walkinGalleryDateFrom');
+        const dateToEl = document.getElementById('walkinGalleryDateTo');
+        const dateApplyBtn = document.getElementById('btnGalleryDateApply');
+        const dateResetBtn = document.getElementById('btnGalleryDateReset');
         const commentModalEl = document.getElementById('walkinCommentModal');
         const commentForm = document.getElementById('walkinGalleryCommentForm');
         const commentCompanyInput = document.getElementById('walkinGalleryCommentCompany');
@@ -3292,6 +3312,8 @@
 
         let currentFilter = 'all';
         let currentCompany = '';
+        let currentDateFrom = '';
+        let currentDateTo = '';
         let lastFeed = { items: [], comments: [], companies: [] };
         let gallerySearchQuery = '';
         let galleryPage = 1;
@@ -3402,12 +3424,16 @@
         async function loadCompany(company, filter = 'all') {
             currentFilter = filter || 'all';
             currentCompany = company;
+            currentDateFrom = dateFromEl ? String(dateFromEl.value || '').trim() : currentDateFrom;
+            currentDateTo = dateToEl ? String(dateToEl.value || '').trim() : currentDateTo;
             loadingEl.classList.remove('d-none');
             setView('company');
             try {
                 const url = new URL(feedUrl, window.location.origin);
                 url.searchParams.set('company', company);
                 if (filter && filter !== 'all') url.searchParams.set('type', filter);
+                if (currentDateFrom) url.searchParams.set('date_from', currentDateFrom);
+                if (currentDateTo) url.searchParams.set('date_to', currentDateTo);
                 const res = await fetch(url.toString(), { headers: { 'Accept': 'application/json' } });
                 const data = await res.json();
                 lastFeed = data || { items: [], comments: [] };
@@ -3459,6 +3485,24 @@
             });
         }
 
+        if (dateApplyBtn) {
+            dateApplyBtn.addEventListener('click', () => {
+                if (!currentCompany) return;
+                loadCompany(currentCompany, currentFilter);
+            });
+        }
+
+        if (dateResetBtn) {
+            dateResetBtn.addEventListener('click', () => {
+                if (dateFromEl) dateFromEl.value = '';
+                if (dateToEl) dateToEl.value = '';
+                currentDateFrom = '';
+                currentDateTo = '';
+                if (!currentCompany) return;
+                loadCompany(currentCompany, currentFilter);
+            });
+        }
+
         if (paginationControlsEl) {
             paginationControlsEl.addEventListener('click', (e) => {
                 const btn = e.target && e.target.closest ? e.target.closest('button[data-page-action]') : null;
@@ -3481,6 +3525,10 @@
             const raw = card.getAttribute('data-company');
             if (!raw) return;
             const company = decodeURIComponent(raw);
+            currentDateFrom = '';
+            currentDateTo = '';
+            if (dateFromEl) dateFromEl.value = '';
+            if (dateToEl) dateToEl.value = '';
             loadCompany(company, 'all');
         });
 
