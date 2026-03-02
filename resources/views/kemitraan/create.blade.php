@@ -1409,6 +1409,7 @@
                                         <div class="fw-semibold">Lowongan yang dibuka</div>
                                         <div class="text-muted small">Detail Lowongan & Jumlah Kebutuhan</div>
                                     </div>
+                                    <div id="walkinOpenedPositionsTotal" class="small fw-semibold text-primary mb-2 d-none"></div>
                                     <div class="table-responsive">
                                         <table class="table table-bordered align-middle mb-0">
                                             <thead class="table-light">
@@ -2792,6 +2793,7 @@
         const participantsTotalEl = document.getElementById('walkinParticipantsTotal');
         const participantsBodyEl = document.getElementById('walkinParticipantsBody');
         const openedPositionsSectionEl = document.getElementById('walkinOpenedPositionsSection');
+        const openedPositionsTotalEl = document.getElementById('walkinOpenedPositionsTotal');
         const openedPositionsBodyEl = document.getElementById('walkinOpenedPositionsBody');
 
         if (!loadingEl || !gridEl || !companiesEl || !companyDetailEl || !companyTitleEl || !companyBackBtn || !commentsWrapEl || !commentListEl || !alertEl || !commentCompanyInput) return;
@@ -2941,8 +2943,17 @@
 
             if (list.length === 0) {
                 openedPositionsBodyEl.innerHTML = '';
+                if (openedPositionsTotalEl) {
+                    openedPositionsTotalEl.textContent = '';
+                    openedPositionsTotalEl.classList.add('d-none');
+                }
                 openedPositionsSectionEl.classList.add('d-none');
                 return;
+            }
+
+            if (openedPositionsTotalEl) {
+                openedPositionsTotalEl.textContent = `Total lowongan: ${list.length}`;
+                openedPositionsTotalEl.classList.remove('d-none');
             }
 
             openedPositionsBodyEl.innerHTML = list
