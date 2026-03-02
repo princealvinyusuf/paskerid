@@ -1356,6 +1356,14 @@
 
                     <div id="walkinGalleryLoading" class="text-muted small">Memuat galeri...</div>
 
+                    <div id="walkinGallerySearchWrap" class="mb-3 d-none">
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text"><i class="bi bi-search"></i></span>
+                            <input type="text" id="walkinGallerySearchInput" class="form-control" placeholder="Cari perusahaan..." aria-label="Cari perusahaan galeri">
+                            <button type="button" class="btn btn-outline-secondary" id="btnGallerySearchClear">Reset</button>
+                        </div>
+                    </div>
+
                     <!-- Company cards -->
                     <div id="walkinGalleryCompanies" class="row g-2 d-none"></div>
 
@@ -2784,6 +2792,9 @@
         const commentsWrapEl = document.getElementById('walkinGalleryComments');
         const commentListEl = document.getElementById('walkinGalleryCommentList');
         const alertEl = document.getElementById('walkinGalleryAlert');
+        const searchWrapEl = document.getElementById('walkinGallerySearchWrap');
+        const searchInputEl = document.getElementById('walkinGallerySearchInput');
+        const searchClearBtnEl = document.getElementById('btnGallerySearchClear');
         const refreshBtn = document.getElementById('btnGalleryRefresh');
         const commentForm = document.getElementById('walkinGalleryCommentForm');
         const commentCompanyInput = document.getElementById('walkinGalleryCommentCompany');
@@ -3255,6 +3266,25 @@
         let currentFilter = 'all';
         let currentCompany = '';
         let lastFeed = { items: [], comments: [], companies: [] };
+        let gallerySearchQuery = '';
+
+        function applyCompanyFilter() {
+            const source = Array.isArray(lastFeed.companies) ? lastFeed.companies : [];
+            const keyword = String(gallerySearchQuery || '').trim().toLowerCase();
+            const filtered = !keyword
+                ? source
+                : source.filter((company) => {
+                    const name = String(company && company.company_name ? company.company_name : 'Umum').toLowerCase();
+                    return name.includes(keyword);
+                });
+
+            if (keyword && filtered.length === 0) {
+                companiesEl.innerHTML = `<div class="text-muted small">Perusahaan tidak ditemukan.</div>`;
+                return;
+            }
+
+            renderCompanies(filtered);
+        }
 
         function setView(mode) {
             // mode: companies | company
@@ -3263,11 +3293,13 @@
                 companyDetailEl.classList.add('d-none');
                 commentsWrapEl.classList.add('d-none');
                 companyBackBtn.classList.add('d-none');
+                if (searchWrapEl) searchWrapEl.classList.remove('d-none');
             } else {
                 companiesEl.classList.add('d-none');
                 companyDetailEl.classList.remove('d-none');
                 commentsWrapEl.classList.remove('d-none');
                 companyBackBtn.classList.remove('d-none');
+                if (searchWrapEl) searchWrapEl.classList.add('d-none');
             }
         }
 
@@ -3287,7 +3319,7 @@
                 renderOpenedPositions([]);
                 setView('companies');
                 companiesEl.classList.remove('d-none');
-                renderCompanies(lastFeed.companies || []);
+                applyCompanyFilter();
             } catch (e) {
                 loadingEl.classList.add('d-none');
                 showAlert('Gagal memuat daftar perusahaan. Coba refresh.', 'warning');
@@ -3333,6 +3365,24 @@
             if (currentCompany) return loadCompany(currentCompany, currentFilter);
             return loadCompanies();
         });
+
+        if (searchInputEl) {
+            searchInputEl.addEventListener('input', (e) => {
+                gallerySearchQuery = String(e && e.target ? e.target.value : '');
+                applyCompanyFilter();
+            });
+        }
+
+        if (searchClearBtnEl) {
+            searchClearBtnEl.addEventListener('click', () => {
+                gallerySearchQuery = '';
+                if (searchInputEl) {
+                    searchInputEl.value = '';
+                    searchInputEl.focus();
+                }
+                applyCompanyFilter();
+            });
+        }
 
         companiesEl.addEventListener('click', (e) => {
             const card = e.target && e.target.closest ? e.target.closest('.walkin-company-card') : null;
