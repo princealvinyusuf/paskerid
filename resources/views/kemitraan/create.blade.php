@@ -1409,7 +1409,8 @@
                                         <div class="fw-semibold">Lowongan yang dibuka</div>
                                         <div class="text-muted small">Detail Lowongan & Jumlah Kebutuhan</div>
                                     </div>
-                                    <div id="walkinOpenedPositionsTotal" class="small fw-semibold text-primary mb-2 d-none"></div>
+                                    <div id="walkinOpenedPositionsTotal" class="small fw-semibold text-primary mb-1 d-none"></div>
+                                    <div id="walkinOpenedPositionsNeedTotal" class="small fw-semibold text-primary mb-2 d-none"></div>
                                     <div class="table-responsive">
                                         <table class="table table-bordered align-middle mb-0">
                                             <thead class="table-light">
@@ -2794,6 +2795,7 @@
         const participantsBodyEl = document.getElementById('walkinParticipantsBody');
         const openedPositionsSectionEl = document.getElementById('walkinOpenedPositionsSection');
         const openedPositionsTotalEl = document.getElementById('walkinOpenedPositionsTotal');
+        const openedPositionsNeedTotalEl = document.getElementById('walkinOpenedPositionsNeedTotal');
         const openedPositionsBodyEl = document.getElementById('walkinOpenedPositionsBody');
 
         if (!loadingEl || !gridEl || !companiesEl || !companyDetailEl || !companyTitleEl || !companyBackBtn || !commentsWrapEl || !commentListEl || !alertEl || !commentCompanyInput) return;
@@ -2947,6 +2949,10 @@
                     openedPositionsTotalEl.textContent = '';
                     openedPositionsTotalEl.classList.add('d-none');
                 }
+                if (openedPositionsNeedTotalEl) {
+                    openedPositionsNeedTotalEl.textContent = '';
+                    openedPositionsNeedTotalEl.classList.add('d-none');
+                }
                 openedPositionsSectionEl.classList.add('d-none');
                 return;
             }
@@ -2954,6 +2960,14 @@
             if (openedPositionsTotalEl) {
                 openedPositionsTotalEl.textContent = `Total lowongan: ${list.length}`;
                 openedPositionsTotalEl.classList.remove('d-none');
+            }
+            if (openedPositionsNeedTotalEl) {
+                const totalKebutuhan = list.reduce((sum, item) => {
+                    const value = Number(item && item.jumlah_kebutuhan ? item.jumlah_kebutuhan : 0);
+                    return sum + (Number.isFinite(value) ? value : 0);
+                }, 0);
+                openedPositionsNeedTotalEl.textContent = `Total Kebutuhan: ${totalKebutuhan}`;
+                openedPositionsNeedTotalEl.classList.remove('d-none');
             }
 
             openedPositionsBodyEl.innerHTML = list
