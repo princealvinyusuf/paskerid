@@ -1456,34 +1456,16 @@
                             <div class="col-12 col-lg-4">
                                 <div id="walkinGalleryComments" class="walkin-panel p-3 p-md-4 walkin-sticky">
                                     <div class="d-flex align-items-center justify-content-between mb-3">
-                                        <div class="fw-semibold">Komentar</div>
-                                        <div class="text-muted small">Setelah disetujui admin</div>
+                                        <div>
+                                            <div class="fw-semibold">Komentar</div>
+                                            <div class="text-muted small">Setelah disetujui admin</div>
+                                        </div>
+                                        <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#walkinCommentModal">
+                                            <i class="bi bi-plus-lg me-1"></i>Tambahkan Komentar
+                                        </button>
                                     </div>
 
-                                    <div class="walkin-comment-compose mb-3">
-                                        <form id="walkinGalleryCommentForm">
-                                            <input type="hidden" name="company_name" id="walkinGalleryCommentCompany" value="">
-                                            <div class="mb-2">
-                                                <label class="form-label small text-muted mb-1">Nama</label>
-                                                <input type="text" class="form-control" name="name" placeholder="Nama kamu" required maxlength="80">
-                                            </div>
-                                            <div class="mb-2">
-                                                <label class="form-label small text-muted mb-1">Komentar</label>
-                                                <textarea class="form-control" name="comment" rows="3" placeholder="Tulis komentar singkat..." required maxlength="1000"></textarea>
-                                            </div>
-                                            <input type="text" name="website" class="d-none" tabindex="-1" autocomplete="off">
-                                            <div class="d-flex justify-content-end mt-2">
-                                                <button type="submit" class="btn btn-primary btn-sm px-3">
-                                                    <i class="bi bi-send me-1"></i>Kirim
-                                                </button>
-                                            </div>
-                                        </form>
-                                    </div>
-
-                                    <div class="d-flex align-items-center justify-content-between mb-2">
-                                        <div class="fw-semibold">Terbaru</div>
-                                        <div class="text-muted small" id="walkinCommentCount"></div>
-                                    </div>
+                                    <div class="text-muted small mb-2" id="walkinCommentCount"></div>
                                     <div id="walkinGalleryCommentList" class="d-flex flex-column gap-2"></div>
                                 </div>
                             </div>
@@ -1699,6 +1681,37 @@
       </div>
       <div class="modal-body" id="walkinGalleryModalBody">
         <div class="text-muted small">Memuat...</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Walkin Comment Modal -->
+<div class="modal fade" id="walkinCommentModal" tabindex="-1" aria-labelledby="walkinCommentModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded-4">
+      <div class="modal-header">
+        <h5 class="modal-title" id="walkinCommentModalLabel">Tambahkan Komentar</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="walkinGalleryCommentForm">
+            <input type="hidden" name="company_name" id="walkinGalleryCommentCompany" value="">
+            <div class="mb-2">
+                <label class="form-label small text-muted mb-1">Nama</label>
+                <input type="text" class="form-control" name="name" placeholder="Nama kamu" required maxlength="80">
+            </div>
+            <div class="mb-2">
+                <label class="form-label small text-muted mb-1">Komentar</label>
+                <textarea class="form-control" name="comment" rows="4" placeholder="Tulis komentar singkat..." required maxlength="1000"></textarea>
+            </div>
+            <input type="text" name="website" class="d-none" tabindex="-1" autocomplete="off">
+            <div class="d-flex justify-content-end mt-2">
+                <button type="submit" class="btn btn-primary btn-sm px-3">
+                    <i class="bi bi-send me-1"></i>Kirim
+                </button>
+            </div>
+        </form>
       </div>
     </div>
   </div>
@@ -2805,6 +2818,7 @@
         const paginationInfoEl = document.getElementById('walkinGalleryPaginationInfo');
         const paginationControlsEl = document.getElementById('walkinGalleryPaginationControls');
         const refreshBtn = document.getElementById('btnGalleryRefresh');
+        const commentModalEl = document.getElementById('walkinCommentModal');
         const commentForm = document.getElementById('walkinGalleryCommentForm');
         const commentCompanyInput = document.getElementById('walkinGalleryCommentCompany');
         const scheduleLoadingEl = document.getElementById('walkinCompanyScheduleLoading');
@@ -3558,6 +3572,10 @@
                     // keep current company in hidden input after reset
                     commentCompanyInput.value = currentCompany || payload.company_name || '';
                     showAlert((data && data.message) ? data.message : 'Komentar terkirim.', 'success');
+                    if (commentModalEl && window.bootstrap) {
+                        const instance = bootstrap.Modal.getOrCreateInstance(commentModalEl);
+                        instance.hide();
+                    }
                 } catch (err) {
                     showAlert('Gagal mengirim komentar. Coba lagi.', 'warning');
                 }
