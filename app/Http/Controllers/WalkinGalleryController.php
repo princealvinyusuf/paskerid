@@ -23,6 +23,7 @@ class WalkinGalleryController extends Controller
         if ($dateFrom !== '' && $dateTo !== '' && $dateFrom > $dateTo) {
             [$dateFrom, $dateTo] = [$dateTo, $dateFrom];
         }
+        $hasSurveyWalkinDate = Schema::hasTable('walk_in_survey_responses') && Schema::hasColumn('walk_in_survey_responses', 'walkin_date');
 
         // If no company specified: return company cards
         if ($company === '') {
@@ -145,6 +146,17 @@ class WalkinGalleryController extends Controller
                         $q->where('status', 'approved');
                     }
                 })
+                ->when($dateFrom !== '' || $dateTo !== '', function ($query) use ($dateFrom, $dateTo) {
+                    $query->whereHas('kemitraan', function ($q) use ($dateFrom, $dateTo) {
+                        if ($dateFrom !== '' && $dateTo !== '') {
+                            $q->whereBetween(DB::raw('DATE(kemitraan.created_at)'), [$dateFrom, $dateTo]);
+                        } elseif ($dateFrom !== '') {
+                            $q->whereDate('kemitraan.created_at', '>=', $dateFrom);
+                        } elseif ($dateTo !== '') {
+                            $q->whereDate('kemitraan.created_at', '<=', $dateTo);
+                        }
+                    });
+                })
                 ->get([
                     'jabatan_yang_dibuka',
                     'jumlah_kebutuhan',
@@ -163,12 +175,20 @@ class WalkinGalleryController extends Controller
             }
 
             $rawCompanyLists = KemitraanDetailLowongan::query()
-                ->whereHas('kemitraan', function ($q) use ($company) {
+                ->whereHas('kemitraan', function ($q) use ($company, $dateFrom, $dateTo) {
                     $q->whereRaw('LOWER(institution_name) = ?', [mb_strtolower($company)])
                       ->where('tipe_penyelenggara', 'Job Portal');
 
                     if (Schema::hasColumn('kemitraan', 'status')) {
                         $q->where('status', 'approved');
+                    }
+
+                    if ($dateFrom !== '' && $dateTo !== '') {
+                        $q->whereBetween(DB::raw('DATE(kemitraan.created_at)'), [$dateFrom, $dateTo]);
+                    } elseif ($dateFrom !== '') {
+                        $q->whereDate('kemitraan.created_at', '>=', $dateFrom);
+                    } elseif ($dateTo !== '') {
+                        $q->whereDate('kemitraan.created_at', '<=', $dateTo);
                     }
                 })
                 ->pluck('nama_perusahaan')
@@ -207,9 +227,19 @@ class WalkinGalleryController extends Controller
             $openedPositions = array_values($openedMap);
 
             if (Schema::hasTable('company_walk_in_survey') && Schema::hasTable('walk_in_survey_responses')) {
+                $surveyDateColumn = $hasSurveyWalkinDate ? 'r.walkin_date' : 'r.created_at';
+                $surveyDateCondSql = '1=1';
+                if ($dateFrom !== '' && $dateTo !== '') {
+                    $surveyDateCondSql = "({$surveyDateColumn} IS NOT NULL AND DATE({$surveyDateColumn}) BETWEEN '{$dateFrom}' AND '{$dateTo}')";
+                } elseif ($dateFrom !== '') {
+                    $surveyDateCondSql = "({$surveyDateColumn} IS NOT NULL AND DATE({$surveyDateColumn}) >= '{$dateFrom}')";
+                } elseif ($dateTo !== '') {
+                    $surveyDateCondSql = "({$surveyDateColumn} IS NOT NULL AND DATE({$surveyDateColumn}) <= '{$dateTo}')";
+                }
+
                 $companyParticipantRows = DB::table('company_walk_in_survey as c')
                     ->leftJoin('walk_in_survey_responses as r', 'r.company_walk_in_survey_id', '=', 'c.id')
-                    ->selectRaw('c.company_name, COUNT(r.id) AS peserta_hadir')
+                    ->selectRaw("c.company_name, SUM(CASE WHEN {$surveyDateCondSql} THEN 1 ELSE 0 END) AS peserta_hadir")
                     ->groupBy('c.company_name')
                     ->get();
 
@@ -235,7 +265,7 @@ class WalkinGalleryController extends Controller
 
                 $companyRatingRows = DB::table('company_walk_in_survey as c')
                     ->leftJoin('walk_in_survey_responses as r', 'r.company_walk_in_survey_id', '=', 'c.id')
-                    ->selectRaw('c.company_name, ROUND(AVG(r.rating_satisfaction), 2) AS avg_rating')
+                    ->selectRaw("c.company_name, ROUND(AVG(CASE WHEN {$surveyDateCondSql} THEN r.rating_satisfaction END), 2) AS avg_rating")
                     ->groupBy('c.company_name')
                     ->get();
 
@@ -285,7 +315,7 @@ class WalkinGalleryController extends Controller
                         $initiatorAvgRaw = DB::table('company_walk_in_survey as c')
                             ->leftJoin('walk_in_survey_responses as r', 'r.company_walk_in_survey_id', '=', 'c.id')
                             ->where('c.walk_in_initiator_id', (int) $initiator->id)
-                            ->selectRaw('ROUND(AVG(r.rating_satisfaction), 2) AS avg_rating')
+                            ->selectRaw("ROUND(AVG(CASE WHEN {$surveyDateCondSql} THEN r.rating_satisfaction END), 2) AS avg_rating")
                             ->value('avg_rating');
                         $initiatorAvg = $initiatorAvgRaw !== null ? (float) $initiatorAvgRaw : null;
                     }
@@ -295,7 +325,7 @@ class WalkinGalleryController extends Controller
                     $totalPesertaRaw = DB::table('company_walk_in_survey as c')
                         ->leftJoin('walk_in_survey_responses as r', 'r.company_walk_in_survey_id', '=', 'c.id')
                         ->where('c.walk_in_initiator_id', $initiatorIdForTotal)
-                        ->selectRaw('COUNT(r.id) AS total_peserta')
+                        ->selectRaw("SUM(CASE WHEN {$surveyDateCondSql} THEN 1 ELSE 0 END) AS total_peserta")
                         ->value('total_peserta');
                     $totalPeserta = (int) ($totalPesertaRaw ?? 0);
                 }
@@ -306,7 +336,7 @@ class WalkinGalleryController extends Controller
                     $initiatorCompanyRows = DB::table('company_walk_in_survey as c')
                         ->leftJoin('walk_in_survey_responses as r', 'r.company_walk_in_survey_id', '=', 'c.id')
                         ->where('c.walk_in_initiator_id', $initiatorIdForTotal)
-                        ->selectRaw('c.company_name, COUNT(r.id) AS peserta_hadir, ROUND(AVG(r.rating_satisfaction), 2) AS avg_rating')
+                        ->selectRaw("c.company_name, SUM(CASE WHEN {$surveyDateCondSql} THEN 1 ELSE 0 END) AS peserta_hadir, ROUND(AVG(CASE WHEN {$surveyDateCondSql} THEN r.rating_satisfaction END), 2) AS avg_rating")
                         ->groupBy('c.id', 'c.company_name')
                         ->orderBy('c.sort_order', 'asc')
                         ->orderBy('c.company_name', 'asc')
