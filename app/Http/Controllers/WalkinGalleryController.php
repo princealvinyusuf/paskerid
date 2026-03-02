@@ -23,6 +23,7 @@ class WalkinGalleryController extends Controller
         if ($dateFrom !== '' && $dateTo !== '' && $dateFrom > $dateTo) {
             [$dateFrom, $dateTo] = [$dateTo, $dateFrom];
         }
+        $hasDateFilter = $dateFrom !== '' || $dateTo !== '';
         $hasSurveyWalkinDate = Schema::hasTable('walk_in_survey_responses') && Schema::hasColumn('walk_in_survey_responses', 'walkin_date');
 
         // If no company specified: return company cards
@@ -285,6 +286,38 @@ class WalkinGalleryController extends Controller
                     ];
                 }
 
+                if ($isJobPortalData && $hasDateFilter) {
+                    $activeCompanyMap = [];
+                    foreach ($joinedCompanyParticipants as $item) {
+                        $companyName = trim((string) ($item['name'] ?? ''));
+                        $peserta = (int) ($item['peserta_hadir'] ?? 0);
+                        if ($companyName !== '' && $peserta > 0) {
+                            $activeCompanyMap[mb_strtolower($companyName)] = true;
+                        }
+                    }
+                    foreach ($joinedCompanyRatings as $item) {
+                        $companyName = trim((string) ($item['name'] ?? ''));
+                        $rating = $item['rating'] ?? null;
+                        if ($companyName !== '' && $rating !== null) {
+                            $activeCompanyMap[mb_strtolower($companyName)] = true;
+                        }
+                    }
+
+                    $joinedCompanies = array_values(array_filter($joinedCompanies, function ($name) use ($activeCompanyMap) {
+                        $key = mb_strtolower(trim((string) $name));
+                        return $key !== '' && isset($activeCompanyMap[$key]);
+                    }));
+                    $joinedCompanyParticipants = array_values(array_filter($joinedCompanyParticipants, function ($item) use ($activeCompanyMap) {
+                        $key = mb_strtolower(trim((string) ($item['name'] ?? '')));
+                        return $key !== '' && isset($activeCompanyMap[$key]);
+                    }));
+                    $joinedCompanyRatings = array_values(array_filter($joinedCompanyRatings, function ($item) use ($activeCompanyMap) {
+                        $key = mb_strtolower(trim((string) ($item['name'] ?? '')));
+                        return $key !== '' && isset($activeCompanyMap[$key]);
+                    }));
+                    $isJobPortalData = count($joinedCompanies) > 0;
+                }
+
                 $initiatorName = $company;
                 $initiatorAvg = $companyRatingMap[mb_strtolower($company)] ?? null;
                 $initiatorIdForTotal = null;
@@ -352,15 +385,20 @@ class WalkinGalleryController extends Controller
                         if ($name === '') {
                             continue;
                         }
-                        $joinedCompanies[] = $name;
                         $peserta = (int) ($row->peserta_hadir ?? 0);
+                        $rating = $row->avg_rating !== null ? (float) $row->avg_rating : null;
+                        if ($hasDateFilter && $peserta <= 0 && $rating === null) {
+                            continue;
+                        }
+
+                        $joinedCompanies[] = $name;
                         $joinedCompanyParticipants[] = [
                             'name' => $name,
                             'peserta_hadir' => $peserta,
                         ];
                         $joinedCompanyRatings[] = [
                             'name' => $name,
-                            'rating' => $row->avg_rating !== null ? (float) $row->avg_rating : null,
+                            'rating' => $rating,
                         ];
                         $computedTotal += $peserta;
                     }
