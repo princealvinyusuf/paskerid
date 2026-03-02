@@ -186,6 +186,7 @@
                                             @php
                                                 $date = \Carbon\Carbon::parse($agenda->date);
                                                 $isUpcoming = $idx === $nextIdx;
+                                                $isToday = $date->isToday();
                                                 $rowClass = $isUpcoming ? 'walkin-schedule-upcoming' : ($idx % 2 === 1 ? 'walkin-schedule-odd' : '');
                                                 $infoItems = (array)($agenda->informasi_lainnya_items ?? []);
                                                 if (empty($infoItems)) {
@@ -203,18 +204,23 @@
                                                 <td><i class="fas fa-user-tie walkin-schedule-icon"></i>{{ $agenda->title }}</td>
                                                 <td>
                                                     <div class="walkin-2line">{{ $agenda->description }}</div>
-                                                    <button
-                                                        class="btn btn-outline-primary btn-sm ms-2 mt-2"
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target="#agendaDetailModal"
-                                                        data-title="{{ e($agenda->title) }}"
-                                                        data-organizer="{{ e($agenda->organizer) }}"
-                                                        data-date="{{ $date->format('d M Y') }}"
-                                                        data-location="{{ e($agenda->location) }}"
-                                                        data-registration="{{ $agenda->registration_url }}"
-                                                        data-info-lainnya='@json($infoItems)'
-                                                        data-description="{{ e($agenda->description) }}"
-                                                    >Detail</button>
+                                                    <div class="d-flex align-items-center gap-2 ms-2 mt-2">
+                                                        <button
+                                                            class="btn btn-outline-primary btn-sm"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#agendaDetailModal"
+                                                            data-title="{{ e($agenda->title) }}"
+                                                            data-organizer="{{ e($agenda->organizer) }}"
+                                                            data-date="{{ $date->format('d M Y') }}"
+                                                            data-location="{{ e($agenda->location) }}"
+                                                            data-registration="{{ $agenda->registration_url }}"
+                                                            data-info-lainnya='@json($infoItems)'
+                                                            data-description="{{ e($agenda->description) }}"
+                                                        >Detail</button>
+                                                        @if($isToday)
+                                                            <span class="badge text-bg-success">Sedang Berlangsung</span>
+                                                        @endif
+                                                    </div>
                                                 </td>
                                                 <td>
                                                     @if(empty($infoItems))
@@ -3152,6 +3158,8 @@
             if (!scheduleBodyEl) return;
             scheduleBodyEl.innerHTML = '';
             const rows = [];
+            const now = new Date();
+            const todayYmd = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
             (upcoming || []).forEach((a) => rows.push({ ...a, _bucket: 'upcoming' }));
             (past || []).forEach((a) => rows.push({ ...a, _bucket: 'past' }));
 
@@ -3193,6 +3201,7 @@
                         return `<a href="${escapeHtml(href)}" target="_blank" class="btn btn-outline-success btn-sm">Buka Link</a>`;
                     }).join('')}</div>`;
                 const isUpcoming = a._bucket === 'upcoming';
+                const isToday = String(a.date || '') === todayYmd;
                 const { dayMonth, year } = formatDateParts(a.date);
                 const tr = document.createElement('tr');
                 tr.className = (!isUpcoming && idx % 2 === 1) ? 'walkin-schedule-odd' : (isUpcoming && idx === 0 ? 'walkin-schedule-upcoming' : '');
@@ -3217,7 +3226,7 @@
                                 data-info-lainnya='${escapeHtml(JSON.stringify(infoItems))}'
                                 data-description="${escapeHtml(a.description || '')}"
                             >Detail</button>
-                            ${isUpcoming ? `<span class="badge text-bg-primary">Akan datang</span>` : `<span class="badge text-bg-secondary">Terdahulu</span>`}
+                            ${isToday ? `<span class="badge text-bg-success">Sedang Berlangsung</span>` : (isUpcoming ? `<span class="badge text-bg-primary">Akan datang</span>` : `<span class="badge text-bg-secondary">Terdahulu</span>`)}
                         </div>
                     </td>
                     <td>${infoCellHtml}</td>
