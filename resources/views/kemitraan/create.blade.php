@@ -1395,7 +1395,7 @@
                                             <thead class="table-light">
                                                 <tr>
                                                     <th>Perusahaan</th>
-                                                    <th style="width:220px;">Peserta Hadir</th>
+                                                    <th style="width:220px;">Peserta Hadir (Mengisi Survei)</th>
                                                 </tr>
                                             </thead>
                                             <tbody id="walkinParticipantsBody"></tbody>
