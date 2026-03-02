@@ -1332,9 +1332,14 @@
             <div class="card shadow-lg w-100 h-100">
                 <div class="card-body p-4">
                     <div class="d-flex align-items-center justify-content-between mb-2">
-                        <div>
+                        <div class="d-flex align-items-start gap-2">
+                            <button type="button" class="btn btn-light btn-sm border d-none" id="btnCompanyBack" aria-label="Kembali ke daftar perusahaan">
+                                <i class="bi bi-arrow-left"></i>
+                            </button>
+                            <div>
                             <h5 class="mb-0"><i class="bi bi-images me-2"></i>Galeri Walk In</h5>
                             <div class="text-muted small">Dokumentasi kegiatan (foto, video, komentar)</div>
+                            </div>
                         </div>
                         <button type="button" class="btn btn-outline-secondary btn-sm" id="btnGalleryRefresh">
                             <i class="bi bi-arrow-clockwise me-1"></i>Refresh
@@ -1351,14 +1356,9 @@
                     <!-- Company detail -->
                     <div id="walkinGalleryCompanyDetail" class="d-none">
                         <div class="d-flex align-items-start justify-content-between mb-3">
-                            <div class="d-flex align-items-center gap-2">
-                                <button type="button" class="btn btn-light btn-sm border" id="btnCompanyBack">
-                                    <i class="bi bi-arrow-left me-1"></i>Kembali
-                                </button>
-                                <div>
-                                    <div class="text-muted small">Dokumentasi perusahaan</div>
-                                    <div class="walkin-company-title fw-semibold" id="walkinGalleryCompanyTitle"></div>
-                                </div>
+                            <div>
+                                <div class="text-muted small">Dokumentasi perusahaan</div>
+                                <div class="walkin-company-title fw-semibold" id="walkinGalleryCompanyTitle"></div>
                             </div>
                             <div class="text-muted small d-none d-md-block">Klik item untuk melihat detail.</div>
                         </div>
@@ -3253,10 +3253,12 @@
                 companiesEl.classList.remove('d-none');
                 companyDetailEl.classList.add('d-none');
                 commentsWrapEl.classList.add('d-none');
+                companyBackBtn.classList.add('d-none');
             } else {
                 companiesEl.classList.add('d-none');
                 companyDetailEl.classList.remove('d-none');
                 commentsWrapEl.classList.remove('d-none');
+                companyBackBtn.classList.remove('d-none');
             }
         }
 
