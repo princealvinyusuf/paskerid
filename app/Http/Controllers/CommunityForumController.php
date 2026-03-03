@@ -577,9 +577,13 @@ class CommunityForumController extends Controller
             ->orderByDesc('created_at')
             ->paginate(10);
 
+        $roleEligibility = $this->resolveVerificationRoleEligibility((int) $user->id);
+
         return view('cf.verification', [
             'requests' => $requests,
             'user' => $user,
+            'allowedRoles' => $roleEligibility['allowed_roles'],
+            'authorTypeCounts' => $roleEligibility['author_type_counts'],
         ]);
     }
 
@@ -601,6 +605,20 @@ class CommunityForumController extends Controller
             'evidence_url' => 'nullable|url|max:500',
             'notes' => 'nullable|string|max:3000',
         ]);
+
+        $roleEligibility = $this->resolveVerificationRoleEligibility((int) $user->id);
+        $allowedRoles = $roleEligibility['allowed_roles'];
+        if (empty($allowedRoles)) {
+            return redirect()
+                ->route('cf.verification.index')
+                ->withErrors(['verification' => 'Belum ada aktivitas thread yang dapat dijadikan dasar verifikasi. Buat thread terlebih dahulu sebagai Employer atau Jobseeker.']);
+        }
+
+        if (!in_array((string) $validated['requested_role'], $allowedRoles, true)) {
+            return redirect()
+                ->route('cf.verification.index')
+                ->withErrors(['verification' => 'Role verifikasi tidak sesuai dengan riwayat tipe penulis Anda di thread CF.']);
+        }
 
         $hasPending = CfVerificationRequest::query()
             ->where('user_id', (int) $user->id)
@@ -1292,6 +1310,33 @@ class CommunityForumController extends Controller
             return 'Verified Jobseeker';
         }
         return '';
+    }
+
+    private function resolveVerificationRoleEligibility(int $userId): array
+    {
+        $authorTypeCounts = CfThread::query()
+            ->selectRaw('author_type, COUNT(*) AS total')
+            ->where('user_id', $userId)
+            ->whereIn('author_type', ['employer', 'jobseeker'])
+            ->groupBy('author_type')
+            ->pluck('total', 'author_type')
+            ->all();
+
+        $allowedRoles = [];
+        if ((int) ($authorTypeCounts['employer'] ?? 0) > 0) {
+            $allowedRoles[] = 'employer';
+        }
+        if ((int) ($authorTypeCounts['jobseeker'] ?? 0) > 0) {
+            $allowedRoles[] = 'jobseeker';
+        }
+
+        return [
+            'allowed_roles' => $allowedRoles,
+            'author_type_counts' => [
+                'employer' => (int) ($authorTypeCounts['employer'] ?? 0),
+                'jobseeker' => (int) ($authorTypeCounts['jobseeker'] ?? 0),
+            ],
+        ];
     }
 
     private function resolveMatchingProfile(Request $request, array $inputFilters): array

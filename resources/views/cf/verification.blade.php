@@ -33,15 +33,30 @@
                 @endif
             </div>
 
+            <div class="small text-muted mb-3">
+                Aktivitas thread Anda:
+                Employer {{ $authorTypeCounts['employer'] ?? 0 }} |
+                Jobseeker {{ $authorTypeCounts['jobseeker'] ?? 0 }}
+            </div>
+
             <form method="POST" action="{{ route('cf.verification.store') }}" class="row g-3">
                 @csrf
                 <div class="col-12 col-md-4">
                     <label for="requested_role" class="form-label">Role Verifikasi</label>
                     <select id="requested_role" name="requested_role" class="form-select" required>
                         <option value="">Pilih role</option>
-                        <option value="employer" @selected(old('requested_role') === 'employer')>Employer</option>
-                        <option value="jobseeker" @selected(old('requested_role') === 'jobseeker')>Jobseeker</option>
+                        <option value="employer" @selected(old('requested_role') === 'employer') @disabled(!in_array('employer', $allowedRoles ?? [], true))>Employer</option>
+                        <option value="jobseeker" @selected(old('requested_role') === 'jobseeker') @disabled(!in_array('jobseeker', $allowedRoles ?? [], true))>Jobseeker</option>
                     </select>
+                    @if(empty($allowedRoles))
+                        <div class="form-text text-danger">
+                            Buat minimal 1 thread sebagai Employer atau Jobseeker untuk mengaktifkan role verifikasi.
+                        </div>
+                    @else
+                        <div class="form-text">
+                            Role yang tersedia disesuaikan dengan tipe penulis pada riwayat thread Anda.
+                        </div>
+                    @endif
                 </div>
 
                 <div class="col-12 col-md-8">

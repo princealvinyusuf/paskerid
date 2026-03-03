@@ -16,7 +16,7 @@
             <button type="button" class="walkin-seg-btn" id="btnPanelGallery" aria-selected="false">Galeri Walk In</button>
             <button type="button" class="walkin-seg-btn" id="btnPanelForm" aria-selected="false">Form Pendaftaran Walk In (Pemberi Kerja)</button>
             <button type="button" class="walkin-seg-btn" id="btnPanelSurvey" aria-selected="false">Survei Evaluasi</button>
-            <button type="button" class="walkin-seg-btn" id="btnPanelStatistik" aria-selected="false">Statistik</button>
+            <button type="button" class="walkin-seg-btn" id="btnPanelStatistik" aria-selected="false">Hasil Evaluasi</button>
         </div>
     </div>
 
