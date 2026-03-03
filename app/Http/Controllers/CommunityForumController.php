@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\DispatchCfReplyNotificationsJob;
+use App\Jobs\ProcessCfReportJob;
 use App\Models\CfCategory;
 use App\Models\CfNotification;
 use App\Models\CfReply;
@@ -548,7 +550,11 @@ class CommunityForumController extends Controller
         ]);
 
         $thread->update(['last_activity_at' => now()]);
-        $this->createReplyNotifications($thread, (int) $request->user()->id, (int) $reply->id);
+        DispatchCfReplyNotificationsJob::dispatch(
+            (int) $thread->id,
+            (int) $request->user()->id,
+            (int) $reply->id
+        );
 
         return redirect()
             ->route('cf.threads.show', $thread->id)
@@ -1014,40 +1020,14 @@ class CommunityForumController extends Controller
             'reason' => 'required|string|min:10|max:1000',
         ]);
 
-        $priority = $this->calculateReportPriority(
-            (string) $validated['reason'],
-            'thread',
-            (int) $request->user()->id
-        );
-        $escalationLevel = $this->resolveEscalationLevel((string) $validated['reason'], (int) $priority['score']);
-
         $report = CfReport::query()->create([
             'reportable_type' => 'thread',
             'reportable_id' => (int) $thread->id,
             'reported_by_user_id' => (int) $request->user()->id,
             'reason' => (string) $validated['reason'],
             'status' => 'open',
-            'priority_score' => $priority['score'],
-            'priority_level' => $priority['level'],
-            'escalation_level' => $escalationLevel,
-            'escalated_at' => $escalationLevel !== 'none' ? now() : null,
         ]);
-
-        $this->createReportAudit(
-            (int) $report->id,
-            (int) $request->user()->id,
-            'reported',
-            null,
-            'open',
-            $escalationLevel,
-            null,
-            [
-                'priority_score' => (int) $priority['score'],
-                'priority_level' => (string) $priority['level'],
-                'reportable_type' => 'thread',
-            ]
-        );
-        $this->applyAutoHideForReport($report, (int) $request->user()->id);
+        ProcessCfReportJob::dispatch((int) $report->id, (int) $request->user()->id);
 
         return redirect()
             ->route('cf.threads.show', $thread->id)
@@ -1074,40 +1054,14 @@ class CommunityForumController extends Controller
             'reason' => 'required|string|min:10|max:1000',
         ]);
 
-        $priority = $this->calculateReportPriority(
-            (string) $validated['reason'],
-            'reply',
-            (int) $request->user()->id
-        );
-        $escalationLevel = $this->resolveEscalationLevel((string) $validated['reason'], (int) $priority['score']);
-
         $report = CfReport::query()->create([
             'reportable_type' => 'reply',
             'reportable_id' => (int) $reply->id,
             'reported_by_user_id' => (int) $request->user()->id,
             'reason' => (string) $validated['reason'],
             'status' => 'open',
-            'priority_score' => $priority['score'],
-            'priority_level' => $priority['level'],
-            'escalation_level' => $escalationLevel,
-            'escalated_at' => $escalationLevel !== 'none' ? now() : null,
         ]);
-
-        $this->createReportAudit(
-            (int) $report->id,
-            (int) $request->user()->id,
-            'reported',
-            null,
-            'open',
-            $escalationLevel,
-            null,
-            [
-                'priority_score' => (int) $priority['score'],
-                'priority_level' => (string) $priority['level'],
-                'reportable_type' => 'reply',
-            ]
-        );
-        $this->applyAutoHideForReport($report, (int) $request->user()->id);
+        ProcessCfReportJob::dispatch((int) $report->id, (int) $request->user()->id);
 
         return redirect()
             ->route('cf.threads.show', $thread->id)
