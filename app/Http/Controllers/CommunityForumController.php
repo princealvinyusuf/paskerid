@@ -1057,12 +1057,25 @@ class CommunityForumController extends Controller
             'rejected' => (int) CfReport::query()->where('status', 'rejected')->count(),
         ];
 
+        $todayStart = now()->startOfDay();
+        $summary = [
+            'open_total' => $statusCounts['open'],
+            'open_high' => (int) CfReport::query()->where('status', 'open')->where('priority_level', 'high')->count(),
+            'open_medium' => (int) CfReport::query()->where('status', 'open')->where('priority_level', 'medium')->count(),
+            'open_low' => (int) CfReport::query()->where('status', 'open')->where('priority_level', 'low')->count(),
+            'open_age_7_plus' => (int) CfReport::query()->where('status', 'open')->where('created_at', '<', now()->subDays(7))->count(),
+            'open_age_14_plus' => (int) CfReport::query()->where('status', 'open')->where('created_at', '<', now()->subDays(14))->count(),
+            'new_today' => (int) CfReport::query()->where('created_at', '>=', $todayStart)->count(),
+            'resolved_today' => (int) CfReport::query()->where('status', 'resolved')->where('reviewed_at', '>=', $todayStart)->count(),
+        ];
+
         return view('cf.reports', [
             'reports' => $reports,
             'targetMap' => $targetMap,
             'status' => $status,
             'statusCounts' => $statusCounts,
             'autoClosedCount' => $autoClosedCount,
+            'summary' => $summary,
         ]);
     }
 

@@ -27,6 +27,51 @@
         </div>
     @endif
 
+    <div class="row g-3 mb-4">
+        <div class="col-12 col-md-6 col-lg-3">
+            <div class="card border-0 shadow-sm rounded-4">
+                <div class="card-body">
+                    <div class="small text-muted">Open Reports</div>
+                    <div class="h4 fw-bold mb-0">{{ (int) ($summary['open_total'] ?? 0) }}</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-6 col-lg-3">
+            <div class="card border-0 shadow-sm rounded-4">
+                <div class="card-body">
+                    <div class="small text-muted">Prioritas Open</div>
+                    <div class="small">
+                        High: <strong>{{ (int) ($summary['open_high'] ?? 0) }}</strong> |
+                        Medium: <strong>{{ (int) ($summary['open_medium'] ?? 0) }}</strong> |
+                        Low: <strong>{{ (int) ($summary['open_low'] ?? 0) }}</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-6 col-lg-3">
+            <div class="card border-0 shadow-sm rounded-4">
+                <div class="card-body">
+                    <div class="small text-muted">Aging Open</div>
+                    <div class="small">
+                        7+ hari: <strong>{{ (int) ($summary['open_age_7_plus'] ?? 0) }}</strong> |
+                        14+ hari: <strong>{{ (int) ($summary['open_age_14_plus'] ?? 0) }}</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-6 col-lg-3">
+            <div class="card border-0 shadow-sm rounded-4">
+                <div class="card-body">
+                    <div class="small text-muted">Aktivitas Hari Ini</div>
+                    <div class="small">
+                        Baru: <strong>{{ (int) ($summary['new_today'] ?? 0) }}</strong> |
+                        Resolved: <strong>{{ (int) ($summary['resolved_today'] ?? 0) }}</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="card border-0 shadow-sm rounded-4 mb-4">
         <div class="card-body">
             <div class="d-flex flex-wrap gap-2 align-items-center">
