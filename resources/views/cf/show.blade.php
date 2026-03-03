@@ -150,6 +150,32 @@
         </div>
     </div>
 
+    @if(!empty($integrationLinks ?? []))
+        <div class="card border-0 shadow-sm rounded-4 mb-4">
+            <div class="card-body p-4">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h3 class="h6 fw-bold mb-0">Program Terkait PaskerID</h3>
+                    <span class="small text-muted">Integrasi fase growth</span>
+                </div>
+                <div class="row g-2">
+                    @foreach($integrationLinks as $item)
+                        <div class="col-12 col-md-6">
+                            <a href="{{ $item['url'] }}" class="text-decoration-none">
+                                <div class="border rounded-3 p-3 h-100">
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                        <strong class="text-dark">{{ $item['title'] }}</strong>
+                                        <span class="badge text-bg-light border text-dark">{{ $item['badge'] }}</span>
+                                    </div>
+                                    <div class="small text-muted">{{ $item['description'] }}</div>
+                                </div>
+                            </a>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+    @endif
+
     <div class="d-flex justify-content-between align-items-center mb-2">
         <h2 class="h5 fw-bold mb-0">Balasan ({{ $thread->replies->count() }})</h2>
     </div>

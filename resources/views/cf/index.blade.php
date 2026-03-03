@@ -23,6 +23,7 @@
             @if($isCfAdmin ?? false)
                 <a href="{{ route('cf.admin.reports.index') }}" class="btn btn-outline-danger btn-sm">Moderation Center</a>
                 <a href="{{ route('cf.admin.verifications.index') }}" class="btn btn-outline-warning btn-sm">Verification Admin</a>
+                <a href="{{ route('cf.admin.trends.index') }}" class="btn btn-outline-info btn-sm">Trend Analytics</a>
             @endif
             @auth
                 <a href="{{ route('cf.verification.index') }}" class="btn btn-outline-secondary btn-sm">
@@ -136,6 +137,60 @@
             @else
                 <div class="small text-muted">
                     Belum ada rekomendasi yang cocok. Isi metadata jabatan/lokasi/tipe kerja untuk meningkatkan relevansi.
+                </div>
+            @endif
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm rounded-4 mb-4">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <h2 class="h6 fw-bold mb-0">Featured Weekly Labor Discussions</h2>
+                <span class="small text-muted">7 hari terakhir</span>
+            </div>
+            @if(isset($featuredWeeklyThreads) && $featuredWeeklyThreads->count() > 0)
+                <div class="row g-3">
+                    @foreach($featuredWeeklyThreads as $featured)
+                        <div class="col-12 col-md-6 col-lg-4">
+                            <div class="border rounded-3 p-3 h-100">
+                                <div class="d-flex align-items-center gap-1 mb-1 flex-wrap">
+                                    @if($featured->is_pinned)
+                                        <span class="badge text-bg-info">Pinned</span>
+                                    @endif
+                                    @if($featured->work_type)
+                                        <span class="badge text-bg-light border">{{ $featured->work_type }}</span>
+                                    @endif
+                                    @if($featured->experience_level)
+                                        <span class="badge text-bg-light border">{{ $featured->experience_level }}</span>
+                                    @endif
+                                </div>
+                                <a href="{{ route('cf.threads.show', $featured->id) }}" class="fw-semibold text-decoration-none d-block mb-1">
+                                    {{ $featured->title }}
+                                </a>
+                                <div class="small text-muted">
+                                    {{ $featured->category->name ?? '-' }} |
+                                    Balasan: {{ (int) ($featured->replies_count ?? 0) }} |
+                                    Views: {{ number_format((int) ($featured->views_count ?? 0)) }}
+                                </div>
+                                <div class="small text-muted mt-1">
+                                    Oleh: {{ $featured->user->name ?? 'Anonim' }}
+                                    @if($featured->job_role)
+                                        | Jabatan: {{ $featured->job_role }}
+                                    @endif
+                                    @if($featured->city || $featured->province)
+                                        | Area:
+                                        @if($featured->city){{ $featured->city }}@endif
+                                        @if($featured->city && $featured->province), @endif
+                                        @if($featured->province){{ $featured->province }}@endif
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            @else
+                <div class="small text-muted">
+                    Belum ada diskusi unggulan minggu ini.
                 </div>
             @endif
         </div>

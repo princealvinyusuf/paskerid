@@ -158,6 +158,9 @@ Route::post('/cf/thread/{id}/toggle-status', [CommunityForumController::class, '
 Route::get('/cf/admin/reports', [CommunityForumController::class, 'reports'])
     ->middleware('auth')
     ->name('cf.admin.reports.index');
+Route::get('/cf/admin/trends', [CommunityForumController::class, 'trends'])
+    ->middleware('auth')
+    ->name('cf.admin.trends.index');
 Route::post('/cf/admin/reports/{id}/status', [CommunityForumController::class, 'updateReportStatus'])
     ->middleware('auth')
     ->whereNumber('id')

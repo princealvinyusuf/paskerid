@@ -160,6 +160,31 @@ class CommunityForumController extends Controller
             $request->user() ? (int) $request->user()->id : null
         );
 
+        $featuredWeeklyThreads = CfThread::query()
+            ->with(['category:id,name,slug', 'user:id,name'])
+            ->withCount([
+                'replies' => function ($query) {
+                    $query->where('is_hidden', false);
+                },
+            ])
+            ->where('status', 'open')
+            ->where('is_hidden', false)
+            ->where('created_at', '>=', now()->subDays(7))
+            ->where(function ($query) {
+                $query
+                    ->whereNotNull('job_role')
+                    ->orWhereNotNull('work_type')
+                    ->orWhereNotNull('province')
+                    ->orWhereNotNull('city')
+                    ->orWhereNotNull('experience_level')
+                    ->orWhereNotNull('sector');
+            })
+            ->orderByDesc('is_pinned')
+            ->orderByRaw('(COALESCE(replies_count, 0) * 3) + (COALESCE(views_count, 0) / 10) DESC')
+            ->orderByDesc('last_activity_at')
+            ->limit(6)
+            ->get();
+
         $unreadNotificationsCount = $request->user()
             ? (int) CfNotification::query()
                 ->where('user_id', (int) $request->user()->id)
@@ -188,6 +213,7 @@ class CommunityForumController extends Controller
             'categories' => $categories,
             'threads' => $threads,
             'hotThreads' => $hotThreads,
+            'featuredWeeklyThreads' => $featuredWeeklyThreads,
             'matchingThreads' => $matchingThreads,
             'matchingSource' => $matchingProfile['source'],
             'isCfAdmin' => $this->isCfAdmin($request),
@@ -471,6 +497,7 @@ class CommunityForumController extends Controller
             'isCfAdmin' => $isAdmin,
             'reputationMap' => $reputationMap,
             'verificationMap' => $verificationMap,
+            'integrationLinks' => $this->resolveProgramIntegrationLinks($thread),
         ]);
     }
 
@@ -1121,6 +1148,116 @@ class CommunityForumController extends Controller
         return redirect()
             ->route('cf.threads.show', $thread->id)
             ->with('success', $nextStatus === 'closed' ? 'Thread ditutup.' : 'Thread dibuka kembali.');
+    }
+
+    public function trends(Request $request): View|RedirectResponse
+    {
+        $accessRedirect = $this->ensureAccess($request);
+        if ($accessRedirect) {
+            return $accessRedirect;
+        }
+
+        if (!$this->isCfAdmin($request)) {
+            return redirect()
+                ->route('cf.index')
+                ->withErrors(['admin' => 'Anda tidak memiliki akses admin CF.']);
+        }
+
+        $period = (int) $request->query('period', 7);
+        if (!in_array($period, [7, 30], true)) {
+            $period = 7;
+        }
+        $periodStart = now()->subDays($period)->startOfDay();
+
+        $threads = CfThread::query()
+            ->with(['category:id,name,slug', 'user:id,name'])
+            ->withCount([
+                'replies' => function ($query) {
+                    $query->where('is_hidden', false);
+                },
+            ])
+            ->where('is_hidden', false)
+            ->where('created_at', '>=', $periodStart)
+            ->orderByDesc('created_at')
+            ->get();
+
+        $categoryCounts = [];
+        $jobRoleCounts = [];
+        $workTypeCounts = [];
+        $locationCounts = [];
+        $titles = [];
+        $totalViews = 0;
+        foreach ($threads as $thread) {
+            $categoryLabel = (string) ($thread->category->name ?? 'Tanpa Kategori');
+            $categoryCounts[$categoryLabel] = ($categoryCounts[$categoryLabel] ?? 0) + 1;
+
+            $jobRole = trim((string) ($thread->job_role ?? ''));
+            if ($jobRole !== '') {
+                $jobRoleCounts[$jobRole] = ($jobRoleCounts[$jobRole] ?? 0) + 1;
+            }
+
+            $workType = trim((string) ($thread->work_type ?? ''));
+            if ($workType !== '') {
+                $workTypeCounts[$workType] = ($workTypeCounts[$workType] ?? 0) + 1;
+            }
+
+            $location = trim((string) ($thread->city ?? ''));
+            $province = trim((string) ($thread->province ?? ''));
+            $area = $location !== '' && $province !== '' ? ($location . ', ' . $province) : ($location !== '' ? $location : $province);
+            if ($area !== '') {
+                $locationCounts[$area] = ($locationCounts[$area] ?? 0) + 1;
+            }
+
+            $title = trim((string) ($thread->title ?? ''));
+            if ($title !== '') {
+                $titles[] = $title;
+            }
+
+            $totalViews += (int) ($thread->views_count ?? 0);
+        }
+
+        arsort($categoryCounts);
+        arsort($jobRoleCounts);
+        arsort($workTypeCounts);
+        arsort($locationCounts);
+
+        $topCategories = array_slice($categoryCounts, 0, 8, true);
+        $topJobRoles = array_slice($jobRoleCounts, 0, 8, true);
+        $topWorkTypes = array_slice($workTypeCounts, 0, 8, true);
+        $topLocations = array_slice($locationCounts, 0, 8, true);
+        $topKeywords = $this->extractTopKeywordsFromTitles($titles, 15);
+
+        $threadIds = $threads->pluck('id')->map(fn ($id) => (int) $id)->all();
+        $totalReplies = empty($threadIds)
+            ? 0
+            : (int) CfReply::query()
+                ->whereIn('cf_thread_id', $threadIds)
+                ->where('is_hidden', false)
+                ->count();
+
+        $topThreads = $threads
+            ->sortByDesc(function ($thread) {
+                return ((int) ($thread->replies_count ?? 0) * 3) + ((int) ($thread->views_count ?? 0) / 10);
+            })
+            ->take(10)
+            ->values();
+
+        return view('cf.trends', [
+            'period' => $period,
+            'periodStart' => $periodStart,
+            'totals' => [
+                'threads' => (int) $threads->count(),
+                'replies' => $totalReplies,
+                'views' => $totalViews,
+                'keywords' => (int) count($topKeywords),
+            ],
+            'topCategories' => $topCategories,
+            'topJobRoles' => $topJobRoles,
+            'topWorkTypes' => $topWorkTypes,
+            'topLocations' => $topLocations,
+            'topKeywords' => $topKeywords,
+            'topThreads' => $topThreads,
+        ]);
     }
 
     public function reports(Request $request): View|RedirectResponse
@@ -2058,5 +2195,86 @@ class CommunityForumController extends Controller
             ->get();
 
         return $threads->all();
+    }
+
+    private function extractTopKeywordsFromTitles(array $titles, int $limit = 15): array
+    {
+        $stopwords = [
+            'dan', 'atau', 'yang', 'di', 'ke', 'dari', 'untuk', 'dengan', 'pada', 'ini', 'itu',
+            'kami', 'kita', 'anda', 'saya', 'aku', 'the', 'and', 'for', 'with', 'from', 'job',
+            'jobs', 'thread', 'diskusi', 'butuh', 'need', 'seeking', 'looking', 'info', 'update',
+            'lowongan', 'kerja', 'talenta', 'candidate', 'kandidat', 'posisi', 'role',
+        ];
+        $stopwordMap = array_fill_keys($stopwords, true);
+        $counts = [];
+
+        foreach ($titles as $title) {
+            $normalized = mb_strtolower((string) $title);
+            $parts = preg_split('/[^a-z0-9]+/i', $normalized) ?: [];
+            foreach ($parts as $part) {
+                $token = trim((string) $part);
+                if ($token === '' || mb_strlen($token) < 3) {
+                    continue;
+                }
+                if (isset($stopwordMap[$token])) {
+                    continue;
+                }
+                if (is_numeric($token)) {
+                    continue;
+                }
+                $counts[$token] = ($counts[$token] ?? 0) + 1;
+            }
+        }
+
+        arsort($counts);
+        return array_slice($counts, 0, $limit, true);
+    }
+
+    private function resolveProgramIntegrationLinks(CfThread $thread): array
+    {
+        $links = [];
+        $authorType = (string) ($thread->author_type ?? 'community');
+        $workType = (string) ($thread->work_type ?? '');
+        $categorySlug = (string) ($thread->category->slug ?? '');
+
+        // miniJobi is relevant for employer hiring posts and jobseeker opportunities.
+        if (in_array($authorType, ['employer', 'jobseeker'], true)) {
+            $links[] = [
+                'title' => 'miniJobi',
+                'description' => 'Lihat lowongan cepat dan apply kandidat yang sesuai.',
+                'url' => route('minijobi.index'),
+                'badge' => 'Jobs',
+            ];
+        }
+
+        // Walk-in related pages are shown for event-oriented or onsite/hybrid contexts.
+        $isWalkinContext = $categorySlug === 'event-job-fair-walk-in-interview'
+            || in_array($workType, ['Onsite', 'Hybrid'], true);
+        if ($isWalkinContext) {
+            $links[] = [
+                'title' => 'Walk-in Schedule',
+                'description' => 'Cek jadwal walk-in interview perusahaan.',
+                'url' => route('walkin-schedule.company'),
+                'badge' => 'Walk-in',
+            ];
+            $links[] = [
+                'title' => 'Walk-in Gallery',
+                'description' => 'Lihat aktivitas dan insight dari event walk-in.',
+                'url' => route('walkin-gallery.feed'),
+                'badge' => 'Community',
+            ];
+        }
+
+        // Career Boost Day is broadly useful for coaching and career support.
+        if (in_array($authorType, ['jobseeker', 'community'], true) || $thread->experience_level) {
+            $links[] = [
+                'title' => 'Career Boost Day',
+                'description' => 'Ikut sesi konsultasi karier dan penguatan profil kerja.',
+                'url' => route('career-boostday.index'),
+                'badge' => 'Career',
+            ];
+        }
+
+        return $links;
     }
 }
