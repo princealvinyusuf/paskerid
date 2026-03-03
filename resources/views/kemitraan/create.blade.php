@@ -2420,11 +2420,17 @@
             });
         }
 
+        function formatRatingStarsLabel(label) {
+            const score = parseInt(String(label), 10);
+            if (!Number.isFinite(score) || score < 1) return '-';
+            return '\u2605'.repeat(Math.min(score, 5));
+        }
+
         function renderRatingDistribution() {
             drawOrUpdate('rating', ratingCanvas, {
                 type: 'doughnut',
                 data: {
-                    labels: ratingDist.map((it) => `${it.label}/5`),
+                    labels: ratingDist.map((it) => formatRatingStarsLabel(it.label)),
                     datasets: [{
                         data: ratingDist.map((it) => Number(it.total || 0)),
                         backgroundColor: colorSet,
@@ -2625,7 +2631,7 @@
                         drawOrUpdate('rating', ratingCanvas, {
                             type: 'doughnut',
                             data: {
-                                labels: ratingDist.map((it) => `${it.label}/5`),
+                                labels: ratingDist.map((it) => formatRatingStarsLabel(it.label)),
                                 datasets: [{
                                     data: ratingDist.map((it) => Number(it.total || 0)),
                                     backgroundColor: colorSet,
