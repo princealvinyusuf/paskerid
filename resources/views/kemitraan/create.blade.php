@@ -299,8 +299,8 @@
                                         <label class="form-label small mb-1">Nama Perusahaan</label>
                                         <select class="form-select" id="row1CompanyName">
                                             <option value="">Semua perusahaan</option>
-                                            @if(isset($surveyCompanies) && $surveyCompanies->count() > 0)
-                                                @php $statsCompanyNames = $surveyCompanies->pluck('company_name')->filter()->map(fn($n) => trim((string)$n))->filter()->unique()->sort()->values(); @endphp
+                                            @if(!empty($availableInstitutions))
+                                                @php $statsCompanyNames = collect($availableInstitutions)->map(fn($n) => trim((string)$n))->filter()->unique()->sort()->values(); @endphp
                                                 @foreach($statsCompanyNames as $statsCompanyName)
                                                     <option value="{{ $statsCompanyName }}">{{ $statsCompanyName }}</option>
                                                 @endforeach
