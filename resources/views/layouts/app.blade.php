@@ -434,7 +434,7 @@
     }
     .navbar .nav-link,
     .navbar .dropdown-item {
-        font-size: 0.85rem;
+        font-size: 0.8rem;
     }
     .navbar .nav-link {
         padding-left: 0.45rem;
