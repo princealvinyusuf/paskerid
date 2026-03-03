@@ -347,6 +347,131 @@ class CommunityForumController extends Controller
             ->with('success', $nextStatus === 'closed' ? 'Thread ditutup.' : 'Thread dibuka kembali.');
     }
 
+    public function reports(Request $request): View|RedirectResponse
+    {
+        $accessRedirect = $this->ensureAccess($request);
+        if ($accessRedirect) {
+            return $accessRedirect;
+        }
+
+        if (!$this->isCfAdmin($request)) {
+            return redirect()
+                ->route('cf.index')
+                ->withErrors(['admin' => 'Anda tidak memiliki akses admin CF.']);
+        }
+
+        $status = trim((string) $request->query('status', ''));
+        $allowedStatus = ['open', 'resolved', 'rejected'];
+
+        $reports = CfReport::query()
+            ->with(['reporter:id,name,email', 'reviewer:id,name,email'])
+            ->when(in_array($status, $allowedStatus, true), function ($query) use ($status) {
+                $query->where('status', $status);
+            })
+            ->orderBy('status')
+            ->orderByDesc('created_at')
+            ->paginate(20)
+            ->withQueryString();
+
+        $threadIds = [];
+        $replyIds = [];
+        foreach ($reports as $report) {
+            if ($report->reportable_type === 'thread') {
+                $threadIds[] = (int) $report->reportable_id;
+            } elseif ($report->reportable_type === 'reply') {
+                $replyIds[] = (int) $report->reportable_id;
+            }
+        }
+
+        $threads = CfThread::query()
+            ->whereIn('id', array_values(array_unique($threadIds)))
+            ->get(['id', 'title'])
+            ->keyBy('id');
+
+        $replies = CfReply::query()
+            ->whereIn('id', array_values(array_unique($replyIds)))
+            ->get(['id', 'cf_thread_id', 'body'])
+            ->keyBy('id');
+
+        $targetMap = [];
+        foreach ($reports as $report) {
+            if ($report->reportable_type === 'thread') {
+                $thread = $threads->get((int) $report->reportable_id);
+                $targetMap[(int) $report->id] = [
+                    'exists' => (bool) $thread,
+                    'label' => $thread ? ('Thread: ' . $thread->title) : 'Thread tidak ditemukan',
+                    'url' => $thread ? route('cf.threads.show', $thread->id) : null,
+                ];
+                continue;
+            }
+
+            $reply = $replies->get((int) $report->reportable_id);
+            $threadId = $reply ? (int) $reply->cf_thread_id : null;
+            $preview = $reply ? mb_substr((string) $reply->body, 0, 80) : null;
+            $targetMap[(int) $report->id] = [
+                'exists' => (bool) $reply,
+                'label' => $reply ? ('Reply: ' . $preview . (mb_strlen((string) $reply->body) > 80 ? '...' : '')) : 'Reply tidak ditemukan',
+                'url' => $reply ? route('cf.threads.show', $threadId) . '#reply-' . $reply->id : null,
+            ];
+        }
+
+        $statusCounts = [
+            'open' => (int) CfReport::query()->where('status', 'open')->count(),
+            'resolved' => (int) CfReport::query()->where('status', 'resolved')->count(),
+            'rejected' => (int) CfReport::query()->where('status', 'rejected')->count(),
+        ];
+
+        return view('cf.reports', [
+            'reports' => $reports,
+            'targetMap' => $targetMap,
+            'status' => $status,
+            'statusCounts' => $statusCounts,
+        ]);
+    }
+
+    public function updateReportStatus(Request $request, int $id): RedirectResponse
+    {
+        $accessRedirect = $this->ensureAccess($request);
+        if ($accessRedirect) {
+            return $accessRedirect;
+        }
+
+        if (!$this->isCfAdmin($request)) {
+            return redirect()
+                ->route('cf.index')
+                ->withErrors(['admin' => 'Anda tidak memiliki akses admin CF.']);
+        }
+
+        $validated = $request->validate([
+            'status' => 'required|in:open,resolved,rejected',
+            'review_note' => 'nullable|string|max:1000',
+        ]);
+
+        $report = CfReport::query()->findOrFail($id);
+        $nextStatus = (string) $validated['status'];
+        $note = trim((string) ($validated['review_note'] ?? ''));
+
+        if ($nextStatus === 'open') {
+            $report->update([
+                'status' => 'open',
+                'reviewed_by_user_id' => null,
+                'review_note' => $note !== '' ? $note : null,
+                'reviewed_at' => null,
+            ]);
+        } else {
+            $report->update([
+                'status' => $nextStatus,
+                'reviewed_by_user_id' => (int) $request->user()->id,
+                'review_note' => $note !== '' ? $note : null,
+                'reviewed_at' => now(),
+            ]);
+        }
+
+        return redirect()
+            ->route('cf.admin.reports.index', ['status' => $request->query('status', '')])
+            ->with('success', 'Status laporan berhasil diperbarui.');
+    }
+
     private function ensureAccess(Request $request): ?RedirectResponse
     {
         if ((bool) $request->session()->get(self::SESSION_KEY, false)) {

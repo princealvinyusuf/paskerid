@@ -121,6 +121,13 @@ Route::post('/cf/thread/{id}/toggle-status', [CommunityForumController::class, '
     ->middleware('auth')
     ->whereNumber('id')
     ->name('cf.threads.toggle-status');
+Route::get('/cf/admin/reports', [CommunityForumController::class, 'reports'])
+    ->middleware('auth')
+    ->name('cf.admin.reports.index');
+Route::post('/cf/admin/reports/{id}/status', [CommunityForumController::class, 'updateReportStatus'])
+    ->middleware('auth')
+    ->whereNumber('id')
+    ->name('cf.admin.reports.update-status');
 
 Route::get('/ketentuan-pengguna', function () {
     return view('ketentuan_pengguna');

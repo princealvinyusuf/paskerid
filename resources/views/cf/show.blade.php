@@ -15,6 +15,10 @@
     <div class="d-flex justify-content-between align-items-start mb-3 gap-2">
         <div>
             <a href="{{ route('cf.index') }}" class="small text-decoration-none">&larr; Kembali ke forum</a>
+            @if($isCfAdmin ?? false)
+                <span class="mx-1 text-muted">|</span>
+                <a href="{{ route('cf.admin.reports.index') }}" class="small text-decoration-none">Moderation Center</a>
+            @endif
             <h1 class="h4 fw-bold mt-2 mb-1">{{ $thread->title }}</h1>
             <div class="small text-muted">
                 {{ $thread->category->name ?? '-' }} |
@@ -97,7 +101,7 @@
     <div class="card border-0 shadow-sm rounded-4 mb-4">
         <div class="card-body p-0">
             @forelse($thread->replies as $reply)
-                <div class="p-3 border-bottom">
+                <div class="p-3 border-bottom" id="reply-{{ $reply->id }}">
                     <div class="small text-muted mb-1">
                         {{ $reply->user->name ?? 'Anonim' }} | {{ $reply->created_at?->format('d M Y H:i') }}
                     </div>

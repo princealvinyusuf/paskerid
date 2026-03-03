@@ -11,6 +11,9 @@
         </div>
         <div class="d-flex gap-2 align-items-center">
             <span class="badge text-bg-warning">Under Construction</span>
+            @if($isCfAdmin ?? false)
+                <a href="{{ route('cf.admin.reports.index') }}" class="btn btn-outline-danger btn-sm">Moderation Center</a>
+            @endif
             <a href="{{ route('cf.threads.create') }}" class="btn btn-success btn-sm">+ Buat Thread</a>
         </div>
     </div>
