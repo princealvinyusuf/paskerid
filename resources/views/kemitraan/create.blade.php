@@ -297,7 +297,15 @@
                                 <div class="d-flex gap-2 align-items-end">
                                     <div class="flex-grow-1">
                                         <label class="form-label small mb-1">Nama Perusahaan</label>
-                                        <input type="text" class="form-control" id="row1CompanyName" placeholder="Contoh: Batavia Business Solutions">
+                                        <select class="form-select" id="row1CompanyName">
+                                            <option value="">Semua perusahaan</option>
+                                            @if(isset($surveyCompanies) && $surveyCompanies->count() > 0)
+                                                @php $statsCompanyNames = $surveyCompanies->pluck('company_name')->filter()->map(fn($n) => trim((string)$n))->filter()->unique()->sort()->values(); @endphp
+                                                @foreach($statsCompanyNames as $statsCompanyName)
+                                                    <option value="{{ $statsCompanyName }}">{{ $statsCompanyName }}</option>
+                                                @endforeach
+                                            @endif
+                                        </select>
                                     </div>
                                     <div class="flex-grow-1">
                                         <label class="form-label small mb-1">Dari Tanggal</label>
