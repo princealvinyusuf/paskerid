@@ -106,6 +106,23 @@
             @endif
             <div style="white-space: pre-line;">{{ $thread->body }}</div>
 
+            @if(!empty($thread->attachment_urls))
+                <hr>
+                <div>
+                    <strong>Lampiran:</strong>
+                    <ul class="mb-0 mt-2">
+                        @foreach(($thread->attachment_urls ?? []) as $url)
+                            @php $fileLabel = basename((string) parse_url($url, PHP_URL_PATH)); @endphp
+                            <li>
+                                <a href="{{ $url }}" target="_blank" rel="noopener noreferrer">
+                                    {{ $fileLabel !== '' ? $fileLabel : $url }}
+                                </a>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
             @auth
                 @if((int) auth()->id() === (int) $thread->user_id || ($isCfAdmin ?? false))
                     <hr>

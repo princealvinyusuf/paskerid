@@ -136,6 +136,21 @@
                         @enderror
                     </div>
 
+                    <div class="col-12">
+                        <label for="attachment_urls_text" class="form-label">Lampiran Link (opsional)</label>
+                        <textarea
+                            id="attachment_urls_text"
+                            name="attachment_urls_text"
+                            rows="4"
+                            class="form-control @error('attachment_urls_text') is-invalid @enderror"
+                            placeholder="Satu URL per baris, wajib HTTPS. Contoh: https://example.com/file.pdf"
+                        >{{ old('attachment_urls_text') }}</textarea>
+                        <div class="form-text">Maksimum 5 link. Format aman: PDF, gambar, DOC/XLS/PPT, TXT, CSV.</div>
+                        @error('attachment_urls_text')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
                     <div class="col-12 d-grid d-md-flex justify-content-md-end">
                         <button type="submit" class="btn btn-success px-4">Publikasikan Thread</button>
                     </div>

@@ -295,11 +295,19 @@ class CommunityForumController extends Controller
             'work_type' => 'nullable|in:Onsite,Hybrid,Remote,Freelance,Project Based',
             'salary_range' => 'nullable|string|max:120',
             'experience_level' => 'nullable|in:Fresh Graduate,Junior,Mid,Senior,Lead',
+            'attachment_urls_text' => 'nullable|string|max:4000',
         ]);
 
         if ($this->isThreadSpam((int) $request->user()->id, (string) $validated['title'], (string) $validated['body'])) {
             return back()
                 ->withErrors(['title' => 'Terdeteksi posting thread berulang dalam waktu singkat. Coba lagi sebentar.'])
+                ->withInput();
+        }
+
+        $attachmentResult = $this->parseAttachmentUrlsText((string) ($validated['attachment_urls_text'] ?? ''));
+        if (!empty($attachmentResult['invalid'])) {
+            return back()
+                ->withErrors(['attachment_urls_text' => 'Ada tautan lampiran tidak valid/aman: ' . implode(', ', $attachmentResult['invalid'])])
                 ->withInput();
         }
 
@@ -330,6 +338,7 @@ class CommunityForumController extends Controller
             'work_type' => $validated['work_type'] ?? null,
             'salary_range' => $validated['salary_range'] ?? null,
             'experience_level' => $validated['experience_level'] ?? null,
+            'attachment_urls' => !empty($attachmentResult['urls']) ? $attachmentResult['urls'] : null,
             'last_activity_at' => now(),
             'status' => 'open',
         ]);
@@ -392,7 +401,15 @@ class CommunityForumController extends Controller
             'work_type' => 'nullable|in:Onsite,Hybrid,Remote,Freelance,Project Based',
             'salary_range' => 'nullable|string|max:120',
             'experience_level' => 'nullable|in:Fresh Graduate,Junior,Mid,Senior,Lead',
+            'attachment_urls_text' => 'nullable|string|max:4000',
         ]);
+
+        $attachmentResult = $this->parseAttachmentUrlsText((string) ($validated['attachment_urls_text'] ?? ''));
+        if (!empty($attachmentResult['invalid'])) {
+            return back()
+                ->withErrors(['attachment_urls_text' => 'Ada tautan lampiran tidak valid/aman: ' . implode(', ', $attachmentResult['invalid'])])
+                ->withInput();
+        }
 
         $slug = $thread->slug;
         if ((string) $thread->title !== (string) $validated['title']) {
@@ -422,6 +439,7 @@ class CommunityForumController extends Controller
             'work_type' => $validated['work_type'] ?? null,
             'salary_range' => $validated['salary_range'] ?? null,
             'experience_level' => $validated['experience_level'] ?? null,
+            'attachment_urls' => !empty($attachmentResult['urls']) ? $attachmentResult['urls'] : null,
             'last_activity_at' => now(),
         ]);
 
@@ -2200,6 +2218,77 @@ class CommunityForumController extends Controller
 
         arsort($counts);
         return array_slice($counts, 0, $limit, true);
+    }
+
+    private function parseAttachmentUrlsText(string $input): array
+    {
+        $rawLines = preg_split('/\r\n|\r|\n/', $input) ?: [];
+        $urls = [];
+        $invalid = [];
+
+        foreach ($rawLines as $line) {
+            $url = trim($line);
+            if ($url === '') {
+                continue;
+            }
+
+            if (!$this->isSafeAttachmentUrl($url)) {
+                $invalid[] = $url;
+                continue;
+            }
+
+            $urls[] = $url;
+        }
+
+        $urls = array_values(array_unique($urls));
+        if (count($urls) > 5) {
+            $invalid[] = 'Maksimum 5 lampiran.';
+            $urls = array_slice($urls, 0, 5);
+        }
+
+        return [
+            'urls' => $urls,
+            'invalid' => $invalid,
+        ];
+    }
+
+    private function isSafeAttachmentUrl(string $url): bool
+    {
+        if (!filter_var($url, FILTER_VALIDATE_URL)) {
+            return false;
+        }
+
+        $parts = parse_url($url);
+        if (!is_array($parts)) {
+            return false;
+        }
+
+        $scheme = strtolower((string) ($parts['scheme'] ?? ''));
+        $host = strtolower((string) ($parts['host'] ?? ''));
+        $path = (string) ($parts['path'] ?? '');
+        if ($scheme !== 'https' || $host === '') {
+            return false;
+        }
+
+        if (in_array($host, ['localhost', '127.0.0.1', '::1'], true)) {
+            return false;
+        }
+
+        if (filter_var($host, FILTER_VALIDATE_IP)) {
+            $isPublicIp = filter_var(
+                $host,
+                FILTER_VALIDATE_IP,
+                FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE
+            );
+            if ($isPublicIp === false) {
+                return false;
+            }
+        }
+
+        $extension = strtolower(pathinfo($path, PATHINFO_EXTENSION));
+        $allowedExtensions = ['pdf', 'jpg', 'jpeg', 'png', 'webp', 'gif', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'txt', 'csv'];
+
+        return $extension !== '' && in_array($extension, $allowedExtensions, true);
     }
 
     private function resolveProgramIntegrationLinks(CfThread $thread): array

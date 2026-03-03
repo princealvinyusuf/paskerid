@@ -23,6 +23,7 @@ class CfThread extends Model
         'work_type',
         'salary_range',
         'experience_level',
+        'attachment_urls',
         'status',
         'is_pinned',
         'is_locked',
@@ -40,6 +41,7 @@ class CfThread extends Model
         'is_hidden' => 'boolean',
         'hidden_by_report_id' => 'integer',
         'hidden_at' => 'datetime',
+        'attachment_urls' => 'array',
         'views_count' => 'integer',
         'last_activity_at' => 'datetime',
     ];
