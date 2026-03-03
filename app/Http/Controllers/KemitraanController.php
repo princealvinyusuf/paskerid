@@ -1068,6 +1068,8 @@ class KemitraanController extends Controller
     {
         $startDate = $request->input('start_date');
         $endDate = $request->input('end_date');
+        $companyName = trim((string) $request->input('company_name', ''));
+        $companyNameLower = mb_strtolower($companyName);
 
         $result = [
             'total_responses' => 0,
@@ -1100,6 +1102,9 @@ class KemitraanController extends Controller
             $baseQuery->whereDate(DB::raw($dateExpr), '>=', $startDate);
         } elseif ($endDate) {
             $baseQuery->whereDate(DB::raw($dateExpr), '<=', $endDate);
+        }
+        if ($companyName !== '') {
+            $baseQuery->whereRaw("LOWER(TRIM(COALESCE(company_name_snapshot, ''))) = ?", [$companyNameLower]);
         }
 
         // Filter for Total Responses and Avg Rating
@@ -1173,6 +1178,9 @@ class KemitraanController extends Controller
             $companyQuery = DB::table('company_walk_in_survey as c')
                 ->leftJoin('walk_in_survey_responses as r', 'r.company_walk_in_survey_id', '=', 'c.id');
             
+            if ($companyName !== '') {
+                $companyQuery->whereRaw("LOWER(TRIM(COALESCE(c.company_name, ''))) = ?", [$companyNameLower]);
+            }
             if ($startDate && $endDate) {
                 $companyQuery->whereBetween(DB::raw($hasWalkinDate ? 'COALESCE(r.walkin_date, DATE(r.created_at))' : 'DATE(r.created_at)'), [$startDate, $endDate]);
             } elseif ($startDate) {
@@ -1206,6 +1214,9 @@ class KemitraanController extends Controller
             $initiatorQuery = DB::table('walk_in_survey_initiators as i')
                 ->leftJoin('company_walk_in_survey as c', 'c.walk_in_initiator_id', '=', 'i.id')
                 ->leftJoin('walk_in_survey_responses as r', 'r.company_walk_in_survey_id', '=', 'c.id');
+            if ($companyName !== '') {
+                $initiatorQuery->whereRaw("LOWER(TRIM(COALESCE(c.company_name, ''))) = ?", [$companyNameLower]);
+            }
             
             if ($startDate && $endDate) {
                 $initiatorQuery->whereBetween(DB::raw($hasWalkinDate ? 'COALESCE(r.walkin_date, DATE(r.created_at))' : 'DATE(r.created_at)'), [$startDate, $endDate]);
@@ -1259,6 +1270,9 @@ class KemitraanController extends Controller
         if (Schema::hasTable('kemitraan_detail_lowongan')) {
             $lowonganQuery = DB::table('kemitraan_detail_lowongan as kdl')
                 ->join('kemitraan as k', 'kdl.kemitraan_id', '=', 'k.id');
+            if ($companyName !== '') {
+                $lowonganQuery->whereRaw("LOWER(TRIM(COALESCE(k.institution_name, ''))) = ?", [$companyNameLower]);
+            }
             
             if ($startDate && $endDate) {
                 $lowonganQuery->whereBetween('kdl.created_at', [$startDate . ' 00:00:00', $endDate . ' 23:59:59']);

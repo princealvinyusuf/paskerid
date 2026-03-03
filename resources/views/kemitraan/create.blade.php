@@ -296,6 +296,10 @@
                                 <label class="form-label mb-1 walkin-filter-title">Filter</label>
                                 <div class="d-flex gap-2 align-items-end">
                                     <div class="flex-grow-1">
+                                        <label class="form-label small mb-1">Nama Perusahaan</label>
+                                        <input type="text" class="form-control" id="row1CompanyName" placeholder="Contoh: Batavia Business Solutions">
+                                    </div>
+                                    <div class="flex-grow-1">
                                         <label class="form-label small mb-1">Dari Tanggal</label>
                                         <input type="date" class="form-control" id="row1StartDate" value="">
                                     </div>
@@ -2573,10 +2577,11 @@
         // Row 1 Date Range Filter
         const row1StartDateEl = document.getElementById('row1StartDate');
         const row1EndDateEl = document.getElementById('row1EndDate');
+        const row1CompanyNameEl = document.getElementById('row1CompanyName');
         const row1FilterBtn = document.getElementById('row1FilterBtn');
         const row1ResetBtn = document.getElementById('row1ResetBtn');
 
-        function updateRow1Stats(startDate, endDate) {
+        function updateRow1Stats(startDate, endDate, companyName) {
             if (!row1FilterBtn) return;
             
             row1FilterBtn.disabled = true;
@@ -2585,6 +2590,7 @@
             const params = new URLSearchParams();
             if (startDate) params.append('start_date', startDate);
             if (endDate) params.append('end_date', endDate);
+            if (companyName) params.append('company_name', companyName);
 
             fetch(`{{ route('kemitraan.statistics.row1') }}?${params.toString()}`)
                 .then(response => response.json())
@@ -2735,13 +2741,14 @@
             row1FilterBtn.addEventListener('click', function () {
                 const startDate = row1StartDateEl ? row1StartDateEl.value : '';
                 const endDate = row1EndDateEl ? row1EndDateEl.value : '';
+                const companyName = row1CompanyNameEl ? String(row1CompanyNameEl.value || '').trim() : '';
                 
                 if (startDate && endDate && startDate > endDate) {
                     alert('Tanggal mulai tidak boleh lebih besar dari tanggal akhir.');
                     return;
                 }
                 
-                updateRow1Stats(startDate, endDate);
+                updateRow1Stats(startDate, endDate, companyName);
             });
         }
 
@@ -2749,7 +2756,8 @@
             row1ResetBtn.addEventListener('click', function () {
                 if (row1StartDateEl) row1StartDateEl.value = '';
                 if (row1EndDateEl) row1EndDateEl.value = '';
-                updateRow1Stats('', '');
+                if (row1CompanyNameEl) row1CompanyNameEl.value = '';
+                updateRow1Stats('', '', '');
             });
         }
     })();
