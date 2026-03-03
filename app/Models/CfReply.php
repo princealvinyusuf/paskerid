@@ -12,10 +12,17 @@ class CfReply extends Model
         'user_id',
         'body',
         'is_solution',
+        'is_hidden',
+        'hidden_reason',
+        'hidden_by_report_id',
+        'hidden_at',
     ];
 
     protected $casts = [
         'is_solution' => 'boolean',
+        'is_hidden' => 'boolean',
+        'hidden_by_report_id' => 'integer',
+        'hidden_at' => 'datetime',
     ];
 
     public function thread(): BelongsTo

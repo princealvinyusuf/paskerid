@@ -82,7 +82,12 @@ class CommunityForumController extends Controller
 
         $threadsQuery = CfThread::query()
             ->with(['category:id,name,slug', 'user:id,name'])
-            ->withCount('replies')
+            ->withCount([
+                'replies' => function ($query) {
+                    $query->where('is_hidden', false);
+                },
+            ])
+            ->where('is_hidden', false)
             ->when($categorySlug !== '', function ($query) use ($categorySlug) {
                 $query->whereHas('category', function ($categoryQuery) use ($categorySlug) {
                     $categoryQuery->where('slug', $categorySlug);
@@ -135,7 +140,13 @@ class CommunityForumController extends Controller
 
         $hotThreads = CfThread::query()
             ->with(['category:id,name,slug', 'user:id,name'])
-            ->withCount('replies')
+            ->withCount([
+                'replies' => function ($query) {
+                    $query->where('is_hidden', false);
+                },
+            ])
+            ->where('status', 'open')
+            ->where('is_hidden', false)
             ->orderByDesc('is_pinned')
             ->orderByDesc('replies_count')
             ->orderByDesc('views_count')
@@ -416,11 +427,32 @@ class CommunityForumController extends Controller
             ->with([
                 'category:id,name,slug',
                 'user:id,name',
-                'replies' => function ($query) {
-                    $query->with('user:id,name')->orderBy('created_at');
-                },
             ])
             ->findOrFail($threadId);
+
+        $isAdmin = $this->isCfAdmin($request);
+        $isOwner = $request->user() && (int) $request->user()->id === (int) $thread->user_id;
+        if ((bool) $thread->is_hidden && !$isAdmin && !$isOwner) {
+            return redirect()
+                ->route('cf.index')
+                ->withErrors(['thread' => 'Thread sedang disembunyikan sementara untuk proses review moderator.']);
+        }
+
+        $thread->load([
+            'replies' => function ($query) use ($isAdmin, $request) {
+                $query
+                    ->with('user:id,name')
+                    ->orderBy('created_at')
+                    ->when(!$isAdmin, function ($nestedQuery) use ($request) {
+                        $nestedQuery->where(function ($visibleQuery) use ($request) {
+                            $visibleQuery->where('is_hidden', false);
+                            if ($request->user()) {
+                                $visibleQuery->orWhere('user_id', (int) $request->user()->id);
+                            }
+                        });
+                    });
+            },
+        ]);
 
         $thread->increment('views_count');
         $thread->views_count = (int) $thread->views_count + 1;
@@ -436,7 +468,7 @@ class CommunityForumController extends Controller
 
         return view('cf.show', [
             'thread' => $thread,
-            'isCfAdmin' => $this->isCfAdmin($request),
+            'isCfAdmin' => $isAdmin,
             'reputationMap' => $reputationMap,
             'verificationMap' => $verificationMap,
         ]);
@@ -454,6 +486,12 @@ class CommunityForumController extends Controller
         }
 
         $thread = CfThread::query()->findOrFail($threadId);
+
+        if ((bool) $thread->is_hidden && !$this->isCfAdmin($request)) {
+            return redirect()
+                ->route('cf.threads.show', $thread->id)
+                ->withErrors(['reply' => 'Thread sedang dalam review moderator dan sementara tidak menerima balasan baru.']);
+        }
 
         if ($thread->status === 'closed') {
             return redirect()
@@ -975,6 +1013,7 @@ class CommunityForumController extends Controller
                 'reportable_type' => 'thread',
             ]
         );
+        $this->applyAutoHideForReport($report, (int) $request->user()->id);
 
         return redirect()
             ->route('cf.threads.show', $thread->id)
@@ -1034,6 +1073,7 @@ class CommunityForumController extends Controller
                 'reportable_type' => 'reply',
             ]
         );
+        $this->applyAutoHideForReport($report, (int) $request->user()->id);
 
         return redirect()
             ->route('cf.threads.show', $thread->id)
@@ -1257,6 +1297,14 @@ class CommunityForumController extends Controller
             $note !== '' ? $note : null,
             ['updated_from_moderation_center' => true]
         );
+
+        if ($nextStatus === 'open') {
+            $report->refresh();
+            $this->applyAutoHideForReport($report, (int) $request->user()->id);
+        } else {
+            $report->refresh();
+            $this->clearAutoHideForReport($report, (int) $request->user()->id, $nextStatus);
+        }
 
         return redirect()
             ->route('cf.admin.reports.index', ['status' => $request->query('status', '')])
@@ -1711,6 +1759,127 @@ class CommunityForumController extends Controller
         ]);
     }
 
+    private function applyAutoHideForReport(CfReport $report, ?int $actorUserId): void
+    {
+        $level = (string) ($report->escalation_level ?? 'none');
+        if (!in_array($level, ['urgent', 'critical'], true)) {
+            return;
+        }
+
+        $hiddenReason = 'Auto-hidden pending moderation review (' . strtoupper($level) . ').';
+
+        if ($report->reportable_type === 'thread') {
+            $thread = CfThread::query()->find((int) $report->reportable_id);
+            if (!$thread || (bool) $thread->is_hidden) {
+                return;
+            }
+
+            $thread->update([
+                'is_hidden' => true,
+                'hidden_reason' => $hiddenReason,
+                'hidden_by_report_id' => (int) $report->id,
+                'hidden_at' => now(),
+            ]);
+
+            $this->createReportAudit(
+                (int) $report->id,
+                $actorUserId,
+                'auto_hidden',
+                null,
+                null,
+                $level,
+                $hiddenReason,
+                ['target_type' => 'thread', 'target_id' => (int) $thread->id]
+            );
+            return;
+        }
+
+        if ($report->reportable_type === 'reply') {
+            $reply = CfReply::query()->find((int) $report->reportable_id);
+            if (!$reply || (bool) $reply->is_hidden) {
+                return;
+            }
+
+            $reply->update([
+                'is_hidden' => true,
+                'hidden_reason' => $hiddenReason,
+                'hidden_by_report_id' => (int) $report->id,
+                'hidden_at' => now(),
+            ]);
+
+            $this->createReportAudit(
+                (int) $report->id,
+                $actorUserId,
+                'auto_hidden',
+                null,
+                null,
+                $level,
+                $hiddenReason,
+                ['target_type' => 'reply', 'target_id' => (int) $reply->id]
+            );
+        }
+    }
+
+    private function clearAutoHideForReport(CfReport $report, ?int $actorUserId, string $resolutionStatus): void
+    {
+        if ($report->reportable_type === 'thread') {
+            $thread = CfThread::query()->find((int) $report->reportable_id);
+            if (!$thread || !(bool) $thread->is_hidden) {
+                return;
+            }
+            if ((int) ($thread->hidden_by_report_id ?? 0) !== (int) $report->id) {
+                return;
+            }
+
+            $thread->update([
+                'is_hidden' => false,
+                'hidden_reason' => null,
+                'hidden_by_report_id' => null,
+                'hidden_at' => null,
+            ]);
+
+            $this->createReportAudit(
+                (int) $report->id,
+                $actorUserId,
+                'auto_unhidden',
+                null,
+                null,
+                (string) ($report->escalation_level ?? 'none'),
+                'Content restored after moderation status: ' . $resolutionStatus . '.',
+                ['target_type' => 'thread', 'target_id' => (int) $thread->id]
+            );
+            return;
+        }
+
+        if ($report->reportable_type === 'reply') {
+            $reply = CfReply::query()->find((int) $report->reportable_id);
+            if (!$reply || !(bool) $reply->is_hidden) {
+                return;
+            }
+            if ((int) ($reply->hidden_by_report_id ?? 0) !== (int) $report->id) {
+                return;
+            }
+
+            $reply->update([
+                'is_hidden' => false,
+                'hidden_reason' => null,
+                'hidden_by_report_id' => null,
+                'hidden_at' => null,
+            ]);
+
+            $this->createReportAudit(
+                (int) $report->id,
+                $actorUserId,
+                'auto_unhidden',
+                null,
+                null,
+                (string) ($report->escalation_level ?? 'none'),
+                'Content restored after moderation status: ' . $resolutionStatus . '.',
+                ['target_type' => 'reply', 'target_id' => (int) $reply->id]
+            );
+        }
+    }
+
     private function autoCloseStaleReports(): int
     {
         $days = (int) env('CF_REPORT_AUTO_CLOSE_DAYS', 30);
@@ -1755,6 +1924,8 @@ class CommunityForumController extends Controller
                 $note,
                 ['policy_days' => $days]
             );
+            $report->refresh();
+            $this->clearAutoHideForReport($report, null, 'resolved');
         }
 
         return count($staleIds);
@@ -1781,6 +1952,7 @@ class CommunityForumController extends Controller
 
         $latestThread = CfThread::query()
             ->where('user_id', (int) $user->id)
+            ->where('is_hidden', false)
             ->latest('created_at')
             ->first(['job_role', 'province', 'city', 'work_type', 'experience_level', 'sector']);
         if ($latestThread) {
@@ -1800,6 +1972,10 @@ class CommunityForumController extends Controller
         $latestReply = CfReply::query()
             ->with('thread:id,job_role,province,city,work_type,experience_level,sector')
             ->where('user_id', (int) $user->id)
+            ->where('is_hidden', false)
+            ->whereHas('thread', function ($query) {
+                $query->where('is_hidden', false);
+            })
             ->latest('created_at')
             ->first();
         if ($latestReply && $latestReply->thread) {
@@ -1837,8 +2013,13 @@ class CommunityForumController extends Controller
 
         $query = CfThread::query()
             ->with(['category:id,name,slug', 'user:id,name'])
-            ->withCount('replies')
-            ->where('status', 'open');
+            ->withCount([
+                'replies' => function ($query) {
+                    $query->where('is_hidden', false);
+                },
+            ])
+            ->where('status', 'open')
+            ->where('is_hidden', false);
 
         if (!empty($excludeIds)) {
             $query->whereNotIn('id', $excludeIds);

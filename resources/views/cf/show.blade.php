@@ -62,6 +62,15 @@
         </div>
     </div>
 
+    @if($thread->is_hidden)
+        <div class="alert alert-warning">
+            Thread ini sedang disembunyikan sementara untuk review moderator.
+            @if($thread->hidden_reason)
+                <div class="small mt-1">{{ $thread->hidden_reason }}</div>
+            @endif
+        </div>
+    @endif
+
     <div class="card border-0 shadow-sm rounded-4 mb-4">
         <div class="card-body p-4">
             @if($thread->location || $thread->sector || $thread->job_role || $thread->work_type || $thread->experience_level || $thread->province || $thread->city || $thread->salary_range)
@@ -162,6 +171,14 @@
                         | {{ $reply->created_at?->format('d M Y H:i') }}
                     </div>
                     <div style="white-space: pre-line;">{{ $reply->body }}</div>
+                    @if($reply->is_hidden)
+                        <div class="mt-2">
+                            <span class="badge text-bg-warning">Hidden Pending Review</span>
+                            @if($reply->hidden_reason)
+                                <div class="small text-muted mt-1">{{ $reply->hidden_reason }}</div>
+                            @endif
+                        </div>
+                    @endif
                     @if($reply->is_solution)
                         <div class="mt-2">
                             <span class="badge text-bg-success">Helpful</span>

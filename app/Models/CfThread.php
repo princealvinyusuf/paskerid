@@ -26,6 +26,10 @@ class CfThread extends Model
         'status',
         'is_pinned',
         'is_locked',
+        'is_hidden',
+        'hidden_reason',
+        'hidden_by_report_id',
+        'hidden_at',
         'views_count',
         'last_activity_at',
     ];
@@ -33,6 +37,9 @@ class CfThread extends Model
     protected $casts = [
         'is_pinned' => 'boolean',
         'is_locked' => 'boolean',
+        'is_hidden' => 'boolean',
+        'hidden_by_report_id' => 'integer',
+        'hidden_at' => 'datetime',
         'views_count' => 'integer',
         'last_activity_at' => 'datetime',
     ];
