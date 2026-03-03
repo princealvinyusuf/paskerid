@@ -31,21 +31,6 @@
                 color: #0f172a;
             }
 
-            body.cf-theme .navbar {
-                background: linear-gradient(135deg, #0f172a, #1e293b) !important;
-                border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-                backdrop-filter: saturate(150%) blur(8px);
-            }
-            body.cf-theme .navbar .nav-link,
-            body.cf-theme .navbar-brand,
-            body.cf-theme .navbar .dropdown-toggle {
-                color: rgba(255, 255, 255, 0.9) !important;
-            }
-            body.cf-theme .navbar .nav-link.active,
-            body.cf-theme .navbar .nav-link:hover {
-                color: #93c5fd !important;
-            }
-
             body.cf-theme .container.py-5 {
                 position: relative;
             }
@@ -154,8 +139,38 @@
                 color: #5b6578 !important;
             }
 
-            body.cf-theme footer {
-                background: linear-gradient(135deg, #0f172a, #1e293b) !important;
+            body.cf-theme .cf-hero {
+                border-radius: 18px;
+                padding: 1.2rem 1.25rem;
+                border: 1px solid rgba(148, 163, 184, 0.2);
+                background: linear-gradient(135deg, rgba(255, 255, 255, 0.94), rgba(239, 246, 255, 0.92));
+                box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+            }
+
+            body.cf-theme .cf-soft {
+                background: rgba(255, 255, 255, 0.72);
+                border: 1px solid rgba(148, 163, 184, 0.14);
+                border-radius: 14px;
+            }
+
+            body.cf-theme .cf-section-title {
+                font-size: 0.78rem;
+                font-weight: 700;
+                letter-spacing: 0.08em;
+                color: #475569;
+                text-transform: uppercase;
+            }
+
+            body.cf-theme .cf-pill {
+                display: inline-flex;
+                align-items: center;
+                gap: 0.35rem;
+                padding: 0.25rem 0.7rem;
+                border-radius: 999px;
+                font-size: 0.78rem;
+                font-weight: 600;
+                color: #0f172a;
+                background: #e2e8f0;
             }
         </style>
     @endif

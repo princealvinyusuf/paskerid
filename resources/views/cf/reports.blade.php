@@ -2,8 +2,9 @@
 
 @section('content')
 <div class="container py-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="cf-hero d-flex justify-content-between align-items-center mb-4">
         <div>
+            <div class="cf-section-title mb-1">Admin Workspace</div>
             <h1 class="h4 fw-bold mb-1">CF Moderation Center</h1>
             <p class="text-muted mb-0">Kelola laporan thread dan balasan komunitas.</p>
         </div>

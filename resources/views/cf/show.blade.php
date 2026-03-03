@@ -12,7 +12,7 @@
         </div>
     @endif
 
-    <div class="d-flex justify-content-between align-items-start mb-3 gap-2">
+    <div class="cf-hero d-flex justify-content-between align-items-start mb-3 gap-2">
         <div>
             <a href="{{ route('cf.index') }}" class="small text-decoration-none">&larr; Kembali ke forum</a>
             <span class="mx-1 text-muted">|</span>
@@ -213,7 +213,7 @@
                         @endif
                         | {{ $reply->created_at?->format('d M Y H:i') }}
                     </div>
-                    <div style="white-space: pre-line;">{{ $reply->body }}</div>
+                    <div class="cf-soft p-2 mt-2" style="white-space: pre-line;">{{ $reply->body }}</div>
                     @if($reply->is_hidden)
                         <div class="mt-2">
                             <span class="badge text-bg-warning">Hidden Pending Review</span>

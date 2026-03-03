@@ -2,8 +2,9 @@
 
 @section('content')
 <div class="container py-5">
-    <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-4 gap-3">
+    <div class="cf-hero d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-4 gap-3">
         <div>
+            <div class="cf-section-title mb-1">Community Forum</div>
             <h1 class="h3 fw-bold mb-1">CF (🚧)</h1>
             <p class="text-muted mb-0">
                 Forum komunitas pasar kerja untuk pelaku usaha dan pencari kerja.
@@ -120,7 +121,7 @@
                 <div class="row g-3">
                     @foreach($matchingThreads as $match)
                         <div class="col-12 col-md-6 col-lg-4">
-                            <div class="border rounded-3 p-3 h-100">
+                            <div class="cf-soft p-3 h-100">
                                 <a href="{{ route('cf.threads.show', $match->id) }}" class="fw-semibold text-decoration-none d-block mb-1">
                                     {{ $match->title }}
                                 </a>
@@ -153,7 +154,7 @@
                 <div class="row g-3">
                     @foreach($featuredWeeklyThreads as $featured)
                         <div class="col-12 col-md-6 col-lg-4">
-                            <div class="border rounded-3 p-3 h-100">
+                            <div class="cf-soft p-3 h-100">
                                 <div class="d-flex align-items-center gap-1 mb-1 flex-wrap">
                                     @if($featured->is_pinned)
                                         <span class="badge text-bg-info">Pinned</span>
