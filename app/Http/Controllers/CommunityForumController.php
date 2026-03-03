@@ -993,6 +993,8 @@ class CommunityForumController extends Controller
                 ->withErrors(['admin' => 'Anda tidak memiliki akses admin CF.']);
         }
 
+        $autoClosedCount = $this->autoCloseStaleReports();
+
         $status = trim((string) $request->query('status', ''));
         $allowedStatus = ['open', 'resolved', 'rejected'];
 
@@ -1060,6 +1062,7 @@ class CommunityForumController extends Controller
             'targetMap' => $targetMap,
             'status' => $status,
             'statusCounts' => $statusCounts,
+            'autoClosedCount' => $autoClosedCount,
         ]);
     }
 
@@ -1425,6 +1428,36 @@ class CommunityForumController extends Controller
             return 'medium';
         }
         return 'low';
+    }
+
+    private function autoCloseStaleReports(): int
+    {
+        $days = (int) env('CF_REPORT_AUTO_CLOSE_DAYS', 30);
+        if ($days <= 0) {
+            return 0;
+        }
+
+        $cutoff = now()->subDays($days);
+        $staleIds = CfReport::query()
+            ->where('status', 'open')
+            ->where('created_at', '<', $cutoff)
+            ->pluck('id')
+            ->all();
+
+        if (empty($staleIds)) {
+            return 0;
+        }
+
+        CfReport::query()
+            ->whereIn('id', $staleIds)
+            ->update([
+                'status' => 'resolved',
+                'reviewed_by_user_id' => null,
+                'review_note' => 'Auto-closed by policy after ' . $days . ' days without resolution.',
+                'reviewed_at' => now(),
+            ]);
+
+        return count($staleIds);
     }
 
     private function resolveMatchingProfile(Request $request, array $inputFilters): array

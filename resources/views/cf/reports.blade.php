@@ -20,6 +20,13 @@
         </div>
     @endif
 
+    @if(($autoClosedCount ?? 0) > 0)
+        <div class="alert alert-info">
+            {{ $autoClosedCount }} laporan open telah di-auto-close sesuai kebijakan stale report.
+            Anda tetap dapat membuka kembali kasus melalui pengaturan status (admin override).
+        </div>
+    @endif
+
     <div class="card border-0 shadow-sm rounded-4 mb-4">
         <div class="card-body">
             <div class="d-flex flex-wrap gap-2 align-items-center">
