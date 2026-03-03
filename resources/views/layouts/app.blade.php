@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     @php $forceDesktop = request()->cookie('force_desktop') === '1'; @endphp
+    @php $isCfRoute = request()->routeIs('cf.*'); @endphp
     @if($forceDesktop)
     <meta name="viewport" content="width=980, user-scalable=no">
     @else
@@ -17,6 +18,147 @@
     <!-- AOS CSS -->
     <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    @if($isCfRoute)
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+        <style>
+            body.cf-theme {
+                font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+                background: radial-gradient(1200px 600px at 0% -10%, rgba(37, 99, 235, 0.18), transparent 60%),
+                            radial-gradient(1200px 600px at 100% 0%, rgba(16, 185, 129, 0.16), transparent 60%),
+                            #f4f7fb;
+                color: #0f172a;
+            }
+
+            body.cf-theme .navbar {
+                background: linear-gradient(135deg, #0f172a, #1e293b) !important;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+                backdrop-filter: saturate(150%) blur(8px);
+            }
+            body.cf-theme .navbar .nav-link,
+            body.cf-theme .navbar-brand,
+            body.cf-theme .navbar .dropdown-toggle {
+                color: rgba(255, 255, 255, 0.9) !important;
+            }
+            body.cf-theme .navbar .nav-link.active,
+            body.cf-theme .navbar .nav-link:hover {
+                color: #93c5fd !important;
+            }
+
+            body.cf-theme .container.py-5 {
+                position: relative;
+            }
+
+            body.cf-theme .card {
+                border-radius: 18px !important;
+                border: 1px solid rgba(148, 163, 184, 0.18) !important;
+                box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08) !important;
+                background: linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.88));
+            }
+            body.cf-theme .card .card-body {
+                padding: 1.1rem 1.2rem;
+            }
+
+            body.cf-theme h1,
+            body.cf-theme h2,
+            body.cf-theme h3,
+            body.cf-theme h4,
+            body.cf-theme h5,
+            body.cf-theme h6 {
+                color: #0b1220;
+                letter-spacing: -0.02em;
+            }
+
+            body.cf-theme .btn {
+                border-radius: 12px !important;
+                font-weight: 600;
+                transition: all 0.2s ease;
+            }
+            body.cf-theme .btn:hover {
+                transform: translateY(-1px);
+                box-shadow: 0 8px 18px rgba(15, 23, 42, 0.15);
+            }
+
+            body.cf-theme .btn-success,
+            body.cf-theme .btn-primary {
+                background: linear-gradient(135deg, #10b981, #059669) !important;
+                border-color: #059669 !important;
+                color: #ffffff !important;
+            }
+            body.cf-theme .btn-outline-success {
+                border-color: #10b981 !important;
+                color: #047857 !important;
+            }
+            body.cf-theme .btn-outline-success:hover {
+                background: #10b981 !important;
+                color: #ffffff !important;
+            }
+
+            body.cf-theme .btn-outline-primary {
+                border-color: #3b82f6 !important;
+                color: #1d4ed8 !important;
+            }
+            body.cf-theme .btn-outline-primary:hover {
+                background: #3b82f6 !important;
+                color: #ffffff !important;
+            }
+
+            body.cf-theme .btn-outline-danger {
+                border-color: #ef4444 !important;
+                color: #b91c1c !important;
+            }
+            body.cf-theme .btn-outline-danger:hover {
+                background: #ef4444 !important;
+                color: #ffffff !important;
+            }
+
+            body.cf-theme .form-control,
+            body.cf-theme .form-select,
+            body.cf-theme textarea {
+                border-radius: 12px !important;
+                border: 1px solid #dbe3ef !important;
+                background-color: #ffffff;
+                padding: 0.55rem 0.75rem;
+                box-shadow: none !important;
+            }
+            body.cf-theme .form-control:focus,
+            body.cf-theme .form-select:focus,
+            body.cf-theme textarea:focus {
+                border-color: #60a5fa !important;
+                box-shadow: 0 0 0 0.2rem rgba(59, 130, 246, 0.18) !important;
+            }
+
+            body.cf-theme .badge {
+                border-radius: 999px;
+                font-weight: 600;
+                padding: 0.4em 0.72em;
+            }
+
+            body.cf-theme .alert {
+                border-radius: 14px;
+                border: none;
+            }
+
+            body.cf-theme .pagination .page-link {
+                border-radius: 10px !important;
+                margin: 0 2px;
+                border: 1px solid #dbe3ef;
+            }
+            body.cf-theme .pagination .page-item.active .page-link {
+                background: #2563eb;
+                border-color: #2563eb;
+            }
+
+            body.cf-theme .text-muted {
+                color: #5b6578 !important;
+            }
+
+            body.cf-theme footer {
+                background: linear-gradient(135deg, #0f172a, #1e293b) !important;
+            }
+        </style>
+    @endif
     @yield('head')
     @stack('head')
     <!-- Google tag (gtag.js) -->
@@ -28,7 +170,7 @@
       gtag('config', 'G-VVRKTYE9YB');
     </script>
 </head>
-<body>
+<body class="{{ $isCfRoute ? 'cf-theme' : '' }}">
     <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top shadow-sm">
         <div class="container-fluid d-flex flex-row justify-content-between align-items-center px-0">
             <!-- Left: Kemnaker Logo and Text -->
