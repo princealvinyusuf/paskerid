@@ -293,7 +293,7 @@
                         <!-- Date Range Filter for Row 1 -->
                         <div class="row g-3 mb-3">
                             <div class="col-12 col-lg-6">
-                                <label class="form-label mb-1">Filter Tanggal (Row 1)</label>
+                                <label class="form-label mb-1">Filter</label>
                                 <div class="d-flex gap-2 align-items-end">
                                     <div class="flex-grow-1">
                                         <label class="form-label small mb-1">Dari Tanggal</label>
