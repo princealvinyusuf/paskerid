@@ -25,9 +25,10 @@
         <style>
             body.cf-theme {
                 font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-                background: radial-gradient(1200px 600px at 0% -10%, rgba(37, 99, 235, 0.18), transparent 60%),
-                            radial-gradient(1200px 600px at 100% 0%, rgba(16, 185, 129, 0.16), transparent 60%),
-                            #f4f7fb;
+                background: radial-gradient(980px 520px at -10% -10%, rgba(59, 130, 246, 0.24), transparent 58%),
+                            radial-gradient(920px 520px at 110% -6%, rgba(16, 185, 129, 0.22), transparent 60%),
+                            radial-gradient(760px 430px at 50% 105%, rgba(168, 85, 247, 0.14), transparent 62%),
+                            #f2f7ff;
                 color: #0f172a;
             }
 
@@ -38,18 +39,36 @@
             }
 
             body.cf-theme .card {
+                position: relative;
+                overflow: hidden;
                 border-radius: 18px !important;
-                border: 1px solid rgba(148, 163, 184, 0.18) !important;
-                box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08) !important;
-                background: linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.88));
+                border: 1px solid rgba(148, 163, 184, 0.2) !important;
+                box-shadow: 0 12px 32px rgba(15, 23, 42, 0.1) !important;
+                background: linear-gradient(165deg, rgba(255, 255, 255, 0.96), rgba(247, 250, 255, 0.92));
                 transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+            }
+            body.cf-theme .card::before {
+                content: "";
+                position: absolute;
+                inset: 0;
+                pointer-events: none;
+                background: linear-gradient(
+                    130deg,
+                    rgba(59, 130, 246, 0.08) 0%,
+                    rgba(59, 130, 246, 0) 35%,
+                    rgba(16, 185, 129, 0.06) 68%,
+                    rgba(168, 85, 247, 0.08) 100%
+                );
+                opacity: 0.78;
             }
             body.cf-theme .card:hover {
                 transform: translateY(-2px);
-                box-shadow: 0 14px 34px rgba(15, 23, 42, 0.12) !important;
-                border-color: rgba(59, 130, 246, 0.22) !important;
+                box-shadow: 0 18px 38px rgba(15, 23, 42, 0.14) !important;
+                border-color: rgba(99, 102, 241, 0.28) !important;
             }
             body.cf-theme .card .card-body {
+                position: relative;
+                z-index: 1;
                 padding: 1.1rem 1.2rem;
             }
 
@@ -83,8 +102,8 @@
 
             body.cf-theme .btn-success,
             body.cf-theme .btn-primary {
-                background: linear-gradient(135deg, #10b981, #059669) !important;
-                border-color: #059669 !important;
+                background: linear-gradient(135deg, #2563eb, #10b981) !important;
+                border-color: #1d4ed8 !important;
                 color: #ffffff !important;
             }
             body.cf-theme .btn-outline-success {
@@ -113,6 +132,30 @@
                 background: #ef4444 !important;
                 color: #ffffff !important;
             }
+            body.cf-theme .btn-outline-warning {
+                border-color: #f59e0b !important;
+                color: #b45309 !important;
+            }
+            body.cf-theme .btn-outline-warning:hover {
+                background: #f59e0b !important;
+                color: #ffffff !important;
+            }
+            body.cf-theme .btn-outline-info {
+                border-color: #06b6d4 !important;
+                color: #0e7490 !important;
+            }
+            body.cf-theme .btn-outline-info:hover {
+                background: #06b6d4 !important;
+                color: #ffffff !important;
+            }
+            body.cf-theme .btn-outline-dark {
+                border-color: #475569 !important;
+                color: #334155 !important;
+            }
+            body.cf-theme .btn-outline-dark:hover {
+                background: #334155 !important;
+                color: #ffffff !important;
+            }
 
             body.cf-theme .form-control,
             body.cf-theme .form-select,
@@ -134,6 +177,7 @@
                 border-radius: 999px;
                 font-weight: 600;
                 padding: 0.4em 0.72em;
+                box-shadow: 0 4px 10px rgba(15, 23, 42, 0.12);
             }
 
             body.cf-theme .alert {
@@ -159,8 +203,8 @@
                 border-radius: 18px;
                 padding: 1.25rem 1.35rem;
                 border: 1px solid rgba(148, 163, 184, 0.2);
-                background: linear-gradient(135deg, rgba(255, 255, 255, 0.94), rgba(239, 246, 255, 0.92));
-                box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+                background: linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(239, 246, 255, 0.94), rgba(236, 253, 245, 0.9));
+                box-shadow: 0 14px 34px rgba(15, 23, 42, 0.1);
             }
             body.cf-theme .cf-toolbar {
                 display: flex;
@@ -176,15 +220,15 @@
             }
 
             body.cf-theme .cf-soft {
-                background: rgba(255, 255, 255, 0.72);
-                border: 1px solid rgba(148, 163, 184, 0.14);
+                background: linear-gradient(145deg, rgba(255, 255, 255, 0.82), rgba(240, 249, 255, 0.72));
+                border: 1px solid rgba(99, 102, 241, 0.14);
                 border-radius: 14px;
                 transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
             }
             body.cf-theme .cf-soft:hover {
                 transform: translateY(-1px);
-                border-color: rgba(99, 102, 241, 0.24);
-                box-shadow: 0 10px 24px rgba(15, 23, 42, 0.1);
+                border-color: rgba(99, 102, 241, 0.28);
+                box-shadow: 0 12px 26px rgba(15, 23, 42, 0.12);
             }
 
             body.cf-theme .cf-section-title {
@@ -203,8 +247,9 @@
                 border-radius: 999px;
                 font-size: 0.78rem;
                 font-weight: 600;
-                color: #0f172a;
-                background: #e2e8f0;
+                color: #1e293b;
+                background: linear-gradient(135deg, #dbeafe, #dcfce7);
+                border: 1px solid rgba(59, 130, 246, 0.16);
             }
 
             body.cf-theme .cf-hero-icon {
@@ -214,16 +259,17 @@
                 align-items: center;
                 justify-content: center;
                 border-radius: 12px;
-                color: #1d4ed8;
-                background: linear-gradient(135deg, #dbeafe, #ecfeff);
-                border: 1px solid rgba(59, 130, 246, 0.2);
+                color: #1e40af;
+                background: linear-gradient(135deg, #dbeafe, #f5d0fe, #dcfce7);
+                border: 1px solid rgba(99, 102, 241, 0.28);
+                box-shadow: 0 8px 20px rgba(59, 130, 246, 0.2);
                 margin-bottom: 0.4rem;
             }
 
             body.cf-theme .cf-empty-state {
                 border: 1px dashed rgba(148, 163, 184, 0.5);
                 border-radius: 14px;
-                background: linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(248, 250, 252, 0.9));
+                background: linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(239, 246, 255, 0.9));
                 padding: 1.1rem;
                 text-align: center;
                 color: #64748b;
@@ -237,10 +283,12 @@
             }
 
             body.cf-theme .cf-list-item {
-                transition: background-color 0.2s ease, transform 0.2s ease;
+                transition: background-color 0.2s ease, transform 0.2s ease, border-left-color 0.2s ease;
+                border-left: 3px solid transparent;
             }
             body.cf-theme .cf-list-item:hover {
-                background-color: rgba(248, 250, 252, 0.9);
+                background: linear-gradient(90deg, rgba(239, 246, 255, 0.9), rgba(240, 253, 250, 0.75));
+                border-left-color: #60a5fa;
             }
 
             body.cf-theme .cf-link-lift {
