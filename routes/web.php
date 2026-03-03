@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\HighlightStatisticController;
 use App\Http\Controllers\Api\InformationController;
 use App\Http\Controllers\WalkinGalleryController;
 use App\Http\Controllers\CareerBoostdayController;
+use App\Http\Controllers\CommunityForumController;
 use App\Http\Controllers\FormHasilKonselingController;
 
 Route::get('/', function () {
@@ -83,6 +84,14 @@ Route::get('/walkin-schedule/company', [App\Http\Controllers\KemitraanController
 Route::get('/kebijakan-privasi', function () {
     return view('kebijakan_privasi');
 })->name('kebijakan_privasi');
+
+// Community Forum (CF) - under construction, protected by passcode
+Route::get('/cf', [CommunityForumController::class, 'showGate'])->name('cf.gate');
+Route::post('/cf/verify-passcode', [CommunityForumController::class, 'verifyPasscode'])
+    ->middleware('throttle:10,1')
+    ->name('cf.verify-passcode');
+Route::get('/cf/underconstruction', [CommunityForumController::class, 'index'])
+    ->name('cf.index');
 
 Route::get('/ketentuan-pengguna', function () {
     return view('ketentuan_pengguna');
