@@ -4,6 +4,13 @@
     <meta charset="UTF-8">
     @php $forceDesktop = request()->cookie('force_desktop') === '1'; @endphp
     @php $isCfRoute = request()->routeIs('cf.*'); @endphp
+    @php
+        $cfPalette = request()->cookie('cf_palette', 'ocean');
+        $allowedCfPalettes = ['ocean', 'emerald', 'sunset'];
+        if (!in_array($cfPalette, $allowedCfPalettes, true)) {
+            $cfPalette = 'ocean';
+        }
+    @endphp
     @if($forceDesktop)
     <meta name="viewport" content="width=980, user-scalable=no">
     @else
@@ -24,10 +31,34 @@
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
         <style>
             body.cf-theme {
+                --cf-accent: #2563eb;
+                --cf-accent-rgb: 37, 99, 235;
+                --cf-secondary: #10b981;
+                --cf-secondary-rgb: 16, 185, 129;
+                --cf-tertiary: #a855f7;
+                --cf-tertiary-rgb: 168, 85, 247;
+            }
+            body.cf-theme.cf-palette-emerald {
+                --cf-accent: #047857;
+                --cf-accent-rgb: 4, 120, 87;
+                --cf-secondary: #0ea5a4;
+                --cf-secondary-rgb: 14, 165, 164;
+                --cf-tertiary: #65a30d;
+                --cf-tertiary-rgb: 101, 163, 13;
+            }
+            body.cf-theme.cf-palette-sunset {
+                --cf-accent: #ea580c;
+                --cf-accent-rgb: 234, 88, 12;
+                --cf-secondary: #db2777;
+                --cf-secondary-rgb: 219, 39, 119;
+                --cf-tertiary: #7c3aed;
+                --cf-tertiary-rgb: 124, 58, 237;
+            }
+            body.cf-theme {
                 font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-                background: radial-gradient(980px 520px at -10% -10%, rgba(59, 130, 246, 0.24), transparent 58%),
-                            radial-gradient(920px 520px at 110% -6%, rgba(16, 185, 129, 0.22), transparent 60%),
-                            radial-gradient(760px 430px at 50% 105%, rgba(168, 85, 247, 0.14), transparent 62%),
+                background: radial-gradient(980px 520px at -10% -10%, rgba(var(--cf-accent-rgb), 0.24), transparent 58%),
+                            radial-gradient(920px 520px at 110% -6%, rgba(var(--cf-secondary-rgb), 0.22), transparent 60%),
+                            radial-gradient(760px 430px at 50% 105%, rgba(var(--cf-tertiary-rgb), 0.14), transparent 62%),
                             #f2f7ff;
                 color: #0f172a;
             }
@@ -55,16 +86,17 @@
                 background: linear-gradient(
                     130deg,
                     rgba(59, 130, 246, 0.08) 0%,
+                    rgba(var(--cf-accent-rgb), 0.08) 0%,
                     rgba(59, 130, 246, 0) 35%,
-                    rgba(16, 185, 129, 0.06) 68%,
-                    rgba(168, 85, 247, 0.08) 100%
+                    rgba(var(--cf-secondary-rgb), 0.06) 68%,
+                    rgba(var(--cf-tertiary-rgb), 0.08) 100%
                 );
                 opacity: 0.78;
             }
             body.cf-theme .card:hover {
                 transform: translateY(-2px);
                 box-shadow: 0 18px 38px rgba(15, 23, 42, 0.14) !important;
-                border-color: rgba(99, 102, 241, 0.28) !important;
+                border-color: rgba(var(--cf-accent-rgb), 0.28) !important;
             }
             body.cf-theme .card .card-body {
                 position: relative;
@@ -102,25 +134,25 @@
 
             body.cf-theme .btn-success,
             body.cf-theme .btn-primary {
-                background: linear-gradient(135deg, #2563eb, #10b981) !important;
-                border-color: #1d4ed8 !important;
+                background: linear-gradient(135deg, var(--cf-accent), var(--cf-secondary)) !important;
+                border-color: var(--cf-accent) !important;
                 color: #ffffff !important;
             }
             body.cf-theme .btn-outline-success {
-                border-color: #10b981 !important;
-                color: #047857 !important;
+                border-color: var(--cf-secondary) !important;
+                color: var(--cf-secondary) !important;
             }
             body.cf-theme .btn-outline-success:hover {
-                background: #10b981 !important;
+                background: var(--cf-secondary) !important;
                 color: #ffffff !important;
             }
 
             body.cf-theme .btn-outline-primary {
-                border-color: #3b82f6 !important;
-                color: #1d4ed8 !important;
+                border-color: var(--cf-accent) !important;
+                color: var(--cf-accent) !important;
             }
             body.cf-theme .btn-outline-primary:hover {
-                background: #3b82f6 !important;
+                background: var(--cf-accent) !important;
                 color: #ffffff !important;
             }
 
@@ -169,8 +201,8 @@
             body.cf-theme .form-control:focus,
             body.cf-theme .form-select:focus,
             body.cf-theme textarea:focus {
-                border-color: #60a5fa !important;
-                box-shadow: 0 0 0 0.2rem rgba(59, 130, 246, 0.18) !important;
+                border-color: rgba(var(--cf-accent-rgb), 0.55) !important;
+                box-shadow: 0 0 0 0.2rem rgba(var(--cf-accent-rgb), 0.18) !important;
             }
 
             body.cf-theme .badge {
@@ -191,8 +223,8 @@
                 border: 1px solid #dbe3ef;
             }
             body.cf-theme .pagination .page-item.active .page-link {
-                background: #2563eb;
-                border-color: #2563eb;
+                background: var(--cf-accent);
+                border-color: var(--cf-accent);
             }
 
             body.cf-theme .text-muted {
@@ -203,7 +235,12 @@
                 border-radius: 18px;
                 padding: 1.25rem 1.35rem;
                 border: 1px solid rgba(148, 163, 184, 0.2);
-                background: linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(239, 246, 255, 0.94), rgba(236, 253, 245, 0.9));
+                background: linear-gradient(
+                    135deg,
+                    rgba(255, 255, 255, 0.96),
+                    rgba(var(--cf-accent-rgb), 0.09),
+                    rgba(var(--cf-secondary-rgb), 0.1)
+                );
                 box-shadow: 0 14px 34px rgba(15, 23, 42, 0.1);
             }
             body.cf-theme .cf-toolbar {
@@ -221,13 +258,13 @@
 
             body.cf-theme .cf-soft {
                 background: linear-gradient(145deg, rgba(255, 255, 255, 0.82), rgba(240, 249, 255, 0.72));
-                border: 1px solid rgba(99, 102, 241, 0.14);
+                border: 1px solid rgba(var(--cf-accent-rgb), 0.18);
                 border-radius: 14px;
                 transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
             }
             body.cf-theme .cf-soft:hover {
                 transform: translateY(-1px);
-                border-color: rgba(99, 102, 241, 0.28);
+                border-color: rgba(var(--cf-accent-rgb), 0.28);
                 box-shadow: 0 12px 26px rgba(15, 23, 42, 0.12);
             }
 
@@ -235,7 +272,7 @@
                 font-size: 0.78rem;
                 font-weight: 700;
                 letter-spacing: 0.08em;
-                color: #475569;
+                color: rgba(var(--cf-accent-rgb), 0.85);
                 text-transform: uppercase;
             }
 
@@ -248,8 +285,8 @@
                 font-size: 0.78rem;
                 font-weight: 600;
                 color: #1e293b;
-                background: linear-gradient(135deg, #dbeafe, #dcfce7);
-                border: 1px solid rgba(59, 130, 246, 0.16);
+                background: linear-gradient(135deg, rgba(var(--cf-accent-rgb), 0.16), rgba(var(--cf-secondary-rgb), 0.16));
+                border: 1px solid rgba(var(--cf-accent-rgb), 0.22);
             }
 
             body.cf-theme .cf-hero-icon {
@@ -259,10 +296,15 @@
                 align-items: center;
                 justify-content: center;
                 border-radius: 12px;
-                color: #1e40af;
-                background: linear-gradient(135deg, #dbeafe, #f5d0fe, #dcfce7);
-                border: 1px solid rgba(99, 102, 241, 0.28);
-                box-shadow: 0 8px 20px rgba(59, 130, 246, 0.2);
+                color: var(--cf-accent);
+                background: linear-gradient(
+                    135deg,
+                    rgba(var(--cf-accent-rgb), 0.22),
+                    rgba(var(--cf-tertiary-rgb), 0.2),
+                    rgba(var(--cf-secondary-rgb), 0.2)
+                );
+                border: 1px solid rgba(var(--cf-accent-rgb), 0.28);
+                box-shadow: 0 8px 20px rgba(var(--cf-accent-rgb), 0.2);
                 margin-bottom: 0.4rem;
             }
 
@@ -288,14 +330,14 @@
             }
             body.cf-theme .cf-list-item:hover {
                 background: linear-gradient(90deg, rgba(239, 246, 255, 0.9), rgba(240, 253, 250, 0.75));
-                border-left-color: #60a5fa;
+                border-left-color: rgba(var(--cf-accent-rgb), 0.7);
             }
 
             body.cf-theme .cf-link-lift {
                 transition: color 0.2s ease;
             }
             body.cf-theme .cf-link-lift:hover {
-                color: #1d4ed8 !important;
+                color: var(--cf-accent) !important;
             }
 
             body.cf-theme a:focus-visible,
@@ -303,8 +345,38 @@
             body.cf-theme input:focus-visible,
             body.cf-theme textarea:focus-visible,
             body.cf-theme select:focus-visible {
-                outline: 2px solid rgba(59, 130, 246, 0.35);
+                outline: 2px solid rgba(var(--cf-accent-rgb), 0.35);
                 outline-offset: 2px;
+            }
+            body.cf-theme .cf-theme-switcher {
+                position: fixed;
+                right: 1rem;
+                bottom: 1rem;
+                z-index: 1055;
+                width: min(260px, calc(100vw - 2rem));
+                border: 1px solid rgba(148, 163, 184, 0.26);
+                border-radius: 16px;
+                background: rgba(255, 255, 255, 0.95);
+                box-shadow: 0 16px 35px rgba(15, 23, 42, 0.14);
+                backdrop-filter: blur(5px);
+                padding: 0.75rem;
+            }
+            body.cf-theme .cf-theme-switcher-title {
+                font-size: 0.73rem;
+                font-weight: 700;
+                letter-spacing: 0.08em;
+                color: #64748b;
+                text-transform: uppercase;
+                margin-bottom: 0.45rem;
+            }
+            body.cf-theme .cf-theme-switcher .btn {
+                width: auto;
+            }
+            body.cf-theme .cf-theme-switcher .cf-theme-option.active {
+                background: var(--cf-accent) !important;
+                border-color: var(--cf-accent) !important;
+                color: #ffffff !important;
+                box-shadow: 0 8px 18px rgba(var(--cf-accent-rgb), 0.32);
             }
 
             @media (max-width: 991.98px) {
@@ -353,7 +425,7 @@
       gtag('config', 'G-VVRKTYE9YB');
     </script>
 </head>
-<body class="{{ $isCfRoute ? 'cf-theme' : '' }}">
+<body class="{{ $isCfRoute ? 'cf-theme cf-palette-' . $cfPalette : '' }}">
     <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top shadow-sm">
         <div class="container-fluid d-flex flex-row justify-content-between align-items-center px-0">
             <!-- Left: Kemnaker Logo and Text -->
@@ -460,6 +532,16 @@
         <button id="backToTopBtn" class="btn btn-success rounded-circle" style="position: fixed; bottom: 32px; left: 32px; display: none; z-index: 9999; width:48px; height:48px; box-shadow: 0 4px 16px rgba(40,167,69,0.18);">
             <i class="fa fa-arrow-up"></i>
         </button>
+        @if($isCfRoute)
+            <div class="cf-theme-switcher" id="cfThemeSwitcher" aria-label="CF palette switcher">
+                <div class="cf-theme-switcher-title">Color Mode</div>
+                <div class="cf-toolbar">
+                    <button type="button" class="btn btn-sm btn-outline-primary cf-theme-option {{ $cfPalette === 'ocean' ? 'active' : '' }}" data-cf-palette="ocean">Ocean</button>
+                    <button type="button" class="btn btn-sm btn-outline-success cf-theme-option {{ $cfPalette === 'emerald' ? 'active' : '' }}" data-cf-palette="emerald">Emerald</button>
+                    <button type="button" class="btn btn-sm btn-outline-warning cf-theme-option {{ $cfPalette === 'sunset' ? 'active' : '' }}" data-cf-palette="sunset">Sunset</button>
+                </div>
+            </div>
+        @endif
     </main>
 
 
@@ -549,6 +631,40 @@
         backToTopBtn.addEventListener('click', function() {
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
+        (function () {
+            const switcher = document.getElementById('cfThemeSwitcher');
+            if (!switcher) {
+                return;
+            }
+
+            const body = document.body;
+            const options = Array.from(switcher.querySelectorAll('.cf-theme-option'));
+            const valid = ['ocean', 'emerald', 'sunset'];
+            const current = valid.find((palette) => body.classList.contains(`cf-palette-${palette}`)) || 'ocean';
+
+            const applyPalette = function (palette) {
+                valid.forEach((item) => body.classList.remove(`cf-palette-${item}`));
+                body.classList.add(`cf-palette-${palette}`);
+
+                options.forEach((button) => {
+                    button.classList.toggle('active', button.dataset.cfPalette === palette);
+                });
+
+                document.cookie = `cf_palette=${palette}; path=/; max-age=31536000; SameSite=Lax`;
+            };
+
+            applyPalette(current);
+
+            options.forEach((button) => {
+                button.addEventListener('click', function () {
+                    const palette = this.dataset.cfPalette;
+                    if (!valid.includes(palette)) {
+                        return;
+                    }
+                    applyPalette(palette);
+                });
+            });
+        })();
     </script>
     <!-- AOS JS -->
     <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
