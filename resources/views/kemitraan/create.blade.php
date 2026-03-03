@@ -331,13 +331,13 @@
                                     <div class="walkin-stat-value" id="statAvgRating">{{ number_format((float) ($statsSummary['avg_rating'] ?? 0), 2) }}/5</div>
                                 </div>
                             </div>
-                            <div class="col-6 col-lg-2">
+                            <div class="col-6 col-lg-2 stats-admin-only d-none">
                                 <div class="walkin-stat-card">
                                     <div class="walkin-stat-label">Active Companies</div>
                                     <div class="walkin-stat-value" id="statActiveCompanies">{{ number_format((int) ($statsSummary['active_companies'] ?? 0)) }}</div>
                                 </div>
                             </div>
-                            <div class="col-6 col-lg-2">
+                            <div class="col-6 col-lg-2 stats-admin-only d-none">
                                 <div class="walkin-stat-card">
                                     <div class="walkin-stat-label">Active Initiators</div>
                                     <div class="walkin-stat-value" id="statActiveInitiators">{{ number_format((int) ($statsSummary['active_initiators'] ?? 0)) }}</div>
@@ -361,7 +361,7 @@
                         <hr class="my-4">
                         
                         <!-- Row 2 -->
-                        <div class="row g-3 mb-3">
+                        <div class="row g-3 mb-3 stats-admin-only d-none">
                             <div class="col-6 col-lg-2">
                                 <div class="walkin-stat-card">
                                     <div class="walkin-stat-label">Responses Today</div>
