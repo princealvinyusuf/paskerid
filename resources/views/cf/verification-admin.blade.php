@@ -2,8 +2,10 @@
 
 @section('content')
 <div class="container py-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="cf-hero d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
         <div>
+            <span class="cf-hero-icon"><i class="fa-solid fa-user-shield"></i></span>
+            <div class="cf-section-title mb-1">Admin Workspace</div>
             <h1 class="h4 fw-bold mb-1">Verification Admin</h1>
             <p class="text-muted mb-0">Review pengajuan badge employer/jobseeker.</p>
         </div>
@@ -33,7 +35,7 @@
     <div class="card border-0 shadow-sm rounded-4">
         <div class="card-body p-0">
             @forelse($requests as $req)
-                <div class="p-3 border-bottom">
+                <div class="p-3 border-bottom cf-list-item">
                     <div class="d-flex justify-content-between align-items-center mb-1">
                         <div>
                             <strong>{{ $req->user->name ?? '-' }}</strong>
@@ -50,7 +52,7 @@
                         <div><strong>Instansi:</strong> {{ $req->organization_name }}</div>
                     @endif
                     @if($req->evidence_url)
-                        <div><strong>Bukti:</strong> <a href="{{ $req->evidence_url }}" target="_blank">{{ $req->evidence_url }}</a></div>
+                        <div><strong>Bukti:</strong> <a href="{{ $req->evidence_url }}" target="_blank" class="cf-link-lift">{{ $req->evidence_url }}</a></div>
                     @endif
                     @if($req->notes)
                         <div><strong>Catatan User:</strong> {{ $req->notes }}</div>
@@ -77,7 +79,12 @@
                     </form>
                 </div>
             @empty
-                <div class="p-4 text-center text-muted">Belum ada pengajuan verifikasi.</div>
+                <div class="p-4">
+                    <div class="cf-empty-state">
+                        <i class="fa-regular fa-folder-open"></i>
+                        <div>Belum ada pengajuan verifikasi.</div>
+                    </div>
+                </div>
             @endforelse
             <div class="p-3">
                 {{ $requests->links() }}

@@ -2,8 +2,10 @@
 
 @section('content')
 <div class="container py-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="cf-hero d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
         <div>
+            <span class="cf-hero-icon"><i class="fa-solid fa-book-open-reader"></i></span>
+            <div class="cf-section-title mb-1">Community Rules</div>
             <h1 class="h4 fw-bold mb-1">Panduan Komunitas CF</h1>
             <p class="text-muted mb-0">Aturan diskusi, standar perilaku, dan transparansi penegakan.</p>
         </div>
@@ -12,7 +14,7 @@
 
     <div class="card border-0 shadow-sm rounded-4 mb-4">
         <div class="card-body p-4">
-            <h2 class="h6 fw-bold">Aturan Utama</h2>
+            <h2 class="h6 fw-bold"><i class="fa-solid fa-scale-balanced me-1 text-primary"></i>Aturan Utama</h2>
             <ul class="mb-0">
                 <li>Fokus pada topik ketenagakerjaan, rekrutmen, dan pengembangan karier.</li>
                 <li>Dilarang spam, penipuan, tautan phishing, hoaks, dan promosi menyesatkan.</li>
@@ -25,7 +27,7 @@
 
     <div class="card border-0 shadow-sm rounded-4 mb-4">
         <div class="card-body p-4">
-            <h2 class="h6 fw-bold">Transparansi Penegakan</h2>
+            <h2 class="h6 fw-bold"><i class="fa-solid fa-shield-heart me-1 text-primary"></i>Transparansi Penegakan</h2>
             <ul class="mb-0">
                 <li>Laporan masuk akan diprioritaskan berdasarkan skor risiko (low/medium/high).</li>
                 <li>Moderator dapat menandai status: open, resolved, atau rejected, disertai catatan.</li>
@@ -37,7 +39,7 @@
 
     <div class="card border-0 shadow-sm rounded-4">
         <div class="card-body p-4">
-            <h2 class="h6 fw-bold">Cara Melaporkan</h2>
+            <h2 class="h6 fw-bold"><i class="fa-regular fa-flag me-1 text-primary"></i>Cara Melaporkan</h2>
             <p class="mb-0">
                 Gunakan tombol <strong>Laporkan</strong> pada thread atau balasan. Jelaskan alasan secara spesifik
                 agar moderator dapat menilai konteks dengan tepat.

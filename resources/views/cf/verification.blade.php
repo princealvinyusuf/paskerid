@@ -2,8 +2,10 @@
 
 @section('content')
 <div class="container py-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="cf-hero d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
         <div>
+            <span class="cf-hero-icon"><i class="fa-solid fa-id-badge"></i></span>
+            <div class="cf-section-title mb-1">Trust & Identity</div>
             <h1 class="h4 fw-bold mb-1">Verifikasi Profil CF</h1>
             <p class="text-muted mb-0">Ajukan badge verifikasi sebagai employer atau jobseeker.</p>
         </div>
@@ -87,7 +89,7 @@
                 <h2 class="h6 fw-bold mb-0">Riwayat Pengajuan</h2>
             </div>
             @forelse($requests as $requestItem)
-                <div class="p-3 border-bottom">
+                <div class="p-3 border-bottom cf-list-item">
                     <div class="d-flex justify-content-between align-items-center mb-1">
                         <div class="small text-muted">
                             {{ strtoupper($requestItem->requested_role) }} | {{ $requestItem->created_at?->format('d M Y H:i') }}
@@ -100,7 +102,7 @@
                         <div><strong>Instansi:</strong> {{ $requestItem->organization_name }}</div>
                     @endif
                     @if($requestItem->evidence_url)
-                        <div><strong>Bukti:</strong> <a href="{{ $requestItem->evidence_url }}" target="_blank">{{ $requestItem->evidence_url }}</a></div>
+                        <div><strong>Bukti:</strong> <a href="{{ $requestItem->evidence_url }}" target="_blank" class="cf-link-lift">{{ $requestItem->evidence_url }}</a></div>
                     @endif
                     @if($requestItem->notes)
                         <div><strong>Catatan:</strong> {{ $requestItem->notes }}</div>
@@ -110,7 +112,12 @@
                     @endif
                 </div>
             @empty
-                <div class="p-4 text-center text-muted">Belum ada pengajuan verifikasi.</div>
+                <div class="p-4">
+                    <div class="cf-empty-state">
+                        <i class="fa-regular fa-id-card"></i>
+                        <div>Belum ada pengajuan verifikasi.</div>
+                    </div>
+                </div>
             @endforelse
             <div class="p-3">
                 {{ $requests->links() }}

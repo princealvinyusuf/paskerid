@@ -2,12 +2,14 @@
 
 @section('content')
 <div class="container py-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="cf-hero d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
         <div>
+            <span class="cf-hero-icon"><i class="fa-regular fa-bell"></i></span>
+            <div class="cf-section-title mb-1">Inbox</div>
             <h1 class="h4 fw-bold mb-1">Notification Center</h1>
             <p class="text-muted mb-0">Pembaruan aktivitas diskusi komunitas Anda.</p>
         </div>
-        <div class="d-flex gap-2">
+        <div class="cf-toolbar">
             <a href="{{ route('cf.index') }}" class="btn btn-outline-secondary btn-sm">Kembali ke Forum</a>
             @if($unreadCount > 0)
                 <form method="POST" action="{{ route('cf.notifications.read-all') }}">
@@ -26,7 +28,7 @@
             </div>
 
             @forelse($notifications as $notification)
-                <div class="p-3 border-bottom {{ $notification->is_read ? '' : 'bg-light' }}">
+                <div class="p-3 border-bottom cf-list-item {{ $notification->is_read ? '' : 'bg-light' }}">
                     <div class="d-flex justify-content-between gap-3 flex-wrap">
                         <div class="flex-grow-1">
                             <div class="d-flex align-items-center gap-2 mb-1">
@@ -54,8 +56,11 @@
                     </div>
                 </div>
             @empty
-                <div class="p-4 text-center text-muted">
-                    Belum ada notifikasi.
+                <div class="p-4">
+                    <div class="cf-empty-state">
+                        <i class="fa-regular fa-bell-slash"></i>
+                        <div>Belum ada notifikasi.</div>
+                    </div>
                 </div>
             @endforelse
 
