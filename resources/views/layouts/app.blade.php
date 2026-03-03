@@ -369,6 +369,12 @@
                 text-transform: uppercase;
                 margin-bottom: 0.45rem;
             }
+            body.cf-theme .cf-theme-switcher-toggle {
+                display: none;
+            }
+            body.cf-theme .cf-theme-switcher-content {
+                display: block;
+            }
             body.cf-theme .cf-theme-switcher .btn {
                 width: auto;
             }
@@ -410,6 +416,30 @@
                 }
                 body.cf-theme .cf-toolbar .btn {
                     width: auto;
+                }
+                body.cf-theme .cf-theme-switcher {
+                    width: auto;
+                    right: 0.75rem;
+                    bottom: 0.75rem;
+                    padding: 0.55rem;
+                }
+                body.cf-theme .cf-theme-switcher-toggle {
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 40px;
+                    height: 40px;
+                    border-radius: 12px !important;
+                }
+                body.cf-theme .cf-theme-switcher-content {
+                    display: none;
+                    margin-top: 0.55rem;
+                }
+                body.cf-theme .cf-theme-switcher.expanded .cf-theme-switcher-content {
+                    display: block;
+                }
+                body.cf-theme .cf-theme-switcher .cf-theme-option {
+                    width: 100%;
                 }
             }
         </style>
@@ -534,11 +564,16 @@
         </button>
         @if($isCfRoute)
             <div class="cf-theme-switcher" id="cfThemeSwitcher" aria-label="CF palette switcher">
-                <div class="cf-theme-switcher-title">Color Mode</div>
-                <div class="cf-toolbar">
-                    <button type="button" class="btn btn-sm btn-outline-primary cf-theme-option {{ $cfPalette === 'ocean' ? 'active' : '' }}" data-cf-palette="ocean">Ocean</button>
-                    <button type="button" class="btn btn-sm btn-outline-success cf-theme-option {{ $cfPalette === 'emerald' ? 'active' : '' }}" data-cf-palette="emerald">Emerald</button>
-                    <button type="button" class="btn btn-sm btn-outline-warning cf-theme-option {{ $cfPalette === 'sunset' ? 'active' : '' }}" data-cf-palette="sunset">Sunset</button>
+                <button type="button" class="btn btn-sm btn-outline-primary cf-theme-switcher-toggle" id="cfThemeToggle" aria-controls="cfThemeSwitcherContent" aria-expanded="false">
+                    <i class="fa-solid fa-palette"></i>
+                </button>
+                <div class="cf-theme-switcher-content" id="cfThemeSwitcherContent">
+                    <div class="cf-theme-switcher-title">Color Mode</div>
+                    <div class="cf-toolbar">
+                        <button type="button" class="btn btn-sm btn-outline-primary cf-theme-option {{ $cfPalette === 'ocean' ? 'active' : '' }}" data-cf-palette="ocean">Ocean</button>
+                        <button type="button" class="btn btn-sm btn-outline-success cf-theme-option {{ $cfPalette === 'emerald' ? 'active' : '' }}" data-cf-palette="emerald">Emerald</button>
+                        <button type="button" class="btn btn-sm btn-outline-warning cf-theme-option {{ $cfPalette === 'sunset' ? 'active' : '' }}" data-cf-palette="sunset">Sunset</button>
+                    </div>
                 </div>
             </div>
         @endif
@@ -638,9 +673,11 @@
             }
 
             const body = document.body;
+            const toggleButton = document.getElementById('cfThemeToggle');
             const options = Array.from(switcher.querySelectorAll('.cf-theme-option'));
             const valid = ['ocean', 'emerald', 'sunset'];
             const current = valid.find((palette) => body.classList.contains(`cf-palette-${palette}`)) || 'ocean';
+            const isMobile = () => window.matchMedia('(max-width: 767.98px)').matches;
 
             const applyPalette = function (palette) {
                 valid.forEach((item) => body.classList.remove(`cf-palette-${item}`));
@@ -655,6 +692,16 @@
 
             applyPalette(current);
 
+            const syncSwitcherState = function () {
+                const expanded = !isMobile();
+                switcher.classList.toggle('expanded', expanded);
+                if (toggleButton) {
+                    toggleButton.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+                }
+            };
+
+            syncSwitcherState();
+
             options.forEach((button) => {
                 button.addEventListener('click', function () {
                     const palette = this.dataset.cfPalette;
@@ -664,6 +711,18 @@
                     applyPalette(palette);
                 });
             });
+
+            if (toggleButton) {
+                toggleButton.addEventListener('click', function () {
+                    if (!isMobile()) {
+                        return;
+                    }
+                    const expanded = switcher.classList.toggle('expanded');
+                    toggleButton.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+                });
+            }
+
+            window.addEventListener('resize', syncSwitcherState);
         })();
     </script>
     <!-- AOS JS -->
