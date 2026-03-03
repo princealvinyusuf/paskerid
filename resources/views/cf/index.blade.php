@@ -2,53 +2,108 @@
 
 @section('content')
 <div class="container py-5">
-    <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-4">
+    <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-4 gap-3">
         <div>
             <h1 class="h3 fw-bold mb-1">CF (Underconstruction)</h1>
             <p class="text-muted mb-0">
-                Prototype portal diskusi komunitas untuk ekosistem pasar kerja.
+                Forum komunitas pasar kerja untuk pelaku usaha dan pencari kerja.
             </p>
         </div>
-        <span class="badge text-bg-warning mt-3 mt-md-0">Under Construction</span>
+        <div class="d-flex gap-2 align-items-center">
+            <span class="badge text-bg-warning">Under Construction</span>
+            <a href="{{ route('cf.threads.create') }}" class="btn btn-success btn-sm">+ Buat Thread</a>
+        </div>
     </div>
 
     <div class="card border-0 shadow-sm rounded-4 mb-4">
         <div class="card-body p-4">
-            <h2 class="h5 fw-bold">Tujuan Portal</h2>
-            <p class="mb-0">
-                Menjadi pusat interaksi antara pelaku usaha dan pencari kerja untuk berbagi kebutuhan,
-                insight rekrutmen, peluang kerja, serta diskusi pengembangan kompetensi.
-            </p>
+            <form method="GET" action="{{ route('cf.index') }}" class="row g-2 align-items-end">
+                <div class="col-12 col-md-4">
+                    <label for="category" class="form-label mb-1">Kategori</label>
+                    <select name="category" id="category" class="form-select">
+                        <option value="">Semua kategori</option>
+                        @foreach($categories as $category)
+                            <option value="{{ $category->slug }}" @selected(($filters['category'] ?? '') === $category->slug)>
+                                {{ $category->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-12 col-md-3">
+                    <label for="author_type" class="form-label mb-1">Tipe Penulis</label>
+                    <select name="author_type" id="author_type" class="form-select">
+                        <option value="">Semua</option>
+                        <option value="employer" @selected(($filters['author_type'] ?? '') === 'employer')>Perusahaan</option>
+                        <option value="jobseeker" @selected(($filters['author_type'] ?? '') === 'jobseeker')>Pencari Kerja</option>
+                        <option value="community" @selected(($filters['author_type'] ?? '') === 'community')>Komunitas</option>
+                    </select>
+                </div>
+                <div class="col-12 col-md-3">
+                    <label for="q" class="form-label mb-1">Cari</label>
+                    <input type="text" id="q" name="q" class="form-control" placeholder="Kata kunci..." value="{{ $filters['q'] ?? '' }}">
+                </div>
+                <div class="col-12 col-md-2 d-grid">
+                    <button type="submit" class="btn btn-outline-success">Filter</button>
+                </div>
+            </form>
         </div>
     </div>
 
-    <div class="row g-4">
-        <div class="col-12 col-lg-6">
-            <div class="card h-100 border-0 shadow-sm rounded-4">
-                <div class="card-body p-4">
-                    <h3 class="h5 fw-bold">Struktur Topik Utama</h3>
-                    <ul class="mb-0 ps-3">
-                        <li>Lowongan & Kebutuhan Talenta</li>
-                        <li>Pencari Kerja & Profil Kandidat</li>
-                        <li>Diskusi Industri per Sektor</li>
-                        <li>Tips CV, Interview, dan Hiring</li>
-                        <li>Event Job Fair / Walk In Interview</li>
-                    </ul>
+    <div class="row g-4 mb-4">
+        @foreach($categories as $category)
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="card h-100 border-0 shadow-sm rounded-4">
+                    <div class="card-body p-3">
+                        <h2 class="h6 fw-bold mb-1">{{ $category->name }}</h2>
+                        <p class="text-muted small mb-0">{{ $category->description }}</p>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col-12 col-lg-6">
-            <div class="card h-100 border-0 shadow-sm rounded-4">
-                <div class="card-body p-4">
-                    <h3 class="h5 fw-bold">Fitur Inti (MVP)</h3>
-                    <ul class="mb-0 ps-3">
-                        <li>Pembuatan thread dan balasan</li>
-                        <li>Kategori dan tag topik</li>
-                        <li>Pencarian thread berdasarkan kata kunci</li>
-                        <li>Moderasi dasar dan pelaporan konten</li>
-                        <li>Pin topik prioritas ketenagakerjaan</li>
-                    </ul>
+        @endforeach
+    </div>
+
+    <div class="card border-0 shadow-sm rounded-4">
+        <div class="card-body p-0">
+            <div class="p-3 border-bottom d-flex justify-content-between align-items-center">
+                <h3 class="h5 fw-bold mb-0">Thread Terbaru</h3>
+                <span class="text-muted small">{{ $threads->total() }} thread</span>
+            </div>
+
+            @forelse($threads as $thread)
+                <div class="p-3 border-bottom">
+                    <div class="d-flex flex-wrap align-items-center gap-2 mb-1">
+                        <a href="{{ route('cf.threads.show', $thread->id) }}" class="fw-semibold text-decoration-none">
+                            {{ $thread->title }}
+                        </a>
+                        @if($thread->is_pinned)
+                            <span class="badge text-bg-info">Pinned</span>
+                        @endif
+                        @if($thread->status === 'closed')
+                            <span class="badge text-bg-secondary">Closed</span>
+                        @endif
+                    </div>
+                    <div class="small text-muted">
+                        {{ $thread->category->name ?? '-' }} |
+                        Oleh: {{ $thread->user->name ?? 'Anonim' }} |
+                        Tipe: {{ strtoupper($thread->author_type) }} |
+                        Balasan: {{ (int) ($thread->replies_count ?? 0) }} |
+                        Views: {{ number_format($thread->views_count) }}
+                        @if($thread->location)
+                            | Lokasi: {{ $thread->location }}
+                        @endif
+                        @if($thread->sector)
+                            | Sektor: {{ $thread->sector }}
+                        @endif
+                    </div>
                 </div>
+            @empty
+                <div class="p-4 text-center text-muted">
+                    Belum ada thread. Mulai diskusi pertama untuk komunitas pasar kerja.
+                </div>
+            @endforelse
+
+            <div class="p-3">
+                {{ $threads->links() }}
             </div>
         </div>
     </div>

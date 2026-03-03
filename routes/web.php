@@ -92,6 +92,18 @@ Route::post('/cf/verify-passcode', [CommunityForumController::class, 'verifyPass
     ->name('cf.verify-passcode');
 Route::get('/cf/underconstruction', [CommunityForumController::class, 'index'])
     ->name('cf.index');
+Route::get('/cf/thread/create', [CommunityForumController::class, 'createThread'])
+    ->name('cf.threads.create');
+Route::post('/cf/thread', [CommunityForumController::class, 'storeThread'])
+    ->middleware('auth')
+    ->name('cf.threads.store');
+Route::get('/cf/thread/{id}', [CommunityForumController::class, 'showThread'])
+    ->whereNumber('id')
+    ->name('cf.threads.show');
+Route::post('/cf/thread/{id}/reply', [CommunityForumController::class, 'storeReply'])
+    ->middleware('auth')
+    ->whereNumber('id')
+    ->name('cf.replies.store');
 
 Route::get('/ketentuan-pengguna', function () {
     return view('ketentuan_pengguna');
