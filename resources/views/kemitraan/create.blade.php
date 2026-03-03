@@ -276,6 +276,9 @@
                             <h5 class="mb-0"><i class="bi bi-graph-up-arrow me-2"></i>Statistik Walk In</h5>
                             <div class="text-muted small">Dashboard interaktif dari data survei, peserta hadir, company, dan initiator.</div>
                         </div>
+                        <button type="button" class="btn btn-outline-dark btn-sm" id="btnStatsAdminDashboard">
+                            <i class="bi bi-shield-lock me-1"></i>Admin Dashboard
+                        </button>
                     </div>
 
                     @if(!($walkinStats['ready'] ?? false))
@@ -386,7 +389,7 @@
                             </div>
                         </div>
 
-                        <div class="row g-3 mb-3">
+                        <div class="row g-3 mb-3 stats-admin-only d-none">
                             <div class="col-12 col-lg-4">
                                 <label class="form-label mb-1">Range Trend</label>
                                 <select class="form-select" id="statsTrendRange">
@@ -407,8 +410,12 @@
                             </div>
                         </div>
 
+                        <div class="alert alert-secondary py-2 px-3 mb-3" id="statsAdminLockedHint">
+                            Fitur Admin Dashboard terkunci. Klik tombol <strong>Admin Dashboard</strong> untuk membuka.
+                        </div>
+
                         <div class="row g-3 mb-3">
-                            <div class="col-12 col-lg-8">
+                            <div class="col-12 col-lg-8 stats-admin-only d-none">
                                 <div class="walkin-panel p-3">
                                     <div class="fw-semibold mb-2">Trend Peserta Hadir</div>
                                     <canvas id="statsTrendChart" height="120"></canvas>
@@ -423,13 +430,13 @@
                         </div>
 
                         <div class="row g-3 mb-3">
-                            <div class="col-12 col-lg-6">
+                            <div class="col-12 col-lg-6 stats-admin-only d-none">
                                 <div class="walkin-panel p-3">
                                     <div class="fw-semibold mb-2">Top Perusahaan (Peserta Hadir)</div>
                                     <canvas id="statsCompanyChart" height="140"></canvas>
                                 </div>
                             </div>
-                            <div class="col-12 col-lg-6">
+                            <div class="col-12 col-lg-6 stats-admin-only d-none">
                                 <div class="walkin-panel p-3">
                                     <div class="fw-semibold mb-2">Top Initiator (Peserta Hadir)</div>
                                     <canvas id="statsInitiatorChart" height="140"></canvas>
@@ -452,7 +459,7 @@
                             </div>
                         </div>
 
-                        <div class="row g-3 mb-3">
+                        <div class="row g-3 mb-3 stats-admin-only d-none">
                             <div class="col-12 col-lg-6">
                                 <div class="walkin-panel p-3">
                                     <div class="fw-semibold mb-2">Top Company Detail</div>
@@ -490,7 +497,7 @@
                             </div>
                         </div>
 
-                        <div class="row g-3">
+                        <div class="row g-3 stats-admin-only d-none">
                             <div class="col-12 col-lg-6">
                                 <div class="walkin-panel p-3">
                                     <div class="fw-semibold mb-2">Sumber Informasi Terpopuler</div>
@@ -2288,6 +2295,9 @@
         const initiatorTableBodyEl = document.getElementById('statsInitiatorTableBody');
         const infoSourcesListEl = document.getElementById('statsInfoSourcesList');
         const jobPortalsListEl = document.getElementById('statsJobPortalsList');
+        const statsAdminBtn = document.getElementById('btnStatsAdminDashboard');
+        const statsAdminLockedHintEl = document.getElementById('statsAdminLockedHint');
+        const statsAdminOnlyEls = panel.querySelectorAll('.stats-admin-only');
 
         const trendCanvas = document.getElementById('statsTrendChart');
         const ratingCanvas = document.getElementById('statsRatingChart');
@@ -2305,6 +2315,12 @@
         const educationDist = Array.isArray(stats.education_distribution) ? stats.education_distribution : [];
         const infoSources = Array.isArray(stats.info_sources) ? stats.info_sources : [];
         const jobPortals = Array.isArray(stats.job_portals) ? stats.job_portals : [];
+        let statsAdminUnlocked = false;
+        try {
+            statsAdminUnlocked = sessionStorage.getItem('walkin_stats_admin_unlocked') === '1';
+        } catch (e) {
+            statsAdminUnlocked = false;
+        }
 
         const charts = {};
         const colorSet = ['#2563eb', '#0ea5e9', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#14b8a6', '#f97316', '#64748b', '#22c55e'];
@@ -2488,12 +2504,29 @@
             }
         }
 
-        renderTrend(trendRangeEl ? trendRangeEl.value : '30');
+        function renderAdminDashboard() {
+            renderTrend(trendRangeEl ? trendRangeEl.value : '30');
+            renderTopData(topLimitEl ? topLimitEl.value : '10');
+            renderCloud(infoSourcesListEl, infoSources);
+            renderCloud(jobPortalsListEl, jobPortals);
+        }
+
+        function setStatsAdminVisibility(unlocked) {
+            statsAdminOnlyEls.forEach((el) => el.classList.toggle('d-none', !unlocked));
+            if (statsAdminLockedHintEl) statsAdminLockedHintEl.classList.toggle('d-none', unlocked);
+            if (statsAdminBtn) {
+                statsAdminBtn.innerHTML = unlocked
+                    ? '<i class="bi bi-shield-check me-1"></i>Admin Dashboard'
+                    : '<i class="bi bi-shield-lock me-1"></i>Admin Dashboard';
+            }
+        }
+
         renderRatingDistribution();
         renderDemographyCharts();
-        renderTopData(topLimitEl ? topLimitEl.value : '10');
-        renderCloud(infoSourcesListEl, infoSources);
-        renderCloud(jobPortalsListEl, jobPortals);
+        setStatsAdminVisibility(statsAdminUnlocked);
+        if (statsAdminUnlocked) {
+            renderAdminDashboard();
+        }
 
         if (trendRangeEl) {
             trendRangeEl.addEventListener('change', function () {
@@ -2503,6 +2536,29 @@
         if (topLimitEl) {
             topLimitEl.addEventListener('change', function () {
                 renderTopData(topLimitEl.value);
+            });
+        }
+
+        if (statsAdminBtn) {
+            statsAdminBtn.addEventListener('click', function () {
+                if (!statsAdminUnlocked) {
+                    const pass = window.prompt('Masukkan passcode Admin Dashboard');
+                    if (pass === null) return;
+                    if (String(pass).trim() !== '080899') {
+                        alert('Passcode tidak valid.');
+                        return;
+                    }
+                    statsAdminUnlocked = true;
+                    try { sessionStorage.setItem('walkin_stats_admin_unlocked', '1'); } catch (e) {}
+                    setStatsAdminVisibility(true);
+                    renderAdminDashboard();
+                    Object.keys(charts).forEach((key) => {
+                        if (charts[key] && typeof charts[key].resize === 'function') {
+                            charts[key].resize();
+                            charts[key].update();
+                        }
+                    });
+                }
             });
         }
 
