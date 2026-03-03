@@ -56,7 +56,7 @@
 
     <div class="card border-0 shadow-sm rounded-4 mb-4">
         <div class="card-body p-4">
-            @if($thread->location || $thread->sector)
+            @if($thread->location || $thread->sector || $thread->job_role || $thread->work_type || $thread->experience_level || $thread->province || $thread->city || $thread->salary_range)
                 <div class="small text-muted mb-2">
                     @if($thread->location)
                         Lokasi: {{ $thread->location }}
@@ -66,6 +66,24 @@
                     @endif
                     @if($thread->sector)
                         Sektor: {{ $thread->sector }}
+                    @endif
+                    @if($thread->job_role)
+                        | Jabatan: {{ $thread->job_role }}
+                    @endif
+                    @if($thread->work_type)
+                        | Tipe Kerja: {{ $thread->work_type }}
+                    @endif
+                    @if($thread->experience_level)
+                        | Pengalaman: {{ $thread->experience_level }}
+                    @endif
+                    @if($thread->province || $thread->city)
+                        | Area:
+                        @if($thread->city){{ $thread->city }}@endif
+                        @if($thread->city && $thread->province), @endif
+                        @if($thread->province){{ $thread->province }}@endif
+                    @endif
+                    @if($thread->salary_range)
+                        | Gaji: {{ $thread->salary_range }}
                     @endif
                 </div>
             @endif

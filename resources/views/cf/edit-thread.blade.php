@@ -61,6 +61,46 @@
                     <input id="sector" name="sector" type="text" class="form-control" maxlength="120" value="{{ old('sector', $thread->sector) }}">
                 </div>
 
+                <div class="col-12 col-md-6">
+                    <label for="job_role" class="form-label">Posisi/Jabatan</label>
+                    <input id="job_role" name="job_role" type="text" class="form-control" maxlength="120" value="{{ old('job_role', $thread->job_role) }}">
+                </div>
+
+                <div class="col-12 col-md-6">
+                    <label for="salary_range" class="form-label">Rentang Gaji</label>
+                    <input id="salary_range" name="salary_range" type="text" class="form-control" maxlength="120" value="{{ old('salary_range', $thread->salary_range) }}">
+                </div>
+
+                <div class="col-12 col-md-4">
+                    <label for="province" class="form-label">Provinsi</label>
+                    <input id="province" name="province" type="text" class="form-control" maxlength="120" value="{{ old('province', $thread->province) }}">
+                </div>
+
+                <div class="col-12 col-md-4">
+                    <label for="city" class="form-label">Kota/Kabupaten</label>
+                    <input id="city" name="city" type="text" class="form-control" maxlength="120" value="{{ old('city', $thread->city) }}">
+                </div>
+
+                <div class="col-12 col-md-4">
+                    <label for="work_type" class="form-label">Tipe Kerja</label>
+                    <select id="work_type" name="work_type" class="form-select">
+                        <option value="">Pilih tipe kerja</option>
+                        @foreach(['Onsite', 'Hybrid', 'Remote', 'Freelance', 'Project Based'] as $type)
+                            <option value="{{ $type }}" @selected(old('work_type', $thread->work_type) === $type)>{{ $type }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="col-12 col-md-4">
+                    <label for="experience_level" class="form-label">Level Pengalaman</label>
+                    <select id="experience_level" name="experience_level" class="form-select">
+                        <option value="">Pilih level</option>
+                        @foreach(['Fresh Graduate', 'Junior', 'Mid', 'Senior', 'Lead'] as $level)
+                            <option value="{{ $level }}" @selected(old('experience_level', $thread->experience_level) === $level)>{{ $level }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
                 <div class="col-12">
                     <label for="body" class="form-label">Isi Diskusi</label>
                     <textarea id="body" name="body" rows="8" class="form-control" required>{{ old('body', $thread->body) }}</textarea>

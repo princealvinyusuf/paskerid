@@ -53,6 +53,36 @@
                     <label for="q" class="form-label mb-1">Cari</label>
                     <input type="text" id="q" name="q" class="form-control" placeholder="Kata kunci..." value="{{ $filters['q'] ?? '' }}">
                 </div>
+                <div class="col-12 col-md-2">
+                    <label for="work_type" class="form-label mb-1">Tipe Kerja</label>
+                    <select name="work_type" id="work_type" class="form-select">
+                        <option value="">Semua</option>
+                        @foreach(['Onsite', 'Hybrid', 'Remote', 'Freelance', 'Project Based'] as $type)
+                            <option value="{{ $type }}" @selected(($filters['work_type'] ?? '') === $type)>{{ $type }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-12 col-md-2">
+                    <label for="experience_level" class="form-label mb-1">Pengalaman</label>
+                    <select name="experience_level" id="experience_level" class="form-select">
+                        <option value="">Semua</option>
+                        @foreach(['Fresh Graduate', 'Junior', 'Mid', 'Senior', 'Lead'] as $level)
+                            <option value="{{ $level }}" @selected(($filters['experience_level'] ?? '') === $level)>{{ $level }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-12 col-md-2">
+                    <label for="province" class="form-label mb-1">Provinsi</label>
+                    <input type="text" id="province" name="province" class="form-control" value="{{ $filters['province'] ?? '' }}">
+                </div>
+                <div class="col-12 col-md-2">
+                    <label for="city" class="form-label mb-1">Kota</label>
+                    <input type="text" id="city" name="city" class="form-control" value="{{ $filters['city'] ?? '' }}">
+                </div>
+                <div class="col-12 col-md-2">
+                    <label for="job_role" class="form-label mb-1">Jabatan</label>
+                    <input type="text" id="job_role" name="job_role" class="form-control" value="{{ $filters['job_role'] ?? '' }}">
+                </div>
                 <div class="col-12 col-md-2 d-grid">
                     <button type="submit" class="btn btn-outline-success">Filter</button>
                 </div>
@@ -140,6 +170,24 @@
                         @endif
                         @if($thread->sector)
                             | Sektor: {{ $thread->sector }}
+                        @endif
+                        @if($thread->job_role)
+                            | Jabatan: {{ $thread->job_role }}
+                        @endif
+                        @if($thread->work_type)
+                            | Tipe Kerja: {{ $thread->work_type }}
+                        @endif
+                        @if($thread->experience_level)
+                            | Pengalaman: {{ $thread->experience_level }}
+                        @endif
+                        @if($thread->province || $thread->city)
+                            | Area:
+                            @if($thread->city){{ $thread->city }}@endif
+                            @if($thread->city && $thread->province), @endif
+                            @if($thread->province){{ $thread->province }}@endif
+                        @endif
+                        @if($thread->salary_range)
+                            | Gaji: {{ $thread->salary_range }}
                         @endif
                     </div>
                 </div>

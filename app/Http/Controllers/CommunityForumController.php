@@ -57,6 +57,11 @@ class CommunityForumController extends Controller
         $categorySlug = trim((string) $request->query('category', ''));
         $authorType = trim((string) $request->query('author_type', ''));
         $keyword = trim((string) $request->query('q', ''));
+        $workType = trim((string) $request->query('work_type', ''));
+        $experienceLevel = trim((string) $request->query('experience_level', ''));
+        $province = trim((string) $request->query('province', ''));
+        $city = trim((string) $request->query('city', ''));
+        $jobRole = trim((string) $request->query('job_role', ''));
 
         $categories = CfCategory::query()
             ->where('is_active', true)
@@ -81,8 +86,29 @@ class CommunityForumController extends Controller
                         ->where('title', 'like', '%' . $keyword . '%')
                         ->orWhere('body', 'like', '%' . $keyword . '%')
                         ->orWhere('sector', 'like', '%' . $keyword . '%')
-                        ->orWhere('location', 'like', '%' . $keyword . '%');
+                        ->orWhere('location', 'like', '%' . $keyword . '%')
+                        ->orWhere('job_role', 'like', '%' . $keyword . '%')
+                        ->orWhere('province', 'like', '%' . $keyword . '%')
+                        ->orWhere('city', 'like', '%' . $keyword . '%')
+                        ->orWhere('work_type', 'like', '%' . $keyword . '%')
+                        ->orWhere('salary_range', 'like', '%' . $keyword . '%')
+                        ->orWhere('experience_level', 'like', '%' . $keyword . '%');
                 });
+            })
+            ->when($workType !== '', function ($query) use ($workType) {
+                $query->where('work_type', $workType);
+            })
+            ->when($experienceLevel !== '', function ($query) use ($experienceLevel) {
+                $query->where('experience_level', $experienceLevel);
+            })
+            ->when($province !== '', function ($query) use ($province) {
+                $query->where('province', 'like', '%' . $province . '%');
+            })
+            ->when($city !== '', function ($query) use ($city) {
+                $query->where('city', 'like', '%' . $city . '%');
+            })
+            ->when($jobRole !== '', function ($query) use ($jobRole) {
+                $query->where('job_role', 'like', '%' . $jobRole . '%');
             })
             ->orderByDesc('is_pinned')
             ->orderByDesc('last_activity_at')
@@ -126,6 +152,11 @@ class CommunityForumController extends Controller
                 'category' => $categorySlug,
                 'author_type' => $authorType,
                 'q' => $keyword,
+                'work_type' => $workType,
+                'experience_level' => $experienceLevel,
+                'province' => $province,
+                'city' => $city,
+                'job_role' => $jobRole,
             ],
         ]);
     }
@@ -166,6 +197,12 @@ class CommunityForumController extends Controller
             'author_type' => 'required|in:employer,jobseeker,community',
             'location' => 'nullable|string|max:120',
             'sector' => 'nullable|string|max:120',
+            'job_role' => 'nullable|string|max:120',
+            'province' => 'nullable|string|max:120',
+            'city' => 'nullable|string|max:120',
+            'work_type' => 'nullable|in:Onsite,Hybrid,Remote,Freelance,Project Based',
+            'salary_range' => 'nullable|string|max:120',
+            'experience_level' => 'nullable|in:Fresh Graduate,Junior,Mid,Senior,Lead',
         ]);
 
         if ($this->isThreadSpam((int) $request->user()->id, (string) $validated['title'], (string) $validated['body'])) {
@@ -195,6 +232,12 @@ class CommunityForumController extends Controller
             'author_type' => (string) $validated['author_type'],
             'location' => $validated['location'] ?? null,
             'sector' => $validated['sector'] ?? null,
+            'job_role' => $validated['job_role'] ?? null,
+            'province' => $validated['province'] ?? null,
+            'city' => $validated['city'] ?? null,
+            'work_type' => $validated['work_type'] ?? null,
+            'salary_range' => $validated['salary_range'] ?? null,
+            'experience_level' => $validated['experience_level'] ?? null,
             'last_activity_at' => now(),
             'status' => 'open',
         ]);
@@ -251,6 +294,12 @@ class CommunityForumController extends Controller
             'author_type' => 'required|in:employer,jobseeker,community',
             'location' => 'nullable|string|max:120',
             'sector' => 'nullable|string|max:120',
+            'job_role' => 'nullable|string|max:120',
+            'province' => 'nullable|string|max:120',
+            'city' => 'nullable|string|max:120',
+            'work_type' => 'nullable|in:Onsite,Hybrid,Remote,Freelance,Project Based',
+            'salary_range' => 'nullable|string|max:120',
+            'experience_level' => 'nullable|in:Fresh Graduate,Junior,Mid,Senior,Lead',
         ]);
 
         $slug = $thread->slug;
@@ -275,6 +324,12 @@ class CommunityForumController extends Controller
             'author_type' => (string) $validated['author_type'],
             'location' => $validated['location'] ?? null,
             'sector' => $validated['sector'] ?? null,
+            'job_role' => $validated['job_role'] ?? null,
+            'province' => $validated['province'] ?? null,
+            'city' => $validated['city'] ?? null,
+            'work_type' => $validated['work_type'] ?? null,
+            'salary_range' => $validated['salary_range'] ?? null,
+            'experience_level' => $validated['experience_level'] ?? null,
             'last_activity_at' => now(),
         ]);
 

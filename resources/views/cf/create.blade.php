@@ -70,6 +70,64 @@
                         @enderror
                     </div>
 
+                    <div class="col-12 col-md-6">
+                        <label for="job_role" class="form-label">Posisi/Jabatan (opsional)</label>
+                        <input id="job_role" name="job_role" type="text" class="form-control @error('job_role') is-invalid @enderror" maxlength="120" value="{{ old('job_role') }}" placeholder="Contoh: Sales Executive, UI/UX Designer">
+                        @error('job_role')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="col-12 col-md-6">
+                        <label for="salary_range" class="form-label">Rentang Gaji (opsional)</label>
+                        <input id="salary_range" name="salary_range" type="text" class="form-control @error('salary_range') is-invalid @enderror" maxlength="120" value="{{ old('salary_range') }}" placeholder="Contoh: 5 - 8 juta / nego">
+                        @error('salary_range')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="col-12 col-md-4">
+                        <label for="province" class="form-label">Provinsi (opsional)</label>
+                        <input id="province" name="province" type="text" class="form-control @error('province') is-invalid @enderror" maxlength="120" value="{{ old('province') }}">
+                        @error('province')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="col-12 col-md-4">
+                        <label for="city" class="form-label">Kota/Kabupaten (opsional)</label>
+                        <input id="city" name="city" type="text" class="form-control @error('city') is-invalid @enderror" maxlength="120" value="{{ old('city') }}">
+                        @error('city')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="col-12 col-md-4">
+                        <label for="work_type" class="form-label">Tipe Kerja (opsional)</label>
+                        <select id="work_type" name="work_type" class="form-select @error('work_type') is-invalid @enderror">
+                            <option value="">Pilih tipe kerja</option>
+                            @foreach(['Onsite', 'Hybrid', 'Remote', 'Freelance', 'Project Based'] as $type)
+                                <option value="{{ $type }}" @selected(old('work_type') === $type)>{{ $type }}</option>
+                            @endforeach
+                        </select>
+                        @error('work_type')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="col-12 col-md-4">
+                        <label for="experience_level" class="form-label">Level Pengalaman (opsional)</label>
+                        <select id="experience_level" name="experience_level" class="form-select @error('experience_level') is-invalid @enderror">
+                            <option value="">Pilih level</option>
+                            @foreach(['Fresh Graduate', 'Junior', 'Mid', 'Senior', 'Lead'] as $level)
+                                <option value="{{ $level }}" @selected(old('experience_level') === $level)>{{ $level }}</option>
+                            @endforeach
+                        </select>
+                        @error('experience_level')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
                     <div class="col-12">
                         <label for="body" class="form-label">Isi Diskusi</label>
                         <textarea id="body" name="body" rows="8" class="form-control @error('body') is-invalid @enderror" required>{{ old('body') }}</textarea>
