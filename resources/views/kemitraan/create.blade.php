@@ -294,8 +294,8 @@
                         <div class="row g-3 mb-3">
                             <div class="col-12 col-lg-6">
                                 <label class="form-label mb-1 walkin-filter-title">Filter</label>
-                                <div class="d-flex gap-2 align-items-end">
-                                    <div class="flex-grow-1">
+                                <div class="row g-2 align-items-end">
+                                    <div class="col-12 col-md-4">
                                         <label class="form-label small mb-1">Nama Perusahaan</label>
                                         <select class="form-select" id="row1CompanyName">
                                             <option value="">Semua perusahaan</option>
@@ -307,21 +307,21 @@
                                             @endif
                                         </select>
                                     </div>
-                                    <div class="flex-grow-1">
+                                    <div class="col-6 col-md-4">
                                         <label class="form-label small mb-1">Dari Tanggal</label>
                                         <input type="date" class="form-control" id="row1StartDate" value="">
                                     </div>
-                                    <div class="flex-grow-1">
+                                    <div class="col-6 col-md-4">
                                         <label class="form-label small mb-1">Sampai Tanggal</label>
                                         <input type="date" class="form-control" id="row1EndDate" value="">
                                     </div>
-                                    <div>
-                                        <button type="button" class="btn btn-primary" id="row1FilterBtn">
+                                    <div class="col-6 col-md-auto d-grid">
+                                        <button type="button" class="btn btn-primary w-100" id="row1FilterBtn">
                                             <i class="bi bi-funnel me-1"></i>Filter
                                         </button>
                                     </div>
-                                    <div>
-                                        <button type="button" class="btn btn-outline-secondary" id="row1ResetBtn">
+                                    <div class="col-6 col-md-auto d-grid">
+                                        <button type="button" class="btn btn-outline-secondary w-100" id="row1ResetBtn">
                                             <i class="bi bi-arrow-counterclockwise me-1"></i>Reset
                                         </button>
                                     </div>
