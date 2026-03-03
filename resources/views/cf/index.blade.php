@@ -11,6 +11,7 @@
         </div>
         <div class="d-flex gap-2 align-items-center">
             <span class="badge text-bg-warning">Under Construction</span>
+            <a href="{{ route('cf.guidelines') }}" class="btn btn-outline-dark btn-sm">Panduan Komunitas</a>
             @auth
                 <a href="{{ route('cf.notifications.index') }}" class="btn btn-outline-primary btn-sm">
                     Notifikasi

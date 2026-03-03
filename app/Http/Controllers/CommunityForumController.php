@@ -196,6 +196,16 @@ class CommunityForumController extends Controller
         ]);
     }
 
+    public function guidelines(Request $request): View|RedirectResponse
+    {
+        $accessRedirect = $this->ensureAccess($request);
+        if ($accessRedirect) {
+            return $accessRedirect;
+        }
+
+        return view('cf.guidelines');
+    }
+
     public function createThread(Request $request): View|RedirectResponse
     {
         $accessRedirect = $this->ensureAccess($request);
@@ -865,12 +875,20 @@ class CommunityForumController extends Controller
             'reason' => 'required|string|min:10|max:1000',
         ]);
 
+        $priority = $this->calculateReportPriority(
+            (string) $validated['reason'],
+            'thread',
+            (int) $request->user()->id
+        );
+
         CfReport::query()->create([
             'reportable_type' => 'thread',
             'reportable_id' => (int) $thread->id,
             'reported_by_user_id' => (int) $request->user()->id,
             'reason' => (string) $validated['reason'],
             'status' => 'open',
+            'priority_score' => $priority['score'],
+            'priority_level' => $priority['level'],
         ]);
 
         return redirect()
@@ -898,12 +916,20 @@ class CommunityForumController extends Controller
             'reason' => 'required|string|min:10|max:1000',
         ]);
 
+        $priority = $this->calculateReportPriority(
+            (string) $validated['reason'],
+            'reply',
+            (int) $request->user()->id
+        );
+
         CfReport::query()->create([
             'reportable_type' => 'reply',
             'reportable_id' => (int) $reply->id,
             'reported_by_user_id' => (int) $request->user()->id,
             'reason' => (string) $validated['reason'],
             'status' => 'open',
+            'priority_score' => $priority['score'],
+            'priority_level' => $priority['level'],
         ]);
 
         return redirect()
@@ -975,7 +1001,8 @@ class CommunityForumController extends Controller
             ->when(in_array($status, $allowedStatus, true), function ($query) use ($status) {
                 $query->where('status', $status);
             })
-            ->orderBy('status')
+            ->orderByRaw("CASE status WHEN 'open' THEN 0 WHEN 'resolved' THEN 1 ELSE 2 END")
+            ->orderByDesc('priority_score')
             ->orderByDesc('created_at')
             ->paginate(20)
             ->withQueryString();
@@ -1337,6 +1364,67 @@ class CommunityForumController extends Controller
                 'jobseeker' => (int) ($authorTypeCounts['jobseeker'] ?? 0),
             ],
         ];
+    }
+
+    private function calculateReportPriority(string $reason, string $reportableType, int $reporterId): array
+    {
+        $text = mb_strtolower(trim($reason));
+        $score = $reportableType === 'thread' ? 20 : 15;
+
+        $highRiskKeywords = [
+            'penipuan', 'scam', 'phishing', 'pelecehan', 'ancaman', 'ujaran kebencian',
+            'diskriminasi', 'sara', 'doxing', 'pornografi',
+        ];
+        $mediumRiskKeywords = [
+            'spam', 'hoax', 'provokasi', 'palsu', 'fake', 'judi',
+        ];
+
+        if ($this->containsAnyKeyword($text, $highRiskKeywords)) {
+            $score += 60;
+        } elseif ($this->containsAnyKeyword($text, $mediumRiskKeywords)) {
+            $score += 35;
+        } else {
+            $score += 10;
+        }
+
+        if (mb_strlen($text) > 220) {
+            $score += 5;
+        }
+
+        $recentOpenReports = (int) CfReport::query()
+            ->where('reported_by_user_id', $reporterId)
+            ->where('status', 'open')
+            ->where('created_at', '>=', now()->subDays(14))
+            ->count();
+        $score += min(20, $recentOpenReports * 5);
+
+        $score = max(0, min(100, $score));
+
+        return [
+            'score' => $score,
+            'level' => $this->resolvePriorityLevel($score),
+        ];
+    }
+
+    private function containsAnyKeyword(string $text, array $keywords): bool
+    {
+        foreach ($keywords as $keyword) {
+            if (mb_strpos($text, $keyword) !== false) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private function resolvePriorityLevel(int $score): string
+    {
+        if ($score >= 75) {
+            return 'high';
+        }
+        if ($score >= 45) {
+            return 'medium';
+        }
+        return 'low';
     }
 
     private function resolveMatchingProfile(Request $request, array $inputFilters): array

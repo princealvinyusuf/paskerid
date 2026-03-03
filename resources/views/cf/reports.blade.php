@@ -52,6 +52,9 @@
                                 <span class="badge text-bg-{{ $report->status === 'open' ? 'danger' : ($report->status === 'resolved' ? 'success' : 'secondary') }}">
                                     {{ strtoupper($report->status) }}
                                 </span>
+                                <span class="badge text-bg-{{ ($report->priority_level ?? 'low') === 'high' ? 'danger' : (($report->priority_level ?? 'low') === 'medium' ? 'warning' : 'secondary') }}">
+                                    PRIORITY {{ strtoupper((string) ($report->priority_level ?? 'low')) }}
+                                </span>
                                 <span class="badge text-bg-light border">{{ strtoupper($report->reportable_type) }}</span>
                                 <span class="small text-muted">Report ID #{{ $report->id }}</span>
                             </div>
@@ -59,6 +62,7 @@
                             <div class="small text-muted mb-1">
                                 Pelapor: {{ $report->reporter->name ?? 'Unknown' }} ({{ $report->reporter->email ?? '-' }})
                                 | Dibuat: {{ $report->created_at?->format('d M Y H:i') }}
+                                | Skor Prioritas: {{ (int) ($report->priority_score ?? 0) }}
                             </div>
 
                             <div class="mb-1">

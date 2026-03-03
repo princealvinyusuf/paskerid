@@ -13,12 +13,15 @@ class CfReport extends Model
         'reported_by_user_id',
         'reason',
         'status',
+        'priority_score',
+        'priority_level',
         'reviewed_by_user_id',
         'review_note',
         'reviewed_at',
     ];
 
     protected $casts = [
+        'priority_score' => 'integer',
         'reviewed_at' => 'datetime',
     ];
 

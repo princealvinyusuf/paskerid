@@ -15,6 +15,8 @@
     <div class="d-flex justify-content-between align-items-start mb-3 gap-2">
         <div>
             <a href="{{ route('cf.index') }}" class="small text-decoration-none">&larr; Kembali ke forum</a>
+            <span class="mx-1 text-muted">|</span>
+            <a href="{{ route('cf.guidelines') }}" class="small text-decoration-none">Panduan Komunitas</a>
             @auth
                 <span class="mx-1 text-muted">|</span>
                 <a href="{{ route('cf.notifications.index') }}" class="small text-decoration-none">Notifikasi</a>

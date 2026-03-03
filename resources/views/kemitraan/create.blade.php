@@ -277,7 +277,7 @@
                             <div class="text-muted small">Dashboard interaktif dari data survei, peserta hadir, company, dan initiator.</div>
                         </div>
                         <div class="d-flex align-items-center gap-2">
-                            <button type="button" class="btn btn-outline-dark btn-sm" id="btnStatsAdminDashboard">
+                            <button type="button" class="btn btn-outline-dark btn-sm d-none" id="btnStatsAdminDashboard">
                                 <i class="bi bi-shield-lock me-1"></i>Admin Dashboard
                             </button>
                             <button type="button" class="btn btn-outline-secondary btn-sm d-none" id="btnStatsAdminLock">
@@ -355,13 +355,13 @@
                                     <div class="walkin-stat-value" id="statActiveInitiators">{{ number_format((int) ($statsSummary['active_initiators'] ?? 0)) }}</div>
                                 </div>
                             </div>
-                            <div class="col-6 col-lg-2">
+                            <div class="col-6 col-lg-2 d-none">
                                 <div class="walkin-stat-card">
                                     <div class="walkin-stat-label">Jumlah Lowongan Dibuka</div>
                                     <div class="walkin-stat-value" id="statJumlahLowongan">{{ number_format((int) ($statsSummary['jumlah_lowongan_dibuka'] ?? 0)) }}</div>
                                 </div>
                             </div>
-                            <div class="col-6 col-lg-2">
+                            <div class="col-6 col-lg-2 d-none">
                                 <div class="walkin-stat-card">
                                     <div class="walkin-stat-label">Total Jumlah Kebutuhan</div>
                                     <div class="walkin-stat-value" id="statTotalKebutuhan">{{ number_format((int) ($statsSummary['total_jumlah_kebutuhan'] ?? 0)) }}</div>

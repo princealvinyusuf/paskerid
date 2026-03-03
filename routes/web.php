@@ -92,6 +92,8 @@ Route::post('/cf/verify-passcode', [CommunityForumController::class, 'verifyPass
     ->name('cf.verify-passcode');
 Route::get('/cf/underconstruction', [CommunityForumController::class, 'index'])
     ->name('cf.index');
+Route::get('/cf/guidelines', [CommunityForumController::class, 'guidelines'])
+    ->name('cf.guidelines');
 Route::get('/cf/thread/create', [CommunityForumController::class, 'createThread'])
     ->name('cf.threads.create');
 Route::post('/cf/thread', [CommunityForumController::class, 'storeThread'])
