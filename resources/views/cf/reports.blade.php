@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container py-5">
-    <div class="cf-hero d-flex justify-content-between align-items-center mb-4">
+    <div class="cf-hero d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
         <div>
             <span class="cf-hero-icon"><i class="fa-solid fa-shield-halved"></i></span>
             <div class="cf-section-title mb-1">Admin Workspace</div>

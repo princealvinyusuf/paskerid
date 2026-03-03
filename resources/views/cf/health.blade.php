@@ -2,14 +2,14 @@
 
 @section('content')
 <div class="container py-5">
-    <div class="cf-hero d-flex justify-content-between align-items-center mb-4">
+    <div class="cf-hero d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
         <div>
             <span class="cf-hero-icon"><i class="fa-solid fa-heart-pulse"></i></span>
             <div class="cf-section-title mb-1">Operations</div>
             <h1 class="h4 fw-bold mb-1">CF Health Monitor</h1>
             <p class="text-muted mb-0">Ringkasan operasional queue, moderasi, dan aktivitas terbaru.</p>
         </div>
-        <div class="d-flex gap-2">
+        <div class="cf-toolbar">
             <a href="{{ route('cf.index') }}" class="btn btn-outline-secondary btn-sm">Kembali ke Forum</a>
             <a href="{{ route('cf.admin.reports.index') }}" class="btn btn-outline-danger btn-sm">Moderation Center</a>
         </div>

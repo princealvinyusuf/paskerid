@@ -33,6 +33,8 @@
 
             body.cf-theme .container.py-5 {
                 position: relative;
+                padding-top: 2rem !important;
+                padding-bottom: 2rem !important;
             }
 
             body.cf-theme .card {
@@ -59,6 +61,10 @@
             body.cf-theme h6 {
                 color: #0b1220;
                 letter-spacing: -0.02em;
+                line-height: 1.25;
+            }
+            body.cf-theme p {
+                line-height: 1.6;
             }
 
             body.cf-theme .btn {
@@ -151,10 +157,22 @@
 
             body.cf-theme .cf-hero {
                 border-radius: 18px;
-                padding: 1.2rem 1.25rem;
+                padding: 1.25rem 1.35rem;
                 border: 1px solid rgba(148, 163, 184, 0.2);
                 background: linear-gradient(135deg, rgba(255, 255, 255, 0.94), rgba(239, 246, 255, 0.92));
                 box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+            }
+            body.cf-theme .cf-toolbar {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 0.5rem;
+                align-items: center;
+            }
+            body.cf-theme .cf-meta {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 0.2rem 0.55rem;
+                align-items: center;
             }
 
             body.cf-theme .cf-soft {
@@ -239,6 +257,40 @@
             body.cf-theme select:focus-visible {
                 outline: 2px solid rgba(59, 130, 246, 0.35);
                 outline-offset: 2px;
+            }
+
+            @media (max-width: 991.98px) {
+                body.cf-theme .card .card-body {
+                    padding: 1rem 1rem;
+                }
+                body.cf-theme .cf-hero {
+                    padding: 1rem 1rem;
+                }
+                body.cf-theme .h3,
+                body.cf-theme h3 {
+                    font-size: 1.38rem;
+                }
+            }
+
+            @media (max-width: 767.98px) {
+                body.cf-theme .container.py-5 {
+                    padding-top: 1.25rem !important;
+                    padding-bottom: 1.5rem !important;
+                }
+                body.cf-theme .h4,
+                body.cf-theme h4 {
+                    font-size: 1.18rem;
+                }
+                body.cf-theme .h5,
+                body.cf-theme h5 {
+                    font-size: 1.02rem;
+                }
+                body.cf-theme .btn {
+                    width: 100%;
+                }
+                body.cf-theme .cf-toolbar .btn {
+                    width: auto;
+                }
             }
         </style>
     @endif

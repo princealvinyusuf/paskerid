@@ -11,7 +11,7 @@
                 Forum komunitas pasar kerja untuk pelaku usaha dan pencari kerja.
             </p>
         </div>
-        <div class="d-flex gap-2 align-items-center">
+        <div class="cf-toolbar">
             <span class="badge text-bg-warning">Under Construction</span>
             <a href="{{ route('cf.guidelines') }}" class="btn btn-outline-dark btn-sm">Panduan Komunitas</a>
             @auth

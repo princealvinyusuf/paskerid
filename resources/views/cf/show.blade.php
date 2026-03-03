@@ -31,7 +31,7 @@
             <h1 class="h4 fw-bold mt-2 mb-1">{{ $thread->title }}</h1>
             @php $threadAuthorRep = $reputationMap[$thread->user_id] ?? null; @endphp
             @php $threadAuthorVerification = $verificationMap[$thread->user_id] ?? null; @endphp
-            <div class="small text-muted">
+            <div class="small text-muted cf-meta">
                 {{ $thread->category->name ?? '-' }} |
                 Oleh {{ $thread->user->name ?? 'Anonim' }} |
                 @if($threadAuthorRep)
