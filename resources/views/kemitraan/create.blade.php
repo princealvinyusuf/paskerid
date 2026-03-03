@@ -276,9 +276,14 @@
                             <h5 class="mb-0"><i class="bi bi-graph-up-arrow me-2"></i>Statistik Walk In</h5>
                             <div class="text-muted small">Dashboard interaktif dari data survei, peserta hadir, company, dan initiator.</div>
                         </div>
-                        <button type="button" class="btn btn-outline-dark btn-sm" id="btnStatsAdminDashboard">
-                            <i class="bi bi-shield-lock me-1"></i>Admin Dashboard
-                        </button>
+                        <div class="d-flex align-items-center gap-2">
+                            <button type="button" class="btn btn-outline-dark btn-sm" id="btnStatsAdminDashboard">
+                                <i class="bi bi-shield-lock me-1"></i>Admin Dashboard
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary btn-sm d-none" id="btnStatsAdminLock">
+                                <i class="bi bi-lock me-1"></i>Lock Dashboard
+                            </button>
+                        </div>
                     </div>
 
                     @if(!($walkinStats['ready'] ?? false))
@@ -408,10 +413,6 @@
                                     <option value="20">Top 20</option>
                                 </select>
                             </div>
-                        </div>
-
-                        <div class="alert alert-secondary py-2 px-3 mb-3" id="statsAdminLockedHint">
-                            Fitur Admin Dashboard terkunci. Klik tombol <strong>Admin Dashboard</strong> untuk membuka.
                         </div>
 
                         <div class="row g-3 mb-3">
@@ -2296,7 +2297,7 @@
         const infoSourcesListEl = document.getElementById('statsInfoSourcesList');
         const jobPortalsListEl = document.getElementById('statsJobPortalsList');
         const statsAdminBtn = document.getElementById('btnStatsAdminDashboard');
-        const statsAdminLockedHintEl = document.getElementById('statsAdminLockedHint');
+        const statsAdminLockBtn = document.getElementById('btnStatsAdminLock');
         const statsAdminOnlyEls = panel.querySelectorAll('.stats-admin-only');
 
         const trendCanvas = document.getElementById('statsTrendChart');
@@ -2513,7 +2514,7 @@
 
         function setStatsAdminVisibility(unlocked) {
             statsAdminOnlyEls.forEach((el) => el.classList.toggle('d-none', !unlocked));
-            if (statsAdminLockedHintEl) statsAdminLockedHintEl.classList.toggle('d-none', unlocked);
+            if (statsAdminLockBtn) statsAdminLockBtn.classList.toggle('d-none', !unlocked);
             if (statsAdminBtn) {
                 statsAdminBtn.innerHTML = unlocked
                     ? '<i class="bi bi-shield-check me-1"></i>Admin Dashboard'
@@ -2559,6 +2560,13 @@
                         }
                     });
                 }
+            });
+        }
+        if (statsAdminLockBtn) {
+            statsAdminLockBtn.addEventListener('click', function () {
+                statsAdminUnlocked = false;
+                try { sessionStorage.removeItem('walkin_stats_admin_unlocked'); } catch (e) {}
+                setStatsAdminVisibility(false);
             });
         }
 
