@@ -150,6 +150,12 @@ class CommunityForumController extends Controller
             'sector' => 'nullable|string|max:120',
         ]);
 
+        if ($this->isThreadSpam((int) $request->user()->id, (string) $validated['title'], (string) $validated['body'])) {
+            return back()
+                ->withErrors(['title' => 'Terdeteksi posting thread berulang dalam waktu singkat. Coba lagi sebentar.'])
+                ->withInput();
+        }
+
         $baseSlug = Str::slug((string) $validated['title']);
         if ($baseSlug === '') {
             $baseSlug = 'diskusi-cf';
@@ -178,6 +184,106 @@ class CommunityForumController extends Controller
         return redirect()
             ->route('cf.threads.show', $thread->id)
             ->with('success', 'Thread diskusi berhasil dibuat.');
+    }
+
+    public function editThread(Request $request, int $threadId): View|RedirectResponse
+    {
+        $accessRedirect = $this->ensureAccess($request);
+        if ($accessRedirect) {
+            return $accessRedirect;
+        }
+
+        $thread = CfThread::query()->findOrFail($threadId);
+        if (!$this->canManageThread($request, $thread)) {
+            return redirect()
+                ->route('cf.threads.show', $thread->id)
+                ->withErrors(['thread' => 'Anda tidak memiliki izin untuk mengubah thread ini.']);
+        }
+
+        $categories = CfCategory::query()
+            ->where('is_active', true)
+            ->orderBy('sort_order')
+            ->orderBy('name')
+            ->get(['id', 'name']);
+
+        return view('cf.edit-thread', [
+            'thread' => $thread,
+            'categories' => $categories,
+        ]);
+    }
+
+    public function updateThread(Request $request, int $threadId): RedirectResponse
+    {
+        $accessRedirect = $this->ensureAccess($request);
+        if ($accessRedirect) {
+            return $accessRedirect;
+        }
+
+        $thread = CfThread::query()->findOrFail($threadId);
+        if (!$this->canManageThread($request, $thread)) {
+            return redirect()
+                ->route('cf.threads.show', $thread->id)
+                ->withErrors(['thread' => 'Anda tidak memiliki izin untuk mengubah thread ini.']);
+        }
+
+        $validated = $request->validate([
+            'cf_category_id' => 'required|exists:cf_categories,id',
+            'title' => 'required|string|max:180',
+            'body' => 'required|string|min:20|max:10000',
+            'author_type' => 'required|in:employer,jobseeker,community',
+            'location' => 'nullable|string|max:120',
+            'sector' => 'nullable|string|max:120',
+        ]);
+
+        $slug = $thread->slug;
+        if ((string) $thread->title !== (string) $validated['title']) {
+            $baseSlug = Str::slug((string) $validated['title']);
+            if ($baseSlug === '') {
+                $baseSlug = 'diskusi-cf';
+            }
+            $slug = $baseSlug;
+            $counter = 1;
+            while (CfThread::query()->where('slug', $slug)->where('id', '!=', $thread->id)->exists()) {
+                $counter++;
+                $slug = $baseSlug . '-' . $counter;
+            }
+        }
+
+        $thread->update([
+            'cf_category_id' => (int) $validated['cf_category_id'],
+            'title' => (string) $validated['title'],
+            'slug' => $slug,
+            'body' => (string) $validated['body'],
+            'author_type' => (string) $validated['author_type'],
+            'location' => $validated['location'] ?? null,
+            'sector' => $validated['sector'] ?? null,
+            'last_activity_at' => now(),
+        ]);
+
+        return redirect()
+            ->route('cf.threads.show', $thread->id)
+            ->with('success', 'Thread berhasil diperbarui.');
+    }
+
+    public function destroyThread(Request $request, int $threadId): RedirectResponse
+    {
+        $accessRedirect = $this->ensureAccess($request);
+        if ($accessRedirect) {
+            return $accessRedirect;
+        }
+
+        $thread = CfThread::query()->findOrFail($threadId);
+        if (!$this->canManageThread($request, $thread)) {
+            return redirect()
+                ->route('cf.threads.show', $thread->id)
+                ->withErrors(['thread' => 'Anda tidak memiliki izin untuk menghapus thread ini.']);
+        }
+
+        $thread->delete();
+
+        return redirect()
+            ->route('cf.index')
+            ->with('success', 'Thread berhasil dihapus.');
     }
 
     public function showThread(Request $request, int $threadId): View|RedirectResponse
@@ -229,6 +335,10 @@ class CommunityForumController extends Controller
             'body' => 'required|string|min:5|max:5000',
         ]);
 
+        if ($this->isReplySpam((int) $request->user()->id, (int) $thread->id, (string) $validated['body'])) {
+            return back()->withErrors(['body' => 'Terdeteksi balasan berulang dalam waktu singkat. Coba lagi sebentar.']);
+        }
+
         CfReply::query()->create([
             'cf_thread_id' => (int) $thread->id,
             'user_id' => (int) $request->user()->id,
@@ -240,6 +350,89 @@ class CommunityForumController extends Controller
         return redirect()
             ->route('cf.threads.show', $thread->id)
             ->with('success', 'Balasan berhasil dikirim.');
+    }
+
+    public function editReply(Request $request, int $threadId, int $replyId): View|RedirectResponse
+    {
+        $accessRedirect = $this->ensureAccess($request);
+        if ($accessRedirect) {
+            return $accessRedirect;
+        }
+
+        $thread = CfThread::query()->findOrFail($threadId);
+        $reply = CfReply::query()
+            ->where('cf_thread_id', $thread->id)
+            ->findOrFail($replyId);
+
+        if (!$this->canManageReply($request, $reply)) {
+            return redirect()
+                ->route('cf.threads.show', $thread->id)
+                ->withErrors(['reply' => 'Anda tidak memiliki izin untuk mengubah balasan ini.']);
+        }
+
+        return view('cf.edit-reply', [
+            'thread' => $thread,
+            'reply' => $reply,
+        ]);
+    }
+
+    public function updateReply(Request $request, int $threadId, int $replyId): RedirectResponse
+    {
+        $accessRedirect = $this->ensureAccess($request);
+        if ($accessRedirect) {
+            return $accessRedirect;
+        }
+
+        $thread = CfThread::query()->findOrFail($threadId);
+        $reply = CfReply::query()
+            ->where('cf_thread_id', $thread->id)
+            ->findOrFail($replyId);
+
+        if (!$this->canManageReply($request, $reply)) {
+            return redirect()
+                ->route('cf.threads.show', $thread->id)
+                ->withErrors(['reply' => 'Anda tidak memiliki izin untuk mengubah balasan ini.']);
+        }
+
+        $validated = $request->validate([
+            'body' => 'required|string|min:5|max:5000',
+        ]);
+
+        $reply->update([
+            'body' => (string) $validated['body'],
+        ]);
+
+        $thread->update(['last_activity_at' => now()]);
+
+        return redirect()
+            ->route('cf.threads.show', $thread->id)
+            ->with('success', 'Balasan berhasil diperbarui.');
+    }
+
+    public function destroyReply(Request $request, int $threadId, int $replyId): RedirectResponse
+    {
+        $accessRedirect = $this->ensureAccess($request);
+        if ($accessRedirect) {
+            return $accessRedirect;
+        }
+
+        $thread = CfThread::query()->findOrFail($threadId);
+        $reply = CfReply::query()
+            ->where('cf_thread_id', $thread->id)
+            ->findOrFail($replyId);
+
+        if (!$this->canManageReply($request, $reply)) {
+            return redirect()
+                ->route('cf.threads.show', $thread->id)
+                ->withErrors(['reply' => 'Anda tidak memiliki izin untuk menghapus balasan ini.']);
+        }
+
+        $reply->delete();
+        $thread->update(['last_activity_at' => now()]);
+
+        return redirect()
+            ->route('cf.threads.show', $thread->id)
+            ->with('success', 'Balasan berhasil dihapus.');
     }
 
     public function reportThread(Request $request, int $threadId): RedirectResponse
@@ -497,5 +690,64 @@ class CommunityForumController extends Controller
 
         $adminEmails = array_filter(array_map('trim', explode(',', $adminEmailsRaw)));
         return in_array(strtolower((string) $user->email), array_map('strtolower', $adminEmails), true);
+    }
+
+    private function canManageThread(Request $request, CfThread $thread): bool
+    {
+        $user = $request->user();
+        if (!$user) {
+            return false;
+        }
+
+        return (int) $thread->user_id === (int) $user->id || $this->isCfAdmin($request);
+    }
+
+    private function canManageReply(Request $request, CfReply $reply): bool
+    {
+        $user = $request->user();
+        if (!$user) {
+            return false;
+        }
+
+        return (int) $reply->user_id === (int) $user->id || $this->isCfAdmin($request);
+    }
+
+    private function isThreadSpam(int $userId, string $title, string $body): bool
+    {
+        $normalizedTitle = mb_strtolower(trim($title));
+        $normalizedBody = mb_strtolower(trim($body));
+
+        return CfThread::query()
+            ->where('user_id', $userId)
+            ->where('created_at', '>=', now()->subMinutes(3))
+            ->where(function ($query) use ($normalizedTitle, $normalizedBody) {
+                $query
+                    ->whereRaw('LOWER(TRIM(title)) = ?', [$normalizedTitle])
+                    ->orWhereRaw('LOWER(TRIM(body)) = ?', [$normalizedBody]);
+            })
+            ->exists();
+    }
+
+    private function isReplySpam(int $userId, int $threadId, string $body): bool
+    {
+        $normalizedBody = mb_strtolower(trim($body));
+
+        $duplicateRecentReply = CfReply::query()
+            ->where('user_id', $userId)
+            ->where('cf_thread_id', $threadId)
+            ->where('created_at', '>=', now()->subMinutes(2))
+            ->whereRaw('LOWER(TRIM(body)) = ?', [$normalizedBody])
+            ->exists();
+
+        if ($duplicateRecentReply) {
+            return true;
+        }
+
+        $burstCount = CfReply::query()
+            ->where('user_id', $userId)
+            ->where('created_at', '>=', now()->subMinute())
+            ->count();
+
+        return $burstCount >= 5;
     }
 }

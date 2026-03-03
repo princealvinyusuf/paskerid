@@ -100,10 +100,37 @@ Route::post('/cf/thread', [CommunityForumController::class, 'storeThread'])
 Route::get('/cf/thread/{id}', [CommunityForumController::class, 'showThread'])
     ->whereNumber('id')
     ->name('cf.threads.show');
+Route::get('/cf/thread/{id}/edit', [CommunityForumController::class, 'editThread'])
+    ->middleware('auth')
+    ->whereNumber('id')
+    ->name('cf.threads.edit');
+Route::patch('/cf/thread/{id}', [CommunityForumController::class, 'updateThread'])
+    ->middleware('auth')
+    ->whereNumber('id')
+    ->name('cf.threads.update');
+Route::delete('/cf/thread/{id}', [CommunityForumController::class, 'destroyThread'])
+    ->middleware('auth')
+    ->whereNumber('id')
+    ->name('cf.threads.destroy');
 Route::post('/cf/thread/{id}/reply', [CommunityForumController::class, 'storeReply'])
     ->middleware('auth')
     ->whereNumber('id')
     ->name('cf.replies.store');
+Route::get('/cf/thread/{threadId}/reply/{replyId}/edit', [CommunityForumController::class, 'editReply'])
+    ->middleware('auth')
+    ->whereNumber('threadId')
+    ->whereNumber('replyId')
+    ->name('cf.replies.edit');
+Route::patch('/cf/thread/{threadId}/reply/{replyId}', [CommunityForumController::class, 'updateReply'])
+    ->middleware('auth')
+    ->whereNumber('threadId')
+    ->whereNumber('replyId')
+    ->name('cf.replies.update');
+Route::delete('/cf/thread/{threadId}/reply/{replyId}', [CommunityForumController::class, 'destroyReply'])
+    ->middleware('auth')
+    ->whereNumber('threadId')
+    ->whereNumber('replyId')
+    ->name('cf.replies.destroy');
 Route::post('/cf/thread/{id}/report', [CommunityForumController::class, 'reportThread'])
     ->middleware('auth')
     ->whereNumber('id')

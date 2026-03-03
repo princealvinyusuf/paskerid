@@ -63,6 +63,18 @@
             <div style="white-space: pre-line;">{{ $thread->body }}</div>
 
             @auth
+                @if((int) auth()->id() === (int) $thread->user_id || ($isCfAdmin ?? false))
+                    <hr>
+                    <div class="d-flex flex-wrap gap-2">
+                        <a href="{{ route('cf.threads.edit', $thread->id) }}" class="btn btn-outline-primary btn-sm">Edit Thread</a>
+                        <form method="POST" action="{{ route('cf.threads.destroy', $thread->id) }}" onsubmit="return confirm('Hapus thread ini?')">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-outline-danger btn-sm">Hapus Thread</button>
+                        </form>
+                    </div>
+                @endif
+
                 <hr>
                 <form method="POST" action="{{ route('cf.threads.report', $thread->id) }}">
                     @csrf
@@ -107,6 +119,19 @@
                     </div>
                     <div style="white-space: pre-line;">{{ $reply->body }}</div>
                     @auth
+                        @if((int) auth()->id() === (int) $reply->user_id || ($isCfAdmin ?? false))
+                            <div class="d-flex flex-wrap gap-2 mt-2">
+                                <a href="{{ route('cf.replies.edit', ['threadId' => $thread->id, 'replyId' => $reply->id]) }}" class="btn btn-outline-primary btn-sm">
+                                    Edit Balasan
+                                </a>
+                                <form method="POST" action="{{ route('cf.replies.destroy', ['threadId' => $thread->id, 'replyId' => $reply->id]) }}" onsubmit="return confirm('Hapus balasan ini?')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-outline-danger btn-sm">Hapus Balasan</button>
+                                </form>
+                            </div>
+                        @endif
+
                         <form method="POST" action="{{ route('cf.replies.report', ['threadId' => $thread->id, 'replyId' => $reply->id]) }}" class="mt-2">
                             @csrf
                             <div class="d-flex gap-2">
