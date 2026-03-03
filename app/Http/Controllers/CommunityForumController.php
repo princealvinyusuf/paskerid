@@ -13,6 +13,7 @@ use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\View\View;
 
 class CommunityForumController extends Controller
@@ -74,11 +75,13 @@ class CommunityForumController extends Controller
             'sector' => '',
         ]);
 
-        $categories = CfCategory::query()
-            ->where('is_active', true)
-            ->orderBy('sort_order')
-            ->orderBy('name')
-            ->get();
+        $categories = Cache::remember('cf:index:active_categories', 600, function () {
+            return CfCategory::query()
+                ->where('is_active', true)
+                ->orderBy('sort_order')
+                ->orderBy('name')
+                ->get();
+        });
 
         $threadsQuery = CfThread::query()
             ->with(['category:id,name,slug', 'user:id,name'])
@@ -138,21 +141,23 @@ class CommunityForumController extends Controller
             }
         }
 
-        $hotThreads = CfThread::query()
-            ->with(['category:id,name,slug', 'user:id,name'])
-            ->withCount([
-                'replies' => function ($query) {
-                    $query->where('is_hidden', false);
-                },
-            ])
-            ->where('status', 'open')
-            ->where('is_hidden', false)
-            ->orderByDesc('is_pinned')
-            ->orderByDesc('replies_count')
-            ->orderByDesc('views_count')
-            ->orderByDesc('last_activity_at')
-            ->limit(5)
-            ->get();
+        $hotThreads = Cache::remember('cf:index:hot_threads', 120, function () {
+            return CfThread::query()
+                ->with(['category:id,name,slug', 'user:id,name'])
+                ->withCount([
+                    'replies' => function ($query) {
+                        $query->where('is_hidden', false);
+                    },
+                ])
+                ->where('status', 'open')
+                ->where('is_hidden', false)
+                ->orderByDesc('is_pinned')
+                ->orderByDesc('replies_count')
+                ->orderByDesc('views_count')
+                ->orderByDesc('last_activity_at')
+                ->limit(5)
+                ->get();
+        });
 
         $matchingThreads = $this->buildMatchingThreads(
             $matchingProfile['profile'],
@@ -160,30 +165,32 @@ class CommunityForumController extends Controller
             $request->user() ? (int) $request->user()->id : null
         );
 
-        $featuredWeeklyThreads = CfThread::query()
-            ->with(['category:id,name,slug', 'user:id,name'])
-            ->withCount([
-                'replies' => function ($query) {
-                    $query->where('is_hidden', false);
-                },
-            ])
-            ->where('status', 'open')
-            ->where('is_hidden', false)
-            ->where('created_at', '>=', now()->subDays(7))
-            ->where(function ($query) {
-                $query
-                    ->whereNotNull('job_role')
-                    ->orWhereNotNull('work_type')
-                    ->orWhereNotNull('province')
-                    ->orWhereNotNull('city')
-                    ->orWhereNotNull('experience_level')
-                    ->orWhereNotNull('sector');
-            })
-            ->orderByDesc('is_pinned')
-            ->orderByRaw('(COALESCE(replies_count, 0) * 3) + (COALESCE(views_count, 0) / 10) DESC')
-            ->orderByDesc('last_activity_at')
-            ->limit(6)
-            ->get();
+        $featuredWeeklyThreads = Cache::remember('cf:index:featured_weekly_threads', 300, function () {
+            return CfThread::query()
+                ->with(['category:id,name,slug', 'user:id,name'])
+                ->withCount([
+                    'replies' => function ($query) {
+                        $query->where('is_hidden', false);
+                    },
+                ])
+                ->where('status', 'open')
+                ->where('is_hidden', false)
+                ->where('created_at', '>=', now()->subDays(7))
+                ->where(function ($query) {
+                    $query
+                        ->whereNotNull('job_role')
+                        ->orWhereNotNull('work_type')
+                        ->orWhereNotNull('province')
+                        ->orWhereNotNull('city')
+                        ->orWhereNotNull('experience_level')
+                        ->orWhereNotNull('sector');
+                })
+                ->orderByDesc('is_pinned')
+                ->orderByRaw('(COALESCE(replies_count, 0) * 3) + (COALESCE(views_count, 0) / 10) DESC')
+                ->orderByDesc('last_activity_at')
+                ->limit(6)
+                ->get();
+        });
 
         $unreadNotificationsCount = $request->user()
             ? (int) CfNotification::query()
@@ -1168,95 +1175,106 @@ class CommunityForumController extends Controller
             $period = 7;
         }
         $periodStart = now()->subDays($period)->startOfDay();
-
-        $threads = CfThread::query()
-            ->with(['category:id,name,slug', 'user:id,name'])
-            ->withCount([
-                'replies' => function ($query) {
-                    $query->where('is_hidden', false);
-                },
-            ])
-            ->where('is_hidden', false)
-            ->where('created_at', '>=', $periodStart)
-            ->orderByDesc('created_at')
-            ->get();
-
-        $categoryCounts = [];
-        $jobRoleCounts = [];
-        $workTypeCounts = [];
-        $locationCounts = [];
-        $titles = [];
-        $totalViews = 0;
-        foreach ($threads as $thread) {
-            $categoryLabel = (string) ($thread->category->name ?? 'Tanpa Kategori');
-            $categoryCounts[$categoryLabel] = ($categoryCounts[$categoryLabel] ?? 0) + 1;
-
-            $jobRole = trim((string) ($thread->job_role ?? ''));
-            if ($jobRole !== '') {
-                $jobRoleCounts[$jobRole] = ($jobRoleCounts[$jobRole] ?? 0) + 1;
-            }
-
-            $workType = trim((string) ($thread->work_type ?? ''));
-            if ($workType !== '') {
-                $workTypeCounts[$workType] = ($workTypeCounts[$workType] ?? 0) + 1;
-            }
-
-            $location = trim((string) ($thread->city ?? ''));
-            $province = trim((string) ($thread->province ?? ''));
-            $area = $location !== '' && $province !== '' ? ($location . ', ' . $province) : ($location !== '' ? $location : $province);
-            if ($area !== '') {
-                $locationCounts[$area] = ($locationCounts[$area] ?? 0) + 1;
-            }
-
-            $title = trim((string) ($thread->title ?? ''));
-            if ($title !== '') {
-                $titles[] = $title;
-            }
-
-            $totalViews += (int) ($thread->views_count ?? 0);
-        }
-
-        arsort($categoryCounts);
-        arsort($jobRoleCounts);
-        arsort($workTypeCounts);
-        arsort($locationCounts);
-
-        $topCategories = array_slice($categoryCounts, 0, 8, true);
-        $topJobRoles = array_slice($jobRoleCounts, 0, 8, true);
-        $topWorkTypes = array_slice($workTypeCounts, 0, 8, true);
-        $topLocations = array_slice($locationCounts, 0, 8, true);
-        $topKeywords = $this->extractTopKeywordsFromTitles($titles, 15);
-
-        $threadIds = $threads->pluck('id')->map(fn ($id) => (int) $id)->all();
-        $totalReplies = empty($threadIds)
-            ? 0
-            : (int) CfReply::query()
-                ->whereIn('cf_thread_id', $threadIds)
+        $cachedTrends = Cache::remember('cf:trends:period:' . $period, 300, function () use ($periodStart) {
+            $threads = CfThread::query()
+                ->with(['category:id,name,slug', 'user:id,name'])
+                ->withCount([
+                    'replies' => function ($query) {
+                        $query->where('is_hidden', false);
+                    },
+                ])
                 ->where('is_hidden', false)
-                ->count();
+                ->where('created_at', '>=', $periodStart)
+                ->orderByDesc('created_at')
+                ->get();
 
-        $topThreads = $threads
-            ->sortByDesc(function ($thread) {
-                return ((int) ($thread->replies_count ?? 0) * 3) + ((int) ($thread->views_count ?? 0) / 10);
-            })
-            ->take(10)
-            ->values();
+            $categoryCounts = [];
+            $jobRoleCounts = [];
+            $workTypeCounts = [];
+            $locationCounts = [];
+            $titles = [];
+            $totalViews = 0;
+            foreach ($threads as $thread) {
+                $categoryLabel = (string) ($thread->category->name ?? 'Tanpa Kategori');
+                $categoryCounts[$categoryLabel] = ($categoryCounts[$categoryLabel] ?? 0) + 1;
+
+                $jobRole = trim((string) ($thread->job_role ?? ''));
+                if ($jobRole !== '') {
+                    $jobRoleCounts[$jobRole] = ($jobRoleCounts[$jobRole] ?? 0) + 1;
+                }
+
+                $workType = trim((string) ($thread->work_type ?? ''));
+                if ($workType !== '') {
+                    $workTypeCounts[$workType] = ($workTypeCounts[$workType] ?? 0) + 1;
+                }
+
+                $location = trim((string) ($thread->city ?? ''));
+                $province = trim((string) ($thread->province ?? ''));
+                $area = $location !== '' && $province !== '' ? ($location . ', ' . $province) : ($location !== '' ? $location : $province);
+                if ($area !== '') {
+                    $locationCounts[$area] = ($locationCounts[$area] ?? 0) + 1;
+                }
+
+                $title = trim((string) ($thread->title ?? ''));
+                if ($title !== '') {
+                    $titles[] = $title;
+                }
+
+                $totalViews += (int) ($thread->views_count ?? 0);
+            }
+
+            arsort($categoryCounts);
+            arsort($jobRoleCounts);
+            arsort($workTypeCounts);
+            arsort($locationCounts);
+
+            $topCategories = array_slice($categoryCounts, 0, 8, true);
+            $topJobRoles = array_slice($jobRoleCounts, 0, 8, true);
+            $topWorkTypes = array_slice($workTypeCounts, 0, 8, true);
+            $topLocations = array_slice($locationCounts, 0, 8, true);
+            $topKeywords = $this->extractTopKeywordsFromTitles($titles, 15);
+
+            $threadIds = $threads->pluck('id')->map(fn ($id) => (int) $id)->all();
+            $totalReplies = empty($threadIds)
+                ? 0
+                : (int) CfReply::query()
+                    ->whereIn('cf_thread_id', $threadIds)
+                    ->where('is_hidden', false)
+                    ->count();
+
+            $topThreads = $threads
+                ->sortByDesc(function ($thread) {
+                    return ((int) ($thread->replies_count ?? 0) * 3) + ((int) ($thread->views_count ?? 0) / 10);
+                })
+                ->take(10)
+                ->values();
+
+            return [
+                'totals' => [
+                    'threads' => (int) $threads->count(),
+                    'replies' => $totalReplies,
+                    'views' => $totalViews,
+                    'keywords' => (int) count($topKeywords),
+                ],
+                'topCategories' => $topCategories,
+                'topJobRoles' => $topJobRoles,
+                'topWorkTypes' => $topWorkTypes,
+                'topLocations' => $topLocations,
+                'topKeywords' => $topKeywords,
+                'topThreads' => $topThreads,
+            ];
+        });
 
         return view('cf.trends', [
             'period' => $period,
             'periodStart' => $periodStart,
-            'totals' => [
-                'threads' => (int) $threads->count(),
-                'replies' => $totalReplies,
-                'views' => $totalViews,
-                'keywords' => (int) count($topKeywords),
-            ],
-            'topCategories' => $topCategories,
-            'topJobRoles' => $topJobRoles,
-            'topWorkTypes' => $topWorkTypes,
-            'topLocations' => $topLocations,
-            'topKeywords' => $topKeywords,
-            'topThreads' => $topThreads,
+            'totals' => $cachedTrends['totals'],
+            'topCategories' => $cachedTrends['topCategories'],
+            'topJobRoles' => $cachedTrends['topJobRoles'],
+            'topWorkTypes' => $cachedTrends['topWorkTypes'],
+            'topLocations' => $cachedTrends['topLocations'],
+            'topKeywords' => $cachedTrends['topKeywords'],
+            'topThreads' => $cachedTrends['topThreads'],
         ]);
     }
 
