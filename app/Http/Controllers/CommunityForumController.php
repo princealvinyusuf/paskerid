@@ -743,6 +743,72 @@ class CommunityForumController extends Controller
             ->with('success', 'Status verifikasi berhasil diperbarui.');
     }
 
+    public function exportVerificationsCsv(Request $request)
+    {
+        $accessRedirect = $this->ensureAccess($request);
+        if ($accessRedirect) {
+            return $accessRedirect;
+        }
+
+        if (!$this->isCfAdmin($request)) {
+            return redirect()
+                ->route('cf.index')
+                ->withErrors(['admin' => 'Anda tidak memiliki akses admin CF.']);
+        }
+
+        $status = trim((string) $request->query('status', ''));
+        $allowed = ['pending', 'approved', 'rejected'];
+
+        $rows = CfVerificationRequest::query()
+            ->with(['user:id,name,email', 'reviewer:id,name,email'])
+            ->when(in_array($status, $allowed, true), function ($query) use ($status) {
+                $query->where('status', $status);
+            })
+            ->orderByDesc('created_at')
+            ->get();
+
+        $filename = 'cf_verifications_' . now()->format('Ymd_His') . '.csv';
+
+        return response()->streamDownload(function () use ($rows) {
+            $handle = fopen('php://output', 'w');
+            fputcsv($handle, [
+                'id',
+                'status',
+                'requested_role',
+                'user_name',
+                'user_email',
+                'organization_name',
+                'evidence_url',
+                'notes',
+                'review_note',
+                'reviewer_name',
+                'reviewer_email',
+                'created_at',
+                'reviewed_at',
+            ]);
+
+            foreach ($rows as $row) {
+                fputcsv($handle, [
+                    (int) $row->id,
+                    (string) $row->status,
+                    (string) $row->requested_role,
+                    (string) ($row->user->name ?? ''),
+                    (string) ($row->user->email ?? ''),
+                    (string) ($row->organization_name ?? ''),
+                    (string) ($row->evidence_url ?? ''),
+                    (string) ($row->notes ?? ''),
+                    (string) ($row->review_note ?? ''),
+                    (string) ($row->reviewer->name ?? ''),
+                    (string) ($row->reviewer->email ?? ''),
+                    (string) ($row->created_at?->toDateTimeString() ?? ''),
+                    (string) ($row->reviewed_at?->toDateTimeString() ?? ''),
+                ]);
+            }
+
+            fclose($handle);
+        }, $filename, ['Content-Type' => 'text/csv']);
+    }
+
     public function editReply(Request $request, int $threadId, int $replyId): View|RedirectResponse
     {
         $accessRedirect = $this->ensureAccess($request);
@@ -1120,6 +1186,74 @@ class CommunityForumController extends Controller
         return redirect()
             ->route('cf.admin.reports.index', ['status' => $request->query('status', '')])
             ->with('success', 'Status laporan berhasil diperbarui.');
+    }
+
+    public function exportReportsCsv(Request $request)
+    {
+        $accessRedirect = $this->ensureAccess($request);
+        if ($accessRedirect) {
+            return $accessRedirect;
+        }
+
+        if (!$this->isCfAdmin($request)) {
+            return redirect()
+                ->route('cf.index')
+                ->withErrors(['admin' => 'Anda tidak memiliki akses admin CF.']);
+        }
+
+        $status = trim((string) $request->query('status', ''));
+        $allowedStatus = ['open', 'resolved', 'rejected'];
+
+        $rows = CfReport::query()
+            ->with(['reporter:id,name,email', 'reviewer:id,name,email'])
+            ->when(in_array($status, $allowedStatus, true), function ($query) use ($status) {
+                $query->where('status', $status);
+            })
+            ->orderByDesc('created_at')
+            ->get();
+
+        $filename = 'cf_reports_' . now()->format('Ymd_His') . '.csv';
+
+        return response()->streamDownload(function () use ($rows) {
+            $handle = fopen('php://output', 'w');
+            fputcsv($handle, [
+                'id',
+                'status',
+                'priority_level',
+                'priority_score',
+                'reportable_type',
+                'reportable_id',
+                'reason',
+                'reporter_name',
+                'reporter_email',
+                'review_note',
+                'reviewer_name',
+                'reviewer_email',
+                'created_at',
+                'reviewed_at',
+            ]);
+
+            foreach ($rows as $row) {
+                fputcsv($handle, [
+                    (int) $row->id,
+                    (string) $row->status,
+                    (string) ($row->priority_level ?? ''),
+                    (int) ($row->priority_score ?? 0),
+                    (string) $row->reportable_type,
+                    (int) $row->reportable_id,
+                    (string) $row->reason,
+                    (string) ($row->reporter->name ?? ''),
+                    (string) ($row->reporter->email ?? ''),
+                    (string) ($row->review_note ?? ''),
+                    (string) ($row->reviewer->name ?? ''),
+                    (string) ($row->reviewer->email ?? ''),
+                    (string) ($row->created_at?->toDateTimeString() ?? ''),
+                    (string) ($row->reviewed_at?->toDateTimeString() ?? ''),
+                ]);
+            }
+
+            fclose($handle);
+        }, $filename, ['Content-Type' => 'text/csv']);
     }
 
     private function ensureAccess(Request $request): ?RedirectResponse

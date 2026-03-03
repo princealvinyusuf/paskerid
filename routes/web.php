@@ -162,6 +162,9 @@ Route::post('/cf/admin/reports/{id}/status', [CommunityForumController::class, '
     ->middleware('auth')
     ->whereNumber('id')
     ->name('cf.admin.reports.update-status');
+Route::get('/cf/admin/reports/export/csv', [CommunityForumController::class, 'exportReportsCsv'])
+    ->middleware('auth')
+    ->name('cf.admin.reports.export-csv');
 Route::get('/cf/notifications', [CommunityForumController::class, 'notifications'])
     ->middleware('auth')
     ->name('cf.notifications.index');
@@ -185,6 +188,9 @@ Route::post('/cf/admin/verifications/{id}/status', [CommunityForumController::cl
     ->middleware('auth')
     ->whereNumber('id')
     ->name('cf.admin.verifications.update-status');
+Route::get('/cf/admin/verifications/export/csv', [CommunityForumController::class, 'exportVerificationsCsv'])
+    ->middleware('auth')
+    ->name('cf.admin.verifications.export-csv');
 
 Route::get('/ketentuan-pengguna', function () {
     return view('ketentuan_pengguna');

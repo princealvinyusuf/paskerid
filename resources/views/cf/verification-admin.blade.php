@@ -24,6 +24,9 @@
             <a href="{{ route('cf.admin.verifications.index', ['status' => 'rejected']) }}" class="btn btn-sm {{ $status === 'rejected' ? 'btn-success' : 'btn-outline-success' }}">
                 Rejected ({{ $statusCounts['rejected'] }})
             </a>
+            <a href="{{ route('cf.admin.verifications.export-csv', ['status' => $status]) }}" class="btn btn-sm btn-outline-primary ms-auto">
+                Export CSV
+            </a>
         </div>
     </div>
 
