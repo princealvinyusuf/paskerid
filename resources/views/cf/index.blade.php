@@ -24,6 +24,7 @@
                 <a href="{{ route('cf.admin.reports.index') }}" class="btn btn-outline-danger btn-sm">Moderation Center</a>
                 <a href="{{ route('cf.admin.verifications.index') }}" class="btn btn-outline-warning btn-sm">Verification Admin</a>
                 <a href="{{ route('cf.admin.trends.index') }}" class="btn btn-outline-info btn-sm">Trend Analytics</a>
+                <a href="{{ route('cf.admin.health.index') }}" class="btn btn-outline-dark btn-sm">Health Monitor</a>
             @endif
             @auth
                 <a href="{{ route('cf.verification.index') }}" class="btn btn-outline-secondary btn-sm">

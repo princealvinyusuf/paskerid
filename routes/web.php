@@ -161,6 +161,9 @@ Route::get('/cf/admin/reports', [CommunityForumController::class, 'reports'])
 Route::get('/cf/admin/trends', [CommunityForumController::class, 'trends'])
     ->middleware('auth')
     ->name('cf.admin.trends.index');
+Route::get('/cf/admin/health', [CommunityForumController::class, 'health'])
+    ->middleware('auth')
+    ->name('cf.admin.health.index');
 Route::post('/cf/admin/reports/{id}/status', [CommunityForumController::class, 'updateReportStatus'])
     ->middleware('auth')
     ->whereNumber('id')

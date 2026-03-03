@@ -16,6 +16,8 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\View\View;
 
 class CommunityForumController extends Controller
@@ -1247,6 +1249,79 @@ class CommunityForumController extends Controller
             'topLocations' => $cachedTrends['topLocations'],
             'topKeywords' => $cachedTrends['topKeywords'],
             'topThreads' => $cachedTrends['topThreads'],
+        ]);
+    }
+
+    public function health(Request $request): View|RedirectResponse
+    {
+        $accessRedirect = $this->ensureAccess($request);
+        if ($accessRedirect) {
+            return $accessRedirect;
+        }
+
+        if (!$this->isCfAdmin($request)) {
+            return redirect()
+                ->route('cf.index')
+                ->withErrors(['admin' => 'Anda tidak memiliki akses admin CF.']);
+        }
+
+        $jobsPending = 0;
+        $failedJobsCount = 0;
+        $failedRecent = [];
+
+        if (Schema::hasTable('jobs')) {
+            $jobsPending = (int) DB::table('jobs')->count();
+        }
+
+        if (Schema::hasTable('failed_jobs')) {
+            $failedJobsCount = (int) DB::table('failed_jobs')->count();
+            $failedRecent = DB::table('failed_jobs')
+                ->select(['id', 'queue', 'failed_at', 'exception'])
+                ->orderByDesc('id')
+                ->limit(10)
+                ->get()
+                ->map(function ($row) {
+                    $exception = trim((string) ($row->exception ?? ''));
+                    $firstLine = $exception !== '' ? (string) explode("\n", $exception)[0] : '-';
+                    return [
+                        'id' => (int) ($row->id ?? 0),
+                        'queue' => (string) ($row->queue ?? '-'),
+                        'failed_at' => (string) ($row->failed_at ?? ''),
+                        'summary' => mb_substr($firstLine, 0, 180),
+                    ];
+                })
+                ->all();
+        }
+
+        $openReports = (int) CfReport::query()->where('status', 'open')->count();
+        $openEscalated = (int) CfReport::query()
+            ->where('status', 'open')
+            ->whereIn('escalation_level', ['urgent', 'critical'])
+            ->count();
+        $hiddenThreads = (int) CfThread::query()->where('is_hidden', true)->count();
+        $hiddenReplies = (int) CfReply::query()->where('is_hidden', true)->count();
+        $unreadNotifications = (int) CfNotification::query()->where('is_read', false)->count();
+
+        $since = now()->subDay();
+        $activity24h = [
+            'threads_created' => (int) CfThread::query()->where('created_at', '>=', $since)->count(),
+            'replies_created' => (int) CfReply::query()->where('created_at', '>=', $since)->count(),
+            'reports_created' => (int) CfReport::query()->where('created_at', '>=', $since)->count(),
+            'audits_logged' => (int) CfReportAudit::query()->where('created_at', '>=', $since)->count(),
+        ];
+
+        return view('cf.health', [
+            'jobsPending' => $jobsPending,
+            'failedJobsCount' => $failedJobsCount,
+            'failedRecent' => $failedRecent,
+            'openReports' => $openReports,
+            'openEscalated' => $openEscalated,
+            'hiddenThreads' => $hiddenThreads,
+            'hiddenReplies' => $hiddenReplies,
+            'unreadNotifications' => $unreadNotifications,
+            'activity24h' => $activity24h,
+            'queueConnection' => (string) config('queue.default', 'unknown'),
+            'generatedAt' => now(),
         ]);
     }
 
