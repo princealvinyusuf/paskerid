@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class CfReport extends Model
 {
@@ -15,6 +16,8 @@ class CfReport extends Model
         'status',
         'priority_score',
         'priority_level',
+        'escalation_level',
+        'escalated_at',
         'reviewed_by_user_id',
         'review_note',
         'reviewed_at',
@@ -22,6 +25,7 @@ class CfReport extends Model
 
     protected $casts = [
         'priority_score' => 'integer',
+        'escalated_at' => 'datetime',
         'reviewed_at' => 'datetime',
     ];
 
@@ -33,5 +37,10 @@ class CfReport extends Model
     public function reviewer(): BelongsTo
     {
         return $this->belongsTo(User::class, 'reviewed_by_user_id');
+    }
+
+    public function audits(): HasMany
+    {
+        return $this->hasMany(CfReportAudit::class, 'cf_report_id');
     }
 }

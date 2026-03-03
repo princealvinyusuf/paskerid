@@ -6,6 +6,7 @@ use App\Models\CfCategory;
 use App\Models\CfNotification;
 use App\Models\CfReply;
 use App\Models\CfReport;
+use App\Models\CfReportAudit;
 use App\Models\CfThread;
 use App\Models\CfVerificationRequest;
 use App\Models\User;
@@ -946,8 +947,9 @@ class CommunityForumController extends Controller
             'thread',
             (int) $request->user()->id
         );
+        $escalationLevel = $this->resolveEscalationLevel((string) $validated['reason'], (int) $priority['score']);
 
-        CfReport::query()->create([
+        $report = CfReport::query()->create([
             'reportable_type' => 'thread',
             'reportable_id' => (int) $thread->id,
             'reported_by_user_id' => (int) $request->user()->id,
@@ -955,7 +957,24 @@ class CommunityForumController extends Controller
             'status' => 'open',
             'priority_score' => $priority['score'],
             'priority_level' => $priority['level'],
+            'escalation_level' => $escalationLevel,
+            'escalated_at' => $escalationLevel !== 'none' ? now() : null,
         ]);
+
+        $this->createReportAudit(
+            (int) $report->id,
+            (int) $request->user()->id,
+            'reported',
+            null,
+            'open',
+            $escalationLevel,
+            null,
+            [
+                'priority_score' => (int) $priority['score'],
+                'priority_level' => (string) $priority['level'],
+                'reportable_type' => 'thread',
+            ]
+        );
 
         return redirect()
             ->route('cf.threads.show', $thread->id)
@@ -987,8 +1006,9 @@ class CommunityForumController extends Controller
             'reply',
             (int) $request->user()->id
         );
+        $escalationLevel = $this->resolveEscalationLevel((string) $validated['reason'], (int) $priority['score']);
 
-        CfReport::query()->create([
+        $report = CfReport::query()->create([
             'reportable_type' => 'reply',
             'reportable_id' => (int) $reply->id,
             'reported_by_user_id' => (int) $request->user()->id,
@@ -996,7 +1016,24 @@ class CommunityForumController extends Controller
             'status' => 'open',
             'priority_score' => $priority['score'],
             'priority_level' => $priority['level'],
+            'escalation_level' => $escalationLevel,
+            'escalated_at' => $escalationLevel !== 'none' ? now() : null,
         ]);
+
+        $this->createReportAudit(
+            (int) $report->id,
+            (int) $request->user()->id,
+            'reported',
+            null,
+            'open',
+            $escalationLevel,
+            null,
+            [
+                'priority_score' => (int) $priority['score'],
+                'priority_level' => (string) $priority['level'],
+                'reportable_type' => 'reply',
+            ]
+        );
 
         return redirect()
             ->route('cf.threads.show', $thread->id)
@@ -1117,6 +1154,23 @@ class CommunityForumController extends Controller
             ];
         }
 
+        $reportIds = $reports->pluck('id')->map(fn ($id) => (int) $id)->all();
+        $auditRows = CfReportAudit::query()
+            ->with('actor:id,name,email')
+            ->whereIn('cf_report_id', $reportIds)
+            ->orderByDesc('created_at')
+            ->get();
+        $auditMap = [];
+        foreach ($auditRows as $audit) {
+            $reportId = (int) $audit->cf_report_id;
+            if (!isset($auditMap[$reportId])) {
+                $auditMap[$reportId] = [];
+            }
+            if (count($auditMap[$reportId]) < 3) {
+                $auditMap[$reportId][] = $audit;
+            }
+        }
+
         $statusCounts = [
             'open' => (int) CfReport::query()->where('status', 'open')->count(),
             'resolved' => (int) CfReport::query()->where('status', 'resolved')->count(),
@@ -1129,6 +1183,7 @@ class CommunityForumController extends Controller
             'open_high' => (int) CfReport::query()->where('status', 'open')->where('priority_level', 'high')->count(),
             'open_medium' => (int) CfReport::query()->where('status', 'open')->where('priority_level', 'medium')->count(),
             'open_low' => (int) CfReport::query()->where('status', 'open')->where('priority_level', 'low')->count(),
+            'open_escalated' => (int) CfReport::query()->where('status', 'open')->whereIn('escalation_level', ['urgent', 'critical'])->count(),
             'open_age_7_plus' => (int) CfReport::query()->where('status', 'open')->where('created_at', '<', now()->subDays(7))->count(),
             'open_age_14_plus' => (int) CfReport::query()->where('status', 'open')->where('created_at', '<', now()->subDays(14))->count(),
             'new_today' => (int) CfReport::query()->where('created_at', '>=', $todayStart)->count(),
@@ -1138,6 +1193,7 @@ class CommunityForumController extends Controller
         return view('cf.reports', [
             'reports' => $reports,
             'targetMap' => $targetMap,
+            'auditMap' => $auditMap,
             'status' => $status,
             'statusCounts' => $statusCounts,
             'autoClosedCount' => $autoClosedCount,
@@ -1164,12 +1220,18 @@ class CommunityForumController extends Controller
         ]);
 
         $report = CfReport::query()->findOrFail($id);
+        $currentStatus = (string) $report->status;
         $nextStatus = (string) $validated['status'];
         $note = trim((string) ($validated['review_note'] ?? ''));
+        $escalationLevel = $nextStatus === 'open'
+            ? $this->resolveEscalationLevel((string) $report->reason, (int) ($report->priority_score ?? 0))
+            : 'none';
 
         if ($nextStatus === 'open') {
             $report->update([
                 'status' => 'open',
+                'escalation_level' => $escalationLevel,
+                'escalated_at' => $escalationLevel !== 'none' ? now() : null,
                 'reviewed_by_user_id' => null,
                 'review_note' => $note !== '' ? $note : null,
                 'reviewed_at' => null,
@@ -1177,11 +1239,24 @@ class CommunityForumController extends Controller
         } else {
             $report->update([
                 'status' => $nextStatus,
+                'escalation_level' => 'none',
+                'escalated_at' => null,
                 'reviewed_by_user_id' => (int) $request->user()->id,
                 'review_note' => $note !== '' ? $note : null,
                 'reviewed_at' => now(),
             ]);
         }
+
+        $this->createReportAudit(
+            (int) $report->id,
+            (int) $request->user()->id,
+            'status_changed',
+            $currentStatus,
+            $nextStatus,
+            $escalationLevel,
+            $note !== '' ? $note : null,
+            ['updated_from_moderation_center' => true]
+        );
 
         return redirect()
             ->route('cf.admin.reports.index', ['status' => $request->query('status', '')])
@@ -1221,6 +1296,8 @@ class CommunityForumController extends Controller
                 'status',
                 'priority_level',
                 'priority_score',
+                'escalation_level',
+                'escalated_at',
                 'reportable_type',
                 'reportable_id',
                 'reason',
@@ -1239,6 +1316,8 @@ class CommunityForumController extends Controller
                     (string) $row->status,
                     (string) ($row->priority_level ?? ''),
                     (int) ($row->priority_score ?? 0),
+                    (string) ($row->escalation_level ?? 'none'),
+                    (string) ($row->escalated_at?->toDateTimeString() ?? ''),
                     (string) $row->reportable_type,
                     (int) $row->reportable_id,
                     (string) $row->reason,
@@ -1577,6 +1656,61 @@ class CommunityForumController extends Controller
         return 'low';
     }
 
+    private function resolveEscalationLevel(string $reason, int $priorityScore): string
+    {
+        $text = mb_strtolower(trim($reason));
+        $criticalKeywords = [
+            'ancaman',
+            'pelecehan',
+            'kekerasan',
+            'doxing',
+            'phishing',
+            'penipuan',
+        ];
+        $urgentKeywords = [
+            'diskriminasi',
+            'ujaran kebencian',
+            'sara',
+            'pornografi',
+            'scam',
+        ];
+
+        if ($this->containsAnyKeyword($text, $criticalKeywords) || $priorityScore >= 90) {
+            return 'critical';
+        }
+        if ($this->containsAnyKeyword($text, $urgentKeywords) || $priorityScore >= 75) {
+            return 'urgent';
+        }
+        if ($priorityScore >= 50) {
+            return 'watch';
+        }
+
+        return 'none';
+    }
+
+    private function createReportAudit(
+        int $reportId,
+        ?int $actorUserId,
+        string $action,
+        ?string $fromStatus,
+        ?string $toStatus,
+        ?string $escalationLevel,
+        ?string $note,
+        array $metadata = []
+    ): void {
+        CfReportAudit::query()->create([
+            'cf_report_id' => $reportId,
+            'actor_user_id' => $actorUserId,
+            'action' => $action,
+            'from_status' => $fromStatus,
+            'to_status' => $toStatus,
+            'escalation_level' => $escalationLevel,
+            'note' => $note,
+            'metadata' => empty($metadata) ? null : $metadata,
+            'created_at' => now(),
+        ]);
+    }
+
     private function autoCloseStaleReports(): int
     {
         $days = (int) env('CF_REPORT_AUTO_CLOSE_DAYS', 30);
@@ -1595,14 +1729,33 @@ class CommunityForumController extends Controller
             return 0;
         }
 
-        CfReport::query()
+        $note = 'Auto-closed by policy after ' . $days . ' days without resolution.';
+        $reports = CfReport::query()
             ->whereIn('id', $staleIds)
-            ->update([
+            ->get();
+
+        foreach ($reports as $report) {
+            $fromStatus = (string) $report->status;
+            $report->update([
                 'status' => 'resolved',
+                'escalation_level' => 'none',
+                'escalated_at' => null,
                 'reviewed_by_user_id' => null,
-                'review_note' => 'Auto-closed by policy after ' . $days . ' days without resolution.',
+                'review_note' => $note,
                 'reviewed_at' => now(),
             ]);
+
+            $this->createReportAudit(
+                (int) $report->id,
+                null,
+                'auto_closed',
+                $fromStatus,
+                'resolved',
+                'none',
+                $note,
+                ['policy_days' => $days]
+            );
+        }
 
         return count($staleIds);
     }

@@ -45,6 +45,9 @@
                         Medium: <strong>{{ (int) ($summary['open_medium'] ?? 0) }}</strong> |
                         Low: <strong>{{ (int) ($summary['open_low'] ?? 0) }}</strong>
                     </div>
+                    <div class="small mt-1">
+                        Escalated: <strong>{{ (int) ($summary['open_escalated'] ?? 0) }}</strong>
+                    </div>
                 </div>
             </div>
         </div>
@@ -99,6 +102,7 @@
             @forelse($reports as $report)
                 @php
                     $target = $targetMap[$report->id] ?? ['exists' => false, 'label' => '-', 'url' => null];
+                    $audits = $auditMap[$report->id] ?? [];
                 @endphp
                 <div class="p-3 border-bottom">
                     <div class="d-flex flex-column flex-lg-row justify-content-between gap-3">
@@ -110,6 +114,11 @@
                                 <span class="badge text-bg-{{ ($report->priority_level ?? 'low') === 'high' ? 'danger' : (($report->priority_level ?? 'low') === 'medium' ? 'warning' : 'secondary') }}">
                                     PRIORITY {{ strtoupper((string) ($report->priority_level ?? 'low')) }}
                                 </span>
+                                @if(($report->escalation_level ?? 'none') !== 'none')
+                                    <span class="badge text-bg-{{ in_array((string) $report->escalation_level, ['critical', 'urgent'], true) ? 'dark' : 'info' }}">
+                                        ESCALATION {{ strtoupper((string) $report->escalation_level) }}
+                                    </span>
+                                @endif
                                 <span class="badge text-bg-light border">{{ strtoupper($report->reportable_type) }}</span>
                                 <span class="small text-muted">Report ID #{{ $report->id }}</span>
                             </div>
@@ -140,6 +149,29 @@
                                     @if($report->reviewed_at)
                                         pada {{ $report->reviewed_at->format('d M Y H:i') }}
                                     @endif
+                                </div>
+                            @endif
+
+                            @if(!empty($audits))
+                                <div class="small text-muted mt-2">
+                                    <strong>Audit Trail:</strong>
+                                </div>
+                                <div class="small">
+                                    @foreach($audits as $audit)
+                                        <div class="text-muted">
+                                            {{ $audit->created_at?->format('d M Y H:i') }} -
+                                            {{ strtoupper((string) $audit->action) }}
+                                            @if($audit->from_status || $audit->to_status)
+                                                ({{ strtoupper((string) ($audit->from_status ?? '-')) }} -> {{ strtoupper((string) ($audit->to_status ?? '-')) }})
+                                            @endif
+                                            @if($audit->escalation_level)
+                                                | Esc: {{ strtoupper((string) $audit->escalation_level) }}
+                                            @endif
+                                            @if($audit->actor)
+                                                | by {{ $audit->actor->name ?? '-' }}
+                                            @endif
+                                        </div>
+                                    @endforeach
                                 </div>
                             @endif
                         </div>
