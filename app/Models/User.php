@@ -22,6 +22,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'cf_verified_role',
+        'cf_verified_at',
     ];
 
     /**
@@ -44,6 +46,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'cf_verified_at' => 'datetime',
         ];
     }
 
@@ -55,5 +58,10 @@ class User extends Authenticatable
     public function cfReplies(): HasMany
     {
         return $this->hasMany(CfReply::class);
+    }
+
+    public function cfVerificationRequests(): HasMany
+    {
+        return $this->hasMany(CfVerificationRequest::class);
     }
 }

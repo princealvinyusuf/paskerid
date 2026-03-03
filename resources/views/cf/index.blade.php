@@ -21,7 +21,16 @@
             @endauth
             @if($isCfAdmin ?? false)
                 <a href="{{ route('cf.admin.reports.index') }}" class="btn btn-outline-danger btn-sm">Moderation Center</a>
+                <a href="{{ route('cf.admin.verifications.index') }}" class="btn btn-outline-warning btn-sm">Verification Admin</a>
             @endif
+            @auth
+                <a href="{{ route('cf.verification.index') }}" class="btn btn-outline-secondary btn-sm">
+                    Verifikasi
+                    @if(($currentVerificationRequest->status ?? '') === 'pending')
+                        <span class="badge text-bg-warning">Pending</span>
+                    @endif
+                </a>
+            @endauth
             <a href="{{ route('cf.threads.create') }}" class="btn btn-success btn-sm">+ Buat Thread</a>
         </div>
     </div>
@@ -191,8 +200,12 @@
                         {{ $thread->category->name ?? '-' }} |
                         Oleh: {{ $thread->user->name ?? 'Anonim' }}
                         @php $authorReputation = $reputationMap[$thread->user_id] ?? null; @endphp
+                        @php $authorVerification = $verificationMap[$thread->user_id] ?? null; @endphp
                         @if($authorReputation)
                             <span class="badge text-bg-light border">{{ $authorReputation['badge'] }}</span>
+                        @endif
+                        @if(!empty($authorVerification['label']))
+                            <span class="badge text-bg-primary">{{ $authorVerification['label'] }}</span>
                         @endif
                         |
                         Tipe:

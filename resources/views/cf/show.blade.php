@@ -22,15 +22,21 @@
             @if($isCfAdmin ?? false)
                 <span class="mx-1 text-muted">|</span>
                 <a href="{{ route('cf.admin.reports.index') }}" class="small text-decoration-none">Moderation Center</a>
+                <span class="mx-1 text-muted">|</span>
+                <a href="{{ route('cf.admin.verifications.index') }}" class="small text-decoration-none">Verification Admin</a>
             @endif
             <h1 class="h4 fw-bold mt-2 mb-1">{{ $thread->title }}</h1>
             @php $threadAuthorRep = $reputationMap[$thread->user_id] ?? null; @endphp
+            @php $threadAuthorVerification = $verificationMap[$thread->user_id] ?? null; @endphp
             <div class="small text-muted">
                 {{ $thread->category->name ?? '-' }} |
                 Oleh {{ $thread->user->name ?? 'Anonim' }} |
                 @if($threadAuthorRep)
                     <span class="badge text-bg-light border">{{ $threadAuthorRep['badge'] }}</span>
                     <span>Skor: {{ $threadAuthorRep['score'] }}</span> |
+                @endif
+                @if(!empty($threadAuthorVerification['label']))
+                    <span class="badge text-bg-primary">{{ $threadAuthorVerification['label'] }}</span> |
                 @endif
                 @if($thread->author_type === 'employer')
                     Perusahaan
@@ -142,10 +148,14 @@
             @forelse($thread->replies as $reply)
                 <div class="p-3 border-bottom" id="reply-{{ $reply->id }}">
                     @php $replyAuthorRep = $reputationMap[$reply->user_id] ?? null; @endphp
+                    @php $replyAuthorVerification = $verificationMap[$reply->user_id] ?? null; @endphp
                     <div class="small text-muted mb-1">
                         {{ $reply->user->name ?? 'Anonim' }}
                         @if($replyAuthorRep)
                             <span class="badge text-bg-light border">{{ $replyAuthorRep['badge'] }}</span>
+                        @endif
+                        @if(!empty($replyAuthorVerification['label']))
+                            <span class="badge text-bg-primary">{{ $replyAuthorVerification['label'] }}</span>
                         @endif
                         | {{ $reply->created_at?->format('d M Y H:i') }}
                     </div>

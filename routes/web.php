@@ -170,6 +170,19 @@ Route::post('/cf/notifications/{id}/read', [CommunityForumController::class, 'ma
 Route::post('/cf/notifications/read-all', [CommunityForumController::class, 'markAllNotificationsRead'])
     ->middleware('auth')
     ->name('cf.notifications.read-all');
+Route::get('/cf/verification', [CommunityForumController::class, 'verification'])
+    ->middleware('auth')
+    ->name('cf.verification.index');
+Route::post('/cf/verification', [CommunityForumController::class, 'storeVerificationRequest'])
+    ->middleware('auth')
+    ->name('cf.verification.store');
+Route::get('/cf/admin/verifications', [CommunityForumController::class, 'verificationAdmin'])
+    ->middleware('auth')
+    ->name('cf.admin.verifications.index');
+Route::post('/cf/admin/verifications/{id}/status', [CommunityForumController::class, 'updateVerificationStatus'])
+    ->middleware('auth')
+    ->whereNumber('id')
+    ->name('cf.admin.verifications.update-status');
 
 Route::get('/ketentuan-pengguna', function () {
     return view('ketentuan_pengguna');

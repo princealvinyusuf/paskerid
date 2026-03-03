@@ -7,6 +7,8 @@ use App\Models\CfNotification;
 use App\Models\CfReply;
 use App\Models\CfReport;
 use App\Models\CfThread;
+use App\Models\CfVerificationRequest;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -160,6 +162,15 @@ class CommunityForumController extends Controller
             }
         }
         $reputationMap = $this->buildReputationMap($threadUserIds);
+        $verificationMap = $this->buildVerificationMap($threadUserIds);
+
+        $currentVerificationRequest = null;
+        if ($request->user()) {
+            $currentVerificationRequest = CfVerificationRequest::query()
+                ->where('user_id', (int) $request->user()->id)
+                ->latest('created_at')
+                ->first();
+        }
 
         return view('cf.index', [
             'categories' => $categories,
@@ -170,6 +181,8 @@ class CommunityForumController extends Controller
             'isCfAdmin' => $this->isCfAdmin($request),
             'unreadNotificationsCount' => $unreadNotificationsCount,
             'reputationMap' => $reputationMap,
+            'verificationMap' => $verificationMap,
+            'currentVerificationRequest' => $currentVerificationRequest,
             'filters' => [
                 'category' => $categorySlug,
                 'author_type' => $authorType,
@@ -408,11 +421,13 @@ class CommunityForumController extends Controller
             }
         }
         $reputationMap = $this->buildReputationMap($userIds);
+        $verificationMap = $this->buildVerificationMap($userIds);
 
         return view('cf.show', [
             'thread' => $thread,
             'isCfAdmin' => $this->isCfAdmin($request),
             'reputationMap' => $reputationMap,
+            'verificationMap' => $verificationMap,
         ]);
     }
 
@@ -543,6 +558,161 @@ class CommunityForumController extends Controller
             ]);
 
         return redirect()->route('cf.notifications.index')->with('success', 'Semua notifikasi telah dibaca.');
+    }
+
+    public function verification(Request $request): View|RedirectResponse
+    {
+        $accessRedirect = $this->ensureAccess($request);
+        if ($accessRedirect) {
+            return $accessRedirect;
+        }
+
+        $user = $request->user();
+        if (!$user) {
+            return redirect()->route('login');
+        }
+
+        $requests = CfVerificationRequest::query()
+            ->where('user_id', (int) $user->id)
+            ->orderByDesc('created_at')
+            ->paginate(10);
+
+        return view('cf.verification', [
+            'requests' => $requests,
+            'user' => $user,
+        ]);
+    }
+
+    public function storeVerificationRequest(Request $request): RedirectResponse
+    {
+        $accessRedirect = $this->ensureAccess($request);
+        if ($accessRedirect) {
+            return $accessRedirect;
+        }
+
+        $user = $request->user();
+        if (!$user) {
+            return redirect()->route('login');
+        }
+
+        $validated = $request->validate([
+            'requested_role' => 'required|in:employer,jobseeker',
+            'organization_name' => 'nullable|string|max:160',
+            'evidence_url' => 'nullable|url|max:500',
+            'notes' => 'nullable|string|max:3000',
+        ]);
+
+        $hasPending = CfVerificationRequest::query()
+            ->where('user_id', (int) $user->id)
+            ->where('status', 'pending')
+            ->exists();
+        if ($hasPending) {
+            return redirect()
+                ->route('cf.verification.index')
+                ->withErrors(['verification' => 'Masih ada pengajuan verifikasi yang berstatus pending.']);
+        }
+
+        CfVerificationRequest::query()->create([
+            'user_id' => (int) $user->id,
+            'requested_role' => (string) $validated['requested_role'],
+            'organization_name' => $validated['organization_name'] ?? null,
+            'evidence_url' => $validated['evidence_url'] ?? null,
+            'notes' => $validated['notes'] ?? null,
+            'status' => 'pending',
+        ]);
+
+        return redirect()
+            ->route('cf.verification.index')
+            ->with('success', 'Pengajuan verifikasi berhasil dikirim.');
+    }
+
+    public function verificationAdmin(Request $request): View|RedirectResponse
+    {
+        $accessRedirect = $this->ensureAccess($request);
+        if ($accessRedirect) {
+            return $accessRedirect;
+        }
+
+        if (!$this->isCfAdmin($request)) {
+            return redirect()
+                ->route('cf.index')
+                ->withErrors(['admin' => 'Anda tidak memiliki akses admin CF.']);
+        }
+
+        $status = trim((string) $request->query('status', ''));
+        $allowed = ['pending', 'approved', 'rejected'];
+
+        $requests = CfVerificationRequest::query()
+            ->with(['user:id,name,email,cf_verified_role,cf_verified_at', 'reviewer:id,name,email'])
+            ->when(in_array($status, $allowed, true), function ($query) use ($status) {
+                $query->where('status', $status);
+            })
+            ->orderBy('status')
+            ->orderByDesc('created_at')
+            ->paginate(20)
+            ->withQueryString();
+
+        $statusCounts = [
+            'pending' => (int) CfVerificationRequest::query()->where('status', 'pending')->count(),
+            'approved' => (int) CfVerificationRequest::query()->where('status', 'approved')->count(),
+            'rejected' => (int) CfVerificationRequest::query()->where('status', 'rejected')->count(),
+        ];
+
+        return view('cf.verification-admin', [
+            'requests' => $requests,
+            'status' => $status,
+            'statusCounts' => $statusCounts,
+        ]);
+    }
+
+    public function updateVerificationStatus(Request $request, int $id): RedirectResponse
+    {
+        $accessRedirect = $this->ensureAccess($request);
+        if ($accessRedirect) {
+            return $accessRedirect;
+        }
+
+        if (!$this->isCfAdmin($request)) {
+            return redirect()
+                ->route('cf.index')
+                ->withErrors(['admin' => 'Anda tidak memiliki akses admin CF.']);
+        }
+
+        $validated = $request->validate([
+            'status' => 'required|in:pending,approved,rejected',
+            'review_note' => 'nullable|string|max:1000',
+        ]);
+
+        $record = CfVerificationRequest::query()->findOrFail($id);
+        $nextStatus = (string) $validated['status'];
+        $reviewNote = trim((string) ($validated['review_note'] ?? ''));
+
+        $record->update([
+            'status' => $nextStatus,
+            'reviewed_by_user_id' => $nextStatus === 'pending' ? null : (int) $request->user()->id,
+            'review_note' => $reviewNote !== '' ? $reviewNote : null,
+            'reviewed_at' => $nextStatus === 'pending' ? null : now(),
+        ]);
+
+        if ($nextStatus === 'approved') {
+            User::query()
+                ->where('id', (int) $record->user_id)
+                ->update([
+                    'cf_verified_role' => (string) $record->requested_role,
+                    'cf_verified_at' => now(),
+                ]);
+        } elseif ($nextStatus === 'rejected') {
+            User::query()
+                ->where('id', (int) $record->user_id)
+                ->update([
+                    'cf_verified_role' => null,
+                    'cf_verified_at' => null,
+                ]);
+        }
+
+        return redirect()
+            ->route('cf.admin.verifications.index', ['status' => $request->query('status', '')])
+            ->with('success', 'Status verifikasi berhasil diperbarui.');
     }
 
     public function editReply(Request $request, int $threadId, int $replyId): View|RedirectResponse
@@ -998,7 +1168,7 @@ class CommunityForumController extends Controller
             return;
         }
 
-        $actorName = (string) \App\Models\User::query()
+        $actorName = (string) User::query()
             ->where('id', $actorUserId)
             ->value('name');
         $actorLabel = trim($actorName) !== '' ? $actorName : 'Seseorang';
@@ -1087,6 +1257,41 @@ class CommunityForumController extends Controller
         }
 
         return 'Pengguna Baru';
+    }
+
+    private function buildVerificationMap(array $userIds): array
+    {
+        $ids = array_values(array_unique(array_filter(array_map('intval', $userIds), fn ($id) => $id > 0)));
+        if (empty($ids)) {
+            return [];
+        }
+
+        $rows = User::query()
+            ->whereIn('id', $ids)
+            ->get(['id', 'cf_verified_role', 'cf_verified_at']);
+
+        $map = [];
+        foreach ($rows as $row) {
+            $role = (string) ($row->cf_verified_role ?? '');
+            $map[(int) $row->id] = [
+                'role' => $role,
+                'label' => $this->resolveVerificationLabel($role),
+                'verified_at' => $row->cf_verified_at,
+            ];
+        }
+
+        return $map;
+    }
+
+    private function resolveVerificationLabel(string $role): string
+    {
+        if ($role === 'employer') {
+            return 'Verified Employer';
+        }
+        if ($role === 'jobseeker') {
+            return 'Verified Jobseeker';
+        }
+        return '';
     }
 
     private function resolveMatchingProfile(Request $request, array $inputFilters): array
