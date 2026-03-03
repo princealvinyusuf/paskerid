@@ -197,7 +197,7 @@
             </a>
             <!-- Navbar links -->
             <div class="collapse navbar-collapse w-100" id="navbarNav">
-                <ul class="navbar-nav ms-auto gap-4 me-4">
+                <ul class="navbar-nav ms-auto gap-2 me-3">
                     <li class="nav-item">
                         <a class="nav-link @if(request()->routeIs('home')) active fw-bold @endif" href="{{ route('home') }}">Beranda</a>
                     </li>
@@ -434,7 +434,7 @@
     }
     .navbar .nav-link,
     .navbar .dropdown-item {
-        font-size: 0.9rem;
+        font-size: 0.85rem;
     }
     .navbar .nav-link.active, .navbar .nav-link:focus, .navbar .nav-link:hover {
         color: var(--light-green) !important;
