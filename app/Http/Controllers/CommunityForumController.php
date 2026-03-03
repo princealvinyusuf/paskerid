@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\CfCategory;
+use App\Models\CfNotification;
 use App\Models\CfReply;
 use App\Models\CfReport;
 use App\Models\CfThread;
@@ -99,11 +100,19 @@ class CommunityForumController extends Controller
             ->limit(5)
             ->get();
 
+        $unreadNotificationsCount = $request->user()
+            ? (int) CfNotification::query()
+                ->where('user_id', (int) $request->user()->id)
+                ->where('is_read', false)
+                ->count()
+            : 0;
+
         return view('cf.index', [
             'categories' => $categories,
             'threads' => $threads,
             'hotThreads' => $hotThreads,
             'isCfAdmin' => $this->isCfAdmin($request),
+            'unreadNotificationsCount' => $unreadNotificationsCount,
             'filters' => [
                 'category' => $categorySlug,
                 'author_type' => $authorType,
@@ -339,17 +348,106 @@ class CommunityForumController extends Controller
             return back()->withErrors(['body' => 'Terdeteksi balasan berulang dalam waktu singkat. Coba lagi sebentar.']);
         }
 
-        CfReply::query()->create([
+        $reply = CfReply::query()->create([
             'cf_thread_id' => (int) $thread->id,
             'user_id' => (int) $request->user()->id,
             'body' => (string) $validated['body'],
         ]);
 
         $thread->update(['last_activity_at' => now()]);
+        $this->createReplyNotifications($thread, (int) $request->user()->id, (int) $reply->id);
 
         return redirect()
             ->route('cf.threads.show', $thread->id)
             ->with('success', 'Balasan berhasil dikirim.');
+    }
+
+    public function notifications(Request $request): View|RedirectResponse
+    {
+        $accessRedirect = $this->ensureAccess($request);
+        if ($accessRedirect) {
+            return $accessRedirect;
+        }
+
+        if (!$request->user()) {
+            return redirect()->route('login');
+        }
+
+        $notifications = CfNotification::query()
+            ->with(['actor:id,name', 'thread:id,title'])
+            ->where('user_id', (int) $request->user()->id)
+            ->orderBy('is_read')
+            ->orderByDesc('created_at')
+            ->paginate(20);
+
+        $unreadCount = (int) CfNotification::query()
+            ->where('user_id', (int) $request->user()->id)
+            ->where('is_read', false)
+            ->count();
+
+        return view('cf.notifications', [
+            'notifications' => $notifications,
+            'unreadCount' => $unreadCount,
+        ]);
+    }
+
+    public function markNotificationRead(Request $request, int $id): RedirectResponse
+    {
+        $accessRedirect = $this->ensureAccess($request);
+        if ($accessRedirect) {
+            return $accessRedirect;
+        }
+
+        if (!$request->user()) {
+            return redirect()->route('login');
+        }
+
+        $notification = CfNotification::query()
+            ->where('user_id', (int) $request->user()->id)
+            ->findOrFail($id);
+
+        if (!$notification->is_read) {
+            $notification->update([
+                'is_read' => true,
+                'read_at' => now(),
+            ]);
+        }
+
+        $redirectUrl = null;
+        if ($notification->cf_thread_id) {
+            $redirectUrl = route('cf.threads.show', $notification->cf_thread_id);
+            if ($notification->cf_reply_id) {
+                $redirectUrl .= '#reply-' . $notification->cf_reply_id;
+            }
+        }
+
+        if ($redirectUrl) {
+            return redirect($redirectUrl);
+        }
+
+        return redirect()->route('cf.notifications.index')->with('success', 'Notifikasi ditandai sudah dibaca.');
+    }
+
+    public function markAllNotificationsRead(Request $request): RedirectResponse
+    {
+        $accessRedirect = $this->ensureAccess($request);
+        if ($accessRedirect) {
+            return $accessRedirect;
+        }
+
+        if (!$request->user()) {
+            return redirect()->route('login');
+        }
+
+        CfNotification::query()
+            ->where('user_id', (int) $request->user()->id)
+            ->where('is_read', false)
+            ->update([
+                'is_read' => true,
+                'read_at' => now(),
+            ]);
+
+        return redirect()->route('cf.notifications.index')->with('success', 'Semua notifikasi telah dibaca.');
     }
 
     public function editReply(Request $request, int $threadId, int $replyId): View|RedirectResponse
@@ -749,5 +847,52 @@ class CommunityForumController extends Controller
             ->count();
 
         return $burstCount >= 5;
+    }
+
+    private function createReplyNotifications(CfThread $thread, int $actorUserId, int $replyId): void
+    {
+        $recipientIds = [];
+
+        if ((int) $thread->user_id !== $actorUserId) {
+            $recipientIds[] = (int) $thread->user_id;
+        }
+
+        $participantIds = CfReply::query()
+            ->where('cf_thread_id', (int) $thread->id)
+            ->where('user_id', '!=', $actorUserId)
+            ->distinct()
+            ->pluck('user_id')
+            ->map(fn ($id) => (int) $id)
+            ->all();
+
+        $recipientIds = array_values(array_unique(array_merge($recipientIds, $participantIds)));
+        if (empty($recipientIds)) {
+            return;
+        }
+
+        $actorName = (string) \App\Models\User::query()
+            ->where('id', $actorUserId)
+            ->value('name');
+        $actorLabel = trim($actorName) !== '' ? $actorName : 'Seseorang';
+        $title = 'Balasan baru pada thread CF';
+        $message = $actorLabel . ' membalas thread "' . $thread->title . '".';
+
+        $rows = [];
+        foreach ($recipientIds as $recipientId) {
+            $rows[] = [
+                'user_id' => $recipientId,
+                'type' => 'thread_reply',
+                'cf_thread_id' => (int) $thread->id,
+                'cf_reply_id' => $replyId,
+                'actor_user_id' => $actorUserId,
+                'title' => $title,
+                'message' => $message,
+                'is_read' => false,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+        }
+
+        CfNotification::query()->insert($rows);
     }
 }

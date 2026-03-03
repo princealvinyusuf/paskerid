@@ -11,6 +11,14 @@
         </div>
         <div class="d-flex gap-2 align-items-center">
             <span class="badge text-bg-warning">Under Construction</span>
+            @auth
+                <a href="{{ route('cf.notifications.index') }}" class="btn btn-outline-primary btn-sm">
+                    Notifikasi
+                    @if(($unreadNotificationsCount ?? 0) > 0)
+                        <span class="badge text-bg-danger">{{ $unreadNotificationsCount }}</span>
+                    @endif
+                </a>
+            @endauth
             @if($isCfAdmin ?? false)
                 <a href="{{ route('cf.admin.reports.index') }}" class="btn btn-outline-danger btn-sm">Moderation Center</a>
             @endif

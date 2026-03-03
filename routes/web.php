@@ -155,6 +155,16 @@ Route::post('/cf/admin/reports/{id}/status', [CommunityForumController::class, '
     ->middleware('auth')
     ->whereNumber('id')
     ->name('cf.admin.reports.update-status');
+Route::get('/cf/notifications', [CommunityForumController::class, 'notifications'])
+    ->middleware('auth')
+    ->name('cf.notifications.index');
+Route::post('/cf/notifications/{id}/read', [CommunityForumController::class, 'markNotificationRead'])
+    ->middleware('auth')
+    ->whereNumber('id')
+    ->name('cf.notifications.read');
+Route::post('/cf/notifications/read-all', [CommunityForumController::class, 'markAllNotificationsRead'])
+    ->middleware('auth')
+    ->name('cf.notifications.read-all');
 
 Route::get('/ketentuan-pengguna', function () {
     return view('ketentuan_pengguna');
