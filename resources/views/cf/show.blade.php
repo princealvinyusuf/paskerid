@@ -2,6 +2,16 @@
 
 @section('content')
 <div class="container py-5">
+    @if($errors->any())
+        <div class="alert alert-danger">
+            <ul class="mb-0">
+                @foreach($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
     <div class="d-flex justify-content-between align-items-start mb-3 gap-2">
         <div>
             <a href="{{ route('cf.index') }}" class="small text-decoration-none">&larr; Kembali ke forum</a>
@@ -9,14 +19,26 @@
             <div class="small text-muted">
                 {{ $thread->category->name ?? '-' }} |
                 Oleh {{ $thread->user->name ?? 'Anonim' }} |
-                {{ strtoupper($thread->author_type) }} |
+                @if($thread->author_type === 'employer')
+                    Perusahaan
+                @elseif($thread->author_type === 'jobseeker')
+                    Pencari Kerja
+                @else
+                    Komunitas
+                @endif
+                |
                 {{ $thread->created_at?->format('d M Y H:i') }} |
                 Views: {{ number_format($thread->views_count) }}
             </div>
         </div>
-        @if($thread->status === 'closed')
-            <span class="badge text-bg-secondary">Thread Closed</span>
-        @endif
+        <div class="d-flex gap-2">
+            @if($thread->is_pinned)
+                <span class="badge text-bg-info">Pinned</span>
+            @endif
+            @if($thread->status === 'closed')
+                <span class="badge text-bg-secondary">Thread Closed</span>
+            @endif
+        </div>
     </div>
 
     <div class="card border-0 shadow-sm rounded-4 mb-4">
@@ -35,6 +57,36 @@
                 </div>
             @endif
             <div style="white-space: pre-line;">{{ $thread->body }}</div>
+
+            @auth
+                <hr>
+                <form method="POST" action="{{ route('cf.threads.report', $thread->id) }}">
+                    @csrf
+                    <label for="thread-report-reason" class="form-label small fw-semibold mb-1">Laporkan thread ini</label>
+                    <div class="d-flex gap-2">
+                        <input id="thread-report-reason" name="reason" type="text" class="form-control form-control-sm" placeholder="Contoh: spam atau konten tidak relevan" required>
+                        <button type="submit" class="btn btn-outline-danger btn-sm">Laporkan</button>
+                    </div>
+                </form>
+            @endauth
+
+            @if($isCfAdmin ?? false)
+                <hr>
+                <div class="d-flex gap-2 flex-wrap">
+                    <form method="POST" action="{{ route('cf.threads.toggle-pin', $thread->id) }}">
+                        @csrf
+                        <button type="submit" class="btn btn-outline-primary btn-sm">
+                            {{ $thread->is_pinned ? 'Lepas Pin' : 'Pin Thread' }}
+                        </button>
+                    </form>
+                    <form method="POST" action="{{ route('cf.threads.toggle-status', $thread->id) }}">
+                        @csrf
+                        <button type="submit" class="btn btn-outline-secondary btn-sm">
+                            {{ $thread->status === 'open' ? 'Tutup Thread' : 'Buka Thread' }}
+                        </button>
+                    </form>
+                </div>
+            @endif
         </div>
     </div>
 
@@ -50,6 +102,15 @@
                         {{ $reply->user->name ?? 'Anonim' }} | {{ $reply->created_at?->format('d M Y H:i') }}
                     </div>
                     <div style="white-space: pre-line;">{{ $reply->body }}</div>
+                    @auth
+                        <form method="POST" action="{{ route('cf.replies.report', ['threadId' => $thread->id, 'replyId' => $reply->id]) }}" class="mt-2">
+                            @csrf
+                            <div class="d-flex gap-2">
+                                <input name="reason" type="text" class="form-control form-control-sm" placeholder="Laporkan balasan ini" required>
+                                <button type="submit" class="btn btn-outline-danger btn-sm">Laporkan</button>
+                            </div>
+                        </form>
+                    @endauth
                 </div>
             @empty
                 <div class="p-4 text-center text-muted">Belum ada balasan.</div>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\CfCategory;
 use App\Models\CfReply;
+use App\Models\CfReport;
 use App\Models\CfThread;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -88,9 +89,21 @@ class CommunityForumController extends Controller
 
         $threads = $threadsQuery->paginate(12)->withQueryString();
 
+        $hotThreads = CfThread::query()
+            ->with(['category:id,name,slug', 'user:id,name'])
+            ->withCount('replies')
+            ->orderByDesc('is_pinned')
+            ->orderByDesc('replies_count')
+            ->orderByDesc('views_count')
+            ->orderByDesc('last_activity_at')
+            ->limit(5)
+            ->get();
+
         return view('cf.index', [
             'categories' => $categories,
             'threads' => $threads,
+            'hotThreads' => $hotThreads,
+            'isCfAdmin' => $this->isCfAdmin($request),
             'filters' => [
                 'category' => $categorySlug,
                 'author_type' => $authorType,
@@ -189,6 +202,7 @@ class CommunityForumController extends Controller
 
         return view('cf.show', [
             'thread' => $thread,
+            'isCfAdmin' => $this->isCfAdmin($request),
         ]);
     }
 
@@ -228,6 +242,111 @@ class CommunityForumController extends Controller
             ->with('success', 'Balasan berhasil dikirim.');
     }
 
+    public function reportThread(Request $request, int $threadId): RedirectResponse
+    {
+        $accessRedirect = $this->ensureAccess($request);
+        if ($accessRedirect) {
+            return $accessRedirect;
+        }
+
+        if (!$request->user()) {
+            return redirect()->route('login');
+        }
+
+        $thread = CfThread::query()->findOrFail($threadId);
+        $validated = $request->validate([
+            'reason' => 'required|string|min:10|max:1000',
+        ]);
+
+        CfReport::query()->create([
+            'reportable_type' => 'thread',
+            'reportable_id' => (int) $thread->id,
+            'reported_by_user_id' => (int) $request->user()->id,
+            'reason' => (string) $validated['reason'],
+            'status' => 'open',
+        ]);
+
+        return redirect()
+            ->route('cf.threads.show', $thread->id)
+            ->with('success', 'Laporan thread diterima. Tim moderator akan meninjau.');
+    }
+
+    public function reportReply(Request $request, int $threadId, int $replyId): RedirectResponse
+    {
+        $accessRedirect = $this->ensureAccess($request);
+        if ($accessRedirect) {
+            return $accessRedirect;
+        }
+
+        if (!$request->user()) {
+            return redirect()->route('login');
+        }
+
+        $thread = CfThread::query()->findOrFail($threadId);
+        $reply = CfReply::query()
+            ->where('cf_thread_id', $thread->id)
+            ->findOrFail($replyId);
+
+        $validated = $request->validate([
+            'reason' => 'required|string|min:10|max:1000',
+        ]);
+
+        CfReport::query()->create([
+            'reportable_type' => 'reply',
+            'reportable_id' => (int) $reply->id,
+            'reported_by_user_id' => (int) $request->user()->id,
+            'reason' => (string) $validated['reason'],
+            'status' => 'open',
+        ]);
+
+        return redirect()
+            ->route('cf.threads.show', $thread->id)
+            ->with('success', 'Laporan balasan diterima. Tim moderator akan meninjau.');
+    }
+
+    public function togglePin(Request $request, int $threadId): RedirectResponse
+    {
+        $accessRedirect = $this->ensureAccess($request);
+        if ($accessRedirect) {
+            return $accessRedirect;
+        }
+
+        if (!$this->isCfAdmin($request)) {
+            return redirect()
+                ->route('cf.threads.show', $threadId)
+                ->withErrors(['admin' => 'Anda tidak memiliki akses admin CF.']);
+        }
+
+        $thread = CfThread::query()->findOrFail($threadId);
+        $thread->update(['is_pinned' => !$thread->is_pinned]);
+
+        return redirect()
+            ->route('cf.threads.show', $thread->id)
+            ->with('success', $thread->is_pinned ? 'Thread dipin.' : 'Pin thread dilepas.');
+    }
+
+    public function toggleStatus(Request $request, int $threadId): RedirectResponse
+    {
+        $accessRedirect = $this->ensureAccess($request);
+        if ($accessRedirect) {
+            return $accessRedirect;
+        }
+
+        if (!$this->isCfAdmin($request)) {
+            return redirect()
+                ->route('cf.threads.show', $threadId)
+                ->withErrors(['admin' => 'Anda tidak memiliki akses admin CF.']);
+        }
+
+        $thread = CfThread::query()->findOrFail($threadId);
+        $nextStatus = $thread->status === 'open' ? 'closed' : 'open';
+        $thread->update(['status' => $nextStatus]);
+
+        return redirect()
+            ->route('cf.threads.show', $thread->id)
+            ->with('success', $nextStatus === 'closed' ? 'Thread ditutup.' : 'Thread dibuka kembali.');
+    }
+
     private function ensureAccess(Request $request): ?RedirectResponse
     {
         if ((bool) $request->session()->get(self::SESSION_KEY, false)) {
@@ -237,5 +356,21 @@ class CommunityForumController extends Controller
         return redirect()
             ->route('cf.gate')
             ->withErrors(['passcode' => 'Masukkan passcode untuk mengakses menu CF.']);
+    }
+
+    private function isCfAdmin(Request $request): bool
+    {
+        $user = $request->user();
+        if (!$user || !isset($user->email)) {
+            return false;
+        }
+
+        $adminEmailsRaw = (string) env('CF_ADMIN_EMAILS', '');
+        if ($adminEmailsRaw === '') {
+            return false;
+        }
+
+        $adminEmails = array_filter(array_map('trim', explode(',', $adminEmailsRaw)));
+        return in_array(strtolower((string) $user->email), array_map('strtolower', $adminEmails), true);
     }
 }

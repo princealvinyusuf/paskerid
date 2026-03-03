@@ -104,6 +104,23 @@ Route::post('/cf/thread/{id}/reply', [CommunityForumController::class, 'storeRep
     ->middleware('auth')
     ->whereNumber('id')
     ->name('cf.replies.store');
+Route::post('/cf/thread/{id}/report', [CommunityForumController::class, 'reportThread'])
+    ->middleware('auth')
+    ->whereNumber('id')
+    ->name('cf.threads.report');
+Route::post('/cf/thread/{threadId}/reply/{replyId}/report', [CommunityForumController::class, 'reportReply'])
+    ->middleware('auth')
+    ->whereNumber('threadId')
+    ->whereNumber('replyId')
+    ->name('cf.replies.report');
+Route::post('/cf/thread/{id}/toggle-pin', [CommunityForumController::class, 'togglePin'])
+    ->middleware('auth')
+    ->whereNumber('id')
+    ->name('cf.threads.toggle-pin');
+Route::post('/cf/thread/{id}/toggle-status', [CommunityForumController::class, 'toggleStatus'])
+    ->middleware('auth')
+    ->whereNumber('id')
+    ->name('cf.threads.toggle-status');
 
 Route::get('/ketentuan-pengguna', function () {
     return view('ketentuan_pengguna');

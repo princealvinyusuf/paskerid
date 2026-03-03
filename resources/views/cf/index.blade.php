@@ -50,8 +50,29 @@
     </div>
 
     <div class="row g-4 mb-4">
+        <div class="col-12 col-lg-4">
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-body">
+                    <h2 class="h6 fw-bold mb-3">Hot Threads</h2>
+                    @forelse($hotThreads as $hotThread)
+                        <div class="mb-2 pb-2 border-bottom">
+                            <a href="{{ route('cf.threads.show', $hotThread->id) }}" class="text-decoration-none fw-semibold">
+                                {{ $hotThread->title }}
+                            </a>
+                            <div class="small text-muted">
+                                Balasan: {{ (int) ($hotThread->replies_count ?? 0) }} | Views: {{ number_format($hotThread->views_count) }}
+                            </div>
+                        </div>
+                    @empty
+                        <div class="text-muted small">Belum ada hot thread.</div>
+                    @endforelse
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-lg-8">
+            <div class="row g-4">
         @foreach($categories as $category)
-            <div class="col-12 col-md-6 col-lg-4">
+            <div class="col-12 col-md-6">
                 <div class="card h-100 border-0 shadow-sm rounded-4">
                     <div class="card-body p-3">
                         <h2 class="h6 fw-bold mb-1">{{ $category->name }}</h2>
@@ -60,6 +81,8 @@
                 </div>
             </div>
         @endforeach
+            </div>
+        </div>
     </div>
 
     <div class="card border-0 shadow-sm rounded-4">
@@ -85,7 +108,15 @@
                     <div class="small text-muted">
                         {{ $thread->category->name ?? '-' }} |
                         Oleh: {{ $thread->user->name ?? 'Anonim' }} |
-                        Tipe: {{ strtoupper($thread->author_type) }} |
+                        Tipe:
+                        @if($thread->author_type === 'employer')
+                            Perusahaan
+                        @elseif($thread->author_type === 'jobseeker')
+                            Pencari Kerja
+                        @else
+                            Komunitas
+                        @endif
+                        |
                         Balasan: {{ (int) ($thread->replies_count ?? 0) }} |
                         Views: {{ number_format($thread->views_count) }}
                         @if($thread->location)
