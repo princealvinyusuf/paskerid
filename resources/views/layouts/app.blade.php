@@ -82,7 +82,7 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link @if(request()->routeIs('cf.*')) active fw-bold @endif" href="{{ route('cf.gate') }}">
-                            CF (Underconstruction)
+                            CF (🚧)
                         </a>
                     </li>
                     @auth

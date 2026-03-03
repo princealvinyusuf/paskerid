@@ -4,7 +4,7 @@
 <div class="container py-5">
     <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-4 gap-3">
         <div>
-            <h1 class="h3 fw-bold mb-1">CF (Underconstruction)</h1>
+            <h1 class="h3 fw-bold mb-1">CF (🚧)</h1>
             <p class="text-muted mb-0">
                 Forum komunitas pasar kerja untuk pelaku usaha dan pencari kerja.
             </p>

@@ -6,7 +6,7 @@
         <div class="col-12 col-md-8 col-lg-6">
             <div class="card border-0 shadow-sm rounded-4">
                 <div class="card-body p-4 p-md-5">
-                    <h1 class="h4 fw-bold mb-2">CF (Underconstruction)</h1>
+                    <h1 class="h4 fw-bold mb-2">CF (🚧)</h1>
                     <p class="text-muted mb-4">
                         Menu ini sementara dibatasi passcode untuk tahap pengembangan.
                     </p>
