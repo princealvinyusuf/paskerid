@@ -432,6 +432,10 @@
     .navbar .nav-link, .navbar-brand {
         color: #fff !important;
     }
+    .navbar .nav-link,
+    .navbar .dropdown-item {
+        font-size: 0.9rem;
+    }
     .navbar .nav-link.active, .navbar .nav-link:focus, .navbar .nav-link:hover {
         color: var(--light-green) !important;
     }
