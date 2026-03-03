@@ -4,6 +4,7 @@
 <div class="container py-5">
     <div class="cf-hero d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-4 gap-3">
         <div>
+            <span class="cf-hero-icon"><i class="fa-solid fa-comments"></i></span>
             <div class="cf-section-title mb-1">Community Forum</div>
             <h1 class="h3 fw-bold mb-1">CF (🚧)</h1>
             <p class="text-muted mb-0">
@@ -106,7 +107,7 @@
     <div class="card border-0 shadow-sm rounded-4 mb-4">
         <div class="card-body">
             <div class="d-flex justify-content-between align-items-center mb-2">
-                <h2 class="h6 fw-bold mb-0">Matching Discussions</h2>
+                <h2 class="h6 fw-bold mb-0"><i class="fa-solid fa-wand-magic-sparkles me-1 text-primary"></i>Matching Discussions</h2>
                 <span class="small text-muted">
                     @if(($matchingSource ?? 'default') === 'filter')
                         Berdasarkan filter Anda
@@ -137,8 +138,9 @@
                     @endforeach
                 </div>
             @else
-                <div class="small text-muted">
-                    Belum ada rekomendasi yang cocok. Isi metadata jabatan/lokasi/tipe kerja untuk meningkatkan relevansi.
+                <div class="cf-empty-state">
+                    <i class="fa-regular fa-compass"></i>
+                    <div class="small">Belum ada rekomendasi yang cocok. Isi metadata jabatan/lokasi/tipe kerja untuk meningkatkan relevansi.</div>
                 </div>
             @endif
         </div>
@@ -147,7 +149,7 @@
     <div class="card border-0 shadow-sm rounded-4 mb-4">
         <div class="card-body">
             <div class="d-flex justify-content-between align-items-center mb-2">
-                <h2 class="h6 fw-bold mb-0">Featured Weekly Labor Discussions</h2>
+                <h2 class="h6 fw-bold mb-0"><i class="fa-solid fa-star me-1 text-warning"></i>Featured Weekly Labor Discussions</h2>
                 <span class="small text-muted">7 hari terakhir</span>
             </div>
             @if(isset($featuredWeeklyThreads) && $featuredWeeklyThreads->count() > 0)
@@ -191,8 +193,9 @@
                     @endforeach
                 </div>
             @else
-                <div class="small text-muted">
-                    Belum ada diskusi unggulan minggu ini.
+                <div class="cf-empty-state">
+                    <i class="fa-regular fa-star"></i>
+                    <div class="small">Belum ada diskusi unggulan minggu ini.</div>
                 </div>
             @endif
         </div>
@@ -202,7 +205,7 @@
         <div class="col-12 col-lg-4">
             <div class="card border-0 shadow-sm rounded-4 h-100">
                 <div class="card-body">
-                    <h2 class="h6 fw-bold mb-3">Hot Threads</h2>
+                    <h2 class="h6 fw-bold mb-3"><i class="fa-solid fa-fire me-1 text-danger"></i>Hot Threads</h2>
                     @forelse($hotThreads as $hotThread)
                         <div class="mb-2 pb-2 border-bottom">
                             <a href="{{ route('cf.threads.show', $hotThread->id) }}" class="text-decoration-none fw-semibold">
@@ -213,7 +216,10 @@
                             </div>
                         </div>
                     @empty
-                        <div class="text-muted small">Belum ada hot thread.</div>
+                        <div class="cf-empty-state">
+                            <i class="fa-regular fa-clock"></i>
+                            <div class="small">Belum ada hot thread.</div>
+                        </div>
                     @endforelse
                 </div>
             </div>
@@ -304,8 +310,11 @@
                     </div>
                 </div>
             @empty
-                <div class="p-4 text-center text-muted">
-                    Belum ada thread. Mulai diskusi pertama untuk komunitas pasar kerja.
+                <div class="p-4">
+                    <div class="cf-empty-state">
+                        <i class="fa-regular fa-comments"></i>
+                        <div>Belum ada thread. Mulai diskusi pertama untuk komunitas pasar kerja.</div>
+                    </div>
                 </div>
             @endforelse
 

@@ -4,6 +4,7 @@
 <div class="container py-5">
     <div class="cf-hero d-flex justify-content-between align-items-center mb-4">
         <div>
+            <span class="cf-hero-icon"><i class="fa-solid fa-chart-line"></i></span>
             <div class="cf-section-title mb-1">Insights</div>
             <h1 class="h4 fw-bold mb-1">CF Trend Analytics</h1>
             <p class="text-muted mb-0">Ringkasan tren diskusi pasar kerja untuk {{ $period }} hari terakhir.</p>
@@ -73,7 +74,10 @@
                             <strong>{{ (int) $count }}</strong>
                         </div>
                     @empty
-                        <div class="small text-muted">Belum ada data kategori untuk periode ini.</div>
+                        <div class="cf-empty-state">
+                            <i class="fa-regular fa-folder-open"></i>
+                            <div class="small">Belum ada data kategori untuk periode ini.</div>
+                        </div>
                     @endforelse
                 </div>
             </div>
@@ -88,7 +92,10 @@
                                 {{ $keyword }} ({{ (int) $count }})
                             </span>
                         @empty
-                            <div class="small text-muted">Belum ada keyword dominan.</div>
+                            <div class="cf-empty-state w-100">
+                                <i class="fa-solid fa-hashtag"></i>
+                                <div class="small">Belum ada keyword dominan.</div>
+                            </div>
                         @endforelse
                     </div>
                 </div>
@@ -107,7 +114,10 @@
                             <strong>{{ (int) $count }}</strong>
                         </div>
                     @empty
-                        <div class="small text-muted">Belum ada data jabatan.</div>
+                        <div class="cf-empty-state">
+                            <i class="fa-regular fa-address-card"></i>
+                            <div class="small">Belum ada data jabatan.</div>
+                        </div>
                     @endforelse
                 </div>
             </div>
@@ -124,7 +134,10 @@
                                 <strong>{{ (int) $count }}</strong>
                             </div>
                         @empty
-                            <div class="small text-muted">Belum ada data tipe kerja.</div>
+                            <div class="cf-empty-state">
+                                <i class="fa-solid fa-briefcase"></i>
+                                <div class="small">Belum ada data tipe kerja.</div>
+                            </div>
                         @endforelse
                     </div>
                     <div>
@@ -135,7 +148,10 @@
                                 <strong>{{ (int) $count }}</strong>
                             </div>
                         @empty
-                            <div class="small text-muted">Belum ada data lokasi.</div>
+                            <div class="cf-empty-state">
+                                <i class="fa-solid fa-location-dot"></i>
+                                <div class="small">Belum ada data lokasi.</div>
+                            </div>
                         @endforelse
                     </div>
                 </div>
@@ -162,7 +178,12 @@
                     </div>
                 </div>
             @empty
-                <div class="p-4 text-center text-muted">Belum ada thread untuk periode ini.</div>
+                <div class="p-4">
+                    <div class="cf-empty-state">
+                        <i class="fa-regular fa-chart-bar"></i>
+                        <div>Belum ada thread untuk periode ini.</div>
+                    </div>
+                </div>
             @endforelse
         </div>
     </div>

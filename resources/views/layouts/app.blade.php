@@ -172,6 +172,35 @@
                 color: #0f172a;
                 background: #e2e8f0;
             }
+
+            body.cf-theme .cf-hero-icon {
+                width: 38px;
+                height: 38px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 12px;
+                color: #1d4ed8;
+                background: linear-gradient(135deg, #dbeafe, #ecfeff);
+                border: 1px solid rgba(59, 130, 246, 0.2);
+                margin-bottom: 0.4rem;
+            }
+
+            body.cf-theme .cf-empty-state {
+                border: 1px dashed rgba(148, 163, 184, 0.5);
+                border-radius: 14px;
+                background: linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(248, 250, 252, 0.9));
+                padding: 1.1rem;
+                text-align: center;
+                color: #64748b;
+            }
+
+            body.cf-theme .cf-empty-state i {
+                font-size: 1.15rem;
+                margin-bottom: 0.35rem;
+                display: inline-block;
+                color: #64748b;
+            }
         </style>
     @endif
     @yield('head')

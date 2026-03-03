@@ -4,6 +4,7 @@
 <div class="container py-5">
     <div class="cf-hero d-flex justify-content-between align-items-center mb-4">
         <div>
+            <span class="cf-hero-icon"><i class="fa-solid fa-heart-pulse"></i></span>
             <div class="cf-section-title mb-1">Operations</div>
             <h1 class="h4 fw-bold mb-1">CF Health Monitor</h1>
             <p class="text-muted mb-0">Ringkasan operasional queue, moderasi, dan aktivitas terbaru.</p>
@@ -60,7 +61,7 @@
         <div class="col-12 col-lg-5">
             <div class="card border-0 shadow-sm rounded-4 h-100">
                 <div class="card-body">
-                    <h2 class="h6 fw-bold mb-3">Activity (24 Jam)</h2>
+                    <h2 class="h6 fw-bold mb-3"><i class="fa-regular fa-clock me-1 text-primary"></i>Activity (24 Jam)</h2>
                     <div class="d-flex justify-content-between border-bottom py-2 small">
                         <span>Threads dibuat</span>
                         <strong>{{ (int) ($activity24h['threads_created'] ?? 0) }}</strong>
@@ -88,7 +89,7 @@
             <div class="card border-0 shadow-sm rounded-4 h-100">
                 <div class="card-body p-0">
                     <div class="p-3 border-bottom">
-                        <h2 class="h6 fw-bold mb-0">Recent Failed Jobs</h2>
+                        <h2 class="h6 fw-bold mb-0"><i class="fa-solid fa-triangle-exclamation me-1 text-danger"></i>Recent Failed Jobs</h2>
                     </div>
                     @forelse($failedRecent as $row)
                         <div class="p-3 border-bottom">
@@ -100,8 +101,11 @@
                             <div class="small text-muted">{{ $row['summary'] }}</div>
                         </div>
                     @empty
-                        <div class="p-4 text-center text-muted">
-                            Tidak ada failed job terbaru.
+                        <div class="p-4">
+                            <div class="cf-empty-state">
+                                <i class="fa-regular fa-circle-check"></i>
+                                <div>Tidak ada failed job terbaru.</div>
+                            </div>
                         </div>
                     @endforelse
                 </div>

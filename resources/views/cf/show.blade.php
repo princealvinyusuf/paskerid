@@ -14,6 +14,7 @@
 
     <div class="cf-hero d-flex justify-content-between align-items-start mb-3 gap-2">
         <div>
+            <span class="cf-hero-icon"><i class="fa-solid fa-message"></i></span>
             <a href="{{ route('cf.index') }}" class="small text-decoration-none">&larr; Kembali ke forum</a>
             <span class="mx-1 text-muted">|</span>
             <a href="{{ route('cf.guidelines') }}" class="small text-decoration-none">Panduan Komunitas</a>
@@ -171,7 +172,7 @@
         <div class="card border-0 shadow-sm rounded-4 mb-4">
             <div class="card-body p-4">
                 <div class="d-flex justify-content-between align-items-center mb-2">
-                    <h3 class="h6 fw-bold mb-0">Program Terkait PaskerID</h3>
+                    <h3 class="h6 fw-bold mb-0"><i class="fa-solid fa-diagram-project me-1 text-primary"></i>Program Terkait PaskerID</h3>
                     <span class="small text-muted">Integrasi fase growth</span>
                 </div>
                 <div class="row g-2">
@@ -194,7 +195,7 @@
     @endif
 
     <div class="d-flex justify-content-between align-items-center mb-2">
-        <h2 class="h5 fw-bold mb-0">Balasan ({{ $thread->replies->count() }})</h2>
+        <h2 class="h5 fw-bold mb-0"><i class="fa-regular fa-comments me-1 text-primary"></i>Balasan ({{ $thread->replies->count() }})</h2>
     </div>
 
     <div class="card border-0 shadow-sm rounded-4 mb-4">
@@ -260,7 +261,12 @@
                     @endauth
                 </div>
             @empty
-                <div class="p-4 text-center text-muted">Belum ada balasan.</div>
+                <div class="p-4">
+                    <div class="cf-empty-state">
+                        <i class="fa-regular fa-message"></i>
+                        <div>Belum ada balasan.</div>
+                    </div>
+                </div>
             @endforelse
         </div>
     </div>

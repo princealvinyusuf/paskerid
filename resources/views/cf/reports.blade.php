@@ -4,6 +4,7 @@
 <div class="container py-5">
     <div class="cf-hero d-flex justify-content-between align-items-center mb-4">
         <div>
+            <span class="cf-hero-icon"><i class="fa-solid fa-shield-halved"></i></span>
             <div class="cf-section-title mb-1">Admin Workspace</div>
             <h1 class="h4 fw-bold mb-1">CF Moderation Center</h1>
             <p class="text-muted mb-0">Kelola laporan thread dan balasan komunitas.</p>
@@ -192,8 +193,11 @@
                     </div>
                 </div>
             @empty
-                <div class="p-4 text-center text-muted">
-                    Belum ada laporan untuk filter ini.
+                <div class="p-4">
+                    <div class="cf-empty-state">
+                        <i class="fa-regular fa-folder-open"></i>
+                        <div>Belum ada laporan untuk filter ini.</div>
+                    </div>
                 </div>
             @endforelse
 
