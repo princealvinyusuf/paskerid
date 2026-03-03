@@ -118,7 +118,12 @@
                     </div>
                     <div class="small text-muted">
                         {{ $thread->category->name ?? '-' }} |
-                        Oleh: {{ $thread->user->name ?? 'Anonim' }} |
+                        Oleh: {{ $thread->user->name ?? 'Anonim' }}
+                        @php $authorReputation = $reputationMap[$thread->user_id] ?? null; @endphp
+                        @if($authorReputation)
+                            <span class="badge text-bg-light border">{{ $authorReputation['badge'] }}</span>
+                        @endif
+                        |
                         Tipe:
                         @if($thread->author_type === 'employer')
                             Perusahaan

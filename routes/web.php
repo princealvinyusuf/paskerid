@@ -131,6 +131,11 @@ Route::delete('/cf/thread/{threadId}/reply/{replyId}', [CommunityForumController
     ->whereNumber('threadId')
     ->whereNumber('replyId')
     ->name('cf.replies.destroy');
+Route::post('/cf/thread/{threadId}/reply/{replyId}/toggle-helpful', [CommunityForumController::class, 'toggleHelpfulReply'])
+    ->middleware('auth')
+    ->whereNumber('threadId')
+    ->whereNumber('replyId')
+    ->name('cf.replies.toggle-helpful');
 Route::post('/cf/thread/{id}/report', [CommunityForumController::class, 'reportThread'])
     ->middleware('auth')
     ->whereNumber('id')

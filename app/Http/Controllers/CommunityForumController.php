@@ -107,12 +107,21 @@ class CommunityForumController extends Controller
                 ->count()
             : 0;
 
+        $threadUserIds = [];
+        foreach ($threads as $thread) {
+            if (isset($thread->user_id)) {
+                $threadUserIds[] = (int) $thread->user_id;
+            }
+        }
+        $reputationMap = $this->buildReputationMap($threadUserIds);
+
         return view('cf.index', [
             'categories' => $categories,
             'threads' => $threads,
             'hotThreads' => $hotThreads,
             'isCfAdmin' => $this->isCfAdmin($request),
             'unreadNotificationsCount' => $unreadNotificationsCount,
+            'reputationMap' => $reputationMap,
             'filters' => [
                 'category' => $categorySlug,
                 'author_type' => $authorType,
@@ -315,9 +324,18 @@ class CommunityForumController extends Controller
         $thread->increment('views_count');
         $thread->views_count = (int) $thread->views_count + 1;
 
+        $userIds = [(int) $thread->user_id];
+        foreach ($thread->replies as $reply) {
+            if (isset($reply->user_id)) {
+                $userIds[] = (int) $reply->user_id;
+            }
+        }
+        $reputationMap = $this->buildReputationMap($userIds);
+
         return view('cf.show', [
             'thread' => $thread,
             'isCfAdmin' => $this->isCfAdmin($request),
+            'reputationMap' => $reputationMap,
         ]);
     }
 
@@ -531,6 +549,39 @@ class CommunityForumController extends Controller
         return redirect()
             ->route('cf.threads.show', $thread->id)
             ->with('success', 'Balasan berhasil dihapus.');
+    }
+
+    public function toggleHelpfulReply(Request $request, int $threadId, int $replyId): RedirectResponse
+    {
+        $accessRedirect = $this->ensureAccess($request);
+        if ($accessRedirect) {
+            return $accessRedirect;
+        }
+
+        if (!$request->user()) {
+            return redirect()->route('login');
+        }
+
+        $thread = CfThread::query()->findOrFail($threadId);
+        $reply = CfReply::query()
+            ->where('cf_thread_id', $thread->id)
+            ->findOrFail($replyId);
+
+        $isThreadOwner = (int) $thread->user_id === (int) $request->user()->id;
+        $isAdmin = $this->isCfAdmin($request);
+        if (!$isThreadOwner && !$isAdmin) {
+            return redirect()
+                ->route('cf.threads.show', $thread->id)
+                ->withErrors(['reply' => 'Hanya pembuat thread atau admin yang dapat menandai helpful.']);
+        }
+
+        $reply->update([
+            'is_solution' => !$reply->is_solution,
+        ]);
+
+        return redirect()
+            ->route('cf.threads.show', $thread->id)
+            ->with('success', $reply->is_solution ? 'Balasan ditandai helpful.' : 'Tanda helpful dihapus.');
     }
 
     public function reportThread(Request $request, int $threadId): RedirectResponse
@@ -894,5 +945,70 @@ class CommunityForumController extends Controller
         }
 
         CfNotification::query()->insert($rows);
+    }
+
+    private function buildReputationMap(array $userIds): array
+    {
+        $ids = array_values(array_unique(array_filter(array_map('intval', $userIds), fn ($id) => $id > 0)));
+        if (empty($ids)) {
+            return [];
+        }
+
+        $threadCounts = CfThread::query()
+            ->selectRaw('user_id, COUNT(*) as total')
+            ->whereIn('user_id', $ids)
+            ->groupBy('user_id')
+            ->pluck('total', 'user_id')
+            ->all();
+
+        $replyCounts = CfReply::query()
+            ->selectRaw('user_id, COUNT(*) as total')
+            ->whereIn('user_id', $ids)
+            ->groupBy('user_id')
+            ->pluck('total', 'user_id')
+            ->all();
+
+        $helpfulCounts = CfReply::query()
+            ->selectRaw('user_id, COUNT(*) as total')
+            ->whereIn('user_id', $ids)
+            ->where('is_solution', true)
+            ->groupBy('user_id')
+            ->pluck('total', 'user_id')
+            ->all();
+
+        $map = [];
+        foreach ($ids as $id) {
+            $threadTotal = (int) ($threadCounts[$id] ?? 0);
+            $replyTotal = (int) ($replyCounts[$id] ?? 0);
+            $helpfulTotal = (int) ($helpfulCounts[$id] ?? 0);
+            $score = ($threadTotal * 5) + ($replyTotal * 2) + ($helpfulTotal * 10);
+
+            $map[$id] = [
+                'threads' => $threadTotal,
+                'replies' => $replyTotal,
+                'helpful' => $helpfulTotal,
+                'score' => $score,
+                'badge' => $this->resolveReputationBadge($score, $helpfulTotal),
+            ];
+        }
+
+        return $map;
+    }
+
+    private function resolveReputationBadge(int $score, int $helpfulTotal): string
+    {
+        if ($score >= 120 || $helpfulTotal >= 10) {
+            return 'Kontributor Tepercaya';
+        }
+
+        if ($score >= 40 || $helpfulTotal >= 3) {
+            return 'Kontributor Aktif';
+        }
+
+        if ($score > 0) {
+            return 'Kontributor Baru';
+        }
+
+        return 'Pengguna Baru';
     }
 }

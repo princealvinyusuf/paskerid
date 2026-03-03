@@ -24,9 +24,14 @@
                 <a href="{{ route('cf.admin.reports.index') }}" class="small text-decoration-none">Moderation Center</a>
             @endif
             <h1 class="h4 fw-bold mt-2 mb-1">{{ $thread->title }}</h1>
+            @php $threadAuthorRep = $reputationMap[$thread->user_id] ?? null; @endphp
             <div class="small text-muted">
                 {{ $thread->category->name ?? '-' }} |
                 Oleh {{ $thread->user->name ?? 'Anonim' }} |
+                @if($threadAuthorRep)
+                    <span class="badge text-bg-light border">{{ $threadAuthorRep['badge'] }}</span>
+                    <span>Skor: {{ $threadAuthorRep['score'] }}</span> |
+                @endif
                 @if($thread->author_type === 'employer')
                     Perusahaan
                 @elseif($thread->author_type === 'jobseeker')
@@ -118,11 +123,30 @@
         <div class="card-body p-0">
             @forelse($thread->replies as $reply)
                 <div class="p-3 border-bottom" id="reply-{{ $reply->id }}">
+                    @php $replyAuthorRep = $reputationMap[$reply->user_id] ?? null; @endphp
                     <div class="small text-muted mb-1">
-                        {{ $reply->user->name ?? 'Anonim' }} | {{ $reply->created_at?->format('d M Y H:i') }}
+                        {{ $reply->user->name ?? 'Anonim' }}
+                        @if($replyAuthorRep)
+                            <span class="badge text-bg-light border">{{ $replyAuthorRep['badge'] }}</span>
+                        @endif
+                        | {{ $reply->created_at?->format('d M Y H:i') }}
                     </div>
                     <div style="white-space: pre-line;">{{ $reply->body }}</div>
+                    @if($reply->is_solution)
+                        <div class="mt-2">
+                            <span class="badge text-bg-success">Helpful</span>
+                        </div>
+                    @endif
                     @auth
+                        @if((int) auth()->id() === (int) $thread->user_id || ($isCfAdmin ?? false))
+                            <form method="POST" action="{{ route('cf.replies.toggle-helpful', ['threadId' => $thread->id, 'replyId' => $reply->id]) }}" class="mt-2">
+                                @csrf
+                                <button type="submit" class="btn btn-outline-success btn-sm">
+                                    {{ $reply->is_solution ? 'Batalkan Helpful' : 'Tandai Helpful' }}
+                                </button>
+                            </form>
+                        @endif
+
                         @if((int) auth()->id() === (int) $reply->user_id || ($isCfAdmin ?? false))
                             <div class="d-flex flex-wrap gap-2 mt-2">
                                 <a href="{{ route('cf.replies.edit', ['threadId' => $thread->id, 'replyId' => $reply->id]) }}" class="btn btn-outline-primary btn-sm">
