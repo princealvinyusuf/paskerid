@@ -92,7 +92,7 @@
                         <h2 class="h6 fw-bold mb-0"><i class="fa-solid fa-triangle-exclamation me-1 text-danger"></i>Recent Failed Jobs</h2>
                     </div>
                     @forelse($failedRecent as $row)
-                        <div class="p-3 border-bottom">
+                        <div class="p-3 border-bottom cf-list-item">
                             <div class="small mb-1">
                                 <strong>#{{ $row['id'] }}</strong> |
                                 Queue: {{ $row['queue'] }} |

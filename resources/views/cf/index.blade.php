@@ -123,7 +123,7 @@
                     @foreach($matchingThreads as $match)
                         <div class="col-12 col-md-6 col-lg-4">
                             <div class="cf-soft p-3 h-100">
-                                <a href="{{ route('cf.threads.show', $match->id) }}" class="fw-semibold text-decoration-none d-block mb-1">
+                                <a href="{{ route('cf.threads.show', $match->id) }}" class="fw-semibold text-decoration-none d-block mb-1 cf-link-lift">
                                     {{ $match->title }}
                                 </a>
                                 <div class="small text-muted">
@@ -168,7 +168,7 @@
                                         <span class="badge text-bg-light border">{{ $featured->experience_level }}</span>
                                     @endif
                                 </div>
-                                <a href="{{ route('cf.threads.show', $featured->id) }}" class="fw-semibold text-decoration-none d-block mb-1">
+                                <a href="{{ route('cf.threads.show', $featured->id) }}" class="fw-semibold text-decoration-none d-block mb-1 cf-link-lift">
                                     {{ $featured->title }}
                                 </a>
                                 <div class="small text-muted">
@@ -207,8 +207,8 @@
                 <div class="card-body">
                     <h2 class="h6 fw-bold mb-3"><i class="fa-solid fa-fire me-1 text-danger"></i>Hot Threads</h2>
                     @forelse($hotThreads as $hotThread)
-                        <div class="mb-2 pb-2 border-bottom">
-                            <a href="{{ route('cf.threads.show', $hotThread->id) }}" class="text-decoration-none fw-semibold">
+                        <div class="mb-2 pb-2 border-bottom cf-list-item rounded-3 px-2 py-2">
+                            <a href="{{ route('cf.threads.show', $hotThread->id) }}" class="text-decoration-none fw-semibold cf-link-lift">
                                 {{ $hotThread->title }}
                             </a>
                             <div class="small text-muted">
@@ -248,9 +248,9 @@
             </div>
 
             @forelse($threads as $thread)
-                <div class="p-3 border-bottom">
+                <div class="p-3 border-bottom cf-list-item">
                     <div class="d-flex flex-wrap align-items-center gap-2 mb-1">
-                        <a href="{{ route('cf.threads.show', $thread->id) }}" class="fw-semibold text-decoration-none">
+                        <a href="{{ route('cf.threads.show', $thread->id) }}" class="fw-semibold text-decoration-none cf-link-lift">
                             {{ $thread->title }}
                         </a>
                         @if($thread->is_pinned)

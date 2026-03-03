@@ -166,8 +166,8 @@
                 <span class="small text-muted">{{ $topThreads->count() }} thread</span>
             </div>
             @forelse($topThreads as $thread)
-                <div class="p-3 border-bottom">
-                    <a href="{{ route('cf.threads.show', $thread->id) }}" class="fw-semibold text-decoration-none">
+                <div class="p-3 border-bottom cf-list-item">
+                    <a href="{{ route('cf.threads.show', $thread->id) }}" class="fw-semibold text-decoration-none cf-link-lift">
                         {{ $thread->title }}
                     </a>
                     <div class="small text-muted">

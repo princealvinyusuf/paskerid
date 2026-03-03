@@ -40,6 +40,12 @@
                 border: 1px solid rgba(148, 163, 184, 0.18) !important;
                 box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08) !important;
                 background: linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.88));
+                transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+            }
+            body.cf-theme .card:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 14px 34px rgba(15, 23, 42, 0.12) !important;
+                border-color: rgba(59, 130, 246, 0.22) !important;
             }
             body.cf-theme .card .card-body {
                 padding: 1.1rem 1.2rem;
@@ -63,6 +69,10 @@
             body.cf-theme .btn:hover {
                 transform: translateY(-1px);
                 box-shadow: 0 8px 18px rgba(15, 23, 42, 0.15);
+            }
+            body.cf-theme .btn:focus-visible {
+                outline: none;
+                box-shadow: 0 0 0 0.24rem rgba(59, 130, 246, 0.2) !important;
             }
 
             body.cf-theme .btn-success,
@@ -151,6 +161,12 @@
                 background: rgba(255, 255, 255, 0.72);
                 border: 1px solid rgba(148, 163, 184, 0.14);
                 border-radius: 14px;
+                transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+            }
+            body.cf-theme .cf-soft:hover {
+                transform: translateY(-1px);
+                border-color: rgba(99, 102, 241, 0.24);
+                box-shadow: 0 10px 24px rgba(15, 23, 42, 0.1);
             }
 
             body.cf-theme .cf-section-title {
@@ -200,6 +216,29 @@
                 margin-bottom: 0.35rem;
                 display: inline-block;
                 color: #64748b;
+            }
+
+            body.cf-theme .cf-list-item {
+                transition: background-color 0.2s ease, transform 0.2s ease;
+            }
+            body.cf-theme .cf-list-item:hover {
+                background-color: rgba(248, 250, 252, 0.9);
+            }
+
+            body.cf-theme .cf-link-lift {
+                transition: color 0.2s ease;
+            }
+            body.cf-theme .cf-link-lift:hover {
+                color: #1d4ed8 !important;
+            }
+
+            body.cf-theme a:focus-visible,
+            body.cf-theme button:focus-visible,
+            body.cf-theme input:focus-visible,
+            body.cf-theme textarea:focus-visible,
+            body.cf-theme select:focus-visible {
+                outline: 2px solid rgba(59, 130, 246, 0.35);
+                outline-offset: 2px;
             }
         </style>
     @endif

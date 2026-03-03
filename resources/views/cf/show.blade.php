@@ -179,7 +179,7 @@
                     @foreach($integrationLinks as $item)
                         <div class="col-12 col-md-6">
                             <a href="{{ $item['url'] }}" class="text-decoration-none">
-                                <div class="border rounded-3 p-3 h-100">
+                                <div class="cf-soft p-3 h-100">
                                     <div class="d-flex justify-content-between align-items-center mb-1">
                                         <strong class="text-dark">{{ $item['title'] }}</strong>
                                         <span class="badge text-bg-light border text-dark">{{ $item['badge'] }}</span>
@@ -201,7 +201,7 @@
     <div class="card border-0 shadow-sm rounded-4 mb-4">
         <div class="card-body p-0">
             @forelse($thread->replies as $reply)
-                <div class="p-3 border-bottom" id="reply-{{ $reply->id }}">
+                <div class="p-3 border-bottom cf-list-item" id="reply-{{ $reply->id }}">
                     @php $replyAuthorRep = $reputationMap[$reply->user_id] ?? null; @endphp
                     @php $replyAuthorVerification = $verificationMap[$reply->user_id] ?? null; @endphp
                     <div class="small text-muted mb-1">

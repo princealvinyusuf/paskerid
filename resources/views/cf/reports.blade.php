@@ -106,7 +106,7 @@
                     $target = $targetMap[$report->id] ?? ['exists' => false, 'label' => '-', 'url' => null];
                     $audits = $auditMap[$report->id] ?? [];
                 @endphp
-                <div class="p-3 border-bottom">
+                <div class="p-3 border-bottom cf-list-item">
                     <div class="d-flex flex-column flex-lg-row justify-content-between gap-3">
                         <div class="flex-grow-1">
                             <div class="d-flex flex-wrap gap-2 align-items-center mb-1">
@@ -134,7 +134,7 @@
                             <div class="mb-1">
                                 <strong>Target:</strong>
                                 @if($target['url'])
-                                    <a href="{{ $target['url'] }}" class="text-decoration-none">{{ $target['label'] }}</a>
+                                    <a href="{{ $target['url'] }}" class="text-decoration-none cf-link-lift">{{ $target['label'] }}</a>
                                 @else
                                     <span class="text-muted">{{ $target['label'] }}</span>
                                 @endif
