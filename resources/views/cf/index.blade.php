@@ -90,6 +90,47 @@
         </div>
     </div>
 
+    <div class="card border-0 shadow-sm rounded-4 mb-4">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <h2 class="h6 fw-bold mb-0">Matching Discussions</h2>
+                <span class="small text-muted">
+                    @if(($matchingSource ?? 'default') === 'filter')
+                        Berdasarkan filter Anda
+                    @elseif(($matchingSource ?? 'default') === 'activity')
+                        Berdasarkan aktivitas Anda
+                    @else
+                        Belum cukup data preferensi
+                    @endif
+                </span>
+            </div>
+            @if(!empty($matchingThreads))
+                <div class="row g-3">
+                    @foreach($matchingThreads as $match)
+                        <div class="col-12 col-md-6 col-lg-4">
+                            <div class="border rounded-3 p-3 h-100">
+                                <a href="{{ route('cf.threads.show', $match->id) }}" class="fw-semibold text-decoration-none d-block mb-1">
+                                    {{ $match->title }}
+                                </a>
+                                <div class="small text-muted">
+                                    {{ $match->category->name ?? '-' }} |
+                                    {{ $match->work_type ?? 'Tipe kerja belum diisi' }}
+                                    @if(!empty($match->city) || !empty($match->province))
+                                        | {{ $match->city ?? '-' }}{{ (!empty($match->city) && !empty($match->province)) ? ', ' : '' }}{{ $match->province ?? '' }}
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            @else
+                <div class="small text-muted">
+                    Belum ada rekomendasi yang cocok. Isi metadata jabatan/lokasi/tipe kerja untuk meningkatkan relevansi.
+                </div>
+            @endif
+        </div>
+    </div>
+
     <div class="row g-4 mb-4">
         <div class="col-12 col-lg-4">
             <div class="card border-0 shadow-sm rounded-4 h-100">

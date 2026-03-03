@@ -62,6 +62,14 @@ class CommunityForumController extends Controller
         $province = trim((string) $request->query('province', ''));
         $city = trim((string) $request->query('city', ''));
         $jobRole = trim((string) $request->query('job_role', ''));
+        $matchingProfile = $this->resolveMatchingProfile($request, [
+            'job_role' => $jobRole,
+            'province' => $province,
+            'city' => $city,
+            'work_type' => $workType,
+            'experience_level' => $experienceLevel,
+            'sector' => '',
+        ]);
 
         $categories = CfCategory::query()
             ->where('is_active', true)
@@ -115,6 +123,12 @@ class CommunityForumController extends Controller
             ->orderByDesc('created_at');
 
         $threads = $threadsQuery->paginate(12)->withQueryString();
+        $excludeThreadIds = [];
+        foreach ($threads as $thread) {
+            if (isset($thread->id)) {
+                $excludeThreadIds[] = (int) $thread->id;
+            }
+        }
 
         $hotThreads = CfThread::query()
             ->with(['category:id,name,slug', 'user:id,name'])
@@ -125,6 +139,12 @@ class CommunityForumController extends Controller
             ->orderByDesc('last_activity_at')
             ->limit(5)
             ->get();
+
+        $matchingThreads = $this->buildMatchingThreads(
+            $matchingProfile['profile'],
+            $excludeThreadIds,
+            $request->user() ? (int) $request->user()->id : null
+        );
 
         $unreadNotificationsCount = $request->user()
             ? (int) CfNotification::query()
@@ -145,6 +165,8 @@ class CommunityForumController extends Controller
             'categories' => $categories,
             'threads' => $threads,
             'hotThreads' => $hotThreads,
+            'matchingThreads' => $matchingThreads,
+            'matchingSource' => $matchingProfile['source'],
             'isCfAdmin' => $this->isCfAdmin($request),
             'unreadNotificationsCount' => $unreadNotificationsCount,
             'reputationMap' => $reputationMap,
@@ -1065,5 +1087,124 @@ class CommunityForumController extends Controller
         }
 
         return 'Pengguna Baru';
+    }
+
+    private function resolveMatchingProfile(Request $request, array $inputFilters): array
+    {
+        $filterProfile = [
+            'job_role' => trim((string) ($inputFilters['job_role'] ?? '')),
+            'province' => trim((string) ($inputFilters['province'] ?? '')),
+            'city' => trim((string) ($inputFilters['city'] ?? '')),
+            'work_type' => trim((string) ($inputFilters['work_type'] ?? '')),
+            'experience_level' => trim((string) ($inputFilters['experience_level'] ?? '')),
+            'sector' => trim((string) ($inputFilters['sector'] ?? '')),
+        ];
+        if ($this->hasMatchingProfile($filterProfile)) {
+            return ['profile' => $filterProfile, 'source' => 'filter'];
+        }
+
+        $user = $request->user();
+        if (!$user) {
+            return ['profile' => $filterProfile, 'source' => 'default'];
+        }
+
+        $latestThread = CfThread::query()
+            ->where('user_id', (int) $user->id)
+            ->latest('created_at')
+            ->first(['job_role', 'province', 'city', 'work_type', 'experience_level', 'sector']);
+        if ($latestThread) {
+            $threadProfile = [
+                'job_role' => trim((string) ($latestThread->job_role ?? '')),
+                'province' => trim((string) ($latestThread->province ?? '')),
+                'city' => trim((string) ($latestThread->city ?? '')),
+                'work_type' => trim((string) ($latestThread->work_type ?? '')),
+                'experience_level' => trim((string) ($latestThread->experience_level ?? '')),
+                'sector' => trim((string) ($latestThread->sector ?? '')),
+            ];
+            if ($this->hasMatchingProfile($threadProfile)) {
+                return ['profile' => $threadProfile, 'source' => 'activity'];
+            }
+        }
+
+        $latestReply = CfReply::query()
+            ->with('thread:id,job_role,province,city,work_type,experience_level,sector')
+            ->where('user_id', (int) $user->id)
+            ->latest('created_at')
+            ->first();
+        if ($latestReply && $latestReply->thread) {
+            $replyProfile = [
+                'job_role' => trim((string) ($latestReply->thread->job_role ?? '')),
+                'province' => trim((string) ($latestReply->thread->province ?? '')),
+                'city' => trim((string) ($latestReply->thread->city ?? '')),
+                'work_type' => trim((string) ($latestReply->thread->work_type ?? '')),
+                'experience_level' => trim((string) ($latestReply->thread->experience_level ?? '')),
+                'sector' => trim((string) ($latestReply->thread->sector ?? '')),
+            ];
+            if ($this->hasMatchingProfile($replyProfile)) {
+                return ['profile' => $replyProfile, 'source' => 'activity'];
+            }
+        }
+
+        return ['profile' => $filterProfile, 'source' => 'default'];
+    }
+
+    private function hasMatchingProfile(array $profile): bool
+    {
+        foreach ($profile as $value) {
+            if (trim((string) $value) !== '') {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private function buildMatchingThreads(array $profile, array $excludeIds, ?int $currentUserId): array
+    {
+        if (!$this->hasMatchingProfile($profile)) {
+            return [];
+        }
+
+        $query = CfThread::query()
+            ->with(['category:id,name,slug', 'user:id,name'])
+            ->withCount('replies')
+            ->where('status', 'open');
+
+        if (!empty($excludeIds)) {
+            $query->whereNotIn('id', $excludeIds);
+        }
+
+        if ($currentUserId) {
+            $query->where('user_id', '!=', $currentUserId);
+        }
+
+        $query->where(function ($similarQuery) use ($profile) {
+            if ($profile['job_role'] !== '') {
+                $similarQuery->orWhere('job_role', 'like', '%' . $profile['job_role'] . '%');
+            }
+            if ($profile['province'] !== '') {
+                $similarQuery->orWhere('province', 'like', '%' . $profile['province'] . '%');
+            }
+            if ($profile['city'] !== '') {
+                $similarQuery->orWhere('city', 'like', '%' . $profile['city'] . '%');
+            }
+            if ($profile['work_type'] !== '') {
+                $similarQuery->orWhere('work_type', $profile['work_type']);
+            }
+            if ($profile['experience_level'] !== '') {
+                $similarQuery->orWhere('experience_level', $profile['experience_level']);
+            }
+            if ($profile['sector'] !== '') {
+                $similarQuery->orWhere('sector', 'like', '%' . $profile['sector'] . '%');
+            }
+        });
+
+        $threads = $query
+            ->orderByDesc('is_pinned')
+            ->orderByDesc('last_activity_at')
+            ->orderByDesc('created_at')
+            ->limit(6)
+            ->get();
+
+        return $threads->all();
     }
 }
