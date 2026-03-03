@@ -273,7 +273,7 @@
                 <div class="card-body p-4">
                     <div class="d-flex align-items-center justify-content-between mb-3">
                         <div>
-                            <h5 class="mb-0"><i class="bi bi-graph-up-arrow me-2"></i>Statistik Walk In</h5>
+                            <h5 class="mb-0"><i class="bi bi-graph-up-arrow me-2"></i>Hasil Evaluasi Walk In</h5>
                             <div class="text-muted small">Dashboard interaktif dari data survei, peserta hadir, company, dan initiator.</div>
                         </div>
                         <div class="d-flex align-items-center gap-2">
