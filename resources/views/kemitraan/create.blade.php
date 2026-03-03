@@ -2170,7 +2170,7 @@
             const isGallery = which === 'gallery';
             const isSchedule = which === 'schedule';
             const isSurvey = which === 'survey';
-            const isStatistik = which === 'statistik';
+            const isStatistik = which === 'hasil_evaluasi';
             btnInfo.classList.toggle('active', isInfo);
             btnForm.classList.toggle('active', isForm);
             btnGallery.classList.toggle('active', isGallery);
@@ -2280,10 +2280,11 @@
             const ok = await ensureSurveyUnlocked();
             if (ok) setActive('survey');
         });
-        btnStatistik.addEventListener('click', () => setActive('statistik'));
+        btnStatistik.addEventListener('click', () => setActive('hasil_evaluasi'));
 
-        const urlPanel = new URLSearchParams(window.location.search).get('panel');
-        const allowedPanels = ['info', 'form', 'gallery', 'schedule', 'survey', 'statistik'];
+        const urlPanelRaw = new URLSearchParams(window.location.search).get('panel');
+        const urlPanel = urlPanelRaw === 'statistik' ? 'hasil_evaluasi' : urlPanelRaw;
+        const allowedPanels = ['info', 'form', 'gallery', 'schedule', 'survey', 'hasil_evaluasi'];
         const initialPanel = allowedPanels.includes(urlPanel) ? urlPanel : 'info';
         if (initialPanel === 'survey') {
             ensureSurveyUnlocked().then((ok) => setActive(ok ? 'survey' : 'info'));
