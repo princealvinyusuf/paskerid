@@ -211,6 +211,10 @@ Route::get('/media-sosial', function () {
     return view('media_sosial');
 })->name('media_sosial');
 
+Route::get('/pusat-bantuan', function () {
+    return view('pusat_bantuan');
+})->name('pusat_bantuan');
+
 Route::get('/miniJobi', [MiniJobiController::class, 'index'])->name('minijobi.index');
 Route::get('/miniJobi/{id}', [MiniJobiController::class, 'show'])
     ->whereNumber('id')

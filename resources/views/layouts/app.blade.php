@@ -475,11 +475,12 @@
                         <a class="nav-link @if(request()->routeIs('informasi_pasar_kerja.index')) active fw-bold @endif" href="{{ route('informasi_pasar_kerja.index') }}">Informasi Pasar Kerja</a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle @if(request()->routeIs('virtual-karir.index')) active fw-bold @endif" href="#" id="layananDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle @if(request()->routeIs('virtual-karir.index') || request()->routeIs('pusat_bantuan')) active fw-bold @endif" href="#" id="layananDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Layanan
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="layananDropdown">
                             <li><a class="dropdown-item @if(request()->routeIs('virtual-karir.index')) active fw-bold @endif" href="{{ route('virtual-karir.index') }}">Virtual Karir</a></li>
+                            <li><a class="dropdown-item @if(request()->routeIs('pusat_bantuan')) active fw-bold @endif" href="{{ route('pusat_bantuan') }}">Pusat Bantuan</a></li>
                             <li><a class="dropdown-item" href="https://microlearning-paskerid.kemnaker.go.id/" target="_blank">Microlearning</a></li>
                             <li><a class="dropdown-item" href="https://paskerid.kemnaker.go.id/RIASEC/" target="_blank">Tes Minat & Karir</a></li>
                         </ul>
@@ -602,6 +603,7 @@
                         <div class="fw-bold mb-2">Layanan</div>
                         <div><a href="{{ route('minijobi.index') }}" class="text-white text-decoration-none">miniJobi</a></div>
                         <div><a href="{{ route('virtual-karir.index') }}" class="text-white text-decoration-none">Virtual Karir</a></div>
+                        <div><a href="{{ route('pusat_bantuan') }}" class="text-white text-decoration-none">Pusat Bantuan</a></div>
                         
                         <!-- <div><a href="{{ route('informasi.index') }}" class="text-white text-decoration-none">Data</a></div> -->
                         <div><a href="https://microlearning-paskerid.kemnaker.go.id/" target="_blank" class="text-white text-decoration-none">Microlearning</a></div>
