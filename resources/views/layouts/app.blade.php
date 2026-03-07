@@ -781,11 +781,10 @@
     }
     .navbar .nav-link,
     .navbar .dropdown-item {
-        font-size: 0.6rem;
+        font-size: 0.5rem;
     }
     .navbar .nav-link {
-        padding-left: 0.45rem;
-        padding-right: 0.45rem;
+        padding: 0.2rem 0.3rem;
     }
     .navbar .nav-link.active, .navbar .nav-link:focus, .navbar .nav-link:hover {
         color: var(--light-green) !important;
