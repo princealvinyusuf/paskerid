@@ -497,7 +497,7 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link @if(request()->routeIs('kemitraan.create')) active fw-bold @endif" href="{{ route('kemitraan.create') }}">
-                            <i class="bi bi-handshake me-1"></i> Walk In Interview
+                            Walk In Interview
                         </a>
                     </li> 
                     <li class="nav-item">
