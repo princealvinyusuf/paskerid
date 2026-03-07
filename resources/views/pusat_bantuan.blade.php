@@ -164,7 +164,7 @@
             </ol>
         </div>
 
-        <div class="faq-category mb-0">
+        <div class="faq-category mb-4">
             <h4 class="fw-bold mb-3">Pelaporan WLKP</h4>
             <ol class="ps-3" start="15">
                 <li class="mb-4">
@@ -196,6 +196,223 @@
                         <li>Isi sesuai alamat pada NIB, atau</li>
                         <li>Minta admin pusat melakukan update data.</li>
                     </ul>
+                </li>
+            </ol>
+        </div>
+
+        <div class="faq-category mb-4">
+            <h4 class="fw-bold mb-3">Perubahan Data Perusahaan</h4>
+            <ol class="ps-3" start="18">
+                <li class="mb-4">
+                    <h6 class="fw-bold">Bagaimana jika terjadi perubahan nama atau alamat perusahaan?</h6>
+                    <p class="mb-2">Hubungi admin WLKP dengan melampirkan:</p>
+                    <ul>
+                        <li>NIB terbaru.</li>
+                        <li>Dokumen perubahan perusahaan.</li>
+                    </ul>
+                </li>
+                <li class="mb-4">
+                    <h6 class="fw-bold">Bagaimana jika terjadi perubahan pemilik atau pengurus?</h6>
+                    <p class="mb-2">Lampirkan:</p>
+                    <ul>
+                        <li>Struktur organisasi perusahaan.</li>
+                        <li>Akta pendirian perusahaan.</li>
+                    </ul>
+                    <p class="mb-0">Admin pusat akan melakukan pembaruan data.</p>
+                </li>
+                <li class="mb-4">
+                    <h6 class="fw-bold">Bagaimana jika tanggal berdiri perusahaan salah?</h6>
+                    <p class="mb-0">Kirim Akta Pendirian Perusahaan kepada admin WLKP untuk pembaruan data.</p>
+                </li>
+                <li class="mb-0">
+                    <h6 class="fw-bold">Bagaimana jika terjadi perubahan KBLI?</h6>
+                    <p class="mb-0">Kirim dokumen NIB terbaru kepada admin WLKP untuk dilakukan update.</p>
+                </li>
+            </ol>
+        </div>
+
+        <div class="faq-category mb-4">
+            <h4 class="fw-bold mb-3">Perpindahan atau Penutupan Perusahaan</h4>
+            <ol class="ps-3" start="22">
+                <li class="mb-4">
+                    <h6 class="fw-bold">Bagaimana mekanisme perpindahan alamat perusahaan?</h6>
+                    <p class="mb-2">Langkahnya:</p>
+                    <ul>
+                        <li>Melapor ke Disnaker setempat.</li>
+                        <li>Pengawas membuat Berita Acara Perpindahan.</li>
+                        <li>Dokumen disampaikan ke admin WLKP pusat.</li>
+                        <li>Admin melakukan update alamat di sistem WLKP.</li>
+                    </ul>
+                </li>
+                <li class="mb-0">
+                    <h6 class="fw-bold">Bagaimana cara menutup akun WLKP perusahaan?</h6>
+                    <p class="mb-2">Langkahnya:</p>
+                    <ul>
+                        <li>Melapor ke Disnaker setempat.</li>
+                        <li>Melampirkan NIB.</li>
+                        <li>Melampirkan Laporan WLKP terakhir.</li>
+                        <li>Melampirkan bukti pembayaran hak tenaga kerja.</li>
+                        <li>Pengawas membuat Berita Acara Penutupan.</li>
+                        <li>Admin WLKP pusat menutup akun perusahaan.</li>
+                    </ul>
+                </li>
+            </ol>
+        </div>
+
+        <div class="faq-category mb-4">
+            <h4 class="fw-bold mb-3">Data Tenaga Kerja</h4>
+            <ol class="ps-3" start="24">
+                <li class="mb-4">
+                    <h6 class="fw-bold">Bagaimana memilih waktu kerja di sistem WLKP?</h6>
+                    <p class="mb-2">Pilih sesuai ketentuan perusahaan:</p>
+                    <ul>
+                        <li>7 jam/hari (40 jam/minggu), atau</li>
+                        <li>8 jam/hari (40 jam/minggu).</li>
+                    </ul>
+                    <p class="mb-0">Jika sektor khusus tersedia di sistem, pilih sesuai sektor usaha.</p>
+                </li>
+                <li class="mb-4">
+                    <h6 class="fw-bold">Mengapa import data tenaga kerja gagal?</h6>
+                    <p class="mb-2">Beberapa penyebab umum:</p>
+                    <ul>
+                        <li>Format Excel tidak sesuai.</li>
+                        <li>File bukan format Microsoft Excel 2010 atau lebih baru.</li>
+                        <li>Format template tidak sesuai.</li>
+                        <li>NIK bukan e-KTP.</li>
+                    </ul>
+                </li>
+                <li class="mb-4">
+                    <h6 class="fw-bold">Bagaimana memilih kode jabatan?</h6>
+                    <ul>
+                        <li>Pilih jabatan yang paling mendekati.</li>
+                        <li>Kode jabatan harus 6 digit angka.</li>
+                        <li>Mengacu pada KBJI 2016.</li>
+                    </ul>
+                </li>
+                <li class="mb-4">
+                    <h6 class="fw-bold">Bagaimana mengisi data tenaga kerja asing?</h6>
+                    <p class="mb-2">Langkahnya:</p>
+                    <ul>
+                        <li>Pilih menu Tenaga Kerja Asing.</li>
+                        <li>Isi nomor notifikasi sesuai dokumen RPTKA.</li>
+                        <li>Pastikan tenaga kerja pendamping terdaftar di tenaga kerja dalam negeri.</li>
+                    </ul>
+                </li>
+                <li class="mb-0">
+                    <h6 class="fw-bold">Mengapa jumlah tenaga kerja tidak sesuai?</h6>
+                    <p class="mb-2">Pastikan:</p>
+                    <ul>
+                        <li>Tidak ada data tenaga kerja ganda.</li>
+                        <li>Status kerja sudah benar (PKWT atau PKWTT).</li>
+                        <li>Jumlah tenaga kerja sesuai kondisi sebenarnya.</li>
+                    </ul>
+                </li>
+            </ol>
+        </div>
+
+        <div class="faq-category mb-4">
+            <h4 class="fw-bold mb-3">Lowongan Kerja</h4>
+            <ol class="ps-3" start="29">
+                <li class="mb-4">
+                    <h6 class="fw-bold">Mengapa perusahaan tidak bisa mendaftarkan lowongan kerja?</h6>
+                    <p class="mb-2">Perusahaan harus menyelesaikan pelaporan WLKP terlebih dahulu hingga tahap pelaporan selesai. Setelah itu perusahaan baru dapat melakukan pembaruan atau pendaftaran lowongan kerja.</p>
+                    <p class="mb-0">Jika masih mengalami kendala, silakan menghubungi Call Center KarirHub.</p>
+                </li>
+                <li class="mb-4">
+                    <h6 class="fw-bold">Mengapa informasi lowongan kerja tidak dapat diedit?</h6>
+                    <p class="mb-0">Perusahaan dapat melakukan pengeditan dengan login ke layanan KarirHub menggunakan akun perusahaan dan melakukan perubahan pada bagian kualifikasi atau informasi lowongan.</p>
+                </li>
+                <li class="mb-0">
+                    <h6 class="fw-bold">Bagaimana perlakuan terhadap tenaga kerja yang sudah tidak bekerja atau terkena PHK?</h6>
+                    <p class="mb-2">Tenaga kerja yang sudah tidak bekerja tidak boleh dihapus dari sistem karena akan menghilangkan histori data.</p>
+                    <p class="mb-2">Solusi:</p>
+                    <ul>
+                        <li>Ubah status tenaga kerja dari masih bekerja menjadi tidak bekerja.</li>
+                    </ul>
+                    <p class="mb-0"><strong>Catatan:</strong> Jika sudah terdapat laporan PHK, data tidak dapat dihapus karena digunakan oleh BPJS Ketenagakerjaan untuk klaim JKP (Jaminan Kehilangan Pekerjaan).</p>
+                </li>
+            </ol>
+        </div>
+
+        <div class="faq-category mb-4">
+            <h4 class="fw-bold mb-3">Pelatihan</h4>
+            <ol class="ps-3" start="32">
+                <li class="mb-4">
+                    <h6 class="fw-bold">Apa yang dimaksud dengan Training Center pada sistem WLKP?</h6>
+                    <p class="mb-2">Training Center adalah lembaga pelatihan yang dimiliki oleh perusahaan untuk meningkatkan kompetensi tenaga kerja dan biasanya memiliki sertifikasi.</p>
+                    <p class="mb-2">Umumnya dimiliki oleh:</p>
+                    <ul>
+                        <li>Perusahaan penyedia jasa tenaga kerja.</li>
+                        <li>Perusahaan jasa layanan K3.</li>
+                    </ul>
+                </li>
+                <li class="mb-0">
+                    <h6 class="fw-bold">Apa yang dimaksud dengan program pemagangan pada bagian Training Center?</h6>
+                    <p class="mb-2">Program pemagangan adalah program pelatihan kerja yang diselenggarakan perusahaan untuk memberikan pengalaman kerja kepada tenaga kerja.</p>
+                    <p class="mb-2">Program ini dapat dilakukan:</p>
+                    <ul>
+                        <li>Di perusahaan lain.</li>
+                        <li>Di luar negeri.</li>
+                    </ul>
+                    <p class="mb-0">Biasanya dilakukan oleh perusahaan penyedia jasa tenaga kerja.</p>
+                </li>
+            </ol>
+        </div>
+
+        <div class="faq-category mb-4">
+            <h4 class="fw-bold mb-3">Jaminan Sosial</h4>
+            <ol class="ps-3" start="34">
+                <li class="mb-4">
+                    <h6 class="fw-bold">Mengapa NPP tidak ditemukan saat pengisian?</h6>
+                    <p class="mb-0">Periksa terlebih dahulu apakah status keanggotaan BPJS Ketenagakerjaan perusahaan masih aktif atau terdapat tunggakan.</p>
+                </li>
+                <li class="mb-4">
+                    <h6 class="fw-bold">Mengapa jumlah tenaga kerja pada NPP tidak sesuai dengan data BPJS?</h6>
+                    <p class="mb-2">Karena sistem WLKP terintegrasi dengan BPJS Ketenagakerjaan.</p>
+                    <p class="mb-2">Jika terjadi ketidaksesuaian:</p>
+                    <ul>
+                        <li>Hubungi admin pusat.</li>
+                        <li>Kirim bukti pembayaran BPJS yang mencantumkan jumlah tenaga kerja terdaftar.</li>
+                    </ul>
+                </li>
+                <li class="mb-4">
+                    <h6 class="fw-bold">Mengapa data BPJS Kesehatan belum terisi?</h6>
+                    <p class="mb-0">Saat ini sistem WLKP belum terintegrasi dengan BPJS Kesehatan, sehingga pengisian jumlah tenaga kerja yang terdaftar masih dilakukan secara manual.</p>
+                </li>
+                <li class="mb-0">
+                    <h6 class="fw-bold">Apa yang dimaksud dengan fasilitas kesejahteraan?</h6>
+                    <p class="mb-2">Fasilitas kesejahteraan adalah fasilitas yang diberikan perusahaan untuk meningkatkan kesejahteraan pekerja, seperti:</p>
+                    <ul>
+                        <li>Perumahan pekerja.</li>
+                        <li>Kendaraan pekerja.</li>
+                        <li>Koperasi karyawan.</li>
+                        <li>Kegiatan family gathering.</li>
+                        <li>Fasilitas lain yang diberikan perusahaan.</li>
+                    </ul>
+                </li>
+            </ol>
+        </div>
+
+        <div class="faq-category mb-0">
+            <h4 class="fw-bold mb-3">Persyaratan Kerja</h4>
+            <ol class="ps-3" start="38">
+                <li class="mb-4">
+                    <h6 class="fw-bold">Mengapa tidak bisa mengisi layanan PP/PKB?</h6>
+                    <p class="mb-2">Layanan PP/PKB hanya tersedia bagi perusahaan yang memiliki lokasi kerja di lebih dari satu provinsi.</p>
+                    <p class="mb-0">Jika perusahaan memiliki PP/PKB, nomor dokumen akan muncul otomatis dalam sistem.</p>
+                </li>
+                <li class="mb-4">
+                    <h6 class="fw-bold">Mengapa jumlah tenaga kerja PKWT dan PKWTT tidak bisa diedit?</h6>
+                    <p class="mb-0">Jumlah tersebut mengikuti data tenaga kerja yang diinput pada bagian data tenaga kerja, sehingga tidak dapat diubah secara manual.</p>
+                </li>
+                <li class="mb-0">
+                    <h6 class="fw-bold">Bagaimana cara mengisi WKWI umum dan sektoral?</h6>
+                    <p class="mb-2">Pengisian dilakukan sesuai ketentuan waktu kerja yang berlaku di perusahaan.</p>
+                    <ul>
+                        <li>Jika perusahaan berada pada sektor tertentu, pilih WKWI sektoral.</li>
+                        <li>Jika tidak termasuk sektor khusus, gunakan WKWI umum.</li>
+                    </ul>
+                    <p class="mb-0">Bagian fasilitas kesejahteraan dan informasi lain harus diisi sesuai kondisi riil perusahaan.</p>
                 </li>
             </ol>
         </div>
