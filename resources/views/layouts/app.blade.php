@@ -475,14 +475,14 @@
                         <a class="nav-link @if(request()->routeIs('informasi_pasar_kerja.index')) active fw-bold @endif" href="{{ route('informasi_pasar_kerja.index') }}">Informasi Pasar Kerja</a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle @if(request()->routeIs('virtual-karir.index') || request()->routeIs('pusat_bantuan')) active fw-bold @endif" href="#" id="layananDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle @if(request()->routeIs('virtual-karir.index') || request()->routeIs('pusat_bantuan') || request()->routeIs('media_sosial')) active fw-bold @endif" href="#" id="layananDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Layanan
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="layananDropdown">
                             <li><a class="dropdown-item @if(request()->routeIs('virtual-karir.index')) active fw-bold @endif" href="{{ route('virtual-karir.index') }}">Virtual Karir</a></li>
                             <li><a class="dropdown-item @if(request()->routeIs('pusat_bantuan')) active fw-bold @endif" href="{{ route('pusat_bantuan') }}">Pusat Bantuan</a></li>
                             <li><a class="dropdown-item" href="https://microlearning-paskerid.kemnaker.go.id/" target="_blank">Microlearning</a></li>
-                            <li><a class="dropdown-item" href="https://paskerid.kemnaker.go.id/RIASEC/" target="_blank">Tes Minat & Karir</a></li>
+                            <li><a class="dropdown-item @if(request()->routeIs('media_sosial')) active fw-bold @endif" href="{{ route('media_sosial') }}">Media Sosial</a></li>
                         </ul>
                     </li>
                     <li class="nav-item dropdown">
@@ -496,13 +496,15 @@
                         <a class="nav-link @if(request()->routeIs('news.index')) active fw-bold @endif" href="{{ route('news.index') }}">Berita</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link @if(request()->routeIs('media_sosial')) active fw-bold @endif" href="{{ route('media_sosial') }}">Media Sosial</a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link @if(request()->routeIs('kemitraan.create')) active fw-bold @endif" href="{{ route('kemitraan.create') }}">
                             <i class="bi bi-handshake me-1"></i> Walk In Interview
                         </a>
                     </li> 
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://paskerid.kemnaker.go.id/RIASEC/" target="_blank">
+                            Tes Minat & Karir
+                        </a>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link @if(request()->routeIs('career-boostday.index')) active fw-bold @endif" href="{{ route('career-boostday.index') }}">
                             Career Boost Day
