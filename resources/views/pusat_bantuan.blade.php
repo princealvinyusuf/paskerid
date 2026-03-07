@@ -393,7 +393,7 @@
             </ol>
         </div>
 
-        <div class="faq-category mb-0">
+        <div class="faq-category mb-4">
             <h4 class="fw-bold mb-3">Persyaratan Kerja</h4>
             <ol class="ps-3" start="38">
                 <li class="mb-4">
@@ -413,6 +413,169 @@
                         <li>Jika tidak termasuk sektor khusus, gunakan WKWI umum.</li>
                     </ul>
                     <p class="mb-0">Bagian fasilitas kesejahteraan dan informasi lain harus diisi sesuai kondisi riil perusahaan.</p>
+                </li>
+            </ol>
+        </div>
+
+        <div class="faq-category mb-4">
+            <h4 class="fw-bold mb-3">Kelembagaan Hubungan Industrial</h4>
+            <ol class="ps-3" start="41">
+                <li class="mb-0">
+                    <h6 class="fw-bold">Bagaimana cara mengisi informasi kelembagaan hubungan industrial?</h6>
+                    <p class="mb-2">Isikan sesuai dengan lembaga hubungan industrial yang dimiliki perusahaan.</p>
+                    <p class="mb-2">Contoh:</p>
+                    <ul>
+                        <li>LKS Bipartit.</li>
+                        <li>Serikat Pekerja.</li>
+                    </ul>
+                    <p class="mb-0">Jika memilih YA untuk LKS Bipartit, perusahaan wajib mengisi jumlah rapat LKS Bipartit yang dilaksanakan dalam satu tahun.</p>
+                </li>
+            </ol>
+        </div>
+
+        <div class="faq-category mb-4">
+            <h4 class="fw-bold mb-3">Pengupahan</h4>
+            <ol class="ps-3" start="42">
+                <li class="mb-4">
+                    <h6 class="fw-bold">Apa yang dimaksud dengan upah terendah?</h6>
+                    <p class="mb-0">Upah terendah adalah upah dengan nominal paling rendah yang diberikan perusahaan kepada pekerja sesuai kondisi sebenarnya.</p>
+                </li>
+                <li class="mb-0">
+                    <h6 class="fw-bold">Apa yang dimaksud dengan upah tertinggi?</h6>
+                    <p class="mb-0">Upah tertinggi adalah upah dengan nominal paling tinggi yang diberikan perusahaan kepada pekerja sesuai kondisi sebenarnya.</p>
+                </li>
+            </ol>
+        </div>
+
+        <div class="faq-category mb-4">
+            <h4 class="fw-bold mb-3">Perselisihan</h4>
+            <ol class="ps-3" start="44">
+                <li class="mb-0">
+                    <h6 class="fw-bold">Bagaimana cara mengisi data perselisihan hubungan industrial?</h6>
+                    <p class="mb-2">Data perselisihan diisi berdasarkan jumlah kasus dalam satu tahun, meliputi:</p>
+                    <ul>
+                        <li>Total kasus mogok kerja.</li>
+                        <li>Total tenaga kerja yang terlibat.</li>
+                        <li>Total tenaga kerja yang terkena PHK.</li>
+                    </ul>
+                </li>
+            </ol>
+        </div>
+
+        <div class="faq-category mb-4">
+            <h4 class="fw-bold mb-3">Keselamatan dan Kesehatan Kerja (K3)</h4>
+            <ol class="ps-3" start="45">
+                <li class="mb-4">
+                    <h6 class="fw-bold">Apa yang dimaksud instalasi pengolahan limbah produksi?</h6>
+                    <p class="mb-2">Instalasi pengolahan limbah produksi adalah sistem pengolahan limbah yang dimiliki perusahaan.</p>
+                    <p class="mb-0">Jika limbah diolah oleh pihak ketiga maka pilih tidak.</p>
+                </li>
+                <li class="mb-4">
+                    <h6 class="fw-bold">Bagaimana cara mengisi data Lembaga P2K3?</h6>
+                    <p class="mb-2">Jika perusahaan memiliki Panitia Pembina K3 (P2K3) maka wajib mengisi:</p>
+                    <ul>
+                        <li>Nomor pengesahan P2K3.</li>
+                        <li>Tanggal pembentukan P2K3.</li>
+                    </ul>
+                </li>
+                <li class="mb-4">
+                    <h6 class="fw-bold">Bagaimana cara mengisi data personil K3?</h6>
+                    <p class="mb-2">Isi jumlah personil K3 yang dimiliki perusahaan, seperti:</p>
+                    <ul>
+                        <li>Ahli K3.</li>
+                        <li>Paramedis.</li>
+                        <li>Petugas K3.</li>
+                        <li>Auditor K3.</li>
+                        <li>Dokter perusahaan.</li>
+                        <li>Regu pemadam kebakaran.</li>
+                        <li>Teknisi K3.</li>
+                        <li>Operator K3.</li>
+                    </ul>
+                </li>
+                <li class="mb-4">
+                    <h6 class="fw-bold">Bagaimana cara mengisi fasilitas K3?</h6>
+                    <p class="mb-2">Isi sesuai fasilitas yang tersedia di perusahaan, misalnya:</p>
+                    <ul>
+                        <li>Ruang P3K.</li>
+                        <li>Alat Pelindung Diri (APD).</li>
+                        <li>Kotak P3K.</li>
+                        <li>Peralatan keselamatan kerja.</li>
+                        <li>Pelayanan kesehatan.</li>
+                    </ul>
+                </li>
+                <li class="mb-4">
+                    <h6 class="fw-bold">Bagaimana cara mengisi data alat K3?</h6>
+                    <p class="mb-2">Isi jumlah alat K3 yang dimiliki perusahaan, seperti:</p>
+                    <ul>
+                        <li>Pesawat uap.</li>
+                        <li>Pesawat angkat angkut.</li>
+                        <li>Instalasi listrik.</li>
+                        <li>Instalasi pemadam kebakaran.</li>
+                        <li>Bejana tekan.</li>
+                        <li>Pesawat tenaga produksi.</li>
+                        <li>Perancah bangunan.</li>
+                    </ul>
+                </li>
+                <li class="mb-4">
+                    <h6 class="fw-bold">Bagaimana cara mengisi data limbah produksi?</h6>
+                    <p class="mb-2">Isi informasi pengelolaan limbah yang dilakukan perusahaan dalam periode satu tahun.</p>
+                    <p class="mb-2">Satuan pengisian:</p>
+                    <ul>
+                        <li>Liter untuk limbah cair.</li>
+                        <li>Ton untuk limbah padat.</li>
+                    </ul>
+                </li>
+                <li class="mb-4">
+                    <h6 class="fw-bold">Bagaimana cara mengisi data bahan kimia berbahaya?</h6>
+                    <p class="mb-2">Isi data bahan kimia yang digunakan atau disimpan perusahaan dengan mencantumkan:</p>
+                    <ul>
+                        <li>Nama bahan.</li>
+                        <li>Jenis bahaya.</li>
+                        <li>Sifat bahan.</li>
+                    </ul>
+                </li>
+                <li class="mb-0">
+                    <h6 class="fw-bold">Bagaimana cara mengisi data kecelakaan kerja?</h6>
+                    <p class="mb-2">Isi data kecelakaan kerja dalam satu tahun, meliputi:</p>
+                    <ul>
+                        <li>Nama kasus.</li>
+                        <li>Jumlah korban tanpa cacat.</li>
+                        <li>Jumlah korban cacat.</li>
+                        <li>Jumlah korban meninggal.</li>
+                    </ul>
+                </li>
+            </ol>
+        </div>
+
+        <div class="faq-category mb-0">
+            <h4 class="fw-bold mb-3">Pengalihan Akun</h4>
+            <ol class="ps-3" start="53">
+                <li class="mb-4">
+                    <h6 class="fw-bold">Bagaimana cara mengganti email atau nomor HP akun SIAPkerja?</h6>
+                    <p class="mb-2">Penggantian email dan nomor HP dapat dilakukan secara mandiri dengan:</p>
+                    <ul>
+                        <li>Login ke akun SIAPkerja.</li>
+                        <li>Pilih Edit Profil.</li>
+                        <li>Perbarui email atau nomor HP.</li>
+                    </ul>
+                </li>
+                <li class="mb-4">
+                    <h6 class="fw-bold">Apa fungsi menu pengalihan akun WLKP?</h6>
+                    <p class="mb-2">Menu ini digunakan jika terjadi pergantian pengelola akun, misalnya:</p>
+                    <ul>
+                        <li>Pengelola akun pindah divisi.</li>
+                        <li>Pengelola akun resign.</li>
+                        <li>Pengelola akun terkena PHK.</li>
+                    </ul>
+                </li>
+                <li class="mb-0">
+                    <h6 class="fw-bold">Bagaimana cara melakukan pengalihan akun WLKP?</h6>
+                    <p class="mb-2">Langkahnya:</p>
+                    <ul>
+                        <li>Masukkan email pengelola baru.</li>
+                        <li>Klik kirim undangan.</li>
+                        <li>Undangan pengelolaan akun akan dikirim ke email tersebut.</li>
+                    </ul>
                 </li>
             </ol>
         </div>
