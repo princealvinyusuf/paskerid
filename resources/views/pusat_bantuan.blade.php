@@ -2,9 +2,31 @@
 
 @section('content')
 <div class="container py-5">
-    <div class="text-center mb-4">
+    <div class="faq-hero text-center mb-4">
+        <div class="faq-hero-chip mb-2">SIAPkerja • WLKP • KarirHub</div>
         <h1 class="fw-bold section-title mb-2">Pusat Bantuan</h1>
-        <p class="text-muted mb-0">Permasalahan Yang Sering Ditanyakan</p>
+        <p class="text-muted mb-0">Permasalahan Yang Sering Ditanyakan (55 FAQ)</p>
+    </div>
+
+    <div class="faq-controls mb-4">
+        <div class="faq-search-wrap">
+            <i class="fa fa-search faq-search-icon" aria-hidden="true"></i>
+            <input
+                type="text"
+                id="faqSearchInput"
+                class="form-control faq-search-input"
+                placeholder="Cari pertanyaan atau kata kunci, contoh: OTP, NIB, BPJS, K3"
+                aria-label="Cari pertanyaan di pusat bantuan"
+            >
+            <button type="button" id="faqSearchClear" class="btn btn-outline-secondary btn-sm faq-search-clear d-none">
+                Reset
+            </button>
+        </div>
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mt-3">
+            <small id="faqSearchResult" class="text-muted">Menampilkan semua pertanyaan.</small>
+            <a href="#faqCategoryNav" class="btn btn-sm btn-outline-success">Lihat Kategori</a>
+        </div>
+        <div id="faqCategoryNav" class="faq-category-nav mt-3"></div>
     </div>
 
     <div class="faq-wrapper">
@@ -585,6 +607,86 @@
 
 @push('head')
 <style>
+    .faq-hero {
+        background: linear-gradient(135deg, rgba(24, 124, 25, 0.08), rgba(0, 163, 138, 0.1));
+        border: 1px solid rgba(24, 124, 25, 0.14);
+        border-radius: 16px;
+        padding: 1.25rem 1rem;
+    }
+
+    .faq-hero-chip {
+        display: inline-block;
+        background: #ffffff;
+        border: 1px solid #d6e8d8;
+        color: #187c19;
+        border-radius: 999px;
+        padding: 0.25rem 0.7rem;
+        font-size: 0.78rem;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+    }
+
+    .faq-controls {
+        max-width: 980px;
+        margin: 0 auto;
+        background: #ffffff;
+        border: 1px solid #e8ecef;
+        border-radius: 14px;
+        padding: 1rem;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+    }
+
+    .faq-search-wrap {
+        position: relative;
+    }
+
+    .faq-search-icon {
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #7d8a99;
+        font-size: 0.9rem;
+    }
+
+    .faq-search-input {
+        padding-left: 2rem;
+        padding-right: 5rem;
+        border-radius: 999px;
+    }
+
+    .faq-search-clear {
+        position: absolute;
+        right: 7px;
+        top: 50%;
+        transform: translateY(-50%);
+        border-radius: 999px;
+        padding: 0.18rem 0.65rem;
+    }
+
+    .faq-category-nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .faq-category-link {
+        text-decoration: none;
+        border: 1px solid #dbe5dc;
+        border-radius: 999px;
+        padding: 0.32rem 0.75rem;
+        font-size: 0.85rem;
+        color: #245b27;
+        background: #f8fbf8;
+        transition: all 0.2s ease;
+    }
+
+    .faq-category-link:hover {
+        background: #eaf5eb;
+        border-color: #bcd8bf;
+        color: #174c1a;
+    }
+
     .faq-wrapper {
         max-width: 980px;
         margin: 0 auto;
@@ -598,6 +700,66 @@
         box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
     }
 
+    .faq-category > h4 {
+        padding-bottom: 0.6rem;
+        border-bottom: 1px solid #edf1f3;
+    }
+
+    .faq-category > ol {
+        list-style: none;
+        padding-left: 0 !important;
+        margin-bottom: 0;
+    }
+
+    .faq-category > ol > li {
+        position: relative;
+        background: #fbfdff;
+        border: 1px solid #e8eef2;
+        border-radius: 12px;
+        padding: 1rem 1rem 0.85rem;
+        margin-bottom: 0.8rem !important;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+    }
+
+    .faq-category > ol > li:hover {
+        border-color: #c7dced;
+        box-shadow: 0 8px 18px rgba(18, 87, 140, 0.08);
+        transform: translateY(-1px);
+    }
+
+    .faq-category > ol > li:last-child {
+        margin-bottom: 0 !important;
+    }
+
+    .faq-number-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 2rem;
+        height: 2rem;
+        border-radius: 999px;
+        background: #eaf6ee;
+        border: 1px solid #cfe8d6;
+        color: #146f1a;
+        font-size: 0.85rem;
+        font-weight: 700;
+        margin-right: 0.55rem;
+        flex-shrink: 0;
+    }
+
+    .faq-category h6 {
+        display: flex;
+        align-items: center;
+        color: #13416b;
+        font-size: 1rem;
+        margin-bottom: 0.55rem;
+    }
+
+    .faq-category ul {
+        padding-left: 1.3rem;
+        list-style: disc;
+    }
+
     .faq-category h6 {
         color: #13416b;
     }
@@ -606,5 +768,115 @@
     .faq-category li {
         line-height: 1.6;
     }
+
+    @media (max-width: 767.98px) {
+        .faq-controls {
+            padding: 0.85rem;
+        }
+
+        .faq-category {
+            padding: 0.95rem;
+        }
+
+        .faq-category > ol > li {
+            padding: 0.85rem 0.85rem 0.75rem;
+        }
+
+        .faq-number-badge {
+            width: 1.75rem;
+            height: 1.75rem;
+            font-size: 0.78rem;
+            margin-right: 0.45rem;
+        }
+    }
 </style>
+@endpush
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const wrapper = document.querySelector('.faq-wrapper');
+        const searchInput = document.getElementById('faqSearchInput');
+        const resetButton = document.getElementById('faqSearchClear');
+        const resultText = document.getElementById('faqSearchResult');
+        const categoryNav = document.getElementById('faqCategoryNav');
+        if (!wrapper || !searchInput || !resetButton || !resultText || !categoryNav) {
+            return;
+        }
+
+        const slugify = (text) => text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+        const categories = Array.from(wrapper.querySelectorAll('.faq-category'));
+
+        categories.forEach((category, categoryIndex) => {
+            const title = category.querySelector('h4');
+            if (title) {
+                const id = `faq-cat-${slugify(title.textContent || '') || (categoryIndex + 1)}`;
+                category.id = id;
+
+                const link = document.createElement('a');
+                link.href = `#${id}`;
+                link.className = 'faq-category-link';
+                link.textContent = title.textContent.trim();
+                categoryNav.appendChild(link);
+            }
+
+            const list = category.querySelector('ol');
+            const start = parseInt(list?.getAttribute('start') || '1', 10);
+            const items = Array.from(category.querySelectorAll('ol > li'));
+
+            items.forEach((item, index) => {
+                item.classList.add('faq-item');
+                const questionTitle = item.querySelector('h6');
+                if (!questionTitle || questionTitle.querySelector('.faq-number-badge')) {
+                    return;
+                }
+
+                const badge = document.createElement('span');
+                badge.className = 'faq-number-badge';
+                badge.textContent = String(start + index);
+                questionTitle.prepend(badge);
+            });
+        });
+
+        const filterFaq = () => {
+            const term = searchInput.value.trim().toLowerCase();
+            let visibleQuestions = 0;
+
+            categories.forEach((category) => {
+                const items = Array.from(category.querySelectorAll('.faq-item'));
+                let visibleInCategory = 0;
+
+                items.forEach((item) => {
+                    const content = (item.textContent || '').toLowerCase();
+                    const isMatch = !term || content.includes(term);
+                    item.style.display = isMatch ? '' : 'none';
+                    if (isMatch) {
+                        visibleInCategory += 1;
+                        visibleQuestions += 1;
+                    }
+                });
+
+                category.style.display = visibleInCategory > 0 ? '' : 'none';
+            });
+
+            if (!term) {
+                resultText.textContent = 'Menampilkan semua pertanyaan.';
+                resetButton.classList.add('d-none');
+                return;
+            }
+
+            resultText.textContent = visibleQuestions > 0
+                ? `Ditemukan ${visibleQuestions} pertanyaan untuk "${searchInput.value.trim()}".`
+                : `Tidak ada hasil untuk "${searchInput.value.trim()}".`;
+            resetButton.classList.remove('d-none');
+        };
+
+        searchInput.addEventListener('input', filterFaq);
+        resetButton.addEventListener('click', function () {
+            searchInput.value = '';
+            searchInput.focus();
+            filterFaq();
+        });
+    });
+</script>
 @endpush
