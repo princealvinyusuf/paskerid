@@ -24,7 +24,11 @@
         </div>
         <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mt-3">
             <small id="faqSearchResult" class="text-muted">Menampilkan semua pertanyaan.</small>
-            <a href="#faqCategoryNav" class="btn btn-sm btn-outline-success">Lihat Kategori</a>
+            <div class="d-flex align-items-center gap-2">
+                <button type="button" id="faqExpandAll" class="btn btn-sm btn-outline-success">Expand all</button>
+                <button type="button" id="faqCollapseAll" class="btn btn-sm btn-outline-secondary">Collapse all</button>
+                <a href="#faqCategoryNav" class="btn btn-sm btn-outline-success">Lihat Kategori</a>
+            </div>
         </div>
         <div id="faqCategoryNav" class="faq-category-nav mt-3"></div>
     </div>
@@ -748,20 +752,70 @@
     }
 
     .faq-category h6 {
+        margin-bottom: 0;
+    }
+
+    .faq-question-btn {
+        width: 100%;
+        border: 0;
+        background: transparent;
+        padding: 0;
+        margin: 0;
         display: flex;
         align-items: center;
+        text-align: left;
         color: #13416b;
         font-size: 1rem;
-        margin-bottom: 0.55rem;
+        font-weight: 700;
+        line-height: 1.45;
+        cursor: pointer;
+    }
+
+    .faq-question-btn:focus-visible {
+        outline: 2px solid rgba(24, 124, 25, 0.35);
+        outline-offset: 3px;
+        border-radius: 6px;
+    }
+
+    .faq-question-text {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .faq-question-icon {
+        width: 1.75rem;
+        height: 1.75rem;
+        border: 1px solid #d9e6dc;
+        border-radius: 999px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.8rem;
+        color: #1f7a23;
+        margin-left: 0.6rem;
+        flex-shrink: 0;
+        transition: transform 0.2s ease, background-color 0.2s ease;
+    }
+
+    .faq-answer {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.25s ease, padding-top 0.25s ease;
+        padding-top: 0;
+    }
+
+    .faq-item.is-open .faq-answer {
+        padding-top: 0.6rem;
+    }
+
+    .faq-item.is-open .faq-question-icon {
+        transform: rotate(180deg);
+        background: #f0f8f2;
     }
 
     .faq-category ul {
         padding-left: 1.3rem;
         list-style: disc;
-    }
-
-    .faq-category h6 {
-        color: #13416b;
     }
 
     .faq-category p,
@@ -800,12 +854,32 @@
         const resetButton = document.getElementById('faqSearchClear');
         const resultText = document.getElementById('faqSearchResult');
         const categoryNav = document.getElementById('faqCategoryNav');
-        if (!wrapper || !searchInput || !resetButton || !resultText || !categoryNav) {
+        const expandAllButton = document.getElementById('faqExpandAll');
+        const collapseAllButton = document.getElementById('faqCollapseAll');
+        if (!wrapper || !searchInput || !resetButton || !resultText || !categoryNav || !expandAllButton || !collapseAllButton) {
             return;
         }
 
         const slugify = (text) => text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
         const categories = Array.from(wrapper.querySelectorAll('.faq-category'));
+        const faqItems = [];
+
+        const setExpanded = (item, expanded) => {
+            const answer = item.querySelector('.faq-answer');
+            const button = item.querySelector('.faq-question-btn');
+            if (!answer || !button) {
+                return;
+            }
+
+            item.classList.toggle('is-open', expanded);
+            button.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+
+            if (expanded) {
+                answer.style.maxHeight = `${answer.scrollHeight + 12}px`;
+            } else {
+                answer.style.maxHeight = '0px';
+            }
+        };
 
         categories.forEach((category, categoryIndex) => {
             const title = category.querySelector('h4');
@@ -827,16 +901,74 @@
             items.forEach((item, index) => {
                 item.classList.add('faq-item');
                 const questionTitle = item.querySelector('h6');
-                if (!questionTitle || questionTitle.querySelector('.faq-number-badge')) {
+                if (!questionTitle) {
                     return;
                 }
 
+                const questionNumber = String(start + index);
+                const questionText = questionTitle.textContent ? questionTitle.textContent.trim() : '';
+
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.className = 'faq-question-btn';
+                button.setAttribute('aria-expanded', 'false');
+
                 const badge = document.createElement('span');
                 badge.className = 'faq-number-badge';
-                badge.textContent = String(start + index);
-                questionTitle.prepend(badge);
+                badge.textContent = questionNumber;
+
+                const textNode = document.createElement('span');
+                textNode.className = 'faq-question-text';
+                textNode.textContent = questionText;
+
+                const icon = document.createElement('span');
+                icon.className = 'faq-question-icon';
+                icon.innerHTML = '<i class="fa fa-chevron-down" aria-hidden="true"></i>';
+
+                button.appendChild(badge);
+                button.appendChild(textNode);
+                button.appendChild(icon);
+
+                questionTitle.innerHTML = '';
+                questionTitle.appendChild(button);
+
+                const answer = document.createElement('div');
+                answer.className = 'faq-answer';
+
+                let sibling = questionTitle.nextSibling;
+                while (sibling) {
+                    const nextSibling = sibling.nextSibling;
+                    answer.appendChild(sibling);
+                    sibling = nextSibling;
+                }
+                item.appendChild(answer);
+
+                button.addEventListener('click', function () {
+                    const isOpen = item.classList.contains('is-open');
+                    setExpanded(item, !isOpen);
+                });
+
+                faqItems.push(item);
             });
         });
+
+        const expandAll = (onlyVisible = false) => {
+            faqItems.forEach((item) => {
+                if (onlyVisible && item.style.display === 'none') {
+                    return;
+                }
+                setExpanded(item, true);
+            });
+        };
+
+        const collapseAll = (onlyVisible = false) => {
+            faqItems.forEach((item) => {
+                if (onlyVisible && item.style.display === 'none') {
+                    return;
+                }
+                setExpanded(item, false);
+            });
+        };
 
         const filterFaq = () => {
             const term = searchInput.value.trim().toLowerCase();
@@ -850,6 +982,13 @@
                     const content = (item.textContent || '').toLowerCase();
                     const isMatch = !term || content.includes(term);
                     item.style.display = isMatch ? '' : 'none';
+
+                    if (!isMatch) {
+                        setExpanded(item, false);
+                    } else if (term) {
+                        setExpanded(item, true);
+                    }
+
                     if (isMatch) {
                         visibleInCategory += 1;
                         visibleQuestions += 1;
@@ -862,6 +1001,7 @@
             if (!term) {
                 resultText.textContent = 'Menampilkan semua pertanyaan.';
                 resetButton.classList.add('d-none');
+                collapseAll();
                 return;
             }
 
@@ -877,6 +1017,28 @@
             searchInput.focus();
             filterFaq();
         });
+
+        expandAllButton.addEventListener('click', function () {
+            expandAll(true);
+        });
+
+        collapseAllButton.addEventListener('click', function () {
+            collapseAll(true);
+        });
+
+        window.addEventListener('resize', function () {
+            faqItems.forEach((item) => {
+                if (!item.classList.contains('is-open')) {
+                    return;
+                }
+                const answer = item.querySelector('.faq-answer');
+                if (answer) {
+                    answer.style.maxHeight = `${answer.scrollHeight + 12}px`;
+                }
+            });
+        });
+
+        collapseAll();
     });
 </script>
 @endpush
