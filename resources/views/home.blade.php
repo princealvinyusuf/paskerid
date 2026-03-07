@@ -21,17 +21,20 @@
 
     {{-- Highlight Pasar Kerja Section (Both Carousels) --}}
     <section class="stat-carousel-section position-relative" style="z-index: 10;">
-        <div class="container-fluid position-relative px-2 px-sm-3">
-            <h3 class="text-center mb-4">Highlight Pasar Kerja</h3>
+        <div class="container-fluid position-relative px-2 px-sm-3 highlight-stat-shell">
+            <div class="stat-carousel-heading text-center mb-4">
+                <h3 class="mb-1">Highlight Pasar Kerja</h3>
+                <p class="stat-carousel-subtitle mb-0">Ringkasan indikator utama ketenagakerjaan terbaru.</p>
+            </div>
             {{-- First Carousel --}}
-            <div class="d-flex align-items-center position-relative mb-4">
-                <button id="statScrollPrev" class="btn btn-light shadow rounded-circle position-absolute start-0 translate-middle-y" style="top:50%; z-index:2; width:40px; height:40px;">
+            <div class="d-flex align-items-center position-relative mb-4 stat-carousel-track">
+                <button id="statScrollPrev" class="btn btn-light shadow rounded-circle position-absolute start-0 translate-middle-y stat-nav-btn" aria-label="Lihat statistik sebelumnya">
                     <i class="fa fa-chevron-left"></i>
                 </button>
-                <div id="statScrollRow" class="d-flex justify-content-lg-center px-0" style="scroll-behavior:smooth; gap:16px; width:100%; overflow-x:hidden;">
+                <div id="statScrollRow" class="d-flex justify-content-lg-center px-0 stat-scroll-row">
                     @foreach($statistics as $stat)
                         <a href="{{ route('informasi.index', ['type' => 'statistik', 'search' => $stat->title]) }}" class="text-decoration-none">
-                            <div class="card shadow-sm stat-card text-center flex-shrink-0" style="max-width:260px; min-width:180px; cursor:pointer;">
+                            <div class="card shadow-sm stat-card stat-highlight-card text-center flex-shrink-0" style="max-width:260px; min-width:180px; cursor:pointer;">
                                 <div class="card-body d-flex flex-column align-items-center justify-content-center">
                                     <div class="stat-icon mb-3">
                                         <i class="fa {{ $stat->logo ?? 'fa-chart-bar' }} fa-2x text-success"></i>
@@ -49,20 +52,20 @@
                         </a>
                     @endforeach
                 </div>
-                <button id="statScrollNext" class="btn btn-light shadow rounded-circle position-absolute end-0 translate-middle-y" style="top:50%; z-index:2; width:40px; height:40px;">
+                <button id="statScrollNext" class="btn btn-light shadow rounded-circle position-absolute end-0 translate-middle-y stat-nav-btn" aria-label="Lihat statistik berikutnya">
                     <i class="fa fa-chevron-right"></i>
                 </button>
             </div>
-            <div class="d-flex justify-content-center mt-3" id="statDots"></div>
+            <div class="d-flex justify-content-center mt-3 stat-dots" id="statDots"></div>
             {{-- Second Carousel --}}
-            <div class="d-flex align-items-center position-relative">
-                <button id="highlightStatScrollPrev" class="btn btn-light shadow rounded-circle position-absolute start-0 translate-middle-y" style="top:50%; z-index:2; width:40px; height:40px;">
+            <div class="d-flex align-items-center position-relative stat-carousel-track">
+                <button id="highlightStatScrollPrev" class="btn btn-light shadow rounded-circle position-absolute start-0 translate-middle-y stat-nav-btn" aria-label="Lihat highlight sebelumnya">
                     <i class="fa fa-chevron-left"></i>
                 </button>
-                <div id="highlightStatScrollRow" class="d-flex justify-content-lg-center px-0" style="scroll-behavior:smooth; gap:16px; width:100%; overflow-x:hidden;">
+                <div id="highlightStatScrollRow" class="d-flex justify-content-lg-center px-0 stat-scroll-row">
                     @foreach($highlightStatistics as $stat)
                         <a href="{{ route('informasi.index', ['type' => 'statistik', 'search' => $stat->title]) }}" class="text-decoration-none">
-                            <div class="card shadow-sm stat-card text-center flex-shrink-0" style="max-width:260px; min-width:180px; cursor:pointer;">
+                            <div class="card shadow-sm stat-card stat-highlight-card text-center flex-shrink-0" style="max-width:260px; min-width:180px; cursor:pointer;">
                                 <div class="card-body d-flex flex-column align-items-center justify-content-center">
                                     <div class="stat-icon mb-3">
                                         <i class="fa {{ $stat->logo ?? 'fa-star' }} fa-2x text-warning"></i>
@@ -80,11 +83,11 @@
                         </a>
                     @endforeach
                 </div>
-                <button id="highlightStatScrollNext" class="btn btn-light shadow rounded-circle position-absolute end-0 translate-middle-y" style="top:50%; z-index:2; width:40px; height:40px;">
+                <button id="highlightStatScrollNext" class="btn btn-light shadow rounded-circle position-absolute end-0 translate-middle-y stat-nav-btn" aria-label="Lihat highlight berikutnya">
                     <i class="fa fa-chevron-right"></i>
                 </button>
             </div>
-            <div class="d-flex justify-content-center mt-3" id="highlightStatDots"></div>
+            <div class="d-flex justify-content-center mt-3 stat-dots" id="highlightStatDots"></div>
             {{-- Third Carousel (Secondary Highlights) with Blue Background Wrapper --}}
             <div class="my-4 py-4 text-white rounded-4" style="background: linear-gradient(to right, #388FE8, #4DA4F3);">
                 <div class="container-fluid px-2 px-sm-3">
@@ -96,14 +99,14 @@
                             <h2 class="fw-bold" style="font-size:3rem;">Informasi bersumber dari Karirhub</h2>
                         </div>
                         <div class="col-md-8 position-relative">
-                            <div class="d-flex align-items-center position-relative">
-                                <button id="highlightStat2ScrollPrev" class="btn btn-light shadow rounded-circle position-absolute start-0 translate-middle-y" style="top:50%; z-index:2; width:40px; height:40px;">
+                            <div class="d-flex align-items-center position-relative stat-carousel-track">
+                                <button id="highlightStat2ScrollPrev" class="btn btn-light shadow rounded-circle position-absolute start-0 translate-middle-y stat-nav-btn" aria-label="Lihat data Karirhub sebelumnya">
                                     <i class="fa fa-chevron-left"></i>
                                 </button>
-                                <div id="highlightStat2ScrollRow" class="d-flex px-0" style="scroll-behavior:smooth; gap:16px; width:100%; overflow-x:hidden;">
+                                <div id="highlightStat2ScrollRow" class="d-flex px-0 stat-scroll-row">
                                     @foreach($highlightStatistics2 ?? [] as $stat)
                                         <a href="{{ route('informasi.index', ['type' => 'statistik', 'search' => $stat->title]) }}" class="text-decoration-none">
-                                            <div class="card shadow-sm stat-card text-center flex-shrink-0" style="max-width:260px; min-width:180px; cursor:pointer;">
+                                            <div class="card shadow-sm stat-card stat-highlight-card text-center flex-shrink-0" style="max-width:260px; min-width:180px; cursor:pointer;">
                                                 <div class="card-body d-flex flex-column align-items-center justify-content-center">
                                                     <div class="stat-icon mb-3">
                                                         <i class="fa {{ $stat->logo ?? 'fa-diamond' }} fa-2x text-info"></i>
@@ -121,11 +124,11 @@
                                         </a>
                                     @endforeach
                                 </div>
-                                <button id="highlightStat2ScrollNext" class="btn btn-light shadow rounded-circle position-absolute end-0 translate-middle-y" style="top:50%; z-index:2; width:40px; height:40px;">
+                                <button id="highlightStat2ScrollNext" class="btn btn-light shadow rounded-circle position-absolute end-0 translate-middle-y stat-nav-btn" aria-label="Lihat data Karirhub berikutnya">
                                     <i class="fa fa-chevron-right"></i>
                                 </button>
                             </div>
-                            <div class="d-flex justify-content-center mt-3" id="highlightStat2Dots"></div>
+                            <div class="d-flex justify-content-center mt-3 stat-dots" id="highlightStat2Dots"></div>
                         </div>
                     </div>
                 </div>
@@ -1005,29 +1008,37 @@
         const next = document.getElementById('statScrollNext');
         const dots = document.getElementById('statDots');
         const cards = row.querySelectorAll('.stat-card');
-        const cardWidth = 256; // width + gap
-        let visible = Math.floor(row.offsetWidth / cardWidth) || 1;
+        const getCardWidth = () => {
+            if (!cards.length) return row.offsetWidth || 1;
+            const gap = parseFloat(window.getComputedStyle(row).gap || '0');
+            return cards[0].getBoundingClientRect().width + gap;
+        };
+        let visible = Math.floor(row.offsetWidth / getCardWidth()) || 1;
         const total = cards.length;
         let current = 0;
 
         function updateDots() {
             dots.innerHTML = '';
-            visible = Math.floor(row.offsetWidth / cardWidth) || 1;
+            visible = Math.floor(row.offsetWidth / getCardWidth()) || 1;
+            const maxStart = Math.max(0, total - visible);
+            current = Math.min(current, maxStart);
             const dotCount = Math.ceil(total / visible);
             for (let i = 0; i < dotCount; i++) {
                 const dot = document.createElement('span');
                 dot.className = 'stat-dot' + (i === Math.floor(current / visible) ? ' active' : '');
                 dot.addEventListener('click', () => {
-                    row.scrollTo({ left: i * cardWidth * visible, behavior: 'smooth' });
+                    row.scrollTo({ left: i * getCardWidth() * visible, behavior: 'smooth' });
                     current = i * visible;
                     updateDots();
                 });
                 dots.appendChild(dot);
             }
+            prev.disabled = current <= 0;
+            next.disabled = current >= maxStart;
         }
 
         function scrollToCurrent() {
-            row.scrollTo({ left: current * cardWidth, behavior: 'smooth' });
+            row.scrollTo({ left: current * getCardWidth(), behavior: 'smooth' });
             updateDots();
         }
 
@@ -1036,12 +1047,12 @@
             scrollToCurrent();
         });
         next.addEventListener('click', () => {
-            current = Math.min(total - visible, current + visible);
+            current = Math.min(Math.max(0, total - visible), current + visible);
             scrollToCurrent();
         });
 
         row.addEventListener('scroll', () => {
-            current = Math.round(row.scrollLeft / cardWidth);
+            current = Math.round(row.scrollLeft / getCardWidth());
             updateDots();
         });
 
@@ -1165,29 +1176,37 @@
         const next = document.getElementById('highlightStatScrollNext');
         const dots = document.getElementById('highlightStatDots');
         const cards = row.querySelectorAll('.stat-card');
-        const cardWidth = 256;
-        let visible = Math.floor(row.offsetWidth / cardWidth) || 1;
+        const getCardWidth = () => {
+            if (!cards.length) return row.offsetWidth || 1;
+            const gap = parseFloat(window.getComputedStyle(row).gap || '0');
+            return cards[0].getBoundingClientRect().width + gap;
+        };
+        let visible = Math.floor(row.offsetWidth / getCardWidth()) || 1;
         const total = cards.length;
         let current = 0;
 
         function updateDots() {
             dots.innerHTML = '';
-            visible = Math.floor(row.offsetWidth / cardWidth) || 1;
+            visible = Math.floor(row.offsetWidth / getCardWidth()) || 1;
+            const maxStart = Math.max(0, total - visible);
+            current = Math.min(current, maxStart);
             const dotCount = Math.ceil(total / visible);
             for (let i = 0; i < dotCount; i++) {
                 const dot = document.createElement('span');
                 dot.className = 'stat-dot' + (i === Math.floor(current / visible) ? ' active' : '');
                 dot.addEventListener('click', () => {
-                    row.scrollTo({ left: i * cardWidth * visible, behavior: 'smooth' });
+                    row.scrollTo({ left: i * getCardWidth() * visible, behavior: 'smooth' });
                     current = i * visible;
                     updateDots();
                 });
                 dots.appendChild(dot);
             }
+            prev.disabled = current <= 0;
+            next.disabled = current >= maxStart;
         }
 
         function scrollToCurrent() {
-            row.scrollTo({ left: current * cardWidth, behavior: 'smooth' });
+            row.scrollTo({ left: current * getCardWidth(), behavior: 'smooth' });
             updateDots();
         }
 
@@ -1196,12 +1215,12 @@
             scrollToCurrent();
         });
         next.addEventListener('click', () => {
-            current = Math.min(total - visible, current + visible);
+            current = Math.min(Math.max(0, total - visible), current + visible);
             scrollToCurrent();
         });
 
         row.addEventListener('scroll', () => {
-            current = Math.round(row.scrollLeft / cardWidth);
+            current = Math.round(row.scrollLeft / getCardWidth());
             updateDots();
         });
 
@@ -1239,29 +1258,37 @@
         const next = document.getElementById('highlightStat2ScrollNext');
         const dots = document.getElementById('highlightStat2Dots');
         const cards = row.querySelectorAll('.stat-card');
-        const cardWidth = 256;
-        let visible = Math.floor(row.offsetWidth / cardWidth) || 1;
+        const getCardWidth = () => {
+            if (!cards.length) return row.offsetWidth || 1;
+            const gap = parseFloat(window.getComputedStyle(row).gap || '0');
+            return cards[0].getBoundingClientRect().width + gap;
+        };
+        let visible = Math.floor(row.offsetWidth / getCardWidth()) || 1;
         const total = cards.length;
         let current = 0;
 
         function updateDots() {
             dots.innerHTML = '';
-            visible = Math.floor(row.offsetWidth / cardWidth) || 1;
+            visible = Math.floor(row.offsetWidth / getCardWidth()) || 1;
+            const maxStart = Math.max(0, total - visible);
+            current = Math.min(current, maxStart);
             const dotCount = Math.ceil(total / visible);
             for (let i = 0; i < dotCount; i++) {
                 const dot = document.createElement('span');
                 dot.className = 'stat-dot' + (i === Math.floor(current / visible) ? ' active' : '');
                 dot.addEventListener('click', () => {
-                    row.scrollTo({ left: i * cardWidth * visible, behavior: 'smooth' });
+                    row.scrollTo({ left: i * getCardWidth() * visible, behavior: 'smooth' });
                     current = i * visible;
                     updateDots();
                 });
                 dots.appendChild(dot);
             }
+            prev.disabled = current <= 0;
+            next.disabled = current >= maxStart;
         }
 
         function scrollToCurrent() {
-            row.scrollTo({ left: current * cardWidth, behavior: 'smooth' });
+            row.scrollTo({ left: current * getCardWidth(), behavior: 'smooth' });
             updateDots();
         }
 
@@ -1270,12 +1297,12 @@
             scrollToCurrent();
         });
         next.addEventListener('click', () => {
-            current = Math.min(total - visible, current + visible);
+            current = Math.min(Math.max(0, total - visible), current + visible);
             scrollToCurrent();
         });
 
         row.addEventListener('scroll', () => {
-            current = Math.round(row.scrollLeft / cardWidth);
+            current = Math.round(row.scrollLeft / getCardWidth());
             updateDots();
         });
 
@@ -1378,8 +1405,61 @@
 }
 .stat-carousel-section {
     background: transparent;
-    padding-top: 2rem;
-    padding-bottom: 2rem;
+    padding-top: 2.25rem;
+    padding-bottom: 2.5rem;
+}
+.highlight-stat-shell {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.72) 0%, rgba(255, 255, 255, 0.48) 100%);
+    border: 1px solid rgba(24, 124, 25, 0.08);
+    border-radius: 1.25rem;
+    padding-top: 1rem;
+    padding-bottom: 1.25rem;
+}
+.stat-carousel-heading h3 {
+    color: #1d2939;
+    font-weight: 700;
+}
+.stat-carousel-subtitle {
+    color: #667085;
+    font-size: 0.95rem;
+}
+.stat-carousel-track {
+    padding-left: 2rem;
+    padding-right: 2rem;
+}
+.stat-scroll-row {
+    scroll-behavior: smooth;
+    gap: 16px;
+    width: 100%;
+    overflow-x: auto !important;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    padding: 0.35rem 0.15rem;
+}
+.stat-scroll-row > a {
+    scroll-snap-align: start;
+}
+.stat-nav-btn {
+    top: 50%;
+    z-index: 2;
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: rgba(255, 255, 255, 0.95) !important;
+    color: #187C19;
+    box-shadow: 0 6px 18px rgba(16, 24, 40, 0.14) !important;
+}
+.stat-nav-btn:hover {
+    background: #ffffff !important;
+    color: #0f6a10;
+}
+.stat-nav-btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+.stat-dots {
+    min-height: 16px;
 }
 .swiper {
     width: 100%;
@@ -1391,18 +1471,26 @@
 .swiper-slide {
     display: block;
 }
-.stat-card {
+.stat-carousel-section .stat-card {
     border-radius: 1.5rem;
-    padding: 2rem 0.5rem; /* Reduced horizontal padding */
-    margin: 0.5rem 0;
-    height: 320px;
-    width: 260px;
+    padding: 1.15rem 0.55rem;
+    margin: 0.35rem 0;
+    height: 300px;
+    width: 248px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    border: 1px solid #e4ece5;
+    background: #ffffff;
+    box-shadow: 0 8px 20px rgba(16, 24, 40, 0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
-.stat-card .card-body {
+.stat-carousel-section .stat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 24px rgba(16, 24, 40, 0.12);
+}
+.stat-carousel-section .stat-card .card-body {
     flex: 1 1 auto;
     display: flex;
     flex-direction: column;
@@ -1435,19 +1523,24 @@
 #statScrollRow::-webkit-scrollbar {
     display: none;
 }
+.stat-scroll-row::-webkit-scrollbar {
+    display: none;
+}
 .stat-dot {
-    width: 12px;
-    height: 12px;
+    width: 9px;
+    height: 9px;
     border-radius: 50%;
-    background: #B8D53D;
-    margin: 0 4px;
-    opacity: 0.4;
-    transition: opacity 0.2s;
+    background: #9fcba0;
+    margin: 0 5px;
+    opacity: 0.5;
+    transition: all 0.2s;
     display: inline-block;
+    cursor: pointer;
 }
 .stat-dot.active {
     background: #187C19;
     opacity: 1;
+    transform: scale(1.2);
 }
 .stat-hero-card {
     border-radius: 2rem;
@@ -1574,15 +1667,15 @@
     padding: 0;
     margin: 0;
 }
-.stat-card {
-    height: 320px;
-    width: 260px;
+.stat-carousel-section .stat-card {
+    height: 300px;
+    width: 248px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
 }
-.stat-card .card-body {
+.stat-carousel-section .stat-card .card-body {
     flex: 1 1 0;
     width: 100%;
     display: flex;
@@ -1590,17 +1683,65 @@
     align-items: center;
     justify-content: flex-start;
 }
-.stat-desc {
+.stat-carousel-section .stat-title {
+    font-size: 1rem !important;
+    line-height: 1.35;
+    min-height: 2.7em;
+}
+.stat-carousel-section .stat-value {
+    font-size: clamp(1.9rem, 2.2vw, 2.25rem) !important;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+}
+.stat-carousel-section .stat-unit {
+    font-size: 1rem !important;
+}
+.stat-carousel-section .stat-desc {
     margin-top: auto;
-    width: 100%; /* Make description use full width */
+    width: 100%;
     display: block;
     line-height: 1.35;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-height: 5.2em; /* ~4 lines at 1.3 line-height */
-    font-size: 0.95rem; /* Start size; will auto-shrink via JS if needed */
-    overflow-wrap: anywhere; /* break long words/links */
-    padding: 0; /* Remove any padding if present */
+    max-height: 4.6em;
+    font-size: 0.88rem;
+    overflow-wrap: anywhere;
+    padding: 0;
+}
+@media (max-width: 991px) {
+    .stat-carousel-track {
+        padding-left: 1.35rem;
+        padding-right: 1.35rem;
+    }
+}
+@media (max-width: 767px) {
+    .highlight-stat-shell {
+        border-radius: 0.95rem;
+        padding-top: 0.8rem;
+    }
+    .stat-carousel-heading h3 {
+        font-size: 1.25rem;
+    }
+    .stat-carousel-subtitle {
+        font-size: 0.82rem;
+    }
+    .stat-carousel-track {
+        padding-left: 0;
+        padding-right: 0;
+    }
+    .stat-nav-btn {
+        display: none;
+    }
+    .stat-carousel-section .stat-card {
+        width: 218px;
+        height: 280px;
+    }
+    .stat-carousel-section .stat-title {
+        font-size: 0.9rem !important;
+    }
+    .stat-carousel-section .stat-value {
+        font-size: 1.8rem !important;
+    }
 }
 .tableau-embed-wrapper {
     overflow-x: auto;
