@@ -11,7 +11,7 @@
 <style>
 .section-berita {
     position: relative;
-    background-color: #00a78e;
+    background: linear-gradient(120deg, #0f5fa8 0%, #2f9fe8 48%, #00a38a 100%);
     padding: 30px 40px;
     overflow: hidden;
     margin-bottom: 0 !important;
@@ -34,21 +34,21 @@
     padding-top: 60px;
 }
 .section-green-card {
-    background: rgba(255, 255, 255, 0.13); /* very transparent white */
+    background: linear-gradient(165deg, rgba(255, 255, 255, 0.92), rgba(242, 247, 255, 0.9));
     border-radius: 24px;
     padding: 40px 32px 32px 32px;
-    box-shadow: 0 2px 16px rgba(0,0,0,0.08);
-    color: #fff;
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.1);
+    color: #1e293b;
     margin-bottom: 32px;
-    border: 2px solid rgba(255,255,255,0.45); /* brighter, more visible */
-    backdrop-filter: blur(24px); /* stronger blur */
-    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(15, 95, 168, 0.2);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
 }
 .section-green-card h3 {
-    color: #111 !important;
+    color: #0b1220 !important;
 }
 .section-green-card p {
-    color: #fff;
+    color: #1e293b;
 }
 .section-green-card:last-of-type {
     margin-bottom: 0 !important;
@@ -57,7 +57,7 @@ section:last-of-type {
     margin-bottom: 0 !important;
 }
 </style>
-<div class="container-fluid p-0" style="background: #edf8e9;">
+<div class="container-fluid p-0 info-ocean-theme">
     @php $forceDesktop = request()->cookie('force_desktop') === '1'; @endphp
     
 <section class="mb-5 px-2 px-md-4 px-lg-5 pt-custom" data-aos="fade-up">
@@ -352,13 +352,57 @@ section:last-of-type {
         right: 16px;
         bottom: 16px;
         z-index: 1050;
-        background: #00a78e;
+        background: #0f5fa8;
         color: #fff;
         border: none;
         border-radius: 9999px;
         padding: 12px 16px;
         font-weight: 600;
         box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    .info-ocean-theme {
+        background: radial-gradient(980px 520px at -10% -10%, rgba(37, 99, 235, 0.2), transparent 58%),
+            radial-gradient(920px 520px at 110% -6%, rgba(16, 185, 129, 0.16), transparent 60%),
+            radial-gradient(760px 430px at 50% 105%, rgba(47, 159, 232, 0.13), transparent 62%),
+            #f2f7ff;
+    }
+
+    .info-ocean-theme .card {
+        position: relative;
+        overflow: hidden;
+        border-radius: 18px !important;
+        border: 1px solid rgba(15, 95, 168, 0.2) !important;
+        box-shadow: 0 12px 30px rgba(12, 50, 82, 0.1) !important;
+        background: linear-gradient(165deg, rgba(255, 255, 255, 0.97), rgba(244, 251, 255, 0.94)) !important;
+        transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+    }
+
+    .info-ocean-theme .card::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background: linear-gradient(
+            130deg,
+            rgba(47, 159, 232, 0.1) 0%,
+            rgba(15, 95, 168, 0.08) 30%,
+            rgba(0, 163, 138, 0.08) 72%,
+            rgba(47, 159, 232, 0.12) 100%
+        );
+        opacity: 0.75;
+    }
+
+    .info-ocean-theme .card .card-body,
+    .info-ocean-theme .card .card-footer {
+        position: relative;
+        z-index: 1;
+    }
+
+    .info-ocean-theme .card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 18px 38px rgba(12, 50, 82, 0.14) !important;
+        border-color: rgba(15, 95, 168, 0.3) !important;
     }
     </style>
 
