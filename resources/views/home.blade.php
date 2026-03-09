@@ -1317,12 +1317,10 @@
     --home-ocean-accent: #0f5fa8;
     --home-ocean-secondary: #00a38a;
     --home-ocean-tertiary: #2f9fe8;
-    --home-ocean-bg: linear-gradient(
-        145deg,
-        rgba(120, 198, 151, 0.2) 0%,
-        rgba(140, 224, 180, 0.18) 42%,
-        rgba(182, 237, 206, 0.2) 100%
-    );
+    --home-ocean-bg: radial-gradient(980px 520px at -10% -10%, rgba(37, 99, 235, 0.2), transparent 58%),
+        radial-gradient(920px 520px at 110% -6%, rgba(16, 185, 129, 0.16), transparent 60%),
+        radial-gradient(760px 430px at 50% 105%, rgba(47, 159, 232, 0.13), transparent 62%),
+        #f2f7ff;
     background: var(--home-ocean-bg);
 }
 
@@ -1672,9 +1670,9 @@
     display: block;
 }
 .rounded-section-bg {
-    background: #edf8e9;
+    background: linear-gradient(165deg, rgba(255, 255, 255, 0.95), rgba(242, 247, 255, 0.92));
     border-radius: 2rem;
-    box-shadow: 0 8px 32px 0 rgba(76,203,143,0.10);
+    box-shadow: 0 8px 32px 0 rgba(15, 95, 168, 0.12);
 }
 .overlap-hero {
     margin-top: -140px; /* Overlap by about 1/3 of the section height, adjust as needed */
