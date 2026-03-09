@@ -86,7 +86,7 @@
             </div>
             <div class="d-flex justify-content-center mt-3" id="highlightStatDots"></div>
             {{-- Third Carousel (Secondary Highlights) with Blue Background Wrapper --}}
-            <div class="my-4 py-4 text-white rounded-4" style="background: linear-gradient(to right, #388FE8, #4DA4F3);">
+            <div class="my-4 py-4 text-white rounded-4 home-ocean-banner">
                 <div class="container-fluid px-2 px-sm-3">
                     <div class="row align-items-center">
                         <div class="col-md-4 mb-4 mb-md-0">
@@ -480,7 +480,7 @@
     </section>
 
     {{-- for ads --}}
- <section class="my-5 py-5 text-white rounded-4 mx-5" style="background: linear-gradient(to right, #388FE8, #4DA4F3);" data-aos="fade-up">
+ <section class="my-5 py-5 text-white rounded-4 mx-5 home-ocean-banner" data-aos="fade-up">
     <div class="container">
         <div class="row align-items-center">
             {{-- Bagian kiri --}}
@@ -1367,6 +1367,17 @@
 
 .home-ocean-theme .stat-card .stat-icon {
     background: linear-gradient(135deg, var(--home-ocean-tertiary) 0%, var(--home-ocean-secondary) 100%);
+}
+
+.home-ocean-theme .home-ocean-banner {
+    background: linear-gradient(
+        120deg,
+        rgba(15, 95, 168, 0.96) 0%,
+        rgba(47, 159, 232, 0.95) 48%,
+        rgba(0, 163, 138, 0.9) 100%
+    ) !important;
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    box-shadow: 0 14px 34px rgba(15, 23, 42, 0.16);
 }
 
 .contrib-card-v3 {
