@@ -1,7 +1,93 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container mt-5">
+<style>
+.info-page-ocean {
+    --info-ocean-accent: #0f5fa8;
+    --info-ocean-secondary: #00a38a;
+    --info-ocean-tertiary: #2f9fe8;
+}
+
+.info-page-ocean-wrap {
+    background: radial-gradient(980px 520px at -10% -10%, rgba(37, 99, 235, 0.2), transparent 58%),
+        radial-gradient(920px 520px at 110% -6%, rgba(16, 185, 129, 0.16), transparent 60%),
+        radial-gradient(760px 430px at 50% 105%, rgba(47, 159, 232, 0.13), transparent 62%),
+        #f2f7ff;
+    padding-top: 1.5rem;
+    padding-bottom: 2rem;
+}
+
+.info-page-ocean .card {
+    position: relative;
+    overflow: hidden;
+    border-radius: 18px !important;
+    border: 1px solid rgba(15, 95, 168, 0.2) !important;
+    box-shadow: 0 12px 30px rgba(12, 50, 82, 0.1) !important;
+    background: linear-gradient(165deg, rgba(255, 255, 255, 0.97), rgba(244, 251, 255, 0.94)) !important;
+}
+
+.info-page-ocean .card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(
+        130deg,
+        rgba(47, 159, 232, 0.1) 0%,
+        rgba(15, 95, 168, 0.08) 30%,
+        rgba(0, 163, 138, 0.08) 72%,
+        rgba(47, 159, 232, 0.12) 100%
+    );
+    opacity: 0.75;
+}
+
+.info-page-ocean .card > * {
+    position: relative;
+    z-index: 1;
+}
+
+.info-page-ocean .card-header {
+    background: linear-gradient(120deg, rgba(15, 95, 168, 0.96) 0%, rgba(47, 159, 232, 0.95) 48%, rgba(0, 163, 138, 0.9) 100%) !important;
+    color: #fff;
+    border-bottom: 0;
+}
+
+.info-page-ocean .list-group-item a.bg-primary.text-white {
+    background: linear-gradient(120deg, rgba(15, 95, 168, 0.96) 0%, rgba(47, 159, 232, 0.95) 48%, rgba(0, 163, 138, 0.9) 100%) !important;
+    color: #fff !important;
+}
+
+.info-page-ocean .nav-tabs {
+    border-bottom-color: rgba(15, 95, 168, 0.2);
+}
+
+.info-page-ocean .nav-tabs .nav-link {
+    color: var(--info-ocean-accent);
+    border-radius: 999px;
+}
+
+.info-page-ocean .nav-tabs .nav-link.active {
+    color: #fff;
+    border-color: transparent;
+    background: linear-gradient(120deg, rgba(15, 95, 168, 0.96) 0%, rgba(47, 159, 232, 0.95) 48%, rgba(0, 163, 138, 0.9) 100%);
+}
+
+.info-page-ocean .table {
+    background: rgba(255, 255, 255, 0.9);
+    border-color: rgba(15, 95, 168, 0.15);
+}
+
+.info-page-ocean .table thead.table-light th {
+    background: rgba(230, 244, 255, 0.95) !important;
+    color: #0f5fa8;
+}
+
+.info-page-ocean .table-hover > tbody > tr:hover > * {
+    background-color: rgba(47, 159, 232, 0.09);
+}
+</style>
+<div class="info-page-ocean-wrap">
+<div class="container mt-5 info-page-ocean">
     <h2 class="text-center mb-4">Publikasi Pasar Kerja</h2>
     <p class="text-center mb-4">Menyediakan tabel dan publikasi pasar kerja yang dikelompokkan ke dalam berbagai kategori</p>
     <div class="row">
@@ -128,6 +214,7 @@
             </div>
         </div>
     </div>
+</div>
 </div>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
