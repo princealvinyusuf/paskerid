@@ -34,21 +34,19 @@
     padding-top: 60px;
 }
 .section-green-card {
-    background: linear-gradient(165deg, rgba(255, 255, 255, 0.92), rgba(242, 247, 255, 0.9));
+    background: linear-gradient(120deg, rgba(15, 95, 168, 0.96) 0%, rgba(47, 159, 232, 0.95) 48%, rgba(0, 163, 138, 0.9) 100%);
     border-radius: 24px;
     padding: 40px 32px 32px 32px;
-    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.1);
-    color: #1e293b;
+    box-shadow: 0 14px 34px rgba(15, 23, 42, 0.16);
+    color: #ffffff;
     margin-bottom: 32px;
-    border: 1px solid rgba(15, 95, 168, 0.2);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.28);
 }
 .section-green-card h3 {
-    color: #0b1220 !important;
+    color: #ffffff !important;
 }
 .section-green-card p {
-    color: #1e293b;
+    color: #ffffff;
 }
 .section-green-card:last-of-type {
     margin-bottom: 0 !important;
