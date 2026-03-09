@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container-fluid p-0" style="background: #edf8e9;">
+<div class="container-fluid p-0 home-ocean-theme">
     {{-- Hero Banner Section (Static) --}}
     <section class="hero-banner position-relative text-white mb-0 d-flex flex-column justify-content-center align-items-center h-100" style="background: url('{{ asset('images/banner_bg_2.jpg') }}') center center/cover no-repeat; min-height: 420px;">
         <div class="w-100">
@@ -1313,6 +1313,64 @@
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
 <style>
+.home-ocean-theme {
+    --home-ocean-accent: #0f5fa8;
+    --home-ocean-secondary: #00a38a;
+    --home-ocean-tertiary: #2f9fe8;
+    --home-ocean-bg: linear-gradient(
+        145deg,
+        rgba(120, 198, 151, 0.2) 0%,
+        rgba(140, 224, 180, 0.18) 42%,
+        rgba(182, 237, 206, 0.2) 100%
+    );
+    background: var(--home-ocean-bg);
+}
+
+.home-ocean-theme .card {
+    position: relative;
+    overflow: hidden;
+    border-radius: 18px !important;
+    border: 1px solid rgba(15, 95, 168, 0.2) !important;
+    box-shadow: 0 12px 30px rgba(12, 50, 82, 0.1) !important;
+    background: linear-gradient(165deg, rgba(255, 255, 255, 0.97), rgba(244, 251, 255, 0.94)) !important;
+    transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+}
+
+.home-ocean-theme .card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(
+        130deg,
+        rgba(47, 159, 232, 0.1) 0%,
+        rgba(15, 95, 168, 0.08) 30%,
+        rgba(0, 163, 138, 0.08) 72%,
+        rgba(47, 159, 232, 0.12) 100%
+    );
+    opacity: 0.75;
+}
+
+.home-ocean-theme .card .card-body,
+.home-ocean-theme .card .card-footer {
+    position: relative;
+    z-index: 1;
+}
+
+.home-ocean-theme .card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 18px 38px rgba(12, 50, 82, 0.14) !important;
+    border-color: rgba(15, 95, 168, 0.3) !important;
+}
+
+.home-ocean-theme .stat-title {
+    color: var(--home-ocean-accent) !important;
+}
+
+.home-ocean-theme .stat-card .stat-icon {
+    background: linear-gradient(135deg, var(--home-ocean-tertiary) 0%, var(--home-ocean-secondary) 100%);
+}
+
 .contrib-card-v3 {
     border-radius: 1.5rem;
     background: #fff;
