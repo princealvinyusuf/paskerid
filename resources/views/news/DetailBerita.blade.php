@@ -13,6 +13,7 @@
 @endsection
 
 @section('content')
+<div class="news-detail-ocean-wrap news-detail-ocean">
 <div class="ribbon-section">
     <button id="likeBtn" class="ribbon-btn">
         <i class="fa fa-thumbs-up"></i>
@@ -111,7 +112,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function updateLikeBtn() {
         if (liked) {
             likeBtn.classList.add('liked');
-            likeBtn.style.background = '#00a78e';
+            likeBtn.style.background = '#0f5fa8';
         } else {
             likeBtn.classList.remove('liked');
             likeBtn.style.background = '#333';
@@ -156,23 +157,69 @@ document.addEventListener('DOMContentLoaded', function() {
 }
 
 .detailberita {
-    background-color: #fff;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(165deg, rgba(255, 255, 255, 0.97), rgba(244, 251, 255, 0.94));
     border-radius: 18px;
-    box-shadow: 0 6px 32px 0 rgba(0,0,0,0.16), 0 1.5px 6px 0 rgba(0,0,0,0.10);
+    border: 1px solid rgba(15, 95, 168, 0.2);
+    box-shadow: 0 12px 30px rgba(12, 50, 82, 0.1);
     padding: 32px 0 32px 0;
+}
+
+.detailberita::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(
+        130deg,
+        rgba(47, 159, 232, 0.1) 0%,
+        rgba(15, 95, 168, 0.08) 30%,
+        rgba(0, 163, 138, 0.08) 72%,
+        rgba(47, 159, 232, 0.12) 100%
+    );
+    opacity: 0.75;
+}
+
+.detailberita > * {
+    position: relative;
+    z-index: 1;
 }
 
 /* Popular News Card */
 .popular-card {
-    background: #fff;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(165deg, rgba(255, 255, 255, 0.97), rgba(244, 251, 255, 0.94));
     border-radius: 18px;
-    box-shadow: 0 6px 32px 0 rgba(0,0,0,0.16), 0 1.5px 6px 0 rgba(0,0,0,0.10);
+    border: 1px solid rgba(15, 95, 168, 0.2);
+    box-shadow: 0 12px 30px rgba(12, 50, 82, 0.1);
     padding: 24px 18px 18px 18px;
+}
+
+.popular-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(
+        130deg,
+        rgba(47, 159, 232, 0.1) 0%,
+        rgba(15, 95, 168, 0.08) 30%,
+        rgba(0, 163, 138, 0.08) 72%,
+        rgba(47, 159, 232, 0.12) 100%
+    );
+    opacity: 0.75;
+}
+
+.popular-card > * {
+    position: relative;
+    z-index: 1;
 }
 
 .section-berita {
     position: relative;
-    background-color: #00a78e;
+    background: linear-gradient(120deg, #0f5fa8 0%, #2f9fe8 48%, #00a38a 100%);
     padding: 30px 40px;
     overflow: hidden;
     background-image: url('{{ asset('images/logo_siapkerja.svg') }}');
@@ -262,7 +309,7 @@ document.addEventListener('DOMContentLoaded', function() {
     width: 100%;  /*panjang garis, bisa disesuaikan*/
     max-width: 400px;
     height: 3px;  /* tebal garis */
-    background-color: #00a78e; /* warna garis */
+    background-color: #0f5fa8; /* warna garis */
 }
 .ribbon-section {
     position: fixed;
@@ -291,7 +338,7 @@ document.addEventListener('DOMContentLoaded', function() {
     transition: background 0.2s;
 }
 .ribbon-btn:hover {
-    background: #00a78e;
+    background: #0f5fa8;
 }
 #likeCount {
     font-size: 11px;
@@ -307,6 +354,19 @@ document.addEventListener('DOMContentLoaded', function() {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.news-detail-ocean-wrap {
+    background: radial-gradient(980px 520px at -10% -10%, rgba(37, 99, 235, 0.2), transparent 58%),
+        radial-gradient(920px 520px at 110% -6%, rgba(16, 185, 129, 0.16), transparent 60%),
+        radial-gradient(760px 430px at 50% 105%, rgba(47, 159, 232, 0.13), transparent 62%),
+        #f2f7ff;
+    padding-bottom: 2rem;
+}
+
+.news-detail-ocean .btn-success {
+    background: linear-gradient(120deg, #0f5fa8 0%, #2f9fe8 48%, #00a38a 100%) !important;
+    border: none !important;
 }
 @media (max-width: 900px) {
     .ribbon-section {
