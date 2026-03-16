@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 use Throwable;
 
@@ -63,10 +64,12 @@ class DashboardDistributionController extends Controller
     private function buildForecastPayload(): array
     {
         try {
+            $this->ensureForecastingConnectionConfigured();
+
             if (!Schema::connection(self::FORECASTING_DB_CONNECTION)->hasTable('jobseeker')) {
                 return [
                     'ready' => false,
-                    'message' => 'Tabel jobseeker belum tersedia pada database aplikasi saat ini.',
+                    'message' => 'Tabel jobseeker belum tersedia pada koneksi database forecasting.',
                 ];
             }
 
@@ -140,11 +143,50 @@ class DashboardDistributionController extends Controller
                 ];
             });
         } catch (Throwable $e) {
+            Log::error('Forecasting payload load failed', [
+                'connection' => self::FORECASTING_DB_CONNECTION,
+                'error' => $e->getMessage(),
+            ]);
+
+            $message = 'Data forecasting belum dapat dimuat saat ini. Silakan cek koneksi database.';
+            if ((bool) config('app.debug', false)) {
+                $message .= ' Detail: ' . $e->getMessage();
+            }
+
             return [
                 'ready' => false,
-                'message' => 'Data forecasting belum dapat dimuat saat ini. Silakan cek koneksi database.',
+                'message' => $message,
             ];
         }
+    }
+
+    private function ensureForecastingConnectionConfigured(): void
+    {
+        $connectionName = self::FORECASTING_DB_CONNECTION;
+        $configured = (array) config('database.connections.' . $connectionName, []);
+
+        if (empty($configured) || empty($configured['driver'])) {
+            config([
+                'database.connections.' . $connectionName => [
+                    'driver' => 'mysql',
+                    'host' => (string) env('JOB_ADMIN_PROD_DB_HOST', '194.233.86.160'),
+                    'port' => (string) env('JOB_ADMIN_PROD_DB_PORT', '3306'),
+                    'database' => (string) env('JOB_ADMIN_PROD_DB_DATABASE', 'job_admin_prod'),
+                    'username' => (string) env('JOB_ADMIN_PROD_DB_USERNAME', 'pasker'),
+                    'password' => (string) env('JOB_ADMIN_PROD_DB_PASSWORD', 'Getjoblivebetter!'),
+                    'unix_socket' => (string) env('JOB_ADMIN_PROD_DB_SOCKET', ''),
+                    'charset' => (string) env('JOB_ADMIN_PROD_DB_CHARSET', 'utf8mb4'),
+                    'collation' => (string) env('JOB_ADMIN_PROD_DB_COLLATION', 'utf8mb4_unicode_ci'),
+                    'prefix' => '',
+                    'prefix_indexes' => true,
+                    'strict' => true,
+                    'engine' => null,
+                ],
+            ]);
+        }
+
+        DB::purge($connectionName);
+        DB::reconnect($connectionName);
     }
 
     /**
