@@ -15,6 +15,7 @@ use Throwable;
 class DashboardDistributionController extends Controller
 {
     private const FORECASTING_SESSION_KEY = 'dashboard_distribution_forecasting_access_granted';
+    private const FORECASTING_DB_CONNECTION = 'job_admin_prod';
 
     public function index()
     {
@@ -62,7 +63,7 @@ class DashboardDistributionController extends Controller
     private function buildForecastPayload(): array
     {
         try {
-            if (!Schema::hasTable('jobseeker')) {
+            if (!Schema::connection(self::FORECASTING_DB_CONNECTION)->hasTable('jobseeker')) {
                 return [
                     'ready' => false,
                     'message' => 'Tabel jobseeker belum tersedia pada database aplikasi saat ini.',
@@ -70,7 +71,8 @@ class DashboardDistributionController extends Controller
             }
 
             return Cache::remember('dashboard_distribution_forecasting_payload', now()->addMinutes(30), function () {
-                $rows = DB::table('jobseeker')
+                $rows = DB::connection(self::FORECASTING_DB_CONNECTION)
+                    ->table('jobseeker')
                     ->selectRaw("DATE_FORMAT(tanggal_daftar, '%Y-%m-01') AS ym, COUNT(*) AS cnt")
                     ->whereNotNull('tanggal_daftar')
                     ->groupBy('ym')

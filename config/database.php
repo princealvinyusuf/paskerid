@@ -62,6 +62,25 @@ return [
             ]) : [],
         ],
 
+        'job_admin_prod' => [
+            'driver' => 'mysql',
+            'host' => env('JOB_ADMIN_PROD_DB_HOST', '194.233.86.160'),
+            'port' => env('JOB_ADMIN_PROD_DB_PORT', '3306'),
+            'database' => env('JOB_ADMIN_PROD_DB_DATABASE', 'job_admin_prod'),
+            'username' => env('JOB_ADMIN_PROD_DB_USERNAME', 'pasker'),
+            'password' => env('JOB_ADMIN_PROD_DB_PASSWORD', 'Getjoblivebetter!'),
+            'unix_socket' => env('JOB_ADMIN_PROD_DB_SOCKET', ''),
+            'charset' => env('JOB_ADMIN_PROD_DB_CHARSET', 'utf8mb4'),
+            'collation' => env('JOB_ADMIN_PROD_DB_COLLATION', 'utf8mb4_unicode_ci'),
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'strict' => true,
+            'engine' => null,
+            'options' => extension_loaded('pdo_mysql') ? array_filter([
+                PDO::MYSQL_ATTR_SSL_CA => env('JOB_ADMIN_PROD_MYSQL_ATTR_SSL_CA'),
+            ]) : [],
+        ],
+
         'mariadb' => [
             'driver' => 'mariadb',
             'url' => env('DB_URL'),
