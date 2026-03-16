@@ -94,7 +94,7 @@ class DashboardDistributionController extends Controller
                         'date' => CarbonImmutable::parse((string) $row->ym)->startOfMonth(),
                         'count' => (int) $row->cnt,
                     ];
-                })->values();
+                })->values()->all();
 
                 $historyLabels = $history->map(fn ($item) => $item['date']->format('M Y'))->all();
                 $historyCounts = $history->map(fn ($item) => $item['count'])->all();
