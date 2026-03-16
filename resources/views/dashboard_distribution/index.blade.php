@@ -5,7 +5,6 @@
     <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
         <h2 class="mb-0">Dashboard Persediaan Tenaga Kerja</h2>
         <div class="d-flex gap-2">
-            <a href="{{ route('dashboard.distribution') }}" class="btn btn-outline-success active">Persediaan</a>
             <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#forecastingPasscodeModal">
                 Forecasting
             </button>
