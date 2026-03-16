@@ -94,13 +94,13 @@ class DashboardDistributionController extends Controller
                         'date' => CarbonImmutable::parse((string) $row->ym)->startOfMonth(),
                         'count' => (int) $row->cnt,
                     ];
-                })->values()->all();
+                })->values();
 
                 $historyLabels = $history->map(fn ($item) => $item['date']->format('M Y'))->all();
                 $historyCounts = $history->map(fn ($item) => $item['count'])->all();
 
                 $maxDate = $history->last()['date'];
-                $forecastPoints = $this->generateForecastPoints($history, $maxDate, 6);
+                $forecastPoints = $this->generateForecastPoints($history->all(), $maxDate, 6);
                 $forecastLabels = array_map(fn ($item) => $item['date']->format('M Y'), $forecastPoints);
                 $forecastCounts = array_map(fn ($item) => $item['count'], $forecastPoints);
 
