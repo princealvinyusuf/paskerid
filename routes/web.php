@@ -32,6 +32,11 @@ Route::get('/about', [App\Http\Controllers\AboutController::class, 'index'])->na
 Route::get('/dashboard-trend', [App\Http\Controllers\DashboardTrendController::class, 'index'])->name('dashboard.trend');
 
 Route::get('/dashboard-distribution', [App\Http\Controllers\DashboardDistributionController::class, 'index'])->name('dashboard.distribution');
+Route::post('/dashboard-distribution/forecasting/verify-passcode', [App\Http\Controllers\DashboardDistributionController::class, 'verifyForecastingPasscode'])
+    ->middleware('throttle:10,1')
+    ->name('dashboard.distribution.forecasting.verify-passcode');
+Route::get('/dashboard-distribution/forecasting', [App\Http\Controllers\DashboardDistributionController::class, 'forecasting'])
+    ->name('dashboard.distribution.forecasting');
 
 Route::get('/dashboard-performance', [App\Http\Controllers\DashboardPerformanceController::class, 'index'])->name('dashboard.performance');
 

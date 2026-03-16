@@ -1,0 +1,962 @@
+{
+  "meta": {
+    "db": "job_admin_prod",
+    "version": "10.4.32-MariaDB"
+  },
+  "row_count": 5253201,
+  "create_table": "CREATE TABLE `jobseeker` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `profile_id` longtext DEFAULT NULL,\n  `nik` longtext DEFAULT NULL,\n  `provinsi` longtext DEFAULT NULL,\n  `kab_kota` longtext DEFAULT NULL,\n  `kecamatan` longtext DEFAULT NULL,\n  `kelurahan` longtext DEFAULT NULL,\n  `region_name` longtext DEFAULT NULL,\n  `umur` longtext DEFAULT NULL,\n  `kelompok_umur` longtext DEFAULT NULL,\n  `jenis_kelamin` longtext DEFAULT NULL,\n  `kondisi_fisik` longtext DEFAULT NULL,\n  `jenis_disabilitas` longtext DEFAULT NULL,\n  `marital` longtext DEFAULT NULL,\n  `status_bekerja` longtext DEFAULT NULL,\n  `tanggal_daftar` date DEFAULT NULL,\n  `start_date` date DEFAULT NULL,\n  `status_sekarang` longtext DEFAULT NULL,\n  `bulan_daftar` longtext DEFAULT NULL,\n  `tanggal_kedaluwarsa` date DEFAULT NULL,\n  `status_profil` longtext DEFAULT NULL,\n  `pendidikan` longtext DEFAULT NULL,\n  `nama_sekolah` longtext DEFAULT NULL,\n  `jurusan` longtext DEFAULT NULL,\n  `experience` longtext DEFAULT NULL,\n  `tanggal_awal_pengalaman` longtext DEFAULT NULL,\n  `tanggal_akhir_pengalaman` longtext DEFAULT NULL,\n  `lama_pengalaman` longtext DEFAULT NULL,\n  `kelompok_pengalaman` longtext DEFAULT NULL,\n  `sertifikasi` longtext DEFAULT NULL,\n  `lembaga_pelatihan` longtext DEFAULT NULL,\n  `progpel` longtext DEFAULT NULL,\n  `keahlian` longtext DEFAULT NULL,\n  `rencana_kerja_luar_negeri` longtext DEFAULT NULL,\n  `country_wish` longtext DEFAULT NULL,\n  `lamaran_diajukan` longtext DEFAULT NULL,\n  `status_aktif_30092025` longtext DEFAULT NULL,\n  `recent_start` longtext DEFAULT NULL,\n  `status_aktif_01122025` longtext DEFAULT NULL,\n  `status_aktif_01012026` longtext DEFAULT NULL,\n  `tahun_siapkerja` longtext DEFAULT NULL,\n  `bulan` longtext DEFAULT NULL,\n  `pendidikan_kelompok` longtext DEFAULT NULL,\n  `name` longtext DEFAULT NULL,\n  `status_aktif_02022026` longtext DEFAULT NULL,\n  `progpel_clean` longtext DEFAULT NULL,\n  `jurusan_clean` longtext DEFAULT NULL,\n  `asalsekolah_clean` longtext DEFAULT NULL,\n  `inputted_date` datetime DEFAULT current_timestamp(),\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB AUTO_INCREMENT=12580547 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci",
+  "columns": [
+    {
+      "ordinal_position": 1,
+      "column_name": "id",
+      "data_type": "int",
+      "column_type": "int(11)",
+      "is_nullable": "NO",
+      "column_default": null,
+      "column_key": "PRI",
+      "extra": "auto_increment"
+    },
+    {
+      "ordinal_position": 2,
+      "column_name": "profile_id",
+      "data_type": "longtext",
+      "column_type": "longtext",
+      "is_nullable": "YES",
+      "column_default": "NULL",
+      "column_key": "",
+      "extra": ""
+    },
+    {
+      "ordinal_position": 3,
+      "column_name": "nik",
+      "data_type": "longtext",
+      "column_type": "longtext",
+      "is_nullable": "YES",
+      "column_default": "NULL",
+      "column_key": "",
+      "extra": ""
+    },
+    {
+      "ordinal_position": 4,
+      "column_name": "provinsi",
+      "data_type": "longtext",
+      "column_type": "longtext",
+      "is_nullable": "YES",
+      "column_default": "NULL",
+      "column_key": "",
+      "extra": ""
+    },
+    {
+      "ordinal_position": 5,
+      "column_name": "kab_kota",
+      "data_type": "longtext",
+      "column_type": "longtext",
+      "is_nullable": "YES",
+      "column_default": "NULL",
+      "column_key": "",
+      "extra": ""
+    },
+    {
+      "ordinal_position": 6,
+      "column_name": "kecamatan",
+      "data_type": "longtext",
+      "column_type": "longtext",
+      "is_nullable": "YES",
+      "column_default": "NULL",
+      "column_key": "",
+      "extra": ""
+    },
+    {
+      "ordinal_position": 7,
+      "column_name": "kelurahan",
+      "data_type": "longtext",
+      "column_type": "longtext",
+      "is_nullable": "YES",
+      "column_default": "NULL",
+      "column_key": "",
+      "extra": ""
+    },
+    {
+      "ordinal_position": 8,
+      "column_name": "region_name",
+      "data_type": "longtext",
+      "column_type": "longtext",
+      "is_nullable": "YES",
+      "column_default": "NULL",
+      "column_key": "",
+      "extra": ""
+    },
+    {
+      "ordinal_position": 9,
+      "column_name": "umur",
+      "data_type": "longtext",
+      "column_type": "longtext",
+      "is_nullable": "YES",
+      "column_default": "NULL",
+      "column_key": "",
+      "extra": ""
+    },
+    {
+      "ordinal_position": 10,
+      "column_name": "kelompok_umur",
+      "data_type": "longtext",
+      "column_type": "longtext",
+      "is_nullable": "YES",
+      "column_default": "NULL",
+      "column_key": "",
+      "extra": ""
+    },
+    {
+      "ordinal_position": 11,
+      "column_name": "jenis_kelamin",
+      "data_type": "longtext",
+      "column_type": "longtext",
+      "is_nullable": "YES",
+      "column_default": "NULL",
+      "column_key": "",
+      "extra": ""
+    },
+    {
+      "ordinal_position": 12,
+      "column_name": "kondisi_fisik",
+      "data_type": "longtext",
+      "column_type": "longtext",
+      "is_nullable": "YES",
+      "column_default": "NULL",
+      "column_key": "",
+      "extra": ""
+    },
+    {
+      "ordinal_position": 13,
+      "column_name": "jenis_disabilitas",
+      "data_type": "longtext",
+      "column_type": "longtext",
+      "is_nullable": "YES",
+      "column_default": "NULL",
+      "column_key": "",
+      "extra": ""
+    },
+    {
+      "ordinal_position": 14,
+      "column_name": "marital",
+      "data_type": "longtext",
+      "column_type": "longtext",
+      "is_nullable": "YES",
+      "column_default": "NULL",
+      "column_key": "",
+      "extra": ""
+    },
+    {
+      "ordinal_position": 15,
+      "column_name": "status_bekerja",
+      "data_type": "longtext",
+      "column_type": "longtext",
+      "is_nullable": "YES",
+      "column_default": "NULL",
+      "column_key": "",
+      "extra": ""
+    },
+    {
+      "ordinal_position": 16,
+      "column_name": "tanggal_daftar",
+      "data_type": "date",
+      "column_type": "date",
+      "is_nullable": "YES",
+      "column_default": "NULL",
+      "column_key": "",
+      "extra": ""
+    },
+    {
+      "ordinal_position": 17,
+      "column_name": "start_date",
+      "data_type": "date",
+      "column_type": "date",
+      "is_nullable": "YES",
+      "column_default": "NULL",
+      "column_key": "",
+      "extra": ""
+    },
+    {
+      "ordinal_position": 18,
+      "column_name": "status_sekarang",
+      "data_type": "longtext",
+      "column_type": "longtext",
+      "is_nullable": "YES",
+      "column_default": "NULL",
+      "column_key": "",
+      "extra": ""
+    },
+    {
+      "ordinal_position": 19,
+      "column_name": "bulan_daftar",
+      "data_type": "longtext",
+      "column_type": "longtext",
+      "is_nullable": "YES",
+      "column_default": "NULL",
+      "column_key": "",
+      "extra": ""
+    },
+    {
+      "ordinal_position": 20,
+      "column_name": "tanggal_kedaluwarsa",
+      "data_type": "date",
+      "column_type": "date",
+      "is_nullable": "YES",
+      "column_default": "NULL",
+      "column_key": "",
+      "extra": ""
+    },
+    {
+      "ordinal_position": 21,
+      "column_name": "status_profil",
+      "data_type": "longtext",
+      "column_type": "longtext",
+      "is_nullable": "YES",
+      "column_default": "NULL",
+      "column_key": "",
+      "extra": ""
+    },
+    {
+      "ordinal_position": 22,
+      "column_name": "pendidikan",
+      "data_type": "longtext",
+      "column_type": "longtext",
+      "is_nullable": "YES",
+      "column_default": "NULL",
+      "column_key": "",
+      "extra": ""
+    },
+    {
+      "ordinal_position": 23,
+      "column_name": "nama_sekolah",
+      "data_type": "longtext",
+      "column_type": "longtext",
+      "is_nullable": "YES",
+      "column_default": "NULL",
+      "column_key": "",
+      "extra": ""
+    },
+    {
+      "ordinal_position": 24,
+      "column_name": "jurusan",
+      "data_type": "longtext",
+      "column_type": "longtext",
+      "is_nullable": "YES",
+      "column_default": "NULL",
+      "column_key": "",
+      "extra": ""
+    },
+    {
+      "ordinal_position": 25,
+      "column_name": "experience",
+      "data_type": "longtext",
+      "column_type": "longtext",
+      "is_nullable": "YES",
+      "column_default": "NULL",
+      "column_key": "",
+      "extra": ""
+    },
+    {
+      "ordinal_position": 26,
+      "column_name": "tanggal_awal_pengalaman",
+      "data_type": "longtext",
+      "column_type": "longtext",
+      "is_nullable": "YES",
+      "column_default": "NULL",
+      "column_key": "",
+      "extra": ""
+    },
+    {
+      "ordinal_position": 27,
+      "column_name": "tanggal_akhir_pengalaman",
+      "data_type": "longtext",
+      "column_type": "longtext",
+      "is_nullable": "YES",
+      "column_default": "NULL",
+      "column_key": "",
+      "extra": ""
+    },
+    {
+      "ordinal_position": 28,
+      "column_name": "lama_pengalaman",
+      "data_type": "longtext",
+      "column_type": "longtext",
+      "is_nullable": "YES",
+      "column_default": "NULL",
+      "column_key": "",
+      "extra": ""
+    },
+    {
+      "ordinal_position": 29,
+      "column_name": "kelompok_pengalaman",
+      "data_type": "longtext",
+      "column_type": "longtext",
+      "is_nullable": "YES",
+      "column_default": "NULL",
+      "column_key": "",
+      "extra": ""
+    },
+    {
+      "ordinal_position": 30,
+      "column_name": "sertifikasi",
+      "data_type": "longtext",
+      "column_type": "longtext",
+      "is_nullable": "YES",
+      "column_default": "NULL",
+      "column_key": "",
+      "extra": ""
+    },
+    {
+      "ordinal_position": 31,
+      "column_name": "lembaga_pelatihan",
+      "data_type": "longtext",
+      "column_type": "longtext",
+      "is_nullable": "YES",
+      "column_default": "NULL",
+      "column_key": "",
+      "extra": ""
+    },
+    {
+      "ordinal_position": 32,
+      "column_name": "progpel",
+      "data_type": "longtext",
+      "column_type": "longtext",
+      "is_nullable": "YES",
+      "column_default": "NULL",
+      "column_key": "",
+      "extra": ""
+    },
+    {
+      "ordinal_position": 33,
+      "column_name": "keahlian",
+      "data_type": "longtext",
+      "column_type": "longtext",
+      "is_nullable": "YES",
+      "column_default": "NULL",
+      "column_key": "",
+      "extra": ""
+    },
+    {
+      "ordinal_position": 34,
+      "column_name": "rencana_kerja_luar_negeri",
+      "data_type": "longtext",
+      "column_type": "longtext",
+      "is_nullable": "YES",
+      "column_default": "NULL",
+      "column_key": "",
+      "extra": ""
+    },
+    {
+      "ordinal_position": 35,
+      "column_name": "country_wish",
+      "data_type": "longtext",
+      "column_type": "longtext",
+      "is_nullable": "YES",
+      "column_default": "NULL",
+      "column_key": "",
+      "extra": ""
+    },
+    {
+      "ordinal_position": 36,
+      "column_name": "lamaran_diajukan",
+      "data_type": "longtext",
+      "column_type": "longtext",
+      "is_nullable": "YES",
+      "column_default": "NULL",
+      "column_key": "",
+      "extra": ""
+    },
+    {
+      "ordinal_position": 37,
+      "column_name": "status_aktif_30092025",
+      "data_type": "longtext",
+      "column_type": "longtext",
+      "is_nullable": "YES",
+      "column_default": "NULL",
+      "column_key": "",
+      "extra": ""
+    },
+    {
+      "ordinal_position": 38,
+      "column_name": "recent_start",
+      "data_type": "longtext",
+      "column_type": "longtext",
+      "is_nullable": "YES",
+      "column_default": "NULL",
+      "column_key": "",
+      "extra": ""
+    },
+    {
+      "ordinal_position": 39,
+      "column_name": "status_aktif_01122025",
+      "data_type": "longtext",
+      "column_type": "longtext",
+      "is_nullable": "YES",
+      "column_default": "NULL",
+      "column_key": "",
+      "extra": ""
+    },
+    {
+      "ordinal_position": 40,
+      "column_name": "status_aktif_01012026",
+      "data_type": "longtext",
+      "column_type": "longtext",
+      "is_nullable": "YES",
+      "column_default": "NULL",
+      "column_key": "",
+      "extra": ""
+    },
+    {
+      "ordinal_position": 41,
+      "column_name": "tahun_siapkerja",
+      "data_type": "longtext",
+      "column_type": "longtext",
+      "is_nullable": "YES",
+      "column_default": "NULL",
+      "column_key": "",
+      "extra": ""
+    },
+    {
+      "ordinal_position": 42,
+      "column_name": "bulan",
+      "data_type": "longtext",
+      "column_type": "longtext",
+      "is_nullable": "YES",
+      "column_default": "NULL",
+      "column_key": "",
+      "extra": ""
+    },
+    {
+      "ordinal_position": 43,
+      "column_name": "pendidikan_kelompok",
+      "data_type": "longtext",
+      "column_type": "longtext",
+      "is_nullable": "YES",
+      "column_default": "NULL",
+      "column_key": "",
+      "extra": ""
+    },
+    {
+      "ordinal_position": 44,
+      "column_name": "name",
+      "data_type": "longtext",
+      "column_type": "longtext",
+      "is_nullable": "YES",
+      "column_default": "NULL",
+      "column_key": "",
+      "extra": ""
+    },
+    {
+      "ordinal_position": 45,
+      "column_name": "status_aktif_02022026",
+      "data_type": "longtext",
+      "column_type": "longtext",
+      "is_nullable": "YES",
+      "column_default": "NULL",
+      "column_key": "",
+      "extra": ""
+    },
+    {
+      "ordinal_position": 46,
+      "column_name": "progpel_clean",
+      "data_type": "longtext",
+      "column_type": "longtext",
+      "is_nullable": "YES",
+      "column_default": "NULL",
+      "column_key": "",
+      "extra": ""
+    },
+    {
+      "ordinal_position": 47,
+      "column_name": "jurusan_clean",
+      "data_type": "longtext",
+      "column_type": "longtext",
+      "is_nullable": "YES",
+      "column_default": "NULL",
+      "column_key": "",
+      "extra": ""
+    },
+    {
+      "ordinal_position": 48,
+      "column_name": "asalsekolah_clean",
+      "data_type": "longtext",
+      "column_type": "longtext",
+      "is_nullable": "YES",
+      "column_default": "NULL",
+      "column_key": "",
+      "extra": ""
+    },
+    {
+      "ordinal_position": 49,
+      "column_name": "inputted_date",
+      "data_type": "datetime",
+      "column_type": "datetime",
+      "is_nullable": "YES",
+      "column_default": "current_timestamp()",
+      "column_key": "",
+      "extra": ""
+    }
+  ],
+  "null_counts": {
+    "id": "0",
+    "profile_id": "0",
+    "nik": "0",
+    "provinsi": "0",
+    "kab_kota": "0",
+    "kecamatan": "0",
+    "kelurahan": "0",
+    "region_name": "0",
+    "umur": "0",
+    "kelompok_umur": "0",
+    "jenis_kelamin": "0",
+    "kondisi_fisik": "0",
+    "jenis_disabilitas": "0",
+    "marital": "0",
+    "status_bekerja": "0",
+    "tanggal_daftar": "0",
+    "start_date": "0",
+    "status_sekarang": "0",
+    "bulan_daftar": "0",
+    "tanggal_kedaluwarsa": "109100",
+    "status_profil": "0",
+    "pendidikan": "0",
+    "nama_sekolah": "0",
+    "jurusan": "0",
+    "experience": "0",
+    "tanggal_awal_pengalaman": "0",
+    "tanggal_akhir_pengalaman": "0",
+    "lama_pengalaman": "0",
+    "kelompok_pengalaman": "0",
+    "sertifikasi": "0",
+    "lembaga_pelatihan": "0",
+    "progpel": "0",
+    "keahlian": "0",
+    "rencana_kerja_luar_negeri": "0",
+    "country_wish": "0",
+    "lamaran_diajukan": "0",
+    "status_aktif_30092025": "0",
+    "recent_start": "0",
+    "status_aktif_01122025": "0",
+    "status_aktif_01012026": "0",
+    "tahun_siapkerja": "0",
+    "bulan": "0",
+    "pendidikan_kelompok": "0",
+    "name": "0",
+    "status_aktif_02022026": "0",
+    "progpel_clean": "0",
+    "jurusan_clean": "0",
+    "asalsekolah_clean": "0",
+    "inputted_date": "0"
+  },
+  "date_columns": [
+    "tanggal_daftar",
+    "start_date",
+    "tanggal_kedaluwarsa",
+    "inputted_date"
+  ],
+  "date_ranges": {
+    "tanggal_daftar": {
+      "mn": "2018-03-02",
+      "mx": "2026-01-31",
+      "non_null": 5253201
+    },
+    "start_date": {
+      "mn": "2020-01-23",
+      "mx": "2026-01-31",
+      "non_null": 5253201
+    },
+    "tanggal_kedaluwarsa": {
+      "mn": "2020-07-23",
+      "mx": "2026-08-02",
+      "non_null": 5144101
+    },
+    "inputted_date": {
+      "mn": "2026-02-12 19:47:46",
+      "mx": "2026-03-04 09:26:06",
+      "non_null": 5253201
+    }
+  },
+  "time_col": "tanggal_daftar",
+  "monthly_counts": [
+    {
+      "ym": "2018-03",
+      "cnt": 1
+    },
+    {
+      "ym": "2018-04",
+      "cnt": 1
+    },
+    {
+      "ym": "2018-05",
+      "cnt": 1
+    },
+    {
+      "ym": "2018-07",
+      "cnt": 11
+    },
+    {
+      "ym": "2018-08",
+      "cnt": 89
+    },
+    {
+      "ym": "2018-09",
+      "cnt": 515
+    },
+    {
+      "ym": "2018-10",
+      "cnt": 494
+    },
+    {
+      "ym": "2018-11",
+      "cnt": 330
+    },
+    {
+      "ym": "2018-12",
+      "cnt": 280
+    },
+    {
+      "ym": "2019-01",
+      "cnt": 341
+    },
+    {
+      "ym": "2019-02",
+      "cnt": 338
+    },
+    {
+      "ym": "2019-03",
+      "cnt": 407
+    },
+    {
+      "ym": "2019-04",
+      "cnt": 331
+    },
+    {
+      "ym": "2019-05",
+      "cnt": 324
+    },
+    {
+      "ym": "2019-06",
+      "cnt": 223
+    },
+    {
+      "ym": "2019-07",
+      "cnt": 1088
+    },
+    {
+      "ym": "2019-08",
+      "cnt": 1855
+    },
+    {
+      "ym": "2019-09",
+      "cnt": 1728
+    },
+    {
+      "ym": "2019-10",
+      "cnt": 2564
+    },
+    {
+      "ym": "2019-11",
+      "cnt": 7687
+    },
+    {
+      "ym": "2019-12",
+      "cnt": 8567
+    },
+    {
+      "ym": "2020-01",
+      "cnt": 14150
+    },
+    {
+      "ym": "2020-02",
+      "cnt": 16510
+    },
+    {
+      "ym": "2020-03",
+      "cnt": 14691
+    },
+    {
+      "ym": "2020-04",
+      "cnt": 120577
+    },
+    {
+      "ym": "2020-05",
+      "cnt": 23007
+    },
+    {
+      "ym": "2020-06",
+      "cnt": 14279
+    },
+    {
+      "ym": "2020-07",
+      "cnt": 20855
+    },
+    {
+      "ym": "2020-08",
+      "cnt": 91533
+    },
+    {
+      "ym": "2020-09",
+      "cnt": 209499
+    },
+    {
+      "ym": "2020-10",
+      "cnt": 129995
+    },
+    {
+      "ym": "2020-11",
+      "cnt": 143968
+    },
+    {
+      "ym": "2020-12",
+      "cnt": 46729
+    },
+    {
+      "ym": "2021-01",
+      "cnt": 69548
+    },
+    {
+      "ym": "2021-02",
+      "cnt": 39193
+    },
+    {
+      "ym": "2021-03",
+      "cnt": 63742
+    },
+    {
+      "ym": "2021-04",
+      "cnt": 32683
+    },
+    {
+      "ym": "2021-05",
+      "cnt": 53908
+    },
+    {
+      "ym": "2021-06",
+      "cnt": 87160
+    },
+    {
+      "ym": "2021-07",
+      "cnt": 43208
+    },
+    {
+      "ym": "2021-08",
+      "cnt": 102045
+    },
+    {
+      "ym": "2021-09",
+      "cnt": 190454
+    },
+    {
+      "ym": "2021-10",
+      "cnt": 475235
+    },
+    {
+      "ym": "2021-11",
+      "cnt": 157915
+    },
+    {
+      "ym": "2021-12",
+      "cnt": 71286
+    },
+    {
+      "ym": "2022-01",
+      "cnt": 57570
+    },
+    {
+      "ym": "2022-02",
+      "cnt": 46308
+    },
+    {
+      "ym": "2022-03",
+      "cnt": 49093
+    },
+    {
+      "ym": "2022-04",
+      "cnt": 53156
+    },
+    {
+      "ym": "2022-05",
+      "cnt": 70364
+    },
+    {
+      "ym": "2022-06",
+      "cnt": 95026
+    },
+    {
+      "ym": "2022-07",
+      "cnt": 69302
+    },
+    {
+      "ym": "2022-08",
+      "cnt": 75235
+    },
+    {
+      "ym": "2022-09",
+      "cnt": 64780
+    },
+    {
+      "ym": "2022-10",
+      "cnt": 21615
+    },
+    {
+      "ym": "2022-11",
+      "cnt": 20155
+    },
+    {
+      "ym": "2022-12",
+      "cnt": 48798
+    },
+    {
+      "ym": "2023-01",
+      "cnt": 44964
+    },
+    {
+      "ym": "2023-02",
+      "cnt": 41388
+    },
+    {
+      "ym": "2023-03",
+      "cnt": 53732
+    },
+    {
+      "ym": "2023-04",
+      "cnt": 45448
+    },
+    {
+      "ym": "2023-05",
+      "cnt": 155144
+    },
+    {
+      "ym": "2023-06",
+      "cnt": 76768
+    },
+    {
+      "ym": "2023-07",
+      "cnt": 78155
+    },
+    {
+      "ym": "2023-08",
+      "cnt": 67156
+    },
+    {
+      "ym": "2023-09",
+      "cnt": 59343
+    },
+    {
+      "ym": "2023-10",
+      "cnt": 69229
+    },
+    {
+      "ym": "2023-11",
+      "cnt": 56422
+    },
+    {
+      "ym": "2023-12",
+      "cnt": 44012
+    },
+    {
+      "ym": "2024-01",
+      "cnt": 52647
+    },
+    {
+      "ym": "2024-02",
+      "cnt": 43840
+    },
+    {
+      "ym": "2024-03",
+      "cnt": 40980
+    },
+    {
+      "ym": "2024-04",
+      "cnt": 46304
+    },
+    {
+      "ym": "2024-05",
+      "cnt": 105271
+    },
+    {
+      "ym": "2024-06",
+      "cnt": 68778
+    },
+    {
+      "ym": "2024-07",
+      "cnt": 72655
+    },
+    {
+      "ym": "2024-08",
+      "cnt": 59510
+    },
+    {
+      "ym": "2024-09",
+      "cnt": 51140
+    },
+    {
+      "ym": "2024-10",
+      "cnt": 49478
+    },
+    {
+      "ym": "2024-11",
+      "cnt": 44448
+    },
+    {
+      "ym": "2024-12",
+      "cnt": 43459
+    },
+    {
+      "ym": "2025-01",
+      "cnt": 50219
+    },
+    {
+      "ym": "2025-02",
+      "cnt": 46031
+    },
+    {
+      "ym": "2025-03",
+      "cnt": 38678
+    },
+    {
+      "ym": "2025-04",
+      "cnt": 59116
+    },
+    {
+      "ym": "2025-05",
+      "cnt": 106690
+    },
+    {
+      "ym": "2025-06",
+      "cnt": 70390
+    },
+    {
+      "ym": "2025-07",
+      "cnt": 71495
+    },
+    {
+      "ym": "2025-08",
+      "cnt": 73852
+    },
+    {
+      "ym": "2025-09",
+      "cnt": 66025
+    },
+    {
+      "ym": "2025-10",
+      "cnt": 124239
+    },
+    {
+      "ym": "2025-11",
+      "cnt": 75824
+    },
+    {
+      "ym": "2025-12",
+      "cnt": 45882
+    },
+    {
+      "ym": "2026-01",
+      "cnt": 23742
+    }
+  ],
+  "important_columns": {},
+  "duplicates": {
+    "nik": 0
+  }
+}
