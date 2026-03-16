@@ -1,0 +1,42 @@
+{
+  "series_points": 94,
+  "series_start": "2018-03-01",
+  "series_end": "2026-01-01",
+  "sarimax_order": [
+    1,
+    1,
+    2
+  ],
+  "sarimax_seasonal_order": [
+    0,
+    1,
+    1,
+    12
+  ],
+  "best_by_horizon": [
+    {
+      "horizon": 1,
+      "model": "gbr_lag",
+      "mae": 30643.137,
+      "rmse": 60506.3601,
+      "mape": 38.9944,
+      "folds": 58
+    },
+    {
+      "horizon": 3,
+      "model": "production_blend",
+      "mae": 36458.6488,
+      "rmse": 68480.9352,
+      "mape": 50.6532,
+      "folds": 56
+    },
+    {
+      "horizon": 6,
+      "model": "production_blend",
+      "mae": 37396.7013,
+      "rmse": 70824.1127,
+      "mape": 51.2597,
+      "folds": 53
+    }
+  ]
+}
