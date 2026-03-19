@@ -503,9 +503,63 @@
                                             <a href="https://karirhub.kemnaker.go.id/" class="text-decoration-none text-dark">
                                             <div class="job-card bg-white text-dark shadow-sm rounded-4 border p-3 h-100">
                                                 <div class="text-center mb-3">
-                                                    <img src="data:{{ $ad->mime_type }};base64,{{ $ad->image_base64 }}"
-                                                        alt="{{ $ad->company_name }}"
-                                                        class="rounded" style="height: 50px; object-fit: contain;">
+                                                    @php
+                                                        $rawImage = trim((string) ($ad->image_base64 ?? ''));
+                                                        $rawMime = strtolower(trim((string) ($ad->mime_type ?? '')));
+                                                        $adImageSrc = '';
+
+                                                        $normalizeMime = static function (string $mime): string {
+                                                            $mime = strtolower(trim($mime));
+                                                            $mime = ltrim($mime, '.');
+                                                            $map = [
+                                                                'jpg' => 'image/jpeg',
+                                                                'jpeg' => 'image/jpeg',
+                                                                'png' => 'image/png',
+                                                                'gif' => 'image/gif',
+                                                                'webp' => 'image/webp',
+                                                                'svg' => 'image/svg+xml',
+                                                            ];
+                                                            if (isset($map[$mime])) {
+                                                                return $map[$mime];
+                                                            }
+                                                            return str_contains($mime, '/') ? $mime : '';
+                                                        };
+
+                                                        if ($rawImage !== '') {
+                                                            if (\Illuminate\Support\Str::startsWith($rawImage, 'data:')) {
+                                                                [$meta, $payload] = array_pad(explode(',', $rawImage, 2), 2, '');
+                                                                if ($payload !== '') {
+                                                                    $detectedMime = '';
+                                                                    if (preg_match('/^data:([^;]+);base64$/i', $meta, $matches) === 1) {
+                                                                        $detectedMime = $normalizeMime((string) ($matches[1] ?? ''));
+                                                                    }
+                                                                    if ($detectedMime === '') {
+                                                                        $detectedMime = $normalizeMime($rawMime);
+                                                                    }
+                                                                    if ($detectedMime === '') {
+                                                                        $detectedMime = 'image/jpeg';
+                                                                    }
+                                                                    $adImageSrc = "data:{$detectedMime};base64,{$payload}";
+                                                                }
+                                                            } else {
+                                                                $detectedMime = $normalizeMime($rawMime);
+                                                                if ($detectedMime === '') {
+                                                                    $detectedMime = 'image/jpeg';
+                                                                }
+                                                                $adImageSrc = "data:{$detectedMime};base64,{$rawImage}";
+                                                            }
+                                                        }
+                                                    @endphp
+
+                                                    @if($adImageSrc !== '')
+                                                        <img src="{{ $adImageSrc }}"
+                                                            alt="{{ $ad->company_name }}"
+                                                            class="rounded" style="height: 50px; object-fit: contain;">
+                                                    @else
+                                                        <img src="{{ asset('images/services/karirhub.png') }}"
+                                                            alt="{{ $ad->company_name }}"
+                                                            class="rounded" style="height: 50px; object-fit: contain;">
+                                                    @endif
                                                 </div>
                                                 <h6 class="fw-bold text-center">{{ \Illuminate\Support\Str::limit($ad->job_title, 15, '...') }}</h6>
                                                 <p class="text-center mb-1 text-muted small">{{ \Illuminate\Support\Str::limit($ad->company_name, 20, '...') }}</p>
