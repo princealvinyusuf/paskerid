@@ -481,7 +481,6 @@
                         <ul class="dropdown-menu" aria-labelledby="layananDropdown">
                             <li><a class="dropdown-item @if(request()->routeIs('virtual-karir.index')) active fw-bold @endif" href="{{ route('virtual-karir.index') }}">Virtual Karir</a></li>
                             <li><a class="dropdown-item @if(request()->routeIs('pusat_bantuan')) active fw-bold @endif" href="{{ route('pusat_bantuan') }}">Pusat Bantuan</a></li>
-                            <li><a class="dropdown-item" href="https://microlearning-paskerid.kemnaker.go.id/" target="_blank">Microlearning</a></li>
                             <li><a class="dropdown-item @if(request()->routeIs('media_sosial')) active fw-bold @endif" href="{{ route('media_sosial') }}">Media Sosial</a></li>
                         </ul>
                     </li>
