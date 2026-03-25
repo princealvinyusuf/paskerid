@@ -133,6 +133,7 @@ class CareerBoostdayController extends Controller
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:120'],
             'whatsapp' => ['required', 'string', 'max:30'],
+            'email' => ['required', 'string', 'email', 'max:120'],
             'status_choice' => ['required', 'string', 'in:fresh,pindah,lainnya'],
             'status_other' => ['nullable', 'string', 'max:120'],
             'jenis_konseling' => ['required', 'string', 'max:255'],
@@ -197,6 +198,11 @@ class CareerBoostdayController extends Controller
             'cv_path' => $cvPath,
             'cv_original_name' => $cvOriginalName,
         ];
+
+        // Backward compatible: only save if the column exists (migration may not be applied yet).
+        if (Schema::hasColumn('career_boostday_consultations', 'email')) {
+            $payload['email'] = $validated['email'];
+        }
 
         // Backward compatible: only save if the column exists (migration may not be applied yet).
         if (Schema::hasColumn('career_boostday_consultations', 'jurusan')) {

@@ -12,6 +12,7 @@ class CareerBoostdayConsultation extends Model
     protected $fillable = [
         'name',
         'whatsapp',
+        'email',
         'status',
         'jenis_konseling',
         'jadwal_konseling',

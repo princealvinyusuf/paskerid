@@ -730,6 +730,11 @@
                                     <input type="text" id="whatsapp" name="whatsapp" class="form-control" value="{{ old('whatsapp') }}" placeholder="Contoh: 0822xxxx atau +62822xxxx" required>
                                     <div class="form-text">Pastikan nomor aktif dan dapat dihubungi.</div>
                                 </div>
+                                <div class="col-12 col-md-6">
+                                    <label class="form-label fw-semibold" for="email">Email</label>
+                                    <input type="email" id="email" name="email" class="form-control" value="{{ old('email') }}" placeholder="contoh@email.com" required>
+                                    <div class="form-text">Masukkan email aktif untuk kebutuhan tindak lanjut konsultasi.</div>
+                                </div>
 
                                 <div class="col-12">
                                     <label class="form-label fw-semibold">Apakah Jobers :</label>
