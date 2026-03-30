@@ -777,9 +777,9 @@
         background-color: var(--primary-green) !important;
     }
     .maintenance-message-banner {
-        background-color: #fff3cd;
-        color: #664d03;
-        border-bottom: 1px solid #ffe69c;
+        background-color: #f97316;
+        color: #ffffff;
+        border-bottom: 1px solid #ea580c;
         font-size: 0.95rem;
         position: relative;
         z-index: 1025;
