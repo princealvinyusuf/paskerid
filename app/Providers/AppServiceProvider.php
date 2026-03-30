@@ -2,9 +2,14 @@
 
 namespace App\Providers;
 
+use Carbon\Carbon;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\View;
+use Throwable;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -25,5 +30,36 @@ class AppServiceProvider extends ServiceProvider
         if (config('app.env') === 'production') {
             URL::forceScheme('https');
         }
+
+        View::composer('layouts.app', function ($view): void {
+            $maintenanceMessage = null;
+
+            try {
+                if (Schema::hasTable('maintenance_message_settings')) {
+                    $setting = DB::table('maintenance_message_settings')
+                        ->where('id', 1)
+                        ->first(['is_enabled', 'maintenance_at', 'duration_minutes']);
+
+                    if (
+                        $setting
+                        && (int) $setting->is_enabled === 1
+                        && !empty($setting->maintenance_at)
+                        && (int) $setting->duration_minutes > 0
+                    ) {
+                        $maintenanceAt = Carbon::parse($setting->maintenance_at)->format('d-m-Y H:i');
+                        $durationMinutes = (int) $setting->duration_minutes;
+                        $maintenanceMessage = sprintf(
+                            'Dalam rangka peningkatan kualitas layanan dan performa sistem, website kami akan menjalani maintenance pada %s WIB selama %d menit, sehingga untuk sementara tidak dapat diakses, mohon maaf atas ketidaknyamanannya.',
+                            $maintenanceAt,
+                            $durationMinutes
+                        );
+                    }
+                }
+            } catch (Throwable $e) {
+                $maintenanceMessage = null;
+            }
+
+            $view->with('maintenanceMessage', $maintenanceMessage);
+        });
     }
 }

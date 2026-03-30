@@ -542,6 +542,13 @@
             </button>
         </div>
     </nav>
+    @if(!empty($maintenanceMessage))
+        <div class="maintenance-message-banner" role="status" aria-live="polite">
+            <div class="container py-2">
+                <i class="fa-solid fa-triangle-exclamation me-2"></i>{{ $maintenanceMessage }}
+            </div>
+        </div>
+    @endif
     @if(session('success'))
         <div class="container mt-3">
             <div class="alert alert-success mb-0">
@@ -768,6 +775,14 @@
     }
     .navbar, .sticky-top {
         background-color: var(--primary-green) !important;
+    }
+    .maintenance-message-banner {
+        background-color: #fff3cd;
+        color: #664d03;
+        border-bottom: 1px solid #ffe69c;
+        font-size: 0.95rem;
+        position: relative;
+        z-index: 1025;
     }
     .navbar .nav-link, .navbar-brand {
         color: #fff !important;
