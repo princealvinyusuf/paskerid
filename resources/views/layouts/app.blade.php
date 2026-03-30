@@ -543,7 +543,7 @@
         </div>
     </nav>
     @if(!empty($maintenanceMessage))
-        <div class="maintenance-message-banner" role="status" aria-live="polite">
+        <div class="maintenance-message-banner" role="status" aria-live="polite" style="background-color:#f97316;color:#ffffff;border-bottom:1px solid #ea580c;">
             <div class="container py-2">
                 <i class="fa-solid fa-triangle-exclamation me-2"></i>{{ $maintenanceMessage }}
             </div>
