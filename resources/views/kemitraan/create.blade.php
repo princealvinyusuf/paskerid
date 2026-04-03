@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container mt-5 mb-5" style="max-width: 1200px;">
+<div class="walkin-page-wrap mt-5 mb-5">
     <div class="text-center mb-4">
         <i class="bi bi-people-fill" style="font-size: 2.5rem; color: #0d6efd;"></i>
         <h2 class="mt-2 mb-0">Walk In Interview</h2>
@@ -4074,17 +4074,25 @@
 </script>
 @endpush
 <style>
+    .walkin-page-wrap {
+        width: min(96vw, 1680px);
+        margin-left: auto;
+        margin-right: auto;
+    }
     .walkin-segmented {
-        display: grid;
-        grid-template-columns: repeat(7, minmax(0, 1fr));
+        display: flex;
+        flex-wrap: nowrap;
         width: 100%;
         background: #eef2f7;
         border-radius: 999px;
         padding: 8px;
         box-shadow: inset 0 0 0 1px rgba(0,0,0,0.06);
         gap: 8px;
+        overflow: hidden;
     }
     .walkin-seg-btn {
+        flex: 1 1 0;
+        min-width: 0;
         border: 0;
         border-radius: 999px;
         padding: 9px 10px;
@@ -4097,6 +4105,8 @@
         min-height: 0;
         font-size: 0.92rem;
         display: block;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
     .walkin-seg-btn.active {
         background: #ffffff;
@@ -4104,8 +4114,11 @@
         box-shadow: 0 6px 16px rgba(2,6,23,0.10);
     }
     @media (max-width: 1200px) and (min-width: 577px) {
-        .walkin-segmented {
-            grid-template-columns: repeat(4, minmax(0, 1fr));
+        .walkin-page-wrap {
+            width: min(98vw, 1300px);
+        }
+        .walkin-seg-btn {
+            font-size: 0.86rem;
         }
     }
     /* Responsive toggle: stack buttons on small screens (prevents cramped layout) */
