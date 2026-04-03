@@ -4075,29 +4075,44 @@
 @endpush
 <style>
     .walkin-segmented {
-        display: inline-flex;
+        display: flex;
         width: 100%;
         background: #eef2f7;
-        border-radius: 999px;
-        padding: 6px;
+        border-radius: 18px;
+        padding: 8px 10px;
         box-shadow: inset 0 0 0 1px rgba(0,0,0,0.06);
-        gap: 6px;
+        gap: 8px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        scrollbar-width: thin;
     }
     .walkin-seg-btn {
-        flex: 1;
+        flex: 0 0 auto;
         border: 0;
         border-radius: 999px;
-        padding: 10px 12px;
+        padding: 11px 18px;
         font-weight: 600;
         background: transparent;
         color: #475569;
         text-align: center;
         white-space: nowrap;
+        min-width: max-content;
     }
     .walkin-seg-btn.active {
         background: #ffffff;
         color: #111827;
         box-shadow: 0 6px 16px rgba(2,6,23,0.10);
+    }
+    @media (min-width: 992px) {
+        .walkin-segmented {
+            border-radius: 999px;
+            padding: 8px;
+        }
+        .walkin-seg-btn {
+            flex: 1 1 0;
+            min-width: 0;
+            padding: 12px 14px;
+        }
     }
     /* Responsive toggle: stack buttons on small screens (prevents cramped layout) */
     @media (max-width: 576px) {
