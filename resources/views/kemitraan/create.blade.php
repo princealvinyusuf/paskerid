@@ -17,6 +17,7 @@
             <button type="button" class="walkin-seg-btn" id="btnPanelForm" aria-selected="false">Form Pendaftaran Walk In (Pemberi Kerja)</button>
             <button type="button" class="walkin-seg-btn" id="btnPanelSurvey" aria-selected="false">Survei Evaluasi</button>
             <button type="button" class="walkin-seg-btn" id="btnPanelStatistik" aria-selected="false">Hasil Evaluasi</button>
+            <button type="button" class="walkin-seg-btn" id="btnPanelPartnerCompany" aria-selected="false">Perusahaan Mitra</button>
         </div>
     </div>
 
@@ -523,6 +524,76 @@
                                     <div id="statsJobPortalsList" class="d-flex flex-wrap gap-2"></div>
                                 </div>
                             </div>
+                        </div>
+                    @endif
+                </div>
+            </div>
+        </div>
+
+        <!-- Perusahaan Mitra -->
+        <div class="col-12 d-none" id="panelPartnerCompany">
+            <div class="card shadow-lg w-100">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <div>
+                            <h5 class="mb-0"><i class="bi bi-buildings me-2"></i>Daftar Perusahaan Mitra Kerja Sama</h5>
+                            <div class="text-muted small">Temukan lowongan baru, ulasan, budaya perusahaan, fasilitas, dan tunjangan.</div>
+                        </div>
+                    </div>
+
+                    @php $partnerItems = collect($partnerCompanies ?? [])->values(); @endphp
+                    @if($partnerItems->isEmpty())
+                        <div class="alert alert-info mb-0">Data perusahaan mitra belum tersedia. Silakan tambahkan dari menu admin <strong>Perusahaan Mitra</strong>.</div>
+                    @else
+                        <div class="row g-3">
+                            @foreach($partnerItems as $partner)
+                                @php
+                                    $name = trim((string) ($partner->company_name ?? '-'));
+                                    $galleryName = trim((string) ($partner->gallery_company_name ?? ''));
+                                    $logoPath = trim((string) ($partner->logo_path ?? ''));
+                                    $logoUrl = $logoPath !== '' ? asset('storage/' . ltrim($logoPath, '/')) : '';
+                                    $rating = max(0, min(5, (float) ($partner->rating ?? 0)));
+                                    $reviewCount = max(0, (int) ($partner->review_count ?? 0));
+                                    $jobCount = max(0, (int) ($partner->job_count ?? 0));
+                                    $summary = trim((string) ($partner->profile_summary ?? ''));
+                                @endphp
+                                <div class="col-12 col-md-6 col-xl-3">
+                                    <div class="partner-company-card h-100">
+                                        <div class="partner-company-logo-wrap">
+                                            @if($logoUrl !== '')
+                                                <img src="{{ $logoUrl }}" alt="{{ $name }}" class="partner-company-logo" loading="lazy">
+                                            @else
+                                                <div class="partner-company-logo partner-company-logo-empty">
+                                                    {{ strtoupper(mb_substr($name, 0, 1)) }}
+                                                </div>
+                                            @endif
+                                        </div>
+                                        <div class="partner-company-name">{{ $name }}</div>
+                                        <div class="partner-company-meta mt-2">
+                                            <span><i class="bi bi-star-fill me-1"></i>{{ number_format($rating, 1) }}</span>
+                                            <span class="mx-1">&middot;</span>
+                                            <span>{{ number_format($reviewCount) }} Ulasan</span>
+                                        </div>
+                                        <div class="mt-2">
+                                            <span class="partner-company-jobs">{{ number_format($jobCount) }} Pekerjaan</span>
+                                        </div>
+                                        @if($summary !== '')
+                                            <div class="partner-company-summary mt-2">{{ $summary }}</div>
+                                        @endif
+                                        @if($galleryName !== '')
+                                            <div class="mt-3">
+                                                <button
+                                                    type="button"
+                                                    class="btn btn-outline-primary btn-sm btn-open-gallery-company"
+                                                    data-gallery-company="{{ $galleryName }}"
+                                                >
+                                                    Lihat di Galeri Walk In
+                                                </button>
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
+                            @endforeach
                         </div>
                     @endif
                 </div>
@@ -2143,6 +2214,7 @@
         const btnSchedule = document.getElementById('btnPanelSchedule');
         const btnSurvey = document.getElementById('btnPanelSurvey');
         const btnStatistik = document.getElementById('btnPanelStatistik');
+        const btnPartnerCompany = document.getElementById('btnPanelPartnerCompany');
         const surveyPasscodeEnabled = @json((bool) ($surveyPasscodeEnabled ?? false));
         const formPasscodeEnabled = @json((bool) ($formPasscodeEnabled ?? false));
         const verifySurveyPasscodeUrl = @json(route('kemitraan.survey.verify-passcode'));
@@ -2154,7 +2226,8 @@
         const panelSchedule = document.getElementById('panelSchedule');
         const panelSurvey = document.getElementById('panelSurvey');
         const panelStatistik = document.getElementById('panelStatistik');
-        if (!btnInfo || !btnForm || !btnGallery || !btnSchedule || !btnSurvey || !btnStatistik || !panelInfo || !panelForm || !panelGallery || !panelSchedule || !panelSurvey || !panelStatistik) return;
+        const panelPartnerCompany = document.getElementById('panelPartnerCompany');
+        if (!btnInfo || !btnForm || !btnGallery || !btnSchedule || !btnSurvey || !btnStatistik || !btnPartnerCompany || !panelInfo || !panelForm || !panelGallery || !panelSchedule || !panelSurvey || !panelStatistik || !panelPartnerCompany) return;
 
         function syncPanelToUrl(which) {
             try {
@@ -2171,24 +2244,28 @@
             const isSchedule = which === 'schedule';
             const isSurvey = which === 'survey';
             const isStatistik = which === 'hasil_evaluasi';
+            const isPartnerCompany = which === 'partner_company';
             btnInfo.classList.toggle('active', isInfo);
             btnForm.classList.toggle('active', isForm);
             btnGallery.classList.toggle('active', isGallery);
             btnSchedule.classList.toggle('active', isSchedule);
             btnSurvey.classList.toggle('active', isSurvey);
             btnStatistik.classList.toggle('active', isStatistik);
+            btnPartnerCompany.classList.toggle('active', isPartnerCompany);
             btnInfo.setAttribute('aria-selected', isInfo ? 'true' : 'false');
             btnForm.setAttribute('aria-selected', isForm ? 'true' : 'false');
             btnGallery.setAttribute('aria-selected', isGallery ? 'true' : 'false');
             btnSchedule.setAttribute('aria-selected', isSchedule ? 'true' : 'false');
             btnSurvey.setAttribute('aria-selected', isSurvey ? 'true' : 'false');
             btnStatistik.setAttribute('aria-selected', isStatistik ? 'true' : 'false');
+            btnPartnerCompany.setAttribute('aria-selected', isPartnerCompany ? 'true' : 'false');
             panelInfo.classList.toggle('d-none', !isInfo);
             panelForm.classList.toggle('d-none', !isForm);
             panelGallery.classList.toggle('d-none', !isGallery);
             panelSchedule.classList.toggle('d-none', !isSchedule);
             panelSurvey.classList.toggle('d-none', !isSurvey);
             panelStatistik.classList.toggle('d-none', !isStatistik);
+            panelPartnerCompany.classList.toggle('d-none', !isPartnerCompany);
             try { localStorage.setItem('walkin_panel', which); } catch (e) {}
             syncPanelToUrl(which);
         }
@@ -2281,10 +2358,11 @@
             if (ok) setActive('survey');
         });
         btnStatistik.addEventListener('click', () => setActive('hasil_evaluasi'));
+        btnPartnerCompany.addEventListener('click', () => setActive('partner_company'));
 
         const urlPanelRaw = new URLSearchParams(window.location.search).get('panel');
         const urlPanel = urlPanelRaw === 'statistik' ? 'hasil_evaluasi' : urlPanelRaw;
-        const allowedPanels = ['info', 'form', 'gallery', 'schedule', 'survey', 'hasil_evaluasi'];
+        const allowedPanels = ['info', 'form', 'gallery', 'schedule', 'survey', 'hasil_evaluasi', 'partner_company'];
         const initialPanel = allowedPanels.includes(urlPanel) ? urlPanel : 'info';
         if (initialPanel === 'survey') {
             ensureSurveyUnlocked().then((ok) => setActive(ok ? 'survey' : 'info'));
@@ -2293,6 +2371,17 @@
         } else {
             setActive(initialPanel);
         }
+
+        panelPartnerCompany.addEventListener('click', function (e) {
+            const btn = e.target && e.target.closest ? e.target.closest('.btn-open-gallery-company') : null;
+            if (!btn) return;
+            const company = String(btn.getAttribute('data-gallery-company') || '').trim();
+            if (!company) return;
+            setActive('gallery');
+            if (typeof window.openWalkinGalleryCompany === 'function') {
+                window.openWalkinGalleryCompany(company);
+            }
+        });
     })();
 
     // Statistik panel
@@ -3721,6 +3810,19 @@
             });
         }
 
+        window.openWalkinGalleryCompany = function (companyName) {
+            const target = String(companyName || '').trim();
+            if (!target) {
+                loadCompanies();
+                return;
+            }
+            currentDateFrom = '';
+            currentDateTo = '';
+            if (dateFromEl) dateFromEl.value = '';
+            if (dateToEl) dateToEl.value = '';
+            loadCompany(target, 'all');
+        };
+
         // initial load: show company cards
         loadCompanies();
     })();
@@ -3782,6 +3884,67 @@
         line-height: 1.25;
         letter-spacing: -0.01em;
         color: #0f172a;
+    }
+    .partner-company-card {
+        border: 1px solid rgba(148, 163, 184, 0.32);
+        border-radius: 16px;
+        padding: 14px;
+        background: #fff;
+        box-shadow: 0 6px 20px rgba(15, 23, 42, 0.06);
+    }
+    .partner-company-logo-wrap {
+        height: 56px;
+        display: flex;
+        align-items: center;
+    }
+    .partner-company-logo {
+        max-width: 170px;
+        max-height: 56px;
+        object-fit: contain;
+    }
+    .partner-company-logo-empty {
+        width: 56px;
+        height: 56px;
+        border-radius: 12px;
+        border: 1px solid rgba(148, 163, 184, 0.45);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        color: #334155;
+        background: #f8fafc;
+    }
+    .partner-company-name {
+        margin-top: 10px;
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #1e293b;
+        line-height: 1.2;
+    }
+    .partner-company-meta {
+        color: #475569;
+        font-size: 0.98rem;
+    }
+    .partner-company-meta .bi-star-fill {
+        color: #ec4899;
+    }
+    .partner-company-jobs {
+        display: inline-flex;
+        padding: 4px 10px;
+        border-radius: 999px;
+        background: #e0ecff;
+        color: #355b8d;
+        font-size: 0.88rem;
+        font-weight: 600;
+    }
+    .partner-company-summary {
+        font-size: 0.86rem;
+        color: #64748b;
+        line-height: 1.35;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
     }
     .walkin-panel {
         border: 1px solid rgba(15,23,42,0.10);

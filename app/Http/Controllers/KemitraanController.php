@@ -6,6 +6,7 @@ use App\Models\Kemitraan;
 use App\Models\TypeOfPartnership;
 use App\Models\BookedDate;
 use App\Models\companysector;
+use App\Models\PartnerCompany;
 use App\Models\PaskerRoom;
 use App\Models\PaskerFacility;
 use App\Models\WalkInSurveyCompany;
@@ -34,6 +35,7 @@ class KemitraanController extends Controller
         $surveyPasscodeEnabled = $this->isSurveyPasscodeEnabled();
         $formPasscodeEnabled = $this->isFormPasscodeEnabled();
         $surveyCompanies = collect();
+        $partnerCompanies = collect();
         
         // Fetch unique institution names from kemitraan for autocomplete
         $availableInstitutions = [];
@@ -65,6 +67,23 @@ class KemitraanController extends Controller
             $surveyCompanies = $query->get($columns);
         }
 
+        if (Schema::hasTable('partner_companies')) {
+            $partnerCompanies = PartnerCompany::query()
+                ->where('is_active', true)
+                ->orderBy('sort_order')
+                ->orderBy('company_name')
+                ->get([
+                    'id',
+                    'company_name',
+                    'gallery_company_name',
+                    'logo_path',
+                    'rating',
+                    'review_count',
+                    'job_count',
+                    'profile_summary',
+                ]);
+        }
+
         return view('kemitraan.create', compact(
             'dropdownPartnership',
             'dropdownCompanySectors',
@@ -78,7 +97,8 @@ class KemitraanController extends Controller
             'walkinStats',
             'surveyPasscodeEnabled',
             'formPasscodeEnabled',
-            'availableInstitutions'
+            'availableInstitutions',
+            'partnerCompanies'
         ));
     }
 
