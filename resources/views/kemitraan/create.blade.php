@@ -2367,7 +2367,7 @@
                 }
             } catch (e) {}
 
-            const passcode = window.prompt('Masukkan passcode untuk membuka Form Pendaftaran:');
+            const passcode = window.prompt('Form ini hanya diperuntukan bagi Pemberi Kerja. Masukkan passcode untuk membuka Form Pendaftaran:');
             if (passcode === null) return false;
             if (String(passcode).trim() === '') {
                 alert('Passcode wajib diisi.');
