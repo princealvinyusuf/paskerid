@@ -4075,43 +4075,38 @@
 @endpush
 <style>
     .walkin-segmented {
-        display: flex;
+        display: grid;
+        grid-template-columns: repeat(7, minmax(0, 1fr));
         width: 100%;
         background: #eef2f7;
-        border-radius: 18px;
-        padding: 8px 10px;
+        border-radius: 999px;
+        padding: 8px;
         box-shadow: inset 0 0 0 1px rgba(0,0,0,0.06);
         gap: 8px;
-        overflow-x: auto;
-        overflow-y: hidden;
-        scrollbar-width: thin;
     }
     .walkin-seg-btn {
-        flex: 0 0 auto;
         border: 0;
         border-radius: 999px;
-        padding: 11px 18px;
+        padding: 12px 14px;
         font-weight: 600;
         background: transparent;
         color: #475569;
         text-align: center;
-        white-space: nowrap;
-        min-width: max-content;
+        white-space: normal;
+        line-height: 1.2;
+        min-height: 48px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
     }
     .walkin-seg-btn.active {
         background: #ffffff;
         color: #111827;
         box-shadow: 0 6px 16px rgba(2,6,23,0.10);
     }
-    @media (min-width: 992px) {
+    @media (max-width: 1200px) and (min-width: 577px) {
         .walkin-segmented {
-            border-radius: 999px;
-            padding: 8px;
-        }
-        .walkin-seg-btn {
-            flex: 1 1 0;
-            min-width: 0;
-            padding: 12px 14px;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
         }
     }
     /* Responsive toggle: stack buttons on small screens (prevents cramped layout) */
