@@ -4087,17 +4087,16 @@
     .walkin-seg-btn {
         border: 0;
         border-radius: 999px;
-        padding: 12px 14px;
+        padding: 9px 10px;
         font-weight: 600;
         background: transparent;
         color: #475569;
         text-align: center;
-        white-space: normal;
-        line-height: 1.2;
-        min-height: 48px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
+        white-space: nowrap;
+        line-height: 1.1;
+        min-height: 0;
+        font-size: 0.92rem;
+        display: block;
     }
     .walkin-seg-btn.active {
         background: #ffffff;
