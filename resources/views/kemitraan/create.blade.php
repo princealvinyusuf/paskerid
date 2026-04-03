@@ -552,8 +552,8 @@
                                     $galleryName = trim((string) ($partner->gallery_company_name ?? ''));
                                     $logoPath = trim((string) ($partner->logo_path ?? ''));
                                     $logoUrl = $logoPath !== '' ? asset('storage/' . ltrim($logoPath, '/')) : '';
-                                    $rating = max(0, min(5, (float) ($partner->rating ?? 0)));
-                                    $reviewCount = max(0, (int) ($partner->review_count ?? 0));
+                                    $rating = max(0, min(5, (float) ($partner->computed_rating ?? 0)));
+                                    $reviewCount = max(0, (int) ($partner->computed_review_count ?? 0));
                                     $jobCount = max(0, (int) ($partner->job_count ?? 0));
                                     $summary = trim((string) ($partner->profile_summary ?? ''));
                                 @endphp
@@ -635,6 +635,15 @@
                                 <div id="partnerGalleryLoading" class="text-muted small">Memuat galeri foto...</div>
                                 <div id="partnerGalleryEmpty" class="text-muted small d-none">Belum ada foto perusahaan ini pada Galeri Walk In.</div>
                                 <div id="partnerGalleryGrid" class="row g-3 d-none"></div>
+                            </div>
+                            <div class="partner-gallery-wrap mt-3">
+                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                    <div class="fw-semibold">Ulasan Pencari Kerja</div>
+                                    <div class="text-muted small">Sumber data: Komentar Galeri Walk In</div>
+                                </div>
+                                <div id="partnerReviewsLoading" class="text-muted small">Memuat ulasan...</div>
+                                <div id="partnerReviewsEmpty" class="text-muted small d-none">Belum ada ulasan untuk perusahaan ini.</div>
+                                <div id="partnerReviewsList" class="d-flex flex-column gap-2 d-none"></div>
                             </div>
                         </div>
                     @endif
@@ -2434,6 +2443,9 @@
         const galleryLoading = document.getElementById('partnerGalleryLoading');
         const galleryEmpty = document.getElementById('partnerGalleryEmpty');
         const galleryGrid = document.getElementById('partnerGalleryGrid');
+        const reviewsLoading = document.getElementById('partnerReviewsLoading');
+        const reviewsEmpty = document.getElementById('partnerReviewsEmpty');
+        const reviewsList = document.getElementById('partnerReviewsList');
         const modalEl = document.getElementById('walkinGalleryModal');
         const modalBody = document.getElementById('walkinGalleryModalBody');
         const modalTitle = document.getElementById('walkinGalleryModalTitle');
@@ -2442,7 +2454,7 @@
             bsModal = bootstrap.Modal.getOrCreateInstance(modalEl);
         }
 
-        if (!listWrap || !detailWrap || !backBtn || !detailLogoWrap || !detailName || !detailRating || !detailReviews || !detailJobs || !detailSummary || !galleryLoading || !galleryEmpty || !galleryGrid) return;
+        if (!listWrap || !detailWrap || !backBtn || !detailLogoWrap || !detailName || !detailRating || !detailReviews || !detailJobs || !detailSummary || !galleryLoading || !galleryEmpty || !galleryGrid || !reviewsLoading || !reviewsEmpty || !reviewsList) return;
 
         function escapeHtml(text) {
             return String(text || '').replace(/[&<>"']/g, function (m) {
@@ -2469,47 +2481,107 @@
             galleryGrid.classList.toggle('d-none', !isReady);
         }
 
-        async function loadGalleryPhotos(galleryCompany) {
+        function showReviewState(state) {
+            const isLoading = state === 'loading';
+            const isEmpty = state === 'empty';
+            const isReady = state === 'ready';
+            reviewsLoading.classList.toggle('d-none', !isLoading);
+            reviewsEmpty.classList.toggle('d-none', !isEmpty);
+            reviewsList.classList.toggle('d-none', !isReady);
+        }
+
+        function renderReviewItems(items) {
+            reviewsList.innerHTML = '';
+            if (!Array.isArray(items) || items.length === 0) {
+                showReviewState('empty');
+                return;
+            }
+
+            items.forEach((item) => {
+                const name = String(item && item.name ? item.name : 'Anonim').trim() || 'Anonim';
+                const company = String(item && item.company_name ? item.company_name : '').trim();
+                const comment = String(item && item.comment ? item.comment : '').trim();
+                const date = String(item && item.created_at ? item.created_at : '').slice(0, 10);
+                const first = name.charAt(0).toUpperCase() || '?';
+
+                const row = document.createElement('div');
+                row.className = 'partner-review-item';
+                row.innerHTML = `
+                    <div class="d-flex align-items-start gap-2">
+                        <div class="walkin-avatar">${escapeHtml(first)}</div>
+                        <div class="flex-grow-1">
+                            <div class="d-flex align-items-start justify-content-between gap-2">
+                                <div class="fw-semibold">${escapeHtml(name)}</div>
+                                <div class="text-muted small">${escapeHtml(date)}</div>
+                            </div>
+                            ${company ? `<div class="small text-muted">${escapeHtml(company)}</div>` : ''}
+                            <div class="small mt-1">${escapeHtml(comment)}</div>
+                        </div>
+                    </div>
+                `;
+                reviewsList.appendChild(row);
+            });
+
+            showReviewState('ready');
+        }
+
+        async function loadPartnerCompanyData(galleryCompany) {
             const company = String(galleryCompany || '').trim();
             galleryGrid.innerHTML = '';
+            reviewsList.innerHTML = '';
             if (!company) {
                 showGalleryState('empty');
+                showReviewState('empty');
                 return;
             }
             showGalleryState('loading');
+            showReviewState('loading');
 
             try {
                 const params = new URLSearchParams();
                 params.set('company', company);
-                params.set('type', 'photo');
                 const res = await fetch(`${feedUrl}?${params.toString()}`, { headers: { Accept: 'application/json' } });
                 if (!res.ok) {
                     showGalleryState('empty');
+                    showReviewState('empty');
                     return;
                 }
                 const data = await res.json().catch(() => ({}));
                 const rawItems = Array.isArray(data.items) ? data.items : [];
                 const photos = rawItems.filter((it) => String(it && it.type ? it.type : '') === 'photo' && String(it.media_path || '').trim() !== '');
+                const comments = Array.isArray(data.comments) ? data.comments : [];
+                const apiRating = data && data.initiator_rating && data.initiator_rating.rating != null
+                    ? Number(data.initiator_rating.rating)
+                    : null;
+
+                if (apiRating !== null && Number.isFinite(apiRating)) {
+                    detailRating.innerHTML = `<i class="bi bi-star-fill me-1"></i>${escapeHtml(apiRating.toFixed(2))}`;
+                } else {
+                    detailRating.innerHTML = `<i class="bi bi-star-fill me-1"></i>0.00`;
+                }
+                detailReviews.textContent = `${escapeHtml(String(comments.length))} Ulasan`;
 
                 if (photos.length === 0) {
                     showGalleryState('empty');
-                    return;
+                } else {
+                    photos.forEach((item) => {
+                        const imgSrc = '/storage/' + String(item.media_path || '').replace(/^storage[\\\/]/, '').replace(/^[\\\/]+/, '').replace(/\\/g, '/');
+                        const col = document.createElement('div');
+                        col.className = 'col-12 col-sm-6 col-lg-4';
+                        col.innerHTML = `
+                            <div class="partner-gallery-card">
+                                <img src="${imgSrc}" alt="${escapeHtml(item.title || 'Gallery Foto')}" class="partner-gallery-photo" data-photo-src="${imgSrc}">
+                            </div>
+                        `;
+                        galleryGrid.appendChild(col);
+                    });
+                    showGalleryState('ready');
                 }
 
-                photos.forEach((item) => {
-                    const imgSrc = '/storage/' + String(item.media_path || '').replace(/^storage[\\\/]/, '').replace(/^[\\\/]+/, '').replace(/\\/g, '/');
-                    const col = document.createElement('div');
-                    col.className = 'col-12 col-sm-6 col-lg-4';
-                    col.innerHTML = `
-                        <div class="partner-gallery-card">
-                            <img src="${imgSrc}" alt="${escapeHtml(item.title || 'Gallery Foto')}" class="partner-gallery-photo" data-photo-src="${imgSrc}">
-                        </div>
-                    `;
-                    galleryGrid.appendChild(col);
-                });
-                showGalleryState('ready');
+                renderReviewItems(comments);
             } catch (e) {
                 showGalleryState('empty');
+                showReviewState('empty');
             }
         }
 
@@ -2539,7 +2611,7 @@
             }
 
             showDetail();
-            loadGalleryPhotos(galleryCompany);
+            loadPartnerCompanyData(galleryCompany);
         });
 
         backBtn.addEventListener('click', function () {
@@ -4145,6 +4217,12 @@
     }
     .partner-gallery-photo:hover {
         transform: scale(1.02);
+    }
+    .partner-review-item {
+        border: 1px solid rgba(148, 163, 184, 0.24);
+        border-radius: 12px;
+        padding: 10px 12px;
+        background: #fff;
     }
     .walkin-panel {
         border: 1px solid rgba(15,23,42,0.10);

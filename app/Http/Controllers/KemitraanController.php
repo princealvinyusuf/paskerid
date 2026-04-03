@@ -77,11 +77,84 @@ class KemitraanController extends Controller
                     'company_name',
                     'gallery_company_name',
                     'logo_path',
-                    'rating',
-                    'review_count',
                     'job_count',
                     'profile_summary',
                 ]);
+
+            if ($partnerCompanies->isNotEmpty()) {
+                $companyRatingMap = [];
+                if (Schema::hasTable('company_walk_in_survey') && Schema::hasTable('walk_in_survey_responses')) {
+                    $companyRatings = DB::table('company_walk_in_survey as c')
+                        ->leftJoin('walk_in_survey_responses as r', 'r.company_walk_in_survey_id', '=', 'c.id')
+                        ->selectRaw('LOWER(TRIM(c.company_name)) AS company_key, ROUND(AVG(r.rating_satisfaction), 2) AS avg_rating')
+                        ->whereNotNull('c.company_name')
+                        ->whereRaw("TRIM(c.company_name) <> ''")
+                        ->groupBy('company_key')
+                        ->get();
+
+                    foreach ($companyRatings as $row) {
+                        $key = trim((string) ($row->company_key ?? ''));
+                        if ($key !== '') {
+                            $companyRatingMap[$key] = $row->avg_rating !== null ? (float) $row->avg_rating : null;
+                        }
+                    }
+                }
+
+                $initiatorRatingMap = [];
+                if (
+                    Schema::hasTable('walk_in_survey_initiators') &&
+                    Schema::hasTable('company_walk_in_survey') &&
+                    Schema::hasTable('walk_in_survey_responses') &&
+                    Schema::hasColumn('company_walk_in_survey', 'walk_in_initiator_id')
+                ) {
+                    $initiatorRatings = DB::table('walk_in_survey_initiators as i')
+                        ->leftJoin('company_walk_in_survey as c', 'c.walk_in_initiator_id', '=', 'i.id')
+                        ->leftJoin('walk_in_survey_responses as r', 'r.company_walk_in_survey_id', '=', 'c.id')
+                        ->selectRaw('LOWER(TRIM(i.initiator_name)) AS initiator_key, ROUND(AVG(r.rating_satisfaction), 2) AS avg_rating')
+                        ->whereNotNull('i.initiator_name')
+                        ->whereRaw("TRIM(i.initiator_name) <> ''")
+                        ->groupBy('initiator_key')
+                        ->get();
+
+                    foreach ($initiatorRatings as $row) {
+                        $key = trim((string) ($row->initiator_key ?? ''));
+                        if ($key !== '') {
+                            $initiatorRatingMap[$key] = $row->avg_rating !== null ? (float) $row->avg_rating : null;
+                        }
+                    }
+                }
+
+                $reviewCountMap = [];
+                if (Schema::hasTable('walkin_gallery_comments')) {
+                    $reviewRows = DB::table('walkin_gallery_comments')
+                        ->selectRaw('LOWER(TRIM(company_name)) AS company_key, COUNT(*) AS total')
+                        ->where('status', 'approved')
+                        ->whereNotNull('company_name')
+                        ->whereRaw("TRIM(company_name) <> ''")
+                        ->groupBy('company_key')
+                        ->get();
+
+                    foreach ($reviewRows as $row) {
+                        $key = trim((string) ($row->company_key ?? ''));
+                        if ($key !== '') {
+                            $reviewCountMap[$key] = (int) ($row->total ?? 0);
+                        }
+                    }
+                }
+
+                $partnerCompanies = $partnerCompanies->map(function ($partner) use ($companyRatingMap, $initiatorRatingMap, $reviewCountMap) {
+                    $mapName = trim((string) ($partner->gallery_company_name ?: $partner->company_name));
+                    $key = mb_strtolower($mapName);
+
+                    $computedRating = $initiatorRatingMap[$key] ?? $companyRatingMap[$key] ?? null;
+                    $computedReviewCount = $reviewCountMap[$key] ?? 0;
+
+                    $partner->computed_rating = $computedRating;
+                    $partner->computed_review_count = (int) $computedReviewCount;
+
+                    return $partner;
+                });
+            }
         }
 
         return view('kemitraan.create', compact(
