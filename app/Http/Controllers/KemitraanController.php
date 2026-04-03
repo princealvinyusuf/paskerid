@@ -77,7 +77,6 @@ class KemitraanController extends Controller
                     'company_name',
                     'gallery_company_name',
                     'logo_path',
-                    'job_count',
                     'profile_summary',
                 ]);
 
@@ -142,15 +141,39 @@ class KemitraanController extends Controller
                     }
                 }
 
-                $partnerCompanies = $partnerCompanies->map(function ($partner) use ($companyRatingMap, $initiatorRatingMap, $reviewCountMap) {
+                $totalKebutuhanMap = [];
+                if (Schema::hasTable('kemitraan_detail_lowongan') && Schema::hasTable('kemitraan')) {
+                    $totalKebutuhanQuery = DB::table('kemitraan_detail_lowongan as kdl')
+                        ->join('kemitraan as k', 'kdl.kemitraan_id', '=', 'k.id')
+                        ->selectRaw('LOWER(TRIM(k.institution_name)) AS company_key, COALESCE(SUM(kdl.jumlah_kebutuhan), 0) AS total_kebutuhan')
+                        ->whereNotNull('k.institution_name')
+                        ->whereRaw("TRIM(k.institution_name) <> ''")
+                        ->groupBy('company_key');
+
+                    if (Schema::hasColumn('kemitraan', 'status')) {
+                        $totalKebutuhanQuery->where('k.status', 'approved');
+                    }
+
+                    $totalKebutuhanRows = $totalKebutuhanQuery->get();
+                    foreach ($totalKebutuhanRows as $row) {
+                        $key = trim((string) ($row->company_key ?? ''));
+                        if ($key !== '') {
+                            $totalKebutuhanMap[$key] = (int) ($row->total_kebutuhan ?? 0);
+                        }
+                    }
+                }
+
+                $partnerCompanies = $partnerCompanies->map(function ($partner) use ($companyRatingMap, $initiatorRatingMap, $reviewCountMap, $totalKebutuhanMap) {
                     $mapName = trim((string) ($partner->gallery_company_name ?: $partner->company_name));
                     $key = mb_strtolower($mapName);
 
                     $computedRating = $initiatorRatingMap[$key] ?? $companyRatingMap[$key] ?? null;
                     $computedReviewCount = $reviewCountMap[$key] ?? 0;
+                    $computedTotalKebutuhan = $totalKebutuhanMap[$key] ?? 0;
 
                     $partner->computed_rating = $computedRating;
                     $partner->computed_review_count = (int) $computedReviewCount;
+                    $partner->computed_total_kebutuhan = (int) $computedTotalKebutuhan;
 
                     return $partner;
                 });

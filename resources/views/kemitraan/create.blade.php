@@ -554,7 +554,7 @@
                                     $logoUrl = $logoPath !== '' ? asset('storage/' . ltrim($logoPath, '/')) : '';
                                     $rating = max(0, min(5, (float) ($partner->computed_rating ?? 0)));
                                     $reviewCount = max(0, (int) ($partner->computed_review_count ?? 0));
-                                    $jobCount = max(0, (int) ($partner->job_count ?? 0));
+                                    $totalKebutuhan = max(0, (int) ($partner->computed_total_kebutuhan ?? 0));
                                     $summary = trim((string) ($partner->profile_summary ?? ''));
                                 @endphp
                                 <div class="col-12 col-md-6 col-xl-3">
@@ -575,7 +575,7 @@
                                             <span>{{ number_format($reviewCount) }} Ulasan</span>
                                         </div>
                                         <div class="mt-2">
-                                            <span class="partner-company-jobs">{{ number_format($jobCount) }} Pekerjaan</span>
+                                            <span class="partner-company-jobs">{{ number_format($totalKebutuhan) }} Pekerjaan Telah Dillaksanakan Melalui Walk In Interview</span>
                                         </div>
                                         @if($summary !== '')
                                             <div class="partner-company-summary mt-2">{{ $summary }}</div>
@@ -590,7 +590,7 @@
                                                     data-company-logo="{{ $logoUrl }}"
                                                     data-company-rating="{{ number_format($rating, 1, '.', '') }}"
                                                     data-company-reviews="{{ $reviewCount }}"
-                                                    data-company-jobs="{{ $jobCount }}"
+                                                    data-company-total-kebutuhan="{{ $totalKebutuhan }}"
                                                     data-company-summary="{{ $summary }}"
                                                 >
                                                     Lihat Detail Perusahaan
@@ -2594,13 +2594,13 @@
             const logoUrl = String(btn.getAttribute('data-company-logo') || '').trim();
             const rating = String(btn.getAttribute('data-company-rating') || '0');
             const reviews = String(btn.getAttribute('data-company-reviews') || '0');
-            const jobs = String(btn.getAttribute('data-company-jobs') || '0');
+            const totalKebutuhan = String(btn.getAttribute('data-company-total-kebutuhan') || '0');
             const summary = String(btn.getAttribute('data-company-summary') || '').trim();
 
             detailName.textContent = companyName || '-';
             detailRating.innerHTML = `<i class="bi bi-star-fill me-1"></i>${escapeHtml(rating)}`;
             detailReviews.textContent = `${escapeHtml(reviews)} Ulasan`;
-            detailJobs.textContent = `${escapeHtml(jobs)} Pekerjaan`;
+            detailJobs.textContent = `${escapeHtml(totalKebutuhan)} Pekerjaan Telah Dillaksanakan Melalui Walk In Interview`;
             detailSummary.textContent = summary || 'Profil perusahaan belum tersedia.';
 
             if (logoUrl) {
@@ -4176,11 +4176,13 @@
     .partner-company-jobs {
         display: inline-flex;
         padding: 4px 10px;
-        border-radius: 999px;
+        border-radius: 14px;
         background: #e0ecff;
         color: #355b8d;
-        font-size: 0.88rem;
+        font-size: 0.86rem;
         font-weight: 600;
+        white-space: normal;
+        line-height: 1.25;
     }
     .partner-company-summary {
         font-size: 0.86rem;
