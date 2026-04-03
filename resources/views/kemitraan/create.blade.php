@@ -14,7 +14,7 @@
             <button type="button" class="walkin-seg-btn active" id="btnPanelInfo" aria-selected="true">Info & Tata Cara</button>
             <button type="button" class="walkin-seg-btn" id="btnPanelSchedule" aria-selected="false">Jadwal Walk In</button>
             <button type="button" class="walkin-seg-btn" id="btnPanelGallery" aria-selected="false">Galeri Walk In</button>
-            <button type="button" class="walkin-seg-btn" id="btnPanelForm" aria-selected="false">Form Pendaftaran Walk In (Pemberi Kerja)</button>
+            <button type="button" class="walkin-seg-btn" id="btnPanelForm" aria-selected="false">Form Pendaftaran</button>
             <button type="button" class="walkin-seg-btn" id="btnPanelSurvey" aria-selected="false">Survei Evaluasi</button>
             <button type="button" class="walkin-seg-btn" id="btnPanelStatistik" aria-selected="false">Hasil Evaluasi</button>
             <button type="button" class="walkin-seg-btn" id="btnPanelPartnerCompany" aria-selected="false">Perusahaan Mitra</button>
@@ -2367,7 +2367,7 @@
                 }
             } catch (e) {}
 
-            const passcode = window.prompt('Masukkan passcode untuk membuka Form Pendaftaran Walk In:');
+            const passcode = window.prompt('Masukkan passcode untuk membuka Form Pendaftaran:');
             if (passcode === null) return false;
             if (String(passcode).trim() === '') {
                 alert('Passcode wajib diisi.');
