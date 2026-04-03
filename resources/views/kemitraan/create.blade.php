@@ -545,7 +545,7 @@
                     @if($partnerItems->isEmpty())
                         <div class="alert alert-info mb-0">Data perusahaan mitra belum tersedia. Silakan tambahkan dari menu admin <strong>Perusahaan Mitra</strong>.</div>
                     @else
-                        <div class="row g-3">
+                        <div id="partnerCompanyListWrap" class="row g-3">
                             @foreach($partnerItems as $partner)
                                 @php
                                     $name = trim((string) ($partner->company_name ?? '-'));
@@ -585,15 +585,57 @@
                                                 <button
                                                     type="button"
                                                     class="btn btn-outline-primary btn-sm btn-open-gallery-company"
+                                                    data-company-name="{{ $name }}"
                                                     data-gallery-company="{{ $galleryName }}"
+                                                    data-company-logo="{{ $logoUrl }}"
+                                                    data-company-rating="{{ number_format($rating, 1, '.', '') }}"
+                                                    data-company-reviews="{{ $reviewCount }}"
+                                                    data-company-jobs="{{ $jobCount }}"
+                                                    data-company-summary="{{ $summary }}"
                                                 >
-                                                    Lihat di Galeri Walk In
+                                                    Lihat Detail Perusahaan
                                                 </button>
                                             </div>
                                         @endif
                                     </div>
                                 </div>
                             @endforeach
+                        </div>
+
+                        <div id="partnerCompanyDetailWrap" class="d-none">
+                            <div class="mb-3">
+                                <button type="button" class="btn btn-outline-secondary btn-sm" id="btnPartnerCompanyBack">
+                                    <i class="bi bi-arrow-left me-1"></i>Kembali ke Daftar
+                                </button>
+                            </div>
+                            <div class="partner-company-card p-3 p-md-4">
+                                <div class="row g-3 align-items-start">
+                                    <div class="col-12 col-md-auto">
+                                        <div id="partnerCompanyDetailLogoWrap" class="partner-company-logo-wrap"></div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="partner-company-name mt-0" id="partnerCompanyDetailName"></div>
+                                        <div class="partner-company-meta mt-2">
+                                            <span id="partnerCompanyDetailRating"></span>
+                                            <span class="mx-1">&middot;</span>
+                                            <span id="partnerCompanyDetailReviews"></span>
+                                        </div>
+                                        <div class="mt-2">
+                                            <span class="partner-company-jobs" id="partnerCompanyDetailJobs"></span>
+                                        </div>
+                                        <div class="partner-company-summary mt-2 partner-company-summary-full" id="partnerCompanyDetailSummary"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="partner-gallery-wrap mt-3">
+                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                    <div class="fw-semibold">Gallery Foto</div>
+                                    <div class="text-muted small">Sumber data: Galeri Walk In</div>
+                                </div>
+                                <div id="partnerGalleryLoading" class="text-muted small">Memuat galeri foto...</div>
+                                <div id="partnerGalleryEmpty" class="text-muted small d-none">Belum ada foto perusahaan ini pada Galeri Walk In.</div>
+                                <div id="partnerGalleryGrid" class="row g-3 d-none"></div>
+                            </div>
                         </div>
                     @endif
                 </div>
@@ -2372,15 +2414,146 @@
             setActive(initialPanel);
         }
 
-        panelPartnerCompany.addEventListener('click', function (e) {
+    })();
+
+    // Partner company detail + gallery photo
+    (function () {
+        const panel = document.getElementById('panelPartnerCompany');
+        if (!panel) return;
+
+        const feedUrl = @json(route('walkin-gallery.feed'));
+        const listWrap = document.getElementById('partnerCompanyListWrap');
+        const detailWrap = document.getElementById('partnerCompanyDetailWrap');
+        const backBtn = document.getElementById('btnPartnerCompanyBack');
+        const detailLogoWrap = document.getElementById('partnerCompanyDetailLogoWrap');
+        const detailName = document.getElementById('partnerCompanyDetailName');
+        const detailRating = document.getElementById('partnerCompanyDetailRating');
+        const detailReviews = document.getElementById('partnerCompanyDetailReviews');
+        const detailJobs = document.getElementById('partnerCompanyDetailJobs');
+        const detailSummary = document.getElementById('partnerCompanyDetailSummary');
+        const galleryLoading = document.getElementById('partnerGalleryLoading');
+        const galleryEmpty = document.getElementById('partnerGalleryEmpty');
+        const galleryGrid = document.getElementById('partnerGalleryGrid');
+        const modalEl = document.getElementById('walkinGalleryModal');
+        const modalBody = document.getElementById('walkinGalleryModalBody');
+        const modalTitle = document.getElementById('walkinGalleryModalTitle');
+        let bsModal = null;
+        if (modalEl && window.bootstrap) {
+            bsModal = bootstrap.Modal.getOrCreateInstance(modalEl);
+        }
+
+        if (!listWrap || !detailWrap || !backBtn || !detailLogoWrap || !detailName || !detailRating || !detailReviews || !detailJobs || !detailSummary || !galleryLoading || !galleryEmpty || !galleryGrid) return;
+
+        function escapeHtml(text) {
+            return String(text || '').replace(/[&<>"']/g, function (m) {
+                return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[m] || m;
+            });
+        }
+
+        function showList() {
+            detailWrap.classList.add('d-none');
+            listWrap.classList.remove('d-none');
+        }
+
+        function showDetail() {
+            listWrap.classList.add('d-none');
+            detailWrap.classList.remove('d-none');
+        }
+
+        function showGalleryState(state) {
+            const isLoading = state === 'loading';
+            const isEmpty = state === 'empty';
+            const isReady = state === 'ready';
+            galleryLoading.classList.toggle('d-none', !isLoading);
+            galleryEmpty.classList.toggle('d-none', !isEmpty);
+            galleryGrid.classList.toggle('d-none', !isReady);
+        }
+
+        async function loadGalleryPhotos(galleryCompany) {
+            const company = String(galleryCompany || '').trim();
+            galleryGrid.innerHTML = '';
+            if (!company) {
+                showGalleryState('empty');
+                return;
+            }
+            showGalleryState('loading');
+
+            try {
+                const params = new URLSearchParams();
+                params.set('company', company);
+                params.set('type', 'photo');
+                const res = await fetch(`${feedUrl}?${params.toString()}`, { headers: { Accept: 'application/json' } });
+                if (!res.ok) {
+                    showGalleryState('empty');
+                    return;
+                }
+                const data = await res.json().catch(() => ({}));
+                const rawItems = Array.isArray(data.items) ? data.items : [];
+                const photos = rawItems.filter((it) => String(it && it.type ? it.type : '') === 'photo' && String(it.media_path || '').trim() !== '');
+
+                if (photos.length === 0) {
+                    showGalleryState('empty');
+                    return;
+                }
+
+                photos.forEach((item) => {
+                    const imgSrc = '/storage/' + String(item.media_path || '').replace(/^storage[\\\/]/, '').replace(/^[\\\/]+/, '').replace(/\\/g, '/');
+                    const col = document.createElement('div');
+                    col.className = 'col-12 col-sm-6 col-lg-4';
+                    col.innerHTML = `
+                        <div class="partner-gallery-card">
+                            <img src="${imgSrc}" alt="${escapeHtml(item.title || 'Gallery Foto')}" class="partner-gallery-photo" data-photo-src="${imgSrc}">
+                        </div>
+                    `;
+                    galleryGrid.appendChild(col);
+                });
+                showGalleryState('ready');
+            } catch (e) {
+                showGalleryState('empty');
+            }
+        }
+
+        panel.addEventListener('click', function (e) {
             const btn = e.target && e.target.closest ? e.target.closest('.btn-open-gallery-company') : null;
             if (!btn) return;
-            const company = String(btn.getAttribute('data-gallery-company') || '').trim();
-            if (!company) return;
-            setActive('gallery');
-            if (typeof window.openWalkinGalleryCompany === 'function') {
-                window.openWalkinGalleryCompany(company);
+
+            const companyName = String(btn.getAttribute('data-company-name') || '').trim();
+            const galleryCompany = String(btn.getAttribute('data-gallery-company') || '').trim();
+            const logoUrl = String(btn.getAttribute('data-company-logo') || '').trim();
+            const rating = String(btn.getAttribute('data-company-rating') || '0');
+            const reviews = String(btn.getAttribute('data-company-reviews') || '0');
+            const jobs = String(btn.getAttribute('data-company-jobs') || '0');
+            const summary = String(btn.getAttribute('data-company-summary') || '').trim();
+
+            detailName.textContent = companyName || '-';
+            detailRating.innerHTML = `<i class="bi bi-star-fill me-1"></i>${escapeHtml(rating)}`;
+            detailReviews.textContent = `${escapeHtml(reviews)} Ulasan`;
+            detailJobs.textContent = `${escapeHtml(jobs)} Pekerjaan`;
+            detailSummary.textContent = summary || 'Profil perusahaan belum tersedia.';
+
+            if (logoUrl) {
+                detailLogoWrap.innerHTML = `<img src="${escapeHtml(logoUrl)}" alt="${escapeHtml(companyName)}" class="partner-company-logo">`;
+            } else {
+                const first = (companyName || '-').trim().charAt(0).toUpperCase() || '-';
+                detailLogoWrap.innerHTML = `<div class="partner-company-logo partner-company-logo-empty">${escapeHtml(first)}</div>`;
             }
+
+            showDetail();
+            loadGalleryPhotos(galleryCompany);
+        });
+
+        backBtn.addEventListener('click', function () {
+            showList();
+        });
+
+        galleryGrid.addEventListener('click', function (e) {
+            const img = e.target && e.target.closest ? e.target.closest('.partner-gallery-photo') : null;
+            if (!img) return;
+            const src = String(img.getAttribute('data-photo-src') || '').trim();
+            if (!src || !modalBody || !modalTitle) return;
+            modalTitle.textContent = 'Gallery Foto Perusahaan';
+            modalBody.innerHTML = `<img src="${src}" class="img-fluid rounded" alt="Gallery Foto">`;
+            if (bsModal) bsModal.show();
         });
     })();
 
@@ -3945,6 +4118,33 @@
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
         overflow: hidden;
+    }
+    .partner-company-summary-full {
+        -webkit-line-clamp: unset;
+        display: block;
+        overflow: visible;
+    }
+    .partner-gallery-wrap {
+        border: 1px solid rgba(148, 163, 184, 0.30);
+        border-radius: 16px;
+        background: #fff;
+        padding: 14px;
+    }
+    .partner-gallery-card {
+        border: 1px solid rgba(148, 163, 184, 0.28);
+        border-radius: 12px;
+        overflow: hidden;
+        background: #f8fafc;
+    }
+    .partner-gallery-photo {
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+        cursor: pointer;
+        transition: transform 0.15s ease;
+    }
+    .partner-gallery-photo:hover {
+        transform: scale(1.02);
     }
     .walkin-panel {
         border: 1px solid rgba(15,23,42,0.10);
