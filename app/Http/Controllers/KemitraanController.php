@@ -6,6 +6,7 @@ use App\Models\Kemitraan;
 use App\Models\TypeOfPartnership;
 use App\Models\BookedDate;
 use App\Models\companysector;
+use App\Models\PartnerCompany;
 use App\Models\PaskerRoom;
 use App\Models\PaskerFacility;
 use App\Models\WalkInSurveyCompany;
@@ -34,6 +35,7 @@ class KemitraanController extends Controller
         $surveyPasscodeEnabled = $this->isSurveyPasscodeEnabled();
         $formPasscodeEnabled = $this->isFormPasscodeEnabled();
         $surveyCompanies = collect();
+        $partnerCompanies = collect();
         
         // Fetch unique institution names from kemitraan for autocomplete
         $availableInstitutions = [];
@@ -65,6 +67,119 @@ class KemitraanController extends Controller
             $surveyCompanies = $query->get($columns);
         }
 
+        if (Schema::hasTable('partner_companies')) {
+            $partnerCompanies = PartnerCompany::query()
+                ->where('is_active', true)
+                ->orderBy('sort_order')
+                ->orderBy('company_name')
+                ->get([
+                    'id',
+                    'company_name',
+                    'gallery_company_name',
+                    'logo_path',
+                    'profile_summary',
+                ]);
+
+            if ($partnerCompanies->isNotEmpty()) {
+                $companyRatingMap = [];
+                if (Schema::hasTable('company_walk_in_survey') && Schema::hasTable('walk_in_survey_responses')) {
+                    $companyRatings = DB::table('company_walk_in_survey as c')
+                        ->leftJoin('walk_in_survey_responses as r', 'r.company_walk_in_survey_id', '=', 'c.id')
+                        ->selectRaw('LOWER(TRIM(c.company_name)) AS company_key, ROUND(AVG(r.rating_satisfaction), 2) AS avg_rating')
+                        ->whereNotNull('c.company_name')
+                        ->whereRaw("TRIM(c.company_name) <> ''")
+                        ->groupBy('company_key')
+                        ->get();
+
+                    foreach ($companyRatings as $row) {
+                        $key = trim((string) ($row->company_key ?? ''));
+                        if ($key !== '') {
+                            $companyRatingMap[$key] = $row->avg_rating !== null ? (float) $row->avg_rating : null;
+                        }
+                    }
+                }
+
+                $initiatorRatingMap = [];
+                if (
+                    Schema::hasTable('walk_in_survey_initiators') &&
+                    Schema::hasTable('company_walk_in_survey') &&
+                    Schema::hasTable('walk_in_survey_responses') &&
+                    Schema::hasColumn('company_walk_in_survey', 'walk_in_initiator_id')
+                ) {
+                    $initiatorRatings = DB::table('walk_in_survey_initiators as i')
+                        ->leftJoin('company_walk_in_survey as c', 'c.walk_in_initiator_id', '=', 'i.id')
+                        ->leftJoin('walk_in_survey_responses as r', 'r.company_walk_in_survey_id', '=', 'c.id')
+                        ->selectRaw('LOWER(TRIM(i.initiator_name)) AS initiator_key, ROUND(AVG(r.rating_satisfaction), 2) AS avg_rating')
+                        ->whereNotNull('i.initiator_name')
+                        ->whereRaw("TRIM(i.initiator_name) <> ''")
+                        ->groupBy('initiator_key')
+                        ->get();
+
+                    foreach ($initiatorRatings as $row) {
+                        $key = trim((string) ($row->initiator_key ?? ''));
+                        if ($key !== '') {
+                            $initiatorRatingMap[$key] = $row->avg_rating !== null ? (float) $row->avg_rating : null;
+                        }
+                    }
+                }
+
+                $reviewCountMap = [];
+                if (Schema::hasTable('walkin_gallery_comments')) {
+                    $reviewRows = DB::table('walkin_gallery_comments')
+                        ->selectRaw('LOWER(TRIM(company_name)) AS company_key, COUNT(*) AS total')
+                        ->where('status', 'approved')
+                        ->whereNotNull('company_name')
+                        ->whereRaw("TRIM(company_name) <> ''")
+                        ->groupBy('company_key')
+                        ->get();
+
+                    foreach ($reviewRows as $row) {
+                        $key = trim((string) ($row->company_key ?? ''));
+                        if ($key !== '') {
+                            $reviewCountMap[$key] = (int) ($row->total ?? 0);
+                        }
+                    }
+                }
+
+                $totalKebutuhanMap = [];
+                if (Schema::hasTable('kemitraan_detail_lowongan') && Schema::hasTable('kemitraan')) {
+                    $totalKebutuhanQuery = DB::table('kemitraan_detail_lowongan as kdl')
+                        ->join('kemitraan as k', 'kdl.kemitraan_id', '=', 'k.id')
+                        ->selectRaw('LOWER(TRIM(k.institution_name)) AS company_key, COALESCE(SUM(kdl.jumlah_kebutuhan), 0) AS total_kebutuhan')
+                        ->whereNotNull('k.institution_name')
+                        ->whereRaw("TRIM(k.institution_name) <> ''")
+                        ->groupBy('company_key');
+
+                    if (Schema::hasColumn('kemitraan', 'status')) {
+                        $totalKebutuhanQuery->where('k.status', 'approved');
+                    }
+
+                    $totalKebutuhanRows = $totalKebutuhanQuery->get();
+                    foreach ($totalKebutuhanRows as $row) {
+                        $key = trim((string) ($row->company_key ?? ''));
+                        if ($key !== '') {
+                            $totalKebutuhanMap[$key] = (int) ($row->total_kebutuhan ?? 0);
+                        }
+                    }
+                }
+
+                $partnerCompanies = $partnerCompanies->map(function ($partner) use ($companyRatingMap, $initiatorRatingMap, $reviewCountMap, $totalKebutuhanMap) {
+                    $mapName = trim((string) ($partner->gallery_company_name ?: $partner->company_name));
+                    $key = mb_strtolower($mapName);
+
+                    $computedRating = $initiatorRatingMap[$key] ?? $companyRatingMap[$key] ?? null;
+                    $computedReviewCount = $reviewCountMap[$key] ?? 0;
+                    $computedTotalKebutuhan = $totalKebutuhanMap[$key] ?? 0;
+
+                    $partner->computed_rating = $computedRating;
+                    $partner->computed_review_count = (int) $computedReviewCount;
+                    $partner->computed_total_kebutuhan = (int) $computedTotalKebutuhan;
+
+                    return $partner;
+                });
+            }
+        }
+
         return view('kemitraan.create', compact(
             'dropdownPartnership',
             'dropdownCompanySectors',
@@ -78,7 +193,8 @@ class KemitraanController extends Controller
             'walkinStats',
             'surveyPasscodeEnabled',
             'formPasscodeEnabled',
-            'availableInstitutions'
+            'availableInstitutions',
+            'partnerCompanies'
         ));
     }
 

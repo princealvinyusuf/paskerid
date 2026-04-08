@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container mt-5 mb-5" style="max-width: 1200px;">
+<div class="walkin-page-wrap mt-5 mb-5">
     <div class="text-center mb-4">
         <i class="bi bi-people-fill" style="font-size: 2.5rem; color: #0d6efd;"></i>
         <h2 class="mt-2 mb-0">Walk In Interview</h2>
@@ -14,9 +14,10 @@
             <button type="button" class="walkin-seg-btn active" id="btnPanelInfo" aria-selected="true">Info & Tata Cara</button>
             <button type="button" class="walkin-seg-btn" id="btnPanelSchedule" aria-selected="false">Jadwal Walk In</button>
             <button type="button" class="walkin-seg-btn" id="btnPanelGallery" aria-selected="false">Galeri Walk In</button>
-            <button type="button" class="walkin-seg-btn" id="btnPanelForm" aria-selected="false">Form Pendaftaran Walk In (Pemberi Kerja)</button>
+            <button type="button" class="walkin-seg-btn" id="btnPanelForm" aria-selected="false">Form Pendaftaran</button>
             <button type="button" class="walkin-seg-btn" id="btnPanelSurvey" aria-selected="false">Survei Evaluasi</button>
             <button type="button" class="walkin-seg-btn" id="btnPanelStatistik" aria-selected="false">Hasil Evaluasi</button>
+            <button type="button" class="walkin-seg-btn" id="btnPanelPartnerCompany" aria-selected="false">Perusahaan Mitra</button>
         </div>
     </div>
 
@@ -522,6 +523,127 @@
                                     <div class="fw-semibold mb-2">Job Portal Terpopuler</div>
                                     <div id="statsJobPortalsList" class="d-flex flex-wrap gap-2"></div>
                                 </div>
+                            </div>
+                        </div>
+                    @endif
+                </div>
+            </div>
+        </div>
+
+        <!-- Perusahaan Mitra -->
+        <div class="col-12 d-none" id="panelPartnerCompany">
+            <div class="card shadow-lg w-100">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <div>
+                            <h5 class="mb-0"><i class="bi bi-buildings me-2"></i>Daftar Perusahaan Mitra Kerja Sama</h5>
+                            <div class="text-muted small">Temukan lowongan baru, ulasan, budaya perusahaan, fasilitas, dan tunjangan.</div>
+                        </div>
+                    </div>
+
+                    @php $partnerItems = collect($partnerCompanies ?? [])->values(); @endphp
+                    @if($partnerItems->isEmpty())
+                        <div class="alert alert-info mb-0">Data perusahaan mitra belum tersedia. Silakan tambahkan dari menu admin <strong>Perusahaan Mitra</strong>.</div>
+                    @else
+                        <div id="partnerCompanyListWrap" class="row g-3">
+                            @foreach($partnerItems as $partner)
+                                @php
+                                    $name = trim((string) ($partner->company_name ?? '-'));
+                                    $galleryName = trim((string) ($partner->gallery_company_name ?? ''));
+                                    $logoPath = trim((string) ($partner->logo_path ?? ''));
+                                    $logoUrl = $logoPath !== '' ? asset('storage/' . ltrim($logoPath, '/')) : '';
+                                    $rating = max(0, min(5, (float) ($partner->computed_rating ?? 0)));
+                                    $reviewCount = max(0, (int) ($partner->computed_review_count ?? 0));
+                                    $totalKebutuhan = max(0, (int) ($partner->computed_total_kebutuhan ?? 0));
+                                    $summary = trim((string) ($partner->profile_summary ?? ''));
+                                @endphp
+                                <div class="col-12 col-md-6 col-xl-3">
+                                    <div class="partner-company-card h-100">
+                                        <div class="partner-company-logo-wrap">
+                                            @if($logoUrl !== '')
+                                                <img src="{{ $logoUrl }}" alt="{{ $name }}" class="partner-company-logo" loading="lazy">
+                                            @else
+                                                <div class="partner-company-logo partner-company-logo-empty">
+                                                    {{ strtoupper(mb_substr($name, 0, 1)) }}
+                                                </div>
+                                            @endif
+                                        </div>
+                                        <div class="partner-company-name">{{ $name }}</div>
+                                        <div class="partner-company-meta mt-2">
+                                            <span><i class="bi bi-star-fill me-1"></i>{{ number_format($rating, 1) }}</span>
+                                            <span class="mx-1">&middot;</span>
+                                            <span>{{ number_format($reviewCount) }} Ulasan</span>
+                                        </div>
+                                        <div class="mt-2">
+                                            <span class="partner-company-jobs">{{ number_format($totalKebutuhan) }} Pekerjaan Telah Dillaksanakan Melalui Walk In Interview</span>
+                                        </div>
+                                        @if($summary !== '')
+                                            <div class="partner-company-summary mt-2">{{ $summary }}</div>
+                                        @endif
+                                        @if($galleryName !== '')
+                                            <div class="mt-3">
+                                                <button
+                                                    type="button"
+                                                    class="btn btn-outline-primary btn-sm btn-open-gallery-company"
+                                                    data-company-name="{{ $name }}"
+                                                    data-gallery-company="{{ $galleryName }}"
+                                                    data-company-logo="{{ $logoUrl }}"
+                                                    data-company-rating="{{ number_format($rating, 1, '.', '') }}"
+                                                    data-company-reviews="{{ $reviewCount }}"
+                                                    data-company-total-kebutuhan="{{ $totalKebutuhan }}"
+                                                    data-company-summary="{{ $summary }}"
+                                                >
+                                                    Lihat Detail Perusahaan
+                                                </button>
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+
+                        <div id="partnerCompanyDetailWrap" class="d-none">
+                            <div class="mb-3">
+                                <button type="button" class="btn btn-outline-secondary btn-sm" id="btnPartnerCompanyBack">
+                                    <i class="bi bi-arrow-left me-1"></i>Kembali ke Daftar
+                                </button>
+                            </div>
+                            <div class="partner-company-card p-3 p-md-4">
+                                <div class="row g-3 align-items-start">
+                                    <div class="col-12 col-md-auto">
+                                        <div id="partnerCompanyDetailLogoWrap" class="partner-company-logo-wrap"></div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="partner-company-name mt-0" id="partnerCompanyDetailName"></div>
+                                        <div class="partner-company-meta mt-2">
+                                            <span id="partnerCompanyDetailRating"></span>
+                                            <span class="mx-1">&middot;</span>
+                                            <span id="partnerCompanyDetailReviews"></span>
+                                        </div>
+                                        <div class="mt-2">
+                                            <span class="partner-company-jobs" id="partnerCompanyDetailJobs"></span>
+                                        </div>
+                                        <div class="partner-company-summary mt-2 partner-company-summary-full" id="partnerCompanyDetailSummary"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="partner-gallery-wrap mt-3">
+                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                    <div class="fw-semibold">Gallery Foto</div>
+                                    <div class="text-muted small">Sumber data: Galeri Walk In</div>
+                                </div>
+                                <div id="partnerGalleryLoading" class="text-muted small">Memuat galeri foto...</div>
+                                <div id="partnerGalleryEmpty" class="text-muted small d-none">Belum ada foto perusahaan ini pada Galeri Walk In.</div>
+                                <div id="partnerGalleryGrid" class="row g-3 d-none"></div>
+                            </div>
+                            <div class="partner-gallery-wrap mt-3">
+                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                    <div class="fw-semibold">Ulasan Pencari Kerja</div>
+                                    <div class="text-muted small">Sumber data: Komentar Galeri Walk In</div>
+                                </div>
+                                <div id="partnerReviewsLoading" class="text-muted small">Memuat ulasan...</div>
+                                <div id="partnerReviewsEmpty" class="text-muted small d-none">Belum ada ulasan untuk perusahaan ini.</div>
+                                <div id="partnerReviewsList" class="d-flex flex-column gap-2 d-none"></div>
                             </div>
                         </div>
                     @endif
@@ -2143,6 +2265,7 @@
         const btnSchedule = document.getElementById('btnPanelSchedule');
         const btnSurvey = document.getElementById('btnPanelSurvey');
         const btnStatistik = document.getElementById('btnPanelStatistik');
+        const btnPartnerCompany = document.getElementById('btnPanelPartnerCompany');
         const surveyPasscodeEnabled = @json((bool) ($surveyPasscodeEnabled ?? false));
         const formPasscodeEnabled = @json((bool) ($formPasscodeEnabled ?? false));
         const verifySurveyPasscodeUrl = @json(route('kemitraan.survey.verify-passcode'));
@@ -2154,7 +2277,8 @@
         const panelSchedule = document.getElementById('panelSchedule');
         const panelSurvey = document.getElementById('panelSurvey');
         const panelStatistik = document.getElementById('panelStatistik');
-        if (!btnInfo || !btnForm || !btnGallery || !btnSchedule || !btnSurvey || !btnStatistik || !panelInfo || !panelForm || !panelGallery || !panelSchedule || !panelSurvey || !panelStatistik) return;
+        const panelPartnerCompany = document.getElementById('panelPartnerCompany');
+        if (!btnInfo || !btnForm || !btnGallery || !btnSchedule || !btnSurvey || !btnStatistik || !btnPartnerCompany || !panelInfo || !panelForm || !panelGallery || !panelSchedule || !panelSurvey || !panelStatistik || !panelPartnerCompany) return;
 
         function syncPanelToUrl(which) {
             try {
@@ -2171,24 +2295,28 @@
             const isSchedule = which === 'schedule';
             const isSurvey = which === 'survey';
             const isStatistik = which === 'hasil_evaluasi';
+            const isPartnerCompany = which === 'partner_company';
             btnInfo.classList.toggle('active', isInfo);
             btnForm.classList.toggle('active', isForm);
             btnGallery.classList.toggle('active', isGallery);
             btnSchedule.classList.toggle('active', isSchedule);
             btnSurvey.classList.toggle('active', isSurvey);
             btnStatistik.classList.toggle('active', isStatistik);
+            btnPartnerCompany.classList.toggle('active', isPartnerCompany);
             btnInfo.setAttribute('aria-selected', isInfo ? 'true' : 'false');
             btnForm.setAttribute('aria-selected', isForm ? 'true' : 'false');
             btnGallery.setAttribute('aria-selected', isGallery ? 'true' : 'false');
             btnSchedule.setAttribute('aria-selected', isSchedule ? 'true' : 'false');
             btnSurvey.setAttribute('aria-selected', isSurvey ? 'true' : 'false');
             btnStatistik.setAttribute('aria-selected', isStatistik ? 'true' : 'false');
+            btnPartnerCompany.setAttribute('aria-selected', isPartnerCompany ? 'true' : 'false');
             panelInfo.classList.toggle('d-none', !isInfo);
             panelForm.classList.toggle('d-none', !isForm);
             panelGallery.classList.toggle('d-none', !isGallery);
             panelSchedule.classList.toggle('d-none', !isSchedule);
             panelSurvey.classList.toggle('d-none', !isSurvey);
             panelStatistik.classList.toggle('d-none', !isStatistik);
+            panelPartnerCompany.classList.toggle('d-none', !isPartnerCompany);
             try { localStorage.setItem('walkin_panel', which); } catch (e) {}
             syncPanelToUrl(which);
         }
@@ -2239,7 +2367,7 @@
                 }
             } catch (e) {}
 
-            const passcode = window.prompt('Masukkan passcode untuk membuka Form Pendaftaran Walk In:');
+            const passcode = window.prompt('Form ini hanya diperuntukan bagi Pemberi Kerja. Masukkan passcode untuk membuka Form Pendaftaran:');
             if (passcode === null) return false;
             if (String(passcode).trim() === '') {
                 alert('Passcode wajib diisi.');
@@ -2281,10 +2409,11 @@
             if (ok) setActive('survey');
         });
         btnStatistik.addEventListener('click', () => setActive('hasil_evaluasi'));
+        btnPartnerCompany.addEventListener('click', () => setActive('partner_company'));
 
         const urlPanelRaw = new URLSearchParams(window.location.search).get('panel');
         const urlPanel = urlPanelRaw === 'statistik' ? 'hasil_evaluasi' : urlPanelRaw;
-        const allowedPanels = ['info', 'form', 'gallery', 'schedule', 'survey', 'hasil_evaluasi'];
+        const allowedPanels = ['info', 'form', 'gallery', 'schedule', 'survey', 'hasil_evaluasi', 'partner_company'];
         const initialPanel = allowedPanels.includes(urlPanel) ? urlPanel : 'info';
         if (initialPanel === 'survey') {
             ensureSurveyUnlocked().then((ok) => setActive(ok ? 'survey' : 'info'));
@@ -2293,6 +2422,211 @@
         } else {
             setActive(initialPanel);
         }
+
+    })();
+
+    // Partner company detail + gallery photo
+    (function () {
+        const panel = document.getElementById('panelPartnerCompany');
+        if (!panel) return;
+
+        const feedUrl = @json(route('walkin-gallery.feed'));
+        const listWrap = document.getElementById('partnerCompanyListWrap');
+        const detailWrap = document.getElementById('partnerCompanyDetailWrap');
+        const backBtn = document.getElementById('btnPartnerCompanyBack');
+        const detailLogoWrap = document.getElementById('partnerCompanyDetailLogoWrap');
+        const detailName = document.getElementById('partnerCompanyDetailName');
+        const detailRating = document.getElementById('partnerCompanyDetailRating');
+        const detailReviews = document.getElementById('partnerCompanyDetailReviews');
+        const detailJobs = document.getElementById('partnerCompanyDetailJobs');
+        const detailSummary = document.getElementById('partnerCompanyDetailSummary');
+        const galleryLoading = document.getElementById('partnerGalleryLoading');
+        const galleryEmpty = document.getElementById('partnerGalleryEmpty');
+        const galleryGrid = document.getElementById('partnerGalleryGrid');
+        const reviewsLoading = document.getElementById('partnerReviewsLoading');
+        const reviewsEmpty = document.getElementById('partnerReviewsEmpty');
+        const reviewsList = document.getElementById('partnerReviewsList');
+        const modalEl = document.getElementById('walkinGalleryModal');
+        const modalBody = document.getElementById('walkinGalleryModalBody');
+        const modalTitle = document.getElementById('walkinGalleryModalTitle');
+        let bsModal = null;
+        if (modalEl && window.bootstrap) {
+            bsModal = bootstrap.Modal.getOrCreateInstance(modalEl);
+        }
+
+        if (!listWrap || !detailWrap || !backBtn || !detailLogoWrap || !detailName || !detailRating || !detailReviews || !detailJobs || !detailSummary || !galleryLoading || !galleryEmpty || !galleryGrid || !reviewsLoading || !reviewsEmpty || !reviewsList) return;
+
+        function escapeHtml(text) {
+            return String(text || '').replace(/[&<>"']/g, function (m) {
+                return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[m] || m;
+            });
+        }
+
+        function showList() {
+            detailWrap.classList.add('d-none');
+            listWrap.classList.remove('d-none');
+        }
+
+        function showDetail() {
+            listWrap.classList.add('d-none');
+            detailWrap.classList.remove('d-none');
+        }
+
+        function showGalleryState(state) {
+            const isLoading = state === 'loading';
+            const isEmpty = state === 'empty';
+            const isReady = state === 'ready';
+            galleryLoading.classList.toggle('d-none', !isLoading);
+            galleryEmpty.classList.toggle('d-none', !isEmpty);
+            galleryGrid.classList.toggle('d-none', !isReady);
+        }
+
+        function showReviewState(state) {
+            const isLoading = state === 'loading';
+            const isEmpty = state === 'empty';
+            const isReady = state === 'ready';
+            reviewsLoading.classList.toggle('d-none', !isLoading);
+            reviewsEmpty.classList.toggle('d-none', !isEmpty);
+            reviewsList.classList.toggle('d-none', !isReady);
+        }
+
+        function renderReviewItems(items) {
+            reviewsList.innerHTML = '';
+            if (!Array.isArray(items) || items.length === 0) {
+                showReviewState('empty');
+                return;
+            }
+
+            items.forEach((item) => {
+                const name = String(item && item.name ? item.name : 'Anonim').trim() || 'Anonim';
+                const company = String(item && item.company_name ? item.company_name : '').trim();
+                const comment = String(item && item.comment ? item.comment : '').trim();
+                const date = String(item && item.created_at ? item.created_at : '').slice(0, 10);
+                const first = name.charAt(0).toUpperCase() || '?';
+
+                const row = document.createElement('div');
+                row.className = 'partner-review-item';
+                row.innerHTML = `
+                    <div class="d-flex align-items-start gap-2">
+                        <div class="walkin-avatar">${escapeHtml(first)}</div>
+                        <div class="flex-grow-1">
+                            <div class="d-flex align-items-start justify-content-between gap-2">
+                                <div class="fw-semibold">${escapeHtml(name)}</div>
+                                <div class="text-muted small">${escapeHtml(date)}</div>
+                            </div>
+                            ${company ? `<div class="small text-muted">${escapeHtml(company)}</div>` : ''}
+                            <div class="small mt-1">${escapeHtml(comment)}</div>
+                        </div>
+                    </div>
+                `;
+                reviewsList.appendChild(row);
+            });
+
+            showReviewState('ready');
+        }
+
+        async function loadPartnerCompanyData(galleryCompany) {
+            const company = String(galleryCompany || '').trim();
+            galleryGrid.innerHTML = '';
+            reviewsList.innerHTML = '';
+            if (!company) {
+                showGalleryState('empty');
+                showReviewState('empty');
+                return;
+            }
+            showGalleryState('loading');
+            showReviewState('loading');
+
+            try {
+                const params = new URLSearchParams();
+                params.set('company', company);
+                const res = await fetch(`${feedUrl}?${params.toString()}`, { headers: { Accept: 'application/json' } });
+                if (!res.ok) {
+                    showGalleryState('empty');
+                    showReviewState('empty');
+                    return;
+                }
+                const data = await res.json().catch(() => ({}));
+                const rawItems = Array.isArray(data.items) ? data.items : [];
+                const photos = rawItems.filter((it) => String(it && it.type ? it.type : '') === 'photo' && String(it.media_path || '').trim() !== '');
+                const comments = Array.isArray(data.comments) ? data.comments : [];
+                const apiRating = data && data.initiator_rating && data.initiator_rating.rating != null
+                    ? Number(data.initiator_rating.rating)
+                    : null;
+
+                if (apiRating !== null && Number.isFinite(apiRating)) {
+                    detailRating.innerHTML = `<i class="bi bi-star-fill me-1"></i>${escapeHtml(apiRating.toFixed(2))}`;
+                } else {
+                    detailRating.innerHTML = `<i class="bi bi-star-fill me-1"></i>0.00`;
+                }
+                detailReviews.textContent = `${escapeHtml(String(comments.length))} Ulasan`;
+
+                if (photos.length === 0) {
+                    showGalleryState('empty');
+                } else {
+                    photos.forEach((item) => {
+                        const imgSrc = '/storage/' + String(item.media_path || '').replace(/^storage[\\\/]/, '').replace(/^[\\\/]+/, '').replace(/\\/g, '/');
+                        const col = document.createElement('div');
+                        col.className = 'col-12 col-sm-6 col-lg-4';
+                        col.innerHTML = `
+                            <div class="partner-gallery-card">
+                                <img src="${imgSrc}" alt="${escapeHtml(item.title || 'Gallery Foto')}" class="partner-gallery-photo" data-photo-src="${imgSrc}">
+                            </div>
+                        `;
+                        galleryGrid.appendChild(col);
+                    });
+                    showGalleryState('ready');
+                }
+
+                renderReviewItems(comments);
+            } catch (e) {
+                showGalleryState('empty');
+                showReviewState('empty');
+            }
+        }
+
+        panel.addEventListener('click', function (e) {
+            const btn = e.target && e.target.closest ? e.target.closest('.btn-open-gallery-company') : null;
+            if (!btn) return;
+
+            const companyName = String(btn.getAttribute('data-company-name') || '').trim();
+            const galleryCompany = String(btn.getAttribute('data-gallery-company') || '').trim();
+            const logoUrl = String(btn.getAttribute('data-company-logo') || '').trim();
+            const rating = String(btn.getAttribute('data-company-rating') || '0');
+            const reviews = String(btn.getAttribute('data-company-reviews') || '0');
+            const totalKebutuhan = String(btn.getAttribute('data-company-total-kebutuhan') || '0');
+            const summary = String(btn.getAttribute('data-company-summary') || '').trim();
+
+            detailName.textContent = companyName || '-';
+            detailRating.innerHTML = `<i class="bi bi-star-fill me-1"></i>${escapeHtml(rating)}`;
+            detailReviews.textContent = `${escapeHtml(reviews)} Ulasan`;
+            detailJobs.textContent = `${escapeHtml(totalKebutuhan)} Pekerjaan Telah Dillaksanakan Melalui Walk In Interview`;
+            detailSummary.textContent = summary || 'Profil perusahaan belum tersedia.';
+
+            if (logoUrl) {
+                detailLogoWrap.innerHTML = `<img src="${escapeHtml(logoUrl)}" alt="${escapeHtml(companyName)}" class="partner-company-logo">`;
+            } else {
+                const first = (companyName || '-').trim().charAt(0).toUpperCase() || '-';
+                detailLogoWrap.innerHTML = `<div class="partner-company-logo partner-company-logo-empty">${escapeHtml(first)}</div>`;
+            }
+
+            showDetail();
+            loadPartnerCompanyData(galleryCompany);
+        });
+
+        backBtn.addEventListener('click', function () {
+            showList();
+        });
+
+        galleryGrid.addEventListener('click', function (e) {
+            const img = e.target && e.target.closest ? e.target.closest('.partner-gallery-photo') : null;
+            if (!img) return;
+            const src = String(img.getAttribute('data-photo-src') || '').trim();
+            if (!src || !modalBody || !modalTitle) return;
+            modalTitle.textContent = 'Gallery Foto Perusahaan';
+            modalBody.innerHTML = `<img src="${src}" class="img-fluid rounded" alt="Gallery Foto">`;
+            if (bsModal) bsModal.show();
+        });
     })();
 
     // Statistik panel
@@ -3721,36 +4055,71 @@
             });
         }
 
+        window.openWalkinGalleryCompany = function (companyName) {
+            const target = String(companyName || '').trim();
+            if (!target) {
+                loadCompanies();
+                return;
+            }
+            currentDateFrom = '';
+            currentDateTo = '';
+            if (dateFromEl) dateFromEl.value = '';
+            if (dateToEl) dateToEl.value = '';
+            loadCompany(target, 'all');
+        };
+
         // initial load: show company cards
         loadCompanies();
     })();
 </script>
 @endpush
 <style>
+    .walkin-page-wrap {
+        width: min(96vw, 1680px);
+        margin-left: auto;
+        margin-right: auto;
+    }
     .walkin-segmented {
-        display: inline-flex;
+        display: flex;
+        flex-wrap: nowrap;
         width: 100%;
         background: #eef2f7;
         border-radius: 999px;
-        padding: 6px;
+        padding: 8px;
         box-shadow: inset 0 0 0 1px rgba(0,0,0,0.06);
-        gap: 6px;
+        gap: 8px;
+        overflow: hidden;
     }
     .walkin-seg-btn {
-        flex: 1;
+        flex: 1 1 0;
+        min-width: 0;
         border: 0;
         border-radius: 999px;
-        padding: 10px 12px;
+        padding: 9px 10px;
         font-weight: 600;
         background: transparent;
         color: #475569;
         text-align: center;
         white-space: nowrap;
+        line-height: 1.1;
+        min-height: 0;
+        font-size: 0.92rem;
+        display: block;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
     .walkin-seg-btn.active {
         background: #ffffff;
         color: #111827;
         box-shadow: 0 6px 16px rgba(2,6,23,0.10);
+    }
+    @media (max-width: 1200px) and (min-width: 577px) {
+        .walkin-page-wrap {
+            width: min(98vw, 1300px);
+        }
+        .walkin-seg-btn {
+            font-size: 0.86rem;
+        }
     }
     /* Responsive toggle: stack buttons on small screens (prevents cramped layout) */
     @media (max-width: 576px) {
@@ -3761,6 +4130,8 @@
             padding: 0;
             background: transparent;
             box-shadow: none;
+            border-radius: 0;
+            overflow: visible;
         }
         .walkin-seg-btn {
             border-radius: 16px;
@@ -3782,6 +4153,102 @@
         line-height: 1.25;
         letter-spacing: -0.01em;
         color: #0f172a;
+    }
+    .partner-company-card {
+        border: 1px solid rgba(148, 163, 184, 0.32);
+        border-radius: 16px;
+        padding: 14px;
+        background: #fff;
+        box-shadow: 0 6px 20px rgba(15, 23, 42, 0.06);
+    }
+    .partner-company-logo-wrap {
+        height: 56px;
+        display: flex;
+        align-items: center;
+    }
+    .partner-company-logo {
+        max-width: 170px;
+        max-height: 56px;
+        object-fit: contain;
+    }
+    .partner-company-logo-empty {
+        width: 56px;
+        height: 56px;
+        border-radius: 12px;
+        border: 1px solid rgba(148, 163, 184, 0.45);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        color: #334155;
+        background: #f8fafc;
+    }
+    .partner-company-name {
+        margin-top: 10px;
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #1e293b;
+        line-height: 1.2;
+    }
+    .partner-company-meta {
+        color: #475569;
+        font-size: 0.98rem;
+    }
+    .partner-company-meta .bi-star-fill {
+        color: #ec4899;
+    }
+    .partner-company-jobs {
+        display: inline-flex;
+        padding: 4px 10px;
+        border-radius: 14px;
+        background: #e0ecff;
+        color: #355b8d;
+        font-size: 0.86rem;
+        font-weight: 600;
+        white-space: normal;
+        line-height: 1.25;
+    }
+    .partner-company-summary {
+        font-size: 0.86rem;
+        color: #64748b;
+        line-height: 1.35;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+    .partner-company-summary-full {
+        -webkit-line-clamp: unset;
+        display: block;
+        overflow: visible;
+    }
+    .partner-gallery-wrap {
+        border: 1px solid rgba(148, 163, 184, 0.30);
+        border-radius: 16px;
+        background: #fff;
+        padding: 14px;
+    }
+    .partner-gallery-card {
+        border: 1px solid rgba(148, 163, 184, 0.28);
+        border-radius: 12px;
+        overflow: hidden;
+        background: #f8fafc;
+    }
+    .partner-gallery-photo {
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+        cursor: pointer;
+        transition: transform 0.15s ease;
+    }
+    .partner-gallery-photo:hover {
+        transform: scale(1.02);
+    }
+    .partner-review-item {
+        border: 1px solid rgba(148, 163, 184, 0.24);
+        border-radius: 12px;
+        padding: 10px 12px;
+        background: #fff;
     }
     .walkin-panel {
         border: 1px solid rgba(15,23,42,0.10);
