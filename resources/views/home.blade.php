@@ -2,6 +2,43 @@
 
 @section('content')
 <div class="container-fluid p-0 home-ocean-theme">
+    @php
+        $showWelcomePopup = isset($welcomePopup) && (int) ($welcomePopup->is_enabled ?? 0) === 1;
+        $welcomePopupImageSrc = '';
+        if ($showWelcomePopup && !empty($welcomePopup->image_base64)) {
+            $popupMime = trim((string) ($welcomePopup->mime_type ?? ''));
+            $popupMime = $popupMime !== '' ? $popupMime : 'image/jpeg';
+            $popupPayload = trim((string) $welcomePopup->image_base64);
+            if (\Illuminate\Support\Str::startsWith($popupPayload, 'data:')) {
+                $welcomePopupImageSrc = $popupPayload;
+            } else {
+                $welcomePopupImageSrc = 'data:' . $popupMime . ';base64,' . $popupPayload;
+            }
+        }
+    @endphp
+
+    @if($showWelcomePopup)
+        <div class="modal fade" id="welcomePopupModal" tabindex="-1" aria-labelledby="welcomePopupModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content welcome-popup-modal">
+                    <div class="modal-header border-0 pb-0">
+                        <h5 class="modal-title" id="welcomePopupModalLabel">Welcome</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body pt-2">
+                        @if($welcomePopupImageSrc !== '')
+                            <div class="text-center mb-3">
+                                <img src="{{ $welcomePopupImageSrc }}" alt="Welcome image" class="img-fluid rounded-3 welcome-popup-image">
+                            </div>
+                        @endif
+                        <h4 class="fw-bold mb-2 text-center">{{ $welcomePopup->title ?? '' }}</h4>
+                        <p class="text-muted mb-0 text-center">{{ $welcomePopup->subtitle ?? '' }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+
     {{-- Hero Banner Section (Static) --}}
     <section class="hero-banner position-relative text-white mb-0 d-flex flex-column justify-content-center align-items-center h-100" style="background: url('{{ asset('images/banner_bg_2.jpg') }}') center center/cover no-repeat; min-height: 420px;">
         <div class="w-100">
@@ -1028,6 +1065,14 @@
     </script>
     <script>
     document.addEventListener('DOMContentLoaded', function () {
+        const welcomePopup = document.getElementById('welcomePopupModal');
+        if (welcomePopup && typeof bootstrap !== 'undefined' && bootstrap.Modal) {
+            const popupModal = new bootstrap.Modal(welcomePopup);
+            popupModal.show();
+        }
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
         // Auto-shrink description text to fit within fixed box height
         function autoshrinkDescriptions(root) {
             const descriptions = (root || document).querySelectorAll('.stat-card .stat-desc');
@@ -1376,6 +1421,18 @@
         radial-gradient(760px 430px at 50% 105%, rgba(47, 159, 232, 0.13), transparent 62%),
         #f2f7ff;
     background: var(--home-ocean-bg);
+}
+
+.welcome-popup-modal {
+    border-radius: 18px;
+    overflow: hidden;
+    border: 1px solid rgba(15, 95, 168, 0.2);
+}
+
+.welcome-popup-image {
+    max-height: 260px;
+    width: auto;
+    object-fit: contain;
 }
 
 .home-ocean-theme .card {

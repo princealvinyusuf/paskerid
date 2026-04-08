@@ -23,6 +23,8 @@ use App\Models\HighlightStatisticSecondary;
 use App\Models\Visitor;
 use App\Models\MitraKerja;
 use App\Models\KarirhubAds;
+use App\Models\HomePopupSetting;
+use Illuminate\Support\Facades\Schema;
 
 class HomeController extends Controller
 {
@@ -76,6 +78,10 @@ class HomeController extends Controller
             ->orderBy('id')
             ->get();
         $ads = KarirhubAds::latest()->get();
+        $welcomePopup = null;
+        if (Schema::hasTable('home_popup_settings')) {
+            $welcomePopup = HomePopupSetting::query()->find(1);
+        }
 
         // Additional categories for Informasi Terbaru section
         $spark = Information::where('subject', 'Seputar Pasar Kerja (SPARK)')->where('status', 'publik')->orderByDesc('date')->take(5)->get();
@@ -109,6 +115,7 @@ class HomeController extends Controller
             'todayVisitors',
             'mitraKerja',
             'ads',
+            'welcomePopup',
             'spark',
             'lmir',
             'regulasi',
