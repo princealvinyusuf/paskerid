@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\News;
 use App\Models\NewsLike;
+use Illuminate\Support\Facades\Schema;
 
 class NewsController extends Controller
 {
@@ -24,6 +25,10 @@ class NewsController extends Controller
     public function show($id)
     {
         $news = \App\Models\News::findorFail($id);
+        if (Schema::hasColumn('news', 'views_count')) {
+            $news->increment('views_count');
+            $news->refresh();
+        }
         $popularNews = \App\Models\News::orderBy('Created_at', 'desc')->limit(5)->get();
 
         return view('news.DetailBerita', compact('news','popularNews'));

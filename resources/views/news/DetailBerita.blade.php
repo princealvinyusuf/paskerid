@@ -39,6 +39,7 @@
             <div class="text-muted mb-3 timestampBerita" style="margin-bottom: 22px !important;">
                 <i class="fa fa-clock" style="font-size:13px"></i> <span style="font-weight: bold; font-size: 13px">{{ \Carbon\Carbon::parse($news->date)->format('d M Y') }} &nbsp; </span>
                 <i class="fa fa-circle-user" style="font-size:13px"></i> <span style="font-weight: bold; font-size: 13px">{{ $news->author}}</span>
+                <i class="fa fa-eye ms-2" style="font-size:13px"></i> <span style="font-weight: bold; font-size: 13px">Views {{ number_format((int) ($news->views_count ?? 0)) }}</span>
             </div>
             
             <img src="{{ asset($news->image_url) }}" alt="{{ $news->title }}" class="img-fluid rounded-3 mb-2 gambarBerita" style="margin-bottom: 28px;">
