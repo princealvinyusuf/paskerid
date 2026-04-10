@@ -115,7 +115,7 @@
                         <div class="col-12">
                             <label class="form-label">Passcode <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" name="bulk_passcode" value="{{ old('bulk_passcode') }}" required placeholder="Isi Portal Code (unique)">
-                            <div class="form-text">Passcode harus sama dengan <strong>Portal Code (unique)</strong> di menu Monitoring Integrasi Karirhub x Mitra.</div>
+                            <div class="form-text">Passcode harus sama dengan <strong>Portal Code (unique)</strong>.</div>
                         </div>
                         <div class="col-12">
                             <label class="form-label">File Excel/CSV <span class="text-danger">*</span></label>
