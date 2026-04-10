@@ -80,7 +80,7 @@
 <div class="modal fade" id="laporLokerModal" tabindex="-1" aria-labelledby="laporLokerModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-scrollable">
         <div class="modal-content">
-            <form method="POST" action="{{ route('lapor-loker.store') }}">
+            <form method="POST" action="{{ route('lapor-loker.store') }}" enctype="multipart/form-data">
                 @csrf
                 <div class="modal-header">
                     <h2 class="modal-title fs-5" id="laporLokerModalLabel">Form Laporan Loker Hoax</h2>
@@ -123,6 +123,11 @@
                         <div class="col-12">
                             <label class="form-label">Tautan Informasi <span class="text-danger">*</span></label>
                             <input type="url" class="form-control" name="tautan_informasi" value="{{ old('tautan_informasi') }}" placeholder="https://..." required>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Lampirkan Bukti Pendukung</label>
+                            <input type="file" class="form-control" name="bukti_pendukung" accept=".jpg,.jpeg,.png,.webp,.pdf,.doc,.docx">
+                            <div class="form-text">Format yang didukung: JPG, PNG, WEBP, PDF, DOC, DOCX (maks. 10MB).</div>
                         </div>
                         <div class="col-12">
                             <label class="form-label">Kronologi Singkat</label>

@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string('nomor_kontak_terduga', 60)->nullable();
             $table->string('platform_sumber', 120)->nullable();
             $table->string('tautan_informasi', 500)->nullable();
+            $table->string('bukti_pendukung_path', 500)->nullable();
+            $table->string('bukti_pendukung_nama', 255)->nullable();
             $table->text('kronologi')->nullable();
             $table->string('pelapor_nama', 120)->nullable();
             $table->string('pelapor_email', 255)->nullable();

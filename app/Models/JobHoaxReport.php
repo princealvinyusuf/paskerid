@@ -16,6 +16,8 @@ class JobHoaxReport extends Model
         'nomor_kontak_terduga',
         'platform_sumber',
         'tautan_informasi',
+        'bukti_pendukung_path',
+        'bukti_pendukung_nama',
         'kronologi',
         'pelapor_nama',
         'pelapor_email',

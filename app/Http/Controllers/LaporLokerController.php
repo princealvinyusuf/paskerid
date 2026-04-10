@@ -30,12 +30,24 @@ class LaporLokerController extends Controller
             'nomor_kontak_terduga' => ['required', 'string', 'max:60'],
             'platform_sumber' => ['required', 'string', 'max:120'],
             'tautan_informasi' => ['required', 'url', 'max:500'],
+            'bukti_pendukung' => ['nullable', 'file', 'max:10240', 'mimes:jpg,jpeg,png,webp,pdf,doc,docx'],
             'kronologi' => ['nullable', 'string', 'max:5000'],
             'pelapor_nama' => ['required', 'string', 'max:120'],
             'pelapor_email' => ['required', 'email', 'max:255'],
         ]);
 
-        JobHoaxReport::create($validated + ['status' => 'pending']);
+        $data = $validated;
+        unset($data['bukti_pendukung']);
+
+        if ($request->hasFile('bukti_pendukung')) {
+            $file = $request->file('bukti_pendukung');
+            if ($file) {
+                $data['bukti_pendukung_path'] = $file->store('lapor_loker/bukti_pendukung', 'public');
+                $data['bukti_pendukung_nama'] = $file->getClientOriginalName();
+            }
+        }
+
+        JobHoaxReport::create($data + ['status' => 'pending']);
 
         return redirect()
             ->route('lapor-loker.index')
