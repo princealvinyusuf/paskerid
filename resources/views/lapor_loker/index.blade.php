@@ -78,7 +78,7 @@
 </div>
 
 <div class="modal fade" id="laporLokerModal" tabindex="-1" aria-labelledby="laporLokerModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable modal-dialog-centered modal-fullscreen-sm-down">
         <div class="modal-content">
             <form method="POST" action="{{ route('lapor-loker.store') }}" enctype="multipart/form-data">
                 @csrf
@@ -152,6 +152,26 @@
     </div>
 </div>
 @endsection
+
+@push('head')
+<style>
+    #laporLokerModal .modal-content {
+        max-height: calc(100vh - 2rem);
+    }
+
+    #laporLokerModal .modal-body {
+        overflow-y: auto;
+        overscroll-behavior: contain;
+    }
+
+    @media (max-width: 575.98px) {
+        #laporLokerModal .modal-content {
+            max-height: 100vh;
+            border-radius: 0;
+        }
+    }
+</style>
+@endpush
 
 @push('scripts')
 <script>
