@@ -43,6 +43,7 @@
                                     <th>Kota</th>
                                     <th>Kontak Terduga</th>
                                     <th>Platform Sumber</th>
+                                    <th>Tautan Informasi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -56,10 +57,17 @@
                                         <td>{{ $report->kota }}</td>
                                         <td>{{ $report->nomor_kontak_terduga ?: '-' }}</td>
                                         <td>{{ $report->platform_sumber ?: '-' }}</td>
+                                        <td>
+                                            @if(!empty($report->tautan_informasi))
+                                                <a href="{{ $report->tautan_informasi }}" target="_blank" rel="noopener noreferrer">Lihat</a>
+                                            @else
+                                                -
+                                            @endif
+                                        </td>
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="8" class="text-center text-muted py-4">
+                                        <td colspan="9" class="text-center text-muted py-4">
                                             Belum ada laporan yang sudah diverifikasi.
                                         </td>
                                     </tr>
