@@ -80,7 +80,7 @@
 <div class="modal fade" id="laporLokerModal" tabindex="-1" aria-labelledby="laporLokerModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-scrollable modal-dialog-centered modal-fullscreen-sm-down">
         <div class="modal-content">
-            <form method="POST" action="{{ route('lapor-loker.store') }}" enctype="multipart/form-data">
+            <form method="POST" action="{{ route('lapor-loker.store') }}" enctype="multipart/form-data" class="d-flex flex-column h-100">
                 @csrf
                 <div class="modal-header">
                     <h2 class="modal-title fs-5" id="laporLokerModalLabel">Form Laporan Loker Hoax</h2>
@@ -155,16 +155,36 @@
 
 @push('head')
 <style>
+    #laporLokerModal .modal-dialog {
+        height: calc(100% - 1rem);
+        margin: 0.5rem auto;
+    }
+
     #laporLokerModal .modal-content {
-        max-height: calc(100vh - 2rem);
+        height: 100%;
+        max-height: 100%;
+        overflow: hidden;
+    }
+
+    #laporLokerModal form {
+        min-height: 0;
     }
 
     #laporLokerModal .modal-body {
+        flex: 1 1 auto;
+        min-height: 0;
         overflow-y: auto;
         overscroll-behavior: contain;
+        -webkit-overflow-scrolling: touch;
     }
 
     @media (max-width: 575.98px) {
+        #laporLokerModal .modal-dialog {
+            height: 100%;
+            margin: 0;
+            max-width: 100%;
+        }
+
         #laporLokerModal .modal-content {
             max-height: 100vh;
             border-radius: 0;
