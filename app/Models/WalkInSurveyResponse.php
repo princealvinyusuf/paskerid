@@ -49,6 +49,8 @@ class WalkInSurveyResponse extends Model
         'rating_satisfaction',
         'improvement_aspects',
         'feedback_improvement_aspects',
+        'walkin_benefit',
+        'walkin_benefit_reason',
     ];
 
     protected $casts = [

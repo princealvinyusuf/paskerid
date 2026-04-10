@@ -476,6 +476,32 @@
                         <div class="row g-3 mb-3 stats-admin-only d-none">
                             <div class="col-12 col-lg-6">
                                 <div class="walkin-panel p-3">
+                                    <div class="fw-semibold mb-2">Manfaat Walk In Interview (Ya/Tidak)</div>
+                                    <canvas id="statsBenefitChart" height="140"></canvas>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-6">
+                                <div class="walkin-panel p-3">
+                                    <div class="fw-semibold mb-2">Alasan Jawaban Manfaat</div>
+                                    <div class="table-responsive">
+                                        <table class="table table-sm table-bordered align-middle mb-0">
+                                            <thead class="table-light">
+                                                <tr>
+                                                    <th style="width:100px;">Jawaban</th>
+                                                    <th style="width:160px;">Perusahaan</th>
+                                                    <th>Alasan</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="statsBenefitReasonsBody"></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mb-3 stats-admin-only d-none">
+                            <div class="col-12 col-lg-6">
+                                <div class="walkin-panel p-3">
                                     <div class="fw-semibold mb-2">Top Company Detail</div>
                                     <div class="table-responsive">
                                         <table class="table table-sm table-bordered align-middle mb-0">
@@ -982,6 +1008,25 @@
                         <div class="walkin-panel p-3 p-md-4 mb-3">
                             <label class="form-label" for="survey_feedback_improvement_aspects">Kritik dan Saran Jawaban di Atas <span class="text-danger">*</span></label>
                             <textarea class="form-control" id="survey_feedback_improvement_aspects" name="survey_feedback_improvement_aspects" rows="3" placeholder="Your answer" required></textarea>
+                        </div>
+
+                        <div class="walkin-panel p-3 p-md-4 mb-3">
+                            <div class="form-label">Apakah kegiatan <em>walk in interview</em> ini memberikan manfaat bagi Anda? <span class="text-danger">*</span></div>
+                            <div class="d-flex flex-wrap gap-3 survey-rating-group">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="survey_walkin_benefit" id="survey_walkin_benefit_yes" value="Ya" required>
+                                    <label class="form-check-label" for="survey_walkin_benefit_yes">Ya</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="survey_walkin_benefit" id="survey_walkin_benefit_no" value="Tidak" required>
+                                    <label class="form-check-label" for="survey_walkin_benefit_no">Tidak</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="walkin-panel p-3 p-md-4 mb-3">
+                            <label class="form-label" for="survey_walkin_benefit_reason">Alasan memilih jawaban di atas <span class="text-danger">*</span></label>
+                            <textarea class="form-control" id="survey_walkin_benefit_reason" name="survey_walkin_benefit_reason" rows="3" placeholder="Tulis alasan Anda" required></textarea>
                         </div>
 
                         <div class="d-flex justify-content-end">
@@ -2641,6 +2686,7 @@
         const topLimitEl = document.getElementById('statsTopLimit');
         const companyTableBodyEl = document.getElementById('statsCompanyTableBody');
         const initiatorTableBodyEl = document.getElementById('statsInitiatorTableBody');
+        const benefitReasonsTableBodyEl = document.getElementById('statsBenefitReasonsBody');
         const infoSourcesListEl = document.getElementById('statsInfoSourcesList');
         const jobPortalsListEl = document.getElementById('statsJobPortalsList');
         const statsAdminBtn = document.getElementById('btnStatsAdminDashboard');
@@ -2653,7 +2699,8 @@
         const initiatorCanvas = document.getElementById('statsInitiatorChart');
         const genderCanvas = document.getElementById('statsGenderChart');
         const educationCanvas = document.getElementById('statsEducationChart');
-        if (!trendCanvas || !ratingCanvas || !companyCanvas || !initiatorCanvas || !genderCanvas || !educationCanvas) return;
+        const benefitCanvas = document.getElementById('statsBenefitChart');
+        if (!trendCanvas || !ratingCanvas || !companyCanvas || !initiatorCanvas || !genderCanvas || !educationCanvas || !benefitCanvas) return;
 
         const trendData = Array.isArray(stats.trend) ? stats.trend : [];
         const ratingDist = Array.isArray(stats.rating_distribution) ? stats.rating_distribution : [];
@@ -2661,6 +2708,8 @@
         const topInitiators = Array.isArray(stats.top_initiators) ? stats.top_initiators : [];
         const genderDist = Array.isArray(stats.gender_distribution) ? stats.gender_distribution : [];
         const educationDist = Array.isArray(stats.education_distribution) ? stats.education_distribution : [];
+        const benefitDist = Array.isArray(stats.walkin_benefit_distribution) ? stats.walkin_benefit_distribution : [];
+        const benefitReasons = Array.isArray(stats.walkin_benefit_reasons) ? stats.walkin_benefit_reasons : [];
         const infoSources = Array.isArray(stats.info_sources) ? stats.info_sources : [];
         const jobPortals = Array.isArray(stats.job_portals) ? stats.job_portals : [];
         let statsAdminUnlocked = false;
@@ -2803,6 +2852,45 @@
             });
         }
 
+        function renderBenefitDistribution(rows) {
+            const list = Array.isArray(rows) ? rows : [];
+            drawOrUpdate('benefit', benefitCanvas, {
+                type: 'doughnut',
+                data: {
+                    labels: list.map((it) => String(it.label || '-')),
+                    datasets: [{
+                        data: list.map((it) => Number(it.total || 0)),
+                        backgroundColor: ['#22c55e', '#ef4444', '#94a3b8'],
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                }
+            });
+        }
+
+        function renderBenefitReasonsTable(rows) {
+            if (!benefitReasonsTableBodyEl) return;
+            const list = Array.isArray(rows) ? rows : [];
+            if (list.length === 0) {
+                benefitReasonsTableBodyEl.innerHTML = '<tr><td colspan="3" class="text-muted text-center">Belum ada data.</td></tr>';
+                return;
+            }
+            benefitReasonsTableBodyEl.innerHTML = list.map((it) => {
+                const benefit = String(it && it.benefit ? it.benefit : '-');
+                const company = String(it && it.company ? it.company : '-');
+                const reason = String(it && it.reason ? it.reason : '-');
+                return `
+                    <tr>
+                        <td>${benefit}</td>
+                        <td>${company}</td>
+                        <td>${reason}</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
         function renderTopData(limitValue) {
             const n = Math.max(1, parseInt(limitValue, 10) || 10);
             const cRows = topCompanies.slice(0, n);
@@ -2861,6 +2949,8 @@
         function renderAdminDashboard() {
             renderTrend(trendRangeEl ? trendRangeEl.value : '30');
             renderTopData(topLimitEl ? topLimitEl.value : '10');
+            renderBenefitDistribution(benefitDist);
+            renderBenefitReasonsTable(benefitReasons);
             renderCloud(infoSourcesListEl, infoSources);
             renderCloud(jobPortalsListEl, jobPortals);
         }
@@ -3009,6 +3099,16 @@
                             }
                         });
                     }
+
+                    // Update Walk-in Benefit Distribution Chart
+                    const benefitDist = Array.isArray(data.walkin_benefit_distribution) ? data.walkin_benefit_distribution : [];
+                    if (charts.benefit && benefitCanvas) {
+                        renderBenefitDistribution(benefitDist);
+                    }
+
+                    // Update Walk-in Benefit Reasons Table
+                    const benefitReasons = Array.isArray(data.walkin_benefit_reasons) ? data.walkin_benefit_reasons : [];
+                    renderBenefitReasonsTable(benefitReasons);
 
                     // Update Top Companies Chart and Table
                     const topCompanies = Array.isArray(data.top_companies) ? data.top_companies : [];

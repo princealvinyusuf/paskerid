@@ -452,6 +452,8 @@ class KemitraanController extends Controller
             'survey_improvement_aspects' => 'required|array|min:1',
             'survey_improvement_aspects.*' => 'string|max:255',
             'survey_feedback_improvement_aspects' => 'required|string|max:5000',
+            'survey_walkin_benefit' => 'required|in:Ya,Tidak',
+            'survey_walkin_benefit_reason' => 'required|string|max:5000',
         ]);
 
         $company = WalkInSurveyCompany::query()
@@ -505,6 +507,8 @@ class KemitraanController extends Controller
             'rating_satisfaction' => (int) $validated['survey_rating_satisfaction'],
             'improvement_aspects' => array_values(array_unique($validated['survey_improvement_aspects'] ?? [])),
             'feedback_improvement_aspects' => $validated['survey_feedback_improvement_aspects'],
+            'walkin_benefit' => $validated['survey_walkin_benefit'],
+            'walkin_benefit_reason' => $validated['survey_walkin_benefit_reason'],
         ];
         if ($hasWalkinDateColumn) {
             // System-filled date to keep field read-only and tamper-resistant.
@@ -869,6 +873,8 @@ class KemitraanController extends Controller
             'age_distribution' => [],
             'education_distribution' => [],
             'domisili_distribution' => [],
+            'walkin_benefit_distribution' => [],
+            'walkin_benefit_reasons' => [],
             'top_companies' => [],
             'top_initiators' => [],
             'info_sources' => [],
@@ -1020,6 +1026,29 @@ class KemitraanController extends Controller
         $ageDistribution = $this->buildDistribution('walk_in_survey_responses', 'age_range');
         $educationDistribution = $this->buildDistribution('walk_in_survey_responses', 'education');
         $domisiliDistribution = $this->buildDistribution('walk_in_survey_responses', 'domisili');
+        $walkinBenefitDistribution = $this->buildDistribution('walk_in_survey_responses', 'walkin_benefit');
+
+        $walkinBenefitReasons = [];
+        if (
+            Schema::hasColumn('walk_in_survey_responses', 'walkin_benefit') &&
+            Schema::hasColumn('walk_in_survey_responses', 'walkin_benefit_reason')
+        ) {
+            $reasonRows = DB::table('walk_in_survey_responses')
+                ->select('walkin_benefit', 'walkin_benefit_reason', 'company_name_snapshot')
+                ->whereNotNull('walkin_benefit_reason')
+                ->whereRaw("TRIM(COALESCE(walkin_benefit_reason, '')) <> ''")
+                ->orderByDesc('id')
+                ->limit(20)
+                ->get();
+
+            foreach ($reasonRows as $row) {
+                $walkinBenefitReasons[] = [
+                    'benefit' => trim((string) ($row->walkin_benefit ?? '-')),
+                    'reason' => trim((string) ($row->walkin_benefit_reason ?? '')),
+                    'company' => trim((string) ($row->company_name_snapshot ?? '-')),
+                ];
+            }
+        }
 
         $topCompanies = [];
         if (Schema::hasTable('company_walk_in_survey')) {
@@ -1110,6 +1139,8 @@ class KemitraanController extends Controller
             'age_distribution' => $ageDistribution,
             'education_distribution' => $educationDistribution,
             'domisili_distribution' => $domisiliDistribution,
+            'walkin_benefit_distribution' => $walkinBenefitDistribution,
+            'walkin_benefit_reasons' => $walkinBenefitReasons,
             'top_companies' => $topCompanies,
             'top_initiators' => $topInitiators,
             'info_sources' => $infoSources,
@@ -1197,6 +1228,8 @@ class KemitraanController extends Controller
             'rating_distribution' => [],
             'gender_distribution' => [],
             'education_distribution' => [],
+            'walkin_benefit_distribution' => [],
+            'walkin_benefit_reasons' => [],
             'top_companies' => [],
             'top_initiators' => [],
             'info_sources' => [],
@@ -1271,6 +1304,44 @@ class KemitraanController extends Controller
                 $result['education_distribution'][] = [
                     'label' => (string) ($row->label ?? '-'),
                     'total' => (int) ($row->total ?? 0),
+                ];
+            }
+        }
+
+        // Walk-in Benefit Distribution
+        if (Schema::hasColumn('walk_in_survey_responses', 'walkin_benefit')) {
+            $benefitRows = (clone $baseQuery)
+                ->selectRaw("TRIM(COALESCE(walkin_benefit, '')) AS label, COUNT(*) AS total")
+                ->whereNotNull('walkin_benefit')
+                ->whereRaw("TRIM(COALESCE(walkin_benefit, '')) <> ''")
+                ->groupBy('label')
+                ->orderByDesc('total')
+                ->get();
+            foreach ($benefitRows as $row) {
+                $result['walkin_benefit_distribution'][] = [
+                    'label' => (string) ($row->label ?? '-'),
+                    'total' => (int) ($row->total ?? 0),
+                ];
+            }
+        }
+
+        // Walk-in Benefit Reasons
+        if (
+            Schema::hasColumn('walk_in_survey_responses', 'walkin_benefit') &&
+            Schema::hasColumn('walk_in_survey_responses', 'walkin_benefit_reason')
+        ) {
+            $reasonRows = (clone $baseQuery)
+                ->select('walkin_benefit', 'walkin_benefit_reason', 'company_name_snapshot')
+                ->whereNotNull('walkin_benefit_reason')
+                ->whereRaw("TRIM(COALESCE(walkin_benefit_reason, '')) <> ''")
+                ->orderByDesc('id')
+                ->limit(20)
+                ->get();
+            foreach ($reasonRows as $row) {
+                $result['walkin_benefit_reasons'][] = [
+                    'benefit' => trim((string) ($row->walkin_benefit ?? '-')),
+                    'reason' => trim((string) ($row->walkin_benefit_reason ?? '')),
+                    'company' => trim((string) ($row->company_name_snapshot ?? '-')),
                 ];
             }
         }
