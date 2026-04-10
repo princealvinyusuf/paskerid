@@ -38,7 +38,7 @@ class AppServiceProvider extends ServiceProvider
                 if (Schema::hasTable('maintenance_message_settings')) {
                     $setting = DB::table('maintenance_message_settings')
                         ->where('id', 1)
-                        ->first(['is_enabled', 'maintenance_at', 'duration_minutes']);
+                        ->first(['is_enabled', 'maintenance_at', 'duration_minutes', 'message_template']);
 
                     if (
                         $setting
@@ -48,10 +48,16 @@ class AppServiceProvider extends ServiceProvider
                     ) {
                         $maintenanceAt = Carbon::parse($setting->maintenance_at)->format('d-m-Y H:i');
                         $durationMinutes = (int) $setting->duration_minutes;
-                        $maintenanceMessage = sprintf(
-                            'Dalam rangka peningkatan kualitas layanan dan performa sistem, website kami akan menjalani maintenance pada %s WIB selama %d menit, sehingga untuk sementara tidak dapat diakses, mohon maaf atas ketidaknyamanannya.',
-                            $maintenanceAt,
-                            $durationMinutes
+                        $defaultTemplate = 'Dalam rangka peningkatan kualitas layanan dan performa sistem, website kami akan menjalani maintenance pada [maintenance_at] WIB selama [duration_minutes] menit, sehingga untuk sementara tidak dapat diakses, mohon maaf atas ketidaknyamanannya.';
+                        $template = trim((string) ($setting->message_template ?? ''));
+                        if ($template === '') {
+                            $template = $defaultTemplate;
+                        }
+
+                        $maintenanceMessage = str_replace(
+                            ['[maintenance_at]', '{maintenance_at}', '[duration_minutes]', '{duration_minutes}'],
+                            [$maintenanceAt, $maintenanceAt, (string) $durationMinutes, (string) $durationMinutes],
+                            $template
                         );
                     }
                 }
