@@ -219,6 +219,8 @@ Route::get('/media-sosial', function () {
 
 Route::get('/lapor-loker', [LaporLokerController::class, 'index'])->name('lapor-loker.index');
 Route::post('/lapor-loker', [LaporLokerController::class, 'store'])->name('lapor-loker.store');
+Route::post('/lapor-loker/bulk', [LaporLokerController::class, 'storeBulk'])->name('lapor-loker.bulk-store');
+Route::get('/lapor-loker/bulk-template', [LaporLokerController::class, 'downloadBulkTemplate'])->name('lapor-loker.bulk-template');
 
 Route::get('/pusat-bantuan', function () {
     return view('pusat_bantuan');

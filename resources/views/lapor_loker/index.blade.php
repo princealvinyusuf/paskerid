@@ -11,18 +11,34 @@
                             <h1 class="h3 fw-bold mb-2">Lapor Loker</h1>
                             <p class="text-muted mb-0">Pusat Informasi Loker Palsu dan Pelaporan Kerja Palsu</p>
                         </div>
-                        <button class="btn btn-success btn-lg" data-bs-toggle="modal" data-bs-target="#laporLokerModal">
-                            <i class="fa-solid fa-triangle-exclamation me-2"></i>Laporkan Loker Hoax
-                        </button>
+                        <div class="d-flex flex-column flex-sm-row gap-2">
+                            <button class="btn btn-outline-success btn-lg" data-bs-toggle="modal" data-bs-target="#laporLokerBulkModal">
+                                <i class="fa-solid fa-file-arrow-up me-2"></i>Lapor Loker (Bulking)
+                            </button>
+                            <button class="btn btn-success btn-lg" data-bs-toggle="modal" data-bs-target="#laporLokerModal">
+                                <i class="fa-solid fa-triangle-exclamation me-2"></i>Laporkan Loker Hoax
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            @if ($errors->any())
+            @if ($errors->getBag('default')->any())
                 <div class="alert alert-danger">
                     <div class="fw-bold mb-2">Mohon periksa kembali data laporan:</div>
                     <ul class="mb-0">
-                        @foreach ($errors->all() as $error)
+                        @foreach ($errors->getBag('default')->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
+            @if ($errors->getBag('bulkReport')->any())
+                <div class="alert alert-danger">
+                    <div class="fw-bold mb-2">Mohon periksa kembali data bulk report:</div>
+                    <ul class="mb-0">
+                        @foreach ($errors->getBag('bulkReport')->all() as $error)
                             <li>{{ $error }}</li>
                         @endforeach
                     </ul>
@@ -81,6 +97,48 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="laporLokerBulkModal" tabindex="-1" aria-labelledby="laporLokerBulkModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable modal-dialog-centered modal-fullscreen-sm-down">
+        <div class="modal-content">
+            <form method="POST" action="{{ route('lapor-loker.bulk-store') }}" enctype="multipart/form-data" class="d-flex flex-column h-100">
+                @csrf
+                <div class="modal-header">
+                    <h2 class="modal-title fs-5" id="laporLokerBulkModalLabel">Lapor Loker (Bulking)</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <label class="form-label">Passcode <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" name="bulk_passcode" value="{{ old('bulk_passcode') }}" required placeholder="Isi Portal Code (unique)">
+                            <div class="form-text">Passcode harus sama dengan <strong>Portal Code (unique)</strong> di menu Monitoring Integrasi Karirhub x Mitra.</div>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">File Excel/CSV <span class="text-danger">*</span></label>
+                            <input type="file" class="form-control" name="bulk_file" required accept=".xlsx,.csv">
+                            <div class="form-text">
+                                Format file didukung: XLSX, CSV (maks. 10MB). Header kolom wajib:
+                                <code>Email Terduga Pelaku</code>, <code>Tanggal Terdeteksi</code>, <code>Nama Perusahaan Yang Digunakan</code>, <code>Nama HR Yang Digunakan</code>,
+                                <code>Provinsi</code>, <code>Kota</code>, <code>Nomor Kontak Terduga</code>, <code>Platform Sumber</code>, <code>Tautan Informasi</code>,
+                                <code>Nama Pelapor</code>, <code>Email Pelapor</code>.
+                            </div>
+                            <div class="mt-2">
+                                <a href="{{ route('lapor-loker.bulk-template') }}" class="btn btn-sm btn-outline-primary">
+                                    <i class="fa-solid fa-download me-1"></i>Download Template CSV
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-success">Import Bulk</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -163,21 +221,25 @@
 
 @push('head')
 <style>
+    #laporLokerBulkModal .modal-dialog,
     #laporLokerModal .modal-dialog {
         height: calc(100% - 1rem);
         margin: 0.5rem auto;
     }
 
+    #laporLokerBulkModal .modal-content,
     #laporLokerModal .modal-content {
         height: 100%;
         max-height: 100%;
         overflow: hidden;
     }
 
+    #laporLokerBulkModal form,
     #laporLokerModal form {
         min-height: 0;
     }
 
+    #laporLokerBulkModal .modal-body,
     #laporLokerModal .modal-body {
         flex: 1 1 auto;
         min-height: 0;
@@ -187,12 +249,14 @@
     }
 
     @media (max-width: 575.98px) {
+        #laporLokerBulkModal .modal-dialog,
         #laporLokerModal .modal-dialog {
             height: 100%;
             margin: 0;
             max-width: 100%;
         }
 
+        #laporLokerBulkModal .modal-content,
         #laporLokerModal .modal-content {
             max-height: 100vh;
             border-radius: 0;
@@ -204,12 +268,15 @@
 @push('scripts')
 <script>
     (function () {
-        var shouldOpenModal = {{ $errors->any() ? 'true' : 'false' }};
-        if (!shouldOpenModal) {
+        var shouldOpenSingleModal = {{ $errors->getBag('default')->any() ? 'true' : 'false' }};
+        var shouldOpenBulkModal = {{ $errors->getBag('bulkReport')->any() ? 'true' : 'false' }};
+
+        if (!shouldOpenSingleModal && !shouldOpenBulkModal) {
             return;
         }
 
-        var modalEl = document.getElementById('laporLokerModal');
+        var modalId = shouldOpenBulkModal ? 'laporLokerBulkModal' : 'laporLokerModal';
+        var modalEl = document.getElementById(modalId);
         if (!modalEl || !window.bootstrap || !window.bootstrap.Modal) {
             return;
         }
