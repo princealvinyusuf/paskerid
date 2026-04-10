@@ -98,7 +98,11 @@
                                             @if(empty($publicFollowUps))
                                                 -
                                             @else
-                                                {!! nl2br(e(implode("\n", $publicFollowUps))) !!}
+                                                <ul class="mb-0 ps-3">
+                                                    @foreach($publicFollowUps as $publicFollowUp)
+                                                        <li>{{ $publicFollowUp }}</li>
+                                                    @endforeach
+                                                </ul>
                                             @endif
                                         </td>
                                     </tr>
