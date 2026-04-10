@@ -27,12 +27,12 @@ class LaporLokerController extends Controller
             'nama_hr_digunakan' => ['required', 'string', 'max:255'],
             'provinsi' => ['required', 'string', 'max:150'],
             'kota' => ['required', 'string', 'max:150'],
-            'nomor_kontak_terduga' => ['nullable', 'string', 'max:60'],
-            'platform_sumber' => ['nullable', 'string', 'max:120'],
-            'tautan_informasi' => ['nullable', 'url', 'max:500'],
+            'nomor_kontak_terduga' => ['required', 'string', 'max:60'],
+            'platform_sumber' => ['required', 'string', 'max:120'],
+            'tautan_informasi' => ['required', 'url', 'max:500'],
             'kronologi' => ['nullable', 'string', 'max:5000'],
-            'pelapor_nama' => ['nullable', 'string', 'max:120'],
-            'pelapor_email' => ['nullable', 'email', 'max:255'],
+            'pelapor_nama' => ['required', 'string', 'max:120'],
+            'pelapor_email' => ['required', 'email', 'max:255'],
         ]);
 
         JobHoaxReport::create($validated + ['status' => 'pending']);

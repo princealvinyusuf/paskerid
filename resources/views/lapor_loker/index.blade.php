@@ -113,28 +113,28 @@
                             <input type="text" class="form-control" name="kota" value="{{ old('kota') }}" required>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label">Nomor Kontak Terduga</label>
-                            <input type="text" class="form-control" name="nomor_kontak_terduga" value="{{ old('nomor_kontak_terduga') }}" placeholder="Contoh: +62...">
+                            <label class="form-label">Nomor Kontak Terduga <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" name="nomor_kontak_terduga" value="{{ old('nomor_kontak_terduga') }}" placeholder="Contoh: +62..." required>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label">Platform Sumber</label>
-                            <input type="text" class="form-control" name="platform_sumber" value="{{ old('platform_sumber') }}" placeholder="Contoh: WhatsApp, Telegram, Email">
+                            <label class="form-label">Platform Sumber <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" name="platform_sumber" value="{{ old('platform_sumber') }}" placeholder="Contoh: WhatsApp, Telegram, Email" required>
                         </div>
                         <div class="col-12">
-                            <label class="form-label">Tautan Informasi (opsional)</label>
-                            <input type="url" class="form-control" name="tautan_informasi" value="{{ old('tautan_informasi') }}" placeholder="https://...">
+                            <label class="form-label">Tautan Informasi <span class="text-danger">*</span></label>
+                            <input type="url" class="form-control" name="tautan_informasi" value="{{ old('tautan_informasi') }}" placeholder="https://..." required>
                         </div>
                         <div class="col-12">
                             <label class="form-label">Kronologi Singkat</label>
                             <textarea class="form-control" name="kronologi" rows="4" placeholder="Jelaskan detail kronologi penipuan yang diketahui">{{ old('kronologi') }}</textarea>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label">Nama Pelapor (opsional)</label>
-                            <input type="text" class="form-control" name="pelapor_nama" value="{{ old('pelapor_nama') }}">
+                            <label class="form-label">Nama Pelapor <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" name="pelapor_nama" value="{{ old('pelapor_nama') }}" required>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label">Email Pelapor (opsional)</label>
-                            <input type="email" class="form-control" name="pelapor_email" value="{{ old('pelapor_email') }}">
+                            <label class="form-label">Email Pelapor <span class="text-danger">*</span></label>
+                            <input type="email" class="form-control" name="pelapor_email" value="{{ old('pelapor_email') }}" required>
                         </div>
                     </div>
                 </div>
