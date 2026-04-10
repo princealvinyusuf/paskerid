@@ -508,6 +508,11 @@
                             Career Boost Day
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link @if(request()->routeIs('lapor-loker.index')) active fw-bold @endif" href="{{ route('lapor-loker.index') }}">
+                            Lapor Loker
+                        </a>
+                    </li>
                     @auth
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="akunDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">

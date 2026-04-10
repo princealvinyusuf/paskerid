@@ -11,6 +11,7 @@ use App\Http\Controllers\WalkinGalleryController;
 use App\Http\Controllers\CareerBoostdayController;
 use App\Http\Controllers\CommunityForumController;
 use App\Http\Controllers\FormHasilKonselingController;
+use App\Http\Controllers\LaporLokerController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -215,6 +216,9 @@ Route::get('/datasets', [App\Http\Controllers\DatasetController::class, 'index']
 Route::get('/media-sosial', function () {
     return view('media_sosial');
 })->name('media_sosial');
+
+Route::get('/lapor-loker', [LaporLokerController::class, 'index'])->name('lapor-loker.index');
+Route::post('/lapor-loker', [LaporLokerController::class, 'store'])->name('lapor-loker.store');
 
 Route::get('/pusat-bantuan', function () {
     return view('pusat_bantuan');
