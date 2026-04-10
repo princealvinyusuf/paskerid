@@ -25,6 +25,10 @@ return new class extends Migration
             $table->string('pelapor_nama', 120)->nullable();
             $table->string('pelapor_email', 255)->nullable();
             $table->string('laporan_mitra', 120)->nullable();
+            $table->boolean('tindak_lanjut_tutup_lowongan')->default(false);
+            $table->boolean('tindak_lanjut_tutup_akun_perusahaan')->default(false);
+            $table->boolean('tindak_lanjut_lainnya_checked')->default(false);
+            $table->text('tindak_lanjut_lainnya_text')->nullable();
             $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
             $table->timestamp('approved_at')->nullable();
             $table->timestamp('rejected_at')->nullable();

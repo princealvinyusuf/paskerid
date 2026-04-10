@@ -60,6 +60,7 @@
                                     <th>Kontak Terduga</th>
                                     <th>Platform Sumber</th>
                                     <th>Tautan Informasi</th>
+                                    <th>Tindak Lanjut</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -80,10 +81,30 @@
                                                 -
                                             @endif
                                         </td>
+                                        <td>
+                                            @php
+                                                $publicFollowUps = [];
+                                                if ((int)($report->tindak_lanjut_tutup_lowongan ?? 0) === 1) {
+                                                    $publicFollowUps[] = 'Menutup Lowongan Kerja';
+                                                }
+                                                if ((int)($report->tindak_lanjut_tutup_akun_perusahaan ?? 0) === 1) {
+                                                    $publicFollowUps[] = 'Menutup Akun Perusahaan';
+                                                }
+                                                if ((int)($report->tindak_lanjut_lainnya_checked ?? 0) === 1) {
+                                                    $otherPublic = trim((string)($report->tindak_lanjut_lainnya_text ?? ''));
+                                                    $publicFollowUps[] = $otherPublic !== '' ? ('Lainnya: ' . $otherPublic) : 'Lainnya';
+                                                }
+                                            @endphp
+                                            @if(empty($publicFollowUps))
+                                                -
+                                            @else
+                                                {!! nl2br(e(implode("\n", $publicFollowUps))) !!}
+                                            @endif
+                                        </td>
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="9" class="text-center text-muted py-4">
+                                        <td colspan="10" class="text-center text-muted py-4">
                                             Belum ada laporan yang sudah diverifikasi.
                                         </td>
                                     </tr>

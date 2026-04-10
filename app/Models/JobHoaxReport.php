@@ -22,6 +22,10 @@ class JobHoaxReport extends Model
         'pelapor_nama',
         'pelapor_email',
         'laporan_mitra',
+        'tindak_lanjut_tutup_lowongan',
+        'tindak_lanjut_tutup_akun_perusahaan',
+        'tindak_lanjut_lainnya_checked',
+        'tindak_lanjut_lainnya_text',
         'status',
         'approved_at',
         'rejected_at',
@@ -29,6 +33,9 @@ class JobHoaxReport extends Model
 
     protected $casts = [
         'tanggal_terdeteksi' => 'date',
+        'tindak_lanjut_tutup_lowongan' => 'boolean',
+        'tindak_lanjut_tutup_akun_perusahaan' => 'boolean',
+        'tindak_lanjut_lainnya_checked' => 'boolean',
         'approved_at' => 'datetime',
         'rejected_at' => 'datetime',
     ];
