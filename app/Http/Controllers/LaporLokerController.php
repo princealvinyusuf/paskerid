@@ -67,7 +67,8 @@ class LaporLokerController extends Controller
             'bulk_file.mimes' => 'File bulk harus berformat .xlsx atau .csv.',
         ]);
 
-        if (!$this->isValidPortalCodePasscode($validated['bulk_passcode'])) {
+        $portalName = $this->resolvePortalNameByPasscode($validated['bulk_passcode']);
+        if ($portalName === null) {
             return redirect()
                 ->route('lapor-loker.index')
                 ->withErrors(['bulk_passcode' => 'Passcode tidak valid. Gunakan Portal Code (unique) yang aktif.'], 'bulkReport')
@@ -161,7 +162,10 @@ class LaporLokerController extends Controller
             }
 
             $validData = $validator->validated();
-            JobHoaxReport::create($validData + ['status' => 'pending']);
+            JobHoaxReport::create($validData + [
+                'status' => 'pending',
+                'laporan_mitra' => $portalName,
+            ]);
             $inserted++;
         }
 
@@ -397,11 +401,11 @@ class LaporLokerController extends Controller
         return $index - 1;
     }
 
-    private function isValidPortalCodePasscode(string $passcode): bool
+    private function resolvePortalNameByPasscode(string $passcode): ?string
     {
         $passcode = trim($passcode);
         if ($passcode === '') {
-            return false;
+            return null;
         }
 
         $host = (string) config('database.connections.mysql.host', '127.0.0.1');
@@ -412,27 +416,28 @@ class LaporLokerController extends Controller
         try {
             $mysqli = @new \mysqli($host, $username, $password, 'job_admin_prod', $port);
         } catch (\Throwable $e) {
-            return false;
+            return null;
         }
 
         if ($mysqli->connect_errno) {
-            return false;
+            return null;
         }
 
-        $query = "SELECT 1 FROM karirhub_mitra_monitoring WHERE LOWER(portal_code) = LOWER(?) AND is_active = 1 LIMIT 1";
+        $query = "SELECT portal_name FROM karirhub_mitra_monitoring WHERE LOWER(portal_code) = LOWER(?) AND is_active = 1 LIMIT 1";
         $stmt = $mysqli->prepare($query);
         if (!$stmt) {
             $mysqli->close();
-            return false;
+            return null;
         }
 
         $stmt->bind_param('s', $passcode);
         $stmt->execute();
-        $stmt->store_result();
-        $exists = $stmt->num_rows > 0;
+        $result = $stmt->get_result();
+        $row = $result ? $result->fetch_assoc() : null;
         $stmt->close();
         $mysqli->close();
 
-        return $exists;
+        $portalName = trim((string) ($row['portal_name'] ?? ''));
+        return $portalName !== '' ? $portalName : null;
     }
 }

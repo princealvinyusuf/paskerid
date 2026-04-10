@@ -21,6 +21,7 @@ class JobHoaxReport extends Model
         'kronologi',
         'pelapor_nama',
         'pelapor_email',
+        'laporan_mitra',
         'status',
         'approved_at',
         'rejected_at',

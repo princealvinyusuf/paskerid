@@ -24,6 +24,7 @@ return new class extends Migration
             $table->text('kronologi')->nullable();
             $table->string('pelapor_nama', 120)->nullable();
             $table->string('pelapor_email', 255)->nullable();
+            $table->string('laporan_mitra', 120)->nullable();
             $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
             $table->timestamp('approved_at')->nullable();
             $table->timestamp('rejected_at')->nullable();
