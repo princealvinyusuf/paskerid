@@ -510,7 +510,7 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link @if(request()->routeIs('lapor-loker.index')) active fw-bold @endif" href="{{ route('lapor-loker.index') }}">
-                            Lapor Loker
+                            Lapor Loker (Underconstruction)
                         </a>
                     </li>
                     @auth
