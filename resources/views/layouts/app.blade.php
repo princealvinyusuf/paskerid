@@ -484,33 +484,26 @@
                         </ul>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle @if(request()->routeIs('datasets.index') || (request()->routeIs('informasi.index') && request('type') == 'publikasi')) active fw-bold @endif" href="#" id="publikasiDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Publikasi</a>
+                        <a class="nav-link dropdown-toggle @if(request()->routeIs('datasets.index') || request()->routeIs('news.index') || (request()->routeIs('informasi.index') && request('type') == 'publikasi')) active fw-bold @endif" href="#" id="publikasiDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Publikasi</a>
                         <ul class="dropdown-menu" aria-labelledby="publikasiDropdown">
                             <li><a class="dropdown-item @if(request()->routeIs('informasi.index') && request('type') == 'publikasi') active fw-bold @endif" href="{{ route('informasi.index', ['type' => 'publikasi']) }}">Publikasi Pasar Kerja</a></li>
                             <li><a class="dropdown-item @if(request()->routeIs('datasets.index')) active fw-bold @endif" href="{{ route('datasets.index') }}">Dataset Pasar Kerja</a></li>
+                            <li><a class="dropdown-item @if(request()->routeIs('news.index')) active fw-bold @endif" href="{{ route('news.index') }}">Berita</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link @if(request()->routeIs('news.index')) active fw-bold @endif" href="{{ route('news.index') }}">Berita</a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link @if(request()->routeIs('kemitraan.create')) active fw-bold @endif" href="{{ route('kemitraan.create') }}">
-                            Walk In Interview
+                            Walk-In
                         </a>
                     </li> 
                     <li class="nav-item">
                         <a class="nav-link" href="https://paskerid.kemnaker.go.id/RIASEC/" target="_blank">
-                            Tes Minat & Karir
+                            Minat Karir
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link @if(request()->routeIs('career-boostday.index')) active fw-bold @endif" href="{{ route('career-boostday.index') }}">
                             Career Boost Day
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link @if(request()->routeIs('lapor-loker.index')) active fw-bold @endif" href="{{ route('lapor-loker.index') }}">
-                            Lapor Loker (Underconstruction)
                         </a>
                     </li>
                     @auth
