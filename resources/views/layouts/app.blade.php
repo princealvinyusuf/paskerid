@@ -472,7 +472,7 @@
                         <a class="nav-link @if(request()->routeIs('home')) active fw-bold @endif" href="{{ route('home') }}">Beranda</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link @if(request()->routeIs('informasi_pasar_kerja.index')) active fw-bold @endif" href="{{ route('informasi_pasar_kerja.index') }}">Informasi Pasar Kerja</a>
+                        <a class="nav-link informasi-pasar-pill @if(request()->routeIs('informasi_pasar_kerja.index')) active fw-bold @endif" href="{{ route('informasi_pasar_kerja.index') }}">Informasi Pasar Kerja</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle @if(request()->routeIs('virtual-karir.index') || request()->routeIs('pusat_bantuan')) active fw-bold @endif" href="#" id="layananDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -790,6 +790,24 @@
     }
     .navbar .nav-link.active, .navbar .nav-link:focus, .navbar .nav-link:hover {
         color: var(--light-green) !important;
+    }
+    .navbar .nav-link.informasi-pasar-pill {
+        background-color: #93f77a;
+        color: #0d3f2f !important;
+        border-radius: 999px;
+        padding: 0.45rem 1rem;
+        font-weight: 700;
+        margin-left: 0.35rem;
+        margin-right: 0.35rem;
+        line-height: 1.1;
+        transition: filter 0.2s ease, transform 0.2s ease;
+    }
+    .navbar .nav-link.informasi-pasar-pill:hover,
+    .navbar .nav-link.informasi-pasar-pill:focus,
+    .navbar .nav-link.informasi-pasar-pill.active {
+        color: #0d3f2f !important;
+        filter: brightness(0.96);
+        transform: translateY(-1px);
     }
     a, .text-success {
         color: var(--primary-green) !important;
