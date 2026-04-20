@@ -447,6 +447,8 @@ class KemitraanController extends Controller
             'survey_feedback_committee_help' => 'required|string|max:5000',
             'survey_rating_access_info' => 'required|integer|between:1,5',
             'survey_feedback_access_info' => 'required|string|max:5000',
+            'survey_rating_information_clarity' => 'required|integer|between:1,5',
+            'survey_rating_service_integrity' => 'required|integer|between:1,5',
             'survey_rating_satisfaction' => 'required|integer|between:1,5',
 
             'survey_improvement_aspects' => 'required|array|min:1',
@@ -504,6 +506,8 @@ class KemitraanController extends Controller
             'feedback_committee_help' => $validated['survey_feedback_committee_help'],
             'rating_access_info' => (int) $validated['survey_rating_access_info'],
             'feedback_access_info' => $validated['survey_feedback_access_info'],
+            'rating_information_clarity' => (int) $validated['survey_rating_information_clarity'],
+            'rating_service_integrity' => (int) $validated['survey_rating_service_integrity'],
             'rating_satisfaction' => (int) $validated['survey_rating_satisfaction'],
             'improvement_aspects' => array_values(array_unique($validated['survey_improvement_aspects'] ?? [])),
             'feedback_improvement_aspects' => $validated['survey_feedback_improvement_aspects'],

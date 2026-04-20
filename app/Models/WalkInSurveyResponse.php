@@ -46,6 +46,8 @@ class WalkInSurveyResponse extends Model
         'feedback_committee_help',
         'rating_access_info',
         'feedback_access_info',
+        'rating_information_clarity',
+        'rating_service_integrity',
         'rating_satisfaction',
         'improvement_aspects',
         'feedback_improvement_aspects',
@@ -68,6 +70,8 @@ class WalkInSurveyResponse extends Model
         'rating_quality_quantity' => 'integer',
         'rating_committee_help' => 'integer',
         'rating_access_info' => 'integer',
+        'rating_information_clarity' => 'integer',
+        'rating_service_integrity' => 'integer',
         'rating_satisfaction' => 'integer',
     ];
 }

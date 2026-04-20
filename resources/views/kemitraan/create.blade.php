@@ -982,6 +982,36 @@
                         @endforeach
 
                         <div class="walkin-panel p-3 p-md-4 mb-3">
+                            <div class="form-label fw-semibold">Kejelasan Informasi <span class="text-danger">*</span></div>
+                            <div class="mb-3">Apakah informasi yang diberikan mudah dipahami?</div>
+                            <div class="small text-muted mb-2">Tidak Jelas</div>
+                            <div class="d-flex flex-wrap gap-2 survey-rating-group mb-2">
+                                @for($n = 1; $n <= 5; $n++)
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="survey_rating_information_clarity" id="survey_rating_information_clarity_{{ $n }}" value="{{ $n }}" required>
+                                        <label class="form-check-label" for="survey_rating_information_clarity_{{ $n }}">{{ $n }}</label>
+                                    </div>
+                                @endfor
+                            </div>
+                            <div class="small text-muted">Sangat Jelas</div>
+                        </div>
+
+                        <div class="walkin-panel p-3 p-md-4 mb-3">
+                            <div class="form-label fw-semibold">Integritas Layanan <span class="text-danger">*</span></div>
+                            <div class="mb-3">Selama proses, apakah Anda menemukan indikasi pungutan liar / praktik tidak wajar?</div>
+                            <div class="small text-muted mb-2">Tidak Pernah</div>
+                            <div class="d-flex flex-wrap gap-2 survey-rating-group mb-2">
+                                @for($n = 1; $n <= 5; $n++)
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="survey_rating_service_integrity" id="survey_rating_service_integrity_{{ $n }}" value="{{ $n }}" required>
+                                        <label class="form-check-label" for="survey_rating_service_integrity_{{ $n }}">{{ $n }}</label>
+                                    </div>
+                                @endfor
+                            </div>
+                            <div class="small text-muted">Sangat Sering</div>
+                        </div>
+
+                        <div class="walkin-panel p-3 p-md-4 mb-3">
                             <div class="form-label">Seberapa Puas Anda Terhadap Penyelenggaraan <em>Walk in Interview</em> <span class="text-danger">*</span></div>
                             <div class="d-flex flex-wrap gap-2 survey-rating-group">
                                 @for($n = 1; $n <= 5; $n++)
