@@ -444,6 +444,15 @@
                         </div>
 
                         <div class="row g-3 mb-3">
+                            <div class="col-12 col-lg-6">
+                                <div class="walkin-panel p-3">
+                                    <div class="fw-semibold mb-2">Distribusi Rating Integritas Layanan</div>
+                                    <canvas id="statsServiceIntegrityChart" height="120"></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mb-3">
                             <div class="col-12 col-lg-6 stats-admin-only d-none">
                                 <div class="walkin-panel p-3">
                                     <div class="fw-semibold mb-2">Top Perusahaan (Peserta Hadir)</div>
@@ -2733,15 +2742,17 @@
 
         const trendCanvas = document.getElementById('statsTrendChart');
         const ratingCanvas = document.getElementById('statsRatingChart');
+        const serviceIntegrityCanvas = document.getElementById('statsServiceIntegrityChart');
         const companyCanvas = document.getElementById('statsCompanyChart');
         const initiatorCanvas = document.getElementById('statsInitiatorChart');
         const genderCanvas = document.getElementById('statsGenderChart');
         const educationCanvas = document.getElementById('statsEducationChart');
         const benefitCanvas = document.getElementById('statsBenefitChart');
-        if (!trendCanvas || !ratingCanvas || !companyCanvas || !initiatorCanvas || !genderCanvas || !educationCanvas || !benefitCanvas) return;
+        if (!trendCanvas || !ratingCanvas || !serviceIntegrityCanvas || !companyCanvas || !initiatorCanvas || !genderCanvas || !educationCanvas || !benefitCanvas) return;
 
         const trendData = Array.isArray(stats.trend) ? stats.trend : [];
         const ratingDist = Array.isArray(stats.rating_distribution) ? stats.rating_distribution : [];
+        const serviceIntegrityDist = Array.isArray(stats.service_integrity_distribution) ? stats.service_integrity_distribution : [];
         const topCompanies = Array.isArray(stats.top_companies) ? stats.top_companies : [];
         const topInitiators = Array.isArray(stats.top_initiators) ? stats.top_initiators : [];
         const genderDist = Array.isArray(stats.gender_distribution) ? stats.gender_distribution : [];
@@ -2854,6 +2865,36 @@
                     labels: ratingDist.map((it) => formatRatingStarsLabel(it.label)),
                     datasets: [{
                         data: ratingDist.map((it) => Number(it.total || 0)),
+                        backgroundColor: colorSet,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                }
+            });
+        }
+
+        function formatServiceIntegrityLabel(label) {
+            const score = parseInt(String(label), 10);
+            if (!Number.isFinite(score) || score < 1 || score > 5) return '-';
+            const scale = {
+                1: '1 - Tidak Pernah',
+                2: '2 - Jarang',
+                3: '3 - Kadang',
+                4: '4 - Sering',
+                5: '5 - Sangat Sering',
+            };
+            return scale[score] || String(score);
+        }
+
+        function renderServiceIntegrityDistribution() {
+            drawOrUpdate('serviceIntegrity', serviceIntegrityCanvas, {
+                type: 'doughnut',
+                data: {
+                    labels: serviceIntegrityDist.map((it) => formatServiceIntegrityLabel(it.label)),
+                    datasets: [{
+                        data: serviceIntegrityDist.map((it) => Number(it.total || 0)),
                         backgroundColor: colorSet,
                     }]
                 },
@@ -3004,6 +3045,7 @@
         }
 
         renderRatingDistribution();
+        renderServiceIntegrityDistribution();
         renderDemographyCharts();
         setStatsAdminVisibility(statsAdminUnlocked);
         if (statsAdminUnlocked) {
@@ -3096,6 +3138,25 @@
                                 labels: ratingDist.map((it) => formatRatingStarsLabel(it.label)),
                                 datasets: [{
                                     data: ratingDist.map((it) => Number(it.total || 0)),
+                                    backgroundColor: colorSet,
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                            }
+                        });
+                    }
+
+                    // Update Service Integrity Distribution Chart
+                    const serviceIntegrityDist = Array.isArray(data.service_integrity_distribution) ? data.service_integrity_distribution : [];
+                    if (charts.serviceIntegrity && serviceIntegrityCanvas) {
+                        drawOrUpdate('serviceIntegrity', serviceIntegrityCanvas, {
+                            type: 'doughnut',
+                            data: {
+                                labels: serviceIntegrityDist.map((it) => formatServiceIntegrityLabel(it.label)),
+                                datasets: [{
+                                    data: serviceIntegrityDist.map((it) => Number(it.total || 0)),
                                     backgroundColor: colorSet,
                                 }]
                             },

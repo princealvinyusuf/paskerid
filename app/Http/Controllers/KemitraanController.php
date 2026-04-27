@@ -873,6 +873,7 @@ class KemitraanController extends Controller
             ],
             'trend' => [],
             'rating_distribution' => [],
+            'service_integrity_distribution' => [],
             'gender_distribution' => [],
             'age_distribution' => [],
             'education_distribution' => [],
@@ -1026,6 +1027,22 @@ class KemitraanController extends Controller
             ];
         }
 
+        $serviceIntegrityDistribution = [];
+        if (Schema::hasColumn('walk_in_survey_responses', 'rating_service_integrity')) {
+            $serviceIntegrityRows = DB::table('walk_in_survey_responses')
+                ->selectRaw('rating_service_integrity AS label, COUNT(*) AS total')
+                ->whereNotNull('rating_service_integrity')
+                ->groupBy('rating_service_integrity')
+                ->orderBy('rating_service_integrity', 'asc')
+                ->get();
+            foreach ($serviceIntegrityRows as $row) {
+                $serviceIntegrityDistribution[] = [
+                    'label' => (string) ($row->label ?? '-'),
+                    'total' => (int) ($row->total ?? 0),
+                ];
+            }
+        }
+
         $genderDistribution = $this->buildDistribution('walk_in_survey_responses', 'gender');
         $ageDistribution = $this->buildDistribution('walk_in_survey_responses', 'age_range');
         $educationDistribution = $this->buildDistribution('walk_in_survey_responses', 'education');
@@ -1139,6 +1156,7 @@ class KemitraanController extends Controller
             ],
             'trend' => $trend,
             'rating_distribution' => $ratingDistribution,
+            'service_integrity_distribution' => $serviceIntegrityDistribution,
             'gender_distribution' => $genderDistribution,
             'age_distribution' => $ageDistribution,
             'education_distribution' => $educationDistribution,
@@ -1230,6 +1248,7 @@ class KemitraanController extends Controller
             'jumlah_lowongan_dibuka' => 0,
             'total_jumlah_kebutuhan' => 0,
             'rating_distribution' => [],
+            'service_integrity_distribution' => [],
             'gender_distribution' => [],
             'education_distribution' => [],
             'walkin_benefit_distribution' => [],
@@ -1276,6 +1295,22 @@ class KemitraanController extends Controller
                 'label' => (string) ($row->label ?? '-'),
                 'total' => (int) ($row->total ?? 0),
             ];
+        }
+
+        // Service Integrity Distribution
+        if (Schema::hasColumn('walk_in_survey_responses', 'rating_service_integrity')) {
+            $serviceIntegrityRows = (clone $baseQuery)
+                ->selectRaw('rating_service_integrity AS label, COUNT(*) AS total')
+                ->whereNotNull('rating_service_integrity')
+                ->groupBy('rating_service_integrity')
+                ->orderBy('rating_service_integrity', 'asc')
+                ->get();
+            foreach ($serviceIntegrityRows as $row) {
+                $result['service_integrity_distribution'][] = [
+                    'label' => (string) ($row->label ?? '-'),
+                    'total' => (int) ($row->total ?? 0),
+                ];
+            }
         }
 
         // Gender Distribution
