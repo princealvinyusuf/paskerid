@@ -24,6 +24,7 @@ use App\Models\Visitor;
 use App\Models\MitraKerja;
 use App\Models\KarirhubAds;
 use App\Models\HomePopupSetting;
+use App\Models\HomePopupItem;
 use Illuminate\Support\Facades\Schema;
 
 class HomeController extends Controller
@@ -78,9 +79,29 @@ class HomeController extends Controller
             ->orderBy('id')
             ->get();
         $ads = KarirhubAds::latest()->get();
-        $welcomePopup = null;
+        $welcomePopups = collect();
         if (Schema::hasTable('home_popup_settings')) {
             $welcomePopup = HomePopupSetting::query()->find(1);
+            $isPopupEnabled = isset($welcomePopup) && (int) ($welcomePopup->is_enabled ?? 0) === 1;
+
+            if ($isPopupEnabled && Schema::hasTable('home_popup_items')) {
+                $welcomePopups = HomePopupItem::query()
+                    ->where('setting_id', 1)
+                    ->where('is_enabled', 1)
+                    ->orderBy('sort_order')
+                    ->orderBy('id')
+                    ->get();
+            }
+
+            // Backward compatibility for legacy single-popup data.
+            if ($isPopupEnabled && $welcomePopups->isEmpty()) {
+                $legacyTitle = trim((string) ($welcomePopup->title ?? ''));
+                $legacySubtitle = trim((string) ($welcomePopup->subtitle ?? ''));
+                $legacyImage = trim((string) ($welcomePopup->image_base64 ?? ''));
+                if ($legacyTitle !== '' || $legacySubtitle !== '' || $legacyImage !== '') {
+                    $welcomePopups = collect([$welcomePopup]);
+                }
+            }
         }
 
         // Additional categories for Informasi Terbaru section
@@ -115,7 +136,7 @@ class HomeController extends Controller
             'todayVisitors',
             'mitraKerja',
             'ads',
-            'welcomePopup',
+            'welcomePopups',
             'spark',
             'lmir',
             'regulasi',

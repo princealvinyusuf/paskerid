@@ -3,18 +3,8 @@
 @section('content')
 <div class="container-fluid p-0 home-ocean-theme">
     @php
-        $showWelcomePopup = isset($welcomePopup) && (int) ($welcomePopup->is_enabled ?? 0) === 1;
-        $welcomePopupImageSrc = '';
-        if ($showWelcomePopup && !empty($welcomePopup->image_base64)) {
-            $popupMime = trim((string) ($welcomePopup->mime_type ?? ''));
-            $popupMime = $popupMime !== '' ? $popupMime : 'image/jpeg';
-            $popupPayload = trim((string) $welcomePopup->image_base64);
-            if (\Illuminate\Support\Str::startsWith($popupPayload, 'data:')) {
-                $welcomePopupImageSrc = $popupPayload;
-            } else {
-                $welcomePopupImageSrc = 'data:' . $popupMime . ';base64,' . $popupPayload;
-            }
-        }
+        $welcomePopupItems = collect($welcomePopups ?? [])->values();
+        $showWelcomePopup = $welcomePopupItems->isNotEmpty();
     @endphp
 
     @if($showWelcomePopup)
@@ -26,13 +16,58 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body pt-2">
-                        @if($welcomePopupImageSrc !== '')
-                            <div class="text-center mb-3">
-                                <img src="{{ $welcomePopupImageSrc }}" alt="Welcome image" class="img-fluid rounded-3 welcome-popup-image">
+                        <div id="welcomePopupCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
+                            @if($welcomePopupItems->count() > 1)
+                                <div class="carousel-indicators position-static mb-3">
+                                    @foreach($welcomePopupItems as $popupItem)
+                                        <button type="button"
+                                            data-bs-target="#welcomePopupCarousel"
+                                            data-bs-slide-to="{{ $loop->index }}"
+                                            class="{{ $loop->first ? 'active' : '' }}"
+                                            aria-current="{{ $loop->first ? 'true' : 'false' }}"
+                                            aria-label="Slide {{ $loop->iteration }}"></button>
+                                    @endforeach
+                                </div>
+                            @endif
+
+                            <div class="carousel-inner">
+                                @foreach($welcomePopupItems as $popupItem)
+                                    @php
+                                        $popupImageSrc = '';
+                                        $popupPayload = trim((string) ($popupItem->image_base64 ?? ''));
+                                        if ($popupPayload !== '') {
+                                            $popupMime = trim((string) ($popupItem->mime_type ?? ''));
+                                            $popupMime = $popupMime !== '' ? $popupMime : 'image/jpeg';
+                                            if (\Illuminate\Support\Str::startsWith($popupPayload, 'data:')) {
+                                                $popupImageSrc = $popupPayload;
+                                            } else {
+                                                $popupImageSrc = 'data:' . $popupMime . ';base64,' . $popupPayload;
+                                            }
+                                        }
+                                    @endphp
+                                    <div class="carousel-item {{ $loop->first ? 'active' : '' }}">
+                                        @if($popupImageSrc !== '')
+                                            <div class="text-center mb-3">
+                                                <img src="{{ $popupImageSrc }}" alt="Welcome image" class="img-fluid rounded-3 welcome-popup-image">
+                                            </div>
+                                        @endif
+                                        <h4 class="fw-bold mb-2 text-center">{{ $popupItem->title ?? '' }}</h4>
+                                        <p class="text-muted mb-0 text-center">{{ $popupItem->subtitle ?? '' }}</p>
+                                    </div>
+                                @endforeach
                             </div>
-                        @endif
-                        <h4 class="fw-bold mb-2 text-center">{{ $welcomePopup->title ?? '' }}</h4>
-                        <p class="text-muted mb-0 text-center">{{ $welcomePopup->subtitle ?? '' }}</p>
+
+                            @if($welcomePopupItems->count() > 1)
+                                <button class="carousel-control-prev" type="button" data-bs-target="#welcomePopupCarousel" data-bs-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Previous</span>
+                                </button>
+                                <button class="carousel-control-next" type="button" data-bs-target="#welcomePopupCarousel" data-bs-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Next</span>
+                                </button>
+                            @endif
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1073,6 +1108,24 @@
         const welcomePopup = document.getElementById('welcomePopupModal');
         if (welcomePopup && typeof bootstrap !== 'undefined' && bootstrap.Modal) {
             const popupModal = new bootstrap.Modal(welcomePopup);
+            const popupCarouselEl = document.getElementById('welcomePopupCarousel');
+            let popupCarousel = null;
+
+            if (popupCarouselEl && bootstrap.Carousel) {
+                popupCarousel = bootstrap.Carousel.getOrCreateInstance(popupCarouselEl, {
+                    interval: 5000,
+                    pause: false,
+                    touch: true,
+                    wrap: true
+                });
+                welcomePopup.addEventListener('shown.bs.modal', function () {
+                    popupCarousel.cycle();
+                });
+                welcomePopup.addEventListener('hidden.bs.modal', function () {
+                    popupCarousel.pause();
+                });
+            }
+
             popupModal.show();
         }
     });
@@ -1438,6 +1491,11 @@
     max-height: 260px;
     width: auto;
     object-fit: contain;
+}
+
+#welcomePopupCarousel .carousel-control-prev-icon,
+#welcomePopupCarousel .carousel-control-next-icon {
+    filter: invert(1) grayscale(100);
 }
 
 .home-ocean-theme .card {
