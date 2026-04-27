@@ -861,6 +861,7 @@ class KemitraanController extends Controller
             'summary' => [
                 'total_responses' => 0,
                 'avg_rating' => 0,
+                'avg_service_integrity' => 0,
                 'responses_today' => 0,
                 'responses_month' => 0,
                 'active_companies' => 0,
@@ -899,6 +900,9 @@ class KemitraanController extends Controller
 
         $totalResponses = (int) DB::table('walk_in_survey_responses')->count();
         $avgRatingRaw = DB::table('walk_in_survey_responses')->avg('rating_satisfaction');
+        $avgServiceIntegrityRaw = Schema::hasColumn('walk_in_survey_responses', 'rating_service_integrity')
+            ? DB::table('walk_in_survey_responses')->avg('rating_service_integrity')
+            : null;
         $responsesToday = (int) DB::table('walk_in_survey_responses')->whereDate(DB::raw($dateExpr), $today->toDateString())->count();
         $responsesMonth = (int) DB::table('walk_in_survey_responses')->whereDate(DB::raw($dateExpr), '>=', $monthStart->toDateString())->count();
         $totalKehadiranPencaker = (int) DB::table('walk_in_survey_responses')->whereDate(DB::raw($dateExpr), '>=', $yearStart->toDateString())->count();
@@ -1144,6 +1148,7 @@ class KemitraanController extends Controller
             'summary' => [
                 'total_responses' => $totalResponses,
                 'avg_rating' => $avgRatingRaw !== null ? round((float) $avgRatingRaw, 2) : 0,
+                'avg_service_integrity' => $avgServiceIntegrityRaw !== null ? round((float) $avgServiceIntegrityRaw, 2) : 0,
                 'responses_today' => $responsesToday,
                 'responses_month' => $responsesMonth,
                 'active_companies' => $activeCompanies,
@@ -1243,6 +1248,7 @@ class KemitraanController extends Controller
         $result = [
             'total_responses' => 0,
             'avg_rating' => 0,
+            'avg_service_integrity' => 0,
             'active_companies' => 0,
             'active_initiators' => 0,
             'jumlah_lowongan_dibuka' => 0,
@@ -1283,6 +1289,10 @@ class KemitraanController extends Controller
         $result['total_responses'] = (int) (clone $baseQuery)->count();
         $avgRatingRaw = (clone $baseQuery)->avg('rating_satisfaction');
         $result['avg_rating'] = $avgRatingRaw !== null ? round((float) $avgRatingRaw, 2) : 0;
+        if (Schema::hasColumn('walk_in_survey_responses', 'rating_service_integrity')) {
+            $avgServiceIntegrityRaw = (clone $baseQuery)->avg('rating_service_integrity');
+            $result['avg_service_integrity'] = $avgServiceIntegrityRaw !== null ? round((float) $avgServiceIntegrityRaw, 2) : 0;
+        }
 
         // Rating Distribution
         $ratingRows = (clone $baseQuery)
