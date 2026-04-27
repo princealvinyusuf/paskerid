@@ -967,6 +967,11 @@
     </a>
 </div>
 
+<!-- WBS Floating Button -->
+<a href="https://wbs.kemnaker.go.id/" class="wbs-float" target="_blank" rel="noopener noreferrer" aria-label="Whistle Blowing System">
+    <img src="{{ asset('images/wbs.png') }}" alt="Whistle Blowing System">
+</a>
+
 <!-- WhatsApp Floating Button -->
 <a href="https://wa.me/628118712018" class="whatsapp-float" target="_blank" rel="noopener" aria-label="Chat via WhatsApp">
     <i class="fab fa-whatsapp" style="font-size:1.6rem;"></i>
@@ -2083,6 +2088,35 @@
     transform: translateY(-2px);
 }
 
+/* WBS Floating Button */
+.wbs-float {
+    position: fixed;
+    right: 24px;
+    bottom: 92px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    border-radius: 16px;
+    background: #ffffff;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    text-decoration: none;
+    z-index: 10000;
+    transition: transform .15s ease, box-shadow .15s ease;
+}
+
+.wbs-float:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.2);
+}
+
+.wbs-float img {
+    display: block;
+    width: 180px;
+    height: auto;
+    max-width: 40vw;
+}
+
 .wa-label {
     font-weight: 700;
     font-size: 0.95rem;
@@ -2091,6 +2125,16 @@
 }
 
 @media (max-width: 575.98px) {
+    .wbs-float {
+        right: 16px;
+        bottom: 88px;
+        padding: 6px;
+        border-radius: 14px;
+    }
+    .wbs-float img {
+        width: 130px;
+        max-width: 48vw;
+    }
     .whatsapp-float { padding: 0 12px; }
     .whatsapp-float .wa-label { display: none; }
 }
