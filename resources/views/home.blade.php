@@ -627,6 +627,10 @@
                                                         <img src="{{ $adImageSrc }}"
                                                             alt="{{ $ad->company_name }}"
                                                             class="rounded" style="height: 50px; object-fit: contain;">
+                                                    @elseif(!empty($ad->company_logo_uri))
+                                                        <img src="{{ $ad->company_logo_uri }}"
+                                                            alt="{{ $ad->company_name }}"
+                                                            class="rounded" style="height: 50px; object-fit: contain;">
                                                     @else
                                                         <img src="{{ asset('images/services/karirhub.png') }}"
                                                             alt="{{ $ad->company_name }}"
@@ -636,20 +640,34 @@
                                                 <h6 class="fw-bold text-center">{{ \Illuminate\Support\Str::limit($ad->job_title, 15, '...') }}</h6>
                                                 <p class="text-center mb-1 text-muted small">{{ \Illuminate\Support\Str::limit($ad->company_name, 20, '...') }}</p>
                                                 <p class="text-center mb-1 text-secondary small">
-                                                    {{ strtoupper($ad->city ?? 'KOTA BELUM DIISI') }},
+                                                    {{ strtoupper($ad->city ?? 'KOTA BELUM DIISI') }}
                                                     <br>
-                                                    {{ strtoupper( Illuminate\Support\Str::limit($ad->province, 10, '...') ?? 'PROVINSI BELUM DIISI') }}
+                                                    <!-- {{ strtoupper(\Illuminate\Support\Str::limit($ad->province ?? 'PROVINSI BELUM DIISI', 20, '...')) }} -->
                                                 </p>
                                                 
 
                                                 <div class="text-center mt-2 mb-2">
                                                     <small class="text-muted">Kisaran Gaji</small>
-                                                    @if ($ad->secret == 1)
+                                                    @php
+                                                        $salaryMin = (float) ($ad->salary_min ?? 0);
+                                                        $salaryMax = (float) ($ad->salary_max ?? 0);
+                                                    @endphp
+                                                    @if ((int) ($ad->secret ?? 1) === 1)
                                                         <div class="fw-semibold text-primary">Dirahasiakan</div>
+                                                    @elseif($salaryMin <= 0 && $salaryMax <= 0)
+                                                        <div class="fw-semibold text-primary">Tidak Dicantumkan</div>
+                                                    @elseif($salaryMin > 0 && $salaryMax <= 0)
+                                                        <div class="fw-semibold text-primary">
+                                                            Rp{{ number_format($salaryMin, 0, ',', '.') }}
+                                                        </div>
+                                                    @elseif($salaryMax > 0 && $salaryMin <= 0)
+                                                        <div class="fw-semibold text-primary">
+                                                            Rp{{ number_format($salaryMax, 0, ',', '.') }}
+                                                        </div>
                                                     @else
                                                         <div class="fw-semibold text-primary">
-                                                            Rp{{ number_format($ad->salary_min / 1000000, 0, ',', '.') }}jt - 
-                                                            Rp{{ number_format($ad->salary_max / 1000000, 2, ',', '.') }}jt
+                                                            Rp{{ number_format($salaryMin, 0, ',', '.') }} -
+                                                            Rp{{ number_format($salaryMax, 0, ',', '.') }}
                                                         </div>
                                                     @endif
                                                 </div>

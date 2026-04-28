@@ -26,6 +26,8 @@ use App\Models\KarirhubAds;
 use App\Models\HomePopupSetting;
 use App\Models\HomePopupItem;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class HomeController extends Controller
 {
@@ -78,7 +80,41 @@ class HomeController extends Controller
             ->orderBy('sort')
             ->orderBy('id')
             ->get();
-        $ads = KarirhubAds::latest()->get();
+        $ads = collect();
+        try {
+            $response = Http::timeout(12)
+                ->acceptJson()
+                ->get('https://api.kemnaker.go.id/karirhub/catalogue/v1/industrial-vacancies', [
+                    'platforms' => ['karirhub'],
+                ]);
+
+            if ($response->successful()) {
+                $ads = collect($response->json('data', []))
+                    ->map(function (array $ad) {
+                        return (object) [
+                            'image_base64' => '',
+                            'mime_type' => '',
+                            'company_logo_uri' => $ad['company_logo_uri'] ?? null,
+                            'company_name' => $ad['company_name'] ?? '-',
+                            'job_title' => $ad['title'] ?? '-',
+                            'city' => $ad['city_name'] ?? null,
+                            'province' => $ad['province_name'] ?? null,
+                            'secret' => !($ad['show_salary'] ?? false) ? 1 : 0,
+                            'salary_min' => (float) ($ad['min_salary_amount'] ?? 0),
+                            'salary_max' => (float) ($ad['max_salary_amount'] ?? 0),
+                        ];
+                    })
+                    ->values();
+            }
+        } catch (\Throwable $exception) {
+            Log::warning('Failed fetching Karirhub vacancies for home page.', [
+                'message' => $exception->getMessage(),
+            ]);
+        }
+
+        if ($ads->isEmpty()) {
+            $ads = KarirhubAds::latest()->get();
+        }
         $welcomePopups = collect();
         if (Schema::hasTable('home_popup_settings')) {
             $welcomePopup = HomePopupSetting::query()->find(1);
