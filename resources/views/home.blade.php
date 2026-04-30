@@ -90,6 +90,12 @@
             </form>
         </div>
     </section>
+    <section class="running-text-strip" aria-label="Informasi berjalan">
+        <div class="running-text-track">
+            <span class="running-text-item">Dengan Integritas dan Pelayanan Prima, Pusat Pasar Kerja Siap Menuju ZI WBBM — Mari Dukung Kami</span>
+            <span class="running-text-item" aria-hidden="true">Dengan Integritas dan Pelayanan Prima, Pusat Pasar Kerja Siap Menuju ZI WBBM — Mari Dukung Kami</span>
+        </div>
+    </section>
 
     {{-- Highlight Pasar Kerja Section (Both Carousels) --}}
     <section class="stat-carousel-section position-relative" style="z-index: 10;">
@@ -1789,6 +1795,34 @@
 }
 .hero-title-responsive {
     font-size: 2.1rem;
+}
+.running-text-strip {
+    position: relative;
+    overflow: hidden;
+    background: #0f6b2f;
+    color: #ffffff;
+    border-top: 2px solid #8dc71e;
+    border-bottom: 2px solid #8dc71e;
+    padding: 0.55rem 0;
+}
+.running-text-track {
+    display: inline-flex;
+    gap: 3rem;
+    white-space: nowrap;
+    min-width: 100%;
+    animation: runningTextScroll 22s linear infinite;
+}
+.running-text-item {
+    font-weight: 600;
+    letter-spacing: 0.01em;
+}
+@keyframes runningTextScroll {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
 }
 @media (min-width: 576px) {
     .hero-title-responsive {
