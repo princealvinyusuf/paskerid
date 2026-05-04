@@ -1020,16 +1020,14 @@
                             <div class="mb-3">Selama proses, apakah Anda menemukan indikasi pungutan liar / praktik tidak wajar?</div>
                             <div class="d-inline-block">
                                 <div class="d-flex flex-wrap gap-2 survey-rating-group">
-                                    @for($n = 1; $n <= 5; $n++)
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="survey_rating_service_integrity" id="survey_rating_service_integrity_{{ $n }}" value="{{ $n }}" required>
-                                            <label class="form-check-label" for="survey_rating_service_integrity_{{ $n }}">{{ $n }}</label>
-                                        </div>
-                                    @endfor
-                                </div>
-                                <div class="d-flex justify-content-between small text-muted mt-2 px-1">
-                                    <span>Tidak Pernah</span>
-                                    <span>Sangat Sering</span>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="survey_rating_service_integrity" id="survey_rating_service_integrity_ya" value="1" required>
+                                        <label class="form-check-label" for="survey_rating_service_integrity_ya">Ya</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="survey_rating_service_integrity" id="survey_rating_service_integrity_tidak" value="2" required>
+                                        <label class="form-check-label" for="survey_rating_service_integrity_tidak">Tidak</label>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -2883,15 +2881,12 @@
 
         function formatServiceIntegrityLabel(label) {
             const score = parseInt(String(label), 10);
-            if (!Number.isFinite(score) || score < 1 || score > 5) return '-';
+            if (!Number.isFinite(score)) return '-';
             const scale = {
-                1: '1 - Tidak Pernah',
-                2: '2 - Jarang',
-                3: '3 - Kadang',
-                4: '4 - Sering',
-                5: '5 - Sangat Sering',
+                1: 'Ya',
+                2: 'Tidak',
             };
-            return scale[score] || String(score);
+            return scale[score] || `Lainnya (${score})`;
         }
 
         function renderServiceIntegrityDistribution() {

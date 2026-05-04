@@ -448,7 +448,7 @@ class KemitraanController extends Controller
             'survey_rating_access_info' => 'required|integer|between:1,5',
             'survey_feedback_access_info' => 'required|string|max:5000',
             'survey_rating_information_clarity' => 'required|integer|between:1,5',
-            'survey_rating_service_integrity' => 'required|integer|between:1,5',
+            'survey_rating_service_integrity' => 'required|integer|between:1,2',
             'survey_rating_satisfaction' => 'required|integer|between:1,5',
 
             'survey_improvement_aspects' => 'required|array|min:1',
