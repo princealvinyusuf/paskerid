@@ -862,6 +862,7 @@ class KemitraanController extends Controller
                 'total_responses' => 0,
                 'avg_rating' => 0,
                 'avg_service_integrity' => 0,
+                'service_integrity_summary' => 'Belum ada data',
                 'responses_today' => 0,
                 'responses_month' => 0,
                 'active_companies' => 0,
@@ -1149,6 +1150,7 @@ class KemitraanController extends Controller
                 'total_responses' => $totalResponses,
                 'avg_rating' => $avgRatingRaw !== null ? round((float) $avgRatingRaw, 2) : 0,
                 'avg_service_integrity' => $avgServiceIntegrityRaw !== null ? round((float) $avgServiceIntegrityRaw, 2) : 0,
+                'service_integrity_summary' => $this->buildServiceIntegritySummary($serviceIntegrityDistribution),
                 'responses_today' => $responsesToday,
                 'responses_month' => $responsesMonth,
                 'active_companies' => $activeCompanies,
@@ -1204,6 +1206,45 @@ class KemitraanController extends Controller
         return $out;
     }
 
+    private function buildServiceIntegritySummary(array $distribution): string
+    {
+        $yesCount = 0;
+        $noCount = 0;
+        $total = 0;
+
+        foreach ($distribution as $item) {
+            $label = trim((string) ($item['label'] ?? ''));
+            $count = (int) ($item['total'] ?? 0);
+            if ($count <= 0) {
+                continue;
+            }
+
+            $total += $count;
+            if ($label === '1') {
+                $yesCount += $count;
+            } elseif ($label === '2') {
+                $noCount += $count;
+            }
+        }
+
+        if ($total <= 0 || ($yesCount + $noCount) <= 0) {
+            return 'Belum ada data';
+        }
+
+        $yesPct = (int) round(($yesCount / $total) * 100);
+        $noPct = (int) round(($noCount / $total) * 100);
+
+        if ($yesCount === $noCount) {
+            return 'Seimbang (Ya ' . $yesPct . '% | Tidak ' . $noPct . '%)';
+        }
+
+        if ($noCount > $yesCount) {
+            return 'Mayoritas Tidak (' . $noPct . '%)';
+        }
+
+        return 'Mayoritas Ya (' . $yesPct . '%)';
+    }
+
     private function isSurveyPasscodeEnabled(): bool
     {
         $settings = $this->getSurveyAccessSettingsRow();
@@ -1249,6 +1290,7 @@ class KemitraanController extends Controller
             'total_responses' => 0,
             'avg_rating' => 0,
             'avg_service_integrity' => 0,
+            'service_integrity_summary' => 'Belum ada data',
             'active_companies' => 0,
             'active_initiators' => 0,
             'jumlah_lowongan_dibuka' => 0,
@@ -1322,6 +1364,7 @@ class KemitraanController extends Controller
                 ];
             }
         }
+        $result['service_integrity_summary'] = $this->buildServiceIntegritySummary($result['service_integrity_distribution']);
 
         // Gender Distribution
         if (Schema::hasColumn('walk_in_survey_responses', 'gender')) {

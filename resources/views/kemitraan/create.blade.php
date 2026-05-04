@@ -346,8 +346,8 @@
                             </div>
                             <div class="col-6 col-lg-2">
                                 <div class="walkin-stat-card">
-                                    <div class="walkin-stat-label">Avg Service Integrity</div>
-                                    <div class="walkin-stat-value" id="statAvgServiceIntegrity">{{ number_format((float) ($statsSummary['avg_service_integrity'] ?? 0), 2) }}/2</div>
+                                    <div class="walkin-stat-label">Service Integrity</div>
+                                    <div class="walkin-stat-value" id="statAvgServiceIntegrity">{{ $statsSummary['service_integrity_summary'] ?? 'Belum ada data' }}</div>
                                 </div>
                             </div>
                             <div class="col-6 col-lg-2 stats-admin-only d-none">
@@ -3127,7 +3127,7 @@
 
                     if (totalResponsesEl) totalResponsesEl.textContent = new Intl.NumberFormat('id-ID').format(data.total_responses || 0);
                     if (avgRatingEl) avgRatingEl.textContent = (data.avg_rating || 0).toFixed(2) + '/5';
-                    if (avgServiceIntegrityEl) avgServiceIntegrityEl.textContent = (data.avg_service_integrity || 0).toFixed(2) + '/2';
+                    if (avgServiceIntegrityEl) avgServiceIntegrityEl.textContent = data.service_integrity_summary || 'Belum ada data';
                     if (activeCompaniesEl) activeCompaniesEl.textContent = new Intl.NumberFormat('id-ID').format(data.active_companies || 0);
                     if (activeInitiatorsEl) activeInitiatorsEl.textContent = new Intl.NumberFormat('id-ID').format(data.active_initiators || 0);
                     if (jumlahLowonganEl) jumlahLowonganEl.textContent = new Intl.NumberFormat('id-ID').format(data.jumlah_lowongan_dibuka || 0);
