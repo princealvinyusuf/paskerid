@@ -453,6 +453,7 @@
                             <div class="col-12 col-lg-6">
                                 <div class="walkin-panel p-3">
                                     <div class="fw-semibold mb-2">Distribusi Rating Integritas Layanan</div>
+                                    <div class="small text-muted mb-2">Apakah ditemukan indikasi pungutan liar / praktik tidak wajar?</div>
                                     <canvas id="statsServiceIntegrityChart" height="120"></canvas>
                                 </div>
                             </div>
