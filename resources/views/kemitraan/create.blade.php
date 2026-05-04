@@ -346,7 +346,7 @@
                             </div>
                             <div class="col-6 col-lg-2">
                                 <div class="walkin-stat-card">
-                                    <div class="walkin-stat-label">Service Integrity</div>
+                                    <div class="walkin-stat-label">Ditemukan Pungli / praktik tidak wajar</div>
                                     <div class="walkin-stat-value" id="statAvgServiceIntegrity">{{ $statsSummary['service_integrity_summary'] ?? 'Belum ada data' }}</div>
                                 </div>
                             </div>
