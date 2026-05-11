@@ -21,6 +21,7 @@ class Kemitraan extends Model
         'business_sector',
         'institution_address',
         'type_of_partnership_id',
+        'walkin_location_id',
         'tipe_penyelenggara',
         'pasker_room_id',
         'other_pasker_room',
@@ -52,6 +53,11 @@ class Kemitraan extends Model
     public function typeOfPartnership()
     {
         return $this->belongsTo(TypeOfPartnership::class, 'type_of_partnership_id');
+    }
+
+    public function walkinLocation()
+    {
+        return $this->belongsTo(WalkinLocation::class, 'walkin_location_id');
     }
 
     public function detailLowongan()

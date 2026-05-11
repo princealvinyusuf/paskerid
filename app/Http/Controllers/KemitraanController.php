@@ -9,6 +9,7 @@ use App\Models\companysector;
 use App\Models\PartnerCompany;
 use App\Models\PaskerRoom;
 use App\Models\PaskerFacility;
+use App\Models\WalkinLocation;
 use App\Models\WalkInSurveyCompany;
 use App\Models\WalkInSurveyResponse;
 use Illuminate\Http\Request;
@@ -23,8 +24,9 @@ class KemitraanController extends Controller
         // Determine selected partnership type id (fallback to first type if not provided)
         $dropdownPartnership = TypeOfPartnership::all();
         $dropdownCompanySectors = companysector::all();
-        $imagePaskerRoom = PaskerRoom::all();
-        $paskerFacility = PaskerFacility::all();
+        $walkinLocations = WalkinLocation::query()->orderBy('location_name')->get();
+        $imagePaskerRoom = PaskerRoom::query()->orderBy('room_name')->get();
+        $paskerFacility = PaskerFacility::query()->orderBy('facility_name')->get();
 
         $defaultTypeId = (int) $request->input('type_of_partnership_id', (int) optional($dropdownPartnership->first())->id);
         $fullyBookedDates = $this->computeFullyBookedDates($defaultTypeId, 180);
@@ -183,6 +185,7 @@ class KemitraanController extends Controller
         return view('kemitraan.create', compact(
             'dropdownPartnership',
             'dropdownCompanySectors',
+            'walkinLocations',
             'imagePaskerRoom',
             'paskerFacility',
             'fullyBookedDates',
@@ -260,6 +263,7 @@ class KemitraanController extends Controller
             'business_sector' => 'nullable|string|max:255',
             'institution_address' => 'required|string|max:255',
             'type_of_partnership_id' => 'required|exists:type_of_partnership,id',
+            'walkin_location_id' => 'required|integer|exists:walkin_locations,id',
             'tipe_penyelenggara' => 'required|in:Job Portal,Perusahaan',
             // Detail Lowongan (repeatable)
             'detail_lowongan' => 'required|array|min:1',
@@ -291,9 +295,37 @@ class KemitraanController extends Controller
 
         // Enforce facility presence: either array not empty or other provided
         $facilityIds = $request->input('pasker_facility_ids', []);
+        $locationId = (int) $request->input('walkin_location_id');
         $otherFacility = $request->input('other_pasker_facility');
         if (empty($facilityIds) && empty($otherFacility)) {
             return back()->withErrors(['pasker_facility_ids' => 'Pilih minimal satu fasilitas atau isi Lainnya.'])->withInput();
+        }
+
+        $roomIds = array_values(array_unique(array_map('intval', (array) $request->input('pasker_room_ids', []))));
+        $facilityIds = array_values(array_unique(array_map('intval', (array) $facilityIds)));
+
+        if (!empty($roomIds)) {
+            $matchedRooms = PaskerRoom::query()
+                ->where('walkin_location_id', $locationId)
+                ->whereIn('id', $roomIds)
+                ->count();
+            if ($matchedRooms !== count($roomIds)) {
+                return back()->withErrors([
+                    'pasker_room_ids' => 'Ruangan yang dipilih harus sesuai dengan lokasi Walk In.',
+                ])->withInput();
+            }
+        }
+
+        if (!empty($facilityIds)) {
+            $matchedFacilities = PaskerFacility::query()
+                ->where('walkin_location_id', $locationId)
+                ->whereIn('id', $facilityIds)
+                ->count();
+            if ($matchedFacilities !== count($facilityIds)) {
+                return back()->withErrors([
+                    'pasker_facility_ids' => 'Kebutuhan yang dipilih harus sesuai dengan lokasi Walk In.',
+                ])->withInput();
+            }
         }
 
         if ($request->hasFile('request_letter')) {
@@ -309,7 +341,6 @@ class KemitraanController extends Controller
         $validated['scheduletimefinish'] = $timeFinish ? ($timeFinish . ':00') : null;
 
         // Backward compatibility: persist first selected room/facility id into legacy columns
-        $roomIds = $request->input('pasker_room_ids', []);
         $validated['pasker_room_id'] = !empty($roomIds) ? (int) $roomIds[0] : null;
 
         $validated['pasker_facility_id'] = !empty($facilityIds) ? (int) $facilityIds[0] : null;

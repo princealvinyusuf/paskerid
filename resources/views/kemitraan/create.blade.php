@@ -1459,12 +1459,26 @@
                                 @endforeach
                             </select>
                         </div>
+                        <div class="col-md-6">
+                            <label for="walkin_location_id" class="form-label">Lokasi diselenggarakannya Walk In</label>
+                            <select name="walkin_location_id" id="walkin_location_id" class="form-select" required>
+                                <option value="">-- Pilih Lokasi --</option>
+                                @foreach ($walkinLocations as $location)
+                                    <option value="{{ $location->id }}" {{ (string) old('walkin_location_id') === (string) $location->id ? 'selected' : '' }}>
+                                        {{ $location->location_name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('walkin_location_id')
+                                <div class="text-danger mt-1">{{ $message }}</div>
+                            @enderror
+                        </div>
                     </div>
                         <div class="col-12">
                             <label for="pasker_room" class="form-label">Ruangan yang akan dipakai</label>
                             <div class="grid-container">
                                 @foreach($imagePaskerRoom as $ruangan)
-                            <div class="ruangan-card">
+                            <div class="ruangan-card js-room-item" data-location-id="{{ (int) ($ruangan->walkin_location_id ?? 0) }}">
                                 @if($ruangan->image_base64)
                                     <img src="data:{{ $ruangan->mime_type }};base64,{{ $ruangan->image_base64 }}" alt="{{ $ruangan->title }}">
                                 @endif
@@ -1478,6 +1492,9 @@
                                 </div>
                             @endforeach
                             </div>
+                            @error('pasker_room_ids')
+                                <div class="text-danger mt-1">{{ $message }}</div>
+                            @enderror
                         </div>
 
                         <div class="form-check align-items-center d-flex" style="padding-top: 10px">
@@ -1490,7 +1507,7 @@
                         <div class="col-md-6">
                             <label for="needs" class="form-label">Kebutuhan yang Diajukan</label>
                             @foreach ($paskerFacility as $facility)
-                           <div class="form-check">
+                           <div class="form-check js-facility-item" data-location-id="{{ (int) ($facility->walkin_location_id ?? 0) }}">
                                 <input class="form-check-input" type="checkbox" name="pasker_facility_ids[]" value="{{ $facility->id }}" id="facility{{ $facility->id }}" {{ collect(old('pasker_facility_ids', []))->contains($facility->id) ? 'checked' : '' }}>
                                  <label class="form-check-label" for="facility{{ $facility->id }}">
                                     {{ $facility->facility_name }}
@@ -2027,6 +2044,34 @@
                 })
                 .catch(() => {});
         });
+    }
+
+    const walkinLocationSelect = document.getElementById('walkin_location_id');
+    const roomItems = Array.from(document.querySelectorAll('.js-room-item'));
+    const facilityItems = Array.from(document.querySelectorAll('.js-facility-item'));
+
+    function toggleMappedOptions(items, selectedLocationId) {
+        items.forEach((item) => {
+            const itemLocationId = String(item.getAttribute('data-location-id') || '0');
+            const shouldShow = selectedLocationId !== '' && itemLocationId === selectedLocationId;
+            item.style.display = shouldShow ? '' : 'none';
+
+            const checkbox = item.querySelector('input[type="checkbox"]');
+            if (checkbox && !shouldShow) {
+                checkbox.checked = false;
+            }
+        });
+    }
+
+    function refreshLocationBoundOptions() {
+        const selectedLocationId = walkinLocationSelect ? String(walkinLocationSelect.value || '') : '';
+        toggleMappedOptions(roomItems, selectedLocationId);
+        toggleMappedOptions(facilityItems, selectedLocationId);
+    }
+
+    if (walkinLocationSelect) {
+        walkinLocationSelect.addEventListener('change', refreshLocationBoundOptions);
+        refreshLocationBoundOptions();
     }
 
     flatpickr("#scheduletimestart", {
