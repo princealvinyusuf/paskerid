@@ -28,6 +28,8 @@ use App\Models\HomePopupItem;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Cache;
+use Throwable;
 
 class HomeController extends Controller
 {
@@ -72,10 +74,31 @@ class HomeController extends Controller
         $datasets = Dataset::orderBy('order')->get()->groupBy('category');
         $highlightStatistics = HighlightStatistic::all();
         $highlightStatistics2 = HighlightStatisticSecondary::all();
-        $visitCount = Visitor::count();
-        $todayVisits = Visitor::whereDate('created_at', today())->count();
-        $totalVisitors = Visitor::distinct('ip_address')->count('ip_address');
-        $todayVisitors = Visitor::whereDate('created_at', today())->distinct('ip_address')->count('ip_address');
+        $visitorStats = Cache::remember('home:visitor-stats', now()->addMinutes(2), function (): array {
+            try {
+                return [
+                    'visitCount' => Visitor::count(),
+                    'todayVisits' => Visitor::whereDate('created_at', today())->count(),
+                    'totalVisitors' => Visitor::distinct('ip_address')->count('ip_address'),
+                    'todayVisitors' => Visitor::whereDate('created_at', today())->distinct('ip_address')->count('ip_address'),
+                ];
+            } catch (Throwable $exception) {
+                Log::warning('Failed loading visitor stats for home page.', [
+                    'message' => $exception->getMessage(),
+                ]);
+
+                return [
+                    'visitCount' => 0,
+                    'todayVisits' => 0,
+                    'totalVisitors' => 0,
+                    'todayVisitors' => 0,
+                ];
+            }
+        });
+        $visitCount = $visitorStats['visitCount'];
+        $todayVisits = $visitorStats['todayVisits'];
+        $totalVisitors = $visitorStats['totalVisitors'];
+        $todayVisitors = $visitorStats['todayVisitors'];
         $mitraKerja = MitraKerja::where('divider', 'mitra')
             ->orderBy('sort')
             ->orderBy('id')
