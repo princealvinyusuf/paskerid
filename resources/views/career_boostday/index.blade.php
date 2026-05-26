@@ -19,12 +19,18 @@
 
             <div class="mb-4">
                 <div class="career-boostday-segmented" role="tablist" aria-label="Career Boost Day toggle">
-                    <a href="{{ route('career-boostday.index', ['tab' => 'form']) }}"
-                       class="career-boostday-seg-btn {{ $tab === 'form' ? 'active' : '' }}"
-                       role="tab"
-                       aria-selected="{{ $tab === 'form' ? 'true' : 'false' }}">
-                        Form Curhat Peluang Kerja
-                    </a>
+                    @if($isRegistrationOpen)
+                        <a href="{{ route('career-boostday.index', ['tab' => 'form']) }}"
+                           class="career-boostday-seg-btn {{ $tab === 'form' ? 'active' : '' }}"
+                           role="tab"
+                           aria-selected="{{ $tab === 'form' ? 'true' : 'false' }}">
+                            Form Curhat Peluang Kerja
+                        </a>
+                    @else
+                        <span class="career-boostday-seg-btn disabled text-muted" role="tab" aria-selected="false" aria-disabled="true">
+                            Form Curhat (Ditutup Sementara)
+                        </span>
+                    @endif
                     <a href="{{ route('career-boostday.index', ['tab' => 'jadwal']) }}"
                        class="career-boostday-seg-btn {{ $tab === 'jadwal' ? 'active' : '' }}"
                        role="tab"
@@ -48,6 +54,9 @@
 
             @if(session('success'))
                 <div class="alert alert-success shadow-sm">{{ session('success') }}</div>
+            @endif
+            @if(session('warning'))
+                <div class="alert alert-warning shadow-sm">{{ session('warning') }}</div>
             @endif
 
             @if($tab === 'jadwal')
@@ -701,10 +710,20 @@
                     </script>
                 @endif
             @else
-                <div class="card shadow-sm rounded-4">
-                    <div class="card-body p-4 p-md-5">
-                        <h2 class="h5 fw-bold mb-1">Form Curhat Peluang Kerja</h2>
-                        <div class="text-muted mb-4">Silakan isi data berikut. Tim kami akan menghubungi Anda melalui WhatsApp.</div>
+                @if(!$isRegistrationOpen)
+                    <div class="card shadow-sm rounded-4">
+                        <div class="card-body p-4 p-md-5">
+                            <h2 class="h5 fw-bold mb-2">Pendaftaran Ditutup Sementara</h2>
+                            <div class="alert alert-warning mb-0">
+                                {{ $registrationClosedMessage }}
+                            </div>
+                        </div>
+                    </div>
+                @else
+                    <div class="card shadow-sm rounded-4">
+                        <div class="card-body p-4 p-md-5">
+                            <h2 class="h5 fw-bold mb-1">Form Curhat Peluang Kerja</h2>
+                            <div class="text-muted mb-4">Silakan isi data berikut. Tim kami akan menghubungi Anda melalui WhatsApp.</div>
 
                         @if ($errors->any())
                             <div class="alert alert-danger">
@@ -905,8 +924,9 @@
                                 syncPendidikanOther();
                             })();
                         </script>
+                        </div>
                     </div>
-                </div>
+                @endif
             @endif
         </div>
     </div>
@@ -936,6 +956,10 @@
         white-space: nowrap;
         text-decoration: none;
         transition: all 0.2s ease;
+    }
+    .career-boostday-seg-btn.disabled {
+        pointer-events: none;
+        opacity: 0.8;
     }
     .career-boostday-seg-btn:hover {
         color: #111827;

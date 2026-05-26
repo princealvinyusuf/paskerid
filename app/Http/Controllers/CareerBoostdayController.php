@@ -16,6 +16,15 @@ class CareerBoostdayController extends Controller
     public function index(Request $request)
     {
         $tab = $request->query('tab', 'form');
+        $registrationAccess = $this->getRegistrationAccessSetting();
+        $isRegistrationOpen = $registrationAccess['is_open'];
+        $registrationClosedMessage = $registrationAccess['closed_message'];
+
+        if (!$isRegistrationOpen && $tab === 'form') {
+            return redirect()
+                ->route('career-boostday.index', ['tab' => 'jadwal'])
+                ->with('warning', $registrationClosedMessage);
+        }
 
         $konsultasiSlots = $this->getKonsultasiSlots();
 
@@ -110,11 +119,28 @@ class CareerBoostdayController extends Controller
                 ->get();
         }
 
-        return view('career_boostday.index', compact('tab', 'konsultasiSlots', 'konsultasiAgendas', 'bookedKonsultasi', 'bookedFeatureAvailable', 'stats', 'testimonials'));
+        return view('career_boostday.index', compact(
+            'tab',
+            'konsultasiSlots',
+            'konsultasiAgendas',
+            'bookedKonsultasi',
+            'bookedFeatureAvailable',
+            'stats',
+            'testimonials',
+            'isRegistrationOpen',
+            'registrationClosedMessage'
+        ));
     }
 
     public function store(Request $request)
     {
+        $registrationAccess = $this->getRegistrationAccessSetting();
+        if (!$registrationAccess['is_open']) {
+            return redirect()
+                ->route('career-boostday.index', ['tab' => 'jadwal'])
+                ->with('warning', $registrationAccess['closed_message']);
+        }
+
         $jadwalRule = ['required', 'string', 'max:120'];
         if (Schema::hasTable('career_boostday_slots')) {
             $allowed = DB::table('career_boostday_slots')
@@ -472,6 +498,66 @@ class CareerBoostdayController extends Controller
         }
 
         return '62' . $digits;
+    }
+
+    private function getRegistrationAccessSetting(): array
+    {
+        $defaultClosedMessage = 'Mohon maaf, pendaftaran Career Boost Day sedang ditutup sementara karena kuota telah terpenuhi.';
+
+        if (!Schema::hasTable('career_boostday_settings')) {
+            return [
+                'is_open' => true,
+                'closed_message' => $defaultClosedMessage,
+            ];
+        }
+
+        try {
+            $isOpenColumn = null;
+            if (Schema::hasColumn('career_boostday_settings', 'is_registration_open')) {
+                $isOpenColumn = 'is_registration_open';
+            } elseif (Schema::hasColumn('career_boostday_settings', 'is_open')) {
+                $isOpenColumn = 'is_open';
+            }
+
+            $selectColumns = ['id'];
+            if ($isOpenColumn !== null) {
+                $selectColumns[] = $isOpenColumn;
+            }
+            if (Schema::hasColumn('career_boostday_settings', 'closed_message')) {
+                $selectColumns[] = 'closed_message';
+            }
+
+            $setting = DB::table('career_boostday_settings')
+                ->where('id', 1)
+                ->first($selectColumns);
+
+            if (!$setting) {
+                return [
+                    'is_open' => true,
+                    'closed_message' => $defaultClosedMessage,
+                ];
+            }
+
+            $isOpen = true;
+            if ($isOpenColumn !== null && isset($setting->{$isOpenColumn})) {
+                $isOpen = (int) $setting->{$isOpenColumn} === 1;
+            }
+
+            $closedMessage = trim((string) ($setting->closed_message ?? ''));
+            if ($closedMessage === '') {
+                $closedMessage = $defaultClosedMessage;
+            }
+
+            return [
+                'is_open' => $isOpen,
+                'closed_message' => $closedMessage,
+            ];
+        } catch (\Throwable $e) {
+            return [
+                'is_open' => true,
+                'closed_message' => $defaultClosedMessage,
+            ];
+        }
     }
 
     private function buildStatistics(): array

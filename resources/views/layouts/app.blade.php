@@ -502,7 +502,11 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link @if(request()->routeIs('career-boostday.index')) active fw-bold @endif" href="{{ route('career-boostday.index') }}">
+                        <a
+                            class="nav-link @if(request()->routeIs('career-boostday.index')) active fw-bold @endif"
+                            href="{{ route('career-boostday.index', ['tab' => ($careerBoostdayRegistrationOpen ?? true) ? 'form' : 'jadwal']) }}"
+                            @if(!($careerBoostdayRegistrationOpen ?? true)) title="{{ $careerBoostdayClosedMessage ?? 'Pendaftaran ditutup sementara.' }}" @endif
+                        >
                             Career Boost Day
                         </a>
                     </li>
