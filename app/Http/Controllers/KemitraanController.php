@@ -812,14 +812,27 @@ class KemitraanController extends Controller
         $kemitraan = $bookedDate->kemitraan;
         if (!$kemitraan) return null;
 
-        $date = $hasRange
+        $dateStartRaw = $hasRange
             ? ($bookedDate->booked_date_start ?? $bookedDate->booked_date)
             : $bookedDate->booked_date;
-        if (!$date) return null;
+        if (!$dateStartRaw) return null;
 
-        $dateStr = $date instanceof Carbon
-            ? $date->format('Y-m-d')
-            : (is_string($date) ? $date : Carbon::parse($date)->format('Y-m-d'));
+        $dateStart = $dateStartRaw instanceof Carbon
+            ? $dateStartRaw->copy()
+            : Carbon::parse($dateStartRaw);
+        $dateFinishRaw = $hasRange
+            ? ($bookedDate->booked_date_finish ?? $dateStartRaw)
+            : $dateStartRaw;
+        $dateFinish = $dateFinishRaw
+            ? ($dateFinishRaw instanceof Carbon ? $dateFinishRaw->copy() : Carbon::parse($dateFinishRaw))
+            : $dateStart->copy();
+
+        $dateStr = $dateStart->format('Y-m-d');
+        $dateFinishStr = $dateFinish->format('Y-m-d');
+        $dateLabel = $dateStart->format('d M Y');
+        if ($dateStr !== $dateFinishStr) {
+            $dateLabel .= ' s/d ' . $dateFinish->format('d M Y');
+        }
 
         $partnershipType = $bookedDate->typeOfPartnership ?? $kemitraan->typeOfPartnership;
         $partnershipTypeName = $partnershipType ? $partnershipType->name : 'Kegiatan Kemitraan';
@@ -866,6 +879,9 @@ class KemitraanController extends Controller
                 . ($timeInfo ? ' (' . $timeInfo . ')' : '')
                 . ($location && $location !== '-' ? ' - Lokasi: ' . $location : ''),
             'date' => $dateStr,
+            'date_start' => $dateStr,
+            'date_finish' => $dateFinishStr,
+            'date_label' => $dateLabel,
             'location' => $location ?: '-',
             'organizer' => $kemitraan->institution_name ?? '-',
             'registration_url' => null,

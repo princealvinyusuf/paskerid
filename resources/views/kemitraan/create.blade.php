@@ -177,17 +177,25 @@
                                     @if(isset($walkinAgendas) && $walkinAgendas->count() > 0)
                                         @php
                                             $nextIdx = null;
+                                            $today = \Carbon\Carbon::today();
                                             foreach($walkinAgendas as $idx => $agenda) {
-                                                if ($nextIdx === null && \Carbon\Carbon::parse($agenda->date)->isFuture()) {
+                                                $agendaStart = \Carbon\Carbon::parse($agenda->date_start ?? $agenda->date);
+                                                $agendaFinish = \Carbon\Carbon::parse($agenda->date_finish ?? ($agenda->date_start ?? $agenda->date));
+                                                if ($nextIdx === null && $agendaFinish->greaterThanOrEqualTo($today)) {
                                                     $nextIdx = $idx;
                                                 }
                                             }
                                         @endphp
                                         @foreach($walkinAgendas as $idx => $agenda)
                                             @php
-                                                $date = \Carbon\Carbon::parse($agenda->date);
+                                                $dateStart = \Carbon\Carbon::parse($agenda->date_start ?? $agenda->date);
+                                                $dateFinish = \Carbon\Carbon::parse($agenda->date_finish ?? ($agenda->date_start ?? $agenda->date));
+                                                $isRangeDate = $dateStart->toDateString() !== $dateFinish->toDateString();
+                                                $dateLabel = $isRangeDate
+                                                    ? ($dateStart->format('d M Y') . ' s/d ' . $dateFinish->format('d M Y'))
+                                                    : $dateStart->format('d M Y');
                                                 $isUpcoming = $idx === $nextIdx;
-                                                $isToday = $date->isToday();
+                                                $isToday = \Carbon\Carbon::today()->betweenIncluded($dateStart, $dateFinish);
                                                 $rowClass = $isUpcoming ? 'walkin-schedule-upcoming' : ($idx % 2 === 1 ? 'walkin-schedule-odd' : '');
                                                 $infoItems = (array)($agenda->informasi_lainnya_items ?? []);
                                                 if (empty($infoItems)) {
@@ -199,8 +207,11 @@
                                             @endphp
                                             <tr class="{{ $rowClass }}">
                                                 <td class="fw-semibold">
-                                                    <div class="walkin-schedule-date">{{ $date->format('d M') }}</div>
-                                                    <div class="text-muted small">{{ $date->format('Y') }}</div>
+                                                    <div class="walkin-schedule-date">{{ $dateStart->format('d M') }}</div>
+                                                    @if($isRangeDate)
+                                                        <div class="text-muted small">s/d {{ $dateFinish->format('d M') }}</div>
+                                                    @endif
+                                                    <div class="text-muted small">{{ $dateStart->format('Y') }}</div>
                                                 </td>
                                                 <td><i class="fas fa-user-tie walkin-schedule-icon"></i>{{ $agenda->title }}</td>
                                                 <td>
@@ -212,7 +223,7 @@
                                                             data-bs-target="#agendaDetailModal"
                                                             data-title="{{ e($agenda->title) }}"
                                                             data-organizer="{{ e($agenda->organizer) }}"
-                                                            data-date="{{ $date->format('d M Y') }}"
+                                                            data-date="{{ $dateLabel }}"
                                                             data-location="{{ e($agenda->location) }}"
                                                             data-registration="{{ $agenda->registration_url }}"
                                                             data-info-lainnya='@json($infoItems)'
@@ -1801,7 +1812,12 @@
                         @if(isset($walkinAgendasPast) && $walkinAgendasPast->count() > 0)
                             @foreach($walkinAgendasPast as $idx => $agenda)
                                 @php
-                                    $date = \Carbon\Carbon::parse($agenda->date);
+                                    $dateStart = \Carbon\Carbon::parse($agenda->date_start ?? $agenda->date);
+                                    $dateFinish = \Carbon\Carbon::parse($agenda->date_finish ?? ($agenda->date_start ?? $agenda->date));
+                                    $isRangeDate = $dateStart->toDateString() !== $dateFinish->toDateString();
+                                    $dateLabel = $isRangeDate
+                                        ? ($dateStart->format('d M Y') . ' s/d ' . $dateFinish->format('d M Y'))
+                                        : $dateStart->format('d M Y');
                                     $infoItems = (array)($agenda->informasi_lainnya_items ?? []);
                                     if (empty($infoItems)) {
                                         $legacyInfo = trim((string)($agenda->informasi_lainnya ?? ''));
@@ -1812,8 +1828,11 @@
                                 @endphp
                                 <tr class="{{ $idx % 2 === 1 ? 'walkin-schedule-odd' : '' }}">
                                     <td class="fw-semibold">
-                                        <div class="walkin-schedule-date">{{ $date->format('d M') }}</div>
-                                        <div class="text-muted small">{{ $date->format('Y') }}</div>
+                                        <div class="walkin-schedule-date">{{ $dateStart->format('d M') }}</div>
+                                        @if($isRangeDate)
+                                            <div class="text-muted small">s/d {{ $dateFinish->format('d M') }}</div>
+                                        @endif
+                                        <div class="text-muted small">{{ $dateStart->format('Y') }}</div>
                                     </td>
                                     <td><i class="fas fa-user-tie walkin-schedule-icon"></i>{{ $agenda->title }}</td>
                                     <td>
@@ -1824,7 +1843,7 @@
                                             data-bs-target="#agendaDetailModal"
                                             data-title="{{ e($agenda->title) }}"
                                             data-organizer="{{ e($agenda->organizer) }}"
-                                            data-date="{{ $date->format('d M Y') }}"
+                                            data-date="{{ $dateLabel }}"
                                             data-location="{{ e($agenda->location) }}"
                                             data-registration="{{ $agenda->registration_url }}"
                                             data-info-lainnya='@json($infoItems)'
@@ -3887,6 +3906,8 @@
             const rows = [];
             const now = new Date();
             const todayYmd = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+            const getStartDate = (item) => String((item && (item.date_start || item.date)) || '');
+            const getFinishDate = (item) => String((item && (item.date_finish || item.date_start || item.date)) || '');
             (upcoming || []).forEach((a) => rows.push({ ...a, _bucket: 'upcoming' }));
             (past || []).forEach((a) => rows.push({ ...a, _bucket: 'past' }));
 
@@ -3898,10 +3919,12 @@
             // Sort: upcoming asc then past desc (already server ordered, but keep stable)
             rows.sort((x, y) => {
                 if (x._bucket !== y._bucket) return x._bucket === 'upcoming' ? -1 : 1;
-                if (x.date === y.date) return 0;
+                const xStart = getStartDate(x);
+                const yStart = getStartDate(y);
+                if (xStart === yStart) return 0;
                 return x._bucket === 'upcoming'
-                    ? (x.date < y.date ? -1 : 1)
-                    : (x.date > y.date ? -1 : 1);
+                    ? (xStart < yStart ? -1 : 1)
+                    : (xStart > yStart ? -1 : 1);
             });
 
             rows.forEach((a, idx) => {
@@ -3928,13 +3951,21 @@
                         return `<a href="${escapeHtml(href)}" target="_blank" class="btn btn-outline-success btn-sm">Buka Link</a>`;
                     }).join('')}</div>`;
                 const isUpcoming = a._bucket === 'upcoming';
-                const isToday = String(a.date || '') === todayYmd;
-                const { dayMonth, year } = formatDateParts(a.date);
+                const dateStart = getStartDate(a);
+                const dateFinish = getFinishDate(a);
+                const isRangeDate = !!dateStart && !!dateFinish && dateStart !== dateFinish;
+                const isToday = !!dateStart && !!dateFinish && dateStart <= todayYmd && todayYmd <= dateFinish;
+                const { dayMonth, year } = formatDateParts(dateStart);
+                const { dayMonth: dayMonthFinish } = formatDateParts(dateFinish);
+                const modalDate = isRangeDate
+                    ? `${formatLongDate(dateStart)} s/d ${formatLongDate(dateFinish)}`
+                    : formatLongDate(dateStart);
                 const tr = document.createElement('tr');
                 tr.className = (!isUpcoming && idx % 2 === 1) ? 'walkin-schedule-odd' : (isUpcoming && idx === 0 ? 'walkin-schedule-upcoming' : '');
                 tr.innerHTML = `
                     <td class="fw-semibold">
                         <div class="walkin-schedule-date">${escapeHtml(dayMonth)}</div>
+                        ${isRangeDate ? `<div class="text-muted small">s/d ${escapeHtml(dayMonthFinish)}</div>` : ''}
                         <div class="text-muted small">${escapeHtml(year)}</div>
                     </td>
                     <td><i class="fas fa-user-tie walkin-schedule-icon"></i>${escapeHtml(a.title || '')}</td>
@@ -3947,7 +3978,7 @@
                                 data-bs-target="#agendaDetailModal"
                                 data-title="${escapeHtml(a.title || '')}"
                                 data-organizer="${escapeHtml(a.organizer || '')}"
-                                data-date="${escapeHtml(formatLongDate(a.date))}"
+                                data-date="${escapeHtml(modalDate)}"
                                 data-location="${escapeHtml(a.location || '')}"
                                 data-registration="${escapeHtml(a.registration_url || '')}"
                                 data-info-lainnya='${escapeHtml(JSON.stringify(infoItems))}'
