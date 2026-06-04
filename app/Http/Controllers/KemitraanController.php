@@ -591,8 +591,18 @@ class KemitraanController extends Controller
         });
 
         $upcomingQ = (clone $base);
-        if ($hasRange) $upcomingQ->where('booked_date_start', '>=', $today)->orderBy('booked_date_start', 'asc');
-        else $upcomingQ->where('booked_date', '>=', $today)->orderBy('booked_date', 'asc');
+        if ($hasRange) {
+            // Include ongoing ranges so active schedules are not dropped between upcoming and past buckets.
+            $upcomingQ->where(function ($q) use ($today) {
+                $q->where('booked_date_finish', '>=', $today)
+                  ->orWhere(function ($q2) use ($today) {
+                      $q2->whereNull('booked_date_finish')
+                         ->where('booked_date_start', '>=', $today);
+                  });
+            })->orderBy('booked_date_start', 'asc');
+        } else {
+            $upcomingQ->where('booked_date', '>=', $today)->orderBy('booked_date', 'asc');
+        }
 
         $pastQ = (clone $base);
         if ($hasRange) {
@@ -764,9 +774,15 @@ class KemitraanController extends Controller
             }
             $query->limit(max(1, $limit));
         } else {
-            // Upcoming only (today and future)
+            // Upcoming includes ongoing ranges and future schedules.
             if ($hasRange) {
-                $query->where('booked_date_start', '>=', $today)->orderBy('booked_date_start', 'asc');
+                $query->where(function ($q) use ($today) {
+                    $q->where('booked_date_finish', '>=', $today)
+                      ->orWhere(function ($q2) use ($today) {
+                          $q2->whereNull('booked_date_finish')
+                             ->where('booked_date_start', '>=', $today);
+                      });
+                })->orderBy('booked_date_start', 'asc');
             } else {
                 $query->where('booked_date', '>=', $today)->orderBy('booked_date', 'asc');
             }
