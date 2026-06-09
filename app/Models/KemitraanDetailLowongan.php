@@ -15,6 +15,7 @@ class KemitraanDetailLowongan extends Model
         'kemitraan_id',
         'jabatan_yang_dibuka',
         'jumlah_kebutuhan',
+        'sasaran_pemenuhan_walk_in_interview',
         'gender',
         'pendidikan_terakhir',
         'pengalaman_kerja',

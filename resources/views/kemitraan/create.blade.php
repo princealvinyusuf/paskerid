@@ -1297,6 +1297,25 @@
                                             required
                                         >
                                     </div>
+                                    @php
+                                        $jumlahKebutuhanValue = max(0, (int) ($dl['jumlah_kebutuhan'] ?? 0));
+                                        $sasaranPemenuhanValue = max(0, min((int) ($dl['sasaran_pemenuhan_walk_in_interview'] ?? 0), $jumlahKebutuhanValue));
+                                    @endphp
+                                    <div class="col-12">
+                                        <label class="form-label" data-for-template="dl___INDEX___sasaran_pemenuhan_walk_in_interview" for="dl_{{ $i }}_sasaran_pemenuhan_walk_in_interview">Sasaran Pemenuhan Kebutuhan Kandidat melalui Walk In Interview ini</label>
+                                        <input
+                                            type="range"
+                                            class="form-range js-sasaran-slider"
+                                            id="dl_{{ $i }}_sasaran_pemenuhan_walk_in_interview"
+                                            data-id-template="dl___INDEX___sasaran_pemenuhan_walk_in_interview"
+                                            name="detail_lowongan[{{ $i }}][sasaran_pemenuhan_walk_in_interview]"
+                                            data-name-template="detail_lowongan[__INDEX__][sasaran_pemenuhan_walk_in_interview]"
+                                            min="0"
+                                            max="{{ $jumlahKebutuhanValue }}"
+                                            value="{{ $sasaranPemenuhanValue }}"
+                                        >
+                                        <div class="form-text">Nilai: <span class="js-sasaran-slider-value">{{ $sasaranPemenuhanValue }} / {{ $jumlahKebutuhanValue }}</span></div>
+                                    </div>
                                     <div class="col-md-6">
                                         <label class="form-label" data-for-template="dl___INDEX___gender" for="dl_{{ $i }}_gender">Gender</label>
                                         <select
@@ -1419,6 +1438,11 @@
                                 <div class="col-md-6">
                                     <label class="form-label" data-for-template="dl___INDEX___jumlah_kebutuhan" for="dl___INDEX___jumlah_kebutuhan">Jumlah Kebutuhan</label>
                                     <input type="number" class="form-control" id="dl___INDEX___jumlah_kebutuhan" data-id-template="dl___INDEX___jumlah_kebutuhan" name="detail_lowongan[__INDEX__][jumlah_kebutuhan]" data-name-template="detail_lowongan[__INDEX__][jumlah_kebutuhan]" placeholder="Contoh: 10" min="1" required>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label" data-for-template="dl___INDEX___sasaran_pemenuhan_walk_in_interview" for="dl___INDEX___sasaran_pemenuhan_walk_in_interview">Sasaran Pemenuhan Kebutuhan Kandidat melalui Walk In Interview ini</label>
+                                    <input type="range" class="form-range js-sasaran-slider" id="dl___INDEX___sasaran_pemenuhan_walk_in_interview" data-id-template="dl___INDEX___sasaran_pemenuhan_walk_in_interview" name="detail_lowongan[__INDEX__][sasaran_pemenuhan_walk_in_interview]" data-name-template="detail_lowongan[__INDEX__][sasaran_pemenuhan_walk_in_interview]" min="0" max="0" value="0">
+                                    <div class="form-text">Nilai: <span class="js-sasaran-slider-value">0 / 0</span></div>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label" data-for-template="dl___INDEX___gender" for="dl___INDEX___gender">Gender</label>
@@ -2330,6 +2354,25 @@
             updateJobPortalCompanyVisibility();
         }
 
+        function syncSasaranSlider(item) {
+            if (!item) return;
+            const jumlahInput = item.querySelector('input[name*="[jumlah_kebutuhan]"]');
+            const slider = item.querySelector('.js-sasaran-slider');
+            const valueLabel = item.querySelector('.js-sasaran-slider-value');
+            if (!slider || !valueLabel) return;
+
+            const parsedJumlah = Number.parseInt(jumlahInput ? jumlahInput.value : '0', 10);
+            const maxValue = Number.isFinite(parsedJumlah) && parsedJumlah > 0 ? parsedJumlah : 0;
+            slider.max = String(maxValue);
+            slider.disabled = maxValue === 0;
+
+            const parsedSliderValue = Number.parseInt(slider.value, 10);
+            const safeCurrentValue = Number.isFinite(parsedSliderValue) ? parsedSliderValue : 0;
+            const clampedValue = Math.min(Math.max(safeCurrentValue, 0), maxValue);
+            slider.value = String(clampedValue);
+            valueLabel.textContent = `${clampedValue} / ${maxValue}`;
+        }
+
         function reindex() {
             const items = Array.from(list.querySelectorAll('.detail-lowongan-item'));
             items.forEach((item, idx) => {
@@ -2356,6 +2399,7 @@
                 const btn = item.querySelector('.btn-remove-lowongan');
                 if (btn) btn.style.display = canRemove ? '' : 'none';
                 updateCompanyItemRemoveButtons(item);
+                syncSasaranSlider(item);
             });
             updateJobPortalCompanyVisibility();
         }
@@ -2392,6 +2436,14 @@
                     updateCompanyItemRemoveButtons(item);
                 }
             }
+        });
+
+        list.addEventListener('input', function (e) {
+            const target = e.target;
+            if (!(target instanceof Element)) return;
+            if (!target.matches('input[name*="[jumlah_kebutuhan]"], .js-sasaran-slider')) return;
+            const item = target.closest('.detail-lowongan-item');
+            syncSasaranSlider(item);
         });
 
         btnAdd.addEventListener('click', addItem);

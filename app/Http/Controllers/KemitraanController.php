@@ -269,6 +269,7 @@ class KemitraanController extends Controller
             'detail_lowongan' => 'required|array|min:1',
             'detail_lowongan.*.jabatan_yang_dibuka' => 'required|string|max:255',
             'detail_lowongan.*.jumlah_kebutuhan' => 'required|integer|min:1|max:1000000',
+            'detail_lowongan.*.sasaran_pemenuhan_walk_in_interview' => 'nullable|integer|min:0|max:1000000',
             'detail_lowongan.*.gender' => 'nullable|string|max:50',
             'detail_lowongan.*.pendidikan_terakhir' => 'nullable|string|max:255',
             'detail_lowongan.*.pengalaman_kerja' => 'nullable|string|max:255',
@@ -369,6 +370,16 @@ class KemitraanController extends Controller
             }
         }
 
+        foreach ($detailLowongan as $idx => $dl) {
+            $jumlahKebutuhan = isset($dl['jumlah_kebutuhan']) ? (int) $dl['jumlah_kebutuhan'] : 0;
+            $sasaranPemenuhan = isset($dl['sasaran_pemenuhan_walk_in_interview']) ? (int) $dl['sasaran_pemenuhan_walk_in_interview'] : 0;
+            if ($sasaranPemenuhan < 0 || $sasaranPemenuhan > $jumlahKebutuhan) {
+                return back()
+                    ->withErrors(["detail_lowongan.$idx.sasaran_pemenuhan_walk_in_interview" => 'Sasaran pemenuhan harus berada di rentang 0 sampai Jumlah Kebutuhan.'])
+                    ->withInput();
+            }
+        }
+
         DB::transaction(function () use ($validated, $roomIds, $facilityIds, $detailLowongan, $isJobPortal) {
             $kemitraan = Kemitraan::create($validated);
 
@@ -394,6 +405,7 @@ class KemitraanController extends Controller
                 $kemitraan->detailLowongan()->create([
                     'jabatan_yang_dibuka' => $dl['jabatan_yang_dibuka'] ?? null,
                     'jumlah_kebutuhan' => isset($dl['jumlah_kebutuhan']) ? (int) $dl['jumlah_kebutuhan'] : null,
+                    'sasaran_pemenuhan_walk_in_interview' => isset($dl['sasaran_pemenuhan_walk_in_interview']) ? (int) $dl['sasaran_pemenuhan_walk_in_interview'] : 0,
                     'gender' => $dl['gender'] ?? null,
                     'pendidikan_terakhir' => $dl['pendidikan_terakhir'] ?? null,
                     'pengalaman_kerja' => $dl['pengalaman_kerja'] ?? null,
