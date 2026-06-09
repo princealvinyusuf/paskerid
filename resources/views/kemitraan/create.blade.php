@@ -1302,7 +1302,7 @@
                                         $sasaranPemenuhanValue = max(0, min((int) ($dl['sasaran_pemenuhan_walk_in_interview'] ?? 0), $jumlahKebutuhanValue));
                                     @endphp
                                     <div class="col-12">
-                                        <label class="form-label" data-for-template="dl___INDEX___sasaran_pemenuhan_walk_in_interview" for="dl_{{ $i }}_sasaran_pemenuhan_walk_in_interview">Sasaran Pemenuhan Kebutuhan Kandidat melalui Walk In Interview ini</label>
+                                        <label class="form-label" data-for-template="dl___INDEX___sasaran_pemenuhan_walk_in_interview" for="dl_{{ $i }}_sasaran_pemenuhan_walk_in_interview">Target Pemenuhan Kebutuhan Kandidat melalui Walk In Interview ini (Jumlah)</label>
                                         <input
                                             type="range"
                                             class="form-range js-sasaran-slider"
@@ -1440,7 +1440,7 @@
                                     <input type="number" class="form-control" id="dl___INDEX___jumlah_kebutuhan" data-id-template="dl___INDEX___jumlah_kebutuhan" name="detail_lowongan[__INDEX__][jumlah_kebutuhan]" data-name-template="detail_lowongan[__INDEX__][jumlah_kebutuhan]" placeholder="Contoh: 10" min="1" required>
                                 </div>
                                 <div class="col-12">
-                                    <label class="form-label" data-for-template="dl___INDEX___sasaran_pemenuhan_walk_in_interview" for="dl___INDEX___sasaran_pemenuhan_walk_in_interview">Sasaran Pemenuhan Kebutuhan Kandidat melalui Walk In Interview ini</label>
+                                    <label class="form-label" data-for-template="dl___INDEX___sasaran_pemenuhan_walk_in_interview" for="dl___INDEX___sasaran_pemenuhan_walk_in_interview">Target Pemenuhan Kebutuhan Kandidat melalui Walk In Interview ini (Jumlah)</label>
                                     <input type="range" class="form-range js-sasaran-slider" id="dl___INDEX___sasaran_pemenuhan_walk_in_interview" data-id-template="dl___INDEX___sasaran_pemenuhan_walk_in_interview" name="detail_lowongan[__INDEX__][sasaran_pemenuhan_walk_in_interview]" data-name-template="detail_lowongan[__INDEX__][sasaran_pemenuhan_walk_in_interview]" min="0" max="0" value="0">
                                     <div class="form-text">Nilai: <span class="js-sasaran-slider-value">0 / 0</span></div>
                                 </div>

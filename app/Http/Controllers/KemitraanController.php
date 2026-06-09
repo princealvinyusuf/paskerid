@@ -375,7 +375,7 @@ class KemitraanController extends Controller
             $sasaranPemenuhan = isset($dl['sasaran_pemenuhan_walk_in_interview']) ? (int) $dl['sasaran_pemenuhan_walk_in_interview'] : 0;
             if ($sasaranPemenuhan < 0 || $sasaranPemenuhan > $jumlahKebutuhan) {
                 return back()
-                    ->withErrors(["detail_lowongan.$idx.sasaran_pemenuhan_walk_in_interview" => 'Sasaran pemenuhan harus berada di rentang 0 sampai Jumlah Kebutuhan.'])
+                    ->withErrors(["detail_lowongan.$idx.sasaran_pemenuhan_walk_in_interview" => 'Target pemenuhan harus berada di rentang 0 sampai Jumlah Kebutuhan.'])
                     ->withInput();
             }
         }
