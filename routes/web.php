@@ -64,6 +64,12 @@ Route::get('kemitraan/under_construction', function() {
     return view('kemitraan.under_construction');
 })->name('kemitraan.underconstruction');
 
+// Program Kemitraan (public)
+Route::get('/program-kemitraan', [App\Http\Controllers\ProgramKemitraanController::class, 'create'])
+    ->name('program-kemitraan.create');
+Route::post('/program-kemitraan', [App\Http\Controllers\ProgramKemitraanController::class, 'store'])
+    ->name('program-kemitraan.store');
+
 
 Route::get('kemitraan/create', [App\Http\Controllers\KemitraanController::class, 'create'])->name('kemitraan.create');
 Route::post('kemitraan', [App\Http\Controllers\KemitraanController::class, 'store'])->name('kemitraan.store');
