@@ -70,12 +70,29 @@ class ProgramKemitraanController extends Controller
         ];
     }
 
+    /**
+     * @return array<int, string>
+     */
+    private function mitraPembangunanTypes(): array
+    {
+        return [
+            'Perusahaan',
+            'Asosiasi/Komunitas',
+            'Lembaga Non-Pemerintah',
+            'Lembaga Pendidikan',
+            'Organisasi Masyarakat',
+            'Persekutuan',
+            'Lainnya',
+        ];
+    }
+
     public function create()
     {
         $businessSectors = $this->businessSectors();
 
         return view('program-kemitraan.create', [
             'institutionCategories' => $this->institutionCategories(),
+            'mitraPembangunanTypes' => $this->mitraPembangunanTypes(),
             'activityTypes' => $this->activityTypes(),
             'businessSectors' => $businessSectors,
         ]);
@@ -91,6 +108,7 @@ class ProgramKemitraanController extends Controller
             'pic_email' => ['required', 'email', 'max:255'],
             'pic_whatsapp' => ['required', 'string', 'max:30'],
             'institution_category' => ['required', Rule::in($this->institutionCategories())],
+            'mitra_pembangunan_type' => ['nullable', 'string', Rule::in($this->mitraPembangunanTypes()), 'required_if:institution_category,' . $mitraCategory],
             'instansi_lembaga_name' => ['required', 'string', 'max:255'],
             'institution_name' => ['required', 'string', 'max:255'],
             'business_sector' => ['nullable', 'string', 'max:255', 'required_if:institution_category,' . $mitraCategory],
@@ -101,6 +119,9 @@ class ProgramKemitraanController extends Controller
 
         $validated['request_letter'] = $request->file('request_letter')->store('program_kemitraan_letters', 'public');
         $validated['status'] = 'pending';
+        if (($validated['institution_category'] ?? '') !== $mitraCategory) {
+            $validated['mitra_pembangunan_type'] = null;
+        }
 
         ProgramKemitraanSubmission::create($validated);
 

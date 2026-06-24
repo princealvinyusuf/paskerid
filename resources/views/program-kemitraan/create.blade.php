@@ -155,6 +155,19 @@
                             </select>
                         </div>
 
+                        <div class="pk-step" id="mitraTypeWrapper" style="{{ old('institution_category') === 'Mitra Pembangunan (Perusahaan/Swasta/Job Portal)' ? '' : 'display:none;' }}">
+                            <label class="form-label pk-step-title"><span class="pk-step-index">5A</span>Jenis Mitra Pembangunan</label>
+                            <small class="d-block text-muted mb-2">(Wajib dipilih jika kategori adalah Mitra Pembangunan)</small>
+                            <select name="mitra_pembangunan_type" id="mitra_pembangunan_type" class="form-select">
+                                <option value="">-- Pilih Jenis Mitra --</option>
+                                @foreach ($mitraPembangunanTypes as $mitraType)
+                                    <option value="{{ $mitraType }}" {{ old('mitra_pembangunan_type') === $mitraType ? 'selected' : '' }}>
+                                        {{ $mitraType }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
                         <div class="pk-step">
                             <label class="form-label pk-step-title"><span class="pk-step-index">6</span>Nama Instansi/Lembaga (Kementerian/Lembaga/Pemerintah Daerah)</label>
                             <small class="d-block text-muted mb-2">(Masukkan nama lengkap instansi/lembaga)</small>
@@ -221,4 +234,28 @@
 @endsection
 
 @section('scripts')
+<script>
+    (function () {
+        var categorySelect = document.getElementById('institution_category');
+        var mitraTypeWrapper = document.getElementById('mitraTypeWrapper');
+        var mitraTypeSelect = document.getElementById('mitra_pembangunan_type');
+        var mitraCategory = 'Mitra Pembangunan (Perusahaan/Swasta/Job Portal)';
+
+        if (!categorySelect || !mitraTypeWrapper || !mitraTypeSelect) {
+            return;
+        }
+
+        function syncMitraTypeVisibility() {
+            var isMitra = categorySelect.value === mitraCategory;
+            mitraTypeWrapper.style.display = isMitra ? '' : 'none';
+            mitraTypeSelect.required = isMitra;
+            if (!isMitra) {
+                mitraTypeSelect.value = '';
+            }
+        }
+
+        categorySelect.addEventListener('change', syncMitraTypeVisibility);
+        syncMitraTypeVisibility();
+    })();
+</script>
 @endsection

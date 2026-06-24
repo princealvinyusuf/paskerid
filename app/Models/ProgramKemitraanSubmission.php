@@ -17,6 +17,7 @@ class ProgramKemitraanSubmission extends Model
         'pic_email',
         'pic_whatsapp',
         'institution_category',
+        'mitra_pembangunan_type',
         'instansi_lembaga_name',
         'institution_name',
         'business_sector',
