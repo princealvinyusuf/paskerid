@@ -169,7 +169,7 @@
                         </div>
 
                         <div class="pk-step">
-                            <label class="form-label pk-step-title"><span class="pk-step-index">6</span>Nama Instansi/Lembaga (Kementerian/Lembaga/Pemerintah Daerah)</label>
+                            <label class="form-label pk-step-title"><span class="pk-step-index">6</span>Nama Instansi/Lembaga (Kementerian/Lembaga/Pemerintah Daerah/Mitra Pembangunan)</label>
                             <small class="d-block text-muted mb-2">(Masukkan nama lengkap instansi/lembaga)</small>
                             <input type="text" name="instansi_lembaga_name" class="form-control" value="{{ old('instansi_lembaga_name') }}" required>
                         </div>
