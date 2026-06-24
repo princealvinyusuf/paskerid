@@ -203,7 +203,7 @@
                             <label class="form-label pk-step-title"><span class="pk-step-index">11</span>Surat Permohonan Kemitraan Pusat Pasar Kerja</label>
                             <small class="d-block text-muted mb-2">(Unduh template surat permohonan, lalu unggah surat yang telah disesuaikan)</small>
                             <div class="mb-2">
-                                <a href="https://drive.google.com/drive/folders/1wZm4htxHuuTynLJXQ__-XiIW_omKrr7S?usp=sharing" class="btn btn-outline-primary btn-sm" target="_blank" rel="noopener noreferrer">
+                                <a href="https://drive.google.com/drive/folders/1N82-qAOrGsttTc_Pkcdz2tc_5txoUrXr?usp=sharing" class="btn btn-outline-primary btn-sm" target="_blank" rel="noopener noreferrer">
                                     Download Template Surat Permohonan
                                 </a>
                             </div>
