@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\ProgramKemitraanSubmission;
-use App\Models\companysector;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -41,12 +40,39 @@ class ProgramKemitraanController extends Controller
         ];
     }
 
+    /**
+     * @return array<int, string>
+     */
+    private function businessSectors(): array
+    {
+        return [
+            'Pertanian, kehutanan, dan Perikanan',
+            'Pertambangan dan Penggalian',
+            'Industri Pengolahan',
+            'Pengadaan Listrik, gas, Uap/Air Panas dan Udara Dingin',
+            'Treatment Air, Treatment Air Limbah, Treatment dan Pemulihan Material Sampah, dan Aktivitas Remediasi',
+            'Konstruksi',
+            'Perdagangan Besar dan Eceran; Reparasi dan Perawatan Mobil dan Sepeda Motor',
+            'Pengangkutan dan Pergudangan',
+            'Penyediaan Akomodasi dan Penyediaan Makan Minum',
+            'Informasi dan Komunikasi',
+            'Aktivitas Keuangan dan Asuransi',
+            'Real Estat',
+            'Aktivitas Profesional, Ilmiah, dan Teknis',
+            'Aktivitas Penyewaan dan Sewa Guna Usaha Tanpa Hak Opsi, Ketenagakerjaan, Agen Perjalanan dan Penunjang Usaha Lainnya',
+            'Administrasi Pemerintahan, Pertahanan, dan Jaminan Sosial Wajib',
+            'Pendidikan',
+            'Aktivitas Kesehatan Manusia dan Aktivitas Sosial',
+            'Kesenian, Hiburan, dan Rekreasi',
+            'Aktivitas Jasa Lainnya',
+            'Aktivitas Rumah Tangga sebagai Pemberi kerja; Aktivitas yang Menghasilkan Barang dan Jasa oleh Rumah Tangga yang digunakan untuk Memenuhi Kebutuhan Sendiri',
+            'Aktivitas Badan Internasional dan Badan Ekstra Internasional Lainnya',
+        ];
+    }
+
     public function create()
     {
-        $businessSectors = companysector::query()
-            ->orderBy('sector_name')
-            ->pluck('sector_name')
-            ->toArray();
+        $businessSectors = $this->businessSectors();
 
         return view('program-kemitraan.create', [
             'institutionCategories' => $this->institutionCategories(),
