@@ -86,6 +86,20 @@
         padding-left: 1.1rem;
         color: #4b5563;
     }
+    .pk-step .form-control::placeholder,
+    .pk-step textarea::placeholder {
+        color: #94a3b8;
+        font-style: italic;
+    }
+    .pk-step-required {
+        color: #dc2626;
+        font-weight: 700;
+        margin-left: 0.2rem;
+    }
+    .pk-submit[disabled] {
+        opacity: 0.8;
+        cursor: wait;
+    }
 </style>
 @endsection
 
@@ -119,31 +133,31 @@
                         @csrf
 
                         <div class="pk-step">
-                            <label class="form-label pk-step-title"><span class="pk-step-index">1</span>Nama Penanggung Jawab (PIC)</label>
+                            <label class="form-label pk-step-title"><span class="pk-step-index">1</span>Nama Penanggung Jawab (PIC)<span class="pk-step-required">*</span></label>
                             <small class="d-block text-muted mb-2">(Masukkan nama lengkap pihak penanggung jawab)</small>
-                            <input type="text" name="pic_name" class="form-control" value="{{ old('pic_name') }}" required>
+                            <input type="text" name="pic_name" class="form-control" value="{{ old('pic_name') }}" placeholder="Contoh: Budi Santoso" required>
                         </div>
 
                         <div class="pk-step">
-                            <label class="form-label pk-step-title"><span class="pk-step-index">2</span>Jabatan Penanggung Jawab</label>
+                            <label class="form-label pk-step-title"><span class="pk-step-index">2</span>Jabatan Penanggung Jawab<span class="pk-step-required">*</span></label>
                             <small class="d-block text-muted mb-2">(Tuliskan jabatan PIC pada instansi)</small>
-                            <input type="text" name="pic_position" class="form-control" value="{{ old('pic_position') }}" required>
+                            <input type="text" name="pic_position" class="form-control" value="{{ old('pic_position') }}" placeholder="Contoh: Manajer HRD" required>
                         </div>
 
                         <div class="pk-step">
-                            <label class="form-label pk-step-title"><span class="pk-step-index">3</span>Alamat Email Instansi</label>
+                            <label class="form-label pk-step-title"><span class="pk-step-index">3</span>Alamat Email Instansi<span class="pk-step-required">*</span></label>
                             <small class="d-block text-muted mb-2">(Pastikan email aktif untuk keperluan komunikasi)</small>
-                            <input type="email" name="pic_email" class="form-control" value="{{ old('pic_email') }}" required>
+                            <input type="email" name="pic_email" class="form-control" value="{{ old('pic_email') }}" placeholder="Contoh: hrd@instansi.go.id" required>
                         </div>
 
                         <div class="pk-step">
-                            <label class="form-label pk-step-title"><span class="pk-step-index">4</span>Nomor WhatsApp Aktif</label>
+                            <label class="form-label pk-step-title"><span class="pk-step-index">4</span>Nomor WhatsApp Aktif<span class="pk-step-required">*</span></label>
                             <small class="d-block text-muted mb-2">(Pastikan nomor WhatsApp aktif untuk keperluan komunikasi)</small>
-                            <input type="text" name="pic_whatsapp" class="form-control" value="{{ old('pic_whatsapp') }}" required>
+                            <input type="text" name="pic_whatsapp" class="form-control" value="{{ old('pic_whatsapp') }}" placeholder="Contoh: 081234567890" required>
                         </div>
 
                         <div class="pk-step">
-                            <label class="form-label pk-step-title"><span class="pk-step-index">5</span>Kategori/Sektor Instansi</label>
+                            <label class="form-label pk-step-title"><span class="pk-step-index">5</span>Kategori/Sektor Instansi<span class="pk-step-required">*</span></label>
                             <small class="d-block text-muted mb-2">(Pilih salah satu yang sesuai)</small>
                             <select name="institution_category" id="institution_category" class="form-select" required>
                                 <option value="">-- Pilih Kategori/Sektor Instansi --</option>
@@ -156,7 +170,7 @@
                         </div>
 
                         <div class="pk-step" id="mitraTypeWrapper" style="{{ old('institution_category') === 'Mitra Pembangunan (Perusahaan/Swasta/Job Portal)' ? '' : 'display:none;' }}">
-                            <label class="form-label pk-step-title"><span class="pk-step-index">5A</span>Jenis Mitra Pembangunan</label>
+                            <label class="form-label pk-step-title"><span class="pk-step-index">6</span>Jenis Mitra Pembangunan<span class="pk-step-required">*</span></label>
                             <small class="d-block text-muted mb-2">(Wajib dipilih jika kategori adalah Mitra Pembangunan)</small>
                             <select name="mitra_pembangunan_type" id="mitra_pembangunan_type" class="form-select">
                                 <option value="">-- Pilih Jenis Mitra --</option>
@@ -169,9 +183,9 @@
                         </div>
 
                         <div class="pk-step">
-                            <label class="form-label pk-step-title"><span class="pk-step-index">6</span>Nama Instansi/Lembaga (Kementerian/Lembaga/Pemerintah Daerah/Mitra Pembangunan)</label>
+                            <label class="form-label pk-step-title"><span class="pk-step-index">7</span>Nama Instansi/Lembaga (Kementerian/Lembaga/Pemerintah Daerah/Mitra Pembangunan)<span class="pk-step-required">*</span></label>
                             <small class="d-block text-muted mb-2">(Masukkan nama lengkap instansi/lembaga)</small>
-                            <input type="text" name="instansi_lembaga_name" class="form-control" value="{{ old('instansi_lembaga_name') }}" required>
+                            <input type="text" name="instansi_lembaga_name" class="form-control" value="{{ old('instansi_lembaga_name') }}" placeholder="Contoh: Dinas Ketenagakerjaan Kota Bandung" required>
                         </div>
 
                         <div class="pk-step" id="businessSectorWrapper">
@@ -188,13 +202,13 @@
                         </div>
 
                         <div class="pk-step">
-                            <label class="form-label pk-step-title"><span class="pk-step-index">9</span>Alamat Instansi/Lembaga/Perusahaan/Mitra Pembangunan</label>
+                            <label class="form-label pk-step-title"><span class="pk-step-index">9</span>Alamat Instansi/Lembaga/Perusahaan/Mitra Pembangunan<span class="pk-step-required">*</span></label>
                             <small class="d-block text-muted mb-2">(Cantumkan alamat lengkap atau wilayah domisili kegiatan)</small>
-                            <textarea name="institution_address" class="form-control" rows="3" required>{{ old('institution_address') }}</textarea>
+                            <textarea name="institution_address" class="form-control" rows="3" placeholder="Contoh: Jl. Gatot Subroto No. 44, Jakarta Selatan" required>{{ old('institution_address') }}</textarea>
                         </div>
 
                         <div class="pk-step">
-                            <label class="form-label pk-step-title"><span class="pk-step-index">10</span>Jenis Kegiatan yang Diajukan</label>
+                            <label class="form-label pk-step-title"><span class="pk-step-index">10</span>Jenis Kegiatan yang Diajukan<span class="pk-step-required">*</span></label>
                             <small class="d-block text-muted mb-2">(Pilih salah satu jenis kegiatan yang ingin diajukan)</small>
                             <select name="proposed_activity_type" class="form-select" required>
                                 <option value="">-- Pilih Jenis Kegiatan --</option>
@@ -207,7 +221,7 @@
                         </div>
 
                         <div class="pk-step mb-4">
-                            <label class="form-label pk-step-title"><span class="pk-step-index">11</span>Surat Permohonan Kemitraan Pusat Pasar Kerja</label>
+                            <label class="form-label pk-step-title"><span class="pk-step-index">11</span>Surat Permohonan Kemitraan Pusat Pasar Kerja<span class="pk-step-required">*</span></label>
                             <small class="d-block text-muted mb-2">(Unduh template surat permohonan, lalu unggah surat yang telah disesuaikan)</small>
                             <div class="mb-2">
                                 <a href="https://drive.google.com/drive/folders/1N82-qAOrGsttTc_Pkcdz2tc_5txoUrXr?usp=sharing" class="btn btn-outline-primary btn-sm" target="_blank" rel="noopener noreferrer">
@@ -218,7 +232,7 @@
                             <small class="text-muted">Format file: PDF/DOC/DOCX (maksimal 5MB)</small>
                         </div>
 
-                        <button type="submit" class="btn btn-primary w-100 pk-submit">Kirim Pengajuan</button>
+                        <button type="submit" class="btn btn-primary w-100 pk-submit" id="pkSubmitBtn">Kirim Pengajuan</button>
                     </form>
                 </div>
             </div>
@@ -230,6 +244,8 @@
 @section('scripts')
 <script>
     (function () {
+        var form = document.getElementById('programKemitraanForm');
+        var submitBtn = document.getElementById('pkSubmitBtn');
         var categorySelect = document.getElementById('institution_category');
         var mitraTypeWrapper = document.getElementById('mitraTypeWrapper');
         var mitraTypeSelect = document.getElementById('mitra_pembangunan_type');
@@ -246,10 +262,34 @@
             if (!isMitra) {
                 mitraTypeSelect.value = '';
             }
+            renumberVisibleSteps();
+        }
+
+        function renumberVisibleSteps() {
+            var visibleSteps = Array.prototype.filter.call(
+                document.querySelectorAll('.pk-step'),
+                function (step) {
+                    return step.style.display !== 'none';
+                }
+            );
+
+            visibleSteps.forEach(function (step, idx) {
+                var badge = step.querySelector('.pk-step-index');
+                if (badge) {
+                    badge.textContent = String(idx + 1);
+                }
+            });
         }
 
         categorySelect.addEventListener('change', syncMitraTypeVisibility);
         syncMitraTypeVisibility();
+
+        if (form && submitBtn) {
+            form.addEventListener('submit', function () {
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = 'Mengirim pengajuan...';
+            });
+        }
     })();
 </script>
 @endsection
