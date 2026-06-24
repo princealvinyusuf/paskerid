@@ -194,7 +194,7 @@
                         </div>
 
                         <div class="pk-step">
-                            <label class="form-label pk-step-title"><span class="pk-step-index">9</span>Alamat Instansi/Lembaga/Perusahaan</label>
+                            <label class="form-label pk-step-title"><span class="pk-step-index">9</span>Alamat Instansi/Lembaga/Perusahaan/Mitra Pembangunan</label>
                             <small class="d-block text-muted mb-2">(Cantumkan alamat lengkap atau wilayah domisili kegiatan)</small>
                             <textarea name="institution_address" class="form-control" rows="3" required>{{ old('institution_address') }}</textarea>
                         </div>
