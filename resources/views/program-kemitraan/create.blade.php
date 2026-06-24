@@ -167,9 +167,9 @@
                             <input type="text" name="institution_name" class="form-control" value="{{ old('institution_name') }}" required>
                         </div>
 
-                        <div class="pk-step" id="businessSectorWrapper" style="{{ old('institution_category') === 'Mitra Pembangunan (Perusahaan/Swasta/Job Portal)' ? '' : 'display:none;' }}">
+                        <div class="pk-step" id="businessSectorWrapper">
                             <label class="form-label pk-step-title"><span class="pk-step-index">8</span>Sektor Lapangan Usaha</label>
-                            <small class="d-block text-muted mb-2">(Muncul untuk Mitra Pembangunan)</small>
+                            <small class="d-block text-muted mb-2">(Pilih sektor yang paling sesuai)</small>
                             <select name="business_sector" class="form-select" id="business_sector">
                                 <option value="">-- Pilih Sektor Lapangan Usaha --</option>
                                 @foreach ($businessSectors as $sector)
@@ -221,27 +221,4 @@
 @endsection
 
 @section('scripts')
-<script>
-    (function () {
-        var categorySelect = document.getElementById('institution_category');
-        var businessSectorWrapper = document.getElementById('businessSectorWrapper');
-        var businessSectorInput = document.getElementById('business_sector');
-        var mitraPembangunan = 'Mitra Pembangunan (Perusahaan/Swasta/Job Portal)';
-
-        if (!categorySelect || !businessSectorWrapper || !businessSectorInput) {
-            return;
-        }
-
-        function toggleBusinessSector() {
-            var shouldShow = categorySelect.value === mitraPembangunan;
-            businessSectorWrapper.style.display = shouldShow ? '' : 'none';
-            if (!shouldShow) {
-                businessSectorInput.value = '';
-            }
-        }
-
-        categorySelect.addEventListener('change', toggleBusinessSector);
-        toggleBusinessSector();
-    })();
-</script>
 @endsection
