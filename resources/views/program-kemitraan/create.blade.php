@@ -174,12 +174,6 @@
                             <input type="text" name="instansi_lembaga_name" class="form-control" value="{{ old('instansi_lembaga_name') }}" required>
                         </div>
 
-                        <div class="pk-step">
-                            <label class="form-label pk-step-title"><span class="pk-step-index">7</span>Nama Instansi</label>
-                            <small class="d-block text-muted mb-2">(Masukkan nama lengkap instansi)</small>
-                            <input type="text" name="institution_name" class="form-control" value="{{ old('institution_name') }}" required>
-                        </div>
-
                         <div class="pk-step" id="businessSectorWrapper">
                             <label class="form-label pk-step-title"><span class="pk-step-index">8</span>Sektor Lapangan Usaha</label>
                             <small class="d-block text-muted mb-2">(Pilih sektor yang paling sesuai)</small>

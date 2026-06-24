@@ -110,13 +110,14 @@ class ProgramKemitraanController extends Controller
             'institution_category' => ['required', Rule::in($this->institutionCategories())],
             'mitra_pembangunan_type' => ['nullable', 'string', Rule::in($this->mitraPembangunanTypes()), 'required_if:institution_category,' . $mitraCategory],
             'instansi_lembaga_name' => ['required', 'string', 'max:255'],
-            'institution_name' => ['required', 'string', 'max:255'],
             'business_sector' => ['nullable', 'string', 'max:255', 'required_if:institution_category,' . $mitraCategory],
             'institution_address' => ['required', 'string', 'max:2000'],
             'proposed_activity_type' => ['required', Rule::in($this->activityTypes())],
             'request_letter' => ['required', 'file', 'mimes:pdf,doc,docx', 'max:5120'],
         ]);
 
+        // Keep legacy `institution_name` populated for existing schema/admin consumers.
+        $validated['institution_name'] = (string) ($validated['instansi_lembaga_name'] ?? '');
         $validated['request_letter'] = $request->file('request_letter')->store('program_kemitraan_letters', 'public');
         $validated['status'] = 'pending';
         if (($validated['institution_category'] ?? '') !== $mitraCategory) {
