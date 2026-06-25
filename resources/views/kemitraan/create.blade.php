@@ -170,6 +170,7 @@
                                         <th style="width: 160px;">Tanggal</th>
                                         <th style="min-width: 360px;">Kegiatan</th>
                                         <th>Deskripsi</th>
+                                        <th style="min-width: 220px;">Jabatan Yang Dibuka</th>
                                         <th style="width: 210px;">Informasi Lainnya</th>
                                     </tr>
                                 </thead>
@@ -204,6 +205,11 @@
                                                         $infoItems = [$legacyInfo];
                                                     }
                                                 }
+                                                $jabatanItems = collect((array)($agenda->jabatan_dibuka ?? []))
+                                                    ->map(static fn ($item) => trim((string) $item))
+                                                    ->filter(static fn ($item) => $item !== '')
+                                                    ->unique()
+                                                    ->values();
                                             @endphp
                                             <tr class="{{ $rowClass }}">
                                                 <td class="fw-semibold">
@@ -227,12 +233,20 @@
                                                             data-location="{{ e($agenda->location) }}"
                                                             data-registration="{{ $agenda->registration_url }}"
                                                             data-info-lainnya='@json($infoItems)'
+                                                            data-jabatan="{{ e($jabatanItems->implode(', ')) }}"
                                                             data-description="{{ e($agenda->description) }}"
                                                         >Detail</button>
                                                         @if($isToday)
                                                             <span class="badge text-bg-success">Sedang Berlangsung</span>
                                                         @endif
                                                     </div>
+                                                </td>
+                                                <td>
+                                                    @if($jabatanItems->isEmpty())
+                                                        <span class="text-muted">-</span>
+                                                    @else
+                                                        <div class="small">{{ $jabatanItems->implode(', ') }}</div>
+                                                    @endif
                                                 </td>
                                                 <td>
                                                     @if(empty($infoItems))
@@ -265,7 +279,7 @@
                                         @endforeach
                                     @else
                                         <tr>
-                                            <td colspan="4" class="text-center text-muted py-4">
+                                            <td colspan="5" class="text-center text-muted py-4">
                                                 <i class="fas fa-calendar-times fa-2x mb-2"></i><br>
                                                 Belum ada jadwal Walk In yang tersedia.
                                             </td>
@@ -1792,6 +1806,7 @@
                                                         <th style="width:160px">Tanggal</th>
                                                         <th style="min-width:360px">Kegiatan</th>
                                                         <th>Deskripsi</th>
+                                                        <th style="min-width:220px">Jabatan Yang Dibuka</th>
                                                         <th style="width: 210px;">Informasi Lainnya</th>
                                                     </tr>
                                                 </thead>
@@ -1829,6 +1844,7 @@
                             <th style="width: 160px;">Tanggal</th>
                             <th style="min-width: 360px;">Kegiatan</th>
                             <th>Deskripsi</th>
+                            <th style="min-width: 220px;">Jabatan Yang Dibuka</th>
                             <th style="width: 210px;">Informasi Lainnya</th>
                         </tr>
                     </thead>
@@ -1849,6 +1865,11 @@
                                             $infoItems = [$legacyInfo];
                                         }
                                     }
+                                    $jabatanItems = collect((array)($agenda->jabatan_dibuka ?? []))
+                                        ->map(static fn ($item) => trim((string) $item))
+                                        ->filter(static fn ($item) => $item !== '')
+                                        ->unique()
+                                        ->values();
                                 @endphp
                                 <tr class="{{ $idx % 2 === 1 ? 'walkin-schedule-odd' : '' }}">
                                     <td class="fw-semibold">
@@ -1871,8 +1892,16 @@
                                             data-location="{{ e($agenda->location) }}"
                                             data-registration="{{ $agenda->registration_url }}"
                                             data-info-lainnya='@json($infoItems)'
+                                            data-jabatan="{{ e($jabatanItems->implode(', ')) }}"
                                             data-description="{{ e($agenda->description) }}"
                                         >Detail</button>
+                                    </td>
+                                    <td>
+                                        @if($jabatanItems->isEmpty())
+                                            <span class="text-muted">-</span>
+                                        @else
+                                            <div class="small">{{ $jabatanItems->implode(', ') }}</div>
+                                        @endif
                                     </td>
                                     <td>
                                         @if(empty($infoItems))
@@ -1905,7 +1934,7 @@
                             @endforeach
                         @else
                             <tr>
-                                <td colspan="4" class="text-center text-muted py-4">
+                                <td colspan="5" class="text-center text-muted py-4">
                                     Belum ada data Walk In terdahulu.
                                 </td>
                             </tr>
@@ -1945,6 +1974,13 @@
                     <div>
                         <div class="small text-muted">Fasilitas</div>
                         <div class="fw-semibold" id="agendaModalLocation"></div>
+                    </div>
+                </div>
+                <div class="walkin-agenda-meta-item">
+                    <i class="fa fa-briefcase"></i>
+                    <div>
+                        <div class="small text-muted">Jabatan Yang Dibuka</div>
+                        <div class="fw-semibold" id="agendaModalJabatan"></div>
                     </div>
                 </div>
             </div>
@@ -3513,6 +3549,7 @@
             document.getElementById('agendaModalOrganizer').textContent = button.getAttribute('data-organizer') || '';
             document.getElementById('agendaModalDate').textContent = button.getAttribute('data-date') || '';
             document.getElementById('agendaModalLocation').textContent = button.getAttribute('data-location') || '';
+            document.getElementById('agendaModalJabatan').textContent = button.getAttribute('data-jabatan') || '-';
             const regUrl = button.getAttribute('data-registration');
             const infoRawAttr = button.getAttribute('data-info-lainnya') || '[]';
             let infoLainnyaItems = [];
@@ -4009,6 +4046,10 @@
                 const isToday = !!dateStart && !!dateFinish && dateStart <= todayYmd && todayYmd <= dateFinish;
                 const { dayMonth, year } = formatDateParts(dateStart);
                 const { dayMonth: dayMonthFinish } = formatDateParts(dateFinish);
+                const jabatanItems = Array.isArray(a.jabatan_dibuka)
+                    ? a.jabatan_dibuka.map((v) => String(v || '').trim()).filter(Boolean)
+                    : [];
+                const jabatanText = jabatanItems.length ? jabatanItems.join(', ') : '-';
                 const modalDate = isRangeDate
                     ? `${formatLongDate(dateStart)} s/d ${formatLongDate(dateFinish)}`
                     : formatLongDate(dateStart);
@@ -4034,11 +4075,13 @@
                                 data-location="${escapeHtml(a.location || '')}"
                                 data-registration="${escapeHtml(a.registration_url || '')}"
                                 data-info-lainnya='${escapeHtml(JSON.stringify(infoItems))}'
+                                data-jabatan="${escapeHtml(jabatanText)}"
                                 data-description="${escapeHtml(a.description || '')}"
                             >Detail</button>
                             ${isToday ? `<span class="badge text-bg-success">Sedang Berlangsung</span>` : (isUpcoming ? `<span class="badge text-bg-primary">Akan datang</span>` : `<span class="badge text-bg-secondary">Terdahulu</span>`)}
                         </div>
                     </td>
+                    <td>${escapeHtml(jabatanText)}</td>
                     <td>${infoCellHtml}</td>
                 `;
                 scheduleBodyEl.appendChild(tr);

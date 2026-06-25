@@ -588,6 +588,7 @@ class KemitraanController extends Controller
         $base = BookedDate::with([
             'kemitraan.typeOfPartnership',
             'kemitraan.rooms',
+            'kemitraan.detailLowongan',
             'kemitraan.facilities',
             'typeOfPartnership'
         ])->whereHas('kemitraan', function ($q) use ($keywords) {
@@ -761,6 +762,7 @@ class KemitraanController extends Controller
         $query = BookedDate::with([
             'kemitraan.typeOfPartnership',
             'kemitraan.rooms',
+            'kemitraan.detailLowongan',
             'kemitraan.facilities',
             'typeOfPartnership'
         ])->whereHas('kemitraan', function ($q) {
@@ -866,6 +868,13 @@ class KemitraanController extends Controller
             : ($kemitraan->other_pasker_facility ?? '-');
 
         $location = trim($roomNames . ($facilityNames !== '-' ? ' - ' . $facilityNames : ''), ' -');
+        $jabatanDibuka = $kemitraan->detailLowongan
+            ->pluck('jabatan_yang_dibuka')
+            ->filter(static fn ($value) => trim((string) $value) !== '')
+            ->map(static fn ($value) => trim((string) $value))
+            ->unique()
+            ->values()
+            ->all();
 
         $timeInfo = '';
         if ($hasTimeRange) {
@@ -890,6 +899,7 @@ class KemitraanController extends Controller
             'description' => ($kemitraan->institution_name ?? '')
                 . ($timeInfo ? ' (' . $timeInfo . ')' : '')
                 . ($location && $location !== '-' ? ' - Lokasi: ' . $location : ''),
+            'jabatan_dibuka' => $jabatanDibuka,
             'date' => $dateStr,
             'date_start' => $dateStr,
             'date_finish' => $dateFinishStr,
