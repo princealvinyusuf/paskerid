@@ -1568,12 +1568,7 @@
 }
 
 .home-ocean-theme .home-ocean-banner {
-    background: linear-gradient(
-        120deg,
-        rgba(15, 95, 168, 0.96) 0%,
-        rgba(47, 159, 232, 0.95) 48%,
-        rgba(0, 163, 138, 0.9) 100%
-    ) !important;
+    background: #FC6C85 !important;
     border: 1px solid rgba(255, 255, 255, 0.28);
     box-shadow: 0 14px 34px rgba(15, 23, 42, 0.16);
 }
