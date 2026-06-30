@@ -1571,8 +1571,8 @@
     background: linear-gradient(
         120deg,
         #fc6c85 0%,
-        #ff7f9a 52%,
-        #ff9bb1 100%
+        #e83f6f 45%,
+        #b51757 100%
     ) !important;
     border: 1px solid rgba(255, 255, 255, 0.28);
     box-shadow: 0 14px 34px rgba(15, 23, 42, 0.16);
