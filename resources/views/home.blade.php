@@ -168,9 +168,6 @@
                 <div class="container-fluid px-2 px-sm-3">
                     <div class="row align-items-center">
                         <div class="col-md-4 mb-4 mb-md-0">
-                            <a href="https://karirhub.kemnaker.go.id/" target="_blank">
-                                <img src="{{ asset('images/services/karirhub_logo.png') }}" alt="Karirhub" class="img-fluid" style="max-height: 50px;">
-                            </a>
                             <h2 class="fw-bold d-flex align-items-center flex-wrap gap-2" style="font-size:3rem;">
                                 <span>Informasi bersumber dari</span>
                                 <span class="thelogo-wrapper">
