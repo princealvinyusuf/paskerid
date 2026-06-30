@@ -171,7 +171,12 @@
                             <a href="https://karirhub.kemnaker.go.id/" target="_blank">
                                 <img src="{{ asset('images/services/karirhub_logo.png') }}" alt="Karirhub" class="img-fluid" style="max-height: 50px;">
                             </a>
-                            <h2 class="fw-bold" style="font-size:3rem;">Informasi bersumber dari Karirhub</h2>
+                            <h2 class="fw-bold d-flex align-items-center flex-wrap gap-2" style="font-size:3rem;">
+                                <span>Informasi bersumber dari</span>
+                                <span class="thelogo-wrapper">
+                                    <img src="{{ asset('images/services/karirhub_logo.png') }}" alt="Karirhub" class="img-fluid thelogo-inline">
+                                </span>
+                            </h2>
                         </div>
                         <div class="col-md-8 position-relative">
                             <div class="d-flex align-items-center position-relative">
@@ -1585,6 +1590,11 @@
         #e83f6f 45%,
         #b51757 100%
     ) !important;
+}
+
+.home-ocean-theme .thelogo-inline {
+    max-height: 48px;
+    width: auto;
 }
 
 .contrib-card-v3 {
