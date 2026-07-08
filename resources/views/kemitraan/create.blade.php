@@ -964,11 +964,10 @@
                         <div class="walkin-panel p-3 p-md-4 mb-3 survey-important-note">
                             <p class="mb-1 fw-semibold"><i class="bi bi-exclamation-triangle-fill me-1"></i>Cara menuliskan pendapat Bapak/Ibu/Saudara/Saudari pada pertanyaan di bawah ini adalah dengan memberikan pilihan jawaban setiap pernyataan yang tersedia, serta berikan komentar.</p>
                             <div class="mb-0">
-                                <div>1 = Sangat buruk</div>
+                                <div>1 = Sangat Buruk</div>
                                 <div>2 = Buruk</div>
-                                <div>3 = Cukup</div>
-                                <div>4 = Baik</div>
-                                <div>5 = Sangat Baik</div>
+                                <div>3 = Baik</div>
+                                <div>4 = Sangat Baik</div>
                             </div>
                         </div>
 
@@ -983,7 +982,7 @@
                             <div class="walkin-panel p-3 p-md-4 mb-3">
                                 <div class="form-label">{{ $block['title'] }} <span class="text-danger">*</span></div>
                                 <div class="d-flex flex-wrap gap-2 survey-rating-group">
-                                    @for($n = 1; $n <= 5; $n++)
+                                    @for($n = 1; $n <= 4; $n++)
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="survey_rating_{{ $block['key'] }}" id="survey_rating_{{ $block['key'] }}_{{ $n }}" value="{{ $n }}" required>
                                             <label class="form-check-label" for="survey_rating_{{ $block['key'] }}_{{ $n }}">{{ $n }}</label>
@@ -1008,7 +1007,7 @@
                             <div class="walkin-panel p-3 p-md-4 mb-3">
                                 <div class="form-label">{{ $block['title'] }} <span class="text-danger">*</span></div>
                                 <div class="d-flex flex-wrap gap-2 survey-rating-group">
-                                    @for($n = 1; $n <= 5; $n++)
+                                    @for($n = 1; $n <= 4; $n++)
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="survey_rating_{{ $block['key'] }}" id="survey_rating_{{ $block['key'] }}_{{ $n }}" value="{{ $n }}" required>
                                             <label class="form-check-label" for="survey_rating_{{ $block['key'] }}_{{ $n }}">{{ $n }}</label>
@@ -1027,7 +1026,7 @@
                             <div class="mb-3">Apakah informasi yang diberikan mudah dipahami?</div>
                             <div class="d-inline-block">
                                 <div class="d-flex flex-wrap gap-2 survey-rating-group">
-                                    @for($n = 1; $n <= 5; $n++)
+                                    @for($n = 1; $n <= 4; $n++)
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="survey_rating_information_clarity" id="survey_rating_information_clarity_{{ $n }}" value="{{ $n }}" required>
                                             <label class="form-check-label" for="survey_rating_information_clarity_{{ $n }}">{{ $n }}</label>
@@ -1061,7 +1060,7 @@
                         <div class="walkin-panel p-3 p-md-4 mb-3">
                             <div class="form-label">Seberapa Puas Anda Terhadap Penyelenggaraan <em>Walk in Interview</em> <span class="text-danger">*</span></div>
                             <div class="d-flex flex-wrap gap-2 survey-rating-group">
-                                @for($n = 1; $n <= 5; $n++)
+                                @for($n = 1; $n <= 4; $n++)
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" name="survey_rating_satisfaction" id="survey_rating_satisfaction_{{ $n }}" value="{{ $n }}" required>
                                         <label class="form-check-label" for="survey_rating_satisfaction_{{ $n }}">{{ $n }}</label>
