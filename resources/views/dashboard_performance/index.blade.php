@@ -2,6 +2,8 @@
 
 @section('content')
 <div class="container my-5">
+    @include('dashboard.navigation')
+
     <h2>Dashboard Struktur Ketenagakerjaan</h2>
     @if($dashboard)
         {!! $dashboard->iframe_code !!}

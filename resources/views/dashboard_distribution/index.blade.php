@@ -2,6 +2,8 @@
 
 @section('content')
 <div class="container my-5">
+    @include('dashboard.navigation')
+
     <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
         <h2 class="mb-0">Dashboard Persediaan Tenaga Kerja</h2>
         <div class="d-flex gap-2 d-none">
