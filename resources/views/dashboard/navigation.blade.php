@@ -48,6 +48,15 @@
         pointer-events: none;
     }
 
+    .dashboard-floating-nav-shell.is-collapsed {
+        width: 0;
+    }
+
+    .dashboard-floating-nav-shell.is-collapsed .dashboard-floating-nav-toggle {
+        left: auto;
+        right: 0;
+    }
+
     .dashboard-floating-nav-shell.is-collapsed .dashboard-floating-nav-toggle i {
         transform: rotate(180deg);
     }
@@ -107,6 +116,11 @@
 
         .dashboard-floating-nav-toggle {
             left: -14px;
+        }
+
+        .dashboard-floating-nav-shell.is-collapsed {
+            left: auto;
+            right: 0.75rem;
         }
     }
 </style>
