@@ -170,7 +170,6 @@
     (function () {
         const shell = document.getElementById('dashboardFloatingNavShell');
         const toggle = document.getElementById('dashboardFloatingNavToggle');
-        const storageKey = 'dashboard_nav_collapsed';
 
         if (!shell || !toggle) {
             return;
@@ -182,13 +181,11 @@
             toggle.setAttribute('aria-label', isCollapsed ? 'Show dashboard navigation' : 'Hide dashboard navigation');
         };
 
-        const savedCollapsed = localStorage.getItem(storageKey) === '1';
-        applyCollapsedState(savedCollapsed);
+        applyCollapsedState(false);
 
         toggle.addEventListener('click', function () {
             const collapsed = !shell.classList.contains('is-collapsed');
             applyCollapsedState(collapsed);
-            localStorage.setItem(storageKey, collapsed ? '1' : '0');
         });
     })();
 </script>
