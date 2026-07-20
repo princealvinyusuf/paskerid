@@ -42,6 +42,7 @@ class WalkinGalleryController extends Controller
                     'media_path',
                     'thumbnail_path',
                     'embed_thumbnail_url',
+                    'sort_order',
                     'created_at',
                 ]);
 
@@ -58,10 +59,14 @@ class WalkinGalleryController extends Controller
                         'cover_thumbnail_path' => null,
                         'cover_embed_thumbnail_url' => null,
                         'latest_at' => null,
+                        'sort_order' => null,
                     ];
                 }
                 $companiesMap[$name]['count']++;
                 $companiesMap[$name]['latest_at'] = $companiesMap[$name]['latest_at'] ?: $it->created_at;
+                if ($companiesMap[$name]['sort_order'] === null && $it->sort_order !== null) {
+                    $companiesMap[$name]['sort_order'] = (int) $it->sort_order;
+                }
 
                 // pick first good cover
                 if ($companiesMap[$name]['cover_type'] === null) {
@@ -75,10 +80,19 @@ class WalkinGalleryController extends Controller
             $companies = array_values($companiesMap);
 
             usort($companies, function ($a, $b) {
-                // sort by count desc then name asc
-                if (($b['count'] ?? 0) !== ($a['count'] ?? 0)) {
-                    return ($b['count'] ?? 0) <=> ($a['count'] ?? 0);
+                // Respect admin sort order first, then fallback by name.
+                $aSort = $a['sort_order'] ?? null;
+                $bSort = $b['sort_order'] ?? null;
+                $aHasSort = $aSort !== null;
+                $bHasSort = $bSort !== null;
+
+                if ($aHasSort && $bHasSort && $aSort !== $bSort) {
+                    return $aSort <=> $bSort;
                 }
+                if ($aHasSort !== $bHasSort) {
+                    return $aHasSort ? -1 : 1;
+                }
+
                 return strcmp((string) $a['company_name'], (string) $b['company_name']);
             });
 
