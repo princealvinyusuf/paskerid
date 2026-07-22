@@ -48,6 +48,7 @@ class WalkInSurveyResponse extends Model
         'feedback_access_info',
         'rating_information_clarity',
         'rating_service_integrity',
+        'service_integrity_detail',
         'rating_satisfaction',
         'improvement_aspects',
         'feedback_improvement_aspects',

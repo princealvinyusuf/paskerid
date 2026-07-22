@@ -1055,6 +1055,16 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="mt-3 d-none" id="survey_service_integrity_detail_wrap">
+                                <label class="form-label" for="survey_service_integrity_detail">Jelaskan Kronologi Pengutan Liar / Praktik Tidak Wajar Yang Dimaksud <span class="text-danger">*</span></label>
+                                <textarea
+                                    class="form-control"
+                                    id="survey_service_integrity_detail"
+                                    name="survey_service_integrity_detail"
+                                    rows="3"
+                                    placeholder="Tuliskan kronologi secara singkat dan jelas"
+                                >{{ old('survey_service_integrity_detail') }}</textarea>
+                            </div>
                         </div>
 
                         <div class="walkin-panel p-3 p-md-4 mb-3">
@@ -3535,6 +3545,29 @@
 
         companySelect.addEventListener('change', syncInitiator);
         syncInitiator();
+    })();
+
+    // Survey: show chronology field when service integrity = Ya
+    (function () {
+        const yesRadio = document.getElementById('survey_rating_service_integrity_ya');
+        const noRadio = document.getElementById('survey_rating_service_integrity_tidak');
+        const detailWrap = document.getElementById('survey_service_integrity_detail_wrap');
+        const detailInput = document.getElementById('survey_service_integrity_detail');
+        if (!yesRadio || !noRadio || !detailWrap || !detailInput) return;
+
+        function syncServiceIntegrityDetail() {
+            const shouldShow = yesRadio.checked;
+            detailWrap.classList.toggle('d-none', !shouldShow);
+            detailInput.required = shouldShow;
+
+            if (!shouldShow) {
+                detailInput.value = '';
+            }
+        }
+
+        yesRadio.addEventListener('change', syncServiceIntegrityDetail);
+        noRadio.addEventListener('change', syncServiceIntegrityDetail);
+        syncServiceIntegrityDetail();
     })();
 
     // Schedule detail modal (reuse virtual-karir style)
