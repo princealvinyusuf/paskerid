@@ -238,9 +238,10 @@
         <div class="row mb-2">
             @foreach($services as $service)
                 @php
-                    $serviceTitle = strtolower(trim((string) $service->title));
-                    $hideServiceInfo = in_array($serviceTitle, ['talenthub', 'job fair', 'job fair virtual'], true);
+                    $normalizedServiceTitle = preg_replace('/[^a-z0-9]+/', '', strtolower(trim((string) $service->title)));
+                    $hideServiceCard = in_array($normalizedServiceTitle, ['talenthub', 'jobfair', 'jobfairvirtual'], true);
                 @endphp
+                @continue($hideServiceCard)
                 <div class="col-md-4 mb-4 d-flex align-items-stretch">
                     <div class="card vk-service-card w-100 shadow-sm animate__animated animate__fadeInUp animate__faster">
                         <div class="card-body d-flex flex-column justify-content-between">
@@ -249,9 +250,7 @@
                                     <div class="vk-service-icon mb-3"><i class="{{ $service->icon }}"></i></div>
                                 @endif
                                 <h5 class="card-title fw-bold">{{ $service->title }}</h5>
-                                @unless($hideServiceInfo)
-                                    <p class="card-text">{{ $service->description }}</p>
-                                @endunless
+                                <p class="card-text">{{ $service->description }}</p>
                             </div>
                             @if($service->link)
                                 <a href="{{ $service->link }}" class="vk-learn-more mt-auto" target="_blank" rel="noopener">Kunjungi</a>
