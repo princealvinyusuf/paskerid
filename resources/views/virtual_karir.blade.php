@@ -237,6 +237,10 @@
         <div class="vk-section-desc">Berbagai layanan digital untuk mendukung pengembangan karir dan akses pasar kerja nasional.</div>
         <div class="row mb-2">
             @foreach($services as $service)
+                @php
+                    $serviceTitle = strtolower(trim((string) $service->title));
+                    $hideServiceInfo = in_array($serviceTitle, ['talenthub', 'job fair', 'job fair virtual'], true);
+                @endphp
                 <div class="col-md-4 mb-4 d-flex align-items-stretch">
                     <div class="card vk-service-card w-100 shadow-sm animate__animated animate__fadeInUp animate__faster">
                         <div class="card-body d-flex flex-column justify-content-between">
@@ -245,7 +249,9 @@
                                     <div class="vk-service-icon mb-3"><i class="{{ $service->icon }}"></i></div>
                                 @endif
                                 <h5 class="card-title fw-bold">{{ $service->title }}</h5>
-                                <p class="card-text">{{ $service->description }}</p>
+                                @unless($hideServiceInfo)
+                                    <p class="card-text">{{ $service->description }}</p>
+                                @endunless
                             </div>
                             @if($service->link)
                                 <a href="{{ $service->link }}" class="vk-learn-more mt-auto" target="_blank" rel="noopener">Kunjungi</a>

@@ -536,13 +536,19 @@
         </div>
         <div class="row justify-content-center g-4">
             @foreach($services as $service)
+                @php
+                    $serviceTitle = strtolower(trim((string) $service->title));
+                    $hideServiceInfo = in_array($serviceTitle, ['talenthub', 'job fair'], true);
+                @endphp
                 <div class="col-12 col-md-6 col-lg-3 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
                     <div class="card service-card-compact shadow rounded-4 border-0 p-3 w-100 h-100 mx-auto d-flex flex-column align-items-center justify-content-center text-center">
                         <div class="mb-3 d-flex align-items-center justify-content-center mx-auto service-logo-container">
                             <img src="{{ asset('images/services/' . $service->logo) }}" alt="{{ $service->title }} Logo" class="service-logo-img">
                         </div>
                         <h5 class="fw-bold mb-2 text-dark text-center">{{ $service->title }}</h5>
-                        <p class="text-dark mb-3 text-center" style="font-size:1rem;">{{ $service->description }}</p>
+                        @unless($hideServiceInfo)
+                            <p class="text-dark mb-3 text-center" style="font-size:1rem;">{{ $service->description }}</p>
+                        @endunless
                         @if($service->link)
                             <div class="text-center mt-auto">
                                 <a href="{{ $service->link }}" target="_blank" class="btn btn-success rounded-pill px-4">Kunjungi <i class="fa fa-arrow-right ms-1"></i></a>
