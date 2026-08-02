@@ -423,44 +423,6 @@ class ProgramKemitraanController extends Controller
         return ['Rapat', 'Lembar kendali', 'Sistem/aplikasi', 'Lainnya'];
     }
 
-    /**
-     * @return array<int, string>
-     */
-    private function evaluasiExecutionStatuses(): array
-    {
-        return ['Sangat berhasil', 'Berhasil', 'Cukup berhasil', 'Kurang berhasil', 'Tidak berhasil'];
-    }
-
-    /**
-     * @return array<int, string>
-     */
-    private function evaluasiRecommendationStatuses(): array
-    {
-        return [
-            'Dilanjutkan tanpa perubahan berarti',
-            'Dilanjutkan dengan perbaikan',
-            'Dirancang ulang',
-            'Tidak dilanjutkan',
-            'Memerlukan keputusan pimpinan',
-        ];
-    }
-
-    /**
-     * @return array<int, string>
-     */
-    private function evaluasiDocumentStatuses(): array
-    {
-        return ['Aktif', 'Revisi'];
-    }
-
-    /**
-     * @return array<int, string>
-     */
-    private function evaluasiDocumentAccessLevels(): array
-    {
-        return ['Terbatas', 'Internal'];
-    }
-
     private function resolveTab(?string $tab): string
     {
         return in_array($tab, [self::TAB_PENDAFTARAN, self::TAB_EVALUASI], true)
@@ -492,10 +454,6 @@ class ProgramKemitraanController extends Controller
             'evaluasiPriorityOptions' => $this->evaluasiPriorityOptions(),
             'evaluasiMonitoringFrequencies' => $this->evaluasiMonitoringFrequencies(),
             'evaluasiMonitoringMediaOptions' => $this->evaluasiMonitoringMediaOptions(),
-            'evaluasiExecutionStatuses' => $this->evaluasiExecutionStatuses(),
-            'evaluasiRecommendationStatuses' => $this->evaluasiRecommendationStatuses(),
-            'evaluasiDocumentStatuses' => $this->evaluasiDocumentStatuses(),
-            'evaluasiDocumentAccessLevels' => $this->evaluasiDocumentAccessLevels(),
         ]);
     }
 
@@ -620,29 +578,6 @@ class ProgramKemitraanController extends Controller
             'first_review_date' => ['nullable', 'date'],
             'evidence_documents' => ['nullable', 'string'],
             'leader_notes' => ['nullable', 'string'],
-            'execution_status' => ['nullable', Rule::in($this->evaluasiExecutionStatuses())],
-            'recommendation_status' => ['nullable', Rule::in($this->evaluasiRecommendationStatuses())],
-            'recommendation_1' => ['nullable', 'string'],
-            'recommendation_2' => ['nullable', 'string'],
-            'recommendation_3' => ['nullable', 'string'],
-            'prepared_by_name' => ['nullable', 'string', 'max:255'],
-            'prepared_by_nip' => ['nullable', 'string', 'max:100'],
-            'prepared_by_date' => ['nullable', 'date'],
-            'verified_by_name' => ['nullable', 'string', 'max:255'],
-            'verified_by_nip' => ['nullable', 'string', 'max:100'],
-            'verified_by_date' => ['nullable', 'date'],
-            'approved_by_name' => ['nullable', 'string', 'max:255'],
-            'approved_by_nip' => ['nullable', 'string', 'max:100'],
-            'approved_by_date' => ['nullable', 'date'],
-            'document_code' => ['nullable', 'string', 'max:50'],
-            'document_version' => ['nullable', 'string', 'max:50'],
-            'document_effective_date' => ['nullable', 'date'],
-            'document_status' => ['nullable', Rule::in($this->evaluasiDocumentStatuses())],
-            'document_storage_location' => ['nullable', 'string', 'max:255'],
-            'document_retention_period' => ['nullable', 'string', 'max:100'],
-            'document_access_level' => ['nullable', Rule::in($this->evaluasiDocumentAccessLevels())],
-            'document_owner' => ['nullable', 'string', 'max:255'],
-            'document_usage_notes' => ['nullable', 'string'],
         ];
 
         foreach ($answerKeys as $answerKey) {
@@ -731,29 +666,6 @@ class ProgramKemitraanController extends Controller
                 'first_review_date' => $validated['first_review_date'] ?? null,
                 'evidence_documents' => $validated['evidence_documents'] ?? null,
                 'leader_notes' => $validated['leader_notes'] ?? null,
-                'execution_status' => $validated['execution_status'] ?? null,
-                'recommendation_status' => $validated['recommendation_status'] ?? null,
-                'recommendation_1' => $validated['recommendation_1'] ?? null,
-                'recommendation_2' => $validated['recommendation_2'] ?? null,
-                'recommendation_3' => $validated['recommendation_3'] ?? null,
-                'prepared_by_name' => $validated['prepared_by_name'] ?? null,
-                'prepared_by_nip' => $validated['prepared_by_nip'] ?? null,
-                'prepared_by_date' => $validated['prepared_by_date'] ?? null,
-                'verified_by_name' => $validated['verified_by_name'] ?? null,
-                'verified_by_nip' => $validated['verified_by_nip'] ?? null,
-                'verified_by_date' => $validated['verified_by_date'] ?? null,
-                'approved_by_name' => $validated['approved_by_name'] ?? null,
-                'approved_by_nip' => $validated['approved_by_nip'] ?? null,
-                'approved_by_date' => $validated['approved_by_date'] ?? null,
-                'document_code' => $validated['document_code'] ?? 'KEP-LEK-01',
-                'document_version' => $validated['document_version'] ?? '1.0',
-                'document_effective_date' => $validated['document_effective_date'] ?? null,
-                'document_status' => $validated['document_status'] ?? null,
-                'document_storage_location' => $validated['document_storage_location'] ?? null,
-                'document_retention_period' => $validated['document_retention_period'] ?? null,
-                'document_access_level' => $validated['document_access_level'] ?? null,
-                'document_owner' => $validated['document_owner'] ?? null,
-                'document_usage_notes' => $validated['document_usage_notes'] ?? null,
             ]);
 
             $answerRows = [];

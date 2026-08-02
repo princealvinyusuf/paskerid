@@ -319,7 +319,7 @@
                             <p class="text-muted mb-2">Isi instrumen evaluasi kegiatan secara lengkap sesuai pelaksanaan.</p>
                             <ul class="pk-hint-list small">
                                 <li>Gunakan skor 1-5 untuk setiap indikator penilaian.</li>
-                                <li>Lengkapi Form A sampai Form C, RTL, dan pengesahan agar data evaluasi utuh.</li>
+                                <li>Lengkapi Form A sampai Form C serta RTL agar data evaluasi utuh.</li>
                             </ul>
                         </div>
 
@@ -736,73 +736,6 @@
                                     <div><label class="form-label">Tanggal reviu pertama</label><input type="date" class="form-control" name="first_review_date" value="{{ old('first_review_date') }}"></div>
                                     <div><label class="form-label">Dokumen bukti</label><textarea class="form-control" name="evidence_documents">{{ old('evidence_documents') }}</textarea></div>
                                     <div><label class="form-label">Catatan pimpinan/arahan tambahan</label><textarea class="form-control" name="leader_notes">{{ old('leader_notes') }}</textarea></div>
-                                </div>
-                            </div>
-
-                            <div class="pk-step">
-                                <div class="pk-eval-section-title">VI Lembar Pengesahan dan Pengendalian Dokumen</div>
-                                <div class="pk-eval-grid mb-3">
-                                    <div>
-                                        <label class="form-label">Status pelaksanaan</label>
-                                        <select class="form-select" name="execution_status">
-                                            <option value="">-- Pilih status --</option>
-                                            @foreach ($evaluasiExecutionStatuses as $status)
-                                                <option value="{{ $status }}" {{ old('execution_status') === $status ? 'selected' : '' }}>{{ $status }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <label class="form-label">Rekomendasi</label>
-                                        <select class="form-select" name="recommendation_status">
-                                            <option value="">-- Pilih rekomendasi --</option>
-                                            @foreach ($evaluasiRecommendationStatuses as $status)
-                                                <option value="{{ $status }}" {{ old('recommendation_status') === $status ? 'selected' : '' }}>{{ $status }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div><label class="form-label">Rekomendasi 1</label><textarea class="form-control" name="recommendation_1">{{ old('recommendation_1') }}</textarea></div>
-                                    <div><label class="form-label">Rekomendasi 2</label><textarea class="form-control" name="recommendation_2">{{ old('recommendation_2') }}</textarea></div>
-                                    <div><label class="form-label">Rekomendasi 3</label><textarea class="form-control" name="recommendation_3">{{ old('recommendation_3') }}</textarea></div>
-                                </div>
-                                <h6 class="fw-semibold">Pengesahan</h6>
-                                <div class="pk-eval-grid mb-3">
-                                    <div><label class="form-label">Disusun oleh - Nama</label><input type="text" class="form-control" name="prepared_by_name" value="{{ old('prepared_by_name') }}"></div>
-                                    <div><label class="form-label">Disusun oleh - NIP</label><input type="text" class="form-control" name="prepared_by_nip" value="{{ old('prepared_by_nip') }}"></div>
-                                    <div><label class="form-label">Disusun oleh - Tanggal</label><input type="date" class="form-control" name="prepared_by_date" value="{{ old('prepared_by_date') }}"></div>
-                                    <div><label class="form-label">Diverifikasi oleh - Nama</label><input type="text" class="form-control" name="verified_by_name" value="{{ old('verified_by_name') }}"></div>
-                                    <div><label class="form-label">Diverifikasi oleh - NIP</label><input type="text" class="form-control" name="verified_by_nip" value="{{ old('verified_by_nip') }}"></div>
-                                    <div><label class="form-label">Diverifikasi oleh - Tanggal</label><input type="date" class="form-control" name="verified_by_date" value="{{ old('verified_by_date') }}"></div>
-                                    <div><label class="form-label">Disetujui oleh - Nama</label><input type="text" class="form-control" name="approved_by_name" value="{{ old('approved_by_name') }}"></div>
-                                    <div><label class="form-label">Disetujui oleh - NIP</label><input type="text" class="form-control" name="approved_by_nip" value="{{ old('approved_by_nip') }}"></div>
-                                    <div><label class="form-label">Disetujui oleh - Tanggal</label><input type="date" class="form-control" name="approved_by_date" value="{{ old('approved_by_date') }}"></div>
-                                </div>
-                                <h6 class="fw-semibold">Pengendalian Dokumen</h6>
-                                <div class="pk-eval-grid">
-                                    <div><label class="form-label">Kode dokumen</label><input type="text" class="form-control" name="document_code" value="{{ old('document_code', 'KEP-LEK-01') }}"></div>
-                                    <div><label class="form-label">Versi</label><input type="text" class="form-control" name="document_version" value="{{ old('document_version', '1.0') }}"></div>
-                                    <div><label class="form-label">Tanggal berlaku</label><input type="date" class="form-control" name="document_effective_date" value="{{ old('document_effective_date') }}"></div>
-                                    <div>
-                                        <label class="form-label">Status dokumen</label>
-                                        <select class="form-select" name="document_status">
-                                            <option value="">-- Pilih status --</option>
-                                            @foreach ($evaluasiDocumentStatuses as $status)
-                                                <option value="{{ $status }}" {{ old('document_status') === $status ? 'selected' : '' }}>{{ $status }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div><label class="form-label">Lokasi penyimpanan</label><input type="text" class="form-control" name="document_storage_location" value="{{ old('document_storage_location') }}"></div>
-                                    <div><label class="form-label">Masa simpan</label><input type="text" class="form-control" name="document_retention_period" value="{{ old('document_retention_period') }}"></div>
-                                    <div>
-                                        <label class="form-label">Akses dokumen</label>
-                                        <select class="form-select" name="document_access_level">
-                                            <option value="">-- Pilih akses --</option>
-                                            @foreach ($evaluasiDocumentAccessLevels as $level)
-                                                <option value="{{ $level }}" {{ old('document_access_level') === $level ? 'selected' : '' }}>{{ $level }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div><label class="form-label">Penanggung jawab</label><input type="text" class="form-control" name="document_owner" value="{{ old('document_owner') }}"></div>
-                                    <div><label class="form-label">Catatan penggunaan</label><textarea class="form-control" name="document_usage_notes">{{ old('document_usage_notes') }}</textarea></div>
                                 </div>
                             </div>
 
