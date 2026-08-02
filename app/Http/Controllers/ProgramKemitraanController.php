@@ -438,6 +438,7 @@ class ProgramKemitraanController extends Controller
     {
         return ProgramKemitraanEvaluationActivity::query()
             ->where('is_active', true)
+            ->withCount('evaluations')
             ->orderByDesc('activity_date')
             ->orderBy('activity_name')
             ->get([
@@ -467,7 +468,7 @@ class ProgramKemitraanController extends Controller
                     'activity_organizer' => (string) $activity->activity_organizer,
                     'participants_invited' => $activity->participants_invited,
                     'participants_attended' => $activity->participants_attended,
-                    'respondent_count' => $activity->respondent_count,
+                    'respondent_count' => (int) ($activity->evaluations_count ?? 0),
                 ];
             })
             ->values()
@@ -649,7 +650,7 @@ class ProgramKemitraanController extends Controller
                 'activity_organizer' => (string) $selectedActivity->activity_organizer,
                 'participants_invited' => $selectedActivity->participants_invited,
                 'participants_attended' => $selectedActivity->participants_attended,
-                'respondent_count' => $selectedActivity->respondent_count,
+                'respondent_count' => null,
                 'respondent_name' => $validated['respondent_name'] ?? null,
                 'respondent_organization' => $validated['respondent_organization'] ?? null,
                 'respondent_role' => $validated['respondent_role'] ?? null,
@@ -749,6 +750,16 @@ class ProgramKemitraanController extends Controller
                 }
                 $evaluation->rtlItems()->createMany($rtlRows);
             }
+
+            $latestRespondentCount = ProgramKemitraanEvaluation::query()
+                ->where('activity_master_id', (int) $selectedActivity->id)
+                ->count();
+
+            $selectedActivity->respondent_count = $latestRespondentCount;
+            $selectedActivity->save();
+
+            $evaluation->respondent_count = $latestRespondentCount;
+            $evaluation->save();
         });
 
         return redirect()

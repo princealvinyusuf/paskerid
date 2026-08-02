@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class ProgramKemitraanEvaluationActivity extends Model
 {
@@ -30,4 +31,9 @@ class ProgramKemitraanEvaluationActivity extends Model
         'activity_date' => 'date',
         'is_active' => 'boolean',
     ];
+
+    public function evaluations(): HasMany
+    {
+        return $this->hasMany(ProgramKemitraanEvaluation::class, 'activity_master_id');
+    }
 }
