@@ -476,6 +476,7 @@
         display: grid;
         grid-template-columns: repeat(12, minmax(0, 1fr));
         gap: 0.9rem;
+        align-items: start;
     }
     .pk-chart-card {
         grid-column: span 12;
@@ -484,16 +485,26 @@
         background: #fff;
         box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
         padding: 0.85rem 0.95rem;
-        min-height: 260px;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
     }
     .pk-chart-card h6 {
         margin-bottom: 0.7rem;
         font-weight: 700;
         color: #0f172a;
     }
-    .pk-chart-card canvas {
+    .pk-chart-canvas-wrap {
+        position: relative;
         width: 100%;
-        min-height: 200px;
+        height: 280px;
+        flex: 1 1 auto;
+    }
+    .pk-chart-card canvas {
+        display: block !important;
+        width: 100% !important;
+        height: 100% !important;
+        max-height: 280px;
     }
     .pk-empty-state {
         border: 1px dashed #cbd5e1;
@@ -507,6 +518,14 @@
     @media (min-width: 992px) {
         .pk-chart-card.col-lg-6 {
             grid-column: span 6;
+        }
+    }
+    @media (max-width: 767.98px) {
+        .pk-chart-canvas-wrap {
+            height: 220px;
+        }
+        .pk-chart-card canvas {
+            max-height: 220px;
         }
     }
     @keyframes pkFadeSlide {
@@ -1192,19 +1211,27 @@
                             <div class="pk-chart-grid">
                                 <div class="pk-chart-card col-lg-6">
                                     <h6>Distribusi Skor 1-5</h6>
-                                    <canvas id="pkScoreDistributionChart" aria-label="Distribusi skor evaluasi"></canvas>
+                                    <div class="pk-chart-canvas-wrap">
+                                        <canvas id="pkScoreDistributionChart" aria-label="Distribusi skor evaluasi"></canvas>
+                                    </div>
                                 </div>
                                 <div class="pk-chart-card col-lg-6">
                                     <h6>Komposisi Jawaban Form A vs Form B</h6>
-                                    <canvas id="pkFormCompositionChart" aria-label="Komposisi form evaluasi"></canvas>
+                                    <div class="pk-chart-canvas-wrap">
+                                        <canvas id="pkFormCompositionChart" aria-label="Komposisi form evaluasi"></canvas>
+                                    </div>
                                 </div>
                                 <div class="pk-chart-card col-lg-6">
                                     <h6>Tren Pengiriman Evaluasi Bulanan</h6>
-                                    <canvas id="pkMonthlyTrendChart" aria-label="Tren pengiriman evaluasi bulanan"></canvas>
+                                    <div class="pk-chart-canvas-wrap">
+                                        <canvas id="pkMonthlyTrendChart" aria-label="Tren pengiriman evaluasi bulanan"></canvas>
+                                    </div>
                                 </div>
                                 <div class="pk-chart-card col-lg-6">
                                     <h6>Peta Rata-rata Skor per Aspek</h6>
-                                    <canvas id="pkSectionAverageChart" aria-label="Rata-rata skor per aspek"></canvas>
+                                    <div class="pk-chart-canvas-wrap">
+                                        <canvas id="pkSectionAverageChart" aria-label="Rata-rata skor per aspek"></canvas>
+                                    </div>
                                 </div>
                             </div>
                         @endif
@@ -1782,135 +1809,143 @@
 
             var scoreCanvas = document.getElementById('pkScoreDistributionChart');
             if (scoreCanvas && hasDataset(scoreDistribution.values)) {
-                new Chart(scoreCanvas, {
-                    type: 'doughnut',
-                    data: {
-                        labels: scoreDistribution.labels || [],
-                        datasets: [{
-                            data: scoreDistribution.values || [],
-                            backgroundColor: ['#ef4444', '#f97316', '#facc15', '#22c55e', '#16a34a'],
-                            borderWidth: 0,
-                        }],
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: { position: 'bottom' },
+                try {
+                    new Chart(scoreCanvas, {
+                        type: 'doughnut',
+                        data: {
+                            labels: scoreDistribution.labels || [],
+                            datasets: [{
+                                data: scoreDistribution.values || [],
+                                backgroundColor: ['#ef4444', '#f97316', '#facc15', '#22c55e', '#16a34a'],
+                                borderWidth: 0,
+                            }],
                         },
-                    },
-                });
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: { position: 'bottom' },
+                            },
+                        },
+                    });
+                } catch (error) {}
             }
 
             var formCanvas = document.getElementById('pkFormCompositionChart');
             if (formCanvas && hasDataset(normalizedFormPercentages)) {
-                new Chart(formCanvas, {
-                    type: 'doughnut',
-                    data: {
-                        labels: formComposition.labels || [],
-                        datasets: [{
-                            label: 'Persentase Jawaban (%)',
-                            data: normalizedFormPercentages,
-                            backgroundColor: ['#2563eb', '#16a34a'],
-                            borderWidth: 0,
-                        }],
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: { position: 'bottom' },
-                            tooltip: {
-                                callbacks: {
-                                    label: function (context) {
-                                        return context.label + ': ' + context.parsed + '%';
+                try {
+                    new Chart(formCanvas, {
+                        type: 'doughnut',
+                        data: {
+                            labels: formComposition.labels || [],
+                            datasets: [{
+                                label: 'Persentase Jawaban (%)',
+                                data: normalizedFormPercentages,
+                                backgroundColor: ['#2563eb', '#16a34a'],
+                                borderWidth: 0,
+                            }],
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: { position: 'bottom' },
+                                tooltip: {
+                                    callbacks: {
+                                        label: function (context) {
+                                            return context.label + ': ' + context.parsed + '%';
+                                        },
                                     },
                                 },
                             },
                         },
-                    },
-                });
+                    });
+                } catch (error) {}
             }
 
             var trendCanvas = document.getElementById('pkMonthlyTrendChart');
             if (trendCanvas && hasDataset(monthlyTrend.values)) {
-                new Chart(trendCanvas, {
-                    type: 'line',
-                    data: {
-                        labels: monthlyTrend.labels || [],
-                        datasets: [{
-                            label: 'Total Evaluasi',
-                            data: monthlyTrend.values || [],
-                            borderColor: '#2563eb',
-                            backgroundColor: 'rgba(37, 99, 235, 0.14)',
-                            fill: true,
-                            tension: 0.3,
-                            pointRadius: 4,
-                            pointHoverRadius: 5,
-                        }],
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                ticks: { precision: 0 },
+                try {
+                    new Chart(trendCanvas, {
+                        type: 'line',
+                        data: {
+                            labels: monthlyTrend.labels || [],
+                            datasets: [{
+                                label: 'Total Evaluasi',
+                                data: monthlyTrend.values || [],
+                                borderColor: '#2563eb',
+                                backgroundColor: 'rgba(37, 99, 235, 0.14)',
+                                fill: true,
+                                tension: 0.3,
+                                pointRadius: 4,
+                                pointHoverRadius: 5,
+                            }],
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    ticks: { precision: 0 },
+                                },
                             },
                         },
-                    },
-                });
+                    });
+                } catch (error) {}
             }
 
             var sectionCanvas = document.getElementById('pkSectionAverageChart');
             if (sectionCanvas && hasDataset(normalizedSectionValues)) {
-                new Chart(sectionCanvas, {
-                    type: 'radar',
-                    data: {
-                        labels: normalizedSectionLabels,
-                        datasets: [{
-                            label: 'Rata-rata Skor',
-                            data: normalizedSectionValues,
-                            backgroundColor: 'rgba(14, 165, 233, 0.22)',
-                            borderColor: '#0284c7',
-                            borderWidth: 2,
-                            pointBackgroundColor: '#0284c7',
-                            pointRadius: 3,
-                        }],
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        scales: {
-                            r: {
-                                beginAtZero: true,
-                                max: 5,
-                                ticks: {
-                                    callback: function (value) {
-                                        return Number(value).toFixed(1);
+                try {
+                    new Chart(sectionCanvas, {
+                        type: 'radar',
+                        data: {
+                            labels: normalizedSectionLabels,
+                            datasets: [{
+                                label: 'Rata-rata Skor',
+                                data: normalizedSectionValues,
+                                backgroundColor: 'rgba(14, 165, 233, 0.22)',
+                                borderColor: '#0284c7',
+                                borderWidth: 2,
+                                pointBackgroundColor: '#0284c7',
+                                pointRadius: 3,
+                            }],
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: {
+                                r: {
+                                    beginAtZero: true,
+                                    max: 5,
+                                    ticks: {
+                                        callback: function (value) {
+                                            return Number(value).toFixed(1);
+                                        },
+                                    },
+                                },
+                            },
+                            plugins: {
+                                legend: { display: true, position: 'bottom' },
+                                tooltip: {
+                                    callbacks: {
+                                        title: function (items) {
+                                            if (!items || items.length === 0) {
+                                                return '';
+                                            }
+                                            var index = items[0].dataIndex;
+                                            return (sectionAverage.labels && sectionAverage.labels[index]) || items[0].label || '';
+                                        },
+                                        label: function (context) {
+                                            return 'Rata-rata: ' + Number(context.raw || 0).toFixed(2);
+                                        },
                                     },
                                 },
                             },
                         },
-                        plugins: {
-                            legend: { display: true, position: 'bottom' },
-                            tooltip: {
-                                callbacks: {
-                                    title: function (items) {
-                                        if (!items || items.length === 0) {
-                                            return '';
-                                        }
-                                        var index = items[0].dataIndex;
-                                        return (sectionAverage.labels && sectionAverage.labels[index]) || items[0].label || '';
-                                    },
-                                    label: function (context) {
-                                        return 'Rata-rata: ' + Number(context.raw || 0).toFixed(2);
-                                    },
-                                },
-                            },
-                        },
-                    },
-                });
+                    });
+                } catch (error) {}
             }
         }
 
