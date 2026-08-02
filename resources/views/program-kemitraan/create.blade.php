@@ -349,15 +349,6 @@
                             <button type="submit" class="btn btn-primary w-100 pk-submit" id="pkSubmitBtn">Kirim Pengajuan</button>
                         </form>
                     @else
-                        <div class="pk-hero">
-                            <h3 class="mb-1">Form Evaluasi Program Kemitraan</h3>
-                            <p class="text-muted mb-2">Isi instrumen evaluasi kegiatan secara lengkap sesuai pelaksanaan.</p>
-                            <ul class="pk-hint-list small">
-                                <li>Gunakan skor 1-5 untuk setiap indikator penilaian.</li>
-                                <li>Lengkapi Form A sampai Form C serta RTL agar data evaluasi utuh.</li>
-                            </ul>
-                        </div>
-
                         @if ($errors->evaluasi->any())
                             <div class="alert alert-danger">
                                 <div class="fw-semibold mb-1">Mohon periksa kembali Form Evaluasi:</div>
@@ -436,6 +427,15 @@
                             </div>
 
                             <div class="pk-eval-subpanel {{ $activeEvaluasiSubTab === 'peserta' ? 'active' : '' }}" data-eval-panel="peserta">
+                            <div class="pk-hero">
+                                <h3 class="mb-1">Form Evaluasi Program Kemitraan</h3>
+                                <p class="text-muted mb-2">Isi instrumen evaluasi kegiatan secara lengkap sesuai pelaksanaan.</p>
+                                <ul class="pk-hint-list small">
+                                    <li>Gunakan skor 1-5 untuk setiap indikator penilaian.</li>
+                                    <li>Lengkapi Form A sampai Form C serta RTL agar data evaluasi utuh.</li>
+                                </ul>
+                            </div>
+
                             <div class="pk-step">
                                 <div class="pk-eval-section-title">II Formulir A - Evaluasi Peserta/Mitra</div>
                                 <p class="pk-eval-subtitle">Profil responden dan penilaian peserta/mitra.</p>
