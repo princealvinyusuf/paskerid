@@ -597,7 +597,7 @@ class ProgramKemitraanController extends Controller
                     'string',
                     function (string $attribute, mixed $value, \Closure $fail) use ($todayPassword): void {
                         if ((string) $value !== $todayPassword) {
-                            $fail('Password Penyelenggara tidak valid. Gunakan format tanggal hari ini (DDMMYYYY).');
+                            $fail('Password Penyelenggara tidak valid.');
                         }
                     },
                 ],
