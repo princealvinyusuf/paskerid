@@ -296,6 +296,12 @@
         box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
         margin-bottom: 0.85rem;
         padding: 0.9rem;
+        transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+    }
+    .pk-wizard-question:hover {
+        transform: translateY(-1px);
+        border-color: #bfdbfe;
+        box-shadow: 0 12px 26px rgba(37, 99, 235, 0.12);
     }
     .pk-wizard-question-label {
         display: flex;
@@ -344,6 +350,10 @@
         transition: all 0.18s ease;
         cursor: pointer;
     }
+    .pk-score-choice span:hover {
+        border-color: #60a5fa;
+        background: #eff6ff;
+    }
     .pk-score-choice input:checked + span {
         border-color: #2563eb;
         background: #2563eb;
@@ -359,6 +369,65 @@
         display: flex;
         justify-content: space-between;
         gap: 0.7rem;
+    }
+    .pk-wizard-nav .btn {
+        transition: transform 0.16s ease, box-shadow 0.16s ease;
+    }
+    .pk-wizard-nav .btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 10px 22px rgba(15, 23, 42, 0.14);
+    }
+    .pk-icon-badge {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: #e0ecff;
+        color: #1d4ed8;
+        flex: 0 0 auto;
+    }
+    .pk-icon-badge svg {
+        width: 16px;
+        height: 16px;
+    }
+    .pk-inline-icon {
+        width: 16px;
+        height: 16px;
+        margin-right: 0.35rem;
+        vertical-align: text-bottom;
+        color: currentColor;
+    }
+    .pk-wizard-section-chip {
+        display: inline-flex;
+        align-items: center;
+        border: 1px solid #bfdbfe;
+        background: #eff6ff;
+        color: #1e40af;
+        border-radius: 999px;
+        padding: 0.3rem 0.65rem;
+        font-size: 0.78rem;
+        font-weight: 600;
+        margin-bottom: 0.7rem;
+    }
+    .pk-step-status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.28rem;
+        margin-left: 0.45rem;
+        border-radius: 999px;
+        padding: 0.16rem 0.46rem;
+        font-size: 0.72rem;
+        font-weight: 700;
+        border: 1px solid #cbd5e1;
+        color: #64748b;
+        background: #f8fafc;
+    }
+    .pk-step-status-badge.is-complete {
+        border-color: #86efac;
+        color: #166534;
+        background: #dcfce7;
     }
     @keyframes pkFadeSlide {
         from {
@@ -580,7 +649,17 @@
                                     <input type="hidden" name="evaluasi_peserta_step" id="evaluasiPesertaStepInput" value="{{ $pesertaWizardInitialStep }}">
                                     <div class="pk-wizard-header">
                                         <div class="d-flex justify-content-between align-items-center gap-2 mb-2">
-                                            <div class="fw-semibold text-dark" id="pesertaWizardTitle">Langkah</div>
+                                            <div class="fw-semibold text-dark d-flex align-items-center gap-2">
+                                                <span class="pk-icon-badge" aria-hidden="true">
+                                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                                        <path d="M4 18V6"></path>
+                                                        <path d="M10 18V10"></path>
+                                                        <path d="M16 18V13"></path>
+                                                        <path d="M22 18V4"></path>
+                                                    </svg>
+                                                </span>
+                                                <span id="pesertaWizardTitle">Langkah</span>
+                                            </div>
                                             <div class="small text-muted" id="pesertaWizardCounter"></div>
                                         </div>
                                         <div class="pk-wizard-progress-track">
@@ -591,8 +670,19 @@
                                     <div class="pk-wizard-step active" data-step-index="1" data-step-title="Profil Responden">
                                         <div class="pk-eval-card">
                                             <div class="pk-eval-card-head">
-                                                <span>Profil Responden</span>
-                                                <span class="pk-eval-card-sub">Isi data dasar terlebih dahulu</span>
+                                                <span>
+                                                    <svg class="pk-inline-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                                        <circle cx="12" cy="8" r="4"></circle>
+                                                        <path d="M4 20c1.8-3.7 5-5.5 8-5.5s6.2 1.8 8 5.5"></path>
+                                                    </svg>
+                                                    Profil Responden
+                                                </span>
+                                                <span class="pk-eval-card-sub">
+                                                    Isi data dasar terlebih dahulu
+                                                    <span class="pk-step-status-badge" data-step-status>
+                                                        <span aria-hidden="true">○</span> Belum
+                                                    </span>
+                                                </span>
                                             </div>
                                             <div class="pk-eval-card-body">
                                                 <div class="pk-eval-profile-grid mb-0">
@@ -641,6 +731,15 @@
 
                                     @foreach (($evaluasiQuestionGroups['form_a'] ?? []) as $sectionKey => $sectionConfig)
                                         <div class="pk-wizard-step" data-step-index="{{ $loop->iteration + 1 }}" data-step-title="{{ $sectionConfig['title'] }}">
+                                            <div class="pk-wizard-section-chip">
+                                                <svg class="pk-inline-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                                    <path d="M12 2l2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 16.3 6.4 19.2l1.1-6.2L3 8.6l6.2-.9L12 2z"></path>
+                                                </svg>
+                                                {{ $sectionConfig['title'] }}
+                                                <span class="pk-step-status-badge" data-step-status>
+                                                    <span aria-hidden="true">○</span> Belum
+                                                </span>
+                                            </div>
                                             <div class="pk-eval-score-note">
                                                 Beri nilai pada setiap pernyataan. Pilih satu skor 1-5 yang paling sesuai.
                                             </div>
@@ -677,8 +776,22 @@
                                     <div class="pk-wizard-step" data-step-index="{{ count($evaluasiQuestionGroups['form_a'] ?? []) + 2 }}" data-step-title="Penilaian Akhir Peserta">
                                         <div class="pk-eval-card">
                                             <div class="pk-eval-card-head">
-                                                <span>Penilaian Akhir Peserta</span>
-                                                <span class="pk-eval-card-sub">Kepuasan dan tindak lanjut</span>
+                                                <span>
+                                                    <svg class="pk-inline-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                                        <path d="M4 12h16"></path>
+                                                        <path d="M4 6h12"></path>
+                                                        <path d="M4 18h10"></path>
+                                                        <path d="M19 6l1.5 1.5L22 6"></path>
+                                                        <path d="M17 18l2 2 4-4"></path>
+                                                    </svg>
+                                                    Penilaian Akhir Peserta
+                                                </span>
+                                                <span class="pk-eval-card-sub">
+                                                    Kepuasan dan tindak lanjut
+                                                    <span class="pk-step-status-badge" data-step-status>
+                                                        <span aria-hidden="true">○</span> Belum
+                                                    </span>
+                                                </span>
                                             </div>
                                             <div class="pk-eval-card-body">
                                                 <div class="pk-eval-grid">
@@ -727,8 +840,18 @@
                                     </div>
 
                                     <div class="pk-wizard-nav">
-                                        <button type="button" class="btn btn-outline-secondary" id="pesertaWizardPrevBtn">Sebelumnya</button>
-                                        <button type="button" class="btn btn-primary" id="pesertaWizardNextBtn">Lanjut</button>
+                                        <button type="button" class="btn btn-outline-secondary" id="pesertaWizardPrevBtn">
+                                            <svg class="pk-inline-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                                <path d="M15 18l-6-6 6-6"></path>
+                                            </svg>
+                                            Sebelumnya
+                                        </button>
+                                        <button type="button" class="btn btn-primary" id="pesertaWizardNextBtn">
+                                            Lanjut
+                                            <svg class="pk-inline-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                                <path d="M9 18l6-6-6-6"></path>
+                                            </svg>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -1152,6 +1275,62 @@
             }
         }
 
+        function isStepComplete(stepElement) {
+            var requiredGroups = {};
+            var fields = stepElement.querySelectorAll('input, select, textarea');
+
+            for (var i = 0; i < fields.length; i++) {
+                var field = fields[i];
+                if (field.disabled || !field.hasAttribute('required')) {
+                    continue;
+                }
+
+                var type = (field.getAttribute('type') || '').toLowerCase();
+                if (type === 'radio') {
+                    if (requiredGroups[field.name]) {
+                        continue;
+                    }
+                    requiredGroups[field.name] = true;
+                    if (!stepElement.querySelector('input[type="radio"][name="' + field.name + '"]:checked')) {
+                        return false;
+                    }
+                    continue;
+                }
+
+                if (type === 'checkbox') {
+                    if (requiredGroups[field.name]) {
+                        continue;
+                    }
+                    requiredGroups[field.name] = true;
+                    if (!stepElement.querySelector('input[type="checkbox"][name="' + field.name + '"]:checked')) {
+                        return false;
+                    }
+                    continue;
+                }
+
+                if (!field.value || !field.value.trim()) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        function refreshStepCompletionBadges() {
+            if (!pesertaWizard || pesertaWizardSteps.length === 0) {
+                return;
+            }
+            pesertaWizardSteps.forEach(function (step) {
+                var badge = step.querySelector('[data-step-status]');
+                if (!badge) {
+                    return;
+                }
+                var done = isStepComplete(step);
+                badge.classList.toggle('is-complete', done);
+                badge.innerHTML = done ? '<span aria-hidden="true">\u2713</span> Selesai' : '<span aria-hidden="true">\u25cb</span> Belum';
+            });
+        }
+
         function validateStep(stepElement) {
             var firstInvalid = null;
             var checkedGroups = {};
@@ -1247,6 +1426,7 @@
                 setEvaluasiSubTab('peserta');
             }
             setPesertaStep(Math.min(Math.max(initialStep, 1), totalSteps));
+            refreshStepCompletionBadges();
 
             if (pesertaWizardPrevBtn) {
                 pesertaWizardPrevBtn.addEventListener('click', function () {
@@ -1262,9 +1442,13 @@
                     if (!validateStep(currentStep)) {
                         return;
                     }
+                    refreshStepCompletionBadges();
                     setPesertaStep(activePesertaStep + 1);
                 });
             }
+
+            pesertaWizard.addEventListener('input', refreshStepCompletionBadges);
+            pesertaWizard.addEventListener('change', refreshStepCompletionBadges);
         }
 
         if (evaluasiSubTabButtons.length > 0 && evaluasiSubPanels.length > 0) {
