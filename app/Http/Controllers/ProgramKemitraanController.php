@@ -539,7 +539,18 @@ class ProgramKemitraanController extends Controller
     public function storeEvaluasi(Request $request)
     {
         $questionGroups = $this->evaluasiQuestionGroups();
-        $answerKeys = $this->evaluasiAnswerKeys($questionGroups);
+        $innerTab = (string) $request->input('evaluasi_inner_tab', 'peserta');
+        if (!in_array($innerTab, ['peserta', 'penyelenggara'], true)) {
+            $innerTab = 'peserta';
+        }
+        $isPesertaTab = $innerTab === 'peserta';
+
+        $participantAnswerKeys = $this->evaluasiAnswerKeys([
+            'form_a' => $questionGroups['form_a'] ?? [],
+        ]);
+        $organizerAnswerKeys = $this->evaluasiAnswerKeys([
+            'form_b' => $questionGroups['form_b'] ?? [],
+        ]);
 
         $rules = [
             'activity_master_id' => [
@@ -548,76 +559,85 @@ class ProgramKemitraanController extends Controller
                     $query->where('is_active', 1);
                 }),
             ],
-            'respondent_name' => ['required', 'string', 'max:255'],
-            'respondent_organization' => ['required', 'string', 'max:255'],
-            'respondent_role' => ['required', 'string', 'max:255'],
-            'respondent_contact' => ['required', 'string', 'max:255'],
-            'respondent_category' => ['required', Rule::in($this->evaluasiRespondentCategories())],
-            'respondent_category_other' => ['nullable', 'string', 'max:255', 'required_if:respondent_category,Lainnya'],
-            'participation_mode' => ['required', Rule::in($this->evaluasiParticipationModes())],
-            'form_a_special_notes' => ['nullable', 'string'],
-            'form_a_most_useful_material' => ['nullable', 'string'],
-            'form_a_material_needs' => ['nullable', 'string'],
-            'form_a_facility_notes' => ['nullable', 'string'],
-            'form_a_proposed_followup' => ['nullable', 'string'],
-            'overall_satisfaction' => ['required', Rule::in($this->evaluasiSatisfactionOptions())],
-            'willing_to_follow_up' => ['required', Rule::in($this->evaluasiWillingFollowupOptions())],
-            'preferred_channels' => ['required', 'array', 'min:1'],
-            'preferred_channels.*' => ['required', Rule::in($this->evaluasiCommunicationChannels())],
-            'best_part' => ['required', 'string'],
-            'needs_improvement' => ['required', 'string'],
-            'needed_topics' => ['required', 'string'],
-            'additional_suggestions' => ['nullable', 'string'],
-            'evaluator_name' => ['required', 'string', 'max:255'],
-            'evaluator_position' => ['required', 'string', 'max:255'],
-            'evaluator_unit' => ['required', 'string', 'max:255'],
-            'evaluation_date' => ['required', 'date'],
-            'evaluator_role' => ['required', Rule::in($this->evaluasiEvaluatorRoles())],
-            'evaluator_role_other' => ['nullable', 'string', 'max:255', 'required_if:evaluator_role,Lainnya'],
-            'form_b_planning_constraints' => ['nullable', 'string'],
-            'form_b_incident_notes' => ['nullable', 'string'],
-            'form_b_good_practices' => ['nullable', 'string'],
-            'form_b_root_issues' => ['nullable', 'string'],
-            'form_b_priority_recommendations' => ['nullable', 'string'],
-            'recap_participants_present' => ['nullable', 'integer', 'min:0'],
-            'recap_forms_distributed' => ['nullable', 'integer', 'min:0'],
-            'recap_forms_received' => ['nullable', 'integer', 'min:0'],
-            'recap_forms_valid' => ['nullable', 'integer', 'min:0'],
-            'recap_response_rate_percent' => ['nullable', 'numeric', 'min:0', 'max:100'],
-            'recap_collection_period' => ['nullable', 'string', 'max:255'],
-            'recap_highest_aspect' => ['nullable', 'string', 'max:255'],
-            'recap_highest_value' => ['nullable', 'numeric', 'min:0', 'max:100'],
-            'recap_lowest_aspect' => ['nullable', 'string', 'max:255'],
-            'recap_lowest_value' => ['nullable', 'numeric', 'min:0', 'max:100'],
-            'recap_overall_score' => ['nullable', 'numeric', 'min:0', 'max:100'],
-            'recap_result_category' => ['nullable', Rule::in($this->evaluasiResultCategories())],
-            'recap_internal_target' => ['nullable', 'numeric', 'min:0', 'max:100'],
-            'recap_achievement_status' => ['nullable', Rule::in($this->evaluasiAchievementStatuses())],
-            'recap_general_conclusion' => ['nullable', 'string'],
-            'indicator_achievements' => ['nullable', 'array'],
-            'indicator_achievements.*.indicator' => ['nullable', 'string', 'max:255'],
-            'indicator_achievements.*.target' => ['nullable', 'string', 'max:255'],
-            'indicator_achievements.*.realization' => ['nullable', 'string', 'max:255'],
-            'indicator_achievements.*.status' => ['nullable', 'string', 'max:255'],
-            'priority_level' => ['nullable', Rule::in($this->evaluasiPriorityOptions())],
-            'rtl_items' => ['nullable', 'array'],
-            'rtl_items.*.issue' => ['nullable', 'string'],
-            'rtl_items.*.follow_up' => ['nullable', 'string'],
-            'rtl_items.*.responsible_person' => ['nullable', 'string', 'max:255'],
-            'rtl_items.*.target_date' => ['nullable', 'date'],
-            'rtl_items.*.completion_indicator' => ['nullable', 'string'],
-            'rtl_items.*.status' => ['nullable', 'string', 'max:255'],
-            'monitoring_coordinator' => ['nullable', 'string', 'max:255'],
-            'monitoring_frequency' => ['nullable', Rule::in($this->evaluasiMonitoringFrequencies())],
-            'monitoring_media' => ['nullable', 'array'],
-            'monitoring_media.*' => ['required', Rule::in($this->evaluasiMonitoringMediaOptions())],
-            'monitoring_media_other' => ['nullable', 'string', 'max:255'],
-            'first_review_date' => ['nullable', 'date'],
-            'evidence_documents' => ['nullable', 'string'],
-            'leader_notes' => ['nullable', 'string'],
         ];
 
-        foreach ($answerKeys as $answerKey) {
+        if ($isPesertaTab) {
+            $rules = array_merge($rules, [
+                'respondent_name' => ['required', 'string', 'max:255'],
+                'respondent_organization' => ['required', 'string', 'max:255'],
+                'respondent_role' => ['required', 'string', 'max:255'],
+                'respondent_contact' => ['required', 'string', 'max:255'],
+                'respondent_category' => ['required', Rule::in($this->evaluasiRespondentCategories())],
+                'respondent_category_other' => ['nullable', 'string', 'max:255', 'required_if:respondent_category,Lainnya'],
+                'participation_mode' => ['required', Rule::in($this->evaluasiParticipationModes())],
+                'form_a_special_notes' => ['nullable', 'string'],
+                'form_a_most_useful_material' => ['nullable', 'string'],
+                'form_a_material_needs' => ['nullable', 'string'],
+                'form_a_facility_notes' => ['nullable', 'string'],
+                'form_a_proposed_followup' => ['nullable', 'string'],
+                'overall_satisfaction' => ['required', Rule::in($this->evaluasiSatisfactionOptions())],
+                'willing_to_follow_up' => ['required', Rule::in($this->evaluasiWillingFollowupOptions())],
+                'preferred_channels' => ['required', 'array', 'min:1'],
+                'preferred_channels.*' => ['required', Rule::in($this->evaluasiCommunicationChannels())],
+                'best_part' => ['required', 'string'],
+                'needs_improvement' => ['required', 'string'],
+                'needed_topics' => ['required', 'string'],
+                'additional_suggestions' => ['nullable', 'string'],
+            ]);
+        } else {
+            $rules = array_merge($rules, [
+                'evaluator_name' => ['required', 'string', 'max:255'],
+                'evaluator_position' => ['required', 'string', 'max:255'],
+                'evaluator_unit' => ['required', 'string', 'max:255'],
+                'evaluation_date' => ['required', 'date'],
+                'evaluator_role' => ['required', Rule::in($this->evaluasiEvaluatorRoles())],
+                'evaluator_role_other' => ['nullable', 'string', 'max:255', 'required_if:evaluator_role,Lainnya'],
+                'form_b_planning_constraints' => ['nullable', 'string'],
+                'form_b_incident_notes' => ['nullable', 'string'],
+                'form_b_good_practices' => ['nullable', 'string'],
+                'form_b_root_issues' => ['nullable', 'string'],
+                'form_b_priority_recommendations' => ['nullable', 'string'],
+                'recap_participants_present' => ['nullable', 'integer', 'min:0'],
+                'recap_forms_distributed' => ['nullable', 'integer', 'min:0'],
+                'recap_forms_received' => ['nullable', 'integer', 'min:0'],
+                'recap_forms_valid' => ['nullable', 'integer', 'min:0'],
+                'recap_response_rate_percent' => ['nullable', 'numeric', 'min:0', 'max:100'],
+                'recap_collection_period' => ['nullable', 'string', 'max:255'],
+                'recap_highest_aspect' => ['nullable', 'string', 'max:255'],
+                'recap_highest_value' => ['nullable', 'numeric', 'min:0', 'max:100'],
+                'recap_lowest_aspect' => ['nullable', 'string', 'max:255'],
+                'recap_lowest_value' => ['nullable', 'numeric', 'min:0', 'max:100'],
+                'recap_overall_score' => ['nullable', 'numeric', 'min:0', 'max:100'],
+                'recap_result_category' => ['nullable', Rule::in($this->evaluasiResultCategories())],
+                'recap_internal_target' => ['nullable', 'numeric', 'min:0', 'max:100'],
+                'recap_achievement_status' => ['nullable', Rule::in($this->evaluasiAchievementStatuses())],
+                'recap_general_conclusion' => ['nullable', 'string'],
+                'indicator_achievements' => ['nullable', 'array'],
+                'indicator_achievements.*.indicator' => ['nullable', 'string', 'max:255'],
+                'indicator_achievements.*.target' => ['nullable', 'string', 'max:255'],
+                'indicator_achievements.*.realization' => ['nullable', 'string', 'max:255'],
+                'indicator_achievements.*.status' => ['nullable', 'string', 'max:255'],
+                'priority_level' => ['nullable', Rule::in($this->evaluasiPriorityOptions())],
+                'rtl_items' => ['nullable', 'array'],
+                'rtl_items.*.issue' => ['nullable', 'string'],
+                'rtl_items.*.follow_up' => ['nullable', 'string'],
+                'rtl_items.*.responsible_person' => ['nullable', 'string', 'max:255'],
+                'rtl_items.*.target_date' => ['nullable', 'date'],
+                'rtl_items.*.completion_indicator' => ['nullable', 'string'],
+                'rtl_items.*.status' => ['nullable', 'string', 'max:255'],
+                'monitoring_coordinator' => ['nullable', 'string', 'max:255'],
+                'monitoring_frequency' => ['nullable', Rule::in($this->evaluasiMonitoringFrequencies())],
+                'monitoring_media' => ['nullable', 'array'],
+                'monitoring_media.*' => ['required', Rule::in($this->evaluasiMonitoringMediaOptions())],
+                'monitoring_media_other' => ['nullable', 'string', 'max:255'],
+                'first_review_date' => ['nullable', 'date'],
+                'evidence_documents' => ['nullable', 'string'],
+                'leader_notes' => ['nullable', 'string'],
+            ]);
+        }
+
+        $requiredAnswerKeys = $isPesertaTab ? $participantAnswerKeys : $organizerAnswerKeys;
+        foreach ($requiredAnswerKeys as $answerKey) {
             $rules['answers.' . $answerKey] = ['required', Rule::in(self::SCORE_OPTIONS)];
         }
 
@@ -637,7 +657,25 @@ class ProgramKemitraanController extends Controller
             ->where('is_active', true)
             ->findOrFail((int) $validated['activity_master_id']);
 
-        DB::transaction(function () use ($validated, $preferredChannels, $monitoringMedia, $indicatorAchievements, $rtlItems, $questionGroups, $selectedActivity): void {
+        // Keep schema compatibility because the current table stores both form A and B columns in one row.
+        $participantDefaults = [
+            'respondent_category' => 'Masyarakat umum',
+            'participation_mode' => 'Luring',
+            'overall_satisfaction' => 'Cukup puas',
+            'willing_to_follow_up' => 'Mungkin',
+            'best_part' => '-',
+            'needs_improvement' => '-',
+            'needed_topics' => '-',
+        ];
+        $evaluatorDefaults = [
+            'evaluator_name' => '-',
+            'evaluator_position' => '-',
+            'evaluator_unit' => '-',
+            'evaluation_date' => now()->toDateString(),
+            'evaluator_role' => 'Panitia',
+        ];
+
+        DB::transaction(function () use ($validated, $preferredChannels, $monitoringMedia, $indicatorAchievements, $rtlItems, $questionGroups, $selectedActivity, $participantDefaults, $evaluatorDefaults): void {
             $evaluation = ProgramKemitraanEvaluation::create([
                 'activity_master_id' => (int) $selectedActivity->id,
                 'activity_name' => (string) $selectedActivity->activity_name,
@@ -655,26 +693,26 @@ class ProgramKemitraanController extends Controller
                 'respondent_organization' => $validated['respondent_organization'] ?? null,
                 'respondent_role' => $validated['respondent_role'] ?? null,
                 'respondent_contact' => $validated['respondent_contact'] ?? null,
-                'respondent_category' => $validated['respondent_category'],
+                'respondent_category' => $validated['respondent_category'] ?? $participantDefaults['respondent_category'],
                 'respondent_category_other' => $validated['respondent_category_other'] ?? null,
-                'participation_mode' => $validated['participation_mode'],
+                'participation_mode' => $validated['participation_mode'] ?? $participantDefaults['participation_mode'],
                 'form_a_special_notes' => $validated['form_a_special_notes'] ?? null,
                 'form_a_most_useful_material' => $validated['form_a_most_useful_material'] ?? null,
                 'form_a_material_needs' => $validated['form_a_material_needs'] ?? null,
                 'form_a_facility_notes' => $validated['form_a_facility_notes'] ?? null,
                 'form_a_proposed_followup' => $validated['form_a_proposed_followup'] ?? null,
-                'overall_satisfaction' => $validated['overall_satisfaction'],
-                'willing_to_follow_up' => $validated['willing_to_follow_up'],
+                'overall_satisfaction' => $validated['overall_satisfaction'] ?? $participantDefaults['overall_satisfaction'],
+                'willing_to_follow_up' => $validated['willing_to_follow_up'] ?? $participantDefaults['willing_to_follow_up'],
                 'preferred_channels' => $preferredChannels,
-                'best_part' => $validated['best_part'],
-                'needs_improvement' => $validated['needs_improvement'],
-                'needed_topics' => $validated['needed_topics'],
+                'best_part' => $validated['best_part'] ?? $participantDefaults['best_part'],
+                'needs_improvement' => $validated['needs_improvement'] ?? $participantDefaults['needs_improvement'],
+                'needed_topics' => $validated['needed_topics'] ?? $participantDefaults['needed_topics'],
                 'additional_suggestions' => $validated['additional_suggestions'] ?? null,
-                'evaluator_name' => $validated['evaluator_name'],
-                'evaluator_position' => $validated['evaluator_position'],
-                'evaluator_unit' => $validated['evaluator_unit'],
-                'evaluation_date' => $validated['evaluation_date'],
-                'evaluator_role' => $validated['evaluator_role'],
+                'evaluator_name' => $validated['evaluator_name'] ?? $evaluatorDefaults['evaluator_name'],
+                'evaluator_position' => $validated['evaluator_position'] ?? $evaluatorDefaults['evaluator_position'],
+                'evaluator_unit' => $validated['evaluator_unit'] ?? $evaluatorDefaults['evaluator_unit'],
+                'evaluation_date' => $validated['evaluation_date'] ?? $evaluatorDefaults['evaluation_date'],
+                'evaluator_role' => $validated['evaluator_role'] ?? $evaluatorDefaults['evaluator_role'],
                 'evaluator_role_other' => $validated['evaluator_role_other'] ?? null,
                 'form_b_planning_constraints' => $validated['form_b_planning_constraints'] ?? null,
                 'form_b_incident_notes' => $validated['form_b_incident_notes'] ?? null,
