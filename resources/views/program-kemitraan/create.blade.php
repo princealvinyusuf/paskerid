@@ -1049,7 +1049,6 @@
                                                     <div>
                                                         <label class="form-label">Password submit Penyelenggara<span class="pk-step-required">*</span></label>
                                                         <input type="password" class="form-control" name="penyelenggara_submit_password" autocomplete="off" required>
-                                                        <small class="text-muted">Gunakan format tanggal hari ini: DDMMYYYY.</small>
                                                     </div>
                                                 </div>
                                             </div>
