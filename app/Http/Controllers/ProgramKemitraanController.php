@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ProgramKemitraanEvaluation;
+use App\Models\ProgramKemitraanEvaluationActivity;
 use App\Models\ProgramKemitraanSubmission;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
@@ -430,6 +431,49 @@ class ProgramKemitraanController extends Controller
             : self::TAB_PENDAFTARAN;
     }
 
+    /**
+     * @return array<int, array<string, mixed>>
+     */
+    private function evaluasiActivities(): array
+    {
+        return ProgramKemitraanEvaluationActivity::query()
+            ->where('is_active', true)
+            ->orderByDesc('activity_date')
+            ->orderBy('activity_name')
+            ->get([
+                'id',
+                'activity_name',
+                'activity_theme',
+                'activity_date',
+                'activity_start_time',
+                'activity_end_time',
+                'activity_timezone',
+                'activity_location',
+                'activity_organizer',
+                'participants_invited',
+                'participants_attended',
+                'respondent_count',
+            ])
+            ->map(function (ProgramKemitraanEvaluationActivity $activity): array {
+                return [
+                    'id' => (int) $activity->id,
+                    'activity_name' => (string) $activity->activity_name,
+                    'activity_theme' => (string) $activity->activity_theme,
+                    'activity_date' => $activity->activity_date ? $activity->activity_date->format('Y-m-d') : null,
+                    'activity_start_time' => (string) $activity->activity_start_time,
+                    'activity_end_time' => (string) $activity->activity_end_time,
+                    'activity_timezone' => (string) $activity->activity_timezone,
+                    'activity_location' => (string) $activity->activity_location,
+                    'activity_organizer' => (string) $activity->activity_organizer,
+                    'participants_invited' => $activity->participants_invited,
+                    'participants_attended' => $activity->participants_attended,
+                    'respondent_count' => $activity->respondent_count,
+                ];
+            })
+            ->values()
+            ->all();
+    }
+
     public function create(Request $request)
     {
         $businessSectors = $this->businessSectors();
@@ -454,6 +498,7 @@ class ProgramKemitraanController extends Controller
             'evaluasiPriorityOptions' => $this->evaluasiPriorityOptions(),
             'evaluasiMonitoringFrequencies' => $this->evaluasiMonitoringFrequencies(),
             'evaluasiMonitoringMediaOptions' => $this->evaluasiMonitoringMediaOptions(),
+            'evaluasiActivities' => $this->evaluasiActivities(),
         ]);
     }
 
@@ -496,17 +541,12 @@ class ProgramKemitraanController extends Controller
         $answerKeys = $this->evaluasiAnswerKeys($questionGroups);
 
         $rules = [
-            'activity_name' => ['required', 'string', 'max:255'],
-            'activity_theme' => ['required', 'string', 'max:255'],
-            'activity_date' => ['required', 'date'],
-            'activity_start_time' => ['required', 'date_format:H:i'],
-            'activity_end_time' => ['required', 'date_format:H:i'],
-            'activity_timezone' => ['required', 'string', 'max:10'],
-            'activity_location' => ['required', 'string', 'max:255'],
-            'activity_organizer' => ['required', 'string', 'max:255'],
-            'participants_invited' => ['nullable', 'integer', 'min:0'],
-            'participants_attended' => ['nullable', 'integer', 'min:0'],
-            'respondent_count' => ['nullable', 'integer', 'min:0'],
+            'activity_master_id' => [
+                'required',
+                Rule::exists('program_kemitraan_evaluation_activities', 'id')->where(function ($query): void {
+                    $query->where('is_active', 1);
+                }),
+            ],
             'respondent_name' => ['nullable', 'string', 'max:255'],
             'respondent_organization' => ['nullable', 'string', 'max:255'],
             'respondent_role' => ['nullable', 'string', 'max:255'],
@@ -592,20 +632,24 @@ class ProgramKemitraanController extends Controller
         }
         $indicatorAchievements = $this->sanitizeRows($validated['indicator_achievements'] ?? [], ['indicator', 'target', 'realization', 'status']);
         $rtlItems = $this->sanitizeRows($validated['rtl_items'] ?? [], ['issue', 'follow_up', 'responsible_person', 'target_date', 'completion_indicator', 'status']);
+        $selectedActivity = ProgramKemitraanEvaluationActivity::query()
+            ->where('is_active', true)
+            ->findOrFail((int) $validated['activity_master_id']);
 
-        DB::transaction(function () use ($validated, $preferredChannels, $monitoringMedia, $qualitativeFeedback, $indicatorAchievements, $rtlItems, $questionGroups): void {
+        DB::transaction(function () use ($validated, $preferredChannels, $monitoringMedia, $indicatorAchievements, $rtlItems, $questionGroups, $selectedActivity): void {
             $evaluation = ProgramKemitraanEvaluation::create([
-                'activity_name' => $validated['activity_name'],
-                'activity_theme' => $validated['activity_theme'],
-                'activity_date' => $validated['activity_date'],
-                'activity_start_time' => $validated['activity_start_time'],
-                'activity_end_time' => $validated['activity_end_time'],
-                'activity_timezone' => $validated['activity_timezone'],
-                'activity_location' => $validated['activity_location'],
-                'activity_organizer' => $validated['activity_organizer'],
-                'participants_invited' => $validated['participants_invited'] ?? null,
-                'participants_attended' => $validated['participants_attended'] ?? null,
-                'respondent_count' => $validated['respondent_count'] ?? null,
+                'activity_master_id' => (int) $selectedActivity->id,
+                'activity_name' => (string) $selectedActivity->activity_name,
+                'activity_theme' => (string) $selectedActivity->activity_theme,
+                'activity_date' => $selectedActivity->activity_date ? $selectedActivity->activity_date->format('Y-m-d') : null,
+                'activity_start_time' => (string) $selectedActivity->activity_start_time,
+                'activity_end_time' => (string) $selectedActivity->activity_end_time,
+                'activity_timezone' => (string) $selectedActivity->activity_timezone,
+                'activity_location' => (string) $selectedActivity->activity_location,
+                'activity_organizer' => (string) $selectedActivity->activity_organizer,
+                'participants_invited' => $selectedActivity->participants_invited,
+                'participants_attended' => $selectedActivity->participants_attended,
+                'respondent_count' => $selectedActivity->respondent_count,
                 'respondent_name' => $validated['respondent_name'] ?? null,
                 'respondent_organization' => $validated['respondent_organization'] ?? null,
                 'respondent_role' => $validated['respondent_role'] ?? null,
