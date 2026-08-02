@@ -442,7 +442,7 @@
     }
     .pk-stats-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
         gap: 0.8rem;
         margin-bottom: 1rem;
     }
@@ -503,7 +503,7 @@
     }
     .pk-spotlight-grid {
         display: grid;
-        grid-template-columns: minmax(240px, 1fr) minmax(220px, 1fr);
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
         gap: 0.75rem;
         margin-bottom: 0.95rem;
     }
@@ -535,12 +535,11 @@
     }
     .pk-chart-grid {
         display: grid;
-        grid-template-columns: repeat(12, minmax(0, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
         gap: 0.9rem;
         align-items: start;
     }
     .pk-chart-card {
-        grid-column: span 12;
         border: 1px solid #dbe3ee;
         border-radius: 14px;
         background: #fff;
@@ -558,7 +557,7 @@
     .pk-chart-canvas-wrap {
         position: relative;
         width: 100%;
-        height: 280px;
+        height: 260px;
         flex: 1 1 auto;
     }
     .pk-chart-card canvas {
@@ -576,10 +575,10 @@
         padding: 1rem;
         margin-top: 0.6rem;
     }
-    @media (min-width: 992px) {
-        .pk-chart-card.col-lg-6 {
-            grid-column: span 6;
-        }
+    .pk-chart-grid .pk-chart-card.col-lg-6 {
+        width: auto;
+        max-width: none;
+        flex: initial;
     }
     @media (max-width: 767.98px) {
         .pk-chart-canvas-wrap {
@@ -614,9 +613,13 @@
 @endsection
 
 @section('content')
-<div class="container py-4 pk-page">
+@php
+    $activeTopTab = $tab ?? 'pendaftaran';
+    $isHasilTopTab = $activeTopTab === 'hasil-evaluasi';
+@endphp
+<div class="{{ $isHasilTopTab ? 'container-fluid' : 'container' }} py-4 pk-page">
     <div class="row justify-content-center">
-        <div class="col-12 col-xl-10">
+        <div class="col-12 {{ $isHasilTopTab ? 'col-xxl-11' : 'col-xl-10' }}">
             <div class="card pk-shell border-0">
                 <div class="card-body p-4 p-md-5">
                     @php
