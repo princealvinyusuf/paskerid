@@ -519,7 +519,7 @@ class ProgramKemitraanController extends Controller
         }
 
         $formTypeRows = DB::table('program_kemitraan_evaluation_answers')
-            ->selectRaw('form_type, COUNT(*) as total')
+            ->selectRaw('form_type, COUNT(DISTINCT evaluation_id) as total')
             ->whereIn('form_type', ['A', 'B'])
             ->whereNotNull('score')
             ->groupBy('form_type')
@@ -530,6 +530,64 @@ class ProgramKemitraanController extends Controller
             if (array_key_exists($formType, $formTypeMap)) {
                 $formTypeMap[$formType] = (int) ($row->total ?? 0);
             }
+        }
+
+        $participantModeRows = DB::table('program_kemitraan_evaluations as e')
+            ->join('program_kemitraan_evaluation_answers as ans', function ($join): void {
+                $join->on('ans.evaluation_id', '=', 'e.id')
+                    ->where('ans.form_type', '=', 'A');
+            })
+            ->whereNotNull('e.participation_mode')
+            ->where('e.participation_mode', '!=', '')
+            ->selectRaw('e.participation_mode as label, COUNT(DISTINCT e.id) as total')
+            ->groupBy('e.participation_mode')
+            ->orderByDesc('total')
+            ->get();
+
+        $participantModeLabels = [];
+        $participantModeValues = [];
+        foreach ($participantModeRows as $row) {
+            $participantModeLabels[] = (string) ($row->label ?? '-');
+            $participantModeValues[] = (int) ($row->total ?? 0);
+        }
+
+        $satisfactionRows = DB::table('program_kemitraan_evaluations as e')
+            ->join('program_kemitraan_evaluation_answers as ans', function ($join): void {
+                $join->on('ans.evaluation_id', '=', 'e.id')
+                    ->where('ans.form_type', '=', 'A');
+            })
+            ->whereNotNull('e.overall_satisfaction')
+            ->where('e.overall_satisfaction', '!=', '')
+            ->selectRaw('e.overall_satisfaction as label, COUNT(DISTINCT e.id) as total')
+            ->groupBy('e.overall_satisfaction')
+            ->orderByDesc('total')
+            ->get();
+
+        $satisfactionLabels = [];
+        $satisfactionValues = [];
+        foreach ($satisfactionRows as $row) {
+            $satisfactionLabels[] = (string) ($row->label ?? '-');
+            $satisfactionValues[] = (int) ($row->total ?? 0);
+        }
+
+        $organizerRoleRows = DB::table('program_kemitraan_evaluations as e')
+            ->join('program_kemitraan_evaluation_answers as ans', function ($join): void {
+                $join->on('ans.evaluation_id', '=', 'e.id')
+                    ->where('ans.form_type', '=', 'B');
+            })
+            ->whereNotNull('e.evaluator_role')
+            ->where('e.evaluator_role', '!=', '')
+            ->where('e.evaluator_role', '!=', '-')
+            ->selectRaw('e.evaluator_role as label, COUNT(DISTINCT e.id) as total')
+            ->groupBy('e.evaluator_role')
+            ->orderByDesc('total')
+            ->get();
+
+        $organizerRoleLabels = [];
+        $organizerRoleValues = [];
+        foreach ($organizerRoleRows as $row) {
+            $organizerRoleLabels[] = (string) ($row->label ?? '-');
+            $organizerRoleValues[] = (int) ($row->total ?? 0);
         }
 
         $trendRows = DB::table('program_kemitraan_evaluations')
@@ -551,11 +609,60 @@ class ProgramKemitraanController extends Controller
             $trendValues[] = (int) ($row->total ?? 0);
         }
 
+        $topActivityRows = DB::table('program_kemitraan_evaluations as e')
+            ->leftJoin('program_kemitraan_evaluation_answers as ans', function ($join): void {
+                $join->on('ans.evaluation_id', '=', 'e.id')
+                    ->whereNotNull('ans.score');
+            })
+            ->whereNotNull('e.activity_master_id')
+            ->whereNotNull('e.activity_name')
+            ->where('e.activity_name', '!=', '')
+            ->selectRaw('
+                e.activity_master_id,
+                e.activity_name,
+                COUNT(DISTINCT e.id) as total_responses,
+                ROUND(AVG(ans.score), 2) as average_score,
+                MAX(e.updated_at) as last_update
+            ')
+            ->groupBy('e.activity_master_id', 'e.activity_name')
+            ->orderByDesc('total_responses')
+            ->orderBy('e.activity_name')
+            ->limit(8)
+            ->get();
+
+        $topActivityLabels = [];
+        $topActivityResponseValues = [];
+        $topActivityAverageValues = [];
+        $topActivityItems = [];
+        foreach ($topActivityRows as $row) {
+            $activityName = (string) ($row->activity_name ?? '-');
+            $responses = (int) ($row->total_responses ?? 0);
+            $avgScore = $row->average_score !== null ? (float) $row->average_score : null;
+
+            $topActivityLabels[] = $activityName;
+            $topActivityResponseValues[] = $responses;
+            $topActivityAverageValues[] = $avgScore !== null ? round($avgScore, 2) : 0.0;
+            $topActivityItems[] = [
+                'activity_master_id' => (int) ($row->activity_master_id ?? 0),
+                'activity_name' => $activityName,
+                'total_responses' => $responses,
+                'average_score' => $avgScore,
+                'last_update' => (string) ($row->last_update ?? ''),
+            ];
+        }
+
+        $highestSectionAspect = $sectionLabels[0] ?? '-';
+        $highestSectionScore = $sectionAverages[0] ?? null;
+        $averageResponsesPerActivity = $totalActivities > 0 ? round($totalResponses / $totalActivities, 2) : 0.0;
+
         return [
             'kpi' => [
                 'total_activities' => $totalActivities,
                 'total_responses' => $totalResponses,
                 'average_score' => $averageScore,
+                'average_responses_per_activity' => $averageResponsesPerActivity,
+                'highest_section_aspect' => $highestSectionAspect,
+                'highest_section_score' => $highestSectionScore,
                 'busiest_activity' => [
                     'name' => $busiestActivity ? (string) ($busiestActivity->activity_name ?? '-') : '-',
                     'responses' => $busiestActivity ? (int) ($busiestActivity->total_responses ?? 0) : 0,
@@ -574,9 +681,27 @@ class ProgramKemitraanController extends Controller
                 'labels' => ['Form A (Peserta)', 'Form B (Penyelenggara)'],
                 'values' => [(int) $formTypeMap['A'], (int) $formTypeMap['B']],
             ],
+            'participant_modes' => [
+                'labels' => $participantModeLabels,
+                'values' => $participantModeValues,
+            ],
+            'satisfaction_levels' => [
+                'labels' => $satisfactionLabels,
+                'values' => $satisfactionValues,
+            ],
+            'organizer_roles' => [
+                'labels' => $organizerRoleLabels,
+                'values' => $organizerRoleValues,
+            ],
             'monthly_trend' => [
                 'labels' => $trendLabels,
                 'values' => $trendValues,
+            ],
+            'top_activities' => [
+                'labels' => $topActivityLabels,
+                'response_values' => $topActivityResponseValues,
+                'average_values' => $topActivityAverageValues,
+                'items' => $topActivityItems,
             ],
         ];
     }

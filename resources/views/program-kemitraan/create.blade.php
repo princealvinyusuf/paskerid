@@ -472,6 +472,67 @@
         font-size: 0.83rem;
         color: #475569;
     }
+    .pk-dashboard-controls {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem;
+        margin-bottom: 0.9rem;
+    }
+    .pk-chip-group {
+        display: inline-flex;
+        gap: 0.4rem;
+        flex-wrap: wrap;
+    }
+    .pk-chip-btn {
+        border: 1px solid #cbd5e1;
+        background: #fff;
+        color: #334155;
+        border-radius: 999px;
+        font-size: 0.78rem;
+        font-weight: 700;
+        padding: 0.28rem 0.68rem;
+        cursor: pointer;
+        transition: all 0.16s ease;
+    }
+    .pk-chip-btn.active {
+        border-color: #2563eb;
+        color: #fff;
+        background: #2563eb;
+    }
+    .pk-spotlight-grid {
+        display: grid;
+        grid-template-columns: minmax(240px, 1fr) minmax(220px, 1fr);
+        gap: 0.75rem;
+        margin-bottom: 0.95rem;
+    }
+    .pk-spotlight-card {
+        border: 1px solid #dbe3ee;
+        border-radius: 14px;
+        background: #fff;
+        box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
+        padding: 0.8rem 0.9rem;
+    }
+    .pk-spotlight-title {
+        margin: 0 0 0.42rem;
+        font-size: 0.82rem;
+        letter-spacing: 0.03em;
+        text-transform: uppercase;
+        font-weight: 700;
+        color: #64748b;
+    }
+    .pk-spotlight-value {
+        font-size: 1.05rem;
+        font-weight: 800;
+        color: #0f172a;
+        line-height: 1.28;
+    }
+    .pk-spotlight-meta {
+        margin-top: 0.34rem;
+        font-size: 0.83rem;
+        color: #475569;
+    }
     .pk-chart-grid {
         display: grid;
         grid-template-columns: repeat(12, minmax(0, 1fr));
@@ -527,6 +588,9 @@
         .pk-chart-card canvas {
             max-height: 220px;
         }
+        .pk-spotlight-grid {
+            grid-template-columns: 1fr;
+        }
     }
     @keyframes pkFadeSlide {
         from {
@@ -562,6 +626,8 @@
                         $selectedEvaluasiActivityId = (string) old('activity_master_id', '');
                         $evaluasiStatsPayload = $evaluasiStats ?? [];
                         $evaluasiKpi = $evaluasiStatsPayload['kpi'] ?? [];
+                        $topActivityItems = $evaluasiStatsPayload['top_activities']['items'] ?? [];
+                        $initialSpotlight = $topActivityItems[0] ?? null;
                         $totalEvaluasiResponses = (int) ($evaluasiKpi['total_responses'] ?? 0);
                         if (!in_array($activeEvaluasiSubTab, ['peserta', 'penyelenggara'], true)) {
                             $activeEvaluasiSubTab = 'peserta';
@@ -1201,6 +1267,18 @@
                                     {{ number_format((int) ($evaluasiKpi['busiest_activity']['responses'] ?? 0), 0, ',', '.') }} respons
                                 </div>
                             </div>
+                            <div class="pk-stat-card">
+                                <div class="pk-stat-label">Rata-rata Respons/Kegiatan</div>
+                                <div class="pk-stat-value">{{ number_format((float) ($evaluasiKpi['average_responses_per_activity'] ?? 0), 2, ',', '.') }}</div>
+                                <div class="pk-stat-sub">Rata-rata penyelesaian evaluasi per kegiatan aktif</div>
+                            </div>
+                            <div class="pk-stat-card">
+                                <div class="pk-stat-label">Aspek Skor Tertinggi</div>
+                                <div class="pk-stat-value">{{ $evaluasiKpi['highest_section_aspect'] ?? '-' }}</div>
+                                <div class="pk-stat-sub">
+                                    Skor {{ isset($evaluasiKpi['highest_section_score']) && $evaluasiKpi['highest_section_score'] !== null ? number_format((float) $evaluasiKpi['highest_section_score'], 2, ',', '.') : '-' }}
+                                </div>
+                            </div>
                         </div>
 
                         @if ($totalEvaluasiResponses === 0)
@@ -1208,6 +1286,41 @@
                                 Belum ada data evaluasi yang cukup untuk divisualisasikan.
                             </div>
                         @else
+                            <div class="pk-dashboard-controls">
+                                <div class="pk-chip-group" role="group" aria-label="Rentang trend evaluasi">
+                                    <button type="button" class="pk-chip-btn active" data-trend-range="all">Semua bulan</button>
+                                    <button type="button" class="pk-chip-btn" data-trend-range="12">12 bulan</button>
+                                    <button type="button" class="pk-chip-btn" data-trend-range="6">6 bulan</button>
+                                </div>
+                                <div class="small text-muted">Gunakan kontrol untuk mengeksplorasi pola data evaluasi.</div>
+                            </div>
+
+                            <div class="pk-spotlight-grid">
+                                <div class="pk-spotlight-card">
+                                    <h6 class="pk-spotlight-title">Spotlight Kegiatan</h6>
+                                    <select id="pkActivitySpotlightSelect" class="form-select form-select-sm">
+                                        @if (empty($topActivityItems))
+                                            <option value="">Belum ada data kegiatan</option>
+                                        @else
+                                            @foreach ($topActivityItems as $spotlightItem)
+                                                <option value="{{ (int) ($spotlightItem['activity_master_id'] ?? 0) }}">
+                                                    {{ $spotlightItem['activity_name'] ?? '-' }}
+                                                </option>
+                                            @endforeach
+                                        @endif
+                                    </select>
+                                </div>
+                                <div class="pk-spotlight-card">
+                                    <h6 class="pk-spotlight-title">Ringkasan Kegiatan Terpilih</h6>
+                                    <div class="pk-spotlight-value" id="pkActivitySpotlightName">{{ $initialSpotlight['activity_name'] ?? '-' }}</div>
+                                    <div class="pk-spotlight-meta">
+                                        Respons: <strong id="pkActivitySpotlightResponses">{{ number_format((int) ($initialSpotlight['total_responses'] ?? 0), 0, ',', '.') }}</strong>
+                                        &middot;
+                                        Rata-rata skor: <strong id="pkActivitySpotlightScore">{{ isset($initialSpotlight['average_score']) && $initialSpotlight['average_score'] !== null ? number_format((float) $initialSpotlight['average_score'], 2, ',', '.') : '-' }}</strong>
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="pk-chart-grid">
                                 <div class="pk-chart-card col-lg-6">
                                     <h6>Distribusi Skor 1-5</h6>
@@ -1231,6 +1344,30 @@
                                     <h6>Peta Rata-rata Skor per Aspek</h6>
                                     <div class="pk-chart-canvas-wrap">
                                         <canvas id="pkSectionAverageChart" aria-label="Rata-rata skor per aspek"></canvas>
+                                    </div>
+                                </div>
+                                <div class="pk-chart-card col-lg-6">
+                                    <h6>Moda Keikutsertaan Peserta</h6>
+                                    <div class="pk-chart-canvas-wrap">
+                                        <canvas id="pkParticipationModeChart" aria-label="Distribusi moda keikutsertaan"></canvas>
+                                    </div>
+                                </div>
+                                <div class="pk-chart-card col-lg-6">
+                                    <h6>Tingkat Kepuasan Peserta</h6>
+                                    <div class="pk-chart-canvas-wrap">
+                                        <canvas id="pkSatisfactionChart" aria-label="Distribusi tingkat kepuasan"></canvas>
+                                    </div>
+                                </div>
+                                <div class="pk-chart-card col-lg-6">
+                                    <h6>Peran Evaluator Penyelenggara</h6>
+                                    <div class="pk-chart-canvas-wrap">
+                                        <canvas id="pkOrganizerRoleChart" aria-label="Distribusi peran evaluator"></canvas>
+                                    </div>
+                                </div>
+                                <div class="pk-chart-card col-lg-6">
+                                    <h6>Top Kegiatan: Respons vs Skor</h6>
+                                    <div class="pk-chart-canvas-wrap">
+                                        <canvas id="pkTopActivityChart" aria-label="Top kegiatan berdasarkan respons"></canvas>
                                     </div>
                                 </div>
                             </div>
@@ -1779,6 +1916,22 @@
             return text.slice(0, maxLen - 1) + '…';
         }
 
+        function formatNumberLocale(value) {
+            var parsed = Number(value || 0);
+            if (Number.isNaN(parsed)) {
+                parsed = 0;
+            }
+            return parsed.toLocaleString('id-ID');
+        }
+
+        function formatScoreLocale(value) {
+            var parsed = Number(value);
+            if (Number.isNaN(parsed)) {
+                return '-';
+            }
+            return parsed.toLocaleString('id-ID', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
         function renderEvaluasiCharts() {
             if (typeof window.Chart === 'undefined') {
                 return;
@@ -1788,6 +1941,10 @@
             var formComposition = evaluasiStats && evaluasiStats.form_composition ? evaluasiStats.form_composition : {};
             var monthlyTrend = evaluasiStats && evaluasiStats.monthly_trend ? evaluasiStats.monthly_trend : {};
             var sectionAverage = evaluasiStats && evaluasiStats.section_average ? evaluasiStats.section_average : {};
+            var participantModes = evaluasiStats && evaluasiStats.participant_modes ? evaluasiStats.participant_modes : {};
+            var satisfactionLevels = evaluasiStats && evaluasiStats.satisfaction_levels ? evaluasiStats.satisfaction_levels : {};
+            var organizerRoles = evaluasiStats && evaluasiStats.organizer_roles ? evaluasiStats.organizer_roles : {};
+            var topActivities = evaluasiStats && evaluasiStats.top_activities ? evaluasiStats.top_activities : {};
             var normalizedSectionValues = Array.isArray(sectionAverage.values)
                 ? sectionAverage.values.map(function (value) { return clampNumber(value, 0, 5); })
                 : [];
@@ -1806,28 +1963,43 @@
                 }
                 return Number(((value / totalFormValues) * 100).toFixed(2));
             });
+            var trendLabelsMaster = Array.isArray(monthlyTrend.labels) ? monthlyTrend.labels.slice() : [];
+            var trendValuesMaster = Array.isArray(monthlyTrend.values) ? monthlyTrend.values.slice() : [];
+            var trendChart = null;
+
+            function createDoughnutChart(canvas, labels, values, colors) {
+                if (!canvas || !hasDataset(values)) {
+                    return null;
+                }
+                return new Chart(canvas, {
+                    type: 'doughnut',
+                    data: {
+                        labels: labels || [],
+                        datasets: [{
+                            data: values || [],
+                            backgroundColor: colors,
+                            borderWidth: 0,
+                        }],
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { position: 'bottom' },
+                        },
+                    },
+                });
+            }
 
             var scoreCanvas = document.getElementById('pkScoreDistributionChart');
             if (scoreCanvas && hasDataset(scoreDistribution.values)) {
                 try {
-                    new Chart(scoreCanvas, {
-                        type: 'doughnut',
-                        data: {
-                            labels: scoreDistribution.labels || [],
-                            datasets: [{
-                                data: scoreDistribution.values || [],
-                                backgroundColor: ['#ef4444', '#f97316', '#facc15', '#22c55e', '#16a34a'],
-                                borderWidth: 0,
-                            }],
-                        },
-                        options: {
-                            responsive: true,
-                            maintainAspectRatio: false,
-                            plugins: {
-                                legend: { position: 'bottom' },
-                            },
-                        },
-                    });
+                    createDoughnutChart(
+                        scoreCanvas,
+                        scoreDistribution.labels || [],
+                        scoreDistribution.values || [],
+                        ['#ef4444', '#f97316', '#facc15', '#22c55e', '#16a34a']
+                    );
                 } catch (error) {}
             }
 
@@ -1866,13 +2038,13 @@
             var trendCanvas = document.getElementById('pkMonthlyTrendChart');
             if (trendCanvas && hasDataset(monthlyTrend.values)) {
                 try {
-                    new Chart(trendCanvas, {
+                    trendChart = new Chart(trendCanvas, {
                         type: 'line',
                         data: {
-                            labels: monthlyTrend.labels || [],
+                            labels: trendLabelsMaster,
                             datasets: [{
                                 label: 'Total Evaluasi',
-                                data: monthlyTrend.values || [],
+                                data: trendValuesMaster,
                                 borderColor: '#2563eb',
                                 backgroundColor: 'rgba(37, 99, 235, 0.14)',
                                 fill: true,
@@ -1893,6 +2065,38 @@
                         },
                     });
                 } catch (error) {}
+            }
+
+            function updateTrendRange(monthLimit) {
+                if (!trendChart) {
+                    return;
+                }
+                if (monthLimit === 'all') {
+                    trendChart.data.labels = trendLabelsMaster.slice();
+                    trendChart.data.datasets[0].data = trendValuesMaster.slice();
+                    trendChart.update();
+                    return;
+                }
+                var limit = Number(monthLimit || 0);
+                if (Number.isNaN(limit) || limit <= 0) {
+                    return;
+                }
+                trendChart.data.labels = trendLabelsMaster.slice(-limit);
+                trendChart.data.datasets[0].data = trendValuesMaster.slice(-limit);
+                trendChart.update();
+            }
+
+            var trendRangeButtons = document.querySelectorAll('[data-trend-range]');
+            if (trendRangeButtons.length > 0) {
+                trendRangeButtons.forEach(function (button) {
+                    button.addEventListener('click', function () {
+                        var selectedRange = button.getAttribute('data-trend-range') || 'all';
+                        trendRangeButtons.forEach(function (otherButton) {
+                            otherButton.classList.toggle('active', otherButton === button);
+                        });
+                        updateTrendRange(selectedRange);
+                    });
+                });
             }
 
             var sectionCanvas = document.getElementById('pkSectionAverageChart');
@@ -1946,6 +2150,148 @@
                         },
                     });
                 } catch (error) {}
+            }
+
+            var participationModeCanvas = document.getElementById('pkParticipationModeChart');
+            if (participationModeCanvas && hasDataset(participantModes.values)) {
+                try {
+                    createDoughnutChart(
+                        participationModeCanvas,
+                        participantModes.labels || [],
+                        participantModes.values || [],
+                        ['#0ea5e9', '#22c55e', '#f59e0b', '#7c3aed', '#ef4444']
+                    );
+                } catch (error) {}
+            }
+
+            var satisfactionCanvas = document.getElementById('pkSatisfactionChart');
+            if (satisfactionCanvas && hasDataset(satisfactionLevels.values)) {
+                try {
+                    createDoughnutChart(
+                        satisfactionCanvas,
+                        satisfactionLevels.labels || [],
+                        satisfactionLevels.values || [],
+                        ['#16a34a', '#22c55e', '#facc15', '#f97316', '#ef4444']
+                    );
+                } catch (error) {}
+            }
+
+            var organizerRoleCanvas = document.getElementById('pkOrganizerRoleChart');
+            if (organizerRoleCanvas && hasDataset(organizerRoles.values)) {
+                try {
+                    new Chart(organizerRoleCanvas, {
+                        type: 'polarArea',
+                        data: {
+                            labels: organizerRoles.labels || [],
+                            datasets: [{
+                                data: organizerRoles.values || [],
+                                backgroundColor: ['#2563eb', '#14b8a6', '#a855f7', '#f59e0b', '#ef4444', '#64748b'],
+                                borderWidth: 0,
+                            }],
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: { position: 'bottom' },
+                            },
+                        },
+                    });
+                } catch (error) {}
+            }
+
+            var topActivityCanvas = document.getElementById('pkTopActivityChart');
+            if (topActivityCanvas && hasDataset(topActivities.response_values)) {
+                try {
+                    new Chart(topActivityCanvas, {
+                        type: 'line',
+                        data: {
+                            labels: (topActivities.labels || []).map(function (label) {
+                                return shortenLabel(label, 20);
+                            }),
+                            datasets: [{
+                                label: 'Total Respons',
+                                data: topActivities.response_values || [],
+                                borderColor: '#2563eb',
+                                backgroundColor: 'rgba(37, 99, 235, 0.14)',
+                                tension: 0.28,
+                                fill: true,
+                                pointRadius: 3,
+                            }, {
+                                label: 'Rata-rata Skor',
+                                data: topActivities.average_values || [],
+                                borderColor: '#16a34a',
+                                backgroundColor: 'rgba(22, 163, 74, 0.10)',
+                                yAxisID: 'y1',
+                                tension: 0.28,
+                                pointRadius: 3,
+                            }],
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    ticks: { precision: 0 },
+                                    title: { display: true, text: 'Respons' },
+                                },
+                                y1: {
+                                    position: 'right',
+                                    beginAtZero: true,
+                                    max: 5,
+                                    grid: { drawOnChartArea: false },
+                                    title: { display: true, text: 'Skor' },
+                                },
+                            },
+                        },
+                    });
+                } catch (error) {}
+            }
+
+            var spotlightSelect = document.getElementById('pkActivitySpotlightSelect');
+            var spotlightName = document.getElementById('pkActivitySpotlightName');
+            var spotlightResponses = document.getElementById('pkActivitySpotlightResponses');
+            var spotlightScore = document.getElementById('pkActivitySpotlightScore');
+            var spotlightItems = Array.isArray(topActivities.items) ? topActivities.items : [];
+
+            function renderSpotlightByIndex(index) {
+                var item = spotlightItems[index] || null;
+                if (!item) {
+                    if (spotlightName) {
+                        spotlightName.textContent = '-';
+                    }
+                    if (spotlightResponses) {
+                        spotlightResponses.textContent = '0';
+                    }
+                    if (spotlightScore) {
+                        spotlightScore.textContent = '-';
+                    }
+                    return;
+                }
+
+                if (spotlightName) {
+                    spotlightName.textContent = item.activity_name || '-';
+                }
+                if (spotlightResponses) {
+                    spotlightResponses.textContent = formatNumberLocale(item.total_responses || 0);
+                }
+                if (spotlightScore) {
+                    spotlightScore.textContent = item.average_score !== null && item.average_score !== undefined
+                        ? formatScoreLocale(item.average_score)
+                        : '-';
+                }
+            }
+
+            if (spotlightSelect && spotlightItems.length > 0) {
+                spotlightSelect.addEventListener('change', function () {
+                    var selectedId = Number(spotlightSelect.value || 0);
+                    var selectedIndex = spotlightItems.findIndex(function (item) {
+                        return Number(item.activity_master_id || 0) === selectedId;
+                    });
+                    renderSpotlightByIndex(selectedIndex >= 0 ? selectedIndex : 0);
+                });
+                renderSpotlightByIndex(0);
             }
         }
 
