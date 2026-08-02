@@ -13,6 +13,7 @@ class ProgramKemitraanController extends Controller
 {
     private const TAB_PENDAFTARAN = 'pendaftaran';
     private const TAB_EVALUASI = 'evaluasi';
+    private const TAB_HASIL_EVALUASI = 'hasil-evaluasi';
     private const SCORE_OPTIONS = ['1', '2', '3', '4', '5'];
 
     /**
@@ -426,9 +427,150 @@ class ProgramKemitraanController extends Controller
 
     private function resolveTab(?string $tab): string
     {
-        return in_array($tab, [self::TAB_PENDAFTARAN, self::TAB_EVALUASI], true)
+        return in_array($tab, [self::TAB_PENDAFTARAN, self::TAB_EVALUASI, self::TAB_HASIL_EVALUASI], true)
             ? (string) $tab
             : self::TAB_PENDAFTARAN;
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    private function evaluasiSectionTitleMap(): array
+    {
+        $map = [];
+        foreach ($this->evaluasiQuestionGroups() as $sections) {
+            foreach ($sections as $sectionKey => $sectionConfig) {
+                $map[$sectionKey] = (string) ($sectionConfig['title'] ?? $sectionKey);
+            }
+        }
+
+        return $map;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function evaluasiStats(): array
+    {
+        $sectionTitleMap = $this->evaluasiSectionTitleMap();
+        $scoreLabels = ['1', '2', '3', '4', '5'];
+        $scoreCountMap = array_fill_keys($scoreLabels, 0);
+        $formTypeMap = ['A' => 0, 'B' => 0];
+
+        $totalActivities = ProgramKemitraanEvaluationActivity::query()
+            ->where('is_active', true)
+            ->count();
+        $totalResponses = ProgramKemitraanEvaluation::query()->count();
+
+        $averageScoreValue = DB::table('program_kemitraan_evaluation_answers')
+            ->whereNotNull('score')
+            ->avg('score');
+        $averageScore = $averageScoreValue !== null ? round((float) $averageScoreValue, 2) : null;
+
+        $busiestActivity = ProgramKemitraanEvaluation::query()
+            ->selectRaw('activity_master_id, activity_name, COUNT(*) as total_responses')
+            ->whereNotNull('activity_master_id')
+            ->groupBy('activity_master_id', 'activity_name')
+            ->orderByDesc('total_responses')
+            ->first();
+
+        $scoreDistributionRows = DB::table('program_kemitraan_evaluation_answers')
+            ->selectRaw('CAST(score AS UNSIGNED) as score_value, COUNT(*) as total')
+            ->whereNotNull('score')
+            ->groupBy('score')
+            ->orderBy('score')
+            ->get();
+
+        foreach ($scoreDistributionRows as $row) {
+            $scoreKey = (string) ((int) ($row->score_value ?? 0));
+            if (array_key_exists($scoreKey, $scoreCountMap)) {
+                $scoreCountMap[$scoreKey] = (int) ($row->total ?? 0);
+            }
+        }
+
+        $sectionAverageRows = DB::table('program_kemitraan_evaluation_answers')
+            ->selectRaw('section_key, AVG(score) as average_score, COUNT(*) as total_answers')
+            ->whereNotNull('section_key')
+            ->whereNotNull('score')
+            ->groupBy('section_key')
+            ->orderByDesc('average_score')
+            ->get();
+
+        $sectionLabels = [];
+        $sectionAverages = [];
+        $sectionAnswerCounts = [];
+        foreach ($sectionAverageRows as $row) {
+            $sectionKey = (string) ($row->section_key ?? '');
+            if ($sectionKey === '') {
+                continue;
+            }
+
+            $sectionLabels[] = (string) ($sectionTitleMap[$sectionKey] ?? $sectionKey);
+            $sectionAverages[] = round((float) ($row->average_score ?? 0), 2);
+            $sectionAnswerCounts[] = (int) ($row->total_answers ?? 0);
+        }
+
+        $formTypeRows = DB::table('program_kemitraan_evaluation_answers')
+            ->selectRaw('form_type, COUNT(*) as total')
+            ->whereIn('form_type', ['A', 'B'])
+            ->whereNotNull('score')
+            ->groupBy('form_type')
+            ->get();
+
+        foreach ($formTypeRows as $row) {
+            $formType = (string) ($row->form_type ?? '');
+            if (array_key_exists($formType, $formTypeMap)) {
+                $formTypeMap[$formType] = (int) ($row->total ?? 0);
+            }
+        }
+
+        $trendRows = DB::table('program_kemitraan_evaluations')
+            ->selectRaw("DATE_FORMAT(created_at, '%Y-%m') as month_key, COUNT(*) as total")
+            ->whereNotNull('created_at')
+            ->groupBy('month_key')
+            ->orderBy('month_key')
+            ->get();
+
+        $trendLabels = [];
+        $trendValues = [];
+        foreach ($trendRows as $row) {
+            $monthKey = (string) ($row->month_key ?? '');
+            if ($monthKey === '') {
+                continue;
+            }
+
+            $trendLabels[] = $monthKey;
+            $trendValues[] = (int) ($row->total ?? 0);
+        }
+
+        return [
+            'kpi' => [
+                'total_activities' => $totalActivities,
+                'total_responses' => $totalResponses,
+                'average_score' => $averageScore,
+                'busiest_activity' => [
+                    'name' => $busiestActivity ? (string) ($busiestActivity->activity_name ?? '-') : '-',
+                    'responses' => $busiestActivity ? (int) ($busiestActivity->total_responses ?? 0) : 0,
+                ],
+            ],
+            'score_distribution' => [
+                'labels' => array_keys($scoreCountMap),
+                'values' => array_values($scoreCountMap),
+            ],
+            'section_average' => [
+                'labels' => $sectionLabels,
+                'values' => $sectionAverages,
+                'answer_counts' => $sectionAnswerCounts,
+            ],
+            'form_composition' => [
+                'labels' => ['Form A (Peserta)', 'Form B (Penyelenggara)'],
+                'values' => [(int) $formTypeMap['A'], (int) $formTypeMap['B']],
+            ],
+            'monthly_trend' => [
+                'labels' => $trendLabels,
+                'values' => $trendValues,
+            ],
+        ];
     }
 
     /**
@@ -500,6 +642,7 @@ class ProgramKemitraanController extends Controller
             'evaluasiMonitoringFrequencies' => $this->evaluasiMonitoringFrequencies(),
             'evaluasiMonitoringMediaOptions' => $this->evaluasiMonitoringMediaOptions(),
             'evaluasiActivities' => $this->evaluasiActivities(),
+            'evaluasiStats' => $this->evaluasiStats(),
         ]);
     }
 

@@ -440,6 +440,75 @@
         color: #166534;
         background: #dcfce7;
     }
+    .pk-stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 0.8rem;
+        margin-bottom: 1rem;
+    }
+    .pk-stat-card {
+        border: 1px solid #dbe3ee;
+        border-radius: 14px;
+        background: #fff;
+        box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
+        padding: 0.85rem 0.95rem;
+    }
+    .pk-stat-label {
+        font-size: 0.78rem;
+        font-weight: 700;
+        color: #64748b;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        margin-bottom: 0.35rem;
+    }
+    .pk-stat-value {
+        font-size: 1.45rem;
+        line-height: 1.15;
+        font-weight: 800;
+        color: #0f172a;
+    }
+    .pk-stat-sub {
+        margin-top: 0.22rem;
+        font-size: 0.83rem;
+        color: #475569;
+    }
+    .pk-chart-grid {
+        display: grid;
+        grid-template-columns: repeat(12, minmax(0, 1fr));
+        gap: 0.9rem;
+    }
+    .pk-chart-card {
+        grid-column: span 12;
+        border: 1px solid #dbe3ee;
+        border-radius: 14px;
+        background: #fff;
+        box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
+        padding: 0.85rem 0.95rem;
+        min-height: 260px;
+    }
+    .pk-chart-card h6 {
+        margin-bottom: 0.7rem;
+        font-weight: 700;
+        color: #0f172a;
+    }
+    .pk-chart-card canvas {
+        width: 100%;
+        min-height: 200px;
+    }
+    .pk-empty-state {
+        border: 1px dashed #cbd5e1;
+        border-radius: 14px;
+        background: #f8fafc;
+        color: #475569;
+        text-align: center;
+        padding: 1rem;
+        margin-top: 0.6rem;
+    }
+    @media (min-width: 992px) {
+        .pk-chart-card.col-lg-6 {
+            grid-column: span 6;
+        }
+    }
     @keyframes pkFadeSlide {
         from {
             opacity: 0;
@@ -472,6 +541,9 @@
                         $scoreOptions = ['1', '2', '3', '4', '5'];
                         $activeEvaluasiSubTab = old('evaluasi_inner_tab', 'peserta');
                         $selectedEvaluasiActivityId = (string) old('activity_master_id', '');
+                        $evaluasiStatsPayload = $evaluasiStats ?? [];
+                        $evaluasiKpi = $evaluasiStatsPayload['kpi'] ?? [];
+                        $totalEvaluasiResponses = (int) ($evaluasiKpi['total_responses'] ?? 0);
                         if (!in_array($activeEvaluasiSubTab, ['peserta', 'penyelenggara'], true)) {
                             $activeEvaluasiSubTab = 'peserta';
                         }
@@ -483,6 +555,9 @@
                         </a>
                         <a href="{{ route('program-kemitraan.create', ['tab' => 'evaluasi']) }}" class="pk-seg-btn {{ $activeTab === 'evaluasi' ? 'active' : '' }}" role="tab" aria-selected="{{ $activeTab === 'evaluasi' ? 'true' : 'false' }}">
                             Form Evaluasi
+                        </a>
+                        <a href="{{ route('program-kemitraan.create', ['tab' => 'hasil-evaluasi']) }}" class="pk-seg-btn {{ $activeTab === 'hasil-evaluasi' ? 'active' : '' }}" role="tab" aria-selected="{{ $activeTab === 'hasil-evaluasi' ? 'true' : 'false' }}">
+                            Hasil Evaluasi
                         </a>
                     </div>
 
@@ -612,7 +687,7 @@
 
                             <button type="submit" class="btn btn-primary w-100 pk-submit" id="pkSubmitBtn">Kirim Pengajuan</button>
                         </form>
-                    @else
+                    @elseif ($activeTab === 'evaluasi')
                         @if (session('evaluasi_success'))
                             <div class="alert alert-success">{{ session('evaluasi_success') }}</div>
                         @endif
@@ -1076,6 +1151,63 @@
                                 <button type="submit" class="btn btn-primary w-100 pk-submit" id="pkEvaluasiSubmitBtn">Kirim Form Evaluasi</button>
                             </div>
                         </form>
+                    @else
+                        <div class="pk-hero">
+                            <h3 class="mb-1">Hasil Evaluasi</h3>
+                            <p class="text-muted mb-0">Dashboard statistik ringkas berdasarkan seluruh data evaluasi Program Kemitraan yang sudah terkumpul.</p>
+                        </div>
+
+                        <div class="pk-stats-grid">
+                            <div class="pk-stat-card">
+                                <div class="pk-stat-label">Total Kegiatan Aktif</div>
+                                <div class="pk-stat-value">{{ number_format((int) ($evaluasiKpi['total_activities'] ?? 0), 0, ',', '.') }}</div>
+                                <div class="pk-stat-sub">Kegiatan tersedia untuk evaluasi</div>
+                            </div>
+                            <div class="pk-stat-card">
+                                <div class="pk-stat-label">Total Respons</div>
+                                <div class="pk-stat-value">{{ number_format($totalEvaluasiResponses, 0, ',', '.') }}</div>
+                                <div class="pk-stat-sub">Seluruh form evaluasi tersubmit</div>
+                            </div>
+                            <div class="pk-stat-card">
+                                <div class="pk-stat-label">Rata-rata Skor</div>
+                                <div class="pk-stat-value">
+                                    {{ isset($evaluasiKpi['average_score']) && $evaluasiKpi['average_score'] !== null ? number_format((float) $evaluasiKpi['average_score'], 2, ',', '.') : '-' }}
+                                </div>
+                                <div class="pk-stat-sub">Skala agregat dari semua jawaban</div>
+                            </div>
+                            <div class="pk-stat-card">
+                                <div class="pk-stat-label">Kegiatan Terbanyak</div>
+                                <div class="pk-stat-value">{{ $evaluasiKpi['busiest_activity']['name'] ?? '-' }}</div>
+                                <div class="pk-stat-sub">
+                                    {{ number_format((int) ($evaluasiKpi['busiest_activity']['responses'] ?? 0), 0, ',', '.') }} respons
+                                </div>
+                            </div>
+                        </div>
+
+                        @if ($totalEvaluasiResponses === 0)
+                            <div class="pk-empty-state">
+                                Belum ada data evaluasi yang cukup untuk divisualisasikan.
+                            </div>
+                        @else
+                            <div class="pk-chart-grid">
+                                <div class="pk-chart-card col-lg-6">
+                                    <h6>Distribusi Skor 1-5</h6>
+                                    <canvas id="pkScoreDistributionChart" aria-label="Distribusi skor evaluasi"></canvas>
+                                </div>
+                                <div class="pk-chart-card col-lg-6">
+                                    <h6>Komposisi Jawaban Form A vs Form B</h6>
+                                    <canvas id="pkFormCompositionChart" aria-label="Komposisi form evaluasi"></canvas>
+                                </div>
+                                <div class="pk-chart-card col-lg-6">
+                                    <h6>Tren Pengiriman Evaluasi Bulanan</h6>
+                                    <canvas id="pkMonthlyTrendChart" aria-label="Tren pengiriman evaluasi bulanan"></canvas>
+                                </div>
+                                <div class="pk-chart-card col-lg-6">
+                                    <h6>Rata-rata Skor per Aspek</h6>
+                                    <canvas id="pkSectionAverageChart" aria-label="Rata-rata skor per aspek"></canvas>
+                                </div>
+                            </div>
+                        @endif
                     @endif
                 </div>
             </div>
@@ -1085,8 +1217,10 @@
 @endsection
 
 @section('scripts')
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
 <script>
     (function () {
+        var evaluasiStats = @json($evaluasiStatsPayload);
         var form = document.getElementById('programKemitraanForm');
         var submitBtn = document.getElementById('pkSubmitBtn');
         var evaluasiForm = document.getElementById('programKemitraanEvaluasiForm');
@@ -1583,6 +1717,142 @@
                 });
             });
         }
+
+        function hasDataset(values) {
+            if (!Array.isArray(values) || values.length === 0) {
+                return false;
+            }
+            for (var i = 0; i < values.length; i++) {
+                if (Number(values[i] || 0) > 0) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function renderEvaluasiCharts() {
+            if (typeof window.Chart === 'undefined') {
+                return;
+            }
+
+            var scoreDistribution = evaluasiStats && evaluasiStats.score_distribution ? evaluasiStats.score_distribution : {};
+            var formComposition = evaluasiStats && evaluasiStats.form_composition ? evaluasiStats.form_composition : {};
+            var monthlyTrend = evaluasiStats && evaluasiStats.monthly_trend ? evaluasiStats.monthly_trend : {};
+            var sectionAverage = evaluasiStats && evaluasiStats.section_average ? evaluasiStats.section_average : {};
+
+            var scoreCanvas = document.getElementById('pkScoreDistributionChart');
+            if (scoreCanvas && hasDataset(scoreDistribution.values)) {
+                new Chart(scoreCanvas, {
+                    type: 'doughnut',
+                    data: {
+                        labels: scoreDistribution.labels || [],
+                        datasets: [{
+                            data: scoreDistribution.values || [],
+                            backgroundColor: ['#ef4444', '#f97316', '#facc15', '#22c55e', '#16a34a'],
+                            borderWidth: 0,
+                        }],
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { position: 'bottom' },
+                        },
+                    },
+                });
+            }
+
+            var formCanvas = document.getElementById('pkFormCompositionChart');
+            if (formCanvas && hasDataset(formComposition.values)) {
+                new Chart(formCanvas, {
+                    type: 'bar',
+                    data: {
+                        labels: formComposition.labels || [],
+                        datasets: [{
+                            label: 'Jumlah Jawaban',
+                            data: formComposition.values || [],
+                            backgroundColor: ['#2563eb', '#16a34a'],
+                            borderRadius: 10,
+                        }],
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: { precision: 0 },
+                            },
+                        },
+                        plugins: {
+                            legend: { display: false },
+                        },
+                    },
+                });
+            }
+
+            var trendCanvas = document.getElementById('pkMonthlyTrendChart');
+            if (trendCanvas && hasDataset(monthlyTrend.values)) {
+                new Chart(trendCanvas, {
+                    type: 'line',
+                    data: {
+                        labels: monthlyTrend.labels || [],
+                        datasets: [{
+                            label: 'Total Evaluasi',
+                            data: monthlyTrend.values || [],
+                            borderColor: '#2563eb',
+                            backgroundColor: 'rgba(37, 99, 235, 0.14)',
+                            fill: true,
+                            tension: 0.3,
+                            pointRadius: 4,
+                            pointHoverRadius: 5,
+                        }],
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: { precision: 0 },
+                            },
+                        },
+                    },
+                });
+            }
+
+            var sectionCanvas = document.getElementById('pkSectionAverageChart');
+            if (sectionCanvas && hasDataset(sectionAverage.values)) {
+                new Chart(sectionCanvas, {
+                    type: 'bar',
+                    data: {
+                        labels: sectionAverage.labels || [],
+                        datasets: [{
+                            label: 'Rata-rata Skor',
+                            data: sectionAverage.values || [],
+                            backgroundColor: '#0ea5e9',
+                            borderRadius: 10,
+                        }],
+                    },
+                    options: {
+                        indexAxis: 'y',
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: {
+                                beginAtZero: true,
+                                suggestedMax: 5,
+                            },
+                        },
+                        plugins: {
+                            legend: { display: false },
+                        },
+                    },
+                });
+            }
+        }
+
+        renderEvaluasiCharts();
     })();
 </script>
 @endsection
