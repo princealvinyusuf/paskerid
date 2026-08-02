@@ -511,7 +511,7 @@ class ProgramKemitraanController extends Controller
         }
 
         // Keep the chart readable by showing top aspects only.
-        $maxSectionItems = 10;
+        $maxSectionItems = 8;
         if (count($sectionLabels) > $maxSectionItems) {
             $sectionLabels = array_slice($sectionLabels, 0, $maxSectionItems);
             $sectionAverages = array_slice($sectionAverages, 0, $maxSectionItems);

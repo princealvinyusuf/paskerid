@@ -1203,7 +1203,7 @@
                                     <canvas id="pkMonthlyTrendChart" aria-label="Tren pengiriman evaluasi bulanan"></canvas>
                                 </div>
                                 <div class="pk-chart-card col-lg-6">
-                                    <h6>Rata-rata Skor per Aspek</h6>
+                                    <h6>Peta Rata-rata Skor per Aspek</h6>
                                     <canvas id="pkSectionAverageChart" aria-label="Rata-rata skor per aspek"></canvas>
                                 </div>
                             </div>
@@ -1805,36 +1805,25 @@
             var formCanvas = document.getElementById('pkFormCompositionChart');
             if (formCanvas && hasDataset(normalizedFormPercentages)) {
                 new Chart(formCanvas, {
-                    type: 'bar',
+                    type: 'doughnut',
                     data: {
                         labels: formComposition.labels || [],
                         datasets: [{
                             label: 'Persentase Jawaban (%)',
                             data: normalizedFormPercentages,
                             backgroundColor: ['#2563eb', '#16a34a'],
-                            borderRadius: 10,
+                            borderWidth: 0,
                         }],
                     },
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                max: 100,
-                                ticks: {
-                                    callback: function (value) {
-                                        return value + '%';
-                                    },
-                                },
-                            },
-                        },
                         plugins: {
-                            legend: { display: false },
+                            legend: { position: 'bottom' },
                             tooltip: {
                                 callbacks: {
                                     label: function (context) {
-                                        return context.parsed.y + '%';
+                                        return context.label + ': ' + context.parsed + '%';
                                     },
                                 },
                             },
@@ -1876,22 +1865,24 @@
             var sectionCanvas = document.getElementById('pkSectionAverageChart');
             if (sectionCanvas && hasDataset(normalizedSectionValues)) {
                 new Chart(sectionCanvas, {
-                    type: 'bar',
+                    type: 'radar',
                     data: {
                         labels: normalizedSectionLabels,
                         datasets: [{
                             label: 'Rata-rata Skor',
                             data: normalizedSectionValues,
-                            backgroundColor: '#0ea5e9',
-                            borderRadius: 10,
+                            backgroundColor: 'rgba(14, 165, 233, 0.22)',
+                            borderColor: '#0284c7',
+                            borderWidth: 2,
+                            pointBackgroundColor: '#0284c7',
+                            pointRadius: 3,
                         }],
                     },
                     options: {
-                        indexAxis: 'y',
                         responsive: true,
                         maintainAspectRatio: false,
                         scales: {
-                            x: {
+                            r: {
                                 beginAtZero: true,
                                 max: 5,
                                 ticks: {
@@ -1902,7 +1893,7 @@
                             },
                         },
                         plugins: {
-                            legend: { display: false },
+                            legend: { display: true, position: 'bottom' },
                             tooltip: {
                                 callbacks: {
                                     title: function (items) {
@@ -1913,7 +1904,7 @@
                                         return (sectionAverage.labels && sectionAverage.labels[index]) || items[0].label || '';
                                     },
                                     label: function (context) {
-                                        return 'Rata-rata: ' + Number(context.parsed.x || 0).toFixed(2);
+                                        return 'Rata-rata: ' + Number(context.raw || 0).toFixed(2);
                                     },
                                 },
                             },
