@@ -169,15 +169,6 @@
         <div class="col-12 col-xl-10">
             <div class="card pk-shell border-0">
                 <div class="card-body p-4 p-md-5">
-                    <div class="pk-hero">
-                        <h3 class="mb-1">Program Kemitraan</h3>
-                        <p class="text-muted mb-2">Form pendaftaran kemitraan Pusat Pasar Kerja.</p>
-                        <ul class="pk-hint-list small">
-                            <li>Isi data dengan lengkap dan benar agar proses verifikasi lebih cepat.</li>
-                            <li>Pastikan email dan WhatsApp aktif untuk kebutuhan komunikasi tim.</li>
-                        </ul>
-                    </div>
-
                     @php
                         $activeTab = $tab ?? 'pendaftaran';
                         $scoreOptions = ['1', '2', '3', '4', '5', 'NA'];
@@ -197,6 +188,15 @@
                     @endif
 
                     @if ($activeTab === 'pendaftaran')
+                        <div class="pk-hero">
+                            <h3 class="mb-1">Program Kemitraan</h3>
+                            <p class="text-muted mb-2">Form pendaftaran kemitraan Pusat Pasar Kerja.</p>
+                            <ul class="pk-hint-list small">
+                                <li>Isi data dengan lengkap dan benar agar proses verifikasi lebih cepat.</li>
+                                <li>Pastikan email dan WhatsApp aktif untuk kebutuhan komunikasi tim.</li>
+                            </ul>
+                        </div>
+
                         @if ($errors->any())
                             <div class="alert alert-danger">
                                 <div class="fw-semibold mb-1">Mohon periksa kembali data Anda:</div>
