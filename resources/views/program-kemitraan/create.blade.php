@@ -337,7 +337,7 @@
         opacity: 0;
         pointer-events: none;
     }
-    .pk-score-choice span {
+    .pk-score-choice > span {
         display: flex;
         flex-direction: row;
         align-items: center;
@@ -353,14 +353,15 @@
         cursor: pointer;
     }
     .pk-score-emoji {
-        font-size: 1.45rem;
+        font-size: 2.05rem;
         line-height: 1;
     }
     .pk-score-number {
-        font-size: 1rem;
+        font-size: 1.2rem;
         line-height: 1;
+        font-weight: 800;
     }
-    .pk-score-choice span:hover {
+    .pk-score-choice > span:hover {
         border-color: #60a5fa;
         background: #eff6ff;
     }
