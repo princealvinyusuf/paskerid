@@ -486,10 +486,6 @@
                         </a>
                     </div>
 
-                    @if (session('success'))
-                        <div class="alert alert-success">{{ session('success') }}</div>
-                    @endif
-
                     @if ($activeTab === 'pendaftaran')
                         <div class="pk-hero">
                             <h3 class="mb-1">Program Kemitraan</h3>
@@ -617,6 +613,10 @@
                             <button type="submit" class="btn btn-primary w-100 pk-submit" id="pkSubmitBtn">Kirim Pengajuan</button>
                         </form>
                     @else
+                        @if (session('evaluasi_success'))
+                            <div class="alert alert-success">{{ session('evaluasi_success') }}</div>
+                        @endif
+
                         @if ($errors->evaluasi->any())
                             <div class="alert alert-danger">
                                 <div class="fw-semibold mb-1">Mohon periksa kembali Form Evaluasi:</div>

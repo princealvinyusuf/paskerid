@@ -802,7 +802,7 @@ class ProgramKemitraanController extends Controller
 
         return redirect()
             ->route('program-kemitraan.create', ['tab' => self::TAB_EVALUASI])
-            ->with('success', 'Form evaluasi berhasil dikirim. Terima kasih atas partisipasi Anda.');
+            ->with('evaluasi_success', 'Form evaluasi berhasil dikirim. Terima kasih atas partisipasi Anda.');
     }
 
     /**
