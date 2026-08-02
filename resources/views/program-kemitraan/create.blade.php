@@ -606,29 +606,6 @@
                                     <div><label class="form-label">Kesimpulan umum</label><textarea class="form-control" name="recap_general_conclusion">{{ old('recap_general_conclusion') }}</textarea></div>
                                 </div>
                                 <hr>
-                                <h6 class="fw-semibold">Analisis Umpan Balik Kualitatif</h6>
-                                <div class="table-responsive mb-3">
-                                    <table class="table table-bordered table-sm">
-                                        <thead class="table-light">
-                                            <tr>
-                                                <th>No.</th>
-                                                <th>Tema</th>
-                                                <th>Ringkasan Temuan/Contoh Masukan</th>
-                                                <th>Frekuensi</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @for ($i = 0; $i < 4; $i++)
-                                                <tr>
-                                                    <td>{{ $i + 1 }}</td>
-                                                    <td><input type="text" class="form-control" name="qualitative_feedback[{{ $i }}][theme]" value="{{ old("qualitative_feedback.$i.theme") }}"></td>
-                                                    <td><textarea class="form-control" name="qualitative_feedback[{{ $i }}][summary]">{{ old("qualitative_feedback.$i.summary") }}</textarea></td>
-                                                    <td><input type="number" min="0" class="form-control" name="qualitative_feedback[{{ $i }}][frequency]" value="{{ old("qualitative_feedback.$i.frequency") }}"></td>
-                                                </tr>
-                                            @endfor
-                                        </tbody>
-                                    </table>
-                                </div>
                                 <h6 class="fw-semibold">Pencapaian Indikator Kegiatan</h6>
                                 <div class="table-responsive">
                                     <table class="table table-bordered table-sm">

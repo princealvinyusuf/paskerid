@@ -553,10 +553,6 @@ class ProgramKemitraanController extends Controller
             'recap_internal_target' => ['nullable', 'numeric', 'min:0', 'max:100'],
             'recap_achievement_status' => ['nullable', Rule::in($this->evaluasiAchievementStatuses())],
             'recap_general_conclusion' => ['nullable', 'string'],
-            'qualitative_feedback' => ['nullable', 'array'],
-            'qualitative_feedback.*.theme' => ['nullable', 'string', 'max:255'],
-            'qualitative_feedback.*.summary' => ['nullable', 'string'],
-            'qualitative_feedback.*.frequency' => ['nullable', 'integer', 'min:0'],
             'indicator_achievements' => ['nullable', 'array'],
             'indicator_achievements.*.indicator' => ['nullable', 'string', 'max:255'],
             'indicator_achievements.*.target' => ['nullable', 'string', 'max:255'],
@@ -594,7 +590,6 @@ class ProgramKemitraanController extends Controller
                 ->withErrors(['monitoring_media_other' => 'Kolom media pemantauan lainnya wajib diisi.'], 'evaluasi')
                 ->withInput();
         }
-        $qualitativeFeedback = $this->sanitizeRows($validated['qualitative_feedback'] ?? [], ['theme', 'summary', 'frequency']);
         $indicatorAchievements = $this->sanitizeRows($validated['indicator_achievements'] ?? [], ['indicator', 'target', 'realization', 'status']);
         $rtlItems = $this->sanitizeRows($validated['rtl_items'] ?? [], ['issue', 'follow_up', 'responsible_person', 'target_date', 'completion_indicator', 'status']);
 
@@ -656,7 +651,6 @@ class ProgramKemitraanController extends Controller
                 'recap_internal_target' => $validated['recap_internal_target'] ?? null,
                 'recap_achievement_status' => $validated['recap_achievement_status'] ?? null,
                 'recap_general_conclusion' => $validated['recap_general_conclusion'] ?? null,
-                'qualitative_feedback' => $qualitativeFeedback,
                 'indicator_achievements' => $indicatorAchievements,
                 'priority_level' => $validated['priority_level'] ?? null,
                 'monitoring_coordinator' => $validated['monitoring_coordinator'] ?? null,
