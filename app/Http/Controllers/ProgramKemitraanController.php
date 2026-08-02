@@ -585,12 +585,22 @@ class ProgramKemitraanController extends Controller
                 'additional_suggestions' => ['nullable', 'string'],
             ]);
         } else {
+            $todayPassword = now()->format('dmY');
             $rules = array_merge($rules, [
                 'evaluator_name' => ['required', 'string', 'max:255'],
                 'evaluator_position' => ['required', 'string', 'max:255'],
                 'evaluator_unit' => ['required', 'string', 'max:255'],
                 'evaluation_date' => ['required', 'date'],
                 'evaluator_role' => ['required', Rule::in($this->evaluasiEvaluatorRoles())],
+                'penyelenggara_submit_password' => [
+                    'required',
+                    'string',
+                    function (string $attribute, mixed $value, \Closure $fail) use ($todayPassword): void {
+                        if ((string) $value !== $todayPassword) {
+                            $fail('Password Penyelenggara tidak valid. Gunakan format tanggal hari ini (DDMMYYYY).');
+                        }
+                    },
+                ],
                 'evaluator_role_other' => ['nullable', 'string', 'max:255', 'required_if:evaluator_role,Lainnya'],
                 'form_b_planning_constraints' => ['nullable', 'string'],
                 'form_b_incident_notes' => ['nullable', 'string'],

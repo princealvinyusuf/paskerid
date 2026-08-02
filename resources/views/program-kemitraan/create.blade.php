@@ -1046,6 +1046,11 @@
                                                     <div><label class="form-label">Praktik baik dipertahankan</label><textarea class="form-control" name="form_b_good_practices">{{ old('form_b_good_practices') }}</textarea></div>
                                                     <div><label class="form-label">Akar masalah yang perlu diperbaiki</label><textarea class="form-control" name="form_b_root_issues">{{ old('form_b_root_issues') }}</textarea></div>
                                                     <div><label class="form-label">Rekomendasi prioritas</label><textarea class="form-control" name="form_b_priority_recommendations">{{ old('form_b_priority_recommendations') }}</textarea></div>
+                                                    <div>
+                                                        <label class="form-label">Password submit Penyelenggara<span class="pk-step-required">*</span></label>
+                                                        <input type="password" class="form-control" name="penyelenggara_submit_password" autocomplete="off" required>
+                                                        <small class="text-muted">Gunakan format tanggal hari ini: DDMMYYYY.</small>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
