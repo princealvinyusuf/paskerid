@@ -378,7 +378,6 @@
                                 <p class="text-muted mb-2">Isi instrumen evaluasi kegiatan secara lengkap sesuai pelaksanaan.</p>
                                 <ul class="pk-hint-list small">
                                     <li>Gunakan skor 1-5 untuk setiap indikator penilaian.</li>
-                                    <li>Lengkapi Form A sampai Form C serta RTL agar data evaluasi utuh.</li>
                                 </ul>
                             </div>
 
