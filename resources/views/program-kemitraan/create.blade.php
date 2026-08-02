@@ -252,6 +252,132 @@
         padding-top: 0.8rem;
         padding-bottom: 0.2rem;
     }
+    .pk-wizard {
+        border: 1px solid #dbe3ee;
+        border-radius: 16px;
+        background: #f8fbff;
+        box-shadow: 0 14px 32px rgba(15, 23, 42, 0.08);
+        padding: 1rem;
+    }
+    .pk-wizard-header {
+        position: sticky;
+        top: 0.4rem;
+        z-index: 4;
+        background: #f8fbff;
+        border-radius: 12px;
+        padding: 0.25rem 0.2rem 0.6rem;
+        margin-bottom: 0.6rem;
+    }
+    .pk-wizard-progress-track {
+        height: 10px;
+        width: 100%;
+        border-radius: 999px;
+        background: #e2e8f0;
+        overflow: hidden;
+    }
+    .pk-wizard-progress-fill {
+        height: 100%;
+        width: 0;
+        border-radius: 999px;
+        background: linear-gradient(90deg, #2563eb, #0ea5e9);
+        transition: width 0.25s ease;
+    }
+    .pk-wizard-step {
+        display: none;
+        animation: pkFadeSlide 0.2s ease;
+    }
+    .pk-wizard-step.active {
+        display: block;
+    }
+    .pk-wizard-question {
+        border: 1px solid #d7e2f0;
+        border-radius: 14px;
+        background: #fff;
+        box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+        margin-bottom: 0.85rem;
+        padding: 0.9rem;
+    }
+    .pk-wizard-question-label {
+        display: flex;
+        gap: 0.7rem;
+        align-items: flex-start;
+        margin-bottom: 0.75rem;
+        color: #0f172a;
+        font-weight: 600;
+    }
+    .pk-wizard-question-index {
+        min-width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: #1d4ed8;
+        border: 1px solid #bfdbfe;
+        background: #eff6ff;
+        font-size: 0.85rem;
+        font-weight: 700;
+    }
+    .pk-score-choice-row {
+        display: grid;
+        gap: 0.5rem;
+        grid-template-columns: repeat(5, minmax(40px, 1fr));
+    }
+    .pk-score-choice {
+        margin: 0;
+    }
+    .pk-score-choice input {
+        position: absolute;
+        opacity: 0;
+        pointer-events: none;
+    }
+    .pk-score-choice span {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #cbd5e1;
+        border-radius: 10px;
+        min-height: 42px;
+        font-weight: 700;
+        color: #1e293b;
+        background: #f8fafc;
+        transition: all 0.18s ease;
+        cursor: pointer;
+    }
+    .pk-score-choice input:checked + span {
+        border-color: #2563eb;
+        background: #2563eb;
+        color: #fff;
+        box-shadow: 0 8px 18px rgba(37, 99, 235, 0.28);
+    }
+    .pk-score-choice input:focus-visible + span {
+        outline: 2px solid #93c5fd;
+        outline-offset: 2px;
+    }
+    .pk-wizard-nav {
+        margin-top: 0.75rem;
+        display: flex;
+        justify-content: space-between;
+        gap: 0.7rem;
+    }
+    @keyframes pkFadeSlide {
+        from {
+            opacity: 0;
+            transform: translateY(6px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    @media (max-width: 767.98px) {
+        .pk-wizard {
+            padding: 0.8rem;
+        }
+        .pk-score-choice-row {
+            grid-template-columns: repeat(5, minmax(28px, 1fr));
+        }
+    }
 </style>
 @endsection
 
@@ -435,190 +561,176 @@
                             </div>
 
                             <div class="pk-eval-subpanel {{ $activeEvaluasiSubTab === 'peserta' ? 'active' : '' }}" data-eval-panel="peserta">
-                            <div class="pk-hero">
-                                <h3 class="mb-1">Form Evaluasi Program Kemitraan</h3>
-                                <p class="text-muted mb-2">Isi instrumen evaluasi kegiatan secara lengkap sesuai pelaksanaan.</p>
-                                <ul class="pk-hint-list small">
-                                    <li>Gunakan skor 1-5 untuk setiap indikator penilaian.</li>
-                                </ul>
-                            </div>
+                                @php
+                                    $pesertaWizardInitialStep = (int) old('evaluasi_peserta_step', 1);
+                                    if ($pesertaWizardInitialStep < 1) {
+                                        $pesertaWizardInitialStep = 1;
+                                    }
+                                @endphp
 
-                            <div class="pk-step">
-                                <div class="pk-eval-section-title">Formulir Evaluasi Peserta/Mitra</div>
-                                <p class="pk-eval-subtitle">Profil responden dan penilaian peserta/mitra.</p>
-                                <div class="pk-eval-intro-chip">Interaktif - Isi profil terlebih dahulu</div>
-
-                                <div class="pk-eval-card">
-                                    <div class="pk-eval-card-head">
-                                        <span>Profil Responden</span>
-                                        <span class="pk-eval-card-sub">Data dasar responden</span>
-                                    </div>
-                                    <div class="pk-eval-card-body">
-                                <div class="pk-eval-profile-grid mb-0">
-                                    <div>
-                                        <label class="form-label">Nama Kegiatan<span class="pk-step-required">*</span></label>
-                                        <select class="form-select" name="activity_master_id" data-shared-field="activity_master_id" required>
-                                            <option value="">-- Pilih nama kegiatan --</option>
-                                            @foreach (($evaluasiActivities ?? []) as $activityOption)
-                                                @php
-                                                    $activityId = (string) ($activityOption['id'] ?? '');
-                                                @endphp
-                                                <option value="{{ $activityId }}" {{ $selectedEvaluasiActivityId === $activityId ? 'selected' : '' }}>
-                                                    {{ $activityOption['activity_name'] ?? '' }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div><label class="form-label">Nama<span class="pk-step-required">*</span></label><input type="text" class="form-control" name="respondent_name" value="{{ old('respondent_name') }}" required></div>
-                                    <div><label class="form-label">Instansi/organisasi<span class="pk-step-required">*</span></label><input type="text" class="form-control" name="respondent_organization" value="{{ old('respondent_organization') }}" required></div>
-                                    <div><label class="form-label">Jabatan/peran<span class="pk-step-required">*</span></label><input type="text" class="form-control" name="respondent_role" value="{{ old('respondent_role') }}" required></div>
-                                    <div><label class="form-label">Kontak/surel<span class="pk-step-required">*</span></label><input type="text" class="form-control" name="respondent_contact" value="{{ old('respondent_contact') }}" required></div>
-                                    <div>
-                                        <label class="form-label">Kategori responden<span class="pk-step-required">*</span></label>
-                                        <select class="form-select" name="respondent_category" required>
-                                            <option value="">-- Pilih kategori --</option>
-                                            @foreach ($evaluasiRespondentCategories as $category)
-                                                <option value="{{ $category }}" {{ old('respondent_category') === $category ? 'selected' : '' }}>{{ $category }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <label class="form-label">Kategori lainnya</label>
-                                        <input type="text" class="form-control" name="respondent_category_other" value="{{ old('respondent_category_other') }}">
-                                    </div>
-                                    <div>
-                                        <label class="form-label">Moda keikutsertaan<span class="pk-step-required">*</span></label>
-                                        <select class="form-select" name="participation_mode" required>
-                                            <option value="">-- Pilih moda --</option>
-                                            @foreach ($evaluasiParticipationModes as $mode)
-                                                <option value="{{ $mode }}" {{ old('participation_mode') === $mode ? 'selected' : '' }}>{{ $mode }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                                    </div>
+                                <div class="pk-hero">
+                                    <h3 class="mb-1">Form Evaluasi Program Kemitraan</h3>
+                                    <p class="text-muted mb-2">Isi instrumen evaluasi kegiatan secara lengkap sesuai pelaksanaan.</p>
+                                    <ul class="pk-hint-list small mb-0">
+                                        <li>Format ini dirancang seperti survei berurutan agar pengisian lebih fokus.</li>
+                                    </ul>
                                 </div>
 
-                                <div class="pk-eval-score-note">
-                                    Nilai setiap indikator menggunakan skala 1-5. Klik header aspek untuk buka/tutup tabel penilaian.
-                                </div>
-
-                                @foreach (($evaluasiQuestionGroups['form_a'] ?? []) as $sectionKey => $sectionConfig)
-                                    @php
-                                        $collapseId = 'pesertaSection_' . $sectionKey;
-                                    @endphp
-                                    <div class="pk-eval-card">
-                                        <button
-                                            type="button"
-                                            class="pk-eval-card-head"
-                                            data-bs-toggle="collapse"
-                                            data-bs-target="#{{ $collapseId }}"
-                                            aria-expanded="{{ $loop->first ? 'true' : 'false' }}"
-                                            aria-controls="{{ $collapseId }}"
-                                        >
-                                            <span>{{ $sectionConfig['title'] }}</span>
-                                            <span class="pk-eval-card-sub">{{ count($sectionConfig['items'] ?? []) }} indikator</span>
-                                        </button>
-                                        <div id="{{ $collapseId }}" class="collapse {{ $loop->first ? 'show' : '' }}">
-                                            <div class="pk-eval-card-body">
-                                        <div class="table-responsive">
-                                            <table class="table table-bordered table-sm pk-eval-table">
-                                                <thead class="table-light">
-                                                    <tr>
-                                                        <th style="width: 48px;">No</th>
-                                                        <th class="pk-item-text">Pernyataan/Indikator</th>
-                                                        @foreach ($scoreOptions as $scoreOption)
-                                                            <th class="text-center">{{ $scoreOption }}</th>
-                                                        @endforeach
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    @foreach (($sectionConfig['items'] ?? []) as $itemIndex => $itemText)
-                                                        @php
-                                                            $itemNumber = $itemIndex + 1;
-                                                            $oldAnswer = old("answers.form_a.$sectionKey.$itemNumber");
-                                                        @endphp
-                                                        <tr>
-                                                            <td>{{ $itemNumber }}</td>
-                                                            <td class="pk-item-text">{{ $itemText }}</td>
-                                                            @foreach ($scoreOptions as $scoreOption)
-                                                                <td class="text-center">
-                                                                    <input type="radio" name="answers[form_a][{{ $sectionKey }}][{{ $itemNumber }}]" value="{{ $scoreOption }}" {{ $oldAnswer === $scoreOption ? 'checked' : '' }} required>
-                                                                </td>
-                                                            @endforeach
-                                                        </tr>
-                                                    @endforeach
-                                                </tbody>
-                                            </table>
+                                <div class="pk-wizard" id="pesertaWizard" data-initial-step="{{ $pesertaWizardInitialStep }}">
+                                    <input type="hidden" name="evaluasi_peserta_step" id="evaluasiPesertaStepInput" value="{{ $pesertaWizardInitialStep }}">
+                                    <div class="pk-wizard-header">
+                                        <div class="d-flex justify-content-between align-items-center gap-2 mb-2">
+                                            <div class="fw-semibold text-dark" id="pesertaWizardTitle">Langkah</div>
+                                            <div class="small text-muted" id="pesertaWizardCounter"></div>
                                         </div>
+                                        <div class="pk-wizard-progress-track">
+                                            <div class="pk-wizard-progress-fill" id="pesertaWizardProgress"></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="pk-wizard-step active" data-step-index="1" data-step-title="Profil Responden">
+                                        <div class="pk-eval-card">
+                                            <div class="pk-eval-card-head">
+                                                <span>Profil Responden</span>
+                                                <span class="pk-eval-card-sub">Isi data dasar terlebih dahulu</span>
+                                            </div>
+                                            <div class="pk-eval-card-body">
+                                                <div class="pk-eval-profile-grid mb-0">
+                                                    <div>
+                                                        <label class="form-label">Nama Kegiatan<span class="pk-step-required">*</span></label>
+                                                        <select class="form-select" name="activity_master_id" data-shared-field="activity_master_id" required>
+                                                            <option value="">-- Pilih nama kegiatan --</option>
+                                                            @foreach (($evaluasiActivities ?? []) as $activityOption)
+                                                                @php $activityId = (string) ($activityOption['id'] ?? ''); @endphp
+                                                                <option value="{{ $activityId }}" {{ $selectedEvaluasiActivityId === $activityId ? 'selected' : '' }}>
+                                                                    {{ $activityOption['activity_name'] ?? '' }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    <div><label class="form-label">Nama<span class="pk-step-required">*</span></label><input type="text" class="form-control" name="respondent_name" value="{{ old('respondent_name') }}" required></div>
+                                                    <div><label class="form-label">Instansi/organisasi<span class="pk-step-required">*</span></label><input type="text" class="form-control" name="respondent_organization" value="{{ old('respondent_organization') }}" required></div>
+                                                    <div><label class="form-label">Jabatan/peran<span class="pk-step-required">*</span></label><input type="text" class="form-control" name="respondent_role" value="{{ old('respondent_role') }}" required></div>
+                                                    <div><label class="form-label">Kontak/surel<span class="pk-step-required">*</span></label><input type="text" class="form-control" name="respondent_contact" value="{{ old('respondent_contact') }}" required></div>
+                                                    <div>
+                                                        <label class="form-label">Kategori responden<span class="pk-step-required">*</span></label>
+                                                        <select class="form-select" name="respondent_category" required>
+                                                            <option value="">-- Pilih kategori --</option>
+                                                            @foreach ($evaluasiRespondentCategories as $category)
+                                                                <option value="{{ $category }}" {{ old('respondent_category') === $category ? 'selected' : '' }}>{{ $category }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    <div>
+                                                        <label class="form-label">Kategori lainnya</label>
+                                                        <input type="text" class="form-control" name="respondent_category_other" value="{{ old('respondent_category_other') }}">
+                                                    </div>
+                                                    <div>
+                                                        <label class="form-label">Moda keikutsertaan<span class="pk-step-required">*</span></label>
+                                                        <select class="form-select" name="participation_mode" required>
+                                                            <option value="">-- Pilih moda --</option>
+                                                            @foreach ($evaluasiParticipationModes as $mode)
+                                                                <option value="{{ $mode }}" {{ old('participation_mode') === $mode ? 'selected' : '' }}>{{ $mode }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                @endforeach
 
-                                <div class="pk-eval-card">
-                                    <div class="pk-eval-card-head">
-                                        <span>Catatan Peserta</span>
-                                        <span class="pk-eval-card-sub">Masukan kualitatif</span>
-                                    </div>
-                                    <div class="pk-eval-card-body">
-                                <div class="pk-eval-grid">
-                                    <div><label class="form-label">Catatan khusus tujuan/tema/sasaran</label><textarea class="form-control" name="form_a_special_notes">{{ old('form_a_special_notes') }}</textarea></div>
-                                    <div><label class="form-label">Materi paling bermanfaat</label><textarea class="form-control" name="form_a_most_useful_material">{{ old('form_a_most_useful_material') }}</textarea></div>
-                                    <div><label class="form-label">Materi perlu diperdalam</label><textarea class="form-control" name="form_a_material_needs">{{ old('form_a_material_needs') }}</textarea></div>
-                                    <div><label class="form-label">Catatan narasumber/panitia/fasilitas</label><textarea class="form-control" name="form_a_facility_notes">{{ old('form_a_facility_notes') }}</textarea></div>
-                                    <div><label class="form-label">Usulan bentuk kerja sama/tindak lanjut</label><textarea class="form-control" name="form_a_proposed_followup">{{ old('form_a_proposed_followup') }}</textarea></div>
-                                </div>
-                                    </div>
-                                </div>
-                                <hr>
-                                <div class="pk-eval-card">
-                                    <div class="pk-eval-card-head">
-                                        <span>Penilaian Akhir Peserta</span>
-                                        <span class="pk-eval-card-sub">Kepuasan dan tindak lanjut</span>
-                                    </div>
-                                    <div class="pk-eval-card-body">
-                                <div class="pk-eval-grid">
-                                    <div>
-                                        <label class="form-label">Tingkat kepuasan umum<span class="pk-step-required">*</span></label>
-                                        <select class="form-select" name="overall_satisfaction" required>
-                                            <option value="">-- Pilih tingkat kepuasan --</option>
-                                            @foreach ($evaluasiSatisfactionOptions as $option)
-                                                <option value="{{ $option }}" {{ old('overall_satisfaction') === $option ? 'selected' : '' }}>{{ $option }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <label class="form-label">Bersedia dihubungi tindak lanjut<span class="pk-step-required">*</span></label>
-                                        <select class="form-select" name="willing_to_follow_up" required>
-                                            <option value="">-- Pilih jawaban --</option>
-                                            @foreach ($evaluasiWillingFollowupOptions as $option)
-                                                <option value="{{ $option }}" {{ old('willing_to_follow_up') === $option ? 'selected' : '' }}>{{ $option }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <label class="form-label">Kanal komunikasi disukai<span class="pk-step-required">*</span></label>
-                                        <div class="d-flex flex-wrap gap-3">
-                                            @foreach ($evaluasiCommunicationChannels as $channel)
+                                    @foreach (($evaluasiQuestionGroups['form_a'] ?? []) as $sectionKey => $sectionConfig)
+                                        <div class="pk-wizard-step" data-step-index="{{ $loop->iteration + 1 }}" data-step-title="{{ $sectionConfig['title'] }}">
+                                            <div class="pk-eval-score-note">
+                                                Beri nilai pada setiap pernyataan. Pilih satu skor 1-5 yang paling sesuai.
+                                            </div>
+                                            @foreach (($sectionConfig['items'] ?? []) as $itemIndex => $itemText)
                                                 @php
-                                                    $selectedChannels = old('preferred_channels', []);
+                                                    $itemNumber = $itemIndex + 1;
+                                                    $oldAnswer = old("answers.form_a.$sectionKey.$itemNumber");
+                                                    $questionName = "answers[form_a][$sectionKey][$itemNumber]";
                                                 @endphp
-                                                <label class="form-check-label">
-                                                    <input class="form-check-input me-1" type="checkbox" name="preferred_channels[]" value="{{ $channel }}" {{ in_array($channel, $selectedChannels, true) ? 'checked' : '' }}>
-                                                    {{ $channel }}
-                                                </label>
+                                                <div class="pk-wizard-question">
+                                                    <div class="pk-wizard-question-label">
+                                                        <span class="pk-wizard-question-index">{{ $itemNumber }}</span>
+                                                        <span>{{ $itemText }}</span>
+                                                    </div>
+                                                    <div class="pk-score-choice-row">
+                                                        @foreach ($scoreOptions as $scoreOption)
+                                                            <label class="pk-score-choice">
+                                                                <input
+                                                                    type="radio"
+                                                                    name="{{ $questionName }}"
+                                                                    value="{{ $scoreOption }}"
+                                                                    {{ $oldAnswer === $scoreOption ? 'checked' : '' }}
+                                                                    required
+                                                                >
+                                                                <span>{{ $scoreOption }}</span>
+                                                            </label>
+                                                        @endforeach
+                                                    </div>
+                                                </div>
                                             @endforeach
                                         </div>
+                                    @endforeach
+
+                                    <div class="pk-wizard-step" data-step-index="{{ count($evaluasiQuestionGroups['form_a'] ?? []) + 2 }}" data-step-title="Penilaian Akhir Peserta">
+                                        <div class="pk-eval-card">
+                                            <div class="pk-eval-card-head">
+                                                <span>Penilaian Akhir Peserta</span>
+                                                <span class="pk-eval-card-sub">Kepuasan dan tindak lanjut</span>
+                                            </div>
+                                            <div class="pk-eval-card-body">
+                                                <div class="pk-eval-grid">
+                                                    <div>
+                                                        <label class="form-label">Tingkat kepuasan umum<span class="pk-step-required">*</span></label>
+                                                        <select class="form-select" name="overall_satisfaction" required>
+                                                            <option value="">-- Pilih tingkat kepuasan --</option>
+                                                            @foreach ($evaluasiSatisfactionOptions as $option)
+                                                                <option value="{{ $option }}" {{ old('overall_satisfaction') === $option ? 'selected' : '' }}>{{ $option }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    <div>
+                                                        <label class="form-label">Bersedia dihubungi tindak lanjut<span class="pk-step-required">*</span></label>
+                                                        <select class="form-select" name="willing_to_follow_up" required>
+                                                            <option value="">-- Pilih jawaban --</option>
+                                                            @foreach ($evaluasiWillingFollowupOptions as $option)
+                                                                <option value="{{ $option }}" {{ old('willing_to_follow_up') === $option ? 'selected' : '' }}>{{ $option }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    <div>
+                                                        <label class="form-label">Kanal komunikasi disukai<span class="pk-step-required">*</span></label>
+                                                        <div class="d-flex flex-wrap gap-3">
+                                                            @foreach ($evaluasiCommunicationChannels as $channel)
+                                                                @php $selectedChannels = old('preferred_channels', []); @endphp
+                                                                <label class="form-check-label">
+                                                                    <input class="form-check-input me-1" type="checkbox" name="preferred_channels[]" value="{{ $channel }}" {{ in_array($channel, $selectedChannels, true) ? 'checked' : '' }}>
+                                                                    {{ $channel }}
+                                                                </label>
+                                                            @endforeach
+                                                        </div>
+                                                    </div>
+                                                    <div><label class="form-label">Hal terbaik dari kegiatan<span class="pk-step-required">*</span></label><textarea class="form-control" name="best_part" required>{{ old('best_part') }}</textarea></div>
+                                                    <div><label class="form-label">Hal yang perlu diperbaiki<span class="pk-step-required">*</span></label><textarea class="form-control" name="needs_improvement" required>{{ old('needs_improvement') }}</textarea></div>
+                                                    <div><label class="form-label">Topik/kegiatan lanjutan dibutuhkan<span class="pk-step-required">*</span></label><textarea class="form-control" name="needed_topics" required>{{ old('needed_topics') }}</textarea></div>
+                                                    <div><label class="form-label">Saran lainnya</label><textarea class="form-control" name="additional_suggestions">{{ old('additional_suggestions') }}</textarea></div>
+                                                    <div><label class="form-label">Catatan khusus tujuan/tema/sasaran</label><textarea class="form-control" name="form_a_special_notes">{{ old('form_a_special_notes') }}</textarea></div>
+                                                    <div><label class="form-label">Materi paling bermanfaat</label><textarea class="form-control" name="form_a_most_useful_material">{{ old('form_a_most_useful_material') }}</textarea></div>
+                                                    <div><label class="form-label">Materi perlu diperdalam</label><textarea class="form-control" name="form_a_material_needs">{{ old('form_a_material_needs') }}</textarea></div>
+                                                    <div><label class="form-label">Catatan narasumber/panitia/fasilitas</label><textarea class="form-control" name="form_a_facility_notes">{{ old('form_a_facility_notes') }}</textarea></div>
+                                                    <div><label class="form-label">Usulan bentuk kerja sama/tindak lanjut</label><textarea class="form-control" name="form_a_proposed_followup">{{ old('form_a_proposed_followup') }}</textarea></div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div><label class="form-label">Hal terbaik dari kegiatan<span class="pk-step-required">*</span></label><textarea class="form-control" name="best_part" required>{{ old('best_part') }}</textarea></div>
-                                    <div><label class="form-label">Hal yang perlu diperbaiki<span class="pk-step-required">*</span></label><textarea class="form-control" name="needs_improvement" required>{{ old('needs_improvement') }}</textarea></div>
-                                    <div><label class="form-label">Topik/kegiatan lanjutan dibutuhkan<span class="pk-step-required">*</span></label><textarea class="form-control" name="needed_topics" required>{{ old('needed_topics') }}</textarea></div>
-                                    <div><label class="form-label">Saran lainnya</label><textarea class="form-control" name="additional_suggestions">{{ old('additional_suggestions') }}</textarea></div>
-                                </div>
+
+                                    <div class="pk-wizard-nav">
+                                        <button type="button" class="btn btn-outline-secondary" id="pesertaWizardPrevBtn">Sebelumnya</button>
+                                        <button type="button" class="btn btn-primary" id="pesertaWizardNextBtn">Lanjut</button>
                                     </div>
                                 </div>
-                            </div>
                             </div>
 
                             <div class="pk-eval-subpanel {{ $activeEvaluasiSubTab === 'penyelenggara' ? 'active' : '' }}" data-eval-panel="penyelenggara">
@@ -870,10 +982,20 @@
         var evaluasiSubTabButtons = document.querySelectorAll('[data-eval-subtab]');
         var evaluasiSubPanels = document.querySelectorAll('[data-eval-panel]');
         var sharedIdentitasFields = document.querySelectorAll('[data-shared-field]');
+        var pesertaWizard = document.getElementById('pesertaWizard');
+        var pesertaWizardSteps = pesertaWizard ? pesertaWizard.querySelectorAll('.pk-wizard-step') : [];
+        var pesertaWizardPrevBtn = document.getElementById('pesertaWizardPrevBtn');
+        var pesertaWizardNextBtn = document.getElementById('pesertaWizardNextBtn');
+        var pesertaWizardCounter = document.getElementById('pesertaWizardCounter');
+        var pesertaWizardTitle = document.getElementById('pesertaWizardTitle');
+        var pesertaWizardProgress = document.getElementById('pesertaWizardProgress');
+        var pesertaWizardStepInput = document.getElementById('evaluasiPesertaStepInput');
+        var evaluasiErrorKeys = @json($errors->evaluasi->keys());
         var categorySelect = document.getElementById('institution_category');
         var mitraTypeWrapper = document.getElementById('mitraTypeWrapper');
         var mitraTypeSelect = document.getElementById('mitra_pembangunan_type');
         var mitraCategory = 'Mitra Pembangunan (Perusahaan/Swasta/Job Portal)';
+        var activePesertaStep = 1;
 
         function syncMitraTypeVisibility() {
             if (!categorySelect || !mitraTypeWrapper || !mitraTypeSelect) {
@@ -918,6 +1040,9 @@
 
         if (evaluasiForm && evaluasiSubmitBtn) {
             evaluasiForm.addEventListener('submit', function () {
+                if (pesertaWizardStepInput) {
+                    pesertaWizardStepInput.value = String(activePesertaStep);
+                }
                 evaluasiSubmitBtn.disabled = true;
                 evaluasiSubmitBtn.innerHTML = 'Mengirim form evaluasi...';
             });
@@ -958,6 +1083,190 @@
             });
         }
 
+        function normalizeFieldName(fieldName) {
+            if (!fieldName) {
+                return '';
+            }
+            return fieldName
+                .replace(/\[\]/g, '')
+                .replace(/\]/g, '')
+                .replace(/\[/g, '.')
+                .replace(/^\./, '');
+        }
+
+        function isErrorMatch(fieldKey, errorKey) {
+            if (!fieldKey || !errorKey) {
+                return false;
+            }
+            return (
+                fieldKey === errorKey ||
+                fieldKey.indexOf(errorKey + '.') === 0 ||
+                errorKey.indexOf(fieldKey + '.') === 0
+            );
+        }
+
+        function getStepFieldNames(stepElement) {
+            var names = [];
+            stepElement.querySelectorAll('input[name], select[name], textarea[name]').forEach(function (field) {
+                names.push(normalizeFieldName(field.name));
+            });
+            return names;
+        }
+
+        function getFirstStepFromErrors() {
+            if (!pesertaWizard || !Array.isArray(evaluasiErrorKeys) || evaluasiErrorKeys.length === 0) {
+                return null;
+            }
+            for (var i = 0; i < pesertaWizardSteps.length; i++) {
+                var names = getStepFieldNames(pesertaWizardSteps[i]);
+                for (var e = 0; e < evaluasiErrorKeys.length; e++) {
+                    var errorKey = evaluasiErrorKeys[e];
+                    for (var n = 0; n < names.length; n++) {
+                        if (isErrorMatch(names[n], errorKey)) {
+                            return i + 1;
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+
+        function refreshWizardHeader(stepNumber, totalSteps, stepTitle) {
+            var pct = Math.round((stepNumber / totalSteps) * 100);
+            if (pesertaWizardCounter) {
+                pesertaWizardCounter.textContent = 'Langkah ' + stepNumber + ' dari ' + totalSteps + ' (' + pct + '%)';
+            }
+            if (pesertaWizardTitle) {
+                pesertaWizardTitle.textContent = stepTitle || 'Langkah';
+            }
+            if (pesertaWizardProgress) {
+                pesertaWizardProgress.style.width = pct + '%';
+            }
+            if (pesertaWizardPrevBtn) {
+                pesertaWizardPrevBtn.disabled = stepNumber === 1;
+            }
+            if (pesertaWizardNextBtn) {
+                var isLast = stepNumber === totalSteps;
+                pesertaWizardNextBtn.style.visibility = isLast ? 'hidden' : 'visible';
+                pesertaWizardNextBtn.disabled = isLast;
+            }
+        }
+
+        function validateStep(stepElement) {
+            var firstInvalid = null;
+            var checkedGroups = {};
+            var fields = stepElement.querySelectorAll('input, select, textarea');
+
+            function hasCheckedInGroup(groupName, typeName) {
+                var groupFields = stepElement.querySelectorAll('input[type="' + typeName + '"]');
+                for (var i = 0; i < groupFields.length; i++) {
+                    if (groupFields[i].name === groupName && groupFields[i].checked) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            fields.forEach(function (field) {
+                if (field.disabled || !field.hasAttribute('required')) {
+                    return;
+                }
+
+                var type = (field.getAttribute('type') || '').toLowerCase();
+                if (type === 'radio') {
+                    if (checkedGroups[field.name]) {
+                        return;
+                    }
+                    checkedGroups[field.name] = true;
+                    var isChecked = hasCheckedInGroup(field.name, 'radio');
+                    if (!isChecked && !firstInvalid) {
+                        firstInvalid = field;
+                    }
+                    return;
+                }
+
+                if (type === 'checkbox') {
+                    var isTicked = hasCheckedInGroup(field.name, 'checkbox');
+                    if (!isTicked && !firstInvalid) {
+                        firstInvalid = field;
+                    }
+                    return;
+                }
+
+                if (!field.value || !field.value.trim()) {
+                    if (!firstInvalid) {
+                        firstInvalid = field;
+                    }
+                }
+            });
+
+            if (firstInvalid) {
+                firstInvalid.focus();
+                return false;
+            }
+            return true;
+        }
+
+        function setPesertaStep(nextStep) {
+            if (!pesertaWizard || pesertaWizardSteps.length === 0) {
+                return;
+            }
+            var totalSteps = pesertaWizardSteps.length;
+            var safeStep = Math.min(Math.max(nextStep, 1), totalSteps);
+            activePesertaStep = safeStep;
+            pesertaWizardSteps.forEach(function (step, idx) {
+                var isActive = idx + 1 === safeStep;
+                step.classList.toggle('active', isActive);
+            });
+            var activeStepElement = pesertaWizardSteps[safeStep - 1];
+            refreshWizardHeader(
+                safeStep,
+                totalSteps,
+                activeStepElement ? activeStepElement.getAttribute('data-step-title') : 'Langkah'
+            );
+            if (pesertaWizardStepInput) {
+                pesertaWizardStepInput.value = String(safeStep);
+            }
+            if (evaluasiSubTabInput) {
+                evaluasiSubTabInput.value = 'peserta';
+            }
+        }
+
+        function initPesertaWizard() {
+            if (!pesertaWizard || pesertaWizardSteps.length === 0) {
+                return;
+            }
+            var totalSteps = pesertaWizardSteps.length;
+            var initialStep = parseInt(pesertaWizard.getAttribute('data-initial-step') || '1', 10);
+            if (Number.isNaN(initialStep)) {
+                initialStep = 1;
+            }
+            var errorStep = getFirstStepFromErrors();
+            if (errorStep !== null) {
+                initialStep = errorStep;
+                setEvaluasiSubTab('peserta');
+            }
+            setPesertaStep(Math.min(Math.max(initialStep, 1), totalSteps));
+
+            if (pesertaWizardPrevBtn) {
+                pesertaWizardPrevBtn.addEventListener('click', function () {
+                    setPesertaStep(activePesertaStep - 1);
+                });
+            }
+            if (pesertaWizardNextBtn) {
+                pesertaWizardNextBtn.addEventListener('click', function () {
+                    var currentStep = pesertaWizardSteps[activePesertaStep - 1];
+                    if (!currentStep) {
+                        return;
+                    }
+                    if (!validateStep(currentStep)) {
+                        return;
+                    }
+                    setPesertaStep(activePesertaStep + 1);
+                });
+            }
+        }
+
         if (evaluasiSubTabButtons.length > 0 && evaluasiSubPanels.length > 0) {
             evaluasiSubTabButtons.forEach(function (button) {
                 button.addEventListener('click', function () {
@@ -971,6 +1280,8 @@
             var initialTab = evaluasiSubTabInput && evaluasiSubTabInput.value ? evaluasiSubTabInput.value : 'peserta';
             setEvaluasiSubTab(initialTab);
         }
+
+        initPesertaWizard();
 
         if (sharedIdentitasFields.length > 0) {
             sharedIdentitasFields.forEach(function (field) {
