@@ -400,10 +400,10 @@
                                             @endforeach
                                         </select>
                                     </div>
-                                    <div><label class="form-label">Nama (opsional)</label><input type="text" class="form-control" name="respondent_name" value="{{ old('respondent_name') }}"></div>
-                                    <div><label class="form-label">Instansi/organisasi</label><input type="text" class="form-control" name="respondent_organization" value="{{ old('respondent_organization') }}"></div>
-                                    <div><label class="form-label">Jabatan/peran</label><input type="text" class="form-control" name="respondent_role" value="{{ old('respondent_role') }}"></div>
-                                    <div><label class="form-label">Kontak/surel</label><input type="text" class="form-control" name="respondent_contact" value="{{ old('respondent_contact') }}"></div>
+                                    <div><label class="form-label">Nama<span class="pk-step-required">*</span></label><input type="text" class="form-control" name="respondent_name" value="{{ old('respondent_name') }}" required></div>
+                                    <div><label class="form-label">Instansi/organisasi<span class="pk-step-required">*</span></label><input type="text" class="form-control" name="respondent_organization" value="{{ old('respondent_organization') }}" required></div>
+                                    <div><label class="form-label">Jabatan/peran<span class="pk-step-required">*</span></label><input type="text" class="form-control" name="respondent_role" value="{{ old('respondent_role') }}" required></div>
+                                    <div><label class="form-label">Kontak/surel<span class="pk-step-required">*</span></label><input type="text" class="form-control" name="respondent_contact" value="{{ old('respondent_contact') }}" required></div>
                                     <div>
                                         <label class="form-label">Kategori responden<span class="pk-step-required">*</span></label>
                                         <select class="form-select" name="respondent_category" required>
