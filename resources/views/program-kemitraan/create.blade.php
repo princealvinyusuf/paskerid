@@ -339,9 +339,10 @@
     }
     .pk-score-choice span {
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
         align-items: center;
         justify-content: center;
+        gap: 0.35rem;
         border: 1px solid #cbd5e1;
         border-radius: 10px;
         min-height: 42px;
@@ -352,12 +353,11 @@
         cursor: pointer;
     }
     .pk-score-emoji {
-        font-size: 1rem;
+        font-size: 1.45rem;
         line-height: 1;
-        margin-bottom: 0.15rem;
     }
     .pk-score-number {
-        font-size: 0.82rem;
+        font-size: 1rem;
         line-height: 1;
     }
     .pk-score-choice span:hover {
