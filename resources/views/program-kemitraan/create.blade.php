@@ -339,6 +339,7 @@
     }
     .pk-score-choice span {
         display: flex;
+        flex-direction: column;
         align-items: center;
         justify-content: center;
         border: 1px solid #cbd5e1;
@@ -349,6 +350,15 @@
         background: #f8fafc;
         transition: all 0.18s ease;
         cursor: pointer;
+    }
+    .pk-score-emoji {
+        font-size: 1rem;
+        line-height: 1;
+        margin-bottom: 0.15rem;
+    }
+    .pk-score-number {
+        font-size: 0.82rem;
+        line-height: 1;
     }
     .pk-score-choice span:hover {
         border-color: #60a5fa;
@@ -756,6 +766,16 @@
                                                     </div>
                                                     <div class="pk-score-choice-row">
                                                         @foreach ($scoreOptions as $scoreOption)
+                                                            @php
+                                                                $scoreEmoji = match ($scoreOption) {
+                                                                    '1' => '😞',
+                                                                    '2' => '🙁',
+                                                                    '3' => '😐',
+                                                                    '4' => '🙂',
+                                                                    '5' => '😄',
+                                                                    default => '🙂',
+                                                                };
+                                                            @endphp
                                                             <label class="pk-score-choice">
                                                                 <input
                                                                     type="radio"
@@ -764,7 +784,10 @@
                                                                     {{ $oldAnswer === $scoreOption ? 'checked' : '' }}
                                                                     required
                                                                 >
-                                                                <span>{{ $scoreOption }}</span>
+                                                                <span>
+                                                                    <span class="pk-score-emoji" aria-hidden="true">{{ $scoreEmoji }}</span>
+                                                                    <span class="pk-score-number">{{ $scoreOption }}</span>
+                                                                </span>
                                                             </label>
                                                         @endforeach
                                                     </div>
