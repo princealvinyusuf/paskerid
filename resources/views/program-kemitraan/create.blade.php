@@ -171,7 +171,7 @@
                 <div class="card-body p-4 p-md-5">
                     @php
                         $activeTab = $tab ?? 'pendaftaran';
-                        $scoreOptions = ['1', '2', '3', '4', '5', 'NA'];
+                        $scoreOptions = ['1', '2', '3', '4', '5'];
                     @endphp
 
                     <div class="pk-segmented" role="tablist" aria-label="Program Kemitraan tabs">
@@ -318,7 +318,7 @@
                             <h3 class="mb-1">Form Evaluasi Program Kemitraan</h3>
                             <p class="text-muted mb-2">Isi instrumen evaluasi kegiatan secara lengkap sesuai pelaksanaan.</p>
                             <ul class="pk-hint-list small">
-                                <li>Gunakan skor 1-5 atau pilih NA jika indikator tidak relevan.</li>
+                                <li>Gunakan skor 1-5 untuk setiap indikator penilaian.</li>
                                 <li>Lengkapi Form A sampai Form C, RTL, dan pengesahan agar data evaluasi utuh.</li>
                             </ul>
                         </div>

@@ -12,7 +12,7 @@ class ProgramKemitraanController extends Controller
 {
     private const TAB_PENDAFTARAN = 'pendaftaran';
     private const TAB_EVALUASI = 'evaluasi';
-    private const SCORE_OPTIONS = ['1', '2', '3', '4', '5', 'NA'];
+    private const SCORE_OPTIONS = ['1', '2', '3', '4', '5'];
 
     /**
      * @return array<int, string>
@@ -773,8 +773,8 @@ class ProgramKemitraanController extends Controller
                             'section_key' => $sectionKey,
                             'indicator_number' => $indicatorNumber,
                             'indicator_text' => $itemText,
-                            'score' => $scoreValue === 'NA' ? null : (int) $scoreValue,
-                            'is_not_applicable' => $scoreValue === 'NA',
+                            'score' => (int) $scoreValue,
+                            'is_not_applicable' => false,
                         ];
                     }
                 }
