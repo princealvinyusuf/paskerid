@@ -1730,6 +1730,28 @@
             return false;
         }
 
+        function clampNumber(value, min, max) {
+            var parsed = Number(value || 0);
+            if (Number.isNaN(parsed)) {
+                parsed = 0;
+            }
+            if (parsed < min) {
+                return min;
+            }
+            if (parsed > max) {
+                return max;
+            }
+            return parsed;
+        }
+
+        function shortenLabel(label, maxLen) {
+            var text = String(label || '');
+            if (text.length <= maxLen) {
+                return text;
+            }
+            return text.slice(0, maxLen - 1) + '…';
+        }
+
         function renderEvaluasiCharts() {
             if (typeof window.Chart === 'undefined') {
                 return;
@@ -1739,6 +1761,24 @@
             var formComposition = evaluasiStats && evaluasiStats.form_composition ? evaluasiStats.form_composition : {};
             var monthlyTrend = evaluasiStats && evaluasiStats.monthly_trend ? evaluasiStats.monthly_trend : {};
             var sectionAverage = evaluasiStats && evaluasiStats.section_average ? evaluasiStats.section_average : {};
+            var normalizedSectionValues = Array.isArray(sectionAverage.values)
+                ? sectionAverage.values.map(function (value) { return clampNumber(value, 0, 5); })
+                : [];
+            var normalizedSectionLabels = Array.isArray(sectionAverage.labels)
+                ? sectionAverage.labels.map(function (label) { return shortenLabel(label, 46); })
+                : [];
+            var normalizedFormValues = Array.isArray(formComposition.values)
+                ? formComposition.values.map(function (value) { return Math.max(0, Number(value || 0)); })
+                : [];
+            var totalFormValues = normalizedFormValues.reduce(function (acc, value) {
+                return acc + value;
+            }, 0);
+            var normalizedFormPercentages = normalizedFormValues.map(function (value) {
+                if (totalFormValues <= 0) {
+                    return 0;
+                }
+                return Number(((value / totalFormValues) * 100).toFixed(2));
+            });
 
             var scoreCanvas = document.getElementById('pkScoreDistributionChart');
             if (scoreCanvas && hasDataset(scoreDistribution.values)) {
@@ -1763,14 +1803,14 @@
             }
 
             var formCanvas = document.getElementById('pkFormCompositionChart');
-            if (formCanvas && hasDataset(formComposition.values)) {
+            if (formCanvas && hasDataset(normalizedFormPercentages)) {
                 new Chart(formCanvas, {
                     type: 'bar',
                     data: {
                         labels: formComposition.labels || [],
                         datasets: [{
-                            label: 'Jumlah Jawaban',
-                            data: formComposition.values || [],
+                            label: 'Persentase Jawaban (%)',
+                            data: normalizedFormPercentages,
                             backgroundColor: ['#2563eb', '#16a34a'],
                             borderRadius: 10,
                         }],
@@ -1781,11 +1821,23 @@
                         scales: {
                             y: {
                                 beginAtZero: true,
-                                ticks: { precision: 0 },
+                                max: 100,
+                                ticks: {
+                                    callback: function (value) {
+                                        return value + '%';
+                                    },
+                                },
                             },
                         },
                         plugins: {
                             legend: { display: false },
+                            tooltip: {
+                                callbacks: {
+                                    label: function (context) {
+                                        return context.parsed.y + '%';
+                                    },
+                                },
+                            },
                         },
                     },
                 });
@@ -1822,14 +1874,14 @@
             }
 
             var sectionCanvas = document.getElementById('pkSectionAverageChart');
-            if (sectionCanvas && hasDataset(sectionAverage.values)) {
+            if (sectionCanvas && hasDataset(normalizedSectionValues)) {
                 new Chart(sectionCanvas, {
                     type: 'bar',
                     data: {
-                        labels: sectionAverage.labels || [],
+                        labels: normalizedSectionLabels,
                         datasets: [{
                             label: 'Rata-rata Skor',
-                            data: sectionAverage.values || [],
+                            data: normalizedSectionValues,
                             backgroundColor: '#0ea5e9',
                             borderRadius: 10,
                         }],
@@ -1841,11 +1893,30 @@
                         scales: {
                             x: {
                                 beginAtZero: true,
-                                suggestedMax: 5,
+                                max: 5,
+                                ticks: {
+                                    callback: function (value) {
+                                        return Number(value).toFixed(1);
+                                    },
+                                },
                             },
                         },
                         plugins: {
                             legend: { display: false },
+                            tooltip: {
+                                callbacks: {
+                                    title: function (items) {
+                                        if (!items || items.length === 0) {
+                                            return '';
+                                        }
+                                        var index = items[0].dataIndex;
+                                        return (sectionAverage.labels && sectionAverage.labels[index]) || items[0].label || '';
+                                    },
+                                    label: function (context) {
+                                        return 'Rata-rata: ' + Number(context.parsed.x || 0).toFixed(2);
+                                    },
+                                },
+                            },
                         },
                     },
                 });

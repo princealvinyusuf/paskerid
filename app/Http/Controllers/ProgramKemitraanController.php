@@ -510,6 +510,14 @@ class ProgramKemitraanController extends Controller
             $sectionAnswerCounts[] = (int) ($row->total_answers ?? 0);
         }
 
+        // Keep the chart readable by showing top aspects only.
+        $maxSectionItems = 10;
+        if (count($sectionLabels) > $maxSectionItems) {
+            $sectionLabels = array_slice($sectionLabels, 0, $maxSectionItems);
+            $sectionAverages = array_slice($sectionAverages, 0, $maxSectionItems);
+            $sectionAnswerCounts = array_slice($sectionAnswerCounts, 0, $maxSectionItems);
+        }
+
         $formTypeRows = DB::table('program_kemitraan_evaluation_answers')
             ->selectRaw('form_type, COUNT(*) as total')
             ->whereIn('form_type', ['A', 'B'])
