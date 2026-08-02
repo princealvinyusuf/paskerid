@@ -182,6 +182,67 @@
         color: #475569;
         margin-bottom: 0.8rem;
     }
+    .pk-eval-intro-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        border-radius: 999px;
+        padding: 0.35rem 0.75rem;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: #1d4ed8;
+        background: #dbeafe;
+        border: 1px solid #bfdbfe;
+        margin-bottom: 0.85rem;
+    }
+    .pk-eval-card {
+        border: 1px solid #dbe3ee;
+        border-radius: 14px;
+        background: #fff;
+        margin-bottom: 1rem;
+        overflow: hidden;
+        box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
+    }
+    .pk-eval-card-head {
+        width: 100%;
+        border: 0;
+        text-align: left;
+        padding: 0.9rem 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem;
+        background: linear-gradient(135deg, rgba(37, 99, 235, 0.08), rgba(16, 185, 129, 0.08));
+        color: #0f172a;
+        font-weight: 700;
+    }
+    .pk-eval-card-head:focus {
+        outline: 2px solid #93c5fd;
+        outline-offset: -2px;
+    }
+    .pk-eval-card-sub {
+        font-size: 0.82rem;
+        color: #475569;
+        font-weight: 500;
+    }
+    .pk-eval-card-body {
+        padding: 0.95rem 1rem 1rem;
+        background: #fff;
+    }
+    .pk-eval-profile-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 0.75rem;
+    }
+    .pk-eval-score-note {
+        border-left: 4px solid #2563eb;
+        background: #eff6ff;
+        color: #1e3a8a;
+        border-radius: 10px;
+        padding: 0.7rem 0.85rem;
+        font-size: 0.86rem;
+        margin-bottom: 0.95rem;
+    }
     .pk-sticky-submit {
         position: sticky;
         bottom: 0;
@@ -385,7 +446,15 @@
                             <div class="pk-step">
                                 <div class="pk-eval-section-title">Formulir Evaluasi Peserta/Mitra</div>
                                 <p class="pk-eval-subtitle">Profil responden dan penilaian peserta/mitra.</p>
-                                <div class="pk-eval-grid mb-3">
+                                <div class="pk-eval-intro-chip">Interaktif - Isi profil terlebih dahulu</div>
+
+                                <div class="pk-eval-card">
+                                    <div class="pk-eval-card-head">
+                                        <span>Profil Responden</span>
+                                        <span class="pk-eval-card-sub">Data dasar responden</span>
+                                    </div>
+                                    <div class="pk-eval-card-body">
+                                <div class="pk-eval-profile-grid mb-0">
                                     <div>
                                         <label class="form-label">Nama Kegiatan<span class="pk-step-required">*</span></label>
                                         <select class="form-select" name="activity_master_id" data-shared-field="activity_master_id" required>
@@ -427,10 +496,31 @@
                                         </select>
                                     </div>
                                 </div>
+                                    </div>
+                                </div>
+
+                                <div class="pk-eval-score-note">
+                                    Nilai setiap indikator menggunakan skala 1-5. Klik header aspek untuk buka/tutup tabel penilaian.
+                                </div>
 
                                 @foreach (($evaluasiQuestionGroups['form_a'] ?? []) as $sectionKey => $sectionConfig)
-                                    <div class="mb-4">
-                                        <h6 class="fw-semibold">{{ $sectionConfig['title'] }}</h6>
+                                    @php
+                                        $collapseId = 'pesertaSection_' . $sectionKey;
+                                    @endphp
+                                    <div class="pk-eval-card">
+                                        <button
+                                            type="button"
+                                            class="pk-eval-card-head"
+                                            data-bs-toggle="collapse"
+                                            data-bs-target="#{{ $collapseId }}"
+                                            aria-expanded="{{ $loop->first ? 'true' : 'false' }}"
+                                            aria-controls="{{ $collapseId }}"
+                                        >
+                                            <span>{{ $sectionConfig['title'] }}</span>
+                                            <span class="pk-eval-card-sub">{{ count($sectionConfig['items'] ?? []) }} indikator</span>
+                                        </button>
+                                        <div id="{{ $collapseId }}" class="collapse {{ $loop->first ? 'show' : '' }}">
+                                            <div class="pk-eval-card-body">
                                         <div class="table-responsive">
                                             <table class="table table-bordered table-sm pk-eval-table">
                                                 <thead class="table-light">
@@ -461,9 +551,17 @@
                                                 </tbody>
                                             </table>
                                         </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 @endforeach
 
+                                <div class="pk-eval-card">
+                                    <div class="pk-eval-card-head">
+                                        <span>Catatan Peserta</span>
+                                        <span class="pk-eval-card-sub">Masukan kualitatif</span>
+                                    </div>
+                                    <div class="pk-eval-card-body">
                                 <div class="pk-eval-grid">
                                     <div><label class="form-label">Catatan khusus tujuan/tema/sasaran</label><textarea class="form-control" name="form_a_special_notes">{{ old('form_a_special_notes') }}</textarea></div>
                                     <div><label class="form-label">Materi paling bermanfaat</label><textarea class="form-control" name="form_a_most_useful_material">{{ old('form_a_most_useful_material') }}</textarea></div>
@@ -471,7 +569,15 @@
                                     <div><label class="form-label">Catatan narasumber/panitia/fasilitas</label><textarea class="form-control" name="form_a_facility_notes">{{ old('form_a_facility_notes') }}</textarea></div>
                                     <div><label class="form-label">Usulan bentuk kerja sama/tindak lanjut</label><textarea class="form-control" name="form_a_proposed_followup">{{ old('form_a_proposed_followup') }}</textarea></div>
                                 </div>
+                                    </div>
+                                </div>
                                 <hr>
+                                <div class="pk-eval-card">
+                                    <div class="pk-eval-card-head">
+                                        <span>Penilaian Akhir Peserta</span>
+                                        <span class="pk-eval-card-sub">Kepuasan dan tindak lanjut</span>
+                                    </div>
+                                    <div class="pk-eval-card-body">
                                 <div class="pk-eval-grid">
                                     <div>
                                         <label class="form-label">Tingkat kepuasan umum<span class="pk-step-required">*</span></label>
@@ -509,6 +615,8 @@
                                     <div><label class="form-label">Hal yang perlu diperbaiki<span class="pk-step-required">*</span></label><textarea class="form-control" name="needs_improvement" required>{{ old('needs_improvement') }}</textarea></div>
                                     <div><label class="form-label">Topik/kegiatan lanjutan dibutuhkan<span class="pk-step-required">*</span></label><textarea class="form-control" name="needed_topics" required>{{ old('needed_topics') }}</textarea></div>
                                     <div><label class="form-label">Saran lainnya</label><textarea class="form-control" name="additional_suggestions">{{ old('additional_suggestions') }}</textarea></div>
+                                </div>
+                                    </div>
                                 </div>
                             </div>
                             </div>
