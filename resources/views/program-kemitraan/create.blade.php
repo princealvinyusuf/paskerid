@@ -383,7 +383,7 @@
                             </div>
 
                             <div class="pk-step">
-                                <div class="pk-eval-section-title">II Formulir A - Evaluasi Peserta/Mitra</div>
+                                <div class="pk-eval-section-title">Formulir Evaluasi Peserta/Mitra</div>
                                 <p class="pk-eval-subtitle">Profil responden dan penilaian peserta/mitra.</p>
                                 <div class="pk-eval-grid mb-3">
                                     <div>
