@@ -69,6 +69,8 @@ Route::get('/program-kemitraan', [App\Http\Controllers\ProgramKemitraanControlle
     ->name('program-kemitraan.create');
 Route::post('/program-kemitraan', [App\Http\Controllers\ProgramKemitraanController::class, 'store'])
     ->name('program-kemitraan.store');
+Route::post('/program-kemitraan/evaluasi', [App\Http\Controllers\ProgramKemitraanController::class, 'storeEvaluasi'])
+    ->name('program-kemitraan.evaluasi.store');
 
 
 Route::get('kemitraan/create', [App\Http\Controllers\KemitraanController::class, 'create'])->name('kemitraan.create');

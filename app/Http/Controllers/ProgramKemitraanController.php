@@ -2,12 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ProgramKemitraanEvaluation;
 use App\Models\ProgramKemitraanSubmission;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
 class ProgramKemitraanController extends Controller
 {
+    private const TAB_PENDAFTARAN = 'pendaftaran';
+    private const TAB_EVALUASI = 'evaluasi';
+    private const SCORE_OPTIONS = ['1', '2', '3', '4', '5', 'NA'];
+
     /**
      * @return array<int, string>
      */
@@ -86,15 +92,410 @@ class ProgramKemitraanController extends Controller
         ];
     }
 
-    public function create()
+    /**
+     * @return array<string, mixed>
+     */
+    private function evaluasiFormASections(): array
+    {
+        return [
+            'a_relevansi_tujuan' => [
+                'title' => 'B. Relevansi dan Kejelasan Tujuan Kegiatan',
+                'items' => [
+                    'Tujuan kegiatan disampaikan dengan jelas sejak awal.',
+                    'Tema kegiatan sesuai dengan kebutuhan peserta/instansi.',
+                    'Susunan kegiatan mendukung pencapaian tujuan yang telah ditetapkan.',
+                    'Kegiatan relevan dengan penguatan layanan informasi pasar kerja.',
+                    'Kegiatan memberikan gambaran yang jelas mengenai peran Pusat Pasar Kerja.',
+                    'Sasaran peserta telah sesuai dengan materi dan tujuan kegiatan.',
+                    'Durasi kegiatan memadai untuk membahas substansi utama.',
+                    'Kegiatan menjawab permasalahan atau kebutuhan yang dihadapi peserta/mitra.',
+                ],
+            ],
+            'a_kualitas_materi' => [
+                'title' => 'C. Kualitas Materi dan Edukasi',
+                'items' => [
+                    'Materi disusun secara sistematis dan mudah diikuti.',
+                    'Informasi yang disampaikan akurat, relevan, dan mutakhir.',
+                    'Istilah teknis dijelaskan dengan bahasa yang mudah dipahami.',
+                    'Contoh, studi kasus, atau simulasi membantu pemahaman peserta.',
+                    'Materi memberikan pengetahuan baru yang dapat diterapkan.',
+                    'Materi memperkuat pemahaman mengenai ekosistem layanan SIAPkerja/Karirhub.',
+                    'Materi memberikan pemahaman mengenai informasi pasar kerja dan kebutuhan dunia kerja.',
+                    'Materi menjelaskan hak, kewajiban, atau peran para pihak secara proporsional.',
+                    'Materi mendukung literasi digital dan penggunaan layanan ketenagakerjaan.',
+                    'Bahan tayang atau bahan pendukung dapat dibaca dengan jelas.',
+                    'Materi memperhatikan kebutuhan peserta dengan latar belakang yang beragam.',
+                    'Peserta memperoleh kesempatan yang cukup untuk bertanya atau berdiskusi.',
+                ],
+            ],
+            'a_narasumber' => [
+                'title' => 'D. Narasumber/Fasilitator',
+                'items' => [
+                    'Narasumber menguasai substansi yang disampaikan.',
+                    'Penyampaian narasumber jelas, runtut, dan komunikatif.',
+                    'Narasumber mampu menyesuaikan bahasa dengan karakteristik peserta.',
+                    'Narasumber memberikan jawaban yang relevan atas pertanyaan peserta.',
+                    'Narasumber mendorong partisipasi aktif dan diskusi yang sehat.',
+                    'Narasumber menjaga sikap profesional, inklusif, dan menghargai peserta.',
+                    'Fasilitator/moderator mengelola alur kegiatan secara efektif.',
+                    'Waktu penyampaian dan diskusi dikelola secara proporsional.',
+                ],
+            ],
+            'a_layanan_peserta' => [
+                'title' => 'E. Penyelenggaraan dan Layanan Peserta',
+                'items' => [
+                    'Informasi undangan, jadwal, dan mekanisme keikutsertaan disampaikan dengan jelas.',
+                    'Proses registrasi atau konfirmasi kehadiran mudah dilakukan.',
+                    'Panitia memberikan layanan yang ramah, tanggap, dan profesional.',
+                    'Kegiatan dimulai dan diakhiri sesuai jadwal atau dengan penjelasan yang memadai.',
+                    'Tempat atau media daring mendukung kenyamanan dan kelancaran peserta.',
+                    'Peralatan, jaringan, suara, dan tampilan materi berfungsi dengan baik.',
+                    'Kebutuhan aksesibilitas peserta diperhatikan secara memadai.',
+                    'Dokumentasi, bahan kegiatan, atau informasi lanjutan tersedia dengan baik.',
+                ],
+            ],
+            'a_promosi_komunikasi' => [
+                'title' => 'F. Efektivitas Promosi dan Komunikasi Publik',
+                'items' => [
+                    'Informasi kegiatan mudah ditemukan dan dipahami.',
+                    'Pesan utama promosi konsisten dengan isi kegiatan.',
+                    'Media publikasi yang digunakan sesuai dengan sasaran audiens.',
+                    'Desain atau tampilan bahan promosi menarik dan profesional.',
+                    'Informasi mengenai layanan Pusat Pasar Kerja disampaikan secara jelas.',
+                    'Tautan, kode QR, kontak, atau kanal informasi lanjutan berfungsi dengan baik.',
+                    'Promosi kegiatan mendorong minat untuk menggunakan atau menyebarluaskan layanan.',
+                    'Komunikasi publik memperkuat citra layanan pemerintah yang tepercaya dan mudah diakses.',
+                ],
+            ],
+            'a_manfaat_dampak' => [
+                'title' => 'G. Manfaat, Dampak, dan Potensi Kemitraan',
+                'items' => [
+                    'Kegiatan meningkatkan pemahaman saya terhadap layanan Pusat Pasar Kerja.',
+                    'Kegiatan meningkatkan kemampuan saya untuk memanfaatkan layanan yang diperkenalkan.',
+                    'Kegiatan membuka peluang kolaborasi atau sinergi antarinstansi/organisasi.',
+                    'Kegiatan menghasilkan informasi, jejaring, atau kontak yang relevan untuk tindak lanjut.',
+                    'Kegiatan mendorong komitmen untuk berbagi informasi pasar kerja secara lebih aktif.',
+                    'Kegiatan mendorong partisipasi dalam penyebarluasan informasi kesempatan kerja.',
+                    'Kegiatan berpotensi memberikan manfaat bagi pencari kerja dan pemberi kerja.',
+                    'Kegiatan layak dilaksanakan kembali atau dikembangkan dalam bentuk lanjutan.',
+                ],
+            ],
+            'a_penilaian_keseluruhan' => [
+                'title' => 'H. Penilaian Keseluruhan',
+                'items' => [
+                    'Secara keseluruhan, kegiatan diselenggarakan dengan baik.',
+                    'Kegiatan memberikan manfaat yang sebanding dengan waktu yang saya luangkan.',
+                    'Saya bersedia merekomendasikan kegiatan sejenis kepada pihak lain.',
+                    'Saya berminat mengikuti kegiatan lanjutan dari Pusat Pasar Kerja.',
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function evaluasiFormBSections(): array
+    {
+        return [
+            'b_perencanaan' => [
+                'title' => 'B. Perencanaan dan Kesiapan Kegiatan',
+                'items' => [
+                    'Tujuan, keluaran, dan indikator keberhasilan kegiatan ditetapkan secara jelas.',
+                    'Kerangka acuan kerja, jadwal, dan pembagian tugas tersedia sebelum pelaksanaan.',
+                    'Sasaran peserta/mitra dipetakan sesuai tujuan kegiatan.',
+                    'Koordinasi internal dan eksternal dilakukan tepat waktu.',
+                    'Narasumber/fasilitator dipilih sesuai kompetensi dan kebutuhan materi.',
+                    'Materi, bahan promosi, dan bahan pendukung melalui proses reviu yang memadai.',
+                    'Daftar risiko, rencana mitigasi, dan penanggung jawab telah ditetapkan.',
+                    'Kebutuhan anggaran, sarana, dan dukungan teknis dipersiapkan secara memadai.',
+                    'Kanal pendaftaran, konfirmasi, dan layanan informasi peserta telah siap.',
+                    'Aspek aksesibilitas, inklusivitas, dan keamanan peserta telah dipertimbangkan.',
+                ],
+            ],
+            'b_pelaksanaan' => [
+                'title' => 'C. Pelaksanaan dan Pengendalian Kegiatan',
+                'items' => [
+                    'Registrasi, penerimaan, dan pengarahan peserta berjalan tertib.',
+                    'Susunan acara terlaksana sesuai jadwal atau perubahan dikelola dengan baik.',
+                    'Koordinasi panitia selama kegiatan berlangsung efektif.',
+                    'Narasumber, moderator, dan petugas teknis menjalankan peran sesuai penugasan.',
+                    'Kehadiran dan partisipasi peserta sesuai target yang ditetapkan.',
+                    'Diskusi berlangsung produktif, aman, dan fokus pada tujuan kegiatan.',
+                    'Permasalahan teknis atau operasional ditangani secara cepat dan tepat.',
+                    'Pelayanan terhadap peserta/mitra diberikan secara profesional dan responsif.',
+                    'Kebutuhan peserta disabilitas atau kebutuhan khusus difasilitasi secara layak.',
+                    'Dokumentasi foto, video, daftar hadir, notula, dan bahan kegiatan tersedia.',
+                    'Perlindungan data pribadi dan penggunaan dokumentasi telah diperhatikan.',
+                    'Pengendalian biaya dan penggunaan sumber daya dilakukan secara efisien.',
+                ],
+            ],
+            'b_kinerja_kemitraan' => [
+                'title' => 'D. Kinerja Kemitraan',
+                'items' => [
+                    'Kegiatan menghadirkan mitra yang relevan dan memiliki kewenangan/kapasitas untuk menindaklanjuti.',
+                    'Peran, kontribusi, dan kepentingan para pihak teridentifikasi dengan jelas.',
+                    'Pembahasan menghasilkan kesepahaman atau arah kerja sama yang konkret.',
+                    'Terdapat daftar kontak, narahubung, atau penanggung jawab dari masing-masing pihak.',
+                    'Terdapat kesepakatan mengenai tahapan, keluaran, atau jadwal tindak lanjut.',
+                    'Potensi risiko, keterbatasan, dan kebutuhan dukungan kemitraan telah dipetakan.',
+                ],
+            ],
+            'b_kinerja_edukasi' => [
+                'title' => 'E. Kinerja Edukasi',
+                'items' => [
+                    'Tujuan pembelajaran atau perubahan pemahaman peserta tercapai.',
+                    'Materi sesuai dengan tingkat pengetahuan dan kebutuhan peserta.',
+                    'Metode penyampaian mendorong keterlibatan dan pemahaman aktif.',
+                    'Pertanyaan, umpan balik, atau hasil diskusi menunjukkan peningkatan pemahaman.',
+                    'Tersedia bahan referensi atau kanal pembelajaran lanjutan.',
+                    'Terdapat rencana pengukuran penerapan pengetahuan setelah kegiatan.',
+                ],
+            ],
+            'b_kinerja_promosi' => [
+                'title' => 'F. Kinerja Promosi',
+                'items' => [
+                    'Pesan utama promosi konsisten dengan identitas dan mandat Pusat Pasar Kerja.',
+                    'Media dan kanal promosi menjangkau sasaran yang ditetapkan.',
+                    'Materi publikasi telah melalui pemeriksaan substansi, bahasa, dan visual.',
+                    'Kegiatan menghasilkan dokumentasi atau konten yang dapat digunakan kembali.',
+                    'Terdapat ajakan bertindak yang jelas, seperti tautan layanan, kontak, atau pendaftaran.',
+                    'Efektivitas promosi dapat diukur melalui data jangkauan, interaksi, atau konversi.',
+                ],
+            ],
+            'b_keluaran_dampak' => [
+                'title' => 'G. Keluaran, Dampak, dan Keberlanjutan',
+                'items' => [
+                    'Keluaran kegiatan tersedia dan sesuai dengan rencana (notula, materi, dokumentasi, daftar kontak, atau dokumen kesepakatan).',
+                    'Capaian peserta, jangkauan, dan keterlibatan terdokumentasi secara akurat.',
+                    'Umpan balik peserta dikumpulkan dengan jumlah responden yang memadai.',
+                    'Hasil kegiatan memberikan nilai tambah bagi layanan Pusat Pasar Kerja.',
+                    'Terdapat temuan, rekomendasi, atau keputusan yang dapat ditindaklanjuti.',
+                    'Penanggung jawab dan target waktu tindak lanjut telah ditetapkan.',
+                    'Hasil kegiatan telah atau akan dikomunikasikan kepada pimpinan dan pihak terkait.',
+                    'Pembelajaran kegiatan terdokumentasi untuk penyelenggaraan berikutnya.',
+                ],
+            ],
+            'b_kepatuhan' => [
+                'title' => 'H. Kepatuhan dan Tata Kelola',
+                'items' => [
+                    'Pelaksanaan kegiatan sesuai dengan surat tugas, undangan, atau dasar penugasan yang berlaku.',
+                    'Penggunaan identitas visual, logo, dan materi publikasi sesuai ketentuan.',
+                    'Pengelolaan data peserta, dokumentasi, dan persetujuan publikasi dilakukan secara patut.',
+                    'Pengadaan, pembiayaan, dan pertanggungjawaban administrasi didukung dokumen yang memadai.',
+                    'Tidak terdapat konflik kepentingan atau pelanggaran etika selama kegiatan.',
+                    'Dokumen dan bukti kegiatan disimpan pada lokasi penyimpanan yang ditetapkan.',
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function evaluasiQuestionGroups(): array
+    {
+        return [
+            'form_a' => $this->evaluasiFormASections(),
+            'form_b' => $this->evaluasiFormBSections(),
+        ];
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    private function evaluasiAnswerKeys(array $groups): array
+    {
+        $keys = [];
+
+        foreach ($groups as $formKey => $sections) {
+            foreach ($sections as $sectionKey => $section) {
+                $items = $section['items'] ?? [];
+                foreach ($items as $itemIndex => $unusedItemText) {
+                    $keys[] = $formKey . '.' . $sectionKey . '.' . ($itemIndex + 1);
+                }
+            }
+        }
+
+        return $keys;
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    private function evaluasiRespondentCategories(): array
+    {
+        return [
+            'Pencari kerja',
+            'Pemberi kerja',
+            'Pemerintah pusat/daerah',
+            'Lembaga pendidikan',
+            'Asosiasi/komunitas',
+            'Mitra platform digital/media',
+            'Narasumber/fasilitator',
+            'Masyarakat umum',
+            'Lainnya',
+        ];
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    private function evaluasiParticipationModes(): array
+    {
+        return ['Luring', 'Daring', 'Hibrida'];
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    private function evaluasiEvaluatorRoles(): array
+    {
+        return ['Ketua tim', 'Koordinator', 'Panitia', 'Evaluator/pengamat', 'Lainnya'];
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    private function evaluasiSatisfactionOptions(): array
+    {
+        return ['Sangat puas', 'Puas', 'Cukup puas', 'Kurang puas', 'Tidak puas'];
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    private function evaluasiWillingFollowupOptions(): array
+    {
+        return ['Ya', 'Mungkin', 'Tidak'];
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    private function evaluasiCommunicationChannels(): array
+    {
+        return ['Surel', 'WhatsApp', 'Telepon', 'Surat resmi'];
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    private function evaluasiResultCategories(): array
+    {
+        return ['Sangat Baik', 'Baik', 'Cukup', 'Kurang', 'Sangat Kurang'];
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    private function evaluasiAchievementStatuses(): array
+    {
+        return ['Melampaui target', 'Mencapai target', 'Belum mencapai target'];
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    private function evaluasiPriorityOptions(): array
+    {
+        return [
+            'Prioritas 1 - Mendesak dan berdampak besar',
+            'Prioritas 2 - Penting dan perlu dijadwalkan',
+            'Prioritas 3 - Penyempurnaan bertahap',
+            'Dapat dipantau tanpa tindakan segera',
+        ];
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    private function evaluasiMonitoringFrequencies(): array
+    {
+        return ['Mingguan', 'Dua mingguan', 'Bulanan', 'Sesuai tenggat'];
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    private function evaluasiMonitoringMediaOptions(): array
+    {
+        return ['Rapat', 'Lembar kendali', 'Sistem/aplikasi', 'Lainnya'];
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    private function evaluasiExecutionStatuses(): array
+    {
+        return ['Sangat berhasil', 'Berhasil', 'Cukup berhasil', 'Kurang berhasil', 'Tidak berhasil'];
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    private function evaluasiRecommendationStatuses(): array
+    {
+        return [
+            'Dilanjutkan tanpa perubahan berarti',
+            'Dilanjutkan dengan perbaikan',
+            'Dirancang ulang',
+            'Tidak dilanjutkan',
+            'Memerlukan keputusan pimpinan',
+        ];
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    private function evaluasiDocumentStatuses(): array
+    {
+        return ['Aktif', 'Revisi'];
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    private function evaluasiDocumentAccessLevels(): array
+    {
+        return ['Terbatas', 'Internal'];
+    }
+
+    private function resolveTab(?string $tab): string
+    {
+        return in_array($tab, [self::TAB_PENDAFTARAN, self::TAB_EVALUASI], true)
+            ? (string) $tab
+            : self::TAB_PENDAFTARAN;
+    }
+
+    public function create(Request $request)
     {
         $businessSectors = $this->businessSectors();
+        $evaluasiQuestionGroups = $this->evaluasiQuestionGroups();
+        $tab = $this->resolveTab($request->query('tab'));
 
         return view('program-kemitraan.create', [
+            'tab' => $tab,
             'institutionCategories' => $this->institutionCategories(),
             'mitraPembangunanTypes' => $this->mitraPembangunanTypes(),
             'activityTypes' => $this->activityTypes(),
             'businessSectors' => $businessSectors,
+            'evaluasiQuestionGroups' => $evaluasiQuestionGroups,
+            'evaluasiRespondentCategories' => $this->evaluasiRespondentCategories(),
+            'evaluasiParticipationModes' => $this->evaluasiParticipationModes(),
+            'evaluasiEvaluatorRoles' => $this->evaluasiEvaluatorRoles(),
+            'evaluasiSatisfactionOptions' => $this->evaluasiSatisfactionOptions(),
+            'evaluasiWillingFollowupOptions' => $this->evaluasiWillingFollowupOptions(),
+            'evaluasiCommunicationChannels' => $this->evaluasiCommunicationChannels(),
+            'evaluasiResultCategories' => $this->evaluasiResultCategories(),
+            'evaluasiAchievementStatuses' => $this->evaluasiAchievementStatuses(),
+            'evaluasiPriorityOptions' => $this->evaluasiPriorityOptions(),
+            'evaluasiMonitoringFrequencies' => $this->evaluasiMonitoringFrequencies(),
+            'evaluasiMonitoringMediaOptions' => $this->evaluasiMonitoringMediaOptions(),
+            'evaluasiExecutionStatuses' => $this->evaluasiExecutionStatuses(),
+            'evaluasiRecommendationStatuses' => $this->evaluasiRecommendationStatuses(),
+            'evaluasiDocumentStatuses' => $this->evaluasiDocumentStatuses(),
+            'evaluasiDocumentAccessLevels' => $this->evaluasiDocumentAccessLevels(),
         ]);
     }
 
@@ -129,5 +530,314 @@ class ProgramKemitraanController extends Controller
         return redirect()
             ->route('program-kemitraan.create')
             ->with('success', 'Pengajuan Program Kemitraan berhasil dikirim. Tim kami akan segera meninjau pengajuan Anda.');
+    }
+
+    public function storeEvaluasi(Request $request)
+    {
+        $questionGroups = $this->evaluasiQuestionGroups();
+        $answerKeys = $this->evaluasiAnswerKeys($questionGroups);
+
+        $rules = [
+            'activity_name' => ['required', 'string', 'max:255'],
+            'activity_theme' => ['required', 'string', 'max:255'],
+            'activity_date' => ['required', 'date'],
+            'activity_start_time' => ['required', 'date_format:H:i'],
+            'activity_end_time' => ['required', 'date_format:H:i'],
+            'activity_timezone' => ['required', 'string', 'max:10'],
+            'activity_location' => ['required', 'string', 'max:255'],
+            'activity_organizer' => ['required', 'string', 'max:255'],
+            'participants_invited' => ['nullable', 'integer', 'min:0'],
+            'participants_attended' => ['nullable', 'integer', 'min:0'],
+            'respondent_count' => ['nullable', 'integer', 'min:0'],
+            'respondent_name' => ['nullable', 'string', 'max:255'],
+            'respondent_organization' => ['nullable', 'string', 'max:255'],
+            'respondent_role' => ['nullable', 'string', 'max:255'],
+            'respondent_contact' => ['nullable', 'string', 'max:255'],
+            'respondent_category' => ['required', Rule::in($this->evaluasiRespondentCategories())],
+            'respondent_category_other' => ['nullable', 'string', 'max:255', 'required_if:respondent_category,Lainnya'],
+            'participation_mode' => ['required', Rule::in($this->evaluasiParticipationModes())],
+            'form_a_special_notes' => ['nullable', 'string'],
+            'form_a_most_useful_material' => ['nullable', 'string'],
+            'form_a_material_needs' => ['nullable', 'string'],
+            'form_a_facility_notes' => ['nullable', 'string'],
+            'form_a_proposed_followup' => ['nullable', 'string'],
+            'overall_satisfaction' => ['required', Rule::in($this->evaluasiSatisfactionOptions())],
+            'willing_to_follow_up' => ['required', Rule::in($this->evaluasiWillingFollowupOptions())],
+            'preferred_channels' => ['required', 'array', 'min:1'],
+            'preferred_channels.*' => ['required', Rule::in($this->evaluasiCommunicationChannels())],
+            'best_part' => ['required', 'string'],
+            'needs_improvement' => ['required', 'string'],
+            'needed_topics' => ['required', 'string'],
+            'additional_suggestions' => ['nullable', 'string'],
+            'evaluator_name' => ['required', 'string', 'max:255'],
+            'evaluator_position' => ['required', 'string', 'max:255'],
+            'evaluator_unit' => ['required', 'string', 'max:255'],
+            'evaluation_date' => ['required', 'date'],
+            'evaluator_role' => ['required', Rule::in($this->evaluasiEvaluatorRoles())],
+            'evaluator_role_other' => ['nullable', 'string', 'max:255', 'required_if:evaluator_role,Lainnya'],
+            'form_b_planning_constraints' => ['nullable', 'string'],
+            'form_b_incident_notes' => ['nullable', 'string'],
+            'form_b_good_practices' => ['nullable', 'string'],
+            'form_b_root_issues' => ['nullable', 'string'],
+            'form_b_priority_recommendations' => ['nullable', 'string'],
+            'recap_participants_present' => ['nullable', 'integer', 'min:0'],
+            'recap_forms_distributed' => ['nullable', 'integer', 'min:0'],
+            'recap_forms_received' => ['nullable', 'integer', 'min:0'],
+            'recap_forms_valid' => ['nullable', 'integer', 'min:0'],
+            'recap_response_rate_percent' => ['nullable', 'numeric', 'min:0', 'max:100'],
+            'recap_collection_period' => ['nullable', 'string', 'max:255'],
+            'recap_highest_aspect' => ['nullable', 'string', 'max:255'],
+            'recap_highest_value' => ['nullable', 'numeric', 'min:0', 'max:100'],
+            'recap_lowest_aspect' => ['nullable', 'string', 'max:255'],
+            'recap_lowest_value' => ['nullable', 'numeric', 'min:0', 'max:100'],
+            'recap_overall_score' => ['nullable', 'numeric', 'min:0', 'max:100'],
+            'recap_result_category' => ['nullable', Rule::in($this->evaluasiResultCategories())],
+            'recap_internal_target' => ['nullable', 'numeric', 'min:0', 'max:100'],
+            'recap_achievement_status' => ['nullable', Rule::in($this->evaluasiAchievementStatuses())],
+            'recap_general_conclusion' => ['nullable', 'string'],
+            'qualitative_feedback' => ['nullable', 'array'],
+            'qualitative_feedback.*.theme' => ['nullable', 'string', 'max:255'],
+            'qualitative_feedback.*.summary' => ['nullable', 'string'],
+            'qualitative_feedback.*.frequency' => ['nullable', 'integer', 'min:0'],
+            'indicator_achievements' => ['nullable', 'array'],
+            'indicator_achievements.*.indicator' => ['nullable', 'string', 'max:255'],
+            'indicator_achievements.*.target' => ['nullable', 'string', 'max:255'],
+            'indicator_achievements.*.realization' => ['nullable', 'string', 'max:255'],
+            'indicator_achievements.*.status' => ['nullable', 'string', 'max:255'],
+            'priority_level' => ['nullable', Rule::in($this->evaluasiPriorityOptions())],
+            'rtl_items' => ['nullable', 'array'],
+            'rtl_items.*.issue' => ['nullable', 'string'],
+            'rtl_items.*.follow_up' => ['nullable', 'string'],
+            'rtl_items.*.responsible_person' => ['nullable', 'string', 'max:255'],
+            'rtl_items.*.target_date' => ['nullable', 'date'],
+            'rtl_items.*.completion_indicator' => ['nullable', 'string'],
+            'rtl_items.*.status' => ['nullable', 'string', 'max:255'],
+            'monitoring_coordinator' => ['nullable', 'string', 'max:255'],
+            'monitoring_frequency' => ['nullable', Rule::in($this->evaluasiMonitoringFrequencies())],
+            'monitoring_media' => ['nullable', 'array'],
+            'monitoring_media.*' => ['required', Rule::in($this->evaluasiMonitoringMediaOptions())],
+            'monitoring_media_other' => ['nullable', 'string', 'max:255'],
+            'first_review_date' => ['nullable', 'date'],
+            'evidence_documents' => ['nullable', 'string'],
+            'leader_notes' => ['nullable', 'string'],
+            'execution_status' => ['nullable', Rule::in($this->evaluasiExecutionStatuses())],
+            'recommendation_status' => ['nullable', Rule::in($this->evaluasiRecommendationStatuses())],
+            'recommendation_1' => ['nullable', 'string'],
+            'recommendation_2' => ['nullable', 'string'],
+            'recommendation_3' => ['nullable', 'string'],
+            'prepared_by_name' => ['nullable', 'string', 'max:255'],
+            'prepared_by_nip' => ['nullable', 'string', 'max:100'],
+            'prepared_by_date' => ['nullable', 'date'],
+            'verified_by_name' => ['nullable', 'string', 'max:255'],
+            'verified_by_nip' => ['nullable', 'string', 'max:100'],
+            'verified_by_date' => ['nullable', 'date'],
+            'approved_by_name' => ['nullable', 'string', 'max:255'],
+            'approved_by_nip' => ['nullable', 'string', 'max:100'],
+            'approved_by_date' => ['nullable', 'date'],
+            'document_code' => ['nullable', 'string', 'max:50'],
+            'document_version' => ['nullable', 'string', 'max:50'],
+            'document_effective_date' => ['nullable', 'date'],
+            'document_status' => ['nullable', Rule::in($this->evaluasiDocumentStatuses())],
+            'document_storage_location' => ['nullable', 'string', 'max:255'],
+            'document_retention_period' => ['nullable', 'string', 'max:100'],
+            'document_access_level' => ['nullable', Rule::in($this->evaluasiDocumentAccessLevels())],
+            'document_owner' => ['nullable', 'string', 'max:255'],
+            'document_usage_notes' => ['nullable', 'string'],
+        ];
+
+        foreach ($answerKeys as $answerKey) {
+            $rules['answers.' . $answerKey] = ['required', Rule::in(self::SCORE_OPTIONS)];
+        }
+
+        $validated = $request->validateWithBag('evaluasi', $rules);
+
+        $preferredChannels = array_values(array_unique($validated['preferred_channels'] ?? []));
+        $monitoringMedia = array_values(array_unique($validated['monitoring_media'] ?? []));
+        if (in_array('Lainnya', $monitoringMedia, true) && empty($validated['monitoring_media_other'])) {
+            return redirect()
+                ->route('program-kemitraan.create', ['tab' => self::TAB_EVALUASI])
+                ->withErrors(['monitoring_media_other' => 'Kolom media pemantauan lainnya wajib diisi.'], 'evaluasi')
+                ->withInput();
+        }
+        $qualitativeFeedback = $this->sanitizeRows($validated['qualitative_feedback'] ?? [], ['theme', 'summary', 'frequency']);
+        $indicatorAchievements = $this->sanitizeRows($validated['indicator_achievements'] ?? [], ['indicator', 'target', 'realization', 'status']);
+        $rtlItems = $this->sanitizeRows($validated['rtl_items'] ?? [], ['issue', 'follow_up', 'responsible_person', 'target_date', 'completion_indicator', 'status']);
+
+        DB::transaction(function () use ($validated, $preferredChannels, $monitoringMedia, $qualitativeFeedback, $indicatorAchievements, $rtlItems, $questionGroups): void {
+            $evaluation = ProgramKemitraanEvaluation::create([
+                'activity_name' => $validated['activity_name'],
+                'activity_theme' => $validated['activity_theme'],
+                'activity_date' => $validated['activity_date'],
+                'activity_start_time' => $validated['activity_start_time'],
+                'activity_end_time' => $validated['activity_end_time'],
+                'activity_timezone' => $validated['activity_timezone'],
+                'activity_location' => $validated['activity_location'],
+                'activity_organizer' => $validated['activity_organizer'],
+                'participants_invited' => $validated['participants_invited'] ?? null,
+                'participants_attended' => $validated['participants_attended'] ?? null,
+                'respondent_count' => $validated['respondent_count'] ?? null,
+                'respondent_name' => $validated['respondent_name'] ?? null,
+                'respondent_organization' => $validated['respondent_organization'] ?? null,
+                'respondent_role' => $validated['respondent_role'] ?? null,
+                'respondent_contact' => $validated['respondent_contact'] ?? null,
+                'respondent_category' => $validated['respondent_category'],
+                'respondent_category_other' => $validated['respondent_category_other'] ?? null,
+                'participation_mode' => $validated['participation_mode'],
+                'form_a_special_notes' => $validated['form_a_special_notes'] ?? null,
+                'form_a_most_useful_material' => $validated['form_a_most_useful_material'] ?? null,
+                'form_a_material_needs' => $validated['form_a_material_needs'] ?? null,
+                'form_a_facility_notes' => $validated['form_a_facility_notes'] ?? null,
+                'form_a_proposed_followup' => $validated['form_a_proposed_followup'] ?? null,
+                'overall_satisfaction' => $validated['overall_satisfaction'],
+                'willing_to_follow_up' => $validated['willing_to_follow_up'],
+                'preferred_channels' => $preferredChannels,
+                'best_part' => $validated['best_part'],
+                'needs_improvement' => $validated['needs_improvement'],
+                'needed_topics' => $validated['needed_topics'],
+                'additional_suggestions' => $validated['additional_suggestions'] ?? null,
+                'evaluator_name' => $validated['evaluator_name'],
+                'evaluator_position' => $validated['evaluator_position'],
+                'evaluator_unit' => $validated['evaluator_unit'],
+                'evaluation_date' => $validated['evaluation_date'],
+                'evaluator_role' => $validated['evaluator_role'],
+                'evaluator_role_other' => $validated['evaluator_role_other'] ?? null,
+                'form_b_planning_constraints' => $validated['form_b_planning_constraints'] ?? null,
+                'form_b_incident_notes' => $validated['form_b_incident_notes'] ?? null,
+                'form_b_good_practices' => $validated['form_b_good_practices'] ?? null,
+                'form_b_root_issues' => $validated['form_b_root_issues'] ?? null,
+                'form_b_priority_recommendations' => $validated['form_b_priority_recommendations'] ?? null,
+                'recap_participants_present' => $validated['recap_participants_present'] ?? null,
+                'recap_forms_distributed' => $validated['recap_forms_distributed'] ?? null,
+                'recap_forms_received' => $validated['recap_forms_received'] ?? null,
+                'recap_forms_valid' => $validated['recap_forms_valid'] ?? null,
+                'recap_response_rate_percent' => $validated['recap_response_rate_percent'] ?? null,
+                'recap_collection_period' => $validated['recap_collection_period'] ?? null,
+                'recap_highest_aspect' => $validated['recap_highest_aspect'] ?? null,
+                'recap_highest_value' => $validated['recap_highest_value'] ?? null,
+                'recap_lowest_aspect' => $validated['recap_lowest_aspect'] ?? null,
+                'recap_lowest_value' => $validated['recap_lowest_value'] ?? null,
+                'recap_overall_score' => $validated['recap_overall_score'] ?? null,
+                'recap_result_category' => $validated['recap_result_category'] ?? null,
+                'recap_internal_target' => $validated['recap_internal_target'] ?? null,
+                'recap_achievement_status' => $validated['recap_achievement_status'] ?? null,
+                'recap_general_conclusion' => $validated['recap_general_conclusion'] ?? null,
+                'qualitative_feedback' => $qualitativeFeedback,
+                'indicator_achievements' => $indicatorAchievements,
+                'priority_level' => $validated['priority_level'] ?? null,
+                'monitoring_coordinator' => $validated['monitoring_coordinator'] ?? null,
+                'monitoring_frequency' => $validated['monitoring_frequency'] ?? null,
+                'monitoring_media' => $monitoringMedia,
+                'monitoring_media_other' => $validated['monitoring_media_other'] ?? null,
+                'first_review_date' => $validated['first_review_date'] ?? null,
+                'evidence_documents' => $validated['evidence_documents'] ?? null,
+                'leader_notes' => $validated['leader_notes'] ?? null,
+                'execution_status' => $validated['execution_status'] ?? null,
+                'recommendation_status' => $validated['recommendation_status'] ?? null,
+                'recommendation_1' => $validated['recommendation_1'] ?? null,
+                'recommendation_2' => $validated['recommendation_2'] ?? null,
+                'recommendation_3' => $validated['recommendation_3'] ?? null,
+                'prepared_by_name' => $validated['prepared_by_name'] ?? null,
+                'prepared_by_nip' => $validated['prepared_by_nip'] ?? null,
+                'prepared_by_date' => $validated['prepared_by_date'] ?? null,
+                'verified_by_name' => $validated['verified_by_name'] ?? null,
+                'verified_by_nip' => $validated['verified_by_nip'] ?? null,
+                'verified_by_date' => $validated['verified_by_date'] ?? null,
+                'approved_by_name' => $validated['approved_by_name'] ?? null,
+                'approved_by_nip' => $validated['approved_by_nip'] ?? null,
+                'approved_by_date' => $validated['approved_by_date'] ?? null,
+                'document_code' => $validated['document_code'] ?? 'KEP-LEK-01',
+                'document_version' => $validated['document_version'] ?? '1.0',
+                'document_effective_date' => $validated['document_effective_date'] ?? null,
+                'document_status' => $validated['document_status'] ?? null,
+                'document_storage_location' => $validated['document_storage_location'] ?? null,
+                'document_retention_period' => $validated['document_retention_period'] ?? null,
+                'document_access_level' => $validated['document_access_level'] ?? null,
+                'document_owner' => $validated['document_owner'] ?? null,
+                'document_usage_notes' => $validated['document_usage_notes'] ?? null,
+            ]);
+
+            $answerRows = [];
+            foreach ($questionGroups as $formKey => $sections) {
+                $formType = $formKey === 'form_a' ? 'A' : 'B';
+                foreach ($sections as $sectionKey => $section) {
+                    $items = $section['items'] ?? [];
+                    foreach ($items as $itemIndex => $itemText) {
+                        $indicatorNumber = $itemIndex + 1;
+                        $scoreValue = $validated['answers'][$formKey][$sectionKey][$indicatorNumber] ?? null;
+                        if ($scoreValue === null) {
+                            continue;
+                        }
+
+                        $answerRows[] = [
+                            'form_type' => $formType,
+                            'section_key' => $sectionKey,
+                            'indicator_number' => $indicatorNumber,
+                            'indicator_text' => $itemText,
+                            'score' => $scoreValue === 'NA' ? null : (int) $scoreValue,
+                            'is_not_applicable' => $scoreValue === 'NA',
+                        ];
+                    }
+                }
+            }
+
+            if (!empty($answerRows)) {
+                $evaluation->answers()->createMany($answerRows);
+            }
+
+            if (!empty($rtlItems)) {
+                $rtlRows = [];
+                foreach ($rtlItems as $index => $rtlItem) {
+                    $rtlRows[] = [
+                        'row_order' => $index + 1,
+                        'issue' => $rtlItem['issue'] ?? null,
+                        'follow_up' => $rtlItem['follow_up'] ?? null,
+                        'responsible_person' => $rtlItem['responsible_person'] ?? null,
+                        'target_date' => $rtlItem['target_date'] ?? null,
+                        'completion_indicator' => $rtlItem['completion_indicator'] ?? null,
+                        'status' => $rtlItem['status'] ?? null,
+                    ];
+                }
+                $evaluation->rtlItems()->createMany($rtlRows);
+            }
+        });
+
+        return redirect()
+            ->route('program-kemitraan.create', ['tab' => self::TAB_EVALUASI])
+            ->with('success', 'Form evaluasi berhasil dikirim. Terima kasih atas partisipasi Anda.');
+    }
+
+    /**
+     * @param array<int, array<string, mixed>> $rows
+     * @param array<int, string> $allowedKeys
+     * @return array<int, array<string, mixed>>
+     */
+    private function sanitizeRows(array $rows, array $allowedKeys): array
+    {
+        $cleanRows = [];
+
+        foreach ($rows as $row) {
+            if (!is_array($row)) {
+                continue;
+            }
+
+            $cleanRow = [];
+            $hasValue = false;
+            foreach ($allowedKeys as $key) {
+                $value = $row[$key] ?? null;
+                if (is_string($value)) {
+                    $value = trim($value);
+                }
+                if ($value !== null && $value !== '') {
+                    $hasValue = true;
+                }
+                $cleanRow[$key] = $value === '' ? null : $value;
+            }
+
+            if ($hasValue) {
+                $cleanRows[] = $cleanRow;
+            }
+        }
+
+        return $cleanRows;
     }
 }
