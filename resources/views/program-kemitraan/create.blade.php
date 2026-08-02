@@ -882,7 +882,7 @@
 
                             <div class="pk-eval-subpanel {{ $activeEvaluasiSubTab === 'penyelenggara' ? 'active' : '' }}" data-eval-panel="penyelenggara">
                             <div class="pk-step">
-                                <div class="pk-eval-section-title">III Formulir B - Evaluasi Internal Pelaksana</div>
+                                <div class="pk-eval-section-title">Formulir Evaluasi Internal Pelaksana</div>
                                 <div class="pk-eval-grid mb-3">
                                     <div>
                                         <label class="form-label">Nama Kegiatan<span class="pk-step-required">*</span></label>
