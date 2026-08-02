@@ -363,60 +363,6 @@
                         <form action="{{ route('program-kemitraan.evaluasi.store') }}" method="POST" id="programKemitraanEvaluasiForm" novalidate>
                             @csrf
                             <input type="hidden" name="evaluasi_inner_tab" id="evaluasiInnerTabInput" value="{{ $activeEvaluasiSubTab }}">
-                            <div class="pk-step">
-                                <div class="pk-eval-section-title">I. Identitas Kegiatan</div>
-                                <div class="pk-eval-grid">
-                                    <div>
-                                        <label class="form-label">Nama kegiatan<span class="pk-step-required">*</span></label>
-                                        <input type="text" class="form-control" name="activity_name" value="{{ old('activity_name') }}" required>
-                                    </div>
-                                    <div>
-                                        <label class="form-label">Tema/topik<span class="pk-step-required">*</span></label>
-                                        <input type="text" class="form-control" name="activity_theme" value="{{ old('activity_theme') }}" required>
-                                    </div>
-                                    <div>
-                                        <label class="form-label">Hari/tanggal<span class="pk-step-required">*</span></label>
-                                        <input type="date" class="form-control" name="activity_date" value="{{ old('activity_date') }}" required>
-                                    </div>
-                                    <div>
-                                        <label class="form-label">Waktu mulai<span class="pk-step-required">*</span></label>
-                                        <input type="time" class="form-control" name="activity_start_time" value="{{ old('activity_start_time') }}" required>
-                                    </div>
-                                    <div>
-                                        <label class="form-label">Waktu selesai<span class="pk-step-required">*</span></label>
-                                        <input type="time" class="form-control" name="activity_end_time" value="{{ old('activity_end_time') }}" required>
-                                    </div>
-                                    <div>
-                                        <label class="form-label">Zona waktu<span class="pk-step-required">*</span></label>
-                                        <select class="form-select" name="activity_timezone" required>
-                                            @foreach (['WIB', 'WITA', 'WIT'] as $zone)
-                                                <option value="{{ $zone }}" {{ old('activity_timezone', 'WIB') === $zone ? 'selected' : '' }}>{{ $zone }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <label class="form-label">Tempat/media<span class="pk-step-required">*</span></label>
-                                        <input type="text" class="form-control" name="activity_location" value="{{ old('activity_location') }}" required>
-                                    </div>
-                                    <div>
-                                        <label class="form-label">Penyelenggara<span class="pk-step-required">*</span></label>
-                                        <input type="text" class="form-control" name="activity_organizer" value="{{ old('activity_organizer') }}" required>
-                                    </div>
-                                    <div>
-                                        <label class="form-label">Jumlah undangan</label>
-                                        <input type="number" min="0" class="form-control" name="participants_invited" value="{{ old('participants_invited') }}">
-                                    </div>
-                                    <div>
-                                        <label class="form-label">Jumlah hadir</label>
-                                        <input type="number" min="0" class="form-control" name="participants_attended" value="{{ old('participants_attended') }}">
-                                    </div>
-                                    <div>
-                                        <label class="form-label">Jumlah responden</label>
-                                        <input type="number" min="0" class="form-control" name="respondent_count" value="{{ old('respondent_count') }}">
-                                    </div>
-                                </div>
-                            </div>
-
                             <div class="pk-eval-segmented" role="tablist" aria-label="Form Evaluasi section tabs">
                                 <button type="button" class="pk-eval-seg-btn {{ $activeEvaluasiSubTab === 'peserta' ? 'active' : '' }}" data-eval-subtab="peserta" aria-selected="{{ $activeEvaluasiSubTab === 'peserta' ? 'true' : 'false' }}">
                                     Peserta
@@ -434,6 +380,60 @@
                                     <li>Gunakan skor 1-5 untuk setiap indikator penilaian.</li>
                                     <li>Lengkapi Form A sampai Form C serta RTL agar data evaluasi utuh.</li>
                                 </ul>
+                            </div>
+
+                            <div class="pk-step" data-shared-group="identitas">
+                                <div class="pk-eval-section-title">I. Identitas Kegiatan</div>
+                                <div class="pk-eval-grid">
+                                    <div>
+                                        <label class="form-label">Nama kegiatan<span class="pk-step-required">*</span></label>
+                                        <input type="text" class="form-control" name="activity_name" data-shared-field="activity_name" value="{{ old('activity_name') }}" required>
+                                    </div>
+                                    <div>
+                                        <label class="form-label">Tema/topik<span class="pk-step-required">*</span></label>
+                                        <input type="text" class="form-control" name="activity_theme" data-shared-field="activity_theme" value="{{ old('activity_theme') }}" required>
+                                    </div>
+                                    <div>
+                                        <label class="form-label">Hari/tanggal<span class="pk-step-required">*</span></label>
+                                        <input type="date" class="form-control" name="activity_date" data-shared-field="activity_date" value="{{ old('activity_date') }}" required>
+                                    </div>
+                                    <div>
+                                        <label class="form-label">Waktu mulai<span class="pk-step-required">*</span></label>
+                                        <input type="time" class="form-control" name="activity_start_time" data-shared-field="activity_start_time" value="{{ old('activity_start_time') }}" required>
+                                    </div>
+                                    <div>
+                                        <label class="form-label">Waktu selesai<span class="pk-step-required">*</span></label>
+                                        <input type="time" class="form-control" name="activity_end_time" data-shared-field="activity_end_time" value="{{ old('activity_end_time') }}" required>
+                                    </div>
+                                    <div>
+                                        <label class="form-label">Zona waktu<span class="pk-step-required">*</span></label>
+                                        <select class="form-select" name="activity_timezone" data-shared-field="activity_timezone" required>
+                                            @foreach (['WIB', 'WITA', 'WIT'] as $zone)
+                                                <option value="{{ $zone }}" {{ old('activity_timezone', 'WIB') === $zone ? 'selected' : '' }}>{{ $zone }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="form-label">Tempat/media<span class="pk-step-required">*</span></label>
+                                        <input type="text" class="form-control" name="activity_location" data-shared-field="activity_location" value="{{ old('activity_location') }}" required>
+                                    </div>
+                                    <div>
+                                        <label class="form-label">Penyelenggara<span class="pk-step-required">*</span></label>
+                                        <input type="text" class="form-control" name="activity_organizer" data-shared-field="activity_organizer" value="{{ old('activity_organizer') }}" required>
+                                    </div>
+                                    <div>
+                                        <label class="form-label">Jumlah undangan</label>
+                                        <input type="number" min="0" class="form-control" name="participants_invited" data-shared-field="participants_invited" value="{{ old('participants_invited') }}">
+                                    </div>
+                                    <div>
+                                        <label class="form-label">Jumlah hadir</label>
+                                        <input type="number" min="0" class="form-control" name="participants_attended" data-shared-field="participants_attended" value="{{ old('participants_attended') }}">
+                                    </div>
+                                    <div>
+                                        <label class="form-label">Jumlah responden</label>
+                                        <input type="number" min="0" class="form-control" name="respondent_count" data-shared-field="respondent_count" value="{{ old('respondent_count') }}">
+                                    </div>
+                                </div>
                             </div>
 
                             <div class="pk-step">
@@ -554,6 +554,60 @@
                             </div>
 
                             <div class="pk-eval-subpanel {{ $activeEvaluasiSubTab === 'penyelenggara' ? 'active' : '' }}" data-eval-panel="penyelenggara">
+                            <div class="pk-step" data-shared-group="identitas">
+                                <div class="pk-eval-section-title">I. Identitas Kegiatan</div>
+                                <div class="pk-eval-grid">
+                                    <div>
+                                        <label class="form-label">Nama kegiatan<span class="pk-step-required">*</span></label>
+                                        <input type="text" class="form-control" name="activity_name" data-shared-field="activity_name" value="{{ old('activity_name') }}" required>
+                                    </div>
+                                    <div>
+                                        <label class="form-label">Tema/topik<span class="pk-step-required">*</span></label>
+                                        <input type="text" class="form-control" name="activity_theme" data-shared-field="activity_theme" value="{{ old('activity_theme') }}" required>
+                                    </div>
+                                    <div>
+                                        <label class="form-label">Hari/tanggal<span class="pk-step-required">*</span></label>
+                                        <input type="date" class="form-control" name="activity_date" data-shared-field="activity_date" value="{{ old('activity_date') }}" required>
+                                    </div>
+                                    <div>
+                                        <label class="form-label">Waktu mulai<span class="pk-step-required">*</span></label>
+                                        <input type="time" class="form-control" name="activity_start_time" data-shared-field="activity_start_time" value="{{ old('activity_start_time') }}" required>
+                                    </div>
+                                    <div>
+                                        <label class="form-label">Waktu selesai<span class="pk-step-required">*</span></label>
+                                        <input type="time" class="form-control" name="activity_end_time" data-shared-field="activity_end_time" value="{{ old('activity_end_time') }}" required>
+                                    </div>
+                                    <div>
+                                        <label class="form-label">Zona waktu<span class="pk-step-required">*</span></label>
+                                        <select class="form-select" name="activity_timezone" data-shared-field="activity_timezone" required>
+                                            @foreach (['WIB', 'WITA', 'WIT'] as $zone)
+                                                <option value="{{ $zone }}" {{ old('activity_timezone', 'WIB') === $zone ? 'selected' : '' }}>{{ $zone }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="form-label">Tempat/media<span class="pk-step-required">*</span></label>
+                                        <input type="text" class="form-control" name="activity_location" data-shared-field="activity_location" value="{{ old('activity_location') }}" required>
+                                    </div>
+                                    <div>
+                                        <label class="form-label">Penyelenggara<span class="pk-step-required">*</span></label>
+                                        <input type="text" class="form-control" name="activity_organizer" data-shared-field="activity_organizer" value="{{ old('activity_organizer') }}" required>
+                                    </div>
+                                    <div>
+                                        <label class="form-label">Jumlah undangan</label>
+                                        <input type="number" min="0" class="form-control" name="participants_invited" data-shared-field="participants_invited" value="{{ old('participants_invited') }}">
+                                    </div>
+                                    <div>
+                                        <label class="form-label">Jumlah hadir</label>
+                                        <input type="number" min="0" class="form-control" name="participants_attended" data-shared-field="participants_attended" value="{{ old('participants_attended') }}">
+                                    </div>
+                                    <div>
+                                        <label class="form-label">Jumlah responden</label>
+                                        <input type="number" min="0" class="form-control" name="respondent_count" data-shared-field="respondent_count" value="{{ old('respondent_count') }}">
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="pk-step">
                                 <div class="pk-eval-section-title">III Formulir B - Evaluasi Internal Pelaksana</div>
                                 <div class="pk-eval-grid mb-3">
@@ -787,6 +841,7 @@
         var evaluasiSubTabInput = document.getElementById('evaluasiInnerTabInput');
         var evaluasiSubTabButtons = document.querySelectorAll('[data-eval-subtab]');
         var evaluasiSubPanels = document.querySelectorAll('[data-eval-panel]');
+        var sharedIdentitasFields = document.querySelectorAll('[data-shared-field]');
         var categorySelect = document.getElementById('institution_category');
         var mitraTypeWrapper = document.getElementById('mitraTypeWrapper');
         var mitraTypeSelect = document.getElementById('mitra_pembangunan_type');
@@ -853,6 +908,26 @@
             if (evaluasiSubTabInput) {
                 evaluasiSubTabInput.value = tabName;
             }
+            evaluasiSubPanels.forEach(function (panel) {
+                var isActivePanel = panel.getAttribute('data-eval-panel') === tabName;
+                panel.querySelectorAll('input, select, textarea').forEach(function (field) {
+                    field.disabled = !isActivePanel;
+                });
+            });
+        }
+
+        function syncSharedField(sourceField) {
+            var key = sourceField.getAttribute('data-shared-field');
+            if (!key) {
+                return;
+            }
+            var value = sourceField.value;
+            document.querySelectorAll('[data-shared-field="' + key + '"]').forEach(function (targetField) {
+                if (targetField === sourceField) {
+                    return;
+                }
+                targetField.value = value;
+            });
         }
 
         if (evaluasiSubTabButtons.length > 0 && evaluasiSubPanels.length > 0) {
@@ -867,6 +942,17 @@
 
             var initialTab = evaluasiSubTabInput && evaluasiSubTabInput.value ? evaluasiSubTabInput.value : 'peserta';
             setEvaluasiSubTab(initialTab);
+        }
+
+        if (sharedIdentitasFields.length > 0) {
+            sharedIdentitasFields.forEach(function (field) {
+                field.addEventListener('input', function () {
+                    syncSharedField(field);
+                });
+                field.addEventListener('change', function () {
+                    syncSharedField(field);
+                });
+            });
         }
     })();
 </script>
