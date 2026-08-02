@@ -126,6 +126,37 @@
         color: #111827;
         box-shadow: 0 6px 16px rgba(2, 6, 23, 0.10);
     }
+    .pk-eval-segmented {
+        display: inline-flex;
+        width: 100%;
+        background: #eef2f7;
+        border-radius: 999px;
+        padding: 6px;
+        gap: 6px;
+        margin-bottom: 1rem;
+    }
+    .pk-eval-seg-btn {
+        flex: 1 1 50%;
+        border: 0;
+        background: transparent;
+        border-radius: 999px;
+        padding: 0.65rem 1rem;
+        text-align: center;
+        color: #475569;
+        font-weight: 600;
+        transition: all 0.2s ease;
+    }
+    .pk-eval-seg-btn.active {
+        background: #fff;
+        color: #111827;
+        box-shadow: 0 6px 16px rgba(2, 6, 23, 0.10);
+    }
+    .pk-eval-subpanel {
+        display: none;
+    }
+    .pk-eval-subpanel.active {
+        display: block;
+    }
     .pk-eval-section-title {
         font-weight: 700;
         color: #0f172a;
@@ -172,6 +203,10 @@
                     @php
                         $activeTab = $tab ?? 'pendaftaran';
                         $scoreOptions = ['1', '2', '3', '4', '5'];
+                        $activeEvaluasiSubTab = old('evaluasi_inner_tab', 'peserta');
+                        if (!in_array($activeEvaluasiSubTab, ['peserta', 'penyelenggara'], true)) {
+                            $activeEvaluasiSubTab = 'peserta';
+                        }
                     @endphp
 
                     <div class="pk-segmented" role="tablist" aria-label="Program Kemitraan tabs">
@@ -334,8 +369,9 @@
                             </div>
                         @endif
 
-                        <form action="{{ route('program-kemitraan.evaluasi.store') }}" method="POST" id="programKemitraanEvaluasiForm">
+                        <form action="{{ route('program-kemitraan.evaluasi.store') }}" method="POST" id="programKemitraanEvaluasiForm" novalidate>
                             @csrf
+                            <input type="hidden" name="evaluasi_inner_tab" id="evaluasiInnerTabInput" value="{{ $activeEvaluasiSubTab }}">
                             <div class="pk-step">
                                 <div class="pk-eval-section-title">I. Identitas Kegiatan</div>
                                 <div class="pk-eval-grid">
@@ -390,6 +426,16 @@
                                 </div>
                             </div>
 
+                            <div class="pk-eval-segmented" role="tablist" aria-label="Form Evaluasi section tabs">
+                                <button type="button" class="pk-eval-seg-btn {{ $activeEvaluasiSubTab === 'peserta' ? 'active' : '' }}" data-eval-subtab="peserta" aria-selected="{{ $activeEvaluasiSubTab === 'peserta' ? 'true' : 'false' }}">
+                                    Peserta
+                                </button>
+                                <button type="button" class="pk-eval-seg-btn {{ $activeEvaluasiSubTab === 'penyelenggara' ? 'active' : '' }}" data-eval-subtab="penyelenggara" aria-selected="{{ $activeEvaluasiSubTab === 'penyelenggara' ? 'true' : 'false' }}">
+                                    Penyelenggara
+                                </button>
+                            </div>
+
+                            <div class="pk-eval-subpanel {{ $activeEvaluasiSubTab === 'peserta' ? 'active' : '' }}" data-eval-panel="peserta">
                             <div class="pk-step">
                                 <div class="pk-eval-section-title">II Formulir A - Evaluasi Peserta/Mitra</div>
                                 <p class="pk-eval-subtitle">Profil responden dan penilaian peserta/mitra.</p>
@@ -505,7 +551,9 @@
                                     <div><label class="form-label">Saran lainnya</label><textarea class="form-control" name="additional_suggestions">{{ old('additional_suggestions') }}</textarea></div>
                                 </div>
                             </div>
+                            </div>
 
+                            <div class="pk-eval-subpanel {{ $activeEvaluasiSubTab === 'penyelenggara' ? 'active' : '' }}" data-eval-panel="penyelenggara">
                             <div class="pk-step">
                                 <div class="pk-eval-section-title">III Formulir B - Evaluasi Internal Pelaksana</div>
                                 <div class="pk-eval-grid mb-3">
@@ -715,6 +763,7 @@
                                     <div><label class="form-label">Catatan pimpinan/arahan tambahan</label><textarea class="form-control" name="leader_notes">{{ old('leader_notes') }}</textarea></div>
                                 </div>
                             </div>
+                            </div>
 
                             <div class="pk-sticky-submit">
                                 <button type="submit" class="btn btn-primary w-100 pk-submit" id="pkEvaluasiSubmitBtn">Kirim Form Evaluasi</button>
@@ -735,6 +784,9 @@
         var submitBtn = document.getElementById('pkSubmitBtn');
         var evaluasiForm = document.getElementById('programKemitraanEvaluasiForm');
         var evaluasiSubmitBtn = document.getElementById('pkEvaluasiSubmitBtn');
+        var evaluasiSubTabInput = document.getElementById('evaluasiInnerTabInput');
+        var evaluasiSubTabButtons = document.querySelectorAll('[data-eval-subtab]');
+        var evaluasiSubPanels = document.querySelectorAll('[data-eval-panel]');
         var categorySelect = document.getElementById('institution_category');
         var mitraTypeWrapper = document.getElementById('mitraTypeWrapper');
         var mitraTypeSelect = document.getElementById('mitra_pembangunan_type');
@@ -786,6 +838,35 @@
                 evaluasiSubmitBtn.disabled = true;
                 evaluasiSubmitBtn.innerHTML = 'Mengirim form evaluasi...';
             });
+        }
+
+        function setEvaluasiSubTab(tabName) {
+            evaluasiSubTabButtons.forEach(function (button) {
+                var isActive = button.getAttribute('data-eval-subtab') === tabName;
+                button.classList.toggle('active', isActive);
+                button.setAttribute('aria-selected', isActive ? 'true' : 'false');
+            });
+            evaluasiSubPanels.forEach(function (panel) {
+                var isActive = panel.getAttribute('data-eval-panel') === tabName;
+                panel.classList.toggle('active', isActive);
+            });
+            if (evaluasiSubTabInput) {
+                evaluasiSubTabInput.value = tabName;
+            }
+        }
+
+        if (evaluasiSubTabButtons.length > 0 && evaluasiSubPanels.length > 0) {
+            evaluasiSubTabButtons.forEach(function (button) {
+                button.addEventListener('click', function () {
+                    var tabName = button.getAttribute('data-eval-subtab');
+                    if (tabName) {
+                        setEvaluasiSubTab(tabName);
+                    }
+                });
+            });
+
+            var initialTab = evaluasiSubTabInput && evaluasiSubTabInput.value ? evaluasiSubTabInput.value : 'peserta';
+            setEvaluasiSubTab(initialTab);
         }
     })();
 </script>
