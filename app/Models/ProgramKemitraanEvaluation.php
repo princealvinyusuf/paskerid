@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class ProgramKemitraanEvaluation extends Model
@@ -79,6 +80,7 @@ class ProgramKemitraanEvaluation extends Model
         'first_review_date',
         'evidence_documents',
         'leader_notes',
+        'certificate_code',
     ];
 
     protected $casts = [
@@ -104,5 +106,10 @@ class ProgramKemitraanEvaluation extends Model
     public function rtlItems(): HasMany
     {
         return $this->hasMany(ProgramKemitraanEvaluationRtlItem::class, 'evaluation_id');
+    }
+
+    public function activityMaster(): BelongsTo
+    {
+        return $this->belongsTo(ProgramKemitraanEvaluationActivity::class, 'activity_master_id');
     }
 }

@@ -12,6 +12,7 @@ use App\Http\Controllers\CareerBoostdayController;
 use App\Http\Controllers\CommunityForumController;
 use App\Http\Controllers\FormHasilKonselingController;
 use App\Http\Controllers\LaporLokerController;
+use App\Http\Controllers\ProgramKemitraanCertificateController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -71,6 +72,11 @@ Route::post('/program-kemitraan', [App\Http\Controllers\ProgramKemitraanControll
     ->name('program-kemitraan.store');
 Route::post('/program-kemitraan/evaluasi', [App\Http\Controllers\ProgramKemitraanController::class, 'storeEvaluasi'])
     ->name('program-kemitraan.evaluasi.store');
+Route::post('/program-kemitraan/sertifikat/redeem', [ProgramKemitraanCertificateController::class, 'redeem'])
+    ->middleware('throttle:20,1')
+    ->name('program-kemitraan.sertifikat.redeem');
+Route::get('/program-kemitraan/sertifikat/download/{code}', [ProgramKemitraanCertificateController::class, 'download'])
+    ->name('program-kemitraan.sertifikat.download');
 
 
 Route::get('kemitraan/create', [App\Http\Controllers\KemitraanController::class, 'create'])->name('kemitraan.create');

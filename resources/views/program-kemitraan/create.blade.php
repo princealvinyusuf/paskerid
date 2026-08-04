@@ -647,6 +647,9 @@
                         <a href="{{ route('program-kemitraan.create', ['tab' => 'hasil-evaluasi']) }}" class="pk-seg-btn {{ $activeTab === 'hasil-evaluasi' ? 'active' : '' }}" role="tab" aria-selected="{{ $activeTab === 'hasil-evaluasi' ? 'true' : 'false' }}">
                             Hasil Evaluasi
                         </a>
+                        <a href="{{ route('program-kemitraan.create', ['tab' => 'sertifikat']) }}" class="pk-seg-btn {{ $activeTab === 'sertifikat' ? 'active' : '' }}" role="tab" aria-selected="{{ $activeTab === 'sertifikat' ? 'true' : 'false' }}">
+                            Sertifikat
+                        </a>
                     </div>
 
                     @if ($activeTab === 'pendaftaran')
@@ -777,7 +780,32 @@
                         </form>
                     @elseif ($activeTab === 'evaluasi')
                         @if (session('evaluasi_success'))
-                            <div class="alert alert-success">{{ session('evaluasi_success') }}</div>
+                            <div class="alert alert-success">
+                                <div>{{ session('evaluasi_success') }}</div>
+                                @if (session('evaluasi_certificate_code'))
+                                    <div class="mt-3">
+                                        <label for="evaluasiCertificateCodeInput" class="form-label fw-semibold mb-1">Kode Sertifikat</label>
+                                        <div class="input-group">
+                                            <input
+                                                id="evaluasiCertificateCodeInput"
+                                                type="text"
+                                                class="form-control"
+                                                value="{{ session('evaluasi_certificate_code') }}"
+                                                readonly
+                                            >
+                                            <button
+                                                type="button"
+                                                class="btn btn-outline-success"
+                                                data-copy-target="evaluasiCertificateCodeInput"
+                                                data-default-label="Salin kode"
+                                            >
+                                                Salin kode
+                                            </button>
+                                        </div>
+                                        <small class="text-muted d-block mt-1">Gunakan kode ini di menu <strong>Sertifikat</strong> untuk mengunduh PDF.</small>
+                                    </div>
+                                @endif
+                            </div>
                         @endif
 
                         @if ($errors->evaluasi->any())
@@ -1239,6 +1267,62 @@
                                 <button type="submit" class="btn btn-primary w-100 pk-submit" id="pkEvaluasiSubmitBtn">Kirim Form Evaluasi</button>
                             </div>
                         </form>
+                    @elseif ($activeTab === 'sertifikat')
+                        <div class="pk-hero">
+                            <h3 class="mb-1">Sertifikat</h3>
+                            <p class="text-muted mb-0">Masukkan kode sertifikat dari Form Evaluasi untuk mengunduh PDF Sertifikat Partisipasi.</p>
+                        </div>
+
+                        @if (session('sertifikat_success'))
+                            <div class="alert alert-success">
+                                <div>{{ session('sertifikat_success') }}</div>
+                                @if (session('sertifikat_download_url'))
+                                    <a
+                                        class="btn btn-sm btn-success mt-2"
+                                        href="{{ session('sertifikat_download_url') }}"
+                                    >
+                                        Unduh Sertifikat PDF
+                                    </a>
+                                @endif
+                            </div>
+                        @endif
+
+                        @if (session('sertifikat_error'))
+                            <div class="alert alert-danger">{{ session('sertifikat_error') }}</div>
+                        @endif
+
+                        <div class="pk-eval-card">
+                            <div class="pk-eval-card-head">
+                                <span>Redeem Kode Sertifikat</span>
+                            </div>
+                            <div class="pk-eval-card-body">
+                                <form action="{{ route('program-kemitraan.sertifikat.redeem') }}" method="POST" class="row g-3">
+                                    @csrf
+                                    <div class="col-12">
+                                        <label for="redeemCertificateCode" class="form-label">Kode Sertifikat</label>
+                                        <input
+                                            id="redeemCertificateCode"
+                                            type="text"
+                                            name="certificate_code"
+                                            class="form-control @error('certificate_code', 'sertifikat') is-invalid @enderror"
+                                            value="{{ old('certificate_code') }}"
+                                            placeholder="Contoh: PKC-2026-AB12CD34"
+                                            autocomplete="off"
+                                            required
+                                        >
+                                        @error('certificate_code', 'sertifikat')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                        <small class="text-muted d-block mt-1">Kode bisa dipakai berulang untuk mengunduh sertifikat.</small>
+                                    </div>
+                                    <div class="col-12">
+                                        <button type="submit" class="btn btn-primary">
+                                            Redeem & Tampilkan Sertifikat
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
                     @else
                         <div class="pk-hero">
                             <h3 class="mb-1">Hasil Evaluasi</h3>
@@ -1473,6 +1557,46 @@
                 evaluasiSubmitBtn.innerHTML = 'Mengirim form evaluasi...';
             });
         }
+
+        document.querySelectorAll('[data-copy-target]').forEach(function (button) {
+            button.addEventListener('click', async function () {
+                var targetId = button.getAttribute('data-copy-target');
+                var input = targetId ? document.getElementById(targetId) : null;
+                if (!input) {
+                    return;
+                }
+
+                var text = input.value || '';
+                if (!text) {
+                    return;
+                }
+
+                var copied = false;
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    try {
+                        await navigator.clipboard.writeText(text);
+                        copied = true;
+                    } catch (error) {}
+                }
+
+                if (!copied) {
+                    input.focus();
+                    input.select();
+                    try {
+                        copied = document.execCommand('copy');
+                    } catch (error) {
+                        copied = false;
+                    }
+                }
+
+                var defaultLabel = button.getAttribute('data-default-label') || 'Salin';
+                var copiedLabel = copied ? 'Tersalin' : 'Gagal menyalin';
+                button.textContent = copiedLabel;
+                window.setTimeout(function () {
+                    button.textContent = defaultLabel;
+                }, 1600);
+            });
+        });
 
         function setEvaluasiSubTab(tabName) {
             evaluasiSubTabButtons.forEach(function (button) {

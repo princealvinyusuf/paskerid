@@ -7,6 +7,7 @@ use App\Models\ProgramKemitraanEvaluationActivity;
 use App\Models\ProgramKemitraanSubmission;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 class ProgramKemitraanController extends Controller
@@ -14,6 +15,7 @@ class ProgramKemitraanController extends Controller
     private const TAB_PENDAFTARAN = 'pendaftaran';
     private const TAB_EVALUASI = 'evaluasi';
     private const TAB_HASIL_EVALUASI = 'hasil-evaluasi';
+    private const TAB_SERTIFIKAT = 'sertifikat';
     private const SCORE_OPTIONS = ['1', '2', '3', '4', '5'];
 
     /**
@@ -427,7 +429,7 @@ class ProgramKemitraanController extends Controller
 
     private function resolveTab(?string $tab): string
     {
-        return in_array($tab, [self::TAB_PENDAFTARAN, self::TAB_EVALUASI, self::TAB_HASIL_EVALUASI], true)
+        return in_array($tab, [self::TAB_PENDAFTARAN, self::TAB_EVALUASI, self::TAB_HASIL_EVALUASI, self::TAB_SERTIFIKAT], true)
             ? (string) $tab
             : self::TAB_PENDAFTARAN;
     }
@@ -961,7 +963,10 @@ class ProgramKemitraanController extends Controller
             'evaluator_role' => 'Panitia',
         ];
 
-        DB::transaction(function () use ($validated, $preferredChannels, $monitoringMedia, $indicatorAchievements, $rtlItems, $questionGroups, $selectedActivity, $participantDefaults, $evaluatorDefaults): void {
+        $issuedCertificateCode = null;
+
+        DB::transaction(function () use ($validated, $preferredChannels, $monitoringMedia, $indicatorAchievements, $rtlItems, $questionGroups, $selectedActivity, $participantDefaults, $evaluatorDefaults, $isPesertaTab, &$issuedCertificateCode): void {
+            $certificateCode = $isPesertaTab ? $this->generateUniqueCertificateCode() : null;
             $evaluation = ProgramKemitraanEvaluation::create([
                 'activity_master_id' => (int) $selectedActivity->id,
                 'activity_name' => (string) $selectedActivity->activity_name,
@@ -1029,7 +1034,9 @@ class ProgramKemitraanController extends Controller
                 'first_review_date' => $validated['first_review_date'] ?? null,
                 'evidence_documents' => $validated['evidence_documents'] ?? null,
                 'leader_notes' => $validated['leader_notes'] ?? null,
+                'certificate_code' => $certificateCode,
             ]);
+            $issuedCertificateCode = $certificateCode;
 
             $answerRows = [];
             foreach ($questionGroups as $formKey => $sections) {
@@ -1086,9 +1093,24 @@ class ProgramKemitraanController extends Controller
             $evaluation->save();
         });
 
-        return redirect()
+        $redirect = redirect()
             ->route('program-kemitraan.create', ['tab' => self::TAB_EVALUASI])
             ->with('evaluasi_success', 'Form evaluasi berhasil dikirim. Terima kasih atas partisipasi Anda.');
+
+        if ($issuedCertificateCode !== null) {
+            $redirect->with('evaluasi_certificate_code', $issuedCertificateCode);
+        }
+
+        return $redirect;
+    }
+
+    private function generateUniqueCertificateCode(): string
+    {
+        do {
+            $candidate = 'PKC-' . now()->format('Y') . '-' . Str::upper(Str::random(8));
+        } while (ProgramKemitraanEvaluation::query()->where('certificate_code', $candidate)->exists());
+
+        return $candidate;
     }
 
     /**
