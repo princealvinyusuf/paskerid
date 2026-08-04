@@ -47,14 +47,15 @@ class ProgramKemitraanCertificatePdfService
         $streamParts[] = '138 404 m 704 404 l S';
         $streamParts[] = $this->text('F2', 32, $this->centeredX('Sebagai PESERTA', 32), 360, 'Sebagai PESERTA');
 
-        $descriptionLines = $this->wrapText(
+        $descriptionLines = $this->wrapTextByWidth(
             'Sertifikat ini diberikan sebagai bentuk apresiasi atas partisipasi, kontribusi, dan antusiasme dalam mendukung kelancaran kegiatan ' . $activityName . '.',
-            122
+            14,
+            self::PAGE_WIDTH - 180
         );
-        $descriptionY = 302;
+        $descriptionY = 304;
         foreach ($descriptionLines as $line) {
-            $streamParts[] = $this->text('F1', 16, 92, $descriptionY, $line);
-            $descriptionY -= 24;
+            $streamParts[] = $this->text('F1', 14, 90, $descriptionY, $line);
+            $descriptionY -= 22;
         }
 
         $imageCommands = [];
@@ -77,6 +78,7 @@ class ProgramKemitraanCertificatePdfService
             $imageCommands[] = 'Q';
         }
 
+        $streamParts[] = $this->text('F1', 18, $this->centeredX('Kepala Pusat Pasar Kerja', 18), 202, 'Kepala Pusat Pasar Kerja');
         $streamParts[] = $this->text('F2', 20, $this->centeredX($signerName, 20), 64, $signerName);
 
         if (!empty($imageCommands)) {
@@ -152,15 +154,14 @@ class ProgramKemitraanCertificatePdfService
 
     private function centeredX(string $text, float $fontSize): float
     {
-        $approxCharWidth = $fontSize * 0.52;
-        $textWidth = strlen($this->normalizeText($text)) * $approxCharWidth;
+        $textWidth = $this->estimateTextWidth($text, $fontSize);
         return max(40, (self::PAGE_WIDTH - $textWidth) / 2);
     }
 
     /**
      * @return array<int, string>
      */
-    private function wrapText(string $text, int $maxChars): array
+    private function wrapTextByWidth(string $text, float $fontSize, float $maxWidth): array
     {
         $cleanText = trim(preg_replace('/\s+/', ' ', $this->normalizeText($text)) ?? '');
         if ($cleanText === '') {
@@ -172,7 +173,7 @@ class ProgramKemitraanCertificatePdfService
         $currentLine = '';
         foreach ($words as $word) {
             $candidate = $currentLine === '' ? $word : $currentLine . ' ' . $word;
-            if (strlen($candidate) > $maxChars && $currentLine !== '') {
+            if ($this->estimateTextWidth($candidate, $fontSize) > $maxWidth && $currentLine !== '') {
                 $lines[] = $currentLine;
                 $currentLine = $word;
                 continue;
@@ -185,6 +186,36 @@ class ProgramKemitraanCertificatePdfService
         }
 
         return $lines;
+    }
+
+    private function estimateTextWidth(string $text, float $fontSize): float
+    {
+        $normalized = $this->normalizeText($text);
+        $widthUnits = 0.0;
+        $length = strlen($normalized);
+
+        for ($i = 0; $i < $length; $i++) {
+            $char = $normalized[$i];
+            if ($char === ' ') {
+                $widthUnits += 0.30;
+                continue;
+            }
+            if (preg_match('/[ilI1\.,:;!\|]/', $char) === 1) {
+                $widthUnits += 0.30;
+                continue;
+            }
+            if (preg_match('/[mwMW@#%&]/', $char) === 1) {
+                $widthUnits += 0.90;
+                continue;
+            }
+            if (preg_match('/[A-Z0-9]/', $char) === 1) {
+                $widthUnits += 0.66;
+                continue;
+            }
+            $widthUnits += 0.56;
+        }
+
+        return $widthUnits * $fontSize;
     }
 
     private function pdfEscape(string $text): string
