@@ -7,6 +7,9 @@ use App\Models\ProgramKemitraanEvaluation;
 
 class ProgramKemitraanCertificatePdfService
 {
+    private const PAGE_WIDTH = 842.0;
+    private const PAGE_HEIGHT = 595.0;
+
     public function generate(ProgramKemitraanEvaluation $evaluation, ?ProgramKemitraanCertificateSetting $setting = null): string
     {
         $setting = $setting ?? ProgramKemitraanCertificateSetting::query()->orderByDesc('id')->first();
@@ -31,7 +34,7 @@ class ProgramKemitraanCertificatePdfService
         $streamParts = [];
         if ($backgroundImageObject !== null) {
             $streamParts[] = 'q';
-            $streamParts[] = '595.00 0 0 842.00 0 0 cm';
+            $streamParts[] = sprintf('%.2F 0 0 %.2F 0 0 cm', self::PAGE_WIDTH, self::PAGE_HEIGHT);
             $streamParts[] = '/Bg1 Do';
             $streamParts[] = 'Q';
         }
@@ -39,29 +42,29 @@ class ProgramKemitraanCertificatePdfService
         // Subtle frame and title area.
         $streamParts[] = '0.74 0.12 0.12 RG';
         $streamParts[] = '2 w';
-        $streamParts[] = '24 24 547 794 re S';
+        $streamParts[] = '24 24 794 547 re S';
         $streamParts[] = '0.95 0.96 0.98 rg';
-        $streamParts[] = '36 686 523 120 re f';
+        $streamParts[] = '48 455 746 108 re f';
         $streamParts[] = '0.74 0.12 0.12 RG';
         $streamParts[] = '1 w';
-        $streamParts[] = '36 686 523 120 re S';
+        $streamParts[] = '48 455 746 108 re S';
 
-        $streamParts[] = $this->text('F2', 38, $this->centeredX($certificateTitle, 38), 758, strtoupper($certificateTitle));
-        $streamParts[] = $this->text('F1', 17, $this->centeredX('Dengan ini menyatakan bahwa', 17), 722, 'Dengan ini menyatakan bahwa');
-        $streamParts[] = $this->text('F2', 52, $this->centeredX($participantName, 52), 630, strtoupper($participantName));
+        $streamParts[] = $this->text('F2', 42, $this->centeredX($certificateTitle, 42), 525, strtoupper($certificateTitle));
+        $streamParts[] = $this->text('F1', 18, $this->centeredX('Dengan ini menyatakan bahwa', 18), 495, 'Dengan ini menyatakan bahwa');
+        $streamParts[] = $this->text('F2', 54, $this->centeredX($participantName, 54), 420, strtoupper($participantName));
         $streamParts[] = '0.74 0.12 0.12 RG';
         $streamParts[] = '1.2 w';
-        $streamParts[] = '90 615 m 505 615 l S';
-        $streamParts[] = $this->text('F2', 30, $this->centeredX('Sebagai PESERTA', 30), 570, 'Sebagai PESERTA');
+        $streamParts[] = '138 404 m 704 404 l S';
+        $streamParts[] = $this->text('F2', 32, $this->centeredX('Sebagai PESERTA', 32), 360, 'Sebagai PESERTA');
 
         $descriptionLines = $this->wrapText(
             'Sertifikat ini diberikan sebagai bentuk apresiasi atas partisipasi, kontribusi, dan antusiasme dalam mendukung kelancaran kegiatan ' . $activityName . '.',
-            86
+            122
         );
-        $descriptionY = 518;
+        $descriptionY = 302;
         foreach ($descriptionLines as $line) {
-            $streamParts[] = $this->text('F1', 14, 70, $descriptionY, $line);
-            $descriptionY -= 21;
+            $streamParts[] = $this->text('F1', 16, 92, $descriptionY, $line);
+            $descriptionY -= 24;
         }
 
         $imageCommands = [];
@@ -76,15 +79,15 @@ class ProgramKemitraanCertificatePdfService
                     $targetHeight = $targetWidth / $ratio;
                 }
             }
-            $x = (595 - $targetWidth) / 2;
-            $y = 165;
+            $x = (self::PAGE_WIDTH - $targetWidth) / 2;
+            $y = 102;
             $imageCommands[] = 'q';
             $imageCommands[] = sprintf('%.2F 0 0 %.2F %.2F %.2F cm', $targetWidth, $targetHeight, $x, $y);
             $imageCommands[] = '/Im1 Do';
             $imageCommands[] = 'Q';
         }
 
-        $streamParts[] = $this->text('F2', 19, $this->centeredX($signerName, 19), 130, $signerName);
+        $streamParts[] = $this->text('F2', 20, $this->centeredX($signerName, 20), 64, $signerName);
 
         if (!empty($imageCommands)) {
             $streamParts = array_merge($streamParts, $imageCommands);
@@ -123,7 +126,7 @@ class ProgramKemitraanCertificatePdfService
         $objects = [];
         $objects[] = '<< /Type /Catalog /Pages 2 0 R >>';
         $objects[] = '<< /Type /Pages /Kids [3 0 R] /Count 1 >>';
-        $objects[] = '<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources ' . $resources . ' /Contents 4 0 R >>';
+        $objects[] = '<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ' . self::PAGE_WIDTH . ' ' . self::PAGE_HEIGHT . '] /Resources ' . $resources . ' /Contents 4 0 R >>';
         $objects[] = '<< /Length ' . strlen($contentStream) . " >>\nstream\n" . $contentStream . "endstream";
         $objects[] = '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>';
         $objects[] = '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>';
@@ -161,7 +164,7 @@ class ProgramKemitraanCertificatePdfService
     {
         $approxCharWidth = $fontSize * 0.52;
         $textWidth = strlen($this->normalizeText($text)) * $approxCharWidth;
-        return max(40, (595 - $textWidth) / 2);
+        return max(40, (self::PAGE_WIDTH - $textWidth) / 2);
     }
 
     /**
