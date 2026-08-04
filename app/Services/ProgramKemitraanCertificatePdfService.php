@@ -54,7 +54,7 @@ class ProgramKemitraanCertificatePdfService
         );
         $descriptionY = 304;
         foreach ($descriptionLines as $line) {
-            $streamParts[] = $this->text('F1', 14, 90, $descriptionY, $line);
+            $streamParts[] = $this->text('F1', 14, $this->centeredX($line, 14), $descriptionY, $line);
             $descriptionY -= 22;
         }
 
