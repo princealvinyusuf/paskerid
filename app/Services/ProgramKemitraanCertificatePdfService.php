@@ -39,16 +39,6 @@ class ProgramKemitraanCertificatePdfService
             $streamParts[] = 'Q';
         }
 
-        // Subtle frame and title area.
-        $streamParts[] = '0.74 0.12 0.12 RG';
-        $streamParts[] = '2 w';
-        $streamParts[] = '24 24 794 547 re S';
-        $streamParts[] = '0.95 0.96 0.98 rg';
-        $streamParts[] = '48 455 746 108 re f';
-        $streamParts[] = '0.74 0.12 0.12 RG';
-        $streamParts[] = '1 w';
-        $streamParts[] = '48 455 746 108 re S';
-
         $streamParts[] = $this->text('F2', 42, $this->centeredX($certificateTitle, 42), 525, strtoupper($certificateTitle));
         $streamParts[] = $this->text('F1', 18, $this->centeredX('Dengan ini menyatakan bahwa', 18), 495, 'Dengan ini menyatakan bahwa');
         $streamParts[] = $this->text('F2', 54, $this->centeredX($participantName, 54), 420, strtoupper($participantName));
