@@ -39,7 +39,7 @@ class ProgramKemitraanCertificatePdfService
             $streamParts[] = 'Q';
         }
 
-        $streamParts[] = $this->text('F2', 42, $this->centeredX($certificateTitle, 42), 525, strtoupper($certificateTitle));
+        $streamParts[] = $this->text('F2', 42, $this->centeredX($certificateTitle, 42) + 10.0, 525, strtoupper($certificateTitle));
         $streamParts[] = $this->text('F1', 18, $this->centeredX('Dengan ini menyatakan bahwa', 18), 495, 'Dengan ini menyatakan bahwa');
         $streamParts[] = $this->text('F2', 54, $this->centeredX($participantName, 54), 420, strtoupper($participantName));
         $streamParts[] = '0.74 0.12 0.12 RG';
@@ -54,7 +54,7 @@ class ProgramKemitraanCertificatePdfService
         );
         $descriptionY = 304;
         foreach ($descriptionLines as $line) {
-            $streamParts[] = $this->text('F1', 14, $this->centeredX($line, 14), $descriptionY, $line);
+            $streamParts[] = $this->text('F1', 14, $this->centeredX($line, 14) + 12.0, $descriptionY, $line);
             $descriptionY -= 22;
         }
 
