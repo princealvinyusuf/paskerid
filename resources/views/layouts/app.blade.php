@@ -800,22 +800,26 @@
         width: auto;
     }
     .pasker-brand-merdeka {
-        height: 40px;
+        height: 30px;
         width: auto;
         border-radius: 4px;
     }
     @media (max-width: 991.98px) {
         .pasker-brand-icon,
-        .pasker-brand-wordmark,
-        .pasker-brand-merdeka {
+        .pasker-brand-wordmark {
             height: 34px;
+        }
+        .pasker-brand-merdeka {
+            height: 26px;
         }
     }
     @media (max-width: 575.98px) {
         .pasker-brand-icon,
-        .pasker-brand-wordmark,
-        .pasker-brand-merdeka {
+        .pasker-brand-wordmark {
             height: 28px;
+        }
+        .pasker-brand-merdeka {
+            height: 22px;
         }
     }
     .navbar .nav-link,
