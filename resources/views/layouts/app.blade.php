@@ -534,11 +534,12 @@
                     @endauth
                 </ul>
             </div>
-            <!-- Right: Pasker ID Logo and Independence mark -->
-            <div class="pasker-brand-group d-flex align-items-center me-0 pe-2">
-                <img class="pasker-brand-icon" src="{{ asset('images/logo.png') }}" alt="Paskerid Logo">
-                <img class="pasker-brand-wordmark" src="{{ asset('images/Logo_Pasker_ID.png') }}" alt="Paskerid Wordmark">
-                <img class="pasker-brand-merdeka" src="{{ asset('images/indonesia_merdeka.jpg') }}" alt="Indonesia Merdeka">
+            <!-- Right: Pasker ID Logo and Text -->
+            <div class="d-flex align-items-center me-0 pe-2">
+                <img src="{{ asset('images/logo.png') }}" alt="Paskerid Logo" style="height:40px; width:auto;">
+                <img src="{{ asset('images/Logo_Pasker_ID.png') }}" alt="Paskerid Logo" style="height:40px; width:auto;">
+                <img src="{{ asset('images/indonesia_merdeka.png') }}" alt="Indonesia Merdeka: Bersatu Berdaulat, Rakyat Sejahtera, Indonesia Maju" class="ms-2" style="height:40px; width:auto;">
+                <!-- <span class="fw-bold ms-2 d-none d-lg-inline" style="font-family: inherit; color: inherit;">Pasker ID</span> -->
             </div>
             <button class="navbar-toggler ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -789,38 +790,6 @@
     }
     .navbar .nav-link, .navbar-brand {
         color: #fff !important;
-    }
-    .pasker-brand-group {
-        gap: 0.45rem;
-        flex-shrink: 0;
-    }
-    .pasker-brand-icon,
-    .pasker-brand-wordmark {
-        height: 40px;
-        width: auto;
-    }
-    .pasker-brand-merdeka {
-        height: 30px;
-        width: auto;
-        border-radius: 4px;
-    }
-    @media (max-width: 991.98px) {
-        .pasker-brand-icon,
-        .pasker-brand-wordmark {
-            height: 34px;
-        }
-        .pasker-brand-merdeka {
-            height: 26px;
-        }
-    }
-    @media (max-width: 575.98px) {
-        .pasker-brand-icon,
-        .pasker-brand-wordmark {
-            height: 28px;
-        }
-        .pasker-brand-merdeka {
-            height: 22px;
-        }
     }
     .navbar .nav-link,
     .navbar .dropdown-item {
