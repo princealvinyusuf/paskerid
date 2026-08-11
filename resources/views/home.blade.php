@@ -72,6 +72,20 @@
                 </div>
             </div>
         </div>
+
+        <div class="modal fade" id="comingSoonPopupModal" tabindex="-1" aria-labelledby="comingSoonPopupModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content coming-soon-popup-modal">
+                    <div class="modal-header border-0 pb-0">
+                        <h5 class="modal-title" id="comingSoonPopupModalLabel">Karirhub Coming Soon</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body pt-2 text-center">
+                        <img src="{{ asset('images/Coming Soon.png') }}" alt="Fitur-fitur baru Karirhub segera hadir" class="coming-soon-popup-image">
+                    </div>
+                </div>
+            </div>
+        </div>
     @endif
 
     {{-- Hero Banner Section (Static) --}}
@@ -1116,6 +1130,10 @@
         const welcomePopup = document.getElementById('welcomePopupModal');
         if (welcomePopup && typeof bootstrap !== 'undefined' && bootstrap.Modal) {
             const popupModal = new bootstrap.Modal(welcomePopup);
+            const comingSoonPopup = document.getElementById('comingSoonPopupModal');
+            const comingSoonModal = comingSoonPopup
+                ? new bootstrap.Modal(comingSoonPopup)
+                : null;
             const popupCarouselEl = document.getElementById('welcomePopupCarousel');
             let popupCarousel = null;
 
@@ -1133,6 +1151,12 @@
                     popupCarousel.pause();
                 });
             }
+
+            welcomePopup.addEventListener('hidden.bs.modal', function () {
+                if (comingSoonModal) {
+                    comingSoonModal.show();
+                }
+            }, { once: true });
 
             popupModal.show();
         }
@@ -1498,6 +1522,22 @@
 .welcome-popup-image {
     max-height: 260px;
     width: auto;
+    object-fit: contain;
+}
+
+.coming-soon-popup-modal {
+    border-radius: 18px;
+    overflow: hidden;
+    border: 1px solid rgba(15, 95, 168, 0.2);
+}
+
+.coming-soon-popup-image {
+    display: block;
+    width: auto;
+    max-width: 100%;
+    max-height: calc(100vh - 150px);
+    margin: 0 auto;
+    border-radius: 12px;
     object-fit: contain;
 }
 
