@@ -126,6 +126,11 @@
         color: #111827;
         box-shadow: 0 6px 16px rgba(2, 6, 23, 0.10);
     }
+    .pk-seg-btn.disabled {
+        cursor: not-allowed;
+        opacity: 0.55;
+        pointer-events: none;
+    }
     .pk-eval-segmented {
         display: inline-flex;
         width: 100%;
@@ -644,12 +649,21 @@
                         <a href="{{ route('program-kemitraan.create', ['tab' => 'evaluasi']) }}" class="pk-seg-btn {{ $activeTab === 'evaluasi' ? 'active' : '' }}" role="tab" aria-selected="{{ $activeTab === 'evaluasi' ? 'true' : 'false' }}">
                             Form Evaluasi
                         </a>
-                        <a href="{{ route('program-kemitraan.create', ['tab' => 'hasil-evaluasi']) }}" class="pk-seg-btn {{ $activeTab === 'hasil-evaluasi' ? 'active' : '' }}" role="tab" aria-selected="{{ $activeTab === 'hasil-evaluasi' ? 'true' : 'false' }}">
-                            Hasil Evaluasi
-                        </a>
-                        <a href="{{ route('program-kemitraan.create', ['tab' => 'sertifikat']) }}" class="pk-seg-btn {{ $activeTab === 'sertifikat' ? 'active' : '' }}" role="tab" aria-selected="{{ $activeTab === 'sertifikat' ? 'true' : 'false' }}">
-                            Sertifikat
-                        </a>
+                        @if ($resultsAndCertificateTabsEnabled ?? false)
+                            <a href="{{ route('program-kemitraan.create', ['tab' => 'hasil-evaluasi']) }}" class="pk-seg-btn {{ $activeTab === 'hasil-evaluasi' ? 'active' : '' }}" role="tab" aria-selected="{{ $activeTab === 'hasil-evaluasi' ? 'true' : 'false' }}">
+                                Hasil Evaluasi
+                            </a>
+                            <a href="{{ route('program-kemitraan.create', ['tab' => 'sertifikat']) }}" class="pk-seg-btn {{ $activeTab === 'sertifikat' ? 'active' : '' }}" role="tab" aria-selected="{{ $activeTab === 'sertifikat' ? 'true' : 'false' }}">
+                                Sertifikat
+                            </a>
+                        @else
+                            <span class="pk-seg-btn disabled" role="tab" aria-selected="false" aria-disabled="true" title="Sedang dalam pengembangan">
+                                Hasil Evaluasi
+                            </span>
+                            <span class="pk-seg-btn disabled" role="tab" aria-selected="false" aria-disabled="true" title="Sedang dalam pengembangan">
+                                Sertifikat
+                            </span>
+                        @endif
                     </div>
 
                     @if ($activeTab === 'pendaftaran')
