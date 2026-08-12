@@ -92,8 +92,8 @@
     </section>
     <section class="running-text-strip" aria-label="Informasi berjalan">
         <div class="running-text-track">
-            <span class="running-text-item">Dengan Integritas dan Pelayanan Prima, Pusat Pasar Kerja Siap Menuju ZI WBBM — Mari Dukung Kami</span>
-            <span class="running-text-item" aria-hidden="true">Dengan Integritas dan Pelayanan Prima, Pusat Pasar Kerja Siap Menuju ZI WBBM — Mari Dukung Kami</span>
+            <span class="running-text-item">Dengan Integritas dan Pelayanan Prima, Pusat Pasar Kerja Siap Menuju WBK dan WBBM — Mari Dukung Kami</span>
+            <span class="running-text-item" aria-hidden="true">Dengan Integritas dan Pelayanan Prima, Pusat Pasar Kerja Siap Menuju WBK dan WBBM — Mari Dukung Kami</span>
         </div>
     </section>
 
