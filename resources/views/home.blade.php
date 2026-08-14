@@ -38,7 +38,10 @@
                                         if ($popupPayload !== '') {
                                             $popupMime = trim((string) ($popupItem->mime_type ?? ''));
                                             $popupMime = $popupMime !== '' ? $popupMime : 'image/jpeg';
-                                            if (\Illuminate\Support\Str::startsWith($popupPayload, 'data:')) {
+                                            if (
+                                                \Illuminate\Support\Str::startsWith($popupPayload, '/') ||
+                                                \Illuminate\Support\Str::startsWith($popupPayload, ['http://', 'https://', 'data:'])
+                                            ) {
                                                 $popupImageSrc = $popupPayload;
                                             } else {
                                                 $popupImageSrc = 'data:' . $popupMime . ';base64,' . $popupPayload;
