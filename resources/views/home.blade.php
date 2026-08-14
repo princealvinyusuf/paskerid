@@ -9,7 +9,7 @@
 
     @if($showWelcomePopup)
         <div class="modal fade" id="welcomePopupModal" tabindex="-1" aria-labelledby="welcomePopupModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-dialog modal-dialog-centered welcome-popup-dialog">
                 <div class="modal-content welcome-popup-modal">
                     <div class="modal-header border-0 pb-0">
                         <h5 class="modal-title" id="welcomePopupModalLabel">Notifikasi</h5>
@@ -1498,10 +1498,32 @@
     border: 1px solid rgba(15, 95, 168, 0.2);
 }
 
+.welcome-popup-dialog {
+    width: calc(100% - 24px);
+    max-width: 560px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 .welcome-popup-image {
-    max-height: 260px;
+    display: block;
     width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: calc(100vh - 190px);
+    margin: 0 auto;
     object-fit: contain;
+}
+
+@media (max-width: 575.98px) {
+    .welcome-popup-modal .modal-body {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    .welcome-popup-image {
+        max-height: calc(100vh - 170px);
+    }
 }
 
 #welcomePopupCarousel .carousel-control-prev-icon,
