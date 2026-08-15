@@ -190,29 +190,6 @@
                 ['name' => 'Jessica F. (@izzermcglizzer)', 'role' => 'Legal Consultant', 'text' => 'Thanks to this tool, CV aku jadi lebih clean dan eye-catching. Recommended banget buat yang lagi job hunting.'],
                 ['name' => 'Eza Hazami', 'role' => 'Tech HR Business Partner', 'text' => 'Jangan suka nyalahin diri sendiri kalau nggak dipanggil HRD. Better sebelum kirim CV minta review dulu. Gratis kalau mau coba.']
             ];
-        @endphp
-
-        <section class="mt-5">
-            <div class="d-flex align-items-end justify-content-between mb-4">
-                <div>
-                    <p class="text-primary fw-bold text-uppercase small mb-1" style="letter-spacing: 0.2em;">Testimonial</p>
-                    <h2 class="h3 fw-bold text-dark mb-0">Review Pengguna</h2>
-                </div>
-                <span class="badge bg-white text-secondary border px-3 py-2 rounded-pill">4.9/5 review kepuasan</span>
-            </div>
-
-            <div class="row g-4">
-                @foreach($userReviews as $review)
-                    <div class="col-md-6 col-xl-4">
-                        <div class="card h-100 border-0 shadow-sm p-4 rounded-4">
-                            <h3 class="h6 fw-bold text-dark mb-1">{{ $review['name'] }}</h3>
-                            <p class="small text-muted mb-2">{{ $review['role'] }}</p>
-                            <p class="small text-secondary mb-0">"{{ $review['text'] }}"</p>
-                        </div>
-                    </div>
-                @endforeach
-            </div>
-        </section>
 
         <div id="result-wrapper" class="mt-5 d-none">
             <div class="row g-4">
@@ -225,8 +202,7 @@
                             <button type="button" data-tab-target="tab-keywords" class="result-tab-btn btn btn-outline-secondary border-0 text-start fw-bold rounded-3 text-dark"><i class="fa-solid fa-key me-2"></i>Keywords</button>
                             <button type="button" data-tab-target="tab-career" class="result-tab-btn btn btn-outline-secondary border-0 text-start fw-bold rounded-3 text-dark"><i class="fa-solid fa-briefcase me-2"></i>Career Fit</button>
                             <hr class="my-2 d-none d-lg-block">
-                            <button id="download-pdf-btn" type="button" class="btn btn-light text-primary border border-primary border-opacity-25 text-start fw-bold rounded-3"><i class="fa-regular fa-file-pdf me-2"></i>Download (PDF)</button>
-                            <button id="download-ats-btn" type="button" class="btn btn-light text-success border border-success border-opacity-25 text-start fw-bold rounded-3"><i class="fa-solid fa-file-lines me-2"></i>Download CV ATS Builder</button>
+                            <button id="download-pdf-btn" type="button" class="btn btn-light text-primary border border-primary border-opacity-25 text-start fw-bold rounded-3"><i class="fa-regular fa-file-pdf me-2"></i>Download Hasil Analisis</button>
                         </div>
                     </div>
                 </aside>
@@ -358,6 +334,38 @@
         </div>
     </section>
 
+    <section class="py-5 bg-light">
+        <div class="container py-4">
+        @php
+            $userReviews = [
+                ['name' => 'Budi S.', 'role' => 'Software Engineer', 'text' => 'Review CV-nya detail banget! Ngebantu banget buat perbaikin CV biar lebih ATS friendly.'],
+                ['name' => 'Jessica F. (@izzermcglizzer)', 'role' => 'Legal Consultant', 'text' => 'Thanks to this tool, CV aku jadi lebih clean dan eye-catching. Recommended banget buat yang lagi job hunting.'],
+                ['name' => 'Eza Hazami', 'role' => 'Tech HR Business Partner', 'text' => 'Jangan suka nyalahin diri sendiri kalau nggak dipanggil HRD. Better sebelum kirim CV minta review dulu. Gratis kalau mau coba.']
+            ];
+        @endphp
+
+            <div class="d-flex align-items-end justify-content-between mb-4">
+                <div>
+                    <p class="text-primary fw-bold text-uppercase small mb-1" style="letter-spacing: 0.2em;">Testimonial</p>
+                    <h2 class="h3 fw-bold text-dark mb-0">Review Pengguna</h2>
+                </div>
+                <span class="badge bg-white text-secondary border px-3 py-2 rounded-pill">4.9/5 review kepuasan</span>
+            </div>
+
+            <div class="row g-4">
+                @foreach($userReviews as $review)
+                    <div class="col-md-6 col-xl-4">
+                        <div class="card h-100 border-0 shadow-sm p-4 rounded-4">
+                            <h3 class="h6 fw-bold text-dark mb-1">{{ $review['name'] }}</h3>
+                            <p class="small text-muted mb-2">{{ $review['role'] }}</p>
+                            <p class="small text-secondary mb-0">"{{ $review['text'] }}"</p>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    </section>
+
     <script>
         (() => {
             const fileInput = document.getElementById('cv-file');
@@ -368,7 +376,6 @@
             const reviewBtn = document.getElementById('review-btn');
             const clearBtn = document.getElementById('clear-btn');
             const downloadPdfBtn = document.getElementById('download-pdf-btn');
-            const downloadAtsBtn = document.getElementById('download-ats-btn');
             const statusText = document.getElementById('status-text');
             const resultWrapper = document.getElementById('result-wrapper');
             const sampleState = document.getElementById('sample-state');
@@ -1224,209 +1231,6 @@
 
             downloadPdfBtn.addEventListener('click', downloadAnalysisPdf);
 
-            // ── ATS CV Builder PDF ────────────────────────────────────────────
-            const parseCvSections = (rawText) => {
-                // Heuristic formatting to salvage unformatted blobs of text from PDF extraction
-                let formattedText = String(rawText || '')
-                    // Force newline before bullet-like characters
-                    .replace(/\s+([•■*]|\!(?=\s))/g, '\n$1')
-                    // Force newline around known common headers
-                    .replace(/\b(ABOUT ME|CONTACT|WORK EXPERIENCE|EDUCATION|SKILLS(?: & KNOWLEDGE)?|TOOLS & TECHNOLOGIES|OTHER SKILLS|PROJECT PORTFOLIO|PROJECTS|EXPERIENCE|CERTIFICATIONS|ORGANIZATIONS?|ACHIEVEMENTS?|SUMMARY|PROFILE)\b/g, '\n$1\n');
-
-                const sectionKeywords = [
-                    'about me', 'summary', 'ringkasan', 'profil', 'profile', 'objective', 'tujuan',
-                    'experience', 'pengalaman', 'work history', 'riwayat kerja', 'employment', 'work experience',
-                    'education', 'pendidikan', 'riwayat pendidikan',
-                    'skill', 'keahlian', 'kemampuan', 'kompetensi', 'technical', 'skills & knowledge', 'tools & technologies', 'other skills',
-                    'achievement', 'pencapaian', 'prestasi',
-                    'certification', 'sertifikasi', 'sertifikat', 'license',
-                    'organization', 'organisasi', 'aktivitas', 'activity',
-                    'language', 'bahasa',
-                    'project', 'proyek', 'project portfolio',
-                    'award', 'penghargaan',
-                    'interest', 'hobi', 'hobby',
-                    'contact', 'kontak', 'informasi',
-                    'volunteer', 'sukarela',
-                    'reference', 'referensi',
-                ];
-                const lines = formattedText.split('\n').map(l => l.trimEnd()).filter(l => l.trim());
-                const sections = [];
-                let current = null;
-
-                for (const line of lines) {
-                    const stripped = line.trim();
-                    if (!stripped) continue;
-                    const lower = stripped.toLowerCase();
-                    const isHeading = stripped.length < 60 &&
-                        sectionKeywords.some(kw => lower === kw || (lower.startsWith(kw) && lower.length < kw.length + 15)) &&
-                        !/^[-•*!\d]/.test(stripped);
-
-                    if (isHeading && current !== null) {
-                        sections.push({ heading: current.heading, lines: current.lines });
-                        current = { heading: stripped, lines: [] };
-                    } else if (isHeading) {
-                        current = { heading: stripped, lines: [] };
-                    } else if (current) {
-                        current.lines.push(stripped);
-                    } else {
-                        if (!sections.length) sections.push({ heading: '__HEADER__', lines: [] });
-                        sections[0].lines.push(stripped);
-                    }
-                }
-                if (current) sections.push({ heading: current.heading, lines: current.lines });
-                return sections;
-            };
-
-            const downloadAtsCvPdf = async () => {
-                if (!latestAnalysis || !latestCvText) {
-                    statusText.textContent = 'Harap analisis CV terlebih dahulu sebelum mengunduh ATS Builder.';
-                    return;
-                }
-                if (!ensureJsPdfLoaded()) {
-                    statusText.textContent = 'PDF generator belum siap. Refresh halaman lalu coba lagi.';
-                    return;
-                }
-
-                try {
-                    statusText.textContent = 'Menyusun CV ATS Builder PDF…';
-                    const { jsPDF } = window.jspdf;
-                    const doc = new jsPDF({ unit: 'mm', format: 'a4' });
-                    const pageW = doc.internal.pageSize.getWidth();
-                    const pageH = doc.internal.pageSize.getHeight();
-                    const marginL = 18;
-                    const marginR = 18;
-                    const contentW = pageW - marginL - marginR;
-                    const maxY = pageH - 18;
-                    let y = 20;
-
-                    const checkPage = (needed = 8) => {
-                        if (y + needed > maxY) {
-                            doc.addPage();
-                            y = 25; // start lower on new pages
-                        }
-                    };
-
-                    const writeLine = (text, opts = {}) => {
-                        const { fontSize = 10, bold = false, color = [40, 40, 40], indent = 0 } = opts;
-                        doc.setFontSize(fontSize);
-                        doc.setFont('helvetica', bold ? 'bold' : 'normal');
-                        doc.setTextColor(...color);
-                        // Clean up text
-                        const safeText = String(text || '').replace(/\s+/g, ' ').trim();
-                        if (!safeText) return; // skip empty lines
-                        const lines = doc.splitTextToSize(safeText, contentW - indent);
-                        const lineHeight = fontSize * 0.45;
-                        checkPage(lines.length * lineHeight + 2);
-                        doc.text(lines, marginL + indent, y);
-                        y += lines.length * lineHeight + 1.5; // paragraph spacing
-                    };
-
-                    const writeSection = (heading) => {
-                        checkPage(16);
-                        y += 4; // spacing before section
-                        doc.setFillColor(30, 64, 175);
-                        doc.rect(marginL, y - 4, 3, 5, 'F');
-                        doc.setFontSize(11);
-                        doc.setFont('helvetica', 'bold');
-                        doc.setTextColor(30, 64, 175);
-                        doc.text(String(heading).toUpperCase(), marginL + 5, y + 0.5);
-                        y += 3;
-                        doc.setDrawColor(226, 232, 240);
-                        doc.setLineWidth(0.5);
-                        doc.line(marginL, y, pageW - marginR, y);
-                        y += 4;
-                        doc.setTextColor(40, 40, 40);
-                    };
-
-                    const candidateName = inferCandidateName(latestCvText);
-                    const keywords = Array.isArray(latestAnalysis.keywords_recommendation)
-                        ? latestAnalysis.keywords_recommendation.filter(Boolean)
-                        : [];
-                    const careerRec = latestAnalysis.career_recommendation || '';
-
-                    // ── Header block ─────────────────────────────────────────
-                    doc.setFillColor(248, 250, 252);
-                    doc.rect(0, 0, pageW, 32, 'F');
-                    doc.setFontSize(22);
-                    doc.setFont('helvetica', 'bold');
-                    doc.setTextColor(15, 23, 42);
-                    doc.text(candidateName, marginL, 16);
-                    if (careerRec) {
-                        const roleLines = doc.splitTextToSize(careerRec, contentW);
-                        doc.setFontSize(10);
-                        doc.setFont('helvetica', 'normal');
-                        doc.setTextColor(71, 85, 105);
-                        doc.text(roleLines[0], marginL, 24);
-                    }
-                    doc.setDrawColor(226, 232, 240);
-                    doc.line(0, 32, pageW, 32);
-                    y = 40;
-
-                    // ── ATS note ─────────────────────────────────────────────
-                    doc.setFontSize(8);
-                    doc.setFont('helvetica', 'italic');
-                    doc.setTextColor(148, 163, 184);
-                    doc.text('ATS-Optimized CV Text | Format Khusus Parsing Mesin (Bukan untuk Human Reviewer)', marginL, y);
-                    y += 6;
-
-                    // ── Parse sections from raw CV text ──────────────────────
-                    const sections = parseCvSections(latestCvText);
-
-                    for (const section of sections) {
-                        if (section.heading === '__HEADER__') {
-                            // First lines before any section heading — treat as contact/intro
-                            for (const line of section.lines.slice(0, 10)) {
-                                writeLine(line, { fontSize: 10, color: [71, 85, 105] });
-                            }
-                            y += 2;
-                        } else {
-                            writeSection(section.heading);
-                            for (const line of section.lines) {
-                                const isBullet = /^[-•*!]/.test(line);
-                                // clean bullet chars
-                                const cleanLine = line.replace(/^[-•*!\s]+/, '');
-                                writeLine(
-                                    (isBullet ? '•  ' : '') + cleanLine,
-                                    { fontSize: 10, indent: isBullet ? 4 : 0 }
-                                );
-                            }
-                        }
-                    }
-
-                    // ── ATS Keywords section ─────────────────────────────────
-                    if (keywords.length) {
-                        writeSection('ATS Keywords (Recommended)');
-                        const kwText = keywords.join(', ');
-                        const kwLines = doc.splitTextToSize(kwText, contentW);
-                        doc.setFontSize(10);
-                        doc.setFont('helvetica', 'normal');
-                        doc.setTextColor(40, 40, 40);
-                        checkPage(kwLines.length * 5 + 4);
-                        doc.text(kwLines, marginL, y);
-                        y += kwLines.length * 5 + 4;
-                    }
-
-                    // ── Footer on all pages ──────────────────────────────────
-                    const totalPages = doc.getNumberOfPages();
-                    for (let p = 1; p <= totalPages; p++) {
-                        doc.setPage(p);
-                        doc.setFontSize(8);
-                        doc.setFont('helvetica', 'normal');
-                        doc.setTextColor(160, 160, 160);
-                        doc.text(`Page ${p} / ${totalPages}`, pageW - marginR, pageH - 8, { align: 'right' });
-                        doc.text('PaskerID CV ATS Builder', marginL, pageH - 8);
-                    }
-
-                    const now = new Date();
-                    const fileName = `ats-cv-${slugify(candidateName)}-${now.toISOString().slice(0, 10)}.pdf`;
-                    doc.save(fileName);
-                    statusText.textContent = 'CV ATS Builder berhasil diunduh!';
-                } catch (err) {
-                    statusText.textContent = `Gagal membuat ATS PDF: ${err?.message || 'unknown error'}`;
-                }
-            };
-
-            downloadAtsBtn.addEventListener('click', downloadAtsCvPdf);
 
             resetScoreVisual();
             resetJobMatchView();
