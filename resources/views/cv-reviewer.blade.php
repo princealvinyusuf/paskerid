@@ -1133,7 +1133,6 @@
                     const totalPages = doc.getNumberOfPages();
                     for (let page = 1; page <= totalPages; page += 1) {
                         doc.setPage(page);
-                        addPageWatermark(doc, watermarkText);
                         addPageHeaderFooter(doc, page, totalPages, logoDataUrl);
                     }
 
