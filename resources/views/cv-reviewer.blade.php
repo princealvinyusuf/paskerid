@@ -190,6 +190,29 @@
                 ['name' => 'Jessica F. (@izzermcglizzer)', 'role' => 'Legal Consultant', 'text' => 'Thanks to this tool, CV aku jadi lebih clean dan eye-catching. Recommended banget buat yang lagi job hunting.'],
                 ['name' => 'Eza Hazami', 'role' => 'Tech HR Business Partner', 'text' => 'Jangan suka nyalahin diri sendiri kalau nggak dipanggil HRD. Better sebelum kirim CV minta review dulu. Gratis kalau mau coba.']
             ];
+        @endphp
+
+        <section class="mt-5">
+            <div class="d-flex align-items-end justify-content-between mb-4">
+                <div>
+                    <p class="text-primary fw-bold text-uppercase small mb-1" style="letter-spacing: 0.2em;">Testimonial</p>
+                    <h2 class="h3 fw-bold text-dark mb-0">Review Pengguna</h2>
+                </div>
+                <span class="badge bg-white text-secondary border px-3 py-2 rounded-pill">4.9/5 review kepuasan</span>
+            </div>
+
+            <div class="row g-4">
+                @foreach($userReviews as $review)
+                    <div class="col-md-6 col-xl-4">
+                        <div class="card h-100 border-0 shadow-sm p-4 rounded-4">
+                            <h3 class="h6 fw-bold text-dark mb-1">{{ $review['name'] }}</h3>
+                            <p class="small text-muted mb-2">{{ $review['role'] }}</p>
+                            <p class="small text-secondary mb-0">"{{ $review['text'] }}"</p>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </section>
 
         <div id="result-wrapper" class="mt-5 d-none">
             <div class="row g-4">
@@ -330,38 +353,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="py-5 bg-light">
-        <div class="container py-4">
-        @php
-            $userReviews = [
-                ['name' => 'Budi S.', 'role' => 'Software Engineer', 'text' => 'Review CV-nya detail banget! Ngebantu banget buat perbaikin CV biar lebih ATS friendly.'],
-                ['name' => 'Jessica F. (@izzermcglizzer)', 'role' => 'Legal Consultant', 'text' => 'Thanks to this tool, CV aku jadi lebih clean dan eye-catching. Recommended banget buat yang lagi job hunting.'],
-                ['name' => 'Eza Hazami', 'role' => 'Tech HR Business Partner', 'text' => 'Jangan suka nyalahin diri sendiri kalau nggak dipanggil HRD. Better sebelum kirim CV minta review dulu. Gratis kalau mau coba.']
-            ];
-        @endphp
-
-            <div class="d-flex align-items-end justify-content-between mb-4">
-                <div>
-                    <p class="text-primary fw-bold text-uppercase small mb-1" style="letter-spacing: 0.2em;">Testimonial</p>
-                    <h2 class="h3 fw-bold text-dark mb-0">Review Pengguna</h2>
-                </div>
-                <span class="badge bg-white text-secondary border px-3 py-2 rounded-pill">4.9/5 review kepuasan</span>
-            </div>
-
-            <div class="row g-4">
-                @foreach($userReviews as $review)
-                    <div class="col-md-6 col-xl-4">
-                        <div class="card h-100 border-0 shadow-sm p-4 rounded-4">
-                            <h3 class="h6 fw-bold text-dark mb-1">{{ $review['name'] }}</h3>
-                            <p class="small text-muted mb-2">{{ $review['role'] }}</p>
-                            <p class="small text-secondary mb-0">"{{ $review['text'] }}"</p>
-                        </div>
-                    </div>
-                @endforeach
             </div>
         </div>
     </section>
