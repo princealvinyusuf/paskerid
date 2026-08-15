@@ -122,11 +122,9 @@ class ProgramKemitraanController extends Controller
                     'Materi disusun secara sistematis dan mudah diikuti.',
                     'Informasi yang disampaikan akurat, relevan, dan mutakhir.',
                     'Istilah teknis dijelaskan dengan bahasa yang mudah dipahami.',
-                    'Contoh, studi kasus, atau simulasi membantu pemahaman peserta.',
                     'Materi memberikan pengetahuan baru yang dapat diterapkan.',
                     'Materi memperkuat pemahaman mengenai ekosistem layanan SIAPkerja/Karirhub.',
                     'Materi memberikan pemahaman mengenai informasi pasar kerja dan kebutuhan dunia kerja.',
-                    'Materi menjelaskan hak, kewajiban, atau peran para pihak secara proporsional.',
                     'Materi mendukung literasi digital dan penggunaan layanan ketenagakerjaan.',
                     'Bahan tayang atau bahan pendukung dapat dibaca dengan jelas.',
                     'Materi memperhatikan kebutuhan peserta dengan latar belakang yang beragam.',
@@ -155,8 +153,6 @@ class ProgramKemitraanController extends Controller
                     'Kegiatan dimulai dan diakhiri sesuai jadwal atau dengan penjelasan yang memadai.',
                     'Tempat atau media daring mendukung kenyamanan dan kelancaran peserta.',
                     'Peralatan, jaringan, suara, dan tampilan materi berfungsi dengan baik.',
-                    'Kebutuhan aksesibilitas peserta diperhatikan secara memadai.',
-                    'Dokumentasi, bahan kegiatan, atau informasi lanjutan tersedia dengan baik.',
                 ],
             ],
             'a_promosi_komunikasi' => [
@@ -169,7 +165,6 @@ class ProgramKemitraanController extends Controller
                     'Informasi mengenai layanan Pusat Pasar Kerja disampaikan secara jelas.',
                     'Tautan, kode QR, kontak, atau kanal informasi lanjutan berfungsi dengan baik.',
                     'Promosi kegiatan mendorong minat untuk menggunakan atau menyebarluaskan layanan.',
-                    'Komunikasi publik memperkuat citra layanan pemerintah yang tepercaya dan mudah diakses.',
                 ],
             ],
             'a_manfaat_dampak' => [
