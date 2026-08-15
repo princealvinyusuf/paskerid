@@ -239,7 +239,6 @@ class ProgramKemitraanController extends Controller
                     'Pembahasan menghasilkan kesepahaman atau arah kerja sama yang konkret.',
                     'Terdapat daftar kontak, narahubung, atau penanggung jawab dari masing-masing pihak.',
                     'Terdapat kesepakatan mengenai tahapan, keluaran, atau jadwal tindak lanjut.',
-                    'Potensi risiko, keterbatasan, dan kebutuhan dukungan kemitraan telah dipetakan.',
                 ],
             ],
             'b_kinerja_edukasi' => [
@@ -250,7 +249,6 @@ class ProgramKemitraanController extends Controller
                     'Metode penyampaian mendorong keterlibatan dan pemahaman aktif.',
                     'Pertanyaan, umpan balik, atau hasil diskusi menunjukkan peningkatan pemahaman.',
                     'Tersedia bahan referensi atau kanal pembelajaran lanjutan.',
-                    'Terdapat rencana pengukuran penerapan pengetahuan setelah kegiatan.',
                 ],
             ],
             'b_kinerja_promosi' => [
