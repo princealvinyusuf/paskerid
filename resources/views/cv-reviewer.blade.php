@@ -175,44 +175,6 @@
             </div>
         </div>
 
-        @php
-            $userReviews = [
-                ['name' => 'Worksfess (@worksfess)', 'role' => 'Komunitas Karir', 'text' => 'Gw kira CV udah bagus, ternyata masih banyak yang kurang. Gara-gara fitur ini jadi tau kalau CV harus ada kata kunci yang relevan sesuai posisi.'],
-                ['name' => 'Rio (@vicarioreinaldo)', 'role' => 'Career Development Content Creator', 'text' => 'Step 1 dapet kerja impian & di notice HRD: update CV di sini. Analisis lengkap dan action item-nya super detail.'],
-                ['name' => 'Andini Saras (@ustadchen)', 'role' => 'Content Creator', 'text' => 'Jujur ini ngebantu banget sih buat jobseekers. Langsung keliatan mana yang harus gue tambahin dan benerin.'],
-                ['name' => 'Putri (@chocostudy_)', 'role' => 'Undergraduate Student', 'text' => 'Berkat webnya aku lolos beberapa paid internship padahal masih kuliah semester 5.'],
-                ['name' => 'Theresa Naevys (@ninanotsleep)', 'role' => 'Freshgraduate', 'text' => 'Skeptis awalnya, tapi ternyata fiturnya beneran bantu banget buat kasih keywords mana yang harus di-highlight di CV.'],
-                ['name' => 'Karirspace (@karirspace)', 'role' => 'Media & Komunitas Karir', 'text' => 'Buat yang serius cari kerja, plis benahin CV dari sekarang. Dieval bagian A-Z dan poin perbaikannya lengkap.'],
-                ['name' => 'Nana (@nanadybs)', 'role' => 'Content Creator Karir', 'text' => 'Solusi canggih buat freshgrad. Nggak sampe 1 menit dapet semua perbaikan CV biar lebih di-notice HR plus bonus personality test.'],
-                ['name' => 'Imam Vishal (@imamprdn_)', 'role' => 'Undergraduate Student', 'text' => 'Jujur baru coba fitur yang bisa bikin CV lebih menarik di mata HR. Penting banget buat mahasiswa di-review secara detail gini.'],
-                ['name' => 'Indrawan Sadewa (@indraaaaaeee_)', 'role' => 'Undergraduate Student', 'text' => 'Fitur ini beneran bantu saya benerin CV non-ATS jadi format ATS dan ubah bahasa non-formal jadi lebih profesional.'],
-                ['name' => 'Gerald Rombelayuk (@ger_obakbaso)', 'role' => 'Social Media Specialist', 'text' => 'Iseng nyobain buat update CV dan hasilnya se in-depth itu. Helpful buat gw yang males baca tips di internet.'],
-                ['name' => 'Jessica F. (@izzermcglizzer)', 'role' => 'Legal Consultant', 'text' => 'Thanks to this tool, CV aku jadi lebih clean dan eye-catching. Recommended banget buat yang lagi job hunting.'],
-                ['name' => 'Eza Hazami', 'role' => 'Tech HR Business Partner', 'text' => 'Jangan suka nyalahin diri sendiri kalau nggak dipanggil HRD. Better sebelum kirim CV minta review dulu. Gratis kalau mau coba.']
-            ];
-        @endphp
-
-        <section class="mt-5">
-            <div class="d-flex align-items-end justify-content-between mb-4">
-                <div>
-                    <p class="text-primary fw-bold text-uppercase small mb-1" style="letter-spacing: 0.2em;">Testimonial</p>
-                    <h2 class="h3 fw-bold text-dark mb-0">Review Pengguna</h2>
-                </div>
-                <span class="badge bg-white text-secondary border px-3 py-2 rounded-pill">4.9/5 review kepuasan</span>
-            </div>
-
-            <div class="row g-4">
-                @foreach($userReviews as $review)
-                    <div class="col-md-6 col-xl-4">
-                        <div class="card h-100 border-0 shadow-sm p-4 rounded-4">
-                            <h3 class="h6 fw-bold text-dark mb-1">{{ $review['name'] }}</h3>
-                            <p class="small text-muted mb-2">{{ $review['role'] }}</p>
-                            <p class="small text-secondary mb-0">"{{ $review['text'] }}"</p>
-                        </div>
-                    </div>
-                @endforeach
-            </div>
-        </section>
 
         <div id="result-wrapper" class="mt-5 d-none">
             <div class="row g-4">
@@ -355,6 +317,44 @@
                 </div>
             </div>
         </div>
+        @php
+            $userReviews = [
+                ['name' => 'Worksfess (@worksfess)', 'role' => 'Komunitas Karir', 'text' => 'Gw kira CV udah bagus, ternyata masih banyak yang kurang. Gara-gara fitur ini jadi tau kalau CV harus ada kata kunci yang relevan sesuai posisi.'],
+                ['name' => 'Rio (@vicarioreinaldo)', 'role' => 'Career Development Content Creator', 'text' => 'Step 1 dapet kerja impian & di notice HRD: update CV di sini. Analisis lengkap dan action item-nya super detail.'],
+                ['name' => 'Andini Saras (@ustadchen)', 'role' => 'Content Creator', 'text' => 'Jujur ini ngebantu banget sih buat jobseekers. Langsung keliatan mana yang harus gue tambahin dan benerin.'],
+                ['name' => 'Putri (@chocostudy_)', 'role' => 'Undergraduate Student', 'text' => 'Berkat webnya aku lolos beberapa paid internship padahal masih kuliah semester 5.'],
+                ['name' => 'Theresa Naevys (@ninanotsleep)', 'role' => 'Freshgraduate', 'text' => 'Skeptis awalnya, tapi ternyata fiturnya beneran bantu banget buat kasih keywords mana yang harus di-highlight di CV.'],
+                ['name' => 'Karirspace (@karirspace)', 'role' => 'Media & Komunitas Karir', 'text' => 'Buat yang serius cari kerja, plis benahin CV dari sekarang. Dieval bagian A-Z dan poin perbaikannya lengkap.'],
+                ['name' => 'Nana (@nanadybs)', 'role' => 'Content Creator Karir', 'text' => 'Solusi canggih buat freshgrad. Nggak sampe 1 menit dapet semua perbaikan CV biar lebih di-notice HR plus bonus personality test.'],
+                ['name' => 'Imam Vishal (@imamprdn_)', 'role' => 'Undergraduate Student', 'text' => 'Jujur baru coba fitur yang bisa bikin CV lebih menarik di mata HR. Penting banget buat mahasiswa di-review secara detail gini.'],
+                ['name' => 'Indrawan Sadewa (@indraaaaaeee_)', 'role' => 'Undergraduate Student', 'text' => 'Fitur ini beneran bantu saya benerin CV non-ATS jadi format ATS dan ubah bahasa non-formal jadi lebih profesional.'],
+                ['name' => 'Gerald Rombelayuk (@ger_obakbaso)', 'role' => 'Social Media Specialist', 'text' => 'Iseng nyobain buat update CV dan hasilnya se in-depth itu. Helpful buat gw yang males baca tips di internet.'],
+                ['name' => 'Jessica F. (@izzermcglizzer)', 'role' => 'Legal Consultant', 'text' => 'Thanks to this tool, CV aku jadi lebih clean dan eye-catching. Recommended banget buat yang lagi job hunting.'],
+                ['name' => 'Eza Hazami', 'role' => 'Tech HR Business Partner', 'text' => 'Jangan suka nyalahin diri sendiri kalau nggak dipanggil HRD. Better sebelum kirim CV minta review dulu. Gratis kalau mau coba.']
+            ];
+        @endphp
+
+        <section class="mt-5 pt-5 border-top">
+            <div class="d-flex align-items-end justify-content-between mb-4">
+                <div>
+                    <p class="text-primary fw-bold text-uppercase small mb-1" style="letter-spacing: 0.2em;">Testimonial</p>
+                    <h2 class="h3 fw-bold text-dark mb-0">Review Pengguna</h2>
+                </div>
+                <span class="badge bg-white text-secondary border px-3 py-2 rounded-pill">4.9/5 review kepuasan</span>
+            </div>
+
+            <div class="row g-4">
+                @foreach($userReviews as $review)
+                    <div class="col-md-6 col-xl-4">
+                        <div class="card h-100 border-0 shadow-sm p-4 rounded-4">
+                            <h3 class="h6 fw-bold text-dark mb-1">{{ $review['name'] }}</h3>
+                            <p class="small text-muted mb-2">{{ $review['role'] }}</p>
+                            <p class="small text-secondary mb-0">"{{ $review['text'] }}"</p>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </section>
     </section>
 
     <script>
