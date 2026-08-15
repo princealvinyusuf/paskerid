@@ -1495,6 +1495,12 @@
                                         <canvas id="pkTopActivityChart" aria-label="Top kegiatan berdasarkan respons"></canvas>
                                     </div>
                                 </div>
+                                <div class="pk-chart-card col-lg-6">
+                                    <h6>Apakah ditemukan indikasi pungutan liar / praktik tidak wajar?</h6>
+                                    <div class="pk-chart-canvas-wrap">
+                                        <canvas id="pkPungliChart" aria-label="Distribusi temuan pungutan liar"></canvas>
+                                    </div>
+                                </div>
                             </div>
                         @endif
                     @endif
@@ -2470,6 +2476,14 @@
                     renderSpotlightByIndex(selectedIndex >= 0 ? selectedIndex : 0);
                 });
                 renderSpotlightByIndex(0);
+            }
+
+            var pkPungliChartCanvas = document.getElementById('pkPungliChart');
+            var pungliStats = evaluasiStats && evaluasiStats.pungli_stats ? evaluasiStats.pungli_stats : {};
+            var pungliYa = Math.max(0, Number(pungliStats.ya || 0));
+            var pungliTidak = Math.max(0, Number(pungliStats.tidak || 0));
+            if (pkPungliChartCanvas && (pungliYa > 0 || pungliTidak > 0)) {
+                createDoughnutChart(pkPungliChartCanvas, ['Ya', 'Tidak'], [pungliYa, pungliTidak], ['#ef4444', '#5568ef']);
             }
         }
 

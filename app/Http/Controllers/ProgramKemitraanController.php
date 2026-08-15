@@ -659,7 +659,19 @@ class ProgramKemitraanController extends Controller
         $highestSectionScore = $sectionAverages[0] ?? null;
         $averageResponsesPerActivity = $totalActivities > 0 ? round($totalResponses / $totalActivities, 2) : 0.0;
 
+        $pungliCounts = DB::table('program_kemitraan_evaluation_answers')
+            ->selectRaw('score, COUNT(*) as count')
+            ->where('indicator_text', 'Selama proses, apakah Anda menemukan indikasi pungutan liar / praktik tidak wajar?')
+            ->whereNotNull('score')
+            ->groupBy('score')
+            ->pluck('count', 'score')
+            ->toArray();
+
         return [
+            'pungli_stats' => [
+                'ya' => $pungliCounts[1] ?? 0,
+                'tidak' => $pungliCounts[5] ?? 0,
+            ],
             'kpi' => [
                 'total_activities' => $totalActivities,
                 'total_responses' => $totalResponses,
