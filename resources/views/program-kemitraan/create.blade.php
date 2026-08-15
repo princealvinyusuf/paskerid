@@ -1655,6 +1655,13 @@
                     field.disabled = !isActivePanel;
                 });
             });
+            if (evaluasiSubmitBtn) {
+                if (tabName === 'peserta') {
+                    evaluasiSubmitBtn.disabled = activePesertaStep !== (pesertaWizardSteps ? pesertaWizardSteps.length : 1);
+                } else if (tabName === 'penyelenggara') {
+                    evaluasiSubmitBtn.disabled = activePenyelenggaraStep !== (penyelenggaraWizardSteps ? penyelenggaraWizardSteps.length : 1);
+                }
+            }
         }
 
         function syncSharedField(sourceField) {
@@ -1874,6 +1881,9 @@
             if (evaluasiSubTabInput) {
                 evaluasiSubTabInput.value = 'peserta';
             }
+            if (evaluasiSubmitBtn && evaluasiSubTabInput && evaluasiSubTabInput.value === 'peserta') {
+                evaluasiSubmitBtn.disabled = safeStep !== totalSteps;
+            }
         }
 
         function initPesertaWizard() {
@@ -1975,6 +1985,9 @@
             }
             if (evaluasiSubTabInput) {
                 evaluasiSubTabInput.value = 'penyelenggara';
+            }
+            if (evaluasiSubmitBtn && evaluasiSubTabInput && evaluasiSubTabInput.value === 'penyelenggara') {
+                evaluasiSubmitBtn.disabled = safeStep !== totalSteps;
             }
         }
 
