@@ -23,14 +23,6 @@
             stroke-linecap: round;
         }
 
-        .dark .score-ring-track {
-            stroke: rgba(148, 163, 184, 0.35);
-        }
-
-        .dark .score-ring-progress {
-            stroke: #60a5fa;
-        }
-
         .result-tabs-sticky {
             position: sticky;
             top: 5.25rem;
@@ -64,11 +56,6 @@
             animation: shimmer 1.5s infinite linear;
         }
 
-        .dark .skeleton-line {
-            background: linear-gradient(90deg, rgba(51,65,85,0.5) 25%, rgba(71,85,105,0.6) 50%, rgba(51,65,85,0.5) 75%);
-            background-size: 600px 100%;
-        }
-
         .tab-scroll {
             scrollbar-width: none;
             -ms-overflow-style: none;
@@ -92,51 +79,51 @@
 @endsection
 
 @section('content')
-    <section class="relative overflow-hidden border-b border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-950">
-        <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_10%_10%,rgba(31,123,255,0.2),transparent_40%),radial-gradient(circle_at_90%_30%,rgba(16,185,129,0.18),transparent_38%)]"></div>
-        <div class="section-container relative py-14 md:py-20">
-            <div class="mx-auto max-w-4xl text-center">
-                <span class="inline-flex rounded-full bg-primary-50 px-4 py-1 text-xs font-semibold text-primary-700 ring-1 ring-primary-100 dark:bg-primary-900/30 dark:text-primary-300 dark:ring-primary-700/40">
+    <section class="position-relative overflow-hidden border-bottom border-light bg-white">
+        <div class="pointer-events-none position-absolute top-0 start-0 w-100 h-100" style="background: radial-gradient(circle at 10% 10%, rgba(31,123,255,0.1), transparent 40%), radial-gradient(circle at 90% 30%, rgba(16,185,129,0.1), transparent 38%);"></div>
+        <div class="container position-relative py-5">
+            <div class="mx-auto text-center" style="max-width: 800px;">
+                <span class="badge rounded-pill bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 px-3 py-2 mb-3">
                     AI CV ATS Checker
                 </span>
-                <h1 class="mt-6 text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white md:text-6xl">
+                <h1 class="display-5 fw-bolder text-dark mb-4">
                     Tingkatkan Peluang Lolos Screening dengan
-                    <span class="text-primary-600">Bedah CV Gratis</span>
+                    <span class="text-primary">Bedah CV Gratis</span>
                 </h1>
-                <p class="mx-auto mt-5 max-w-3xl text-base text-slate-600 dark:text-slate-300 md:text-lg">
+                <p class="lead text-secondary mb-4">
                     Dapatkan analisis CV mendalam berbasis AI seperti platform profesional: skor ATS, analisis 12 aspek penting, action points, keyword rekomendasi, dan saran karier.
                 </p>
-                <div class="mt-6 flex flex-wrap items-center justify-center gap-2 text-sm text-slate-600 dark:text-slate-300">
-                    <span class="rounded-full bg-white px-3 py-1 ring-1 ring-slate-200 dark:bg-slate-900 dark:ring-slate-700">4.9/5 review kepuasan</span>
-                    <span class="rounded-full bg-white px-3 py-1 ring-1 ring-slate-200 dark:bg-slate-900 dark:ring-slate-700">12 aspek evaluasi</span>
+                <div class="d-flex flex-wrap justify-content-center gap-2 small text-secondary">
+                    <span class="badge bg-white text-secondary border px-3 py-2 rounded-pill">4.9/5 review kepuasan</span>
+                    <span class="badge bg-white text-secondary border px-3 py-2 rounded-pill">12 aspek evaluasi</span>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="section-container py-10 md:py-14">
-        <div class="grid gap-8 lg:grid-cols-3">
-            <div class="lg:col-span-2">
-                <div class="surface-card p-6 md:p-8">
-                    <h2 class="text-2xl font-bold text-slate-900 dark:text-white">Review CV Sekarang</h2>
-                    <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">Upload CV Anda atau tempel teks CV, lalu klik tombol review untuk mendapatkan hasil yang detail.</p>
+    <section class="container py-5">
+        <div class="row g-4">
+            <div class="col-lg-8">
+                <div class="card border-0 shadow-sm p-4 p-md-5 mb-4 rounded-4">
+                    <h2 class="h4 fw-bold text-dark">Review CV Sekarang</h2>
+                    <p class="text-muted small">Upload CV Anda atau tempel teks CV, lalu klik tombol review untuk mendapatkan hasil yang detail.</p>
 
-                    <div class="mt-6 grid gap-4 md:grid-cols-2">
-                        <div>
-                            <label for="cv-file" class="mb-2 block text-sm font-semibold text-slate-700 dark:text-slate-200">CV / Resume</label>
-                            <input id="cv-file" type="file" accept=".txt,.md,.rtf,.pdf,.doc,.docx,.png,.jpg,.jpeg,.webp" class="block w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 file:mr-3 file:rounded-lg file:border-0 file:bg-primary-600 file:px-3 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-primary-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200">
-                            <p id="file-help" class="mt-2 text-xs text-slate-500 dark:text-slate-400">
+                    <div class="row g-3 mt-3">
+                        <div class="col-md-6">
+                            <label for="cv-file" class="form-label fw-bold text-dark">CV / Resume</label>
+                            <input id="cv-file" type="file" accept=".txt,.md,.rtf,.pdf,.doc,.docx,.png,.jpg,.jpeg,.webp" class="form-control">
+                            <div id="file-help" class="form-text small">
                                 File teks, PDF, DOCX, dan gambar CV akan dicoba dibaca otomatis (termasuk OCR untuk scan). Jika gagal, paste isi CV di kolom bawah.
-                            </p>
+                            </div>
                         </div>
-                        <div>
-                            <label for="review-language" class="mb-2 block text-sm font-semibold text-slate-700 dark:text-slate-200">Select Language</label>
-                            <select id="review-language" class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-200 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200">
+                        <div class="col-md-6">
+                            <label for="review-language" class="form-label fw-bold text-dark">Select Language</label>
+                            <select id="review-language" class="form-select mb-3">
                                 <option value="id">Bahasa Indonesia</option>
                                 <option value="en">English</option>
                             </select>
-                            <label for="review-purpose" class="mb-2 mt-4 block text-sm font-semibold text-slate-700 dark:text-slate-200">Review Purpose</label>
-                            <select id="review-purpose" class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-200 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200">
+                            <label for="review-purpose" class="form-label fw-bold text-dark">Review Purpose</label>
+                            <select id="review-purpose" class="form-select">
                                 <option value="job">Job Seeking</option>
                                 <option value="job-scholarship">Job-seeking & Scholarship</option>
                                 <option value="internship">Internship</option>
@@ -144,45 +131,45 @@
                         </div>
                     </div>
 
-                    <div class="mt-5">
-                        <label for="cv-text" class="mb-2 block text-sm font-semibold text-slate-700 dark:text-slate-200">CV Text</label>
-                        <textarea id="cv-text" rows="12" class="w-full rounded-xl border border-slate-200 bg-white px-3 py-3 text-sm text-slate-700 placeholder:text-slate-400 focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-200 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100" placeholder="Paste CV Anda di sini jika file tidak terbaca..."></textarea>
+                    <div class="mt-4">
+                        <label for="cv-text" class="form-label fw-bold text-dark">CV Text</label>
+                        <textarea id="cv-text" rows="12" class="form-control" placeholder="Paste CV Anda di sini jika file tidak terbaca..."></textarea>
                     </div>
 
-                    <div class="mt-5">
-                        <label for="job-description" class="mb-2 block text-sm font-semibold text-slate-700 dark:text-slate-200">Target Job Description (Opsional)</label>
-                        <textarea id="job-description" rows="8" class="w-full rounded-xl border border-slate-200 bg-white px-3 py-3 text-sm text-slate-700 placeholder:text-slate-400 focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-200 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100" placeholder="Paste job description untuk mendapatkan CV-job match score dan gap analysis."></textarea>
+                    <div class="mt-4">
+                        <label for="job-description" class="form-label fw-bold text-dark">Target Job Description (Opsional)</label>
+                        <textarea id="job-description" rows="8" class="form-control" placeholder="Paste job description untuk mendapatkan CV-job match score dan gap analysis."></textarea>
                     </div>
 
-                    <div class="mt-5 flex flex-wrap items-center gap-3">
-                        <button id="review-btn" type="button" class="btn-primary">
+                    <div class="mt-4 d-flex flex-wrap align-items-center gap-2">
+                        <button id="review-btn" type="button" class="btn btn-primary px-4 py-2 fw-bold">
                             <span id="review-btn-text">Review Sekarang</span>
-                            <span id="review-btn-loading" class="hidden">
-                                <i class="fa-solid fa-spinner fa-spin mr-1"></i> Menganalisis...
+                            <span id="review-btn-loading" class="d-none">
+                                <i class="fa-solid fa-spinner fa-spin me-1"></i> Menganalisis...
                             </span>
                         </button>
-                        <button id="clear-btn" type="button" class="btn-secondary">Reset</button>
-                        <span id="status-text" class="text-sm text-slate-500 dark:text-slate-400"></span>
+                        <button id="clear-btn" type="button" class="btn btn-outline-secondary px-4 py-2 fw-bold">Reset</button>
+                        <span id="status-text" class="small text-muted ms-2"></span>
                     </div>
                 </div>
             </div>
 
-            <div>
-                <div class="surface-card p-6">
-                    <h3 class="text-lg font-bold text-slate-900 dark:text-white">Apa yang dianalisis?</h3>
-                    <ul class="mt-4 space-y-2 text-sm text-slate-600 dark:text-slate-300">
-                        <li><i class="fa-solid fa-check text-emerald-500"></i> Overall Impression</li>
-                        <li><i class="fa-solid fa-check text-emerald-500"></i> Contact Information</li>
-                        <li><i class="fa-solid fa-check text-emerald-500"></i> Relevant Skill</li>
-                        <li><i class="fa-solid fa-check text-emerald-500"></i> Professional Summary</li>
-                        <li><i class="fa-solid fa-check text-emerald-500"></i> Work Experience</li>
-                        <li><i class="fa-solid fa-check text-emerald-500"></i> Achievement</li>
-                        <li><i class="fa-solid fa-check text-emerald-500"></i> Education & Certification</li>
-                        <li><i class="fa-solid fa-check text-emerald-500"></i> Organizational Activity</li>
-                        <li><i class="fa-solid fa-check text-emerald-500"></i> Writing Quality</li>
-                        <li><i class="fa-solid fa-check text-emerald-500"></i> Additional Section</li>
-                        <li><i class="fa-solid fa-check text-emerald-500"></i> Keywords</li>
-                        <li><i class="fa-solid fa-check text-emerald-500"></i> Career Recommendation</li>
+            <div class="col-lg-4">
+                <div class="card border-0 shadow-sm p-4 rounded-4">
+                    <h3 class="h5 fw-bold text-dark">Apa yang dianalisis?</h3>
+                    <ul class="list-unstyled mt-3 mb-0 text-secondary small" style="line-height: 1.8;">
+                        <li><i class="fa-solid fa-check text-success me-2"></i> Overall Impression</li>
+                        <li><i class="fa-solid fa-check text-success me-2"></i> Contact Information</li>
+                        <li><i class="fa-solid fa-check text-success me-2"></i> Relevant Skill</li>
+                        <li><i class="fa-solid fa-check text-success me-2"></i> Professional Summary</li>
+                        <li><i class="fa-solid fa-check text-success me-2"></i> Work Experience</li>
+                        <li><i class="fa-solid fa-check text-success me-2"></i> Achievement</li>
+                        <li><i class="fa-solid fa-check text-success me-2"></i> Education & Certification</li>
+                        <li><i class="fa-solid fa-check text-success me-2"></i> Organizational Activity</li>
+                        <li><i class="fa-solid fa-check text-success me-2"></i> Writing Quality</li>
+                        <li><i class="fa-solid fa-check text-success me-2"></i> Additional Section</li>
+                        <li><i class="fa-solid fa-check text-success me-2"></i> Keywords</li>
+                        <li><i class="fa-solid fa-check text-success me-2"></i> Career Recommendation</li>
                     </ul>
                 </div>
             </div>
@@ -190,212 +177,180 @@
 
         @php
             $userReviews = [
-                [
-                    'name' => 'Worksfess (@worksfess)',
-                    'role' => 'Komunitas Karir',
-                    'text' => 'Gw kira CV udah bagus, ternyata masih banyak yang kurang. Gara-gara fitur ini jadi tau kalau CV harus ada kata kunci yang relevan sesuai posisi.',
-                ],
-                [
-                    'name' => 'Rio (@vicarioreinaldo)',
-                    'role' => 'Career Development Content Creator',
-                    'text' => 'Step 1 dapet kerja impian & di notice HRD: update CV di sini. Analisis lengkap dan action item-nya super detail.',
-                ],
-                [
-                    'name' => 'Andini Saras (@ustadchen)',
-                    'role' => 'Content Creator',
-                    'text' => 'Jujur ini ngebantu banget sih buat jobseekers. Langsung keliatan mana yang harus gue tambahin dan benerin.',
-                ],
-                [
-                    'name' => 'Putri (@chocostudy_)',
-                    'role' => 'Undergraduate Student',
-                    'text' => 'Berkat webnya aku lolos beberapa paid internship padahal masih kuliah semester 5.',
-                ],
-                [
-                    'name' => 'Theresa Naevys (@ninanotsleep)',
-                    'role' => 'Freshgraduate',
-                    'text' => 'Skeptis awalnya, tapi ternyata fiturnya beneran bantu banget buat kasih keywords mana yang harus di-highlight di CV.',
-                ],
-                [
-                    'name' => 'Karirspace (@karirspace)',
-                    'role' => 'Media & Komunitas Karir',
-                    'text' => 'Buat yang serius cari kerja, plis benahin CV dari sekarang. Dieval bagian A-Z dan poin perbaikannya lengkap.',
-                ],
-                [
-                    'name' => 'Nana (@nanadybs)',
-                    'role' => 'Content Creator Karir',
-                    'text' => 'Solusi canggih buat freshgrad. Nggak sampe 1 menit dapet semua perbaikan CV biar lebih di-notice HR plus bonus personality test.',
-                ],
-                [
-                    'name' => 'Imam Vishal (@imamprdn_)',
-                    'role' => 'Undergraduate Student',
-                    'text' => 'Jujur baru coba fitur yang bisa bikin CV lebih menarik di mata HR. Penting banget buat mahasiswa di-review secara detail gini.',
-                ],
-                [
-                    'name' => 'Indrawan Sadewa (@indraaaaaeee_)',
-                    'role' => 'Undergraduate Student',
-                    'text' => 'Fitur ini beneran bantu saya benerin CV non-ATS jadi format ATS dan ubah bahasa non-formal jadi lebih profesional.',
-                ],
-                [
-                    'name' => 'Gerald Rombelayuk (@ger_obakbaso)',
-                    'role' => 'Social Media Specialist',
-                    'text' => 'Iseng nyobain buat update CV dan hasilnya se in-depth itu. Helpful buat gw yang males baca tips di internet.',
-                ],
-                [
-                    'name' => 'Jessica F. (@izzermcglizzer)',
-                    'role' => 'Legal Consultant',
-                    'text' => 'Thanks to this tool, CV aku jadi lebih clean dan eye-catching. Recommended banget buat yang lagi job hunting.',
-                ],
-                [
-                    'name' => 'Eza Hazami',
-                    'role' => 'Tech HR Business Partner',
-                    'text' => 'Jangan suka nyalahin diri sendiri kalau nggak dipanggil HRD. Better sebelum kirim CV minta review dulu. Gratis kalau mau coba.',
-                ],
+                ['name' => 'Worksfess (@worksfess)', 'role' => 'Komunitas Karir', 'text' => 'Gw kira CV udah bagus, ternyata masih banyak yang kurang. Gara-gara fitur ini jadi tau kalau CV harus ada kata kunci yang relevan sesuai posisi.'],
+                ['name' => 'Rio (@vicarioreinaldo)', 'role' => 'Career Development Content Creator', 'text' => 'Step 1 dapet kerja impian & di notice HRD: update CV di sini. Analisis lengkap dan action item-nya super detail.'],
+                ['name' => 'Andini Saras (@ustadchen)', 'role' => 'Content Creator', 'text' => 'Jujur ini ngebantu banget sih buat jobseekers. Langsung keliatan mana yang harus gue tambahin dan benerin.'],
+                ['name' => 'Putri (@chocostudy_)', 'role' => 'Undergraduate Student', 'text' => 'Berkat webnya aku lolos beberapa paid internship padahal masih kuliah semester 5.'],
+                ['name' => 'Theresa Naevys (@ninanotsleep)', 'role' => 'Freshgraduate', 'text' => 'Skeptis awalnya, tapi ternyata fiturnya beneran bantu banget buat kasih keywords mana yang harus di-highlight di CV.'],
+                ['name' => 'Karirspace (@karirspace)', 'role' => 'Media & Komunitas Karir', 'text' => 'Buat yang serius cari kerja, plis benahin CV dari sekarang. Dieval bagian A-Z dan poin perbaikannya lengkap.'],
+                ['name' => 'Nana (@nanadybs)', 'role' => 'Content Creator Karir', 'text' => 'Solusi canggih buat freshgrad. Nggak sampe 1 menit dapet semua perbaikan CV biar lebih di-notice HR plus bonus personality test.'],
+                ['name' => 'Imam Vishal (@imamprdn_)', 'role' => 'Undergraduate Student', 'text' => 'Jujur baru coba fitur yang bisa bikin CV lebih menarik di mata HR. Penting banget buat mahasiswa di-review secara detail gini.'],
+                ['name' => 'Indrawan Sadewa (@indraaaaaeee_)', 'role' => 'Undergraduate Student', 'text' => 'Fitur ini beneran bantu saya benerin CV non-ATS jadi format ATS dan ubah bahasa non-formal jadi lebih profesional.'],
+                ['name' => 'Gerald Rombelayuk (@ger_obakbaso)', 'role' => 'Social Media Specialist', 'text' => 'Iseng nyobain buat update CV dan hasilnya se in-depth itu. Helpful buat gw yang males baca tips di internet.'],
+                ['name' => 'Jessica F. (@izzermcglizzer)', 'role' => 'Legal Consultant', 'text' => 'Thanks to this tool, CV aku jadi lebih clean dan eye-catching. Recommended banget buat yang lagi job hunting.'],
+                ['name' => 'Eza Hazami', 'role' => 'Tech HR Business Partner', 'text' => 'Jangan suka nyalahin diri sendiri kalau nggak dipanggil HRD. Better sebelum kirim CV minta review dulu. Gratis kalau mau coba.']
             ];
         @endphp
 
-        <section class="mt-10">
-            <div class="mb-5 flex items-end justify-between gap-3">
+        <section class="mt-5">
+            <div class="d-flex align-items-end justify-content-between mb-4">
                 <div>
-                    <p class="text-xs font-semibold uppercase tracking-[0.2em] text-primary-600">Testimonial</p>
-                    <h2 class="mt-2 text-2xl font-bold text-slate-900 dark:text-white">Review Pengguna</h2>
+                    <p class="text-primary fw-bold text-uppercase small mb-1" style="letter-spacing: 0.2em;">Testimonial</p>
+                    <h2 class="h3 fw-bold text-dark mb-0">Review Pengguna</h2>
                 </div>
-                <span class="rounded-full bg-white px-3 py-1 text-xs font-semibold text-slate-600 ring-1 ring-slate-200 dark:bg-slate-900 dark:text-slate-300 dark:ring-slate-700">4.9/5 review kepuasan</span>
+                <span class="badge bg-white text-secondary border px-3 py-2 rounded-pill">4.9/5 review kepuasan</span>
             </div>
 
-            <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            <div class="row g-4">
                 @foreach($userReviews as $review)
-                    <article class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-700 dark:bg-slate-900">
-                        <h3 class="text-sm font-bold text-slate-900 dark:text-white">{{ $review['name'] }}</h3>
-                        <p class="mt-0.5 text-xs font-medium text-slate-500 dark:text-slate-400">{{ $review['role'] }}</p>
-                        <p class="mt-3 text-sm leading-relaxed text-slate-700 dark:text-slate-300">
-                            "{{ $review['text'] }}"
-                        </p>
-                    </article>
+                    <div class="col-md-6 col-xl-4">
+                        <div class="card h-100 border-0 shadow-sm p-4 rounded-4">
+                            <h3 class="h6 fw-bold text-dark mb-1">{{ $review['name'] }}</h3>
+                            <p class="small text-muted mb-2">{{ $review['role'] }}</p>
+                            <p class="small text-secondary mb-0">"{{ $review['text'] }}"</p>
+                        </div>
+                    </div>
                 @endforeach
             </div>
         </section>
 
-        <div id="result-wrapper" class="mt-8 hidden">
-            <div class="flex flex-col gap-6 lg:flex-row lg:items-start">
-                <aside class="surface-card p-4 lg:sticky lg:top-24 lg:w-72 lg:flex-none">
-                    <div class="result-tabs-sticky tab-scroll -mx-1 flex gap-2 overflow-x-auto px-1 py-1 lg:mx-0 lg:flex-col lg:overflow-visible lg:px-0">
-                        <button type="button" data-tab-target="tab-overview" class="result-tab-btn shrink-0 rounded-xl bg-primary-600 px-4 py-2 text-left text-sm font-semibold text-white"><i class="fa-regular fa-eye mr-2"></i>Overview</button>
-                        <button type="button" data-tab-target="tab-aspects" class="result-tab-btn shrink-0 rounded-xl border border-slate-200 bg-white px-4 py-2 text-left text-sm font-semibold text-slate-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200"><i class="fa-regular fa-square-check mr-2"></i>12 Aspek</button>
-                        <button type="button" data-tab-target="tab-job-match" class="result-tab-btn shrink-0 rounded-xl border border-slate-200 bg-white px-4 py-2 text-left text-sm font-semibold text-slate-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200"><i class="fa-solid fa-bullseye mr-2"></i>Job Match</button>
-                        <button type="button" data-tab-target="tab-keywords" class="result-tab-btn shrink-0 rounded-xl border border-slate-200 bg-white px-4 py-2 text-left text-sm font-semibold text-slate-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200"><i class="fa-solid fa-key mr-2"></i>Keywords</button>
-                        <button type="button" data-tab-target="tab-career" class="result-tab-btn shrink-0 rounded-xl border border-slate-200 bg-white px-4 py-2 text-left text-sm font-semibold text-slate-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200"><i class="fa-solid fa-briefcase mr-2"></i>Career Fit</button>
-                        <button id="download-pdf-btn" type="button" class="shrink-0 rounded-xl border border-primary-200 bg-primary-50 px-4 py-2 text-left text-sm font-semibold text-primary-700 transition hover:bg-primary-100 dark:border-primary-700/50 dark:bg-primary-900/30 dark:text-primary-300"><i class="fa-regular fa-file-pdf mr-2"></i>Download Analysis (PDF)</button>
+        <div id="result-wrapper" class="mt-5 d-none">
+            <div class="row g-4">
+                <aside class="col-lg-3">
+                    <div class="card border-0 shadow-sm p-3 rounded-4 sticky-top" style="top: 100px; z-index: 10;">
+                        <div class="d-flex flex-row flex-lg-column gap-2 overflow-auto pb-2 pb-lg-0 result-tabs-sticky tab-scroll">
+                            <button type="button" data-tab-target="tab-overview" class="result-tab-btn btn btn-primary text-start fw-bold rounded-3 active"><i class="fa-regular fa-eye me-2"></i>Overview</button>
+                            <button type="button" data-tab-target="tab-aspects" class="result-tab-btn btn btn-outline-secondary border-0 text-start fw-bold rounded-3 text-dark"><i class="fa-regular fa-square-check me-2"></i>12 Aspek</button>
+                            <button type="button" data-tab-target="tab-job-match" class="result-tab-btn btn btn-outline-secondary border-0 text-start fw-bold rounded-3 text-dark"><i class="fa-solid fa-bullseye me-2"></i>Job Match</button>
+                            <button type="button" data-tab-target="tab-keywords" class="result-tab-btn btn btn-outline-secondary border-0 text-start fw-bold rounded-3 text-dark"><i class="fa-solid fa-key me-2"></i>Keywords</button>
+                            <button type="button" data-tab-target="tab-career" class="result-tab-btn btn btn-outline-secondary border-0 text-start fw-bold rounded-3 text-dark"><i class="fa-solid fa-briefcase me-2"></i>Career Fit</button>
+                            <hr class="my-2 d-none d-lg-block">
+                            <button id="download-pdf-btn" type="button" class="btn btn-light text-primary border border-primary border-opacity-25 text-start fw-bold rounded-3"><i class="fa-regular fa-file-pdf me-2"></i>Download (PDF)</button>
+                        </div>
                     </div>
                 </aside>
 
-                <div class="min-w-0 flex-1 space-y-6">
-                    <div class="surface-card p-6 md:p-8">
-                        <div class="flex flex-wrap items-center justify-between gap-4">
+                <div class="col-lg-9">
+                    <div class="card border-0 shadow-sm p-4 p-md-5 mb-4 rounded-4">
+                        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
                             <div>
-                                <p class="text-xs font-semibold uppercase tracking-[0.2em] text-primary-600">AI CV Reviewer Results</p>
-                                <h2 class="mt-2 text-2xl font-bold text-slate-900 dark:text-white">Hasil Analisis CV</h2>
+                                <p class="text-primary fw-bold text-uppercase small mb-1" style="letter-spacing: 0.2em;">AI CV Reviewer Results</p>
+                                <h2 class="h3 fw-bold text-dark mb-0">Hasil Analisis CV</h2>
                             </div>
-                            <div id="score-chip" class="flex items-center gap-4 rounded-2xl bg-primary-50 px-4 py-3 ring-1 ring-primary-100 dark:bg-primary-900/30 dark:ring-primary-700/40">
-                                <div class="relative h-20 w-20">
-                                    <svg class="h-20 w-20 -rotate-90" viewBox="0 0 120 120" aria-hidden="true">
+                            <div id="score-chip" class="d-flex align-items-center gap-3 bg-primary bg-opacity-10 border border-primary border-opacity-25 rounded-4 p-3">
+                                <div class="position-relative" style="width: 80px; height: 80px;">
+                                    <svg class="w-100 h-100" viewBox="0 0 120 120" style="transform: rotate(-90deg);">
                                         <circle class="score-ring-track" cx="60" cy="60" r="52" stroke-width="12" fill="none"></circle>
                                         <circle id="score-ring-progress" class="score-ring-progress" cx="60" cy="60" r="52" stroke-width="12" fill="none"></circle>
                                     </svg>
-                                    <div class="absolute inset-0 flex items-center justify-center">
-                                        <p id="overall-score" class="text-xl font-extrabold text-primary-700 dark:text-primary-300">0%</p>
+                                    <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center">
+                                        <span id="overall-score" class="fs-4 fw-bolder text-primary">0%</span>
                                     </div>
                                 </div>
                                 <div>
-                                    <p id="ats-label" class="text-xs uppercase tracking-[0.15em] text-primary-700 dark:text-primary-300">ATS Readiness</p>
-                                    <p id="ats-caption" class="mt-1 text-sm text-slate-700 dark:text-slate-200">Skor keseluruhan CV Anda</p>
+                                    <p id="ats-label" class="fw-bold text-primary text-uppercase mb-0 small" style="letter-spacing: 0.1em;">ATS Readiness</p>
+                                    <p id="ats-caption" class="small text-muted mb-0">Skor keseluruhan CV Anda</p>
                                 </div>
                             </div>
                         </div>
-                        <p id="overall-impression" class="mt-5 text-sm leading-relaxed text-slate-600 dark:text-slate-300"></p>
+                        <p id="overall-impression" class="mt-4 mb-0 text-secondary"></p>
                     </div>
 
                     <div id="tab-overview" class="result-tab-panel">
-                        <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-                            <div class="surface-card p-5">
-                                <p class="text-xs uppercase tracking-[0.12em] text-slate-500 dark:text-slate-400">Top Strength</p>
-                                <p id="top-strength" class="mt-2 text-sm font-semibold text-slate-800 dark:text-slate-100">-</p>
+                        <div class="row g-3">
+                            <div class="col-md-6 col-xl-3">
+                                <div class="card border-0 shadow-sm p-4 h-100 rounded-4">
+                                    <p class="text-muted text-uppercase small fw-bold mb-2" style="letter-spacing: 0.1em;">Top Strength</p>
+                                    <p id="top-strength" class="fw-bold text-dark mb-0">-</p>
+                                </div>
                             </div>
-                            <div class="surface-card p-5">
-                                <p class="text-xs uppercase tracking-[0.12em] text-slate-500 dark:text-slate-400">Main Gap</p>
-                                <p id="main-gap" class="mt-2 text-sm font-semibold text-slate-800 dark:text-slate-100">-</p>
+                            <div class="col-md-6 col-xl-3">
+                                <div class="card border-0 shadow-sm p-4 h-100 rounded-4">
+                                    <p class="text-muted text-uppercase small fw-bold mb-2" style="letter-spacing: 0.1em;">Main Gap</p>
+                                    <p id="main-gap" class="fw-bold text-dark mb-0">-</p>
+                                </div>
                             </div>
-                            <div class="surface-card p-5">
-                                <p class="text-xs uppercase tracking-[0.12em] text-slate-500 dark:text-slate-400">Aspect Count</p>
-                                <p id="aspect-count" class="mt-2 text-sm font-semibold text-slate-800 dark:text-slate-100">0 aspek</p>
+                            <div class="col-md-6 col-xl-3">
+                                <div class="card border-0 shadow-sm p-4 h-100 rounded-4">
+                                    <p class="text-muted text-uppercase small fw-bold mb-2" style="letter-spacing: 0.1em;">Aspect Count</p>
+                                    <p id="aspect-count" class="fw-bold text-dark mb-0">0 aspek</p>
+                                </div>
                             </div>
-                            <div class="surface-card p-5">
-                                <p class="text-xs uppercase tracking-[0.12em] text-slate-500 dark:text-slate-400">Recommended Action</p>
-                                <p id="priority-action" class="mt-2 text-sm font-semibold text-slate-800 dark:text-slate-100">-</p>
+                            <div class="col-md-6 col-xl-3">
+                                <div class="card border-0 shadow-sm p-4 h-100 rounded-4">
+                                    <p class="text-muted text-uppercase small fw-bold mb-2" style="letter-spacing: 0.1em;">Recommended Action</p>
+                                    <p id="priority-action" class="fw-bold text-dark mb-0">-</p>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div id="tab-aspects" class="result-tab-panel hidden">
-                        <div id="aspects-grid" class="grid gap-4 md:grid-cols-2"></div>
+
+                    <div id="tab-aspects" class="result-tab-panel d-none">
+                        <div id="aspects-grid" class="row g-3"></div>
                     </div>
 
-                    <div id="tab-job-match" class="result-tab-panel hidden">
-                        <div class="surface-card p-6">
-                            <div class="flex flex-wrap items-center justify-between gap-3">
-                                <h3 class="text-lg font-bold text-slate-900 dark:text-white">Job-targeted CV Scoring</h3>
-                                <span id="job-match-score-badge" class="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700 dark:bg-slate-800 dark:text-slate-200">Belum dianalisis</span>
+                    <div id="tab-job-match" class="result-tab-panel d-none">
+                        <div class="card border-0 shadow-sm p-4 rounded-4">
+                            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-3">
+                                <h3 class="h5 fw-bold text-dark mb-0">Job-targeted CV Scoring</h3>
+                                <span id="job-match-score-badge" class="badge bg-light border text-dark">Belum dianalisis</span>
                             </div>
-                            <p id="job-match-summary" class="mt-3 text-sm leading-relaxed text-slate-600 dark:text-slate-300">Tambahkan job description untuk melihat kecocokan CV terhadap target role.</p>
-                            <div class="mt-4 grid gap-4 md:grid-cols-2">
-                                <div>
-                                    <p class="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-400">Key Gaps</p>
-                                    <ul id="job-match-gaps" class="mt-2 space-y-1 text-sm text-slate-600 dark:text-slate-300"></ul>
+                            <p id="job-match-summary" class="text-secondary small">Tambahkan job description untuk melihat kecocokan CV terhadap target role.</p>
+                            <div class="row g-4 mt-1">
+                                <div class="col-md-6">
+                                    <p class="text-muted text-uppercase small fw-bold mb-2" style="letter-spacing: 0.1em;">Key Gaps</p>
+                                    <ul id="job-match-gaps" class="text-secondary small ps-3 mb-0"></ul>
                                 </div>
-                                <div>
-                                    <p class="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-400">Suggested Keywords</p>
-                                    <ul id="job-match-keywords" class="mt-2 space-y-1 text-sm text-slate-600 dark:text-slate-300"></ul>
+                                <div class="col-md-6">
+                                    <p class="text-muted text-uppercase small fw-bold mb-2" style="letter-spacing: 0.1em;">Suggested Keywords</p>
+                                    <ul id="job-match-keywords" class="text-secondary small ps-3 mb-0"></ul>
                                 </div>
                             </div>
                             <div class="mt-4">
-                                <p class="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-400">Priority Improvements</p>
-                                <ul id="job-match-improvements" class="mt-2 space-y-1 text-sm text-slate-600 dark:text-slate-300"></ul>
+                                <p class="text-muted text-uppercase small fw-bold mb-2" style="letter-spacing: 0.1em;">Priority Improvements</p>
+                                <ul id="job-match-improvements" class="text-secondary small ps-3 mb-0"></ul>
                             </div>
                         </div>
                     </div>
 
-                    <div id="tab-keywords" class="result-tab-panel hidden">
-                        <div class="surface-card p-6">
-                            <h3 class="text-lg font-bold text-slate-900 dark:text-white">Keywords Recommendation</h3>
-                            <ul id="keywords-list" class="mt-3 space-y-2 text-sm text-slate-600 dark:text-slate-300"></ul>
+                    <div id="tab-keywords" class="result-tab-panel d-none">
+                        <div class="card border-0 shadow-sm p-4 rounded-4">
+                            <h3 class="h5 fw-bold text-dark">Keywords Recommendation</h3>
+                            <ul id="keywords-list" class="text-secondary small ps-3 mt-3 mb-0"></ul>
                         </div>
                     </div>
 
-                    <div id="tab-career" class="result-tab-panel hidden">
-                        <div class="surface-card p-6">
-                            <h3 class="text-lg font-bold text-slate-900 dark:text-white">Career Recommendation</h3>
-                            <p id="career-recommendation" class="mt-3 text-sm leading-relaxed text-slate-600 dark:text-slate-300"></p>
+                    <div id="tab-career" class="result-tab-panel d-none">
+                        <div class="card border-0 shadow-sm p-4 rounded-4">
+                            <h3 class="h5 fw-bold text-dark">Career Recommendation</h3>
+                            <p id="career-recommendation" class="text-secondary small mt-3 mb-0"></p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div id="sample-state" class="mt-8">
-            <div class="surface-card p-6 md:p-8">
-                <p class="text-xs font-semibold uppercase tracking-[0.2em] text-primary-600">Contoh Hasil Analisis</p>
-                <h2 class="mt-2 text-2xl font-bold text-slate-900 dark:text-white">Preview sebelum review</h2>
-                <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">Setelah Anda klik <strong>Review Sekarang</strong>, hasil akan tampil seperti struktur di bawah ini.</p>
-                <div class="mt-5 grid gap-4 md:grid-cols-2">
-                    <div class="surface-card p-5">
-                        <div class="skeleton-line h-4 w-32 rounded"></div>
-                        <div class="skeleton-line mt-3 h-3 w-full rounded"></div>
-                        <div class="skeleton-line mt-2 h-3 w-11/12 rounded"></div>
-                        <div class="skeleton-line mt-2 h-3 w-9/12 rounded"></div>
+        <div id="sample-state" class="mt-5">
+            <div class="card border-0 shadow-sm p-4 p-md-5 rounded-4">
+                <p class="text-primary fw-bold text-uppercase small mb-1" style="letter-spacing: 0.2em;">Contoh Hasil Analisis</p>
+                <h2 class="h3 fw-bold text-dark">Preview sebelum review</h2>
+                <p class="text-secondary small mb-4">Setelah Anda klik <strong>Review Sekarang</strong>, hasil akan tampil seperti struktur di bawah ini.</p>
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="card border-0 shadow-sm p-4 bg-light rounded-4">
+                            <div class="skeleton-line rounded" style="height: 16px; width: 120px;"></div>
+                            <div class="skeleton-line rounded mt-3" style="height: 12px; width: 100%;"></div>
+                            <div class="skeleton-line rounded mt-2" style="height: 12px; width: 90%;"></div>
+                            <div class="skeleton-line rounded mt-2" style="height: 12px; width: 75%;"></div>
+                        </div>
                     </div>
-                    <div class="surface-card p-5">
-                        <div class="skeleton-line h-4 w-40 rounded"></div>
-                        <div class="skeleton-line mt-3 h-3 w-full rounded"></div>
-                        <div class="skeleton-line mt-2 h-3 w-10/12 rounded"></div>
-                        <div class="skeleton-line mt-2 h-3 w-7/12 rounded"></div>
+                    <div class="col-md-6">
+                        <div class="card border-0 shadow-sm p-4 bg-light rounded-4">
+                            <div class="skeleton-line rounded" style="height: 16px; width: 150px;"></div>
+                            <div class="skeleton-line rounded mt-3" style="height: 12px; width: 100%;"></div>
+                            <div class="skeleton-line rounded mt-2" style="height: 12px; width: 85%;"></div>
+                            <div class="skeleton-line rounded mt-2" style="height: 12px; width: 60%;"></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -469,10 +424,9 @@
 
             const setLoading = (loading) => {
                 reviewBtn.disabled = loading;
-                reviewBtn.classList.toggle('opacity-70', loading);
-                reviewBtn.classList.toggle('cursor-not-allowed', loading);
-                reviewBtnText.classList.toggle('hidden', loading);
-                reviewBtnLoading.classList.toggle('hidden', !loading);
+                reviewBtn.classList.toggle('opacity-75', loading);
+                reviewBtnText.classList.toggle('d-none', loading);
+                reviewBtnLoading.classList.toggle('d-none', !loading);
             };
 
             const ringRadius = 52;
@@ -483,27 +437,27 @@
             const getScorePalette = (score) => {
                 if (score >= 80) {
                     return {
-                        ring: '#10b981',
-                        text: ['text-emerald-700', 'dark:text-emerald-300'],
-                        chip: ['bg-emerald-50', 'ring-emerald-100', 'dark:bg-emerald-900/30', 'dark:ring-emerald-700/40'],
-                        label: ['text-emerald-700', 'dark:text-emerald-300'],
+                        ring: '#198754', // success
+                        text: ['text-success'],
+                        chip: ['bg-success', 'bg-opacity-10', 'border-success', 'border-opacity-25'],
+                        label: ['text-success'],
                         caption: 'CV Anda sudah kuat dan kompetitif.'
                     };
                 }
                 if (score >= 65) {
                     return {
-                        ring: '#f59e0b',
-                        text: ['text-amber-700', 'dark:text-amber-300'],
-                        chip: ['bg-amber-50', 'ring-amber-100', 'dark:bg-amber-900/30', 'dark:ring-amber-700/40'],
-                        label: ['text-amber-700', 'dark:text-amber-300'],
+                        ring: '#ffc107', // warning
+                        text: ['text-warning'],
+                        chip: ['bg-warning', 'bg-opacity-10', 'border-warning', 'border-opacity-25'],
+                        label: ['text-warning'],
                         caption: 'CV Anda cukup baik, perlu sedikit peningkatan.'
                     };
                 }
                 return {
-                    ring: '#f43f5e',
-                    text: ['text-rose-700', 'dark:text-rose-300'],
-                    chip: ['bg-rose-50', 'ring-rose-100', 'dark:bg-rose-900/30', 'dark:ring-rose-700/40'],
-                    label: ['text-rose-700', 'dark:text-rose-300'],
+                    ring: '#dc3545', // danger
+                    text: ['text-danger'],
+                    chip: ['bg-danger', 'bg-opacity-10', 'border-danger', 'border-opacity-25'],
+                    label: ['text-danger'],
                     caption: 'CV Anda butuh optimasi prioritas sebelum melamar.'
                 };
             };
@@ -512,9 +466,9 @@
                 const palette = getScorePalette(score);
                 scoreRingProgress.style.stroke = palette.ring;
 
-                overallScore.classList.remove('text-primary-700', 'dark:text-primary-300', 'text-emerald-700', 'dark:text-emerald-300', 'text-amber-700', 'dark:text-amber-300', 'text-rose-700', 'dark:text-rose-300');
-                atsLabel.classList.remove('text-primary-700', 'dark:text-primary-300', 'text-emerald-700', 'dark:text-emerald-300', 'text-amber-700', 'dark:text-amber-300', 'text-rose-700', 'dark:text-rose-300');
-                scoreChip.classList.remove('bg-primary-50', 'ring-primary-100', 'dark:bg-primary-900/30', 'dark:ring-primary-700/40', 'bg-emerald-50', 'ring-emerald-100', 'dark:bg-emerald-900/30', 'dark:ring-emerald-700/40', 'bg-amber-50', 'ring-amber-100', 'dark:bg-amber-900/30', 'dark:ring-amber-700/40', 'bg-rose-50', 'ring-rose-100', 'dark:bg-rose-900/30', 'dark:ring-rose-700/40');
+                overallScore.classList.remove('text-primary', 'text-success', 'text-warning', 'text-danger');
+                atsLabel.classList.remove('text-primary', 'text-success', 'text-warning', 'text-danger');
+                scoreChip.classList.remove('bg-primary', 'bg-success', 'bg-warning', 'bg-danger', 'bg-opacity-10', 'border-primary', 'border-success', 'border-warning', 'border-danger', 'border-opacity-25');
 
                 overallScore.classList.add(...palette.text);
                 atsLabel.classList.add(...palette.label);
@@ -524,28 +478,23 @@
 
             const resetScoreVisual = () => {
                 scoreRingProgress.style.stroke = '';
-                overallScore.classList.remove('text-emerald-700', 'dark:text-emerald-300', 'text-amber-700', 'dark:text-amber-300', 'text-rose-700', 'dark:text-rose-300');
-                atsLabel.classList.remove('text-emerald-700', 'dark:text-emerald-300', 'text-amber-700', 'dark:text-amber-300', 'text-rose-700', 'dark:text-rose-300');
-                scoreChip.classList.remove('bg-emerald-50', 'ring-emerald-100', 'dark:bg-emerald-900/30', 'dark:ring-emerald-700/40', 'bg-amber-50', 'ring-amber-100', 'dark:bg-amber-900/30', 'dark:ring-amber-700/40', 'bg-rose-50', 'ring-rose-100', 'dark:bg-rose-900/30', 'dark:ring-rose-700/40');
-                overallScore.classList.add('text-primary-700', 'dark:text-primary-300');
-                atsLabel.classList.add('text-primary-700', 'dark:text-primary-300');
-                scoreChip.classList.add('bg-primary-50', 'ring-primary-100', 'dark:bg-primary-900/30', 'dark:ring-primary-700/40');
+                overallScore.classList.remove('text-success', 'text-warning', 'text-danger');
+                atsLabel.classList.remove('text-success', 'text-warning', 'text-danger');
+                scoreChip.classList.remove('bg-success', 'bg-warning', 'bg-danger', 'bg-opacity-10', 'border-success', 'border-warning', 'border-danger', 'border-opacity-25');
+                overallScore.classList.add('text-primary');
+                atsLabel.classList.add('text-primary');
+                scoreChip.classList.add('bg-primary', 'bg-opacity-10', 'border-primary', 'border-opacity-25');
                 atsCaption.textContent = 'Skor keseluruhan CV Anda';
             };
 
             const setActiveTab = (targetId) => {
-                tabPanels.forEach((panel) => panel.classList.toggle('hidden', panel.id !== targetId));
+                tabPanels.forEach((panel) => panel.classList.toggle('d-none', panel.id !== targetId));
                 tabButtons.forEach((button) => {
                     const isActive = button.dataset.tabTarget === targetId;
-                    button.classList.toggle('bg-primary-600', isActive);
-                    button.classList.toggle('text-white', isActive);
-                    button.classList.toggle('border', !isActive);
-                    button.classList.toggle('border-slate-200', !isActive);
-                    button.classList.toggle('dark:border-slate-700', !isActive);
-                    button.classList.toggle('bg-white', !isActive);
-                    button.classList.toggle('dark:bg-slate-900', !isActive);
-                    button.classList.toggle('text-slate-700', !isActive);
-                    button.classList.toggle('dark:text-slate-200', !isActive);
+                    button.classList.toggle('btn-primary', isActive);
+                    button.classList.toggle('btn-outline-secondary', !isActive);
+                    button.classList.toggle('text-dark', !isActive);
+                    button.classList.toggle('border-0', !isActive);
                 });
 
                 if (targetId === 'tab-aspects') {
@@ -557,7 +506,7 @@
                     });
                 }
 
-                if (!resultWrapper.classList.contains('hidden')) {
+                if (!resultWrapper.classList.contains('d-none')) {
                     animatePanels();
                 }
             };
@@ -838,7 +787,7 @@
 
             const resetJobMatchView = () => {
                 jobMatchScoreBadge.textContent = 'Belum dianalisis';
-                jobMatchScoreBadge.className = 'rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700 dark:bg-slate-800 dark:text-slate-200';
+                jobMatchScoreBadge.className = 'badge bg-light border text-dark';
                 jobMatchSummary.textContent = 'Tambahkan job description untuk melihat kecocokan CV terhadap target role.';
                 renderBulletedList(jobMatchGaps, [], 'Belum ada gap yang dihitung.');
                 renderBulletedList(jobMatchKeywords, [], 'Belum ada keyword rekomendasi.');
@@ -854,9 +803,9 @@
                 const score = Math.max(0, Math.min(100, Number(jobTargeted.match_score)));
                 const tone = scoreTone(score);
                 const toneStyles = {
-                    emerald: 'rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300',
-                    amber: 'rounded-full bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-700 dark:bg-amber-900/30 dark:text-amber-300',
-                    rose: 'rounded-full bg-rose-50 px-3 py-1 text-xs font-semibold text-rose-700 dark:bg-rose-900/30 dark:text-rose-300'
+                    emerald: 'badge rounded-pill bg-success bg-opacity-10 text-success border border-success border-opacity-25',
+                    amber: 'badge rounded-pill bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25',
+                    rose: 'badge rounded-pill bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25'
                 };
 
                 jobMatchScoreBadge.className = toneStyles[tone];
@@ -1282,41 +1231,43 @@
                 const score = Number(aspect.score || 0);
                 const tone = scoreTone(score);
                 const toneStyles = {
-                    emerald: 'bg-emerald-50 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300',
-                    amber: 'bg-amber-50 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300',
-                    rose: 'bg-rose-50 text-rose-700 dark:bg-rose-900/30 dark:text-rose-300'
+                    emerald: 'bg-success bg-opacity-10 text-success border-success border-opacity-25',
+                    amber: 'bg-warning bg-opacity-10 text-warning border-warning border-opacity-25',
+                    rose: 'bg-danger bg-opacity-10 text-danger border-danger border-opacity-25'
                 };
                 const toneBarStyles = {
-                    emerald: 'bg-emerald-500',
-                    amber: 'bg-amber-500',
-                    rose: 'bg-rose-500'
+                    emerald: 'bg-success',
+                    amber: 'bg-warning',
+                    rose: 'bg-danger'
                 };
                 const actionPoints = Array.isArray(aspect.action_points) ? aspect.action_points : [];
                 const aspectId = `${String(aspect.name || 'aspect').toLowerCase().replaceAll(/[^a-z0-9]+/g, '-')}-${index}`;
 
                 return `
-                    <article class="surface-card p-5">
-                        <button type="button" class="aspect-toggle flex w-full items-start justify-between gap-3 text-left" data-target="${escapeHtml(aspectId)}">
-                            <h3 class="text-base font-bold text-slate-900 dark:text-white">${escapeHtml(aspect.name || 'Aspect')}</h3>
-                            <div class="flex items-center gap-2">
-                                <span class="rounded-full px-2.5 py-1 text-xs font-semibold ${toneStyles[tone]}">${escapeHtml(score)}%</span>
-                                <i class="fa-solid fa-chevron-down text-xs text-slate-400 transition-transform aspect-icon"></i>
+                    <div class="col-12">
+                        <article class="card border-0 shadow-sm p-4 rounded-4 h-100">
+                            <button type="button" class="aspect-toggle btn btn-link text-decoration-none p-0 d-flex w-100 align-items-start justify-content-between gap-3 text-start border-0 shadow-none" data-target="${escapeHtml(aspectId)}">
+                                <h3 class="h6 fw-bold text-dark mb-0">${escapeHtml(aspect.name || 'Aspect')}</h3>
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="badge rounded-pill px-3 py-2 border ${toneStyles[tone]}">${escapeHtml(score)}%</span>
+                                    <i class="fa-solid fa-chevron-down small text-muted transition-transform aspect-icon"></i>
+                                </div>
+                            </button>
+                            <div class="mt-3 progress" style="height: 8px;">
+                                <div class="progress-bar ${toneBarStyles[tone]}" role="progressbar" style="width: ${Math.max(0, Math.min(100, score))}%"></div>
                             </div>
-                        </button>
-                        <div class="mt-3 h-2 rounded-full bg-slate-100 dark:bg-slate-800">
-                            <div class="h-2 rounded-full ${toneBarStyles[tone]}" style="width: ${Math.max(0, Math.min(100, score))}%"></div>
-                        </div>
-                        <div id="${escapeHtml(aspectId)}" class="aspect-panel mt-3">
-                            <p class="text-sm text-slate-600 dark:text-slate-300">${escapeHtml(aspect.analysis || '')}</p>
-                            ${actionPoints.length ? `<div class="mt-3">
-                            <p class="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-400">Action Points</p>
-                            <ul class="mt-2 space-y-1 text-sm text-slate-600 dark:text-slate-300">
-                                ${actionPoints.map((point) => `<li>- ${escapeHtml(point)}</li>`).join('')}
-                            </ul>
-                            </div>` : ''}
-                            ${aspect.why_important ? `<p class="mt-3 text-xs leading-relaxed text-slate-500 dark:text-slate-400"><strong class="text-slate-700 dark:text-slate-300">Why it matters:</strong> ${escapeHtml(aspect.why_important)}</p>` : ''}
-                        </div>
-                    </article>
+                            <div id="${escapeHtml(aspectId)}" class="aspect-panel mt-3">
+                                <p class="small text-secondary mb-0">${escapeHtml(aspect.analysis || '')}</p>
+                                ${actionPoints.length ? `<div class="mt-3">
+                                <p class="small fw-bold text-muted text-uppercase mb-2" style="letter-spacing: 0.12em;">Action Points</p>
+                                <ul class="small text-secondary ps-3 mb-0">
+                                    ${actionPoints.map((point) => `<li class="mb-1">${escapeHtml(point)}</li>`).join('')}
+                                </ul>
+                                </div>` : ''}
+                                ${aspect.why_important ? `<p class="mt-3 small text-muted mb-0"><strong class="text-dark">Why it matters:</strong> ${escapeHtml(aspect.why_important)}</p>` : ''}
+                            </div>
+                        </article>
+                    </div>
                 `;
             };
 
@@ -1402,8 +1353,8 @@
                 latestAnalysis = null;
                 latestCvText = '';
                 statusText.textContent = '';
-                resultWrapper.classList.add('hidden');
-                sampleState.classList.remove('hidden');
+                resultWrapper.classList.add('d-none');
+                sampleState.classList.remove('d-none');
                 aspectsGrid.innerHTML = '';
                 keywordsList.innerHTML = '';
                 overallImpression.textContent = '';
@@ -1548,8 +1499,8 @@ ${jobDescription || '(Not provided)'}
                     careerRecommendation.textContent = parsed.career_recommendation || '-';
                     renderJobMatch(parsed.job_targeted);
 
-                    resultWrapper.classList.remove('hidden');
-                    sampleState.classList.add('hidden');
+                    resultWrapper.classList.remove('d-none');
+                    sampleState.classList.add('d-none');
                     setActiveTab('tab-overview');
                     animatePanels();
                     statusText.textContent = 'Analisis selesai. Silakan cek hasil di bawah.';
