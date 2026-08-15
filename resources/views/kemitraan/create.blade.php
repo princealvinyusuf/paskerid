@@ -3127,7 +3127,7 @@
                 benefitReasonsTableBodyEl.innerHTML = '<tr><td colspan="3" class="text-muted text-center">Belum ada data.</td></tr>';
                 return;
             }
-            benefitReasonsTableBodyEl.innerHTML = list.map((it) => {
+            benefitReasonsTableBodyEl.innerHTML = list.slice(0, 5).map((it) => {
                 const benefit = String(it && it.benefit ? it.benefit : '-');
                 const company = String(it && it.company ? it.company : '-');
                 const reason = String(it && it.reason ? it.reason : '-');
