@@ -153,6 +153,7 @@ class ProgramKemitraanController extends Controller
                     'Kegiatan dimulai dan diakhiri sesuai jadwal atau dengan penjelasan yang memadai.',
                     'Tempat atau media daring mendukung kenyamanan dan kelancaran peserta.',
                     'Peralatan, jaringan, suara, dan tampilan materi berfungsi dengan baik.',
+                    'Selama proses, apakah Anda menemukan indikasi pungutan liar / praktik tidak wajar?',
                 ],
             ],
             'a_promosi_komunikasi' => [
