@@ -1226,23 +1226,30 @@
 
             // ── ATS CV Builder PDF ────────────────────────────────────────────
             const parseCvSections = (rawText) => {
+                // Heuristic formatting to salvage unformatted blobs of text from PDF extraction
+                let formattedText = String(rawText || '')
+                    // Force newline before bullet-like characters
+                    .replace(/\s+([•■*]|\!(?=\s))/g, '\n$1')
+                    // Force newline around known common headers
+                    .replace(/\b(ABOUT ME|CONTACT|WORK EXPERIENCE|EDUCATION|SKILLS(?: & KNOWLEDGE)?|TOOLS & TECHNOLOGIES|OTHER SKILLS|PROJECT PORTFOLIO|PROJECTS|EXPERIENCE|CERTIFICATIONS|ORGANIZATIONS?|ACHIEVEMENTS?|SUMMARY|PROFILE)\b/g, '\n$1\n');
+
                 const sectionKeywords = [
-                    'summary', 'ringkasan', 'profil', 'profile', 'objective', 'tujuan',
-                    'experience', 'pengalaman', 'work history', 'riwayat kerja', 'employment',
+                    'about me', 'summary', 'ringkasan', 'profil', 'profile', 'objective', 'tujuan',
+                    'experience', 'pengalaman', 'work history', 'riwayat kerja', 'employment', 'work experience',
                     'education', 'pendidikan', 'riwayat pendidikan',
-                    'skill', 'keahlian', 'kemampuan', 'kompetensi', 'technical',
+                    'skill', 'keahlian', 'kemampuan', 'kompetensi', 'technical', 'skills & knowledge', 'tools & technologies', 'other skills',
                     'achievement', 'pencapaian', 'prestasi',
                     'certification', 'sertifikasi', 'sertifikat', 'license',
                     'organization', 'organisasi', 'aktivitas', 'activity',
                     'language', 'bahasa',
-                    'project', 'proyek',
+                    'project', 'proyek', 'project portfolio',
                     'award', 'penghargaan',
                     'interest', 'hobi', 'hobby',
                     'contact', 'kontak', 'informasi',
                     'volunteer', 'sukarela',
                     'reference', 'referensi',
                 ];
-                const lines = rawText.split('\n').map(l => l.trimEnd()).filter(l => l.trim());
+                const lines = formattedText.split('\n').map(l => l.trimEnd()).filter(l => l.trim());
                 const sections = [];
                 let current = null;
 
@@ -1251,8 +1258,8 @@
                     if (!stripped) continue;
                     const lower = stripped.toLowerCase();
                     const isHeading = stripped.length < 60 &&
-                        sectionKeywords.some(kw => lower.startsWith(kw) || lower === kw) &&
-                        !/^[-•*\d]/.test(stripped);
+                        sectionKeywords.some(kw => lower === kw || (lower.startsWith(kw) && lower.length < kw.length + 15)) &&
+                        !/^[-•*!\d]/.test(stripped);
 
                     if (isHeading && current !== null) {
                         sections.push({ heading: current.heading, lines: current.lines });
@@ -1375,9 +1382,9 @@
                         } else {
                             writeSection(section.heading);
                             for (const line of section.lines) {
-                                const isBullet = /^[-•*]/.test(line);
+                                const isBullet = /^[-•*!]/.test(line);
                                 // clean bullet chars
-                                const cleanLine = line.replace(/^[-•*\s]+/, '');
+                                const cleanLine = line.replace(/^[-•*!\s]+/, '');
                                 writeLine(
                                     (isBullet ? '•  ' : '') + cleanLine,
                                     { fontSize: 10, indent: isBullet ? 4 : 0 }
