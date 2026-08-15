@@ -387,13 +387,13 @@
                                     <div class="walkin-stat-value" id="statActiveInitiators">{{ number_format((int) ($statsSummary['active_initiators'] ?? 0)) }}</div>
                                 </div>
                             </div>
-                            <div class="col-6 col-lg-2 d-none">
+                            <div class="col-6 col-lg-2">
                                 <div class="walkin-stat-card">
                                     <div class="walkin-stat-label">Jumlah Lowongan Dibuka</div>
                                     <div class="walkin-stat-value" id="statJumlahLowongan">{{ number_format((int) ($statsSummary['jumlah_lowongan_dibuka'] ?? 0)) }}</div>
                                 </div>
                             </div>
-                            <div class="col-6 col-lg-2 d-none">
+                            <div class="col-6 col-lg-2">
                                 <div class="walkin-stat-card">
                                     <div class="walkin-stat-label">Total Jumlah Kebutuhan</div>
                                     <div class="walkin-stat-value" id="statTotalKebutuhan">{{ number_format((int) ($statsSummary['total_jumlah_kebutuhan'] ?? 0)) }}</div>
@@ -2933,11 +2933,13 @@
         const benefitReasons = Array.isArray(stats.walkin_benefit_reasons) ? stats.walkin_benefit_reasons : [];
         const infoSources = Array.isArray(stats.info_sources) ? stats.info_sources : [];
         const jobPortals = Array.isArray(stats.job_portals) ? stats.job_portals : [];
-        let statsAdminUnlocked = false;
+        let statsAdminUnlocked = true; // Show all by default
         try {
-            statsAdminUnlocked = sessionStorage.getItem('walkin_stats_admin_unlocked') === '1';
+            if (sessionStorage.getItem('walkin_stats_admin_unlocked') === '0') {
+                statsAdminUnlocked = false;
+            }
         } catch (e) {
-            statsAdminUnlocked = false;
+            statsAdminUnlocked = true;
         }
 
         const charts = {};
