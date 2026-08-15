@@ -287,7 +287,7 @@ class KemitraanController extends Controller
             'other_pasker_facility' => 'nullable|string|max:255',
             // At least one facility either selected or other provided
             // Custom manual check below will enforce this since array rules change semantics
-            'schedule' => 'required|string|max:255',
+            'schedule' => 'required|string|max:1000',
             'scheduletimestart' => 'nullable|date_format:H:i',
             'scheduletimefinish' => 'nullable|date_format:H:i',
             'request_letter' => 'nullable|file|mimes:pdf,doc,docx|max:2048',

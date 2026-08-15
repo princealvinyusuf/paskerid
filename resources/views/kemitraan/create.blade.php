@@ -1587,9 +1587,9 @@
                             <label for="schedule" class="form-label">Usulan Jadwal Kegiatan</label>
                             <div class="input-group">
                                 <span class="input-group-text"><i class="bi bi-calendar-event"></i></span>
-                                <input type="text" class="form-control" id="schedule" name="schedule" placeholder="Pilih rentang tanggal" autocomplete="off" value="{{ old('schedule') }}" required>
+                                <input type="text" class="form-control" id="schedule" name="schedule" placeholder="Pilih satu atau beberapa tanggal" autocomplete="off" value="{{ old('schedule') }}" required readonly>
                             </div>
-                            <div class="form-text">Pilih rentang tanggal pelaksanaan kegiatan.</div>
+                            <div class="form-text">Klik pada tanggal-tanggal yang diinginkan (bisa lebih dari satu).</div>
                         </div>
 
                         <div class="col-md-6">
@@ -2099,7 +2099,7 @@
     });
     var fullyBookedDates = @json($fullyBookedDates ?? []);
     var schedulePicker = flatpickr("#schedule", {
-        mode: "range",
+        mode: "multiple",
         dateFormat: "Y-m-d",
         minDate: "today",
         disable: fullyBookedDates,
