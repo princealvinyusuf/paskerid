@@ -2100,9 +2100,15 @@
     var fullyBookedDates = @json($fullyBookedDates ?? []);
     var schedulePicker = flatpickr("#schedule", {
         mode: "multiple",
+        conjunction: ", ",
         dateFormat: "Y-m-d",
         minDate: "today",
         disable: fullyBookedDates,
+        onChange: function(selectedDates, dateStr, instance) {
+            if (selectedDates && selectedDates.length > 1) {
+                selectedDates.sort((a, b) => a.getTime() - b.getTime());
+            }
+        },
         locale: {
             firstDayOfWeek: 1,
             weekdays: {
