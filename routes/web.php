@@ -48,6 +48,10 @@ Route::get('/informasi/{id}', [App\Http\Controllers\InformasiController::class, 
 
 Route::get('/virtual-karir', [App\Http\Controllers\VirtualKarirController::class, 'index'])->name('virtual-karir.index');
 
+Route::get('/cv-review', function () {
+    return view('cv-reviewer');
+})->name('cv.reviewer');
+
 // Career Boost Day (public)
 Route::get('/career-boostday', [CareerBoostdayController::class, 'index'])->name('career-boostday.index');
 Route::post('/career-boostday/konsultasi', [CareerBoostdayController::class, 'store'])->name('career-boostday.store');

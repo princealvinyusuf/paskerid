@@ -502,6 +502,11 @@
                         </a>
                     </li> 
                     <li class="nav-item">
+                        <a class="nav-link @if(request()->routeIs('cv.reviewer')) active fw-bold @endif" href="{{ route('cv.reviewer') }}">
+                            CV Review (Underconstruction)
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="https://paskerid.kemnaker.go.id/RIASEC/" target="_blank">
                             Minat Karir
                         </a>
