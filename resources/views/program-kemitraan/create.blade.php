@@ -1178,14 +1178,14 @@
                                                     <div><label class="form-label">Tanggal evaluasi<span class="pk-step-required">*</span></label><input type="date" class="form-control" name="evaluation_date" value="{{ old('evaluation_date') }}" required></div>
                                                     <div>
                                                         <label class="form-label">Peran dalam kegiatan<span class="pk-step-required">*</span></label>
-                                                        <select class="form-select" name="evaluator_role" required>
+                                                        <select class="form-select" name="evaluator_role" id="evaluator_role_select" required>
                                                             <option value="">-- Pilih peran --</option>
                                                             @foreach ($evaluasiEvaluatorRoles as $role)
                                                                 <option value="{{ $role }}" {{ old('evaluator_role') === $role ? 'selected' : '' }}>{{ $role }}</option>
                                                             @endforeach
                                                         </select>
                                                     </div>
-                                                    <div><label class="form-label">Peran lainnya</label><input type="text" class="form-control" name="evaluator_role_other" value="{{ old('evaluator_role_other') }}"></div>
+                                                    <div id="evaluator_role_other_wrapper" style="display: none;"><label class="form-label">Peran lainnya</label><input type="text" class="form-control" name="evaluator_role_other" value="{{ old('evaluator_role_other') }}"></div>
                                                 </div>
                                             </div>
                                         </div>
@@ -2489,6 +2489,24 @@
             respondentCategorySelect.addEventListener('change', toggleRespondentCategoryOther);
             // Initialize on load
             toggleRespondentCategoryOther();
+        }
+
+        // Toggle Peran Lainnya visibility
+        var evaluatorRoleSelect = document.getElementById('evaluator_role_select');
+        var evaluatorRoleOtherWrapper = document.getElementById('evaluator_role_other_wrapper');
+        
+        if (evaluatorRoleSelect && evaluatorRoleOtherWrapper) {
+            function toggleEvaluatorRoleOther() {
+                if (evaluatorRoleSelect.value === 'Lainnya') {
+                    evaluatorRoleOtherWrapper.style.display = 'block';
+                } else {
+                    evaluatorRoleOtherWrapper.style.display = 'none';
+                }
+            }
+            
+            evaluatorRoleSelect.addEventListener('change', toggleEvaluatorRoleOther);
+            // Initialize on load
+            toggleEvaluatorRoleOther();
         }
 
         renderEvaluasiCharts();
