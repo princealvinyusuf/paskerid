@@ -317,7 +317,36 @@
                 </div>
             </div>
         </div>
+        @php
+            $userReviews = [
+                ['name' => 'Worksfess (@worksfess)', 'role' => 'Komunitas Karir', 'text' => 'Gw kira CV udah bagus, ternyata masih banyak yang kurang. Gara-gara fitur ini jadi tau kalau CV harus ada kata kunci yang relevan sesuai posisi.'],
+                ['name' => 'Rio (@vicarioreinaldo)', 'role' => 'Career Development Content Creator', 'text' => 'Step 1 dapet kerja impian & di notice HRD: update CV di sini. Analisis lengkap dan action item-nya super detail.'],
+                ['name' => 'Andini Saras (@ustadchen)', 'role' => 'Content Creator', 'text' => 'Jujur ini ngebantu banget sih buat jobseekers. Langsung keliatan mana yang harus gue tambahin dan benerin.'],
 
+            ];
+        @endphp
+
+        <section class="mt-5 pt-5 border-top">
+            <div class="d-flex align-items-end justify-content-between mb-4">
+                <div>
+                    <p class="text-primary fw-bold text-uppercase small mb-1" style="letter-spacing: 0.2em;">Testimonial</p>
+                    <h2 class="h3 fw-bold text-dark mb-0">Review Pengguna</h2>
+                </div>
+                <span class="badge bg-white text-secondary border px-3 py-2 rounded-pill">4.9/5 review kepuasan</span>
+            </div>
+
+            <div class="row g-4">
+                @foreach($userReviews as $review)
+                    <div class="col-md-6 col-xl-4">
+                        <div class="card h-100 border-0 shadow-sm p-4 rounded-4">
+                            <h3 class="h6 fw-bold text-dark mb-1">{{ $review['name'] }}</h3>
+                            <p class="small text-muted mb-2">{{ $review['role'] }}</p>
+                            <p class="small text-secondary mb-0">"{{ $review['text'] }}"</p>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </section>
     </section>
 
     <script>
