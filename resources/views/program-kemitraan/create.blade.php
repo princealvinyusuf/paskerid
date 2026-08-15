@@ -917,17 +917,18 @@
                                                     <div><label class="form-label">Nama<span class="pk-step-required">*</span></label><input type="text" class="form-control" name="respondent_name" value="{{ old('respondent_name') }}" required></div>
                                                     <div><label class="form-label">Instansi/organisasi<span class="pk-step-required">*</span></label><input type="text" class="form-control" name="respondent_organization" value="{{ old('respondent_organization') }}" required></div>
                                                     <div><label class="form-label">Jabatan/peran<span class="pk-step-required">*</span></label><input type="text" class="form-control" name="respondent_role" value="{{ old('respondent_role') }}" required></div>
-                                                    <div><label class="form-label">Kontak/surel<span class="pk-step-required">*</span></label><input type="text" class="form-control" name="respondent_contact" value="{{ old('respondent_contact') }}" required></div>
+                                                    <div><label class="form-label">Kontak<span class="pk-step-required">*</span></label><input type="text" class="form-control" name="respondent_contact" value="{{ old('respondent_contact') }}" required></div>
+                                                    <div><label class="form-label">Alamat Email<span class="pk-step-required">*</span></label><input type="email" class="form-control" name="respondent_email" value="{{ old('respondent_email') }}" required></div>
                                                     <div>
                                                         <label class="form-label">Kategori responden<span class="pk-step-required">*</span></label>
-                                                        <select class="form-select" name="respondent_category" required>
+                                                        <select class="form-select" name="respondent_category" id="respondent_category_select" required>
                                                             <option value="">-- Pilih kategori --</option>
                                                             @foreach ($evaluasiRespondentCategories as $category)
                                                                 <option value="{{ $category }}" {{ old('respondent_category') === $category ? 'selected' : '' }}>{{ $category }}</option>
                                                             @endforeach
                                                         </select>
                                                     </div>
-                                                    <div>
+                                                    <div id="respondent_category_other_wrapper" style="display: none;">
                                                         <label class="form-label">Kategori lainnya</label>
                                                         <input type="text" class="form-control" name="respondent_category_other" value="{{ old('respondent_category_other') }}">
                                                     </div>
@@ -2434,6 +2435,24 @@
                 });
                 renderSpotlightByIndex(0);
             }
+        }
+
+        // Toggle Kategori Lainnya visibility
+        var respondentCategorySelect = document.getElementById('respondent_category_select');
+        var respondentCategoryOtherWrapper = document.getElementById('respondent_category_other_wrapper');
+        
+        if (respondentCategorySelect && respondentCategoryOtherWrapper) {
+            function toggleRespondentCategoryOther() {
+                if (respondentCategorySelect.value === 'Lainnya') {
+                    respondentCategoryOtherWrapper.style.display = 'block';
+                } else {
+                    respondentCategoryOtherWrapper.style.display = 'none';
+                }
+            }
+            
+            respondentCategorySelect.addEventListener('change', toggleRespondentCategoryOther);
+            // Initialize on load
+            toggleRespondentCategoryOther();
         }
 
         renderEvaluasiCharts();

@@ -30,6 +30,7 @@ class ProgramKemitraanEvaluation extends Model
         'respondent_organization',
         'respondent_role',
         'respondent_contact',
+        'respondent_email',
         'respondent_category',
         'respondent_category_other',
         'participation_mode',

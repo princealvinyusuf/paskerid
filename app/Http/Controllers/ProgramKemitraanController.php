@@ -854,6 +854,7 @@ class ProgramKemitraanController extends Controller
                 'respondent_organization' => ['required', 'string', 'max:255'],
                 'respondent_role' => ['required', 'string', 'max:255'],
                 'respondent_contact' => ['required', 'string', 'max:255'],
+                'respondent_email' => ['required', 'email', 'max:255'],
                 'respondent_category' => ['required', Rule::in($this->evaluasiRespondentCategories())],
                 'respondent_category_other' => ['nullable', 'string', 'max:255', 'required_if:respondent_category,Lainnya'],
                 'participation_mode' => ['required', Rule::in($this->evaluasiParticipationModes())],
