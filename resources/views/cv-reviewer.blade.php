@@ -1457,7 +1457,7 @@ ${jobDescription || '(Not provided)'}
                     let response;
                     try {
                         response = await window.puter.ai.chat(prompt, {
-                            model: 'gpt-5.3-chat',
+                            model: 'gpt-4o',
                             temperature: 0.2,
                             max_tokens: 2600
                         });
@@ -1465,7 +1465,7 @@ ${jobDescription || '(Not provided)'}
                         // Retry once for transient provider-side failures.
                         statusText.textContent = 'Permintaan pertama gagal, mencoba ulang...';
                         response = await window.puter.ai.chat(prompt, {
-                            model: 'gpt-5.3-chat',
+                            model: 'gpt-4o',
                             temperature: 0.2,
                             max_tokens: 2200
                         });
