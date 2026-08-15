@@ -16,7 +16,7 @@ class ProgramKemitraanController extends Controller
     private const TAB_EVALUASI = 'evaluasi';
     private const TAB_HASIL_EVALUASI = 'hasil-evaluasi';
     private const TAB_SERTIFIKAT = 'sertifikat';
-    private const RESULTS_AND_CERTIFICATE_TABS_ENABLED = false;
+    private const RESULTS_AND_CERTIFICATE_TABS_ENABLED = true;
     private const SCORE_OPTIONS = ['1', '2', '3', '4', '5'];
 
     /**
