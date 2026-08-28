@@ -878,6 +878,22 @@ class KemitraanController extends Controller
             ->values()
             ->all();
 
+        $linkMelamarItems = $kemitraan->detailLowongan
+            ->map(static function ($item) {
+                $link = trim((string) ($item->link_melamar ?? ''));
+                $jabatan = trim((string) ($item->jabatan_yang_dibuka ?? ''));
+                if ($link === '') {
+                    return null;
+                }
+                return [
+                    'jabatan' => $jabatan,
+                    'url' => $link,
+                ];
+            })
+            ->filter()
+            ->values()
+            ->all();
+
         $timeInfo = '';
         if ($hasTimeRange) {
             $timeStart = $bookedDate->booked_time_start ? substr($bookedDate->booked_time_start, 0, 5) : ($kemitraan->scheduletimestart ?? '');
@@ -902,6 +918,7 @@ class KemitraanController extends Controller
                 . ($timeInfo ? ' (' . $timeInfo . ')' : '')
                 . ($location && $location !== '-' ? ' - Lokasi: ' . $location : ''),
             'jabatan_dibuka' => $jabatanDibuka,
+            'link_melamar_items' => $linkMelamarItems,
             'date' => $dateStr,
             'date_start' => $dateStr,
             'date_finish' => $dateFinishStr,

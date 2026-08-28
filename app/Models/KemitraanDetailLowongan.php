@@ -16,6 +16,8 @@ class KemitraanDetailLowongan extends Model
         'jabatan_yang_dibuka',
         'jumlah_kebutuhan',
         'sasaran_pemenuhan_walk_in_interview',
+        'jumlah_penempatan',
+        'link_melamar',
         'gender',
         'pendidikan_terakhir',
         'pengalaman_kerja',

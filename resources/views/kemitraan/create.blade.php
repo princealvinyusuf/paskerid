@@ -171,6 +171,7 @@
                                         <th style="min-width: 360px;">Kegiatan</th>
                                         <th>Deskripsi</th>
                                         <th style="min-width: 220px;">Jabatan Yang Dibuka</th>
+                                        <th style="min-width: 180px;">Link Melamar</th>
                                         <th style="width: 210px;">Informasi Lainnya</th>
                                     </tr>
                                 </thead>
@@ -210,6 +211,9 @@
                                                     ->filter(static fn ($item) => $item !== '')
                                                     ->unique()
                                                     ->values();
+                                                $linkMelamarItems = collect((array)($agenda->link_melamar_items ?? []))
+                                                    ->filter(static fn ($item) => !empty($item['url']))
+                                                    ->values();
                                             @endphp
                                             <tr class="{{ $rowClass }}">
                                                 <td class="fw-semibold">
@@ -233,6 +237,7 @@
                                                             data-location="{{ e($agenda->location) }}"
                                                             data-registration="{{ $agenda->registration_url }}"
                                                             data-info-lainnya='@json($infoItems)'
+                                                            data-link-melamar='@json($linkMelamarItems)'
                                                             data-jabatan="{{ e($jabatanItems->implode(', ')) }}"
                                                             data-description="{{ e($agenda->description) }}"
                                                         >Detail</button>
@@ -246,6 +251,26 @@
                                                         <span class="text-muted">-</span>
                                                     @else
                                                         <div class="small">{{ $jabatanItems->implode(', ') }}</div>
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @if($linkMelamarItems->isEmpty())
+                                                        <span class="text-muted">-</span>
+                                                    @else
+                                                        <div class="d-flex flex-column gap-1">
+                                                            @foreach($linkMelamarItems as $lmi)
+                                                                @php
+                                                                    $url = $lmi['url'] ?? '';
+                                                                    $job = trim((string)($lmi['jabatan'] ?? ''));
+                                                                    $isExternal = preg_match('/^https?:\/\//i', $url) === 1;
+                                                                    $href = $isExternal ? $url : ('https://' . ltrim($url, '/'));
+                                                                    $btnText = $job !== '' ? ('Lamar: ' . \Illuminate\Support\Str::limit($job, 25)) : 'Link Melamar';
+                                                                @endphp
+                                                                <a href="{{ $href }}" target="_blank" rel="noopener" class="btn btn-outline-primary btn-sm text-start" title="{{ $job ? 'Lamar posisi: ' . $job : 'Link Melamar' }}">
+                                                                    <i class="fa fa-arrow-up-right-from-square me-1"></i>{{ $btnText }}
+                                                                </a>
+                                                            @endforeach
+                                                        </div>
                                                     @endif
                                                 </td>
                                                 <td>
@@ -279,7 +304,7 @@
                                         @endforeach
                                     @else
                                         <tr>
-                                            <td colspan="5" class="text-center text-muted py-4">
+                                            <td colspan="6" class="text-center text-muted py-4">
                                                 <i class="fas fa-calendar-times fa-2x mb-2"></i><br>
                                                 Belum ada jadwal Walk In yang tersedia.
                                             </td>
@@ -1816,6 +1841,7 @@
                                                         <th style="min-width:360px">Kegiatan</th>
                                                         <th>Deskripsi</th>
                                                         <th style="min-width:220px">Jabatan Yang Dibuka</th>
+                                                        <th style="min-width:180px">Link Melamar</th>
                                                         <th style="width: 210px;">Informasi Lainnya</th>
                                                     </tr>
                                                 </thead>
@@ -1854,6 +1880,7 @@
                             <th style="min-width: 360px;">Kegiatan</th>
                             <th>Deskripsi</th>
                             <th style="min-width: 220px;">Jabatan Yang Dibuka</th>
+                            <th style="min-width: 180px;">Link Melamar</th>
                             <th style="width: 210px;">Informasi Lainnya</th>
                         </tr>
                     </thead>
@@ -1879,6 +1906,9 @@
                                         ->filter(static fn ($item) => $item !== '')
                                         ->unique()
                                         ->values();
+                                    $linkMelamarItems = collect((array)($agenda->link_melamar_items ?? []))
+                                        ->filter(static fn ($item) => !empty($item['url']))
+                                        ->values();
                                 @endphp
                                 <tr class="{{ $idx % 2 === 1 ? 'walkin-schedule-odd' : '' }}">
                                     <td class="fw-semibold">
@@ -1901,6 +1931,7 @@
                                             data-location="{{ e($agenda->location) }}"
                                             data-registration="{{ $agenda->registration_url }}"
                                             data-info-lainnya='@json($infoItems)'
+                                            data-link-melamar='@json($linkMelamarItems)'
                                             data-jabatan="{{ e($jabatanItems->implode(', ')) }}"
                                             data-description="{{ e($agenda->description) }}"
                                         >Detail</button>
@@ -1910,6 +1941,26 @@
                                             <span class="text-muted">-</span>
                                         @else
                                             <div class="small">{{ $jabatanItems->implode(', ') }}</div>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if($linkMelamarItems->isEmpty())
+                                            <span class="text-muted">-</span>
+                                        @else
+                                            <div class="d-flex flex-column gap-1">
+                                                @foreach($linkMelamarItems as $lmi)
+                                                    @php
+                                                        $url = $lmi['url'] ?? '';
+                                                        $job = trim((string)($lmi['jabatan'] ?? ''));
+                                                        $isExternal = preg_match('/^https?:\/\//i', $url) === 1;
+                                                        $href = $isExternal ? $url : ('https://' . ltrim($url, '/'));
+                                                        $btnText = $job !== '' ? ('Lamar: ' . \Illuminate\Support\Str::limit($job, 25)) : 'Link Melamar';
+                                                    @endphp
+                                                    <a href="{{ $href }}" target="_blank" rel="noopener" class="btn btn-outline-primary btn-sm text-start" title="{{ $job ? 'Lamar posisi: ' . $job : 'Link Melamar' }}">
+                                                        <i class="fa fa-arrow-up-right-from-square me-1"></i>{{ $btnText }}
+                                                    </a>
+                                                @endforeach
+                                            </div>
                                         @endif
                                     </td>
                                     <td>
@@ -1943,7 +1994,7 @@
                             @endforeach
                         @else
                             <tr>
-                                <td colspan="5" class="text-center text-muted py-4">
+                                <td colspan="6" class="text-center text-muted py-4">
                                     Belum ada data Walk In terdahulu.
                                 </td>
                             </tr>
@@ -1995,6 +2046,7 @@
             </div>
 
             <div class="mb-3" id="agendaModalRegistration"></div>
+            <div class="mb-3" id="agendaModalLinkMelamar"></div>
             <div class="mb-1" id="agendaModalInfoLainnya"></div>
         </div>
       </div>
@@ -3602,6 +3654,35 @@
                 const fallback = String(infoRawAttr || '').trim();
                 infoLainnyaItems = fallback ? [fallback] : [];
             }
+
+            const linkRawAttr = button.getAttribute('data-link-melamar') || '[]';
+            let linkMelamarItems = [];
+            try {
+                const parsed = JSON.parse(linkRawAttr);
+                if (Array.isArray(parsed)) {
+                    linkMelamarItems = parsed.filter((it) => it && it.url);
+                }
+            } catch (e) {
+                linkMelamarItems = [];
+            }
+            const linkMelamarEl = document.getElementById('agendaModalLinkMelamar');
+            if (linkMelamarEl) {
+                if (linkMelamarItems.length > 0) {
+                    let linkHtml = '<div class="small text-muted mb-1">Link Melamar</div><div class="d-flex flex-wrap gap-2">';
+                    linkMelamarItems.forEach((it) => {
+                        let href = it.url;
+                        if (!/^https?:\/\//i.test(href)) {
+                            href = 'https://' + href.replace(/^\/+/, '');
+                        }
+                        const label = it.jabatan ? `Lamar ${it.jabatan}` : 'Link Melamar';
+                        linkHtml += `<a href="${escapeHtml(href)}" target="_blank" rel="noopener" class="btn btn-primary btn-sm"><i class="fa fa-arrow-up-right-from-square me-1"></i> ${escapeHtml(label)}</a>`;
+                    });
+                    linkHtml += '</div>';
+                    linkMelamarEl.innerHTML = linkHtml;
+                } else {
+                    linkMelamarEl.innerHTML = '';
+                }
+            }
             const infoEl = document.getElementById('agendaModalInfoLainnya');
             function buildInfoItemHtml(value) {
                 const pathOnly = String(value || '').split('?')[0].split('#')[0].toLowerCase();
@@ -4090,6 +4171,20 @@
                     ? a.jabatan_dibuka.map((v) => String(v || '').trim()).filter(Boolean)
                     : [];
                 const jabatanText = jabatanItems.length ? jabatanItems.join(', ') : '-';
+                const linkMelamarItems = Array.isArray(a.link_melamar_items)
+                    ? a.link_melamar_items.filter((it) => it && it.url)
+                    : [];
+                const linkMelamarCellHtml = linkMelamarItems.length === 0
+                    ? '<span class="text-muted">-</span>'
+                    : `<div class="d-flex flex-column gap-1">${linkMelamarItems.map((it) => {
+                        let href = it.url || '';
+                        if (!/^https?:\/\//i.test(href)) {
+                            href = 'https://' + href.replace(/^\/+/, '');
+                        }
+                        const job = String(it.jabatan || '').trim();
+                        const btnText = job ? ('Lamar: ' + (job.length > 25 ? job.substring(0, 22) + '...' : job)) : 'Link Melamar';
+                        return `<a href="${escapeHtml(href)}" target="_blank" rel="noopener" class="btn btn-outline-primary btn-sm text-start" title="${escapeHtml(job ? 'Lamar posisi: ' + job : 'Link Melamar')}"><i class="fa fa-arrow-up-right-from-square me-1"></i>${escapeHtml(btnText)}</a>`;
+                    }).join('')}</div>`;
                 const modalDate = isRangeDate
                     ? `${formatLongDate(dateStart)} s/d ${formatLongDate(dateFinish)}`
                     : formatLongDate(dateStart);
@@ -4115,6 +4210,7 @@
                                 data-location="${escapeHtml(a.location || '')}"
                                 data-registration="${escapeHtml(a.registration_url || '')}"
                                 data-info-lainnya='${escapeHtml(JSON.stringify(infoItems))}'
+                                data-link-melamar='${escapeHtml(JSON.stringify(linkMelamarItems))}'
                                 data-jabatan="${escapeHtml(jabatanText)}"
                                 data-description="${escapeHtml(a.description || '')}"
                             >Detail</button>
@@ -4122,6 +4218,7 @@
                         </div>
                     </td>
                     <td>${escapeHtml(jabatanText)}</td>
+                    <td>${linkMelamarCellHtml}</td>
                     <td>${infoCellHtml}</td>
                 `;
                 scheduleBodyEl.appendChild(tr);
