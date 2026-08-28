@@ -261,12 +261,12 @@
                                                             @foreach($linkMelamarItems as $lmi)
                                                                 @php
                                                                     $url = $lmi['url'] ?? '';
-                                                                    $job = trim((string)($lmi['jabatan'] ?? ''));
+                                                                    $lbl = trim((string)($lmi['label'] ?? ($lmi['jabatan'] ?? '')));
                                                                     $isExternal = preg_match('/^https?:\/\//i', $url) === 1;
                                                                     $href = $isExternal ? $url : ('https://' . ltrim($url, '/'));
-                                                                    $btnText = $job !== '' ? ('Lamar: ' . \Illuminate\Support\Str::limit($job, 25)) : 'Link Melamar';
+                                                                    $btnText = $lbl !== '' ? ('Lamar: ' . \Illuminate\Support\Str::limit($lbl, 25)) : 'Link Melamar';
                                                                 @endphp
-                                                                <a href="{{ $href }}" target="_blank" rel="noopener" class="btn btn-outline-primary btn-sm text-start" title="{{ $job ? 'Lamar posisi: ' . $job : 'Link Melamar' }}">
+                                                                <a href="{{ $href }}" target="_blank" rel="noopener" class="btn btn-outline-primary btn-sm text-start" title="{{ $lbl ? 'Lamar: ' . $lbl : 'Link Melamar' }}">
                                                                     <i class="fa fa-arrow-up-right-from-square me-1"></i>{{ $btnText }}
                                                                 </a>
                                                             @endforeach
@@ -1951,12 +1951,12 @@
                                                 @foreach($linkMelamarItems as $lmi)
                                                     @php
                                                         $url = $lmi['url'] ?? '';
-                                                        $job = trim((string)($lmi['jabatan'] ?? ''));
+                                                        $lbl = trim((string)($lmi['label'] ?? ($lmi['jabatan'] ?? '')));
                                                         $isExternal = preg_match('/^https?:\/\//i', $url) === 1;
                                                         $href = $isExternal ? $url : ('https://' . ltrim($url, '/'));
-                                                        $btnText = $job !== '' ? ('Lamar: ' . \Illuminate\Support\Str::limit($job, 25)) : 'Link Melamar';
+                                                        $btnText = $lbl !== '' ? ('Lamar: ' . \Illuminate\Support\Str::limit($lbl, 25)) : 'Link Melamar';
                                                     @endphp
-                                                    <a href="{{ $href }}" target="_blank" rel="noopener" class="btn btn-outline-primary btn-sm text-start" title="{{ $job ? 'Lamar posisi: ' . $job : 'Link Melamar' }}">
+                                                    <a href="{{ $href }}" target="_blank" rel="noopener" class="btn btn-outline-primary btn-sm text-start" title="{{ $lbl ? 'Lamar: ' . $lbl : 'Link Melamar' }}">
                                                         <i class="fa fa-arrow-up-right-from-square me-1"></i>{{ $btnText }}
                                                     </a>
                                                 @endforeach
@@ -3660,7 +3660,19 @@
             try {
                 const parsed = JSON.parse(linkRawAttr);
                 if (Array.isArray(parsed)) {
-                    linkMelamarItems = parsed.filter((it) => it && it.url);
+                    parsed.forEach((it) => {
+                        if (!it || !it.url) return;
+                        const urls = String(it.url).split(/[,\r\n]+/).map((s) => s.trim()).filter(Boolean);
+                        const count = urls.length;
+                        urls.forEach((u, uIdx) => {
+                            const lbl = it.label || (count > 1 && it.jabatan ? `${it.jabatan} (Link ${uIdx + 1})` : (count > 1 ? `Link ${uIdx + 1}` : it.jabatan));
+                            linkMelamarItems.push({
+                                jabatan: it.jabatan || '',
+                                url: u,
+                                label: lbl || ''
+                            });
+                        });
+                    });
                 }
             } catch (e) {
                 linkMelamarItems = [];
@@ -3674,7 +3686,7 @@
                         if (!/^https?:\/\//i.test(href)) {
                             href = 'https://' + href.replace(/^\/+/, '');
                         }
-                        const label = it.jabatan ? `Lamar ${it.jabatan}` : 'Link Melamar';
+                        const label = it.label ? `Lamar ${it.label}` : (it.jabatan ? `Lamar ${it.jabatan}` : 'Link Melamar');
                         linkHtml += `<a href="${escapeHtml(href)}" target="_blank" rel="noopener" class="btn btn-primary btn-sm"><i class="fa fa-arrow-up-right-from-square me-1"></i> ${escapeHtml(label)}</a>`;
                     });
                     linkHtml += '</div>';
@@ -4171,9 +4183,22 @@
                     ? a.jabatan_dibuka.map((v) => String(v || '').trim()).filter(Boolean)
                     : [];
                 const jabatanText = jabatanItems.length ? jabatanItems.join(', ') : '-';
-                const linkMelamarItems = Array.isArray(a.link_melamar_items)
+                const rawLinkItems = Array.isArray(a.link_melamar_items)
                     ? a.link_melamar_items.filter((it) => it && it.url)
                     : [];
+                const linkMelamarItems = [];
+                rawLinkItems.forEach((it) => {
+                    const urls = String(it.url).split(/[,\r\n]+/).map((s) => s.trim()).filter(Boolean);
+                    const count = urls.length;
+                    urls.forEach((u, uIdx) => {
+                        const lbl = it.label || (count > 1 && it.jabatan ? `${it.jabatan} (Link ${uIdx + 1})` : (count > 1 ? `Link ${uIdx + 1}` : it.jabatan));
+                        linkMelamarItems.push({
+                            jabatan: it.jabatan || '',
+                            url: u,
+                            label: lbl || ''
+                        });
+                    });
+                });
                 const linkMelamarCellHtml = linkMelamarItems.length === 0
                     ? '<span class="text-muted">-</span>'
                     : `<div class="d-flex flex-column gap-1">${linkMelamarItems.map((it) => {
@@ -4181,9 +4206,9 @@
                         if (!/^https?:\/\//i.test(href)) {
                             href = 'https://' + href.replace(/^\/+/, '');
                         }
-                        const job = String(it.jabatan || '').trim();
+                        const job = String(it.label || it.jabatan || '').trim();
                         const btnText = job ? ('Lamar: ' + (job.length > 25 ? job.substring(0, 22) + '...' : job)) : 'Link Melamar';
-                        return `<a href="${escapeHtml(href)}" target="_blank" rel="noopener" class="btn btn-outline-primary btn-sm text-start" title="${escapeHtml(job ? 'Lamar posisi: ' + job : 'Link Melamar')}"><i class="fa fa-arrow-up-right-from-square me-1"></i>${escapeHtml(btnText)}</a>`;
+                        return `<a href="${escapeHtml(href)}" target="_blank" rel="noopener" class="btn btn-outline-primary btn-sm text-start" title="${escapeHtml(job ? 'Lamar: ' + job : 'Link Melamar')}"><i class="fa fa-arrow-up-right-from-square me-1"></i>${escapeHtml(btnText)}</a>`;
                     }).join('')}</div>`;
                 const modalDate = isRangeDate
                     ? `${formatLongDate(dateStart)} s/d ${formatLongDate(dateFinish)}`

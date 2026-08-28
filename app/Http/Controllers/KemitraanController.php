@@ -878,21 +878,27 @@ class KemitraanController extends Controller
             ->values()
             ->all();
 
-        $linkMelamarItems = $kemitraan->detailLowongan
-            ->map(static function ($item) {
-                $link = trim((string) ($item->link_melamar ?? ''));
-                $jabatan = trim((string) ($item->jabatan_yang_dibuka ?? ''));
-                if ($link === '') {
-                    return null;
+        $linkMelamarItems = [];
+        foreach ($kemitraan->detailLowongan as $item) {
+            $rawLink = trim((string) ($item->link_melamar ?? ''));
+            $jabatan = trim((string) ($item->jabatan_yang_dibuka ?? ''));
+            if ($rawLink === '') {
+                continue;
+            }
+            $urls = array_values(array_filter(array_map('trim', preg_split('/[,\r\n]+/', $rawLink)), static fn($u) => $u !== ''));
+            $urlCount = count($urls);
+            foreach ($urls as $uIdx => $url) {
+                $lbl = $jabatan;
+                if ($urlCount > 1) {
+                    $lbl = $jabatan !== '' ? ($jabatan . ' (Link ' . ($uIdx + 1) . ')') : ('Link ' . ($uIdx + 1));
                 }
-                return [
+                $linkMelamarItems[] = [
                     'jabatan' => $jabatan,
-                    'url' => $link,
+                    'url' => $url,
+                    'label' => $lbl,
                 ];
-            })
-            ->filter()
-            ->values()
-            ->all();
+            }
+        }
 
         $timeInfo = '';
         if ($hasTimeRange) {
