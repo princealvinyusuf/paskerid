@@ -75,6 +75,15 @@
         .aspect-panel.open {
             opacity: 1;
         }
+
+        .career-fit-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .career-fit-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0.75rem 1.5rem rgba(15, 23, 42, 0.08) !important;
+        }
     </style>
 @endsection
 
@@ -284,8 +293,15 @@
 
                     <div id="tab-career" class="result-tab-panel d-none">
                         <div class="card border-0 shadow-sm p-4 rounded-4">
-                            <h3 class="h5 fw-bold text-dark">Career Recommendation</h3>
+                            <div class="d-flex flex-wrap align-items-start justify-content-between gap-2">
+                                <div>
+                                    <h3 class="h5 fw-bold text-dark mb-1">Rekomendasi Karier</h3>
+                                    <p class="text-muted small mb-0">Pekerjaan yang paling sesuai dengan pengalaman dan keterampilan di CV Anda.</p>
+                                </div>
+                                <span class="badge rounded-pill bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25">Career Fit</span>
+                            </div>
                             <p id="career-recommendation" class="text-secondary small mt-3 mb-0"></p>
+                            <div id="career-recommendations-grid" class="row g-3 mt-1"></div>
                         </div>
                     </div>
                 </div>
@@ -371,6 +387,7 @@
             const aspectsGrid = document.getElementById('aspects-grid');
             const keywordsList = document.getElementById('keywords-list');
             const careerRecommendation = document.getElementById('career-recommendation');
+            const careerRecommendationsGrid = document.getElementById('career-recommendations-grid');
             const jobMatchScoreBadge = document.getElementById('job-match-score-badge');
             const jobMatchSummary = document.getElementById('job-match-summary');
             const jobMatchGaps = document.getElementById('job-match-gaps');
@@ -806,6 +823,72 @@
                 renderBulletedList(jobMatchGaps, jobTargeted.key_gaps, 'Tidak ada gap utama terdeteksi.');
                 renderBulletedList(jobMatchKeywords, jobTargeted.suggested_keywords, 'Tidak ada keyword tambahan.');
                 renderBulletedList(jobMatchImprovements, jobTargeted.priority_improvements, 'Tidak ada prioritas tambahan.');
+            };
+
+            const buildKarirhubSearchUrl = (keyword) => {
+                const baseUrl = 'https://karirhub.kemnaker.go.id/lowongan-dalam-negeri/lowongan';
+                const normalizedKeyword = String(keyword || '').trim();
+                return normalizedKeyword
+                    ? `${baseUrl}?keyword=${encodeURIComponent(normalizedKeyword)}`
+                    : baseUrl;
+            };
+
+            const renderCareerRecommendations = (recommendations) => {
+                const normalized = Array.isArray(recommendations)
+                    ? recommendations.filter((item) => item && item.title).slice(0, 8)
+                    : [];
+
+                if (!normalized.length) {
+                    careerRecommendationsGrid.innerHTML = `
+                        <div class="col-12">
+                            <div class="bg-light border rounded-3 p-3 text-muted small">
+                                Belum ada rekomendasi pekerjaan terstruktur. Coba lengkapi pengalaman, keterampilan, dan pencapaian di CV.
+                            </div>
+                        </div>
+                    `;
+                    return;
+                }
+
+                careerRecommendationsGrid.innerHTML = normalized.map((career) => {
+                    const fitScore = Math.max(0, Math.min(100, Number(career.fit_score) || 0));
+                    const zone = Math.max(1, Math.min(5, Number(career.job_zone) || 1));
+                    const matchedSkills = Array.isArray(career.matched_skills)
+                        ? career.matched_skills.filter(Boolean).slice(0, 5)
+                        : [];
+                    const primaryKeyword = career.search_keyword || career.title;
+                    const relatedKeyword = career.related_keyword || primaryKeyword;
+
+                    return `
+                        <div class="col-12 col-md-6">
+                            <article class="career-fit-card card border h-100 rounded-4 p-3 shadow-sm">
+                                <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
+                                    <h4 class="h6 fw-bold text-dark mb-0">${escapeHtml(career.title)}</h4>
+                                    <span class="badge rounded-pill bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 text-nowrap">Job Zone ${zone}</span>
+                                </div>
+                                <div class="d-flex align-items-center gap-2 mb-2">
+                                    <div class="progress flex-grow-1" style="height: 7px;">
+                                        <div class="progress-bar bg-success" role="progressbar" style="width: ${fitScore}%;" aria-valuenow="${fitScore}" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                    <span class="small fw-bold text-success text-nowrap">${fitScore}% cocok</span>
+                                </div>
+                                ${matchedSkills.length ? `
+                                    <div class="d-flex flex-wrap gap-1 mb-2">
+                                        ${matchedSkills.map((skill) => `<span class="badge bg-light text-secondary border">${escapeHtml(skill)}</span>`).join('')}
+                                    </div>
+                                ` : ''}
+                                <p class="text-secondary small flex-grow-1 mb-3">${escapeHtml(career.why || 'Relevan dengan profil pengalaman dan keterampilan di CV Anda.')}</p>
+                                <div class="d-flex flex-wrap gap-2">
+                                    <a class="btn btn-sm btn-outline-primary" href="${escapeHtml(buildKarirhubSearchUrl(primaryKeyword))}" target="_blank" rel="noopener noreferrer">
+                                        <i class="fa-solid fa-magnifying-glass me-1"></i>Lihat Pekerjaan
+                                    </a>
+                                    <a class="btn btn-sm btn-outline-secondary" href="${escapeHtml(buildKarirhubSearchUrl(relatedKeyword))}" target="_blank" rel="noopener noreferrer">
+                                        Lowongan Serupa
+                                    </a>
+                                </div>
+                            </article>
+                        </div>
+                    `;
+                }).join('');
             };
 
             const ensureJsPdfLoaded = () => Boolean(window.jspdf?.jsPDF);
@@ -1354,6 +1437,7 @@
                 scoreRingProgress.style.strokeDashoffset = `${ringCircumference}`;
                 resetScoreVisual();
                 careerRecommendation.textContent = '';
+                careerRecommendationsGrid.innerHTML = '';
                 topStrength.textContent = '-';
                 mainGap.textContent = '-';
                 aspectCount.textContent = '0 aspek';
@@ -1421,7 +1505,18 @@ Analyze the following CV text and return STRICT JSON only with this schema:
     }
   ],
   "keywords_recommendation": ["string", "string"],
-  "career_recommendation": "string",
+  "career_recommendation": "short summary string",
+  "career_recommendations": [
+    {
+      "title": "job title",
+      "fit_score": number (0-100),
+      "why": "specific reason based on CV evidence",
+      "matched_skills": ["skill from CV", "skill from CV"],
+      "search_keyword": "primary Indonesian job-search keyword",
+      "related_keyword": "related job-search keyword",
+      "job_zone": number (1-5)
+    }
+  ],
   "job_targeted": {
     "match_score": number (0-100),
     "summary": "string",
@@ -1433,6 +1528,9 @@ Analyze the following CV text and return STRICT JSON only with this schema:
 
 Important rules:
 - Return exactly 12 aspects, matching all names listed above.
+- Return 6 distinct career_recommendations ranked from best to lowest fit.
+- Base each career fit on evidence found in the CV; do not invent skills or experience.
+- Job Zone means preparation level: 1 minimal, 2 basic, 3 intermediate, 4 high, 5 very high.
 - Give practical, concrete action points.
 - Keep analysis concise but insightful.
 - JSON only, no markdown.
@@ -1451,7 +1549,7 @@ ${jobDescription || '(Not provided)'}
                         response = await window.puter.ai.chat(prompt, {
                             model: 'gpt-4o',
                             temperature: 0.2,
-                            max_tokens: 2600
+                            max_tokens: 3600
                         });
                     } catch (firstError) {
                         // Retry once for transient provider-side failures.
@@ -1459,7 +1557,7 @@ ${jobDescription || '(Not provided)'}
                         response = await window.puter.ai.chat(prompt, {
                             model: 'gpt-4o',
                             temperature: 0.2,
-                            max_tokens: 2200
+                            max_tokens: 3200
                         });
                     }
 
@@ -1489,6 +1587,7 @@ ${jobDescription || '(Not provided)'}
                         : '<li>- Tidak ada keyword rekomendasi.</li>';
 
                     careerRecommendation.textContent = parsed.career_recommendation || '-';
+                    renderCareerRecommendations(parsed.career_recommendations);
                     renderJobMatch(parsed.job_targeted);
 
                     resultWrapper.classList.remove('d-none');
