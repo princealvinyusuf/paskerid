@@ -14,7 +14,12 @@ class ProgramKemitraanCertificateSetting extends Model
     protected $fillable = [
         'signature_image_path',
         'background_image_path',
+        'logo_image_path',
+        'ministry_header_text',
         'signer_name',
+        'signer_position',
+        'sign_place',
         'certificate_title',
+        'participation_role_default',
     ];
 }

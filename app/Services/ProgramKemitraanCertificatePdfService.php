@@ -12,15 +12,23 @@ class ProgramKemitraanCertificatePdfService
 
     public function generate(ProgramKemitraanEvaluation $evaluation, ?ProgramKemitraanCertificateSetting $setting = null): string
     {
-        $setting = $setting ?? ProgramKemitraanCertificateSetting::query()->orderByDesc('id')->first();
+        $setting = $setting ?? ProgramKemitraanCertificateSetting::query()->orderBy('id')->first();
 
-        $certificateTitle = $this->normalizeText((string) ($setting?->certificate_title ?: 'Sertifikat Partisipasi'));
+        $certificateTitle = $this->normalizeText((string) ($setting?->certificate_title ?: 'Sertifikat'));
+        $ministryHeader = $this->normalizeText((string) ($setting?->ministry_header_text ?: 'KEMENTERIAN KETENAGAKERJAAN REPUBLIK INDONESIA'));
         $participantName = $this->normalizeText((string) ($evaluation->respondent_name ?: '-'));
         $activityName = $this->normalizeText((string) ($evaluation->activity_name ?: 'Program Kemitraan'));
         $signerName = $this->normalizeText((string) ($setting?->signer_name ?: 'R. Nurhidajat, S.E., M.Ec.Dev.'));
+        $signerPosition = $this->normalizeText((string) ($setting?->signer_position ?: 'Kepala Pusat Pasar Kerja'));
+        $signPlace = $this->normalizeText((string) ($setting?->sign_place ?: 'Jakarta'));
+        $certificateNumber = $this->normalizeText((string) ($evaluation->certificate_code ?: '-'));
+        $participantRole = $this->participantRole($evaluation, $setting);
+        $activityDate = $evaluation->activity_date ? indo_date($evaluation->activity_date) : '-';
+        $activityLocation = $this->normalizeText((string) ($evaluation->activity_location ?: '-'));
 
         $signaturePath = $this->resolveLocalAssetPath((string) ($setting?->signature_image_path ?? ''));
         $backgroundPath = $this->resolveLocalAssetPath((string) ($setting?->background_image_path ?? ''));
+        $logoPath = $this->resolveLocalAssetPath((string) ($setting?->logo_image_path ?? ''));
 
         $signatureImageObject = null;
         if ($signaturePath !== null) {
@@ -29,6 +37,10 @@ class ProgramKemitraanCertificatePdfService
         $backgroundImageObject = null;
         if ($backgroundPath !== null) {
             $backgroundImageObject = $this->prepareJpegImageObject($backgroundPath);
+        }
+        $logoImageObject = null;
+        if ($logoPath !== null) {
+            $logoImageObject = $this->prepareJpegImageObject($logoPath);
         }
 
         $streamParts = [];
@@ -39,29 +51,56 @@ class ProgramKemitraanCertificatePdfService
             $streamParts[] = 'Q';
         }
 
-        $streamParts[] = $this->text('F2', 42, $this->centeredX($certificateTitle, 42) - 32.0, 525, strtoupper($certificateTitle));
-        $streamParts[] = $this->text('F1', 18, $this->centeredX('Dengan ini menyatakan bahwa', 18), 495, 'Dengan ini menyatakan bahwa');
-        $streamParts[] = $this->text('F2', 54, $this->centeredX($participantName, 54) - 32.0, 420, strtoupper($participantName));
-        $streamParts[] = '0.74 0.12 0.12 RG';
-        $streamParts[] = '1.2 w';
-        $streamParts[] = '138 404 m 704 404 l S';
-        $streamParts[] = $this->text('F2', 32, $this->centeredX('Sebagai PESERTA', 32), 360, 'Sebagai PESERTA');
+        if ($logoImageObject !== null) {
+            $targetHeight = 58.0;
+            $targetWidth = $targetHeight * ($logoImageObject['width'] / max(1, $logoImageObject['height']));
+            $targetWidth = min($targetWidth, 72.0);
+            $streamParts[] = 'q';
+            $streamParts[] = sprintf(
+                '%.2F 0 0 %.2F %.2F %.2F cm',
+                $targetWidth,
+                $targetHeight,
+                (self::PAGE_WIDTH - $targetWidth) / 2,
+                525.0
+            );
+            $streamParts[] = '/Logo1 Do';
+            $streamParts[] = 'Q';
+        } else {
+            $streamParts[] = $this->kemnakerMark();
+        }
 
-        $descriptionLines = $this->wrapTextByWidth(
-            'Sertifikat ini diberikan sebagai bentuk apresiasi atas partisipasi, kontribusi, dan antusiasme dalam mendukung kelancaran kegiatan ' . $activityName . '.',
-            14,
-            self::PAGE_WIDTH - 180
+        $streamParts[] = $this->text('F2', 16, $this->centeredX($ministryHeader, 16), 505, $ministryHeader);
+        $titleSize = 52.0;
+        $streamParts[] = $this->text('F3', $titleSize, $this->centeredX($certificateTitle, $titleSize), 442, $certificateTitle);
+        $streamParts[] = $this->text('F1', 16, $this->centeredX('NOMOR ' . $certificateNumber, 16), 412, 'NOMOR ' . $certificateNumber);
+        $streamParts[] = $this->text('F1', 18, $this->centeredX('Diberikan kepada:', 18), 380, 'Diberikan kepada:');
+
+        $nameSize = $this->fitFontSize($participantName, 30, 18, 620);
+        $nameX = $this->centeredX($participantName, $nameSize);
+        $streamParts[] = $this->text('F4', $nameSize, $nameX, 340, $participantName);
+        $nameWidth = min(620.0, $this->estimateTextWidth($participantName, $nameSize));
+        $streamParts[] = '0 0 0 RG';
+        $streamParts[] = '1 w';
+        $streamParts[] = sprintf('%.2F 334 m %.2F 334 l S', (self::PAGE_WIDTH - $nameWidth) / 2, (self::PAGE_WIDTH + $nameWidth) / 2);
+
+        $description = sprintf(
+            'Atas partisipasinya sebagai %s dalam acara %s yang dilaksanakan pada tanggal %s di %s.',
+            $participantRole,
+            $activityName,
+            $this->normalizeText($activityDate),
+            $activityLocation
         );
-        $descriptionY = 304;
+        $descriptionLines = $this->wrapTextByWidth($description, 14, self::PAGE_WIDTH - 150);
+        $descriptionY = 300;
         foreach ($descriptionLines as $line) {
-            $streamParts[] = $this->text('F1', 14, $this->centeredX($line, 14) + 12.0, $descriptionY, $line);
-            $descriptionY -= 22;
+            $streamParts[] = $this->text('F1', 14, $this->centeredX($line, 14), $descriptionY, $line);
+            $descriptionY -= 21;
         }
 
         $imageCommands = [];
         if ($signatureImageObject !== null) {
-            $targetWidth = 190.0;
-            $targetHeight = 78.0;
+            $targetWidth = 135.0;
+            $targetHeight = 60.0;
             $ratio = $signatureImageObject['width'] / max(1, $signatureImageObject['height']);
             if ($ratio > 0) {
                 if (($targetWidth / $targetHeight) > $ratio) {
@@ -70,16 +109,19 @@ class ProgramKemitraanCertificatePdfService
                     $targetHeight = $targetWidth / $ratio;
                 }
             }
-            $x = (self::PAGE_WIDTH - $targetWidth) / 2;
-            $y = 102;
+            $x = 625.0 + ((145.0 - $targetWidth) / 2);
+            $y = 76;
             $imageCommands[] = 'q';
             $imageCommands[] = sprintf('%.2F 0 0 %.2F %.2F %.2F cm', $targetWidth, $targetHeight, $x, $y);
             $imageCommands[] = '/Im1 Do';
             $imageCommands[] = 'Q';
         }
 
-        $streamParts[] = $this->text('F1', 18, $this->centeredX('Kepala Pusat Pasar Kerja', 18), 202, 'Kepala Pusat Pasar Kerja');
-        $streamParts[] = $this->text('F2', 20, $this->centeredX($signerName, 20), 64, $signerName);
+        $signatureX = 625.0;
+        $streamParts[] = $this->text('F1', 12, $signatureX, 202, $signPlace . ', ' . $this->normalizeText($activityDate));
+        $streamParts[] = $this->text('F1', 12, $signatureX, 183, $signerPosition . ',');
+        $streamParts[] = $this->text('F1', 12, $signatureX, 151, 'Ttd. (cap)/TTE');
+        $streamParts[] = $this->text('F2', 12, $signatureX, 56, $signerName);
 
         if (!empty($imageCommands)) {
             $streamParts = array_merge($streamParts, $imageCommands);
@@ -88,7 +130,9 @@ class ProgramKemitraanCertificatePdfService
         $contentStream = implode("\n", $streamParts) . "\n";
         $fontRegularObjectId = 5;
         $fontBoldObjectId = 6;
-        $nextObjectId = 7;
+        $fontScriptObjectId = 7;
+        $fontNameObjectId = 8;
+        $nextObjectId = 9;
 
         $backgroundObjectId = null;
         if ($backgroundImageObject !== null) {
@@ -102,14 +146,23 @@ class ProgramKemitraanCertificatePdfService
             $nextObjectId++;
         }
 
-        $resources = '<< /Font << /F1 ' . $fontRegularObjectId . ' 0 R /F2 ' . $fontBoldObjectId . ' 0 R >>';
-        if ($backgroundObjectId !== null || $signatureObjectId !== null) {
+        $logoObjectId = null;
+        if ($logoImageObject !== null) {
+            $logoObjectId = $nextObjectId;
+        }
+
+        $resources = '<< /Font << /F1 ' . $fontRegularObjectId . ' 0 R /F2 ' . $fontBoldObjectId
+            . ' 0 R /F3 ' . $fontScriptObjectId . ' 0 R /F4 ' . $fontNameObjectId . ' 0 R >>';
+        if ($backgroundObjectId !== null || $signatureObjectId !== null || $logoObjectId !== null) {
             $resources .= ' /XObject <<';
             if ($backgroundObjectId !== null) {
                 $resources .= ' /Bg1 ' . $backgroundObjectId . ' 0 R';
             }
             if ($signatureObjectId !== null) {
                 $resources .= ' /Im1 ' . $signatureObjectId . ' 0 R';
+            }
+            if ($logoObjectId !== null) {
+                $resources .= ' /Logo1 ' . $logoObjectId . ' 0 R';
             }
             $resources .= ' >>';
         }
@@ -122,6 +175,8 @@ class ProgramKemitraanCertificatePdfService
         $objects[] = '<< /Length ' . strlen($contentStream) . " >>\nstream\n" . $contentStream . "endstream";
         $objects[] = '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>';
         $objects[] = '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>';
+        $objects[] = '<< /Type /Font /Subtype /Type1 /BaseFont /Times-Italic /Encoding /WinAnsiEncoding >>';
+        $objects[] = '<< /Type /Font /Subtype /Type1 /BaseFont /Times-Bold /Encoding /WinAnsiEncoding >>';
 
         if ($backgroundImageObject !== null) {
             $objects[] = '<< /Type /XObject /Subtype /Image /Width ' . $backgroundImageObject['width']
@@ -137,7 +192,53 @@ class ProgramKemitraanCertificatePdfService
                 . strlen($signatureImageObject['data']) . " >>\nstream\n" . $signatureImageObject['data'] . "\nendstream";
         }
 
+        if ($logoImageObject !== null) {
+            $objects[] = '<< /Type /XObject /Subtype /Image /Width ' . $logoImageObject['width']
+                . ' /Height ' . $logoImageObject['height']
+                . ' /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length '
+                . strlen($logoImageObject['data']) . " >>\nstream\n" . $logoImageObject['data'] . "\nendstream";
+        }
+
         return $this->renderPdf($objects);
+    }
+
+    private function participantRole(
+        ProgramKemitraanEvaluation $evaluation,
+        ?ProgramKemitraanCertificateSetting $setting
+    ): string {
+        $role = trim((string) ($evaluation->respondent_role ?: $setting?->participation_role_default ?: 'Peserta'));
+
+        return $this->normalizeText($role);
+    }
+
+    private function fitFontSize(string $text, float $preferredSize, float $minimumSize, float $maxWidth): float
+    {
+        $size = $preferredSize;
+        while ($size > $minimumSize && $this->estimateTextWidth($text, $size) > $maxWidth) {
+            $size -= 1.0;
+        }
+
+        return $size;
+    }
+
+    private function kemnakerMark(): string
+    {
+        return implode("\n", [
+            'q',
+            '0.17 0.30 0.39 RG',
+            '0.17 0.30 0.39 rg',
+            '7 w',
+            '1 J',
+            '397 575 m 445 527 l S',
+            '409 581 m 451 539 l S',
+            '445 575 m 397 527 l S',
+            '433 581 m 391 539 l S',
+            '390 574 8 8 re f',
+            '444 574 8 8 re f',
+            '390 526 8 8 re f',
+            '444 526 8 8 re f',
+            'Q',
+        ]);
     }
 
     private function text(string $fontAlias, float $fontSize, float $x, float $y, string $text): string
