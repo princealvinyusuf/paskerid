@@ -851,7 +851,6 @@
 
                 careerRecommendationsGrid.innerHTML = normalized.map((career) => {
                     const fitScore = Math.max(0, Math.min(100, Number(career.fit_score) || 0));
-                    const zone = Math.max(1, Math.min(5, Number(career.job_zone) || 1));
                     const matchedSkills = Array.isArray(career.matched_skills)
                         ? career.matched_skills.filter(Boolean).slice(0, 5)
                         : [];
@@ -863,7 +862,6 @@
                             <article class="career-fit-card card border h-100 rounded-4 p-3 shadow-sm">
                                 <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
                                     <h4 class="h6 fw-bold text-dark mb-0">${escapeHtml(career.title)}</h4>
-                                    <span class="badge rounded-pill bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 text-nowrap">Job Zone ${zone}</span>
                                 </div>
                                 <div class="d-flex align-items-center gap-2 mb-2">
                                     <div class="progress flex-grow-1" style="height: 7px;">
@@ -1008,7 +1006,7 @@
                 doc.setTextColor(255, 255, 255);
                 doc.setFontSize(9);
                 doc.setFont('helvetica', 'bold');
-                doc.text('Cari Loker - Bedah CV Gratis', logoDataUrl ? 12 : 14, 6);
+                doc.text('Pusat Pasar Kerja - Bedah CV Gratis', logoDataUrl ? 12 : 14, 6);
                 doc.setTextColor(100, 116, 139);
                 doc.setFontSize(9);
                 doc.setFont('helvetica', 'normal');
@@ -1173,36 +1171,45 @@
                 y = addPdfSectionHeading(doc, `Detailed Aspect Review (${aspects.length})`, y);
 
                 for (const aspect of aspects) {
-                    y = ensurePdfSpace(doc, y, 34);
+                    doc.setFontSize(10);
+                    doc.setFont('helvetica', 'normal');
+                    const analysisLines = wrapTextForPdf(doc, aspect.analysis || '-', 174);
+                    const actionPoints = formatBulletItems(aspect.action_points).slice(0, 3);
+                    const actionPointLines = actionPoints.map((point) => wrapTextForPdf(doc, `- ${point}`, 168));
+                    const actionLinesHeight = actionPointLines.reduce((height, lines) => height + (lines.length * 4.8) + 1.5, 0);
+                    const cardHeight = 18 + (analysisLines.length * 5.1) + 7 + actionLinesHeight;
+
+                    y = ensurePdfSpace(doc, y, cardHeight + 6);
+                    const cardTop = y - 5;
                     doc.setDrawColor(226, 232, 240);
-                    doc.roundedRect(14, y - 4, 182, 28, 2, 2, 'S');
+                    doc.setFillColor(255, 255, 255);
+                    doc.roundedRect(14, cardTop, 182, cardHeight, 2, 2, 'FD');
                     doc.setFontSize(11);
                     doc.setFont('helvetica', 'bold');
-                    doc.text(`${aspect.name || 'Aspect'}`, 15, y);
+                    doc.text(`${aspect.name || 'Aspect'}`, 18, y);
                     const score = Number(aspect.score || 0);
                     const toneStyle = getPdfScoreToneStyle(score);
                     doc.setFillColor(...toneStyle.bg);
                     doc.roundedRect(160, y - 3.7, 30, 7, 2, 2, 'F');
                     doc.setTextColor(...toneStyle.text);
                     doc.setFontSize(10);
-                    doc.text(`${score}%`, 171, y + 1);
+                    doc.text(`${score}%`, 175, y + 1, { align: 'center' });
                     doc.setTextColor(15, 23, 42);
-                    y += 5;
+                    y += 7;
                     doc.setFontSize(10);
                     doc.setFont('helvetica', 'normal');
-                    y = addPdfParagraph(doc, aspect.analysis || '-', y, { maxWidth: 176, x: 15, lineHeight: 5.1 });
+                    doc.text(analysisLines, 18, y);
+                    y += (analysisLines.length * 5.1) + 4;
 
-                    const actionPoints = formatBulletItems(aspect.action_points);
-                    y = ensurePdfSpace(doc, y, 10);
                     doc.setFont('helvetica', 'bold');
-                    doc.text('Action Points:', 15, y);
+                    doc.text('Action Points:', 18, y);
                     y += 5;
                     doc.setFont('helvetica', 'normal');
-                    for (const point of actionPoints.slice(0, 3)) {
-                        y = ensurePdfSpace(doc, y, 7);
-                        y = addPdfParagraph(doc, `- ${point}`, y, { maxWidth: 172, x: 17, lineHeight: 4.8 });
+                    for (const lines of actionPointLines) {
+                        doc.text(lines, 20, y);
+                        y += (lines.length * 4.8) + 1.5;
                     }
-                    y += 2;
+                    y = cardTop + cardHeight + 6;
                 }
 
                     const totalPages = doc.getNumberOfPages();
