@@ -502,11 +502,6 @@
                         </a>
                     </li> 
                     <li class="nav-item">
-                        <a class="nav-link @if(request()->routeIs('cv.reviewer')) active fw-bold @endif" href="{{ route('cv.reviewer') }}" onclick="let p = prompt('Masukkan password untuk mengakses fitur ini:'); if(p !== 'Pusatpasarkerj4') { alert('Password salah!'); return false; }">
-                            CV Review
-                        </a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link" href="https://paskerid.kemnaker.go.id/RIASEC/" target="_blank">
                             Minat Karir
                         </a>
