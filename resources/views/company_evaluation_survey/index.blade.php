@@ -23,6 +23,11 @@
     $customScaleLabels = [
         'service_speed' => [1 => 'Sangat Lama', 2 => 'Lama', 3 => 'Cepat', 4 => 'Sangat Cepat'],
         'fee_compliance' => [1 => 'Pernah', 2 => 'Tidak Pernah'],
+        'product_quality' => [1 => 'Tidak Berkualitas', 2 => 'Kurang Berkualitas', 3 => 'Berkualitas', 4 => 'Sangat Berkualitas'],
+        'officer_competence' => [1 => 'Tidak Kompeten', 2 => 'Kurang Kompeten', 3 => 'Kompeten', 4 => 'Sangat Kompeten'],
+        'officer_behavior' => [1 => 'Tidak Sopan dan Ramah', 2 => 'Kurang Sopan dan Ramah', 3 => 'Sopan dan Ramah', 4 => 'Sangat Sopan dan Ramah'],
+        'facility_quality' => [1 => 'Tidak Nyaman', 2 => 'Cukup Nyaman', 3 => 'Nyaman', 4 => 'Sangat Nyaman'],
+        'complaint_media_completeness' => [1 => 'Tidak Ada', 2 => 'Kurang Lengkap', 3 => 'Lengkap', 4 => 'Sangat Lengkap'],
     ];
 @endphp
 
