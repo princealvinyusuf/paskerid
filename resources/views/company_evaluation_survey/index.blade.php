@@ -28,6 +28,7 @@
         'officer_behavior' => [1 => 'Tidak Sopan dan Ramah', 2 => 'Kurang Sopan dan Ramah', 3 => 'Sopan dan Ramah', 4 => 'Sangat Sopan dan Ramah'],
         'facility_quality' => [1 => 'Tidak Nyaman', 2 => 'Cukup Nyaman', 3 => 'Nyaman', 4 => 'Sangat Nyaman'],
         'complaint_media_completeness' => [1 => 'Tidak Ada', 2 => 'Kurang Lengkap', 3 => 'Lengkap', 4 => 'Sangat Lengkap'],
+        'procedure_information_fit' => [1 => 'Tidak Sesuai', 2 => 'Kurang Sesuai', 3 => 'Sesuai', 4 => 'Sangat Sesuai'],
         'admin_service_hours_fit' => [1 => 'Tidak Sesuai', 2 => 'Kurang Sesuai', 3 => 'Sesuai', 4 => 'Sangat Sesuai'],
         'candidate_fit' => [1 => 'Tidak Sesuai', 2 => 'Kurang Sesuai', 3 => 'Sesuai', 4 => 'Sangat Sesuai'],
     ];
@@ -172,10 +173,11 @@
                             <p class="text-muted mb-4">Gunakan skala penilaian 1–4 yang sama.</p>
                             <div class="d-grid gap-3">
                                 @foreach($qualityQuestions as $field => $question)
+                                    @php $questionScaleLabels = $customScaleLabels[$field] ?? $scaleLabels; @endphp
                                     <div class="question-card">
                                         <div class="fw-semibold mb-3">{{ $loop->iteration }}. {{ $question }} <span class="text-danger">*</span></div>
                                         <div class="d-flex flex-wrap gap-2">
-                                            @foreach($scaleLabels as $score => $label)
+                                            @foreach($questionScaleLabels as $score => $label)
                                                 <div class="form-check scale-option">
                                                     <input class="form-check-input" type="radio" id="{{ $field }}_{{ $score }}" name="{{ $field }}" value="{{ $score }}" @checked((string) old($field) === (string) $score) required>
                                                     <label class="form-check-label" for="{{ $field }}_{{ $score }}"><strong>{{ $score }}</strong> — {{ $label }}</label>
