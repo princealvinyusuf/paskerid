@@ -13,6 +13,7 @@ use App\Http\Controllers\CommunityForumController;
 use App\Http\Controllers\FormHasilKonselingController;
 use App\Http\Controllers\LaporLokerController;
 use App\Http\Controllers\ProgramKemitraanCertificateController;
+use App\Http\Controllers\CompanyEvaluationSurveyController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -94,6 +95,13 @@ Route::post('kemitraan/form/verify-passcode', [App\Http\Controllers\KemitraanCon
     ->name('kemitraan.form.verify-passcode');
 Route::get('kemitraan/fully-booked-dates', [App\Http\Controllers\KemitraanController::class, 'fullyBookedDates'])->name('kemitraan.fullyBookedDates');
 Route::get('kemitraan/statistics/row1', [App\Http\Controllers\KemitraanController::class, 'getFilteredRow1Statistics'])->name('kemitraan.statistics.row1');
+
+// Company evaluation survey (public, intentionally not linked in the Walk In Interview menu)
+Route::get('/survei-evaluasi-perusahaan', [CompanyEvaluationSurveyController::class, 'index'])
+    ->name('company-evaluation-survey.index');
+Route::post('/survei-evaluasi-perusahaan', [CompanyEvaluationSurveyController::class, 'store'])
+    ->middleware('throttle:10,1')
+    ->name('company-evaluation-survey.store');
 
 // Walk-in Interview Gallery (public)
 Route::get('/walkin-gallery/feed', [WalkinGalleryController::class, 'feed'])->name('walkin-gallery.feed');
