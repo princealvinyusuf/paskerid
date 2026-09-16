@@ -28,6 +28,8 @@
         'officer_behavior' => [1 => 'Tidak Sopan dan Ramah', 2 => 'Kurang Sopan dan Ramah', 3 => 'Sopan dan Ramah', 4 => 'Sangat Sopan dan Ramah'],
         'facility_quality' => [1 => 'Tidak Nyaman', 2 => 'Cukup Nyaman', 3 => 'Nyaman', 4 => 'Sangat Nyaman'],
         'complaint_media_completeness' => [1 => 'Tidak Ada', 2 => 'Kurang Lengkap', 3 => 'Lengkap', 4 => 'Sangat Lengkap'],
+        'admin_service_hours_fit' => [1 => 'Tidak Sesuai', 2 => 'Kurang Sesuai', 3 => 'Sesuai', 4 => 'Sangat Sesuai'],
+        'candidate_fit' => [1 => 'Tidak Sesuai', 2 => 'Kurang Sesuai', 3 => 'Sesuai', 4 => 'Sangat Sesuai'],
     ];
 @endphp
 
