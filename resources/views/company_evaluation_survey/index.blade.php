@@ -20,6 +20,10 @@
         'candidate_fit' => 'Kesesuaian karakteristik pencari kerja dengan kebutuhan perusahaan Anda.',
     ];
     $scaleLabels = [1 => 'Tidak Mudah', 2 => 'Kurang Mudah', 3 => 'Mudah', 4 => 'Sangat Mudah'];
+    $customScaleLabels = [
+        'service_speed' => [1 => 'Sangat Lama', 2 => 'Lama', 3 => 'Cepat', 4 => 'Sangat Cepat'],
+        'fee_compliance' => [1 => 'Pernah', 2 => 'Tidak Pernah'],
+    ];
 @endphp
 
 <style>
@@ -139,13 +143,14 @@
                             </div>
 
                             <h2 class="h5 fw-bold section-title mt-5 mb-2">Kepuasan Pengguna</h2>
-                            <p class="text-muted mb-4">Pilih skala 1–4: 1 Tidak Mudah, 2 Kurang Mudah, 3 Mudah, dan 4 Sangat Mudah.</p>
+                            <p class="text-muted mb-4">Pilih jawaban yang paling sesuai pada setiap pertanyaan.</p>
                             <div class="d-grid gap-3">
                                 @foreach($satisfactionQuestions as $field => $question)
+                                    @php $questionScaleLabels = $customScaleLabels[$field] ?? $scaleLabels; @endphp
                                     <div class="question-card">
                                         <div class="fw-semibold mb-3">{{ $loop->iteration }}. {{ $question }} <span class="text-danger">*</span></div>
                                         <div class="d-flex flex-wrap gap-2">
-                                            @foreach($scaleLabels as $score => $label)
+                                            @foreach($questionScaleLabels as $score => $label)
                                                 <div class="form-check scale-option">
                                                     <input class="form-check-input" type="radio" id="{{ $field }}_{{ $score }}" name="{{ $field }}" value="{{ $score }}" @checked((string) old($field) === (string) $score) required>
                                                     <label class="form-check-label" for="{{ $field }}_{{ $score }}"><strong>{{ $score }}</strong> — {{ $label }}</label>

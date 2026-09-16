@@ -72,6 +72,7 @@ class CompanyEvaluationSurveyController extends Controller
         foreach (self::RATING_FIELDS as $field) {
             $rules[$field] = ['required', 'integer', 'between:1,4'];
         }
+        $rules['fee_compliance'] = ['required', 'integer', 'between:1,2'];
 
         $validated = $request->validate($rules);
         $validated['information_sources'] = array_values(array_unique($validated['information_sources']));
