@@ -35,8 +35,15 @@
           @endif
 
           <div class="card-body d-flex flex-column">
+            @php
+                $previewContent = html_entity_decode((string) ($item->content ?? ''), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+                $previewContent = str_replace("\u{00A0}", ' ', $previewContent);
+                $previewContent = strip_tags($previewContent);
+                $previewContent = preg_replace('/\s+/u', ' ', $previewContent) ?? '';
+                $previewContent = trim($previewContent);
+            @endphp
             <h5 class="card-title fw-bold line-2">{{ $item->title }}</h5>
-            <p class="card-text flex-grow-1 line-3">{{ Str::limit($item->content, 160) }}</p>
+            <p class="card-text flex-grow-1 line-3">{{ Str::limit($previewContent, 160) }}</p>
           </div>
 
           <div class="card-footer bg-white d-flex justify-content-between text-muted text-sm mt-auto">
