@@ -44,8 +44,15 @@
             
             <img src="{{ asset($news->image_url) }}" alt="{{ $news->title }}" class="img-fluid rounded-3 mb-2 gambarBerita" style="margin-bottom: 28px;">
 
+            @php
+                $newsContent = (string) ($news->content ?? '');
+                // Support content that might be stored as escaped HTML text.
+                if (\Illuminate\Support\Str::contains($newsContent, ['&lt;', '&gt;'])) {
+                    $newsContent = html_entity_decode($newsContent, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+                }
+            @endphp
             <div class="contentBerita" style="font-size: 1.18rem; line-height: 1.85; color: #222; margin-bottom: 10px;">
-                {!! nl2br(e($news->content)) !!}
+                {!! $newsContent !!}
             </div>
         </div>
 
@@ -247,6 +254,55 @@ document.addEventListener('DOMContentLoaded', function() {
     line-height: 1.85;
     color: #222;
     margin-bottom: 10px;
+}
+
+.contentBerita h1,
+.contentBerita h2,
+.contentBerita h3,
+.contentBerita h4,
+.contentBerita h5,
+.contentBerita h6 {
+    margin-top: 1rem;
+    margin-bottom: 0.75rem;
+    font-weight: 700;
+}
+
+.contentBerita p {
+    margin-bottom: 1rem;
+}
+
+.contentBerita ul,
+.contentBerita ol {
+    padding-left: 1.4rem;
+    margin-bottom: 1rem;
+}
+
+.contentBerita blockquote {
+    border-left: 4px solid #00a78e;
+    padding-left: 0.9rem;
+    margin: 1rem 0;
+    color: #495057;
+}
+
+.contentBerita pre {
+    background: #f7f7f9;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 0.8rem 1rem;
+    overflow-x: auto;
+    font-size: 0.95rem;
+}
+
+.contentBerita .ql-align-right {
+    text-align: right;
+}
+
+.contentBerita .ql-align-center {
+    text-align: center;
+}
+
+.contentBerita .ql-align-justify {
+    text-align: justify;
 }
 .section-title {
     position: relative;
