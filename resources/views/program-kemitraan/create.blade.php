@@ -646,9 +646,11 @@
                         <a href="{{ route('program-kemitraan.create', ['tab' => 'pendaftaran']) }}" class="pk-seg-btn {{ $activeTab === 'pendaftaran' ? 'active' : '' }}" role="tab" aria-selected="{{ $activeTab === 'pendaftaran' ? 'true' : 'false' }}">
                             Pendaftaran Program Kemitraan
                         </a>
-                        <a href="{{ route('program-kemitraan.create', ['tab' => 'evaluasi']) }}" class="pk-seg-btn {{ $activeTab === 'evaluasi' ? 'active' : '' }}" role="tab" aria-selected="{{ $activeTab === 'evaluasi' ? 'true' : 'false' }}">
-                            Form Evaluasi
-                        </a>
+                        @if ($evaluationTabEnabled ?? false)
+                            <a href="{{ route('program-kemitraan.create', ['tab' => 'evaluasi']) }}" class="pk-seg-btn {{ $activeTab === 'evaluasi' ? 'active' : '' }}" role="tab" aria-selected="{{ $activeTab === 'evaluasi' ? 'true' : 'false' }}">
+                                Form Evaluasi
+                            </a>
+                        @endif
                         @if ($resultsAndCertificateTabsEnabled ?? false)
                             <a href="{{ route('program-kemitraan.create', ['tab' => 'hasil-evaluasi']) }}" class="pk-seg-btn {{ $activeTab === 'hasil-evaluasi' ? 'active' : '' }}" role="tab" aria-selected="{{ $activeTab === 'hasil-evaluasi' ? 'true' : 'false' }}">
                                 Hasil Evaluasi
@@ -656,13 +658,6 @@
                             <a href="{{ route('program-kemitraan.create', ['tab' => 'sertifikat']) }}" class="pk-seg-btn {{ $activeTab === 'sertifikat' ? 'active' : '' }}" role="tab" aria-selected="{{ $activeTab === 'sertifikat' ? 'true' : 'false' }}">
                                 Sertifikat
                             </a>
-                        @else
-                            <span class="pk-seg-btn disabled" role="tab" aria-selected="false" aria-disabled="true" title="Sedang dalam pengembangan">
-                                Hasil Evaluasi
-                            </span>
-                            <span class="pk-seg-btn disabled" role="tab" aria-selected="false" aria-disabled="true" title="Sedang dalam pengembangan">
-                                Sertifikat
-                            </span>
                         @endif
                     </div>
 

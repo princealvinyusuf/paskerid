@@ -16,7 +16,8 @@ class ProgramKemitraanController extends Controller
     private const TAB_EVALUASI = 'evaluasi';
     private const TAB_HASIL_EVALUASI = 'hasil-evaluasi';
     private const TAB_SERTIFIKAT = 'sertifikat';
-    private const RESULTS_AND_CERTIFICATE_TABS_ENABLED = true;
+    private const EVALUATION_TAB_ENABLED = false;
+    private const RESULTS_AND_CERTIFICATE_TABS_ENABLED = false;
     private const SCORE_OPTIONS = ['1', '2', '3', '4', '5'];
 
     /**
@@ -424,7 +425,11 @@ class ProgramKemitraanController extends Controller
 
     private function resolveTab(?string $tab): string
     {
-        $allowedTabs = [self::TAB_PENDAFTARAN, self::TAB_EVALUASI];
+        $allowedTabs = [self::TAB_PENDAFTARAN];
+
+        if (self::EVALUATION_TAB_ENABLED) {
+            $allowedTabs[] = self::TAB_EVALUASI;
+        }
 
         if (self::RESULTS_AND_CERTIFICATE_TABS_ENABLED) {
             $allowedTabs[] = self::TAB_HASIL_EVALUASI;
@@ -774,6 +779,7 @@ class ProgramKemitraanController extends Controller
 
         return view('program-kemitraan.create', [
             'tab' => $tab,
+            'evaluationTabEnabled' => self::EVALUATION_TAB_ENABLED,
             'resultsAndCertificateTabsEnabled' => self::RESULTS_AND_CERTIFICATE_TABS_ENABLED,
             'institutionCategories' => $this->institutionCategories(),
             'mitraPembangunanTypes' => $this->mitraPembangunanTypes(),
