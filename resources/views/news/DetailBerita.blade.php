@@ -168,6 +168,7 @@ document.addEventListener('DOMContentLoaded', function() {
     border-radius: 18px;
     box-shadow: 0 6px 32px 0 rgba(0,0,0,0.16), 0 1.5px 6px 0 rgba(0,0,0,0.10);
     padding: 32px 0 32px 0;
+    overflow: hidden;
 }
 
 /* Popular News Card */
@@ -254,6 +255,12 @@ document.addEventListener('DOMContentLoaded', function() {
     line-height: 1.85;
     color: #222;
     margin-bottom: 10px;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
+.contentBerita * {
+    max-width: 100%;
 }
 
 .contentBerita h1,
@@ -291,6 +298,22 @@ document.addEventListener('DOMContentLoaded', function() {
     padding: 0.8rem 1rem;
     overflow-x: auto;
     font-size: 0.95rem;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.contentBerita img,
+.contentBerita video,
+.contentBerita iframe {
+    max-width: 100%;
+    height: auto;
+}
+
+.contentBerita table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    border-collapse: collapse;
 }
 
 .contentBerita .ql-align-right {
