@@ -255,12 +255,28 @@ document.addEventListener('DOMContentLoaded', function() {
     line-height: 1.85;
     color: #222;
     margin-bottom: 10px;
-    overflow-wrap: break-word;
+    overflow-wrap: normal;
     word-break: normal;
+    hyphens: none;
 }
 
 .contentBerita * {
     max-width: 100%;
+}
+
+.contentBerita p,
+.contentBerita li,
+.contentBerita blockquote,
+.contentBerita span,
+.contentBerita strong,
+.contentBerita em {
+    overflow-wrap: normal !important;
+    word-break: normal !important;
+    hyphens: none !important;
+}
+
+.contentBerita a {
+    overflow-wrap: anywhere;
 }
 
 .contentBerita h1,
