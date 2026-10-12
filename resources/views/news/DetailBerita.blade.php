@@ -50,6 +50,13 @@
                 if (\Illuminate\Support\Str::contains($newsContent, ['&lt;', '&gt;'])) {
                     $newsContent = html_entity_decode($newsContent, ENT_QUOTES | ENT_HTML5, 'UTF-8');
                 }
+                // Rich-text editors can store ordinary spaces as non-breaking spaces,
+                // which makes a whole paragraph unwrappable and splits words at the edge.
+                $newsContent = preg_replace(
+                    '/(?:&nbsp;|&#0*160;|&#x0*a0;|\x{00a0})/iu',
+                    ' ',
+                    $newsContent
+                );
             @endphp
             <div class="contentBerita" style="font-size: 1.18rem; line-height: 1.85; color: #222; margin-bottom: 10px;">
                 {!! $newsContent !!}
