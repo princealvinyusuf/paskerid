@@ -255,8 +255,8 @@ document.addEventListener('DOMContentLoaded', function() {
     line-height: 1.85;
     color: #222;
     margin-bottom: 10px;
-    overflow-wrap: anywhere;
-    word-break: break-word;
+    overflow-wrap: break-word;
+    word-break: normal;
 }
 
 .contentBerita * {
