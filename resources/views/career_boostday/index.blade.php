@@ -795,17 +795,17 @@
                                 <div class="col-12 col-md-6">
                                     <label class="form-label fw-semibold">Metode Curhat</label>
                                     @php
-                                        $jenisOld = old('jenis_konseling', 'Online (Zoom)');
+                                        $jenisOld = old('jenis_konseling', 'online');
                                         $jenisOnline = 'Online (Zoom)';
                                         $jenisOffline = 'Offline (datang langsung ke kantor Pusat Pasar Kerja, Jl. Gatot Subroto No.44, Jakarta Selatan)';
                                     @endphp
                                     <div class="d-flex flex-column gap-2">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="jenis_konseling" id="jenis_online" value="{{ $jenisOnline }}" {{ $jenisOld === $jenisOnline ? 'checked' : '' }} required>
+                                            <input class="form-check-input" type="radio" name="jenis_konseling" id="jenis_online" value="online" {{ $jenisOld === 'online' ? 'checked' : '' }} required>
                                             <label class="form-check-label" for="jenis_online">{{ $jenisOnline }}</label>
                                         </div>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="jenis_konseling" id="jenis_offline" value="{{ $jenisOffline }}" {{ $jenisOld === $jenisOffline ? 'checked' : '' }} required>
+                                            <input class="form-check-input" type="radio" name="jenis_konseling" id="jenis_offline" value="offline" {{ $jenisOld === 'offline' ? 'checked' : '' }} required>
                                             <label class="form-check-label" for="jenis_offline">{{ $jenisOffline }}</label>
                                         </div>
                                     </div>

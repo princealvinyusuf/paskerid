@@ -162,7 +162,7 @@ class CareerBoostdayController extends Controller
             'email' => ['required', 'string', 'email', 'max:120'],
             'status_choice' => ['required', 'string', 'in:fresh,pindah,lainnya'],
             'status_other' => ['nullable', 'string', 'max:120'],
-            'jenis_konseling' => ['required', 'string', 'max:255'],
+            'jenis_konseling' => ['required', 'string', Rule::in(['online', 'offline'])],
             'jadwal_konseling' => $jadwalRule,
             'pendidikan_choice' => ['nullable', 'string', 'max:40'],
             'pendidikan_other' => ['nullable', 'string', 'max:120'],
@@ -214,11 +214,16 @@ class CareerBoostdayController extends Controller
             $jurusan = $j !== '' ? $j : null;
         }
 
+        $jenisKonseling = match ($validated['jenis_konseling']) {
+            'online' => 'Online (Zoom)',
+            'offline' => 'Offline (datang langsung ke kantor Pusat Pasar Kerja, Jl. Gatot Subroto No.44, Jakarta Selatan)',
+        };
+
         $payload = [
             'name' => $validated['name'],
             'whatsapp' => $validated['whatsapp'],
             'status' => $status,
-            'jenis_konseling' => $validated['jenis_konseling'],
+            'jenis_konseling' => $jenisKonseling,
             'jadwal_konseling' => $validated['jadwal_konseling'],
             'pendidikan_terakhir' => $pendidikan,
             'cv_path' => $cvPath,
