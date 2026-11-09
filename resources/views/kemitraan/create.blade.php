@@ -908,18 +908,38 @@
                         <div class="walkin-panel p-3 p-md-4 mb-3">
                             <div class="form-label">Dari mana Anda mengetahui <em>Walk in Interview</em> yang diadakan di Pusat Pasar Kerja? <span class="text-danger">*</span></div>
                             <div class="d-grid gap-2 mb-0">
-                                @foreach(['Sosial media', 'Dinas Ketenagakerjaan', 'Teman/Keluarga/Kerabat', 'Sekolah / Universitas'] as $idx => $option)
+                                @php
+                                    $selectedInfoSources = (array) old('survey_info_source', []);
+                                    $selectedSocialMedia = (array) old('survey_social_media', []);
+                                @endphp
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="survey_info_source[]" id="survey_info_source_social_media" value="Sosial media" @checked(in_array('Sosial media', $selectedInfoSources, true))>
+                                    <label class="form-check-label" for="survey_info_source_social_media">Sosial media</label>
+                                </div>
+                                <div id="survey_social_media_options" class="ms-4 ps-3 border-start d-grid gap-2 {{ in_array('Sosial media', $selectedInfoSources, true) ? '' : 'd-none' }}">
+                                    <div class="small text-muted">Pilih sosial media yang Anda gunakan: <span class="text-danger">*</span></div>
+                                    @foreach(['Instagram', 'Facebook', 'TikTok', 'X (Twitter)', 'LinkedIn', 'YouTube'] as $idx => $option)
+                                        <div class="form-check">
+                                            <input class="form-check-input survey-social-media-option" type="checkbox" name="survey_social_media[]" id="survey_social_media_{{ $idx }}" value="{{ $option }}" @checked(in_array($option, $selectedSocialMedia, true))>
+                                            <label class="form-check-label" for="survey_social_media_{{ $idx }}">{{ $option }}</label>
+                                        </div>
+                                    @endforeach
+                                    @error('survey_social_media', 'survey')
+                                        <div class="text-danger small">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                @foreach(['Dinas Ketenagakerjaan', 'Teman/Keluarga/Kerabat', 'Sekolah / Universitas'] as $idx => $option)
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" name="survey_info_source[]" id="survey_info_source_{{ $idx }}" value="{{ $option }}">
+                                        <input class="form-check-input" type="checkbox" name="survey_info_source[]" id="survey_info_source_{{ $idx }}" value="{{ $option }}" @checked(in_array($option, $selectedInfoSources, true))>
                                         <label class="form-check-label" for="survey_info_source_{{ $idx }}">{{ $option }}</label>
                                     </div>
                                 @endforeach
                                 <div class="d-flex align-items-center gap-2">
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" name="survey_info_source[]" id="survey_info_source_other_checkbox" value="Other">
+                                        <input class="form-check-input" type="checkbox" name="survey_info_source[]" id="survey_info_source_other_checkbox" value="Other" @checked(in_array('Other', $selectedInfoSources, true))>
                                         <label class="form-check-label" for="survey_info_source_other_checkbox">Other:</label>
                                     </div>
-                                    <input type="text" class="form-control form-control-sm" name="survey_info_source_other" placeholder="Tuliskan sumber lainnya">
+                                    <input type="text" class="form-control form-control-sm" name="survey_info_source_other" value="{{ old('survey_info_source_other') }}" placeholder="Tuliskan sumber lainnya">
                                 </div>
                             </div>
                         </div>
@@ -3578,6 +3598,27 @@
         form.addEventListener('input', refreshProgress);
         form.addEventListener('change', refreshProgress);
         refreshProgress();
+    })();
+
+    // Survey: show social-media choices only when "Sosial media" is selected
+    (function () {
+        const socialMediaToggle = document.getElementById('survey_info_source_social_media');
+        const socialMediaOptions = document.getElementById('survey_social_media_options');
+        if (!socialMediaToggle || !socialMediaOptions) return;
+
+        const platformCheckboxes = Array.from(socialMediaOptions.querySelectorAll('.survey-social-media-option'));
+
+        function syncSocialMediaOptions() {
+            const isSelected = socialMediaToggle.checked;
+            socialMediaOptions.classList.toggle('d-none', !isSelected);
+            platformCheckboxes.forEach((checkbox, index) => {
+                checkbox.required = isSelected && index === 0 && !platformCheckboxes.some((item) => item.checked);
+            });
+        }
+
+        socialMediaToggle.addEventListener('change', syncSocialMediaOptions);
+        platformCheckboxes.forEach((checkbox) => checkbox.addEventListener('change', syncSocialMediaOptions));
+        syncSocialMediaOptions();
     })();
 
     // Survey: auto-fill Walk In Initiator from selected company

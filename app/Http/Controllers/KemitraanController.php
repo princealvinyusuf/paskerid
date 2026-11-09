@@ -15,6 +15,7 @@ use App\Models\WalkInSurveyResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Validation\Rule;
 use Carbon\Carbon;
 
 class KemitraanController extends Controller
@@ -439,7 +440,8 @@ class KemitraanController extends Controller
             !Schema::hasTable('walk_in_survey_initiators') ||
             !Schema::hasColumn('company_walk_in_survey', 'walk_in_initiator_id') ||
             !Schema::hasColumn('walk_in_survey_responses', 'walk_in_initiator_id') ||
-            !Schema::hasColumn('walk_in_survey_responses', 'walkin_initiator_snapshot')
+            !Schema::hasColumn('walk_in_survey_responses', 'walkin_initiator_snapshot') ||
+            !Schema::hasColumn('walk_in_survey_responses', 'social_media_sources')
         ) {
             return redirect()
                 ->route('kemitraan.create', ['panel' => 'survey'])
@@ -463,6 +465,15 @@ class KemitraanController extends Controller
             'survey_info_source' => 'required|array|min:1',
             'survey_info_source.*' => 'string|max:255',
             'survey_info_source_other' => 'nullable|string|max:255',
+            'survey_social_media' => [
+                Rule::requiredIf(fn () => in_array('Sosial media', (array) $request->input('survey_info_source', []), true)),
+                'array',
+                'min:1',
+            ],
+            'survey_social_media.*' => [
+                'string',
+                Rule::in(['Instagram', 'Facebook', 'TikTok', 'X (Twitter)', 'LinkedIn', 'YouTube']),
+            ],
 
             'survey_job_portal' => 'required|array|min:1',
             'survey_job_portal.*' => 'string|max:255',
@@ -531,6 +542,9 @@ class KemitraanController extends Controller
             'education' => $validated['survey_education'],
             'info_sources' => array_values(array_unique($validated['survey_info_source'] ?? [])),
             'info_source_other' => $validated['survey_info_source_other'] ?? null,
+            'social_media_sources' => in_array('Sosial media', $validated['survey_info_source'] ?? [], true)
+                ? array_values(array_unique($validated['survey_social_media'] ?? []))
+                : null,
             'job_portals' => array_values(array_unique($validated['survey_job_portal'] ?? [])),
             'job_portal_other' => $validated['survey_job_portal_other'] ?? null,
             'strengths' => array_values(array_unique($validated['survey_strengths'] ?? [])),
