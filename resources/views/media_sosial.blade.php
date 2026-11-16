@@ -56,8 +56,8 @@
                     <i class="fab fa-tiktok fa-3x"></i>
                 </div>
                 <h5 class="fw-bold">TikTok</h5>
-                <p class="mb-2">@paskerid_</p>
-                <a href="https://www.tiktok.com/@paskerid_" target="_blank" class="btn btn-light btn-sm fw-bold rounded-pill px-4">Kunjungi <i class="fa fa-arrow-right ms-1"></i></a>
+                <p class="mb-2">@pusatpasarkerja</p>
+                <a href="https://www.tiktok.com/@pusatpasarkerja" target="_blank" class="btn btn-light btn-sm fw-bold rounded-pill px-4">Kunjungi <i class="fa fa-arrow-right ms-1"></i></a>
             </div>
         </div>
     </div>

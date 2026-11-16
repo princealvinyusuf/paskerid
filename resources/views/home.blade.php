@@ -993,7 +993,7 @@
             </span>
             <i class="fa fa-angle-right"></i>
         </a>
-        <a href="https://www.tiktok.com/@paskerid_" target="_blank" class="social-chip" rel="noopener">
+        <a href="https://www.tiktok.com/@pusatpasarkerja" target="_blank" class="social-chip" rel="noopener">
             <span class="chip-left">
                 <span class="chip-icon"><i class="fab fa-tiktok"></i></span>
                 <span>TikTok</span>
