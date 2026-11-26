@@ -1016,6 +1016,30 @@
         top: 16px;
         right: 20px;
     }
+    html.dark-mode .career-boostday-segmented {
+        background: var(--theme-surface-2);
+        box-shadow: inset 0 0 0 1px var(--theme-border);
+    }
+    html.dark-mode .career-boostday-seg-btn {
+        color: var(--theme-muted);
+    }
+    html.dark-mode .career-boostday-seg-btn:hover {
+        color: var(--theme-heading);
+    }
+    html.dark-mode .career-boostday-seg-btn.active {
+        background: var(--theme-surface-3);
+        color: #ffffff;
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.28);
+    }
+    @media (max-width: 576px) {
+        html.dark-mode .career-boostday-seg-btn {
+            background: var(--theme-surface-2);
+            border-color: var(--theme-border);
+        }
+        html.dark-mode .career-boostday-seg-btn.active {
+            background: #198754;
+        }
+    }
 </style>
 @endpush
 

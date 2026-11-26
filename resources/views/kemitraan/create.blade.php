@@ -5442,6 +5442,114 @@
         align-items: center;
         gap: 8px; /* jarak antara checkbox dan label */
     }
+    html.dark-mode .walkin-segmented {
+        background: var(--theme-surface-2);
+        box-shadow: inset 0 0 0 1px var(--theme-border);
+    }
+    html.dark-mode .walkin-seg-btn {
+        color: var(--theme-muted);
+    }
+    html.dark-mode .walkin-seg-btn.active {
+        background: var(--theme-surface-3);
+        color: #ffffff;
+    }
+    html.dark-mode .walkin-panel,
+    html.dark-mode .partner-company-card,
+    html.dark-mode .partner-gallery-wrap,
+    html.dark-mode .partner-review-item,
+    html.dark-mode .walkin-media-card,
+    html.dark-mode .walkin-company-card,
+    html.dark-mode .walkin-rating-company-row,
+    html.dark-mode .walkin-comment-card,
+    html.dark-mode .ruangan-card {
+        background: var(--theme-surface);
+        color: var(--theme-text);
+        border-color: var(--theme-border);
+    }
+    html.dark-mode .partner-gallery-card,
+    html.dark-mode .partner-company-logo-empty,
+    html.dark-mode .walkin-media-thumb,
+    html.dark-mode .walkin-company-thumb {
+        background-color: var(--theme-surface-2);
+        color: var(--theme-text);
+        border-color: var(--theme-border);
+    }
+    html.dark-mode .walkin-company-title,
+    html.dark-mode .partner-company-name,
+    html.dark-mode .walkin-schedule-intro-title,
+    html.dark-mode .walkin-schedule-intro-card-title,
+    html.dark-mode #panelStatistik .walkin-stat-value,
+    html.dark-mode .walkin-rating-company-name,
+    html.dark-mode .walkin-rating-value-lg,
+    html.dark-mode .walkin-rating-value-sm,
+    html.dark-mode .walkin-schedule-date,
+    html.dark-mode .walkin-avatar {
+        color: var(--theme-heading);
+    }
+    html.dark-mode .partner-company-meta,
+    html.dark-mode .partner-company-summary,
+    html.dark-mode .walkin-schedule-intro-desc,
+    html.dark-mode .walkin-schedule-list li,
+    html.dark-mode #panelStatistik .walkin-stat-label,
+    html.dark-mode .walkin-comment-company {
+        color: var(--theme-muted);
+    }
+    html.dark-mode #panelInfo .walkin-schedule-intro-hero,
+    html.dark-mode #panelSchedule .walkin-schedule-intro-hero,
+    html.dark-mode #panelInfo .walkin-schedule-intro-card,
+    html.dark-mode #panelSchedule .walkin-schedule-intro-card,
+    html.dark-mode #panelStatistik .walkin-stat-card,
+    html.dark-mode #panelSurvey .walkin-panel,
+    html.dark-mode .walkin-rating-initiator {
+        background: linear-gradient(165deg, #17243a, #111b2d);
+        color: var(--theme-text);
+        border-color: var(--theme-border);
+    }
+    html.dark-mode #panelInfo .walkin-schedule-flow-image-wrap,
+    html.dark-mode #panelSchedule .walkin-schedule-flow-image-wrap {
+        background: var(--theme-surface-2);
+        border-color: var(--theme-border);
+    }
+    html.dark-mode #panelSurvey .survey-progress-sticky {
+        background: rgba(21, 31, 50, 0.94);
+        border-color: var(--theme-border);
+    }
+    html.dark-mode #panelSurvey .form-label {
+        color: var(--theme-heading);
+    }
+    html.dark-mode #panelSurvey .form-control,
+    html.dark-mode #panelSurvey .form-select,
+    html.dark-mode #panelSurvey .form-check {
+        background: var(--theme-input);
+        color: var(--theme-text);
+        border-color: var(--theme-border);
+    }
+    html.dark-mode #panelSurvey .survey-tag-progress,
+    html.dark-mode .walkin-chip,
+    html.dark-mode .partner-company-jobs {
+        background: var(--theme-primary-soft);
+        color: #9bc9ff;
+        border-color: #3e6189;
+    }
+    html.dark-mode #panelSurvey .survey-important-note {
+        background: #443617;
+        border-color: #806427;
+    }
+    html.dark-mode #panelSurvey .survey-important-note p {
+        color: #ffe09a;
+    }
+    html.dark-mode .walkin-schedule-odd,
+    html.dark-mode .walkin-agenda-meta-item {
+        background: var(--theme-surface-2);
+        border-color: var(--theme-border);
+    }
+    html.dark-mode .walkin-schedule-upcoming {
+        background: #173455 !important;
+    }
+    html.dark-mode .walkin-info-thumb-link {
+        background: var(--theme-surface-2);
+        border-color: #4f75a1;
+    }
 </style>
 
 @endsection 

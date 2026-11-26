@@ -225,11 +225,11 @@ document.addEventListener('DOMContentLoaded', function() {
     color: white;
 }
 
-.text-primary {
+.section-berita .text-primary {
     color: white;
 }
 
-.text-white {
+.section-berita .text-white {
     color: white;
 }
 
@@ -426,6 +426,33 @@ document.addEventListener('DOMContentLoaded', function() {
         margin-bottom: 0;
         top: unset;
     }
+}
+html.dark-mode .detailberita,
+html.dark-mode .popular-card {
+    background: var(--theme-surface);
+    color: var(--theme-text);
+    border: 1px solid var(--theme-border);
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.28);
+}
+html.dark-mode .contentBerita {
+    color: var(--theme-text);
+}
+html.dark-mode .contentBerita blockquote {
+    color: var(--theme-muted);
+    background: var(--theme-surface-2);
+    padding-top: 0.65rem;
+    padding-bottom: 0.65rem;
+}
+html.dark-mode .contentBerita pre {
+    background: #0d1728;
+    border-color: var(--theme-border);
+    color: #e8eef7;
+}
+html.dark-mode .contentBerita table,
+html.dark-mode .contentBerita th,
+html.dark-mode .contentBerita td {
+    color: var(--theme-text);
+    border-color: var(--theme-border);
 }
 </style>
 

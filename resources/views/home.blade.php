@@ -2272,5 +2272,41 @@
     .whatsapp-float .wa-label { display: none; }
 }
 
+html.dark-mode .home-ocean-theme {
+    --home-ocean-bg:
+        radial-gradient(980px 520px at -10% -10%, rgba(37, 99, 235, 0.16), transparent 58%),
+        radial-gradient(920px 520px at 110% -6%, rgba(16, 185, 129, 0.12), transparent 60%),
+        #0b1120;
+    color: var(--theme-text);
+}
+html.dark-mode .home-ocean-theme .card:not(.home-ocean-banner),
+html.dark-mode .home-ocean-theme .contrib-card-v3,
+html.dark-mode .home-ocean-theme .service-card-v2,
+html.dark-mode .home-ocean-theme .service-card-compact {
+    background: linear-gradient(165deg, #17243a, #111b2d) !important;
+    color: var(--theme-text) !important;
+    border-color: var(--theme-border) !important;
+}
+html.dark-mode .home-ocean-theme .card::before {
+    background: linear-gradient(130deg, rgba(47, 159, 232, 0.08), rgba(0, 163, 138, 0.06));
+    opacity: 0.45;
+}
+html.dark-mode .home-ocean-theme .rounded-section-bg {
+    background: linear-gradient(135deg, #111b2d, #17243a) !important;
+}
+html.dark-mode .home-ocean-theme .dataset-bg-yellow,
+html.dark-mode .home-ocean-theme .dataset-bg-blue,
+html.dark-mode .home-ocean-theme .dataset-bg-green {
+    background: #1c2940 !important;
+    color: var(--theme-text);
+}
+html.dark-mode .home-ocean-theme [style*="color:#222"],
+html.dark-mode .home-ocean-theme [style*="color: #222"] {
+    color: var(--theme-text) !important;
+}
+html.dark-mode .home-ocean-theme .card-footer {
+    border-color: var(--theme-border);
+}
+
 </style>
 @endpush 

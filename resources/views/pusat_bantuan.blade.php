@@ -843,6 +843,51 @@
             margin-right: 0.45rem;
         }
     }
+    html.dark-mode .faq-hero {
+        background: linear-gradient(135deg, rgba(34, 197, 94, 0.12), rgba(20, 184, 166, 0.1));
+        border-color: #315c53;
+    }
+    html.dark-mode .faq-hero-chip,
+    html.dark-mode .faq-controls,
+    html.dark-mode .faq-category {
+        background: var(--theme-surface);
+        color: var(--theme-text);
+        border-color: var(--theme-border);
+    }
+    html.dark-mode .faq-hero-chip {
+        color: #78e39a;
+    }
+    html.dark-mode .faq-category-link {
+        background: var(--theme-surface-2);
+        border-color: var(--theme-border);
+        color: #b8ebc8;
+    }
+    html.dark-mode .faq-category-link:hover {
+        background: var(--theme-surface-3);
+        border-color: #5b7b6c;
+        color: #ffffff;
+    }
+    html.dark-mode .faq-category > h4 {
+        border-color: var(--theme-border);
+    }
+    html.dark-mode .faq-category > ol > li {
+        background: #111b2d;
+        border-color: var(--theme-border);
+        color: var(--theme-text);
+    }
+    html.dark-mode .faq-question-btn {
+        color: #d9ecff;
+    }
+    html.dark-mode .faq-number-badge,
+    html.dark-mode .faq-item.is-open .faq-question-icon {
+        background: #173b31;
+        border-color: #315c53;
+        color: #78e39a;
+    }
+    html.dark-mode .faq-question-icon {
+        border-color: var(--theme-border);
+        color: #78e39a;
+    }
 </style>
 @endpush
 

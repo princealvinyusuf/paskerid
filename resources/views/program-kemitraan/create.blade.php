@@ -614,6 +614,93 @@
             grid-template-columns: repeat(5, minmax(28px, 1fr));
         }
     }
+    html.dark-mode .pk-page {
+        background:
+            radial-gradient(1200px 520px at -8% -10%, rgba(16, 185, 129, 0.1), transparent 55%),
+            radial-gradient(900px 480px at 110% 0%, rgba(37, 99, 235, 0.12), transparent 58%),
+            var(--theme-page);
+        color: var(--theme-text);
+    }
+    html.dark-mode .pk-shell,
+    html.dark-mode .pk-step,
+    html.dark-mode .pk-eval-card,
+    html.dark-mode .pk-eval-card-body,
+    html.dark-mode .pk-wizard,
+    html.dark-mode .pk-wizard-header,
+    html.dark-mode .pk-wizard-question,
+    html.dark-mode .pk-stat-card,
+    html.dark-mode .pk-spotlight-card,
+    html.dark-mode .pk-chart-card {
+        background: var(--theme-surface);
+        color: var(--theme-text);
+        border-color: var(--theme-border);
+    }
+    html.dark-mode .pk-segmented,
+    html.dark-mode .pk-eval-segmented {
+        background: var(--theme-surface-2);
+    }
+    html.dark-mode .pk-seg-btn,
+    html.dark-mode .pk-eval-seg-btn,
+    html.dark-mode .pk-hint-list,
+    html.dark-mode .pk-eval-subtitle,
+    html.dark-mode .pk-eval-card-sub,
+    html.dark-mode .pk-stat-label,
+    html.dark-mode .pk-stat-sub,
+    html.dark-mode .pk-spotlight-title,
+    html.dark-mode .pk-spotlight-meta {
+        color: var(--theme-muted);
+    }
+    html.dark-mode .pk-seg-btn.active,
+    html.dark-mode .pk-eval-seg-btn.active {
+        background: var(--theme-surface-3);
+        color: #ffffff;
+    }
+    html.dark-mode .pk-step-title,
+    html.dark-mode .pk-eval-section-title,
+    html.dark-mode .pk-eval-card-head,
+    html.dark-mode .pk-wizard-question-label,
+    html.dark-mode .pk-stat-value,
+    html.dark-mode .pk-spotlight-value,
+    html.dark-mode .pk-chart-card h6 {
+        color: var(--theme-heading);
+    }
+    html.dark-mode .pk-eval-card-head,
+    html.dark-mode .pk-hero {
+        background: linear-gradient(135deg, rgba(37, 99, 235, 0.14), rgba(16, 185, 129, 0.12));
+        border-color: var(--theme-border);
+    }
+    html.dark-mode .pk-eval-intro-chip,
+    html.dark-mode .pk-eval-score-note,
+    html.dark-mode .pk-wizard-section-chip,
+    html.dark-mode .pk-wizard-question-index,
+    html.dark-mode .pk-icon-badge {
+        background: var(--theme-primary-soft);
+        color: #9bc9ff;
+        border-color: #3e6189;
+    }
+    html.dark-mode .pk-sticky-submit {
+        background: rgba(21, 31, 50, 0.92);
+        border-color: var(--theme-border);
+    }
+    html.dark-mode .pk-score-choice > span,
+    html.dark-mode .pk-chip-btn,
+    html.dark-mode .pk-step-status-badge,
+    html.dark-mode .pk-empty-state {
+        background: var(--theme-surface-2);
+        color: var(--theme-text);
+        border-color: var(--theme-border);
+    }
+    html.dark-mode .pk-score-choice input:checked + span,
+    html.dark-mode .pk-chip-btn.active {
+        background: #2563eb;
+        color: #ffffff;
+        border-color: #60a5fa;
+    }
+    html.dark-mode .pk-step-status-badge.is-complete {
+        background: var(--theme-success-soft);
+        color: #9aebba;
+        border-color: #397154;
+    }
 </style>
 @endsection
 

@@ -218,6 +218,34 @@
             min-height: unset;
         }
     }
+    html.dark-mode .vk-section {
+        background: linear-gradient(135deg, #151f32 80%, #233d32 100%);
+        color: var(--theme-text);
+        border: 1px solid var(--theme-border);
+    }
+    html.dark-mode .vk-section-desc {
+        color: var(--theme-muted);
+    }
+    html.dark-mode .vk-section-title,
+    html.dark-mode .vk-jobfair-countdown {
+        color: #78e39a;
+    }
+    html.dark-mode .vk-agenda-row-upcoming {
+        background: #234430 !important;
+        color: #d5f7df;
+    }
+    html.dark-mode .vk-agenda-row-odd {
+        background: var(--theme-surface-2);
+    }
+    html.dark-mode .vk-agenda-meta-item,
+    html.dark-mode .vk-agenda-desc {
+        background: var(--theme-surface-2);
+        border-color: var(--theme-border);
+        color: var(--theme-text);
+    }
+    html.dark-mode .vk-agenda-desc #agendaModalDescription {
+        color: var(--theme-text);
+    }
 </style>
 <div class="container py-4">
     <div class="vk-hero mb-5 animate__animated animate__fadeInDown">

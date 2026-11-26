@@ -56,5 +56,17 @@
 .dataset-bg-yellow { background: #fffbe6; }
 .dataset-bg-blue   { background: #e6f0ff; }
 .dataset-bg-green  { background: #e6ffed; }
+html.dark-mode .dataset-bg-yellow,
+html.dark-mode .dataset-bg-blue,
+html.dark-mode .dataset-bg-green {
+    background: var(--theme-surface-2);
+    color: var(--theme-text);
+    border: 1px solid var(--theme-border);
+}
+html.dark-mode .dataset-bg-yellow h4,
+html.dark-mode .dataset-bg-blue h4,
+html.dark-mode .dataset-bg-green h4 {
+    color: #71df96 !important;
+}
 </style>
 @endpush
