@@ -475,12 +475,23 @@
                         <a class="nav-link text-primary @if(request()->routeIs('informasi_pasar_kerja.index')) active fw-bold @endif" href="{{ route('informasi_pasar_kerja.index') }}">Informasi Pasar Kerja</a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle text-success border border-success rounded-pill fw-bold px-3 @if(request()->routeIs('virtual-karir.index') || request()->routeIs('pusat_bantuan')) active @endif" href="#" id="layananDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle text-success border border-success rounded-pill fw-bold px-3 @if(request()->routeIs('virtual-karir.index') || request()->routeIs('pusat_bantuan') || request()->routeIs('kemitraan.create') || request()->routeIs('career-boostday.index')) active @endif" href="#" id="layananDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Layanan
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="layananDropdown">
                             <li><a class="dropdown-item @if(request()->routeIs('virtual-karir.index')) active fw-bold @endif" href="{{ route('virtual-karir.index') }}">Virtual Karir</a></li>
                             <li><a class="dropdown-item @if(request()->routeIs('pusat_bantuan')) active fw-bold @endif" href="{{ route('pusat_bantuan') }}">Pusat Bantuan</a></li>
+                            <li><a class="dropdown-item @if(request()->routeIs('kemitraan.create')) active fw-bold @endif" href="{{ route('kemitraan.create') }}">Walk-In</a></li>
+                            <li><a class="dropdown-item" href="https://paskerid.kemnaker.go.id/RIASEC/" target="_blank">Minat Karir</a></li>
+                            <li>
+                                <a
+                                    class="dropdown-item @if(request()->routeIs('career-boostday.index')) active fw-bold @endif"
+                                    href="{{ route('career-boostday.index', ['tab' => ($careerBoostdayRegistrationOpen ?? true) ? 'form' : 'jadwal']) }}"
+                                    @if(!($careerBoostdayRegistrationOpen ?? true)) title="{{ $careerBoostdayClosedMessage ?? 'Pendaftaran ditutup sementara.' }}" @endif
+                                >
+                                    Career Boost Day
+                                </a>
+                            </li>
                         </ul>
                     </li>
                     <li class="nav-item dropdown">
@@ -494,25 +505,6 @@
                     <li class="nav-item">
                         <a class="nav-link @if(request()->routeIs('program-kemitraan.*')) active fw-bold @endif" href="{{ route('program-kemitraan.create') }}">
                             Kemitraan
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link @if(request()->routeIs('kemitraan.create')) active fw-bold @endif" href="{{ route('kemitraan.create') }}">
-                            Walk-In
-                        </a>
-                    </li> 
-                    <li class="nav-item">
-                        <a class="nav-link" href="https://paskerid.kemnaker.go.id/RIASEC/" target="_blank">
-                            Minat Karir
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a
-                            class="nav-link @if(request()->routeIs('career-boostday.index')) active fw-bold @endif"
-                            href="{{ route('career-boostday.index', ['tab' => ($careerBoostdayRegistrationOpen ?? true) ? 'form' : 'jadwal']) }}"
-                            @if(!($careerBoostdayRegistrationOpen ?? true)) title="{{ $careerBoostdayClosedMessage ?? 'Pendaftaran ditutup sementara.' }}" @endif
-                        >
-                            Career Boost Day
                         </a>
                     </li>
                     @auth
