@@ -1,251 +1,152 @@
 @extends('layouts.app')
 
 @section('content')
-<section class="section-berita">
-    <img src="{{ asset('images/logo_siapkerja_white.svg') }}" class="section-bg" alt="background">
-    <div class="section-content">
-        <h2 style="color: white; font-weight: bold; margin-left: 80px;">Informasi Pasar Kerja</h2>
-        <p style="color: white; margin-left: 80px; font-size: 20px">Temukan data, tren, dan analisis terbaru seputar pasar kerja di Indonesia.</p>
+<section class="market-info-hero">
+    <span class="market-info-hero-grid" aria-hidden="true"></span>
+    <span class="market-info-hero-orb market-info-hero-orb-one" aria-hidden="true"></span>
+    <span class="market-info-hero-orb market-info-hero-orb-two" aria-hidden="true"></span>
+    <img src="{{ asset('images/logo_siapkerja_white.svg') }}" class="market-info-hero-mark" alt="" aria-hidden="true">
+    <div class="market-info-hero-content">
+        <span class="market-info-eyebrow"><i class="fa-solid fa-chart-line"></i> Data & Analitik</span>
+        <h1>Informasi Pasar Kerja</h1>
+        <p>Temukan data, tren, dan analisis terbaru seputar pasar kerja di Indonesia.</p>
     </div>
 </section>
-<style>
-.section-berita {
-    position: relative;
-    background: linear-gradient(120deg, #0f5fa8 0%, #2f9fe8 48%, #00a38a 100%);
-    padding: 30px 40px;
-    overflow: hidden;
-    margin-bottom: 0 !important;
-}
-.section-bg {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 400px;
-    height: 100%;
-    object-fit: cover;
-    opacity: 0.4;
-}
-.section-content {
-    position: relative;
-    z-index: 1;
-    max-width: 1200px;
-}
-.pt-custom {
-    padding-top: 60px;
-}
-.section-green-card {
-    background: linear-gradient(120deg, rgba(15, 95, 168, 0.96) 0%, rgba(47, 159, 232, 0.95) 48%, rgba(0, 163, 138, 0.9) 100%);
-    border-radius: 24px;
-    padding: 40px 32px 32px 32px;
-    box-shadow: 0 14px 34px rgba(15, 23, 42, 0.16);
-    color: #ffffff;
-    margin-bottom: 32px;
-    border: 1px solid rgba(255, 255, 255, 0.28);
-}
-.section-green-card h3 {
-    color: #ffffff !important;
-}
-.section-green-card p {
-    color: #ffffff;
-}
-.section-green-card:last-of-type {
-    margin-bottom: 0 !important;
-}
-section:last-of-type {
-    margin-bottom: 0 !important;
-}
-</style>
+
 <div class="container-fluid p-0 info-ocean-theme">
     @php $forceDesktop = request()->cookie('force_desktop') === '1'; @endphp
-    
-<section class="mb-5 px-2 px-md-4 px-lg-5 pt-custom" data-aos="fade-up">
-        <div class="section-green-card">
-            <h3 class="text-center mb-4">Struktur Ketenagakerjaan</h3>
-            <div class="row gx-3 gy-4 justify-content-center" id="section3Cards">
-                @php $count3 = 0; $total3 = count($informasiSection3); @endphp
-                @foreach($informasiSection3 as $info)
-                    @php $count3++; @endphp
-                    <div class="col-12 col-md-6 col-lg-3 d-flex align-items-stretch section3-card{{ $count3 > 4 ? ' d-none' : '' }}">
-                        <div class="card stat-card shadow-sm border-0 w-100 h-100 p-3 d-flex flex-column align-items-center justify-content-center text-center">
-                            <h5 class="fw-bold mb-2">{{ $info->title }}</h5>
-                            <p class="mb-2 text-muted">{{ $info->description }}</p>
-                            <div class="w-100" style="min-height: 350px;">
-                                <div class="tableau-embed-wrapper w-100" style="min-height: 350px; overflow-x: auto;">
-                                    <div style="min-width: 400px;">
-                                        @php
-                                            $embed3 = $info->tableau_embed_code;
-                                            if ($forceDesktop) {
-                                                $embed3 = str_replace([
-                                                    ':device=phone',
-                                                    ':device=tablet',
-                                                    'name="device" value="phone"',
-                                                    'name="device" value="tablet"'
-                                                ], [
-                                                    ':device=desktop',
-                                                    ':device=desktop',
-                                                    'name="device" value="desktop"',
-                                                    'name="device" value="desktop"'
-                                                ], $embed3);
-                                            }
-                                        @endphp
-                                        {!! str_replace([
-                                            "vizElement.style.width='400px';",
-                                            'vizElement.style.width = \"400px\";',
-                                            'vizElement.style.width = \"100%\";',
-                                            'vizElement.style.height=\'427px\';',
-                                            'vizElement.style.height = \"427px\";'
-                                        ], [
-                                            "vizElement.style.width='100%';",
-                                            'vizElement.style.width = "100%";',
-                                            'vizElement.style.width = "100%";',
-                                            "vizElement.style.height='427px';",
-                                            'vizElement.style.height = "427px";'
-                                        ], $embed3) !!}
-                                    </div>
-                                </div>
-                            </div>
-                            <a href="{{ route('dashboard.performance') }}" class="btn btn-primary mt-3 w-100 d-none">Lihat Detail</a>
-                        </div>
-                    </div>
-                @endforeach
-            </div>
-            @if($total3 > 4)
-                <div class="text-center mt-3">
-                    <button id="lihatLebihBanyakBtn3" class="btn btn-success px-4">Lihat lebih banyak</button>
-                    <a href="{{ route('dashboard.performance') }}" id="section3LihatDetailBtn" class="btn btn-primary px-4 mt-3 d-none">Lihat Detail</a>
-                </div>
-            @endif
-        </div>
-    </section>
+    @php
+        $marketSections = [
+            [
+                'key' => '3',
+                'title' => 'Struktur Ketenagakerjaan',
+                'items' => $informasiSection3,
+                'detailRoute' => route('dashboard.performance'),
+                'icon' => 'fa-chart-pie',
+                'tone' => 'purple',
+            ],
+            [
+                'key' => '1',
+                'title' => 'Kebutuhan Tenaga Kerja',
+                'items' => $informasiSection1,
+                'detailRoute' => route('dashboard.trend'),
+                'icon' => 'fa-arrow-trend-up',
+                'tone' => 'blue',
+            ],
+            [
+                'key' => '2',
+                'title' => 'Persediaan Tenaga Kerja',
+                'items' => $informasiSection2,
+                'detailRoute' => route('dashboard.distribution'),
+                'icon' => 'fa-users',
+                'tone' => 'green',
+            ],
+        ];
+    @endphp
 
+    <nav class="market-info-nav" aria-label="Navigasi Informasi Pasar Kerja">
+        <div class="market-info-nav-inner">
+            @foreach($marketSections as $marketSection)
+                <a href="#market-section-{{ $marketSection['key'] }}" class="market-info-nav-link market-tone-{{ $marketSection['tone'] }}">
+                    <span><i class="fa-solid {{ $marketSection['icon'] }}"></i></span>
+                    {{ $marketSection['title'] }}
+                </a>
+            @endforeach
+        </div>
+    </nav>
+    <main class="market-info-content">
+        @foreach($marketSections as $marketSection)
+            @php
+                $sectionKey = $marketSection['key'];
+                $sectionItems = $marketSection['items'];
+                $sectionTotal = count($sectionItems);
+                $buttonSuffix = $sectionKey === '1' ? '' : $sectionKey;
+            @endphp
+            <section id="market-section-{{ $sectionKey }}"
+                class="market-analytics-section market-tone-{{ $marketSection['tone'] }}"
+                data-aos="fade-up">
+                <span class="market-section-decoration" aria-hidden="true"></span>
+                <header class="market-section-header">
+                    <div class="market-section-heading">
+                        <span class="market-section-icon"><i class="fa-solid {{ $marketSection['icon'] }}"></i></span>
+                        <div>
+                            <span class="market-section-index">0{{ $loop->iteration }}</span>
+                            <h2>{{ $marketSection['title'] }}</h2>
+                        </div>
+                    </div>
+                    <span class="market-section-count">{{ str_pad($sectionTotal, 2, '0', STR_PAD_LEFT) }}</span>
+                </header>
 
-    <section class="mb-5 px-2 px-md-4 px-lg-5 pt-custom" data-aos="fade-up">
-        <div class="section-green-card">
-            <h3 class="text-center mb-4">Kebutuhan Tenaga Kerja</h3>
-            <style>
-                .tableauPlaceholder,
-                .tableauPlaceholder object {
-                    width: 100% !important;
-                    min-width: 0 !important;
-                    max-width: 100% !important;
-                    height: 427px !important;
-                }
-            </style>
-            <div class="row gx-3 gy-4 justify-content-center" id="section1Cards">
-                @php $count = 0; $total = count($informasiSection1); @endphp
-                @foreach($informasiSection1 as $info)
-                    @php $count++; @endphp
-                    <div class="col-12 col-md-6 col-lg-3 d-flex align-items-stretch section1-card{{ $count > 4 ? ' d-none' : '' }}">
-                        <div class="card stat-card shadow-sm border-0 w-100 h-100 p-3 d-flex flex-column align-items-center justify-content-center text-center">
-                            <h5 class="fw-bold mb-2">{{ $info->title }}</h5>
-                            <p class="mb-2 text-muted">{{ $info->description }}</p>
-                            <div class="w-100" style="min-height: 350px;">
-                                <div class="tableau-embed-wrapper w-100" style="min-height: 350px; overflow-x: auto;">
-                                    <div style="min-width: 400px;">
-                                        @php
-                                            $embed1 = $info->tableau_embed_code;
-                                            if ($forceDesktop) {
-                                                $embed1 = str_replace([
-                                                    ':device=phone',
-                                                    ':device=tablet',
-                                                    'name="device" value="phone"',
-                                                    'name="device" value="tablet"'
-                                                ], [
-                                                    ':device=desktop',
-                                                    ':device=desktop',
-                                                    'name="device" value="desktop"',
-                                                    'name="device" value="desktop"'
-                                                ], $embed1);
-                                            }
-                                        @endphp
-                                        {!! str_replace([
-                                            "vizElement.style.width='400px';",
-                                            'vizElement.style.width = \"400px\";',
-                                            'vizElement.style.width = \"100%\";',
-                                            'vizElement.style.height=\'427px\';',
-                                            'vizElement.style.height = \"427px\";'
-                                        ], [
-                                            "vizElement.style.width='100%';",
-                                            'vizElement.style.width = "100%";',
-                                            'vizElement.style.width = "100%";',
-                                            "vizElement.style.height='427px';",
-                                            'vizElement.style.height = "427px";'
-                                        ], $embed1) !!}
+                <div class="row g-4" id="section{{ $sectionKey }}Cards">
+                    @foreach($sectionItems as $info)
+                        @php
+                            $embedCode = $info->tableau_embed_code;
+                            if ($forceDesktop) {
+                                $embedCode = str_replace([
+                                    ':device=phone',
+                                    ':device=tablet',
+                                    'name="device" value="phone"',
+                                    'name="device" value="tablet"'
+                                ], [
+                                    ':device=desktop',
+                                    ':device=desktop',
+                                    'name="device" value="desktop"',
+                                    'name="device" value="desktop"'
+                                ], $embedCode);
+                            }
+                            $embedCode = str_replace([
+                                "vizElement.style.width='400px';",
+                                'vizElement.style.width = \"400px\";',
+                                'vizElement.style.width = \"100%\";',
+                                'vizElement.style.height=\'427px\';',
+                                'vizElement.style.height = \"427px\";'
+                            ], [
+                                "vizElement.style.width='100%';",
+                                'vizElement.style.width = "100%";',
+                                'vizElement.style.width = "100%";',
+                                "vizElement.style.height='427px';",
+                                'vizElement.style.height = "427px";'
+                            ], $embedCode);
+                        @endphp
+                        <div class="col-12 col-xl-6 d-flex align-items-stretch section{{ $sectionKey }}-card{{ $loop->iteration > 4 ? ' d-none' : '' }}">
+                            <article class="market-dashboard-card">
+                                <header class="market-dashboard-card-header">
+                                    <span class="market-dashboard-number">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</span>
+                                    <div>
+                                        <h3>{{ $info->title }}</h3>
+                                        @if($info->description)
+                                            <p>{{ $info->description }}</p>
+                                        @endif
+                                    </div>
+                                </header>
+                                <div class="market-dashboard-viewer">
+                                    <div class="tableau-embed-wrapper">
+                                        <div class="market-dashboard-embed">
+                                            {!! $embedCode !!}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <a href="{{ route('dashboard.trend') }}" class="btn btn-primary mt-3 w-100 d-none">Lihat Detail</a>
+                                <a href="{{ $marketSection['detailRoute'] }}" class="d-none">Lihat Detail</a>
+                            </article>
                         </div>
-                    </div>
-                @endforeach
-            </div>
-            @if($total > 4)
-                <div class="text-center mt-3">
-                    <button id="lihatLebihBanyakBtn" class="btn btn-success px-4">Lihat lebih banyak</button>
-                    <a href="{{ route('dashboard.trend') }}" id="section1LihatDetailBtn" class="btn btn-primary px-4 mt-3 d-none">Lihat Detail</a>
+                    @endforeach
                 </div>
-            @endif
-        </div>
-    </section>
-    <section class="my-5 mb-5 px-2 px-md-4 px-lg-5 pt-custom" data-aos="fade-up">
-        <div class="section-green-card">
-            <h3 class="text-center mb-4">Persediaan Tenaga Kerja</h3>
-            <div class="row gx-3 gy-4 justify-content-center" id="section2Cards">
-                @php $count2 = 0; $total2 = count($informasiSection2); @endphp
-                @foreach($informasiSection2 as $info)
-                    @php $count2++; @endphp
-                    <div class="col-12 col-md-6 col-lg-3 d-flex align-items-stretch section2-card{{ $count2 > 4 ? ' d-none' : '' }}">
-                        <div class="card stat-card shadow-sm border-0 w-100 h-100 p-3 d-flex flex-column align-items-center justify-content-center text-center">
-                            <h5 class="fw-bold mb-2">{{ $info->title }}</h5>
-                            <p class="mb-2 text-muted">{{ $info->description }}</p>
-                            <div class="w-100" style="min-height: 350px;">
-                                <div class="tableau-embed-wrapper w-100" style="min-height: 350px; overflow-x: auto;">
-                                    <div style="min-width: 400px;">
-                                        @php
-                                            $embed2 = $info->tableau_embed_code;
-                                            if ($forceDesktop) {
-                                                $embed2 = str_replace([
-                                                    ':device=phone',
-                                                    ':device=tablet',
-                                                    'name="device" value="phone"',
-                                                    'name="device" value="tablet"'
-                                                ], [
-                                                    ':device=desktop',
-                                                    ':device=desktop',
-                                                    'name="device" value="desktop"',
-                                                    'name="device" value="desktop"'
-                                                ], $embed2);
-                                            }
-                                        @endphp
-                                        {!! str_replace([
-                                            "vizElement.style.width='400px';",
-                                            'vizElement.style.width = \"400px\";',
-                                            'vizElement.style.width = \"100%\";',
-                                            'vizElement.style.height=\'427px\';',
-                                            'vizElement.style.height = \"427px\";'
-                                        ], [
-                                            "vizElement.style.width='100%';",
-                                            'vizElement.style.width = "100%";',
-                                            'vizElement.style.width = "100%";',
-                                            "vizElement.style.height='427px';",
-                                            'vizElement.style.height = "427px";'
-                                        ], $embed2) !!}
-                                    </div>
-                                </div>
-                            </div>
-                            <a href="{{ route('dashboard.distribution') }}" class="btn btn-primary mt-3 w-100 d-none">Lihat Detail</a>
-                        </div>
+
+                @if($sectionTotal > 4)
+                    <div class="market-section-actions">
+                        <button id="lihatLebihBanyakBtn{{ $buttonSuffix }}" class="market-more-button" type="button">
+                            Lihat lebih banyak <i class="fa-solid fa-chevron-down"></i>
+                        </button>
+                        <a href="{{ $marketSection['detailRoute'] }}"
+                            id="section{{ $sectionKey }}LihatDetailBtn"
+                            class="market-detail-button d-none">
+                            Lihat Detail <i class="fa-solid fa-arrow-right"></i>
+                        </a>
                     </div>
-                @endforeach
-            </div>
-            @if($total2 > 4)
-                <div class="text-center mt-3">
-                    <button id="lihatLebihBanyakBtn2" class="btn btn-success px-4">Lihat lebih banyak</button>
-                    <a href="{{ route('dashboard.distribution') }}" id="section2LihatDetailBtn" class="btn btn-primary px-4 mt-3 d-none">Lihat Detail</a>
-                </div>
-            @endif
-        </div>
-    </section>
+                @endif
+            </section>
+        @endforeach
+    </main>
     
     <!-- <section class="my-5 mb-5 px-2 px-md-4 px-lg-5 pt-custom" data-aos="fade-up">
         <div class="section-green-card">
@@ -359,65 +260,535 @@ section:last-of-type {
         box-shadow: 0 4px 12px rgba(0,0,0,0.2);
     }
 
-    .info-ocean-theme {
-        background: radial-gradient(980px 520px at -10% -10%, rgba(37, 99, 235, 0.2), transparent 58%),
-            radial-gradient(920px 520px at 110% -6%, rgba(16, 185, 129, 0.16), transparent 60%),
-            radial-gradient(760px 430px at 50% 105%, rgba(47, 159, 232, 0.13), transparent 62%),
-            #f2f7ff;
+    html {
+        scroll-behavior: smooth;
     }
 
-    .info-ocean-theme .card {
+    .market-info-hero {
         position: relative;
+        min-height: 330px;
+        display: flex;
+        align-items: center;
         overflow: hidden;
-        border-radius: 18px !important;
-        border: 1px solid rgba(15, 95, 168, 0.2) !important;
-        box-shadow: 0 12px 30px rgba(12, 50, 82, 0.1) !important;
-        background: linear-gradient(165deg, rgba(255, 255, 255, 0.97), rgba(244, 251, 255, 0.94)) !important;
-        transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+        color: #fff;
+        background:
+            radial-gradient(circle at 82% 14%, rgba(45, 212, 191, 0.24), transparent 25%),
+            radial-gradient(circle at 12% 95%, rgba(59, 130, 246, 0.24), transparent 30%),
+            linear-gradient(125deg, #052b49 0%, #0b5c7a 52%, #078475 100%);
     }
 
-    .info-ocean-theme .card::before {
+    .market-info-hero::after {
         content: "";
         position: absolute;
-        inset: 0;
-        pointer-events: none;
-        background: linear-gradient(
-            130deg,
-            rgba(47, 159, 232, 0.1) 0%,
-            rgba(15, 95, 168, 0.08) 30%,
-            rgba(0, 163, 138, 0.08) 72%,
-            rgba(47, 159, 232, 0.12) 100%
-        );
-        opacity: 0.75;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        height: 100px;
+        background: linear-gradient(to top, rgba(3, 33, 51, 0.32), transparent);
     }
 
-    .info-ocean-theme .card .card-body,
-    .info-ocean-theme .card .card-footer {
+    .market-info-hero-grid {
+        position: absolute;
+        inset: 0;
+        opacity: 0.13;
+        background-image:
+            linear-gradient(rgba(255, 255, 255, 0.42) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255, 255, 255, 0.42) 1px, transparent 1px);
+        background-size: 52px 52px;
+        mask-image: linear-gradient(90deg, #000, transparent 75%);
+    }
+
+    .market-info-hero-orb {
+        position: absolute;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 50%;
+    }
+
+    .market-info-hero-orb-one {
+        width: 270px;
+        height: 270px;
+        top: -175px;
+        left: 38%;
+    }
+
+    .market-info-hero-orb-two {
+        width: 130px;
+        height: 130px;
+        right: 11%;
+        bottom: -55px;
+    }
+
+    .market-info-hero-mark {
+        position: absolute;
+        top: 50%;
+        right: clamp(1rem, 7vw, 7rem);
+        width: min(380px, 34vw);
+        height: 76%;
+        object-fit: contain;
+        opacity: 0.14;
+        transform: translateY(-50%);
+    }
+
+    .market-info-hero-content {
+        position: relative;
+        z-index: 2;
+        width: min(1380px, 100%);
+        margin: 0 auto;
+        padding: 3.6rem clamp(1.25rem, 6vw, 6rem);
+    }
+
+    .market-info-eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.55rem;
+        margin-bottom: 0.8rem;
+        color: #82f1df;
+        font-size: 0.76rem;
+        font-weight: 800;
+        letter-spacing: 0.13em;
+        text-transform: uppercase;
+    }
+
+    .market-info-hero h1 {
+        max-width: 850px;
+        margin: 0 0 0.8rem;
+        color: #fff;
+        font-size: clamp(2.4rem, 5vw, 4.7rem);
+        font-weight: 850;
+        line-height: 1;
+        letter-spacing: -0.05em;
+    }
+
+    .market-info-hero p {
+        max-width: 690px;
+        margin: 0;
+        color: rgba(255, 255, 255, 0.76);
+        font-size: clamp(0.95rem, 1.7vw, 1.15rem);
+        line-height: 1.65;
+    }
+
+    .info-ocean-theme {
+        min-height: 100vh;
+        background:
+            radial-gradient(850px 480px at -8% 5%, rgba(37, 99, 235, 0.13), transparent 58%),
+            radial-gradient(780px 460px at 108% 45%, rgba(16, 185, 129, 0.11), transparent 60%),
+            #eff6fb;
+    }
+
+    .market-info-nav {
+        position: relative;
+        z-index: 5;
+        padding: 0 clamp(1rem, 4vw, 3rem);
+        transform: translateY(-28px);
+    }
+
+    .market-info-nav-inner {
+        display: flex;
+        width: min(1120px, 100%);
+        gap: 0.75rem;
+        margin: 0 auto;
+        padding: 0.6rem;
+        overflow-x: auto;
+        border: 1px solid rgba(15, 95, 168, 0.12);
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.9);
+        box-shadow: 0 16px 38px rgba(12, 50, 82, 0.13);
+        backdrop-filter: blur(14px);
+        scrollbar-width: none;
+    }
+
+    .market-info-nav-inner::-webkit-scrollbar {
+        display: none;
+    }
+
+    .market-info-nav-link {
+        --market-accent: #2578d5;
+        --market-accent-rgb: 37, 120, 213;
+        display: inline-flex;
+        min-width: 0;
+        flex: 1 0 auto;
+        align-items: center;
+        justify-content: center;
+        gap: 0.6rem;
+        padding: 0.7rem 0.9rem;
+        border-radius: 14px;
+        color: #315266;
+        font-size: 0.84rem;
+        font-weight: 750;
+        text-decoration: none;
+        white-space: nowrap;
+        transition: color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+    }
+
+    .market-info-nav-link span {
+        display: inline-flex;
+        width: 34px;
+        height: 34px;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px;
+        color: var(--market-accent);
+        background: rgba(var(--market-accent-rgb), 0.11);
+    }
+
+    .market-info-nav-link:hover {
+        color: var(--market-accent);
+        background: rgba(var(--market-accent-rgb), 0.08);
+        transform: translateY(-2px);
+    }
+
+    .market-info-content {
+        width: min(1500px, 100%);
+        margin: -0.3rem auto 0;
+        padding: 0 clamp(0.75rem, 3.5vw, 3rem) 4rem;
+    }
+
+    .market-tone-purple {
+        --market-accent: #805ad5;
+        --market-accent-rgb: 128, 90, 213;
+    }
+
+    .market-tone-blue {
+        --market-accent: #2578d5;
+        --market-accent-rgb: 37, 120, 213;
+    }
+
+    .market-tone-green {
+        --market-accent: #079273;
+        --market-accent-rgb: 7, 146, 115;
+    }
+
+    .market-analytics-section {
+        position: relative;
+        margin-bottom: 2rem;
+        padding: clamp(1rem, 3vw, 2.25rem);
+        overflow: hidden;
+        border: 1px solid rgba(var(--market-accent-rgb), 0.15);
+        border-radius: 30px;
+        background:
+            linear-gradient(125deg, rgba(var(--market-accent-rgb), 0.08), transparent 26%),
+            rgba(255, 255, 255, 0.72);
+        box-shadow: 0 16px 40px rgba(12, 50, 82, 0.085);
+        scroll-margin-top: 90px;
+        backdrop-filter: blur(10px);
+    }
+
+    .market-section-decoration {
+        position: absolute;
+        width: 220px;
+        height: 220px;
+        top: -150px;
+        right: -95px;
+        border: 32px solid rgba(var(--market-accent-rgb), 0.07);
+        border-radius: 50%;
+        pointer-events: none;
+    }
+
+    .market-section-header {
         position: relative;
         z-index: 1;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
     }
 
-    .info-ocean-theme .card:hover {
+    .market-section-heading {
+        display: flex;
+        align-items: center;
+        gap: 0.9rem;
+    }
+
+    .market-section-icon {
+        display: inline-flex;
+        width: 54px;
+        height: 54px;
+        flex: 0 0 auto;
+        align-items: center;
+        justify-content: center;
+        border-radius: 17px;
+        color: #fff;
+        background: var(--market-accent);
+        box-shadow: 0 10px 23px rgba(var(--market-accent-rgb), 0.25);
+        font-size: 1.15rem;
+    }
+
+    .market-section-index {
+        display: block;
+        margin-bottom: 0.08rem;
+        color: var(--market-accent);
+        font-size: 0.7rem;
+        font-weight: 850;
+        letter-spacing: 0.12em;
+    }
+
+    .market-section-heading h2 {
+        margin: 0;
+        color: #153c56;
+        font-size: clamp(1.35rem, 2.3vw, 2rem);
+        font-weight: 800;
+        letter-spacing: -0.03em;
+    }
+
+    .market-section-count {
+        display: inline-flex;
+        min-width: 44px;
+        height: 38px;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid rgba(var(--market-accent-rgb), 0.2);
+        border-radius: 11px;
+        color: var(--market-accent);
+        background: rgba(255, 255, 255, 0.7);
+        font-size: 0.76rem;
+        font-weight: 850;
+        letter-spacing: 0.08em;
+    }
+
+    .market-dashboard-card {
+        position: relative;
+        display: flex;
+        width: 100%;
+        min-width: 0;
+        flex-direction: column;
+        padding: 1rem;
+        overflow: hidden;
+        border: 1px solid rgba(var(--market-accent-rgb), 0.14);
+        border-radius: 22px;
+        background: rgba(255, 255, 255, 0.96);
+        box-shadow: 0 10px 26px rgba(12, 50, 82, 0.075);
+        transition: border-color 0.22s ease, box-shadow 0.22s ease, transform 0.22s ease;
+    }
+
+    .market-dashboard-card:hover {
+        border-color: rgba(var(--market-accent-rgb), 0.38);
+        box-shadow: 0 16px 32px rgba(12, 50, 82, 0.13);
         transform: translateY(-3px);
-        box-shadow: 0 18px 38px rgba(12, 50, 82, 0.14) !important;
-        border-color: rgba(15, 95, 168, 0.3) !important;
+    }
+
+    .market-dashboard-card-header {
+        display: grid;
+        min-height: 94px;
+        grid-template-columns: auto minmax(0, 1fr);
+        align-items: start;
+        gap: 0.8rem;
+        padding: 0.25rem 0.2rem 1rem;
+    }
+
+    .market-dashboard-number {
+        display: inline-flex;
+        width: 34px;
+        height: 34px;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px;
+        color: var(--market-accent);
+        background: rgba(var(--market-accent-rgb), 0.1);
+        font-size: 0.68rem;
+        font-weight: 850;
+        letter-spacing: 0.06em;
+    }
+
+    .market-dashboard-card h3 {
+        margin: 0 0 0.35rem;
+        color: #163b52;
+        font-size: 1rem;
+        font-weight: 800;
+        line-height: 1.4;
+        overflow-wrap: anywhere;
+    }
+
+    .market-dashboard-card p {
+        margin: 0;
+        color: #657c8b;
+        font-size: 0.82rem;
+        line-height: 1.55;
+        overflow-wrap: anywhere;
+    }
+
+    .market-dashboard-viewer {
+        position: relative;
+        min-width: 0;
+        overflow: hidden;
+        border: 1px solid #dfe9ef;
+        border-radius: 15px;
+        background: #eef4f7;
+        isolation: isolate;
+    }
+
+    .market-dashboard-viewer::before {
+        content: "";
+        display: block;
+        height: 8px;
+        background: linear-gradient(90deg, var(--market-accent), rgba(var(--market-accent-rgb), 0.25));
+    }
+
+    .tableau-embed-wrapper {
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .market-dashboard-embed {
+        min-width: 400px;
+        min-height: 427px;
+    }
+
+    .market-dashboard-viewer .tableauPlaceholder,
+    .market-dashboard-viewer .tableauPlaceholder object {
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+        height: 427px !important;
+    }
+
+    .market-section-actions {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        margin-top: 1.5rem;
+    }
+
+    .market-more-button,
+    .market-detail-button {
+        display: inline-flex;
+        min-height: 44px;
+        align-items: center;
+        justify-content: center;
+        gap: 0.55rem;
+        padding: 0.65rem 1rem;
+        border: 1px solid rgba(var(--market-accent-rgb), 0.3);
+        border-radius: 999px;
+        font-size: 0.84rem;
+        font-weight: 750;
+        text-decoration: none;
+        transition: color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+    }
+
+    .market-more-button {
+        color: var(--market-accent);
+        background: rgba(255, 255, 255, 0.78);
+    }
+
+    .market-detail-button {
+        color: #fff;
+        background: var(--market-accent);
+    }
+
+    .market-more-button:hover,
+    .market-detail-button:hover {
+        color: #fff;
+        background: var(--market-accent);
+        transform: translateY(-2px);
+    }
+
+    @media (max-width: 767.98px) {
+        .market-info-hero {
+            min-height: 300px;
+        }
+
+        .market-info-hero-mark {
+            width: 62vw;
+            opacity: 0.09;
+        }
+
+        .market-info-nav {
+            padding: 0 0.75rem;
+        }
+
+        .market-info-nav-inner {
+            justify-content: flex-start;
+        }
+
+        .market-info-nav-link {
+            flex: 0 0 auto;
+        }
+
+        .market-analytics-section {
+            border-radius: 22px;
+        }
+
+        .market-dashboard-card {
+            border-radius: 18px;
+        }
+    }
+
+    @media (max-width: 575.98px) {
+        .market-info-hero-content {
+            padding-right: 1rem;
+            padding-left: 1rem;
+        }
+
+        .market-info-content {
+            padding-right: 0.5rem;
+            padding-left: 0.5rem;
+        }
+
+        .market-section-icon {
+            width: 46px;
+            height: 46px;
+            border-radius: 14px;
+        }
+
+        .market-section-count {
+            display: none;
+        }
+
+        .market-dashboard-card {
+            padding: 0.75rem;
+        }
     }
 
     html.dark-mode .info-ocean-theme {
         background:
-            radial-gradient(980px 520px at -10% -10%, rgba(37, 99, 235, 0.16), transparent 58%),
-            radial-gradient(920px 520px at 110% -6%, rgba(16, 185, 129, 0.12), transparent 60%),
+            radial-gradient(850px 480px at -8% 5%, rgba(37, 99, 235, 0.11), transparent 58%),
+            radial-gradient(780px 460px at 108% 45%, rgba(16, 185, 129, 0.09), transparent 60%),
             var(--theme-page);
         color: var(--theme-text);
     }
-    html.dark-mode .info-ocean-theme .card {
-        background: linear-gradient(165deg, #17243a, #111b2d) !important;
-        color: var(--theme-text) !important;
-        border-color: var(--theme-border) !important;
+
+    html.dark-mode .market-info-nav-inner,
+    html.dark-mode .market-analytics-section,
+    html.dark-mode .market-dashboard-card {
+        border-color: var(--theme-border);
+        background-color: #111b2d;
     }
-    html.dark-mode .info-ocean-theme .card::before {
-        background: linear-gradient(130deg, rgba(47, 159, 232, 0.08), rgba(0, 163, 138, 0.06));
-        opacity: 0.45;
+
+    html.dark-mode .market-info-nav-inner {
+        background: rgba(17, 27, 45, 0.92);
+    }
+
+    html.dark-mode .market-analytics-section {
+        background:
+            linear-gradient(125deg, rgba(var(--market-accent-rgb), 0.11), transparent 26%),
+            rgba(17, 27, 45, 0.82);
+    }
+
+    html.dark-mode .market-dashboard-card {
+        background: #17243a;
+    }
+
+    html.dark-mode .market-info-nav-link,
+    html.dark-mode .market-section-heading h2,
+    html.dark-mode .market-dashboard-card h3 {
+        color: var(--theme-text);
+    }
+
+    html.dark-mode .market-dashboard-card p {
+        color: var(--theme-text-muted);
+    }
+
+    html.dark-mode .market-section-count,
+    html.dark-mode .market-more-button {
+        background: rgba(15, 23, 42, 0.7);
+    }
+
+    html.dark-mode .market-dashboard-viewer {
+        border-color: var(--theme-border);
+        background: #0f172a;
     }
     </style>
 
