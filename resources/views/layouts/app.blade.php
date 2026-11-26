@@ -446,6 +446,93 @@
     @endif
     @yield('head')
     @stack('head')
+    <script>
+        try {
+            if (localStorage.getItem('pasker-color-mode') === 'dark') {
+                document.documentElement.classList.add('dark-mode');
+                document.documentElement.setAttribute('data-bs-theme', 'dark');
+            }
+        } catch (error) {
+            // Keep the default light theme when browser storage is unavailable.
+        }
+    </script>
+    <style>
+        html.dark-mode {
+            color-scheme: dark;
+        }
+        html.dark-mode body,
+        html.dark-mode main {
+            background-color: #0f172a;
+            color: #e5e7eb;
+        }
+        html.dark-mode .navbar {
+            background-color: #111827 !important;
+        }
+        html.dark-mode .navbar-brand span,
+        html.dark-mode .navbar .nav-link:not(.text-primary):not(.text-success) {
+            color: #f8fafc !important;
+        }
+        html.dark-mode .navbar-toggler {
+            border-color: #64748b;
+            background-color: #f8fafc;
+        }
+        html.dark-mode .dropdown-menu,
+        html.dark-mode .card,
+        html.dark-mode .modal-content,
+        html.dark-mode .offcanvas,
+        html.dark-mode .accordion-item,
+        html.dark-mode .list-group-item,
+        html.dark-mode .bg-white,
+        html.dark-mode .bg-light {
+            background-color: #1e293b !important;
+            color: #e5e7eb !important;
+            border-color: #334155 !important;
+        }
+        html.dark-mode .dropdown-item,
+        html.dark-mode .dropdown-item-text,
+        html.dark-mode .accordion-button {
+            color: #e5e7eb;
+        }
+        html.dark-mode .dropdown-item:hover,
+        html.dark-mode .dropdown-item:focus,
+        html.dark-mode .accordion-button:not(.collapsed) {
+            background-color: #334155;
+            color: #ffffff;
+        }
+        html.dark-mode .text-dark,
+        html.dark-mode .text-body,
+        html.dark-mode .text-body-emphasis {
+            color: #f8fafc !important;
+        }
+        html.dark-mode .text-muted,
+        html.dark-mode .text-body-secondary {
+            color: #94a3b8 !important;
+        }
+        html.dark-mode .form-control,
+        html.dark-mode .form-select,
+        html.dark-mode textarea {
+            background-color: #111827;
+            color: #f8fafc;
+            border-color: #475569;
+        }
+        html.dark-mode .form-control::placeholder,
+        html.dark-mode textarea::placeholder {
+            color: #94a3b8;
+        }
+        html.dark-mode .table {
+            --bs-table-bg: #1e293b;
+            --bs-table-color: #e5e7eb;
+            --bs-table-border-color: #475569;
+        }
+        html.dark-mode .theme-toggle {
+            color: #f8fafc;
+            border-color: #94a3b8;
+        }
+        html.dark-mode .theme-toggle:hover {
+            background-color: #334155;
+            border-color: #cbd5e1;
+        }
+    </style>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-VVRKTYE9YB"></script>
     <script>
@@ -506,6 +593,12 @@
                         <a class="nav-link @if(request()->routeIs('program-kemitraan.*')) active fw-bold @endif" href="{{ route('program-kemitraan.create') }}">
                             Kemitraan
                         </a>
+                    </li>
+                    <li class="nav-item d-flex align-items-center">
+                        <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-2 ms-lg-1 theme-toggle" id="themeToggle" aria-pressed="false" title="Switch to dark mode">
+                            <i class="fa-solid fa-moon" id="themeToggleIcon" aria-hidden="true"></i>
+                            <span class="d-none d-xl-inline ms-1" id="themeToggleText">Dark Mode</span>
+                        </button>
                     </li>
                     @auth
                     <li class="nav-item dropdown">
@@ -665,6 +758,46 @@
         backToTopBtn.addEventListener('click', function() {
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
+        (function () {
+            const storageKey = 'pasker-color-mode';
+            const root = document.documentElement;
+            const toggle = document.getElementById('themeToggle');
+            const icon = document.getElementById('themeToggleIcon');
+            const text = document.getElementById('themeToggleText');
+
+            if (!toggle) {
+                return;
+            }
+
+            const applyColorMode = function (mode) {
+                const isDark = mode === 'dark';
+                root.classList.toggle('dark-mode', isDark);
+
+                if (isDark) {
+                    root.setAttribute('data-bs-theme', 'dark');
+                } else {
+                    root.removeAttribute('data-bs-theme');
+                }
+
+                toggle.setAttribute('aria-pressed', isDark ? 'true' : 'false');
+                toggle.setAttribute('title', isDark ? 'Switch to light mode' : 'Switch to dark mode');
+                icon.className = isDark ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+                text.textContent = isDark ? 'Light Mode' : 'Dark Mode';
+            };
+
+            applyColorMode(root.classList.contains('dark-mode') ? 'dark' : 'light');
+
+            toggle.addEventListener('click', function () {
+                const mode = root.classList.contains('dark-mode') ? 'light' : 'dark';
+                applyColorMode(mode);
+
+                try {
+                    localStorage.setItem(storageKey, mode);
+                } catch (error) {
+                    // The toggle still works for this page when storage is unavailable.
+                }
+            });
+        })();
         (function () {
             const switcher = document.getElementById('cfThemeSwitcher');
             if (!switcher) {
