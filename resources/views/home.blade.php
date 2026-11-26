@@ -697,57 +697,81 @@
 
 
     {{-- DATASET Section --}}
-    <section class="my-5 px-2 px-md-4 px-lg-5" data-aos="fade-up">
-    <div class="text-center mb-4">
-        <h2 class="fw-bold" style="font-size:2.2rem;">
-            <i class="text-primary"></i>
-            Dataset Pasar Kerja
-        </h2>
-    </div>
     @php
-        $categoryBg = [
-            'Pencari Kerja' => 'dataset-bg-yellow',
-            'Pemberi Kerja' => 'dataset-bg-blue',
-            'Lowongan Kerja' => 'dataset-bg-green',
+        $datasetCategoryMeta = [
+            'Pencari Kerja' => ['tone' => 'amber', 'fallbackIcon' => 'fa-user-group'],
+            'Pemberi Kerja' => ['tone' => 'blue', 'fallbackIcon' => 'fa-building'],
+            'Lowongan Kerja' => ['tone' => 'green', 'fallbackIcon' => 'fa-briefcase'],
         ];
     @endphp
-    <div class="row justify-content-center g-4">
-        @foreach($datasets as $category => $cards)
-            <div class="col-12 col-md-4">
-                <div class="mb-3 p-3 rounded shadow {{ $categoryBg[$category] ?? '' }}">
-                    <h4 class="fw-bold mb-2" style="color: #187C19;">
-                        <span class="text-danger">Dataset</span> {{ $category }}
-                        @if($cards->first()->icon)
-                            <i class="fa {{ $cards->first()->icon }} ms-2"></i>
-                        @endif
-                    </h4>
-                    @foreach($cards as $card)
-                        <div class="card mb-3 shadow-sm">
-                            <div class="card-body">
-                                <div class="fw-bold mb-1">{{ $card->title }}</div>
-                                <div class="mb-1 text-muted" style="font-size:0.95rem;">
-                                    <i class="fa fa-map-marker"></i> {{ $card->location ?? '-' }}<br>
-                                    <i class="fa fa-calendar"></i> {{ $card->years ?? '-' }}
-                                </div>
-                                <div class="d-flex gap-2 mt-2">
-                                    @if($card->csv_url)
-                                        <a href="{{ asset($card->csv_url) }}" class="btn btn-warning btn-sm fw-bold" download>CSV</a>
-                                    @endif
-                                    @if($card->xlsx_url)
-                                        <a href="{{ asset($card->xlsx_url) }}" class="btn btn-success btn-sm fw-bold" target="_blank">XLSX</a>
-                                    @endif
-                                </div>
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
+    <section class="dataset-showcase my-5 mx-2 mx-md-4 mx-lg-5" data-aos="fade-up">
+        <span class="dataset-showcase-decoration dataset-showcase-decoration-one" aria-hidden="true"></span>
+        <span class="dataset-showcase-decoration dataset-showcase-decoration-two" aria-hidden="true"></span>
+
+        <div class="dataset-showcase-inner">
+            <div class="dataset-showcase-heading">
+                <span class="dataset-showcase-heading-icon"><i class="fa-solid fa-database"></i></span>
+                <h2>Dataset Pasar Kerja</h2>
+                <span class="dataset-showcase-heading-line" aria-hidden="true"></span>
             </div>
-        @endforeach
-    </div>
-    <div class="text-center mt-4">
-        <a href="{{ route('datasets.index') }}" class="btn btn-outline-success rounded-pill px-4 py-2">Lihat Semua</a>
-    </div>
-</section>
+
+            <div class="dataset-category-grid">
+                @foreach($datasets as $category => $cards)
+                    @php
+                        $categoryMeta = $datasetCategoryMeta[$category] ?? ['tone' => 'blue', 'fallbackIcon' => 'fa-table'];
+                        $categoryIcon = $cards->first()->icon ?: $categoryMeta['fallbackIcon'];
+                    @endphp
+                    <article class="dataset-category dataset-tone-{{ $categoryMeta['tone'] }}"
+                        data-aos="fade-up"
+                        data-aos-delay="{{ $loop->index * 100 }}">
+                        <header class="dataset-category-header">
+                            <span class="dataset-category-icon">
+                                <i class="fa {{ $categoryIcon }}"></i>
+                            </span>
+                            <h3><span>Dataset</span> {{ $category }}</h3>
+                            <span class="dataset-category-count">{{ str_pad($cards->count(), 2, '0', STR_PAD_LEFT) }}</span>
+                        </header>
+
+                        <div class="dataset-card-list">
+                            @foreach($cards as $card)
+                                <div class="dataset-item">
+                                    <div class="dataset-item-number">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</div>
+                                    <h4>{{ $card->title }}</h4>
+                                    @if($card->description)
+                                        <p class="dataset-item-description">{{ $card->description }}</p>
+                                    @endif
+                                    <div class="dataset-item-meta">
+                                        <span><i class="fa-solid fa-location-dot"></i> {{ $card->location ?? '-' }}</span>
+                                        <span><i class="fa-regular fa-calendar"></i> {{ $card->years ?? '-' }}</span>
+                                    </div>
+                                    @if($card->csv_url || $card->xlsx_url)
+                                        <div class="dataset-item-actions">
+                                            @if($card->csv_url)
+                                                <a href="{{ asset($card->csv_url) }}" class="dataset-format dataset-format-csv" download>
+                                                    <i class="fa-solid fa-file-csv"></i> CSV
+                                                </a>
+                                            @endif
+                                            @if($card->xlsx_url)
+                                                <a href="{{ asset($card->xlsx_url) }}" class="dataset-format dataset-format-xlsx" target="_blank">
+                                                    <i class="fa-solid fa-file-excel"></i> XLSX
+                                                </a>
+                                            @endif
+                                        </div>
+                                    @endif
+                                </div>
+                            @endforeach
+                        </div>
+                    </article>
+                @endforeach
+            </div>
+
+            <div class="text-center mt-4">
+                <a href="{{ route('datasets.index') }}" class="dataset-showcase-all">
+                    Lihat Semua <i class="fa-solid fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </section>
 
 
     {{-- Topik Data Section --}}
@@ -2663,9 +2687,365 @@
         margin-top: -60px; /* Less overlap on mobile */
     }
 }
-.dataset-bg-yellow { background: #fffbe6; }
-.dataset-bg-blue   { background: #e6f0ff; }
-.dataset-bg-green  { background: #e6ffed; }
+/* Dataset library */
+.dataset-showcase {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(15, 95, 168, 0.12);
+    border-radius: 32px;
+    background:
+        radial-gradient(circle at 4% 10%, rgba(250, 187, 35, 0.12), transparent 22%),
+        radial-gradient(circle at 97% 88%, rgba(0, 163, 138, 0.12), transparent 25%),
+        linear-gradient(145deg, rgba(255, 255, 255, 0.94), rgba(237, 247, 253, 0.96));
+    box-shadow: 0 20px 50px rgba(12, 50, 82, 0.1);
+}
+
+.dataset-showcase::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    opacity: 0.32;
+    pointer-events: none;
+    background-image: radial-gradient(rgba(15, 95, 168, 0.18) 1px, transparent 1px);
+    background-size: 22px 22px;
+    mask-image: linear-gradient(115deg, #000, transparent 35%, transparent 70%, #000);
+}
+
+.dataset-showcase-inner {
+    position: relative;
+    z-index: 2;
+    padding: clamp(1.5rem, 4vw, 3.5rem);
+}
+
+.dataset-showcase-decoration {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.dataset-showcase-decoration-one {
+    width: 180px;
+    height: 180px;
+    top: -115px;
+    left: 12%;
+    border: 28px solid rgba(250, 187, 35, 0.09);
+}
+
+.dataset-showcase-decoration-two {
+    width: 220px;
+    height: 220px;
+    right: -150px;
+    bottom: 8%;
+    border: 36px solid rgba(0, 163, 138, 0.08);
+}
+
+.dataset-showcase-heading {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.dataset-showcase-heading-icon {
+    display: inline-flex;
+    width: 54px;
+    height: 54px;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    border-radius: 17px;
+    color: #fff;
+    background: linear-gradient(135deg, #0f5fa8, #00a38a);
+    box-shadow: 0 11px 25px rgba(15, 95, 168, 0.24);
+    font-size: 1.2rem;
+}
+
+.dataset-showcase-heading h2 {
+    flex: 0 0 auto;
+    margin: 0;
+    color: #0b3859;
+    font-size: clamp(1.75rem, 3vw, 2.55rem);
+    font-weight: 800;
+    letter-spacing: -0.035em;
+}
+
+.dataset-showcase-heading-line {
+    width: 100%;
+    height: 1px;
+    margin-left: 0.4rem;
+    background: linear-gradient(90deg, rgba(15, 95, 168, 0.28), transparent);
+}
+
+.dataset-category-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: start;
+    gap: 1.25rem;
+}
+
+.dataset-category {
+    --dataset-accent: #2583e8;
+    --dataset-accent-rgb: 37, 131, 232;
+    position: relative;
+    padding: 0.75rem;
+    overflow: hidden;
+    border: 1px solid rgba(var(--dataset-accent-rgb), 0.2);
+    border-radius: 24px;
+    background:
+        linear-gradient(180deg, rgba(var(--dataset-accent-rgb), 0.12), transparent 135px),
+        rgba(255, 255, 255, 0.74);
+    box-shadow: 0 12px 30px rgba(12, 50, 82, 0.08);
+    backdrop-filter: blur(12px);
+}
+
+.dataset-tone-amber {
+    --dataset-accent: #d98c08;
+    --dataset-accent-rgb: 217, 140, 8;
+}
+
+.dataset-tone-blue {
+    --dataset-accent: #2578d5;
+    --dataset-accent-rgb: 37, 120, 213;
+}
+
+.dataset-tone-green {
+    --dataset-accent: #079273;
+    --dataset-accent-rgb: 7, 146, 115;
+}
+
+.dataset-category-header {
+    position: relative;
+    display: flex;
+    min-height: 86px;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.85rem 0.7rem 1rem;
+}
+
+.dataset-category-icon {
+    display: inline-flex;
+    width: 46px;
+    height: 46px;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    border-radius: 14px;
+    color: #fff;
+    background: var(--dataset-accent);
+    box-shadow: 0 8px 18px rgba(var(--dataset-accent-rgb), 0.25);
+}
+
+.dataset-category-header h3 {
+    margin: 0;
+    color: #153c56;
+    font-size: 1rem;
+    font-weight: 800;
+    line-height: 1.35;
+}
+
+.dataset-category-header h3 span {
+    display: block;
+    margin-bottom: 0.05rem;
+    color: var(--dataset-accent);
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.dataset-category-count {
+    align-self: flex-start;
+    margin-left: auto;
+    padding: 0.25rem 0.45rem;
+    border: 1px solid rgba(var(--dataset-accent-rgb), 0.18);
+    border-radius: 8px;
+    color: var(--dataset-accent);
+    background: rgba(255, 255, 255, 0.7);
+    font-size: 0.7rem;
+    font-weight: 850;
+    letter-spacing: 0.06em;
+}
+
+.dataset-card-list {
+    display: grid;
+    gap: 0.75rem;
+}
+
+.dataset-item {
+    position: relative;
+    padding: 1.1rem;
+    overflow: hidden;
+    border: 1px solid rgba(var(--dataset-accent-rgb), 0.12);
+    border-radius: 17px;
+    background: rgba(255, 255, 255, 0.94);
+    box-shadow: 0 6px 16px rgba(12, 50, 82, 0.055);
+    transition: border-color 0.22s ease, box-shadow 0.22s ease, transform 0.22s ease;
+}
+
+.dataset-item:hover {
+    border-color: rgba(var(--dataset-accent-rgb), 0.4);
+    box-shadow: 0 12px 24px rgba(12, 50, 82, 0.11);
+    transform: translateY(-3px);
+}
+
+.dataset-item-number {
+    position: absolute;
+    top: 0.9rem;
+    right: 0.95rem;
+    color: rgba(var(--dataset-accent-rgb), 0.56);
+    font-size: 0.68rem;
+    font-weight: 850;
+    letter-spacing: 0.08em;
+}
+
+.dataset-item h4 {
+    margin: 0 2rem 0.75rem 0;
+    color: #14384f;
+    font-size: 0.97rem;
+    font-weight: 750;
+    line-height: 1.45;
+    overflow-wrap: anywhere;
+}
+
+.dataset-item-description {
+    margin: -0.25rem 0 0.8rem;
+    color: #6a7e8c;
+    font-size: 0.82rem;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+.dataset-item-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    margin-bottom: 0.9rem;
+}
+
+.dataset-item-meta span {
+    display: inline-flex;
+    min-width: 0;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem 0.55rem;
+    border-radius: 9px;
+    color: #5e7584;
+    background: #f0f6f9;
+    font-size: 0.74rem;
+    font-weight: 650;
+    overflow-wrap: anywhere;
+}
+
+.dataset-item-meta i {
+    flex: 0 0 auto;
+    color: var(--dataset-accent);
+}
+
+.dataset-item-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding-top: 0.85rem;
+    border-top: 1px solid #e8eff3;
+}
+
+.dataset-format {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.42rem 0.68rem;
+    border: 1px solid transparent;
+    border-radius: 9px;
+    font-size: 0.72rem;
+    font-weight: 800;
+    text-decoration: none;
+    transition: color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+}
+
+.dataset-format:hover {
+    transform: translateY(-2px);
+}
+
+.dataset-format-csv {
+    border-color: #f3d28c;
+    color: #8b5905;
+    background: #fff5d9;
+}
+
+.dataset-format-csv:hover {
+    color: #fff;
+    background: #d98c08;
+}
+
+.dataset-format-xlsx {
+    border-color: #9ddbc9;
+    color: #057258;
+    background: #e5f8f2;
+}
+
+.dataset-format-xlsx:hover {
+    color: #fff;
+    background: #079273;
+}
+
+.dataset-showcase-all {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.78rem 1.2rem;
+    border: 1px solid rgba(15, 95, 168, 0.28);
+    border-radius: 999px;
+    color: #0f5fa8;
+    background: rgba(255, 255, 255, 0.72);
+    font-weight: 750;
+    text-decoration: none;
+    box-shadow: 0 8px 20px rgba(12, 50, 82, 0.07);
+    transition: color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+}
+
+.dataset-showcase-all:hover {
+    color: #fff;
+    background: #0f5fa8;
+    transform: translateY(-2px);
+}
+
+@media (max-width: 991.98px) {
+    .dataset-category-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .dataset-card-list {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 575.98px) {
+    .dataset-showcase {
+        border-radius: 24px;
+    }
+
+    .dataset-showcase-heading {
+        align-items: flex-start;
+    }
+
+    .dataset-showcase-heading-icon {
+        width: 46px;
+        height: 46px;
+        border-radius: 14px;
+    }
+
+    .dataset-showcase-heading-line {
+        display: none;
+    }
+
+    .dataset-card-list {
+        grid-template-columns: 1fr;
+    }
+
+    .dataset-category {
+        border-radius: 20px;
+    }
+}
+
 .service-card-compact {
     border-radius: 1.5rem;
     background: #fff;
@@ -3037,6 +3417,48 @@ html.dark-mode .market-carousel-panel {
     background:
         linear-gradient(120deg, rgba(var(--market-accent-rgb), 0.13), transparent 32%),
         rgba(17, 27, 45, 0.78);
+}
+html.dark-mode .dataset-showcase {
+    border-color: var(--theme-border);
+    background:
+        radial-gradient(circle at 4% 10%, rgba(250, 187, 35, 0.09), transparent 22%),
+        radial-gradient(circle at 97% 88%, rgba(0, 163, 138, 0.1), transparent 25%),
+        linear-gradient(145deg, #111b2d, #17243a);
+}
+html.dark-mode .dataset-showcase-heading h2 {
+    color: var(--theme-text);
+}
+html.dark-mode .dataset-category {
+    background:
+        linear-gradient(180deg, rgba(var(--dataset-accent-rgb), 0.14), transparent 135px),
+        rgba(17, 27, 45, 0.8);
+}
+html.dark-mode .dataset-category-header h3 {
+    color: var(--theme-text);
+}
+html.dark-mode .dataset-category-count {
+    background: rgba(15, 23, 42, 0.68);
+}
+html.dark-mode .dataset-item {
+    background: #17243a;
+    border-color: rgba(var(--dataset-accent-rgb), 0.2);
+}
+html.dark-mode .dataset-item h4 {
+    color: var(--theme-text);
+}
+html.dark-mode .dataset-item-description,
+html.dark-mode .dataset-item-meta span {
+    color: var(--theme-text-muted);
+}
+html.dark-mode .dataset-item-meta span {
+    background: #1c2940;
+}
+html.dark-mode .dataset-item-actions {
+    border-color: var(--theme-border);
+}
+html.dark-mode .dataset-showcase-all {
+    color: #7dd3fc;
+    background: rgba(15, 23, 42, 0.62);
 }
 
 </style>
