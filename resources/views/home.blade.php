@@ -850,50 +850,87 @@
     </section>
 
     {{-- News Section --}}
-    <section class="my-5 px-2 px-md-4 px-lg-5" data-aos="fade-up">
-        <h2 class="fw-bold text-center mb-4" style="font-size:2rem;">Berita Terkini</h2>
-        <div class="row g-4 align-items-stretch">
-            @php
-                $featuredNews = $news->first();
-                $otherNews = $news->slice(1, 2);
-            @endphp
-            <div class="col-lg-7">
-                @if($featuredNews)
-                    <div class="position-relative rounded-4 overflow-hidden shadow-sm" style="height:340px;">
-                        @if($featuredNews->image_url)
-                            <img src="{{ $featuredNews->image_url }}" alt="{{ $featuredNews->title }}" class="w-100 h-100 object-fit-cover" style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover;">
-                        @endif
-                        <a href="{{ route('news.DetailBerita', $featuredNews->id) }}" class="stretched-link"></a>
-                        <div class="position-absolute bottom-0 start-0 w-100 p-4" style="background: linear-gradient(0deg,rgba(0,0,0,0.7) 70%,rgba(0,0,0,0.1) 100%);">
-                            <div class="text-white mb-1" style="font-size:1rem;">{{ indo_date($featuredNews->date) }}</div>
-                            <h3 class="fw-bold text-white mb-2" style="font-size:1.5rem;">{{ $featuredNews->title }}</h3>
-                            <p class="text-white mb-0" style="font-size:1.1rem;">{{ Str::limit($featuredNews->content, 120) }}</p>
-                        </div>
-                    </div>
-                @endif
+    @php
+        $featuredNews = $news->first();
+        $otherNews = $news->slice(1, 2);
+        $newsPreview = static function ($content, $limit) {
+            $preview = html_entity_decode((string) $content, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+            $preview = str_replace("\u{00A0}", ' ', $preview);
+            $preview = strip_tags($preview);
+            $preview = preg_replace('/\s+/u', ' ', $preview) ?? '';
+            return \Illuminate\Support\Str::limit(trim($preview), $limit);
+        };
+    @endphp
+    <section class="news-showcase my-5 mx-2 mx-md-4 mx-lg-5" data-aos="fade-up">
+        <span class="news-showcase-orb news-showcase-orb-one" aria-hidden="true"></span>
+        <span class="news-showcase-orb news-showcase-orb-two" aria-hidden="true"></span>
+
+        <div class="news-showcase-inner">
+            <div class="news-showcase-heading">
+                <div class="news-showcase-title">
+                    <span class="news-showcase-title-icon"><i class="fa-regular fa-newspaper"></i></span>
+                    <h2>Berita Terkini</h2>
+                </div>
+                <a href="{{ route('news.index') }}" class="news-showcase-all d-none d-md-inline-flex">
+                    Lihat Semua Berita <i class="fa-solid fa-arrow-right"></i>
+                </a>
             </div>
-            <div class="col-lg-5 d-flex flex-column gap-4">
-                @foreach($otherNews as $item)
-                    <div class="d-flex flex-row rounded-4 shadow-sm bg-white overflow-hidden h-100 position-relative" style="min-height:150px;">
-                        @if($item->image_url)
-                            <img src="{{ $item->image_url }}" alt="{{ $item->title }}" class="object-fit-cover" style="width:160px; height:100%; object-fit:cover;">
-                        @endif
-                        <a href="{{ route('news.DetailBerita', $item->id) }}" class="stretched-link"></a>
-                        <div class="p-3 d-flex flex-column justify-content-between flex-grow-1">
-                            <div>
-                                <div class="text-muted mb-1" style="font-size:0.95rem;">{{ indo_date($item->date) }}</div>
-                                <div class="fw-bold mb-1" style="font-size:1.1rem;">{{ $item->title }}</div>
-                                <div class="text-muted" style="font-size:1rem;">{{ Str::limit($item->content, 80) }}</div>
-                            </div>
+
+            @if($featuredNews)
+                <div class="news-editorial-grid">
+                    <a href="{{ route('news.DetailBerita', $featuredNews->id) }}" class="news-featured">
+                        <div class="news-featured-media">
+                            @if($featuredNews->image_url)
+                                <img src="{{ $featuredNews->image_url }}" alt="{{ $featuredNews->title }}">
+                            @else
+                                <span class="news-image-fallback"><i class="fa-regular fa-newspaper"></i></span>
+                            @endif
                         </div>
+                        <div class="news-featured-overlay"></div>
+                        <span class="news-featured-badge"><i class="fa-solid fa-bolt"></i> 01</span>
+                        <div class="news-featured-content">
+                            <div class="news-date"><i class="fa-regular fa-calendar"></i> {{ indo_date($featuredNews->date) }}</div>
+                            <h3>{{ $featuredNews->title }}</h3>
+                            <p>{{ $newsPreview($featuredNews->content, 180) }}</p>
+                            <span class="news-read-action">
+                                <i class="fa-solid fa-arrow-right"></i>
+                            </span>
+                        </div>
+                    </a>
+
+                    <div class="news-secondary-list">
+                        @foreach($otherNews as $item)
+                            <a href="{{ route('news.DetailBerita', $item->id) }}" class="news-secondary-item">
+                                <div class="news-secondary-media">
+                                    @if($item->image_url)
+                                        <img src="{{ $item->image_url }}" alt="{{ $item->title }}">
+                                    @else
+                                        <span class="news-image-fallback"><i class="fa-regular fa-newspaper"></i></span>
+                                    @endif
+                                    <span class="news-secondary-number">{{ str_pad($loop->iteration + 1, 2, '0', STR_PAD_LEFT) }}</span>
+                                </div>
+                                <div class="news-secondary-content">
+                                    <div class="news-date"><i class="fa-regular fa-calendar"></i> {{ indo_date($item->date) }}</div>
+                                    <h3>{{ $item->title }}</h3>
+                                    <p>{{ $newsPreview($item->content, 105) }}</p>
+                                    <span class="news-secondary-arrow"><i class="fa-solid fa-arrow-right"></i></span>
+                                </div>
+                            </a>
+                        @endforeach
                     </div>
-                @endforeach
+                </div>
+            @else
+                <div class="news-showcase-empty">
+                    <i class="fa-regular fa-newspaper"></i>
+                    <p>Belum ada berita terbaru.</p>
+                </div>
+            @endif
+
+            <div class="text-center mt-4 d-md-none">
+                <a href="{{ route('news.index') }}" class="news-showcase-all">
+                    Lihat Semua Berita <i class="fa-solid fa-arrow-right"></i>
+                </a>
             </div>
-        </div>
-        <div class="text-center mt-4">
-            <a href="{{ route('news.index') }}" class="btn btn-outline-success rounded-pill px-4 py-2">
-                Lihat Semua Berita <i class="fa fa-arrow-right"></i>
-            </a>
         </div>
     </section>
 
@@ -3456,6 +3493,449 @@
     }
 }
 
+/* Latest news editorial section */
+.news-showcase {
+    position: relative;
+    overflow: hidden;
+    border-radius: 32px;
+    color: #fff;
+    background:
+        radial-gradient(circle at 95% 4%, rgba(45, 212, 191, 0.16), transparent 25%),
+        radial-gradient(circle at 3% 100%, rgba(47, 159, 232, 0.17), transparent 27%),
+        linear-gradient(138deg, #082d49 0%, #0b4162 55%, #075e61 100%);
+    box-shadow: 0 24px 58px rgba(8, 45, 73, 0.18);
+}
+
+.news-showcase::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    opacity: 0.13;
+    pointer-events: none;
+    background-image:
+        linear-gradient(rgba(255, 255, 255, 0.42) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.42) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: linear-gradient(130deg, #000, transparent 65%);
+}
+
+.news-showcase-inner {
+    position: relative;
+    z-index: 2;
+    padding: clamp(1.5rem, 4vw, 3.5rem);
+}
+
+.news-showcase-orb {
+    position: absolute;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.news-showcase-orb-one {
+    width: 220px;
+    height: 220px;
+    top: -140px;
+    right: 15%;
+}
+
+.news-showcase-orb-two {
+    width: 120px;
+    height: 120px;
+    right: -42px;
+    bottom: 8%;
+}
+
+.news-showcase-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    margin-bottom: 1.75rem;
+}
+
+.news-showcase-title {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+}
+
+.news-showcase-title-icon {
+    display: inline-flex;
+    width: 52px;
+    height: 52px;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 16px;
+    color: #f5cf68;
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 10px 24px rgba(2, 25, 42, 0.16);
+    font-size: 1.2rem;
+    backdrop-filter: blur(8px);
+}
+
+.news-showcase-title h2 {
+    margin: 0;
+    color: #fff;
+    font-size: clamp(1.8rem, 3vw, 2.65rem);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+}
+
+.news-showcase-all {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    gap: 0.65rem;
+    padding: 0.76rem 1.15rem;
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    border-radius: 999px;
+    color: #fff;
+    background: rgba(255, 255, 255, 0.09);
+    font-size: 0.88rem;
+    font-weight: 750;
+    text-decoration: none;
+    backdrop-filter: blur(8px);
+    transition: color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+}
+
+.news-showcase-all:hover {
+    color: #0b4162;
+    background: #fff;
+    transform: translateY(-2px);
+}
+
+.news-editorial-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(330px, 0.85fr);
+    gap: 1.15rem;
+}
+
+.news-featured {
+    position: relative;
+    display: block;
+    min-height: 490px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 24px;
+    color: #fff;
+    background: #092f49;
+    box-shadow: 0 16px 36px rgba(1, 23, 38, 0.22);
+    text-decoration: none;
+}
+
+.news-featured-media,
+.news-featured-media img,
+.news-featured-overlay {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.news-featured-media img {
+    object-fit: cover;
+    transition: transform 0.55s ease;
+}
+
+.news-featured:hover .news-featured-media img {
+    transform: scale(1.045);
+}
+
+.news-featured-overlay {
+    background:
+        linear-gradient(180deg, rgba(2, 18, 29, 0.08) 20%, rgba(2, 21, 35, 0.48) 55%, rgba(2, 20, 33, 0.95) 100%),
+        linear-gradient(90deg, rgba(2, 24, 38, 0.3), transparent 60%);
+}
+
+.news-featured-badge {
+    position: absolute;
+    z-index: 2;
+    top: 1.25rem;
+    left: 1.25rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.52rem 0.7rem;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 999px;
+    color: #17384a;
+    background: #f5cf68;
+    box-shadow: 0 8px 20px rgba(2, 20, 33, 0.2);
+    font-size: 0.72rem;
+    font-weight: 850;
+}
+
+.news-featured-content {
+    position: absolute;
+    z-index: 2;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    padding: clamp(1.35rem, 3vw, 2.25rem);
+}
+
+.news-date {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    margin-bottom: 0.65rem;
+    color: inherit;
+    font-size: 0.75rem;
+    font-weight: 700;
+    opacity: 0.72;
+}
+
+.news-featured h3 {
+    max-width: 800px;
+    margin: 0 3.3rem 0.65rem 0;
+    color: #fff;
+    font-size: clamp(1.45rem, 2.5vw, 2.2rem);
+    font-weight: 800;
+    line-height: 1.2;
+    letter-spacing: -0.025em;
+    overflow-wrap: anywhere;
+}
+
+.news-featured p {
+    max-width: 780px;
+    margin: 0 3rem 0 0;
+    color: rgba(255, 255, 255, 0.76);
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+.news-read-action {
+    position: absolute;
+    right: clamp(1.35rem, 3vw, 2.25rem);
+    bottom: clamp(1.35rem, 3vw, 2.25rem);
+    display: inline-flex;
+    width: 42px;
+    height: 42px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: #153a50;
+    background: #f5cf68;
+    box-shadow: 0 9px 20px rgba(2, 20, 33, 0.24);
+    transition: transform 0.2s ease;
+}
+
+.news-featured:hover .news-read-action {
+    transform: translateX(4px);
+}
+
+.news-secondary-list {
+    display: grid;
+    grid-template-rows: repeat(2, minmax(0, 1fr));
+    gap: 1.15rem;
+}
+
+.news-secondary-item {
+    display: grid;
+    min-height: 0;
+    grid-template-columns: minmax(125px, 0.72fr) minmax(0, 1.28fr);
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    border-radius: 22px;
+    color: #17384a;
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 12px 28px rgba(1, 23, 38, 0.15);
+    text-decoration: none;
+    transition: border-color 0.22s ease, box-shadow 0.22s ease, transform 0.22s ease;
+}
+
+.news-secondary-item:hover {
+    color: #17384a;
+    border-color: #5dd5c2;
+    box-shadow: 0 17px 34px rgba(1, 23, 38, 0.22);
+    transform: translateY(-4px);
+}
+
+.news-secondary-media {
+    position: relative;
+    min-height: 100%;
+    overflow: hidden;
+    background: linear-gradient(145deg, #0f5fa8, #00a38a);
+}
+
+.news-secondary-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.news-secondary-item:hover .news-secondary-media img {
+    transform: scale(1.055);
+}
+
+.news-secondary-number {
+    position: absolute;
+    top: 0.75rem;
+    left: 0.75rem;
+    padding: 0.35rem 0.45rem;
+    border-radius: 8px;
+    color: #17384a;
+    background: #f5cf68;
+    box-shadow: 0 6px 14px rgba(2, 20, 33, 0.18);
+    font-size: 0.68rem;
+    font-weight: 850;
+}
+
+.news-secondary-content {
+    position: relative;
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    padding: 1.15rem;
+}
+
+.news-secondary-content .news-date {
+    color: #5f7786;
+    opacity: 1;
+}
+
+.news-secondary-content h3 {
+    margin: 0 0 0.55rem;
+    color: #163b52;
+    font-size: 1rem;
+    font-weight: 800;
+    line-height: 1.38;
+    overflow-wrap: anywhere;
+}
+
+.news-secondary-content p {
+    margin: 0 2rem 0 0;
+    color: #657c8a;
+    font-size: 0.8rem;
+    line-height: 1.5;
+}
+
+.news-secondary-arrow {
+    display: inline-flex;
+    width: 30px;
+    height: 30px;
+    align-items: center;
+    justify-content: center;
+    align-self: flex-end;
+    margin-top: auto;
+    border-radius: 50%;
+    color: #fff;
+    background: #0b8d76;
+    transition: transform 0.2s ease;
+}
+
+.news-secondary-item:hover .news-secondary-arrow {
+    transform: translateX(3px);
+}
+
+.news-image-fallback {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.74);
+    background:
+        radial-gradient(circle at 75% 20%, rgba(255, 255, 255, 0.18), transparent 28%),
+        linear-gradient(145deg, #0f5fa8, #00a38a);
+    font-size: 3rem;
+}
+
+.news-showcase-empty {
+    display: grid;
+    min-height: 280px;
+    place-content: center;
+    border: 1px dashed rgba(255, 255, 255, 0.28);
+    border-radius: 22px;
+    color: rgba(255, 255, 255, 0.7);
+    text-align: center;
+}
+
+.news-showcase-empty i {
+    margin-bottom: 0.8rem;
+    font-size: 2.2rem;
+}
+
+.news-showcase-empty p {
+    margin: 0;
+}
+
+@media (max-width: 991.98px) {
+    .news-editorial-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .news-secondary-list {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-rows: auto;
+    }
+
+    .news-secondary-item {
+        grid-template-columns: 1fr;
+    }
+
+    .news-secondary-media {
+        min-height: 190px;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .news-secondary-list {
+        grid-template-columns: 1fr;
+    }
+
+    .news-secondary-item {
+        grid-template-columns: minmax(120px, 0.65fr) minmax(0, 1.35fr);
+    }
+
+    .news-secondary-media {
+        min-height: 220px;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .news-showcase {
+        border-radius: 24px;
+    }
+
+    .news-showcase-title-icon {
+        width: 46px;
+        height: 46px;
+        border-radius: 14px;
+    }
+
+    .news-featured {
+        min-height: 460px;
+        border-radius: 20px;
+    }
+
+    .news-featured h3,
+    .news-featured p {
+        margin-right: 0;
+    }
+
+    .news-featured p {
+        padding-right: 2.6rem;
+    }
+
+    .news-secondary-item {
+        grid-template-columns: 1fr;
+    }
+
+    .news-secondary-media {
+        min-height: 180px;
+    }
+
+    .news-secondary-content p {
+        margin-right: 0;
+    }
+}
+
 .service-card-compact {
     border-radius: 1.5rem;
     background: #fff;
@@ -3869,6 +4349,18 @@ html.dark-mode .dataset-item-actions {
 html.dark-mode .dataset-showcase-all {
     color: #7dd3fc;
     background: rgba(15, 23, 42, 0.62);
+}
+html.dark-mode .news-secondary-item {
+    border-color: var(--theme-border);
+    color: var(--theme-text);
+    background: #17243a;
+}
+html.dark-mode .news-secondary-content h3 {
+    color: var(--theme-text);
+}
+html.dark-mode .news-secondary-content p,
+html.dark-mode .news-secondary-content .news-date {
+    color: var(--theme-text-muted);
 }
 
 </style>
