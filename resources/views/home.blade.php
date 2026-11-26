@@ -100,181 +100,124 @@
         </div>
     </section>
 
-    {{-- Highlight Pasar Kerja --}}
-    <section class="stat-carousel-section market-highlight" data-aos="fade-up">
-        <div class="market-highlight-shell">
-            <div class="market-highlight-heading">
-                <div>
-                    <span class="market-highlight-eyebrow"><i class="fa-solid fa-signal"></i> Data terkini</span>
-                    <h2>Highlight Pasar Kerja</h2>
-                    <p>Angka penting untuk membaca kondisi dan pergerakan pasar kerja Indonesia.</p>
-                </div>
-                <div class="market-live-badge">
-                    <span></span>
-                    Ringkasan statistik
-                </div>
+    {{-- Highlight Pasar Kerja Section --}}
+    <section class="stat-carousel-section market-highlight-section position-relative">
+        <span class="market-highlight-shape market-highlight-shape-one" aria-hidden="true"></span>
+        <span class="market-highlight-shape market-highlight-shape-two" aria-hidden="true"></span>
+        <div class="container-fluid position-relative px-2 px-sm-3 px-lg-4">
+            <div class="market-highlight-heading" data-aos="fade-up">
+                <span class="market-highlight-heading-icon"><i class="fa-solid fa-chart-column"></i></span>
+                <h3>Highlight Pasar Kerja</h3>
+                <span class="market-highlight-heading-line" aria-hidden="true"></span>
             </div>
 
-            {{-- Main statistics --}}
-            <div class="market-lane">
-                <div class="market-lane-heading">
-                    <div>
-                        <span class="market-lane-number">01</span>
-                        <div>
-                            <h3>Indikator Utama</h3>
-                            <p>Gambaran umum ketenagakerjaan</p>
-                        </div>
-                    </div>
-                    <div class="market-controls">
-                        <button id="statScrollPrev" class="market-control" type="button" aria-label="Indikator sebelumnya">
-                            <i class="fa-solid fa-arrow-left"></i>
-                        </button>
-                        <button id="statScrollNext" class="market-control" type="button" aria-label="Indikator berikutnya">
-                            <i class="fa-solid fa-arrow-right"></i>
-                        </button>
-                    </div>
+            {{-- First Carousel --}}
+            <div class="market-carousel-panel market-carousel-panel-blue" data-aos="fade-up">
+                <button id="statScrollPrev" class="market-carousel-button market-carousel-button-prev" type="button" aria-label="Sebelumnya">
+                    <i class="fa fa-chevron-left"></i>
+                </button>
+                <div id="statScrollRow" class="market-carousel-track">
+                    @foreach($statistics as $stat)
+                        <a href="{{ route('informasi.index', ['type' => 'statistik', 'search' => $stat->title]) }}" class="market-stat-link">
+                            <article class="market-stat-card">
+                                <div class="market-stat-top">
+                                    <span class="market-stat-icon"><i class="fa {{ $stat->logo ?? 'fa-chart-bar' }}"></i></span>
+                                    <span class="market-stat-index">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</span>
+                                </div>
+                                <div class="stat-title market-stat-title">{{ $stat->title }}</div>
+                                <div class="market-stat-reading">
+                                    <span class="stat-value market-stat-value">{{ $stat->value }}</span>
+                                    @if($stat->unit)
+                                        <span class="stat-unit market-stat-unit">{{ $stat->unit }}</span>
+                                    @endif
+                                </div>
+                                @if($stat->description)
+                                    <div class="stat-desc market-stat-description">{{ $stat->description }}</div>
+                                @endif
+                                <span class="market-stat-action"><i class="fa-solid fa-arrow-right"></i></span>
+                            </article>
+                        </a>
+                    @endforeach
                 </div>
-                <div class="market-carousel-frame">
-                    <div id="statScrollRow" class="market-scroll-row">
-                        @foreach($statistics as $stat)
+                <button id="statScrollNext" class="market-carousel-button market-carousel-button-next" type="button" aria-label="Berikutnya">
+                    <i class="fa fa-chevron-right"></i>
+                </button>
+                <div class="market-carousel-dots" id="statDots"></div>
+            </div>
+
+            {{-- Second Carousel --}}
+            <div class="market-carousel-panel market-carousel-panel-green" data-aos="fade-up">
+                <button id="highlightStatScrollPrev" class="market-carousel-button market-carousel-button-prev" type="button" aria-label="Sebelumnya">
+                    <i class="fa fa-chevron-left"></i>
+                </button>
+                <div id="highlightStatScrollRow" class="market-carousel-track">
+                    @foreach($highlightStatistics as $stat)
+                        <a href="{{ route('informasi.index', ['type' => 'statistik', 'search' => $stat->title]) }}" class="market-stat-link">
+                            <article class="market-stat-card">
+                                <div class="market-stat-top">
+                                    <span class="market-stat-icon"><i class="fa {{ $stat->logo ?? 'fa-star' }}"></i></span>
+                                    <span class="market-stat-index">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</span>
+                                </div>
+                                <div class="stat-title market-stat-title">{{ $stat->title }}</div>
+                                <div class="market-stat-reading">
+                                    <span class="stat-value market-stat-value">{{ $stat->value }}</span>
+                                    @if($stat->unit)
+                                        <span class="stat-unit market-stat-unit">{{ $stat->unit }}</span>
+                                    @endif
+                                </div>
+                                @if($stat->description)
+                                    <div class="stat-desc market-stat-description">{{ $stat->description }}</div>
+                                @endif
+                                <span class="market-stat-action"><i class="fa-solid fa-arrow-right"></i></span>
+                            </article>
+                        </a>
+                    @endforeach
+                </div>
+                <button id="highlightStatScrollNext" class="market-carousel-button market-carousel-button-next" type="button" aria-label="Berikutnya">
+                    <i class="fa fa-chevron-right"></i>
+                </button>
+                <div class="market-carousel-dots" id="highlightStatDots"></div>
+            </div>
+
+            {{-- Third Carousel (Secondary Highlights) --}}
+            <div class="market-source-panel home-ocean-banner-pink" data-aos="fade-up">
+                <div class="market-source-intro">
+                    <h2>Informasi bersumber dari</h2>
+                    <span class="thelogo-wrapper">
+                        <img src="{{ asset('images/services/karirhub_logo.png') }}" alt="Karirhub" class="img-fluid thelogo-inline">
+                    </span>
+                </div>
+                <div class="market-source-carousel">
+                    <button id="highlightStat2ScrollPrev" class="market-carousel-button market-carousel-button-prev" type="button" aria-label="Sebelumnya">
+                        <i class="fa fa-chevron-left"></i>
+                    </button>
+                    <div id="highlightStat2ScrollRow" class="market-carousel-track">
+                        @foreach($highlightStatistics2 ?? [] as $stat)
                             <a href="{{ route('informasi.index', ['type' => 'statistik', 'search' => $stat->title]) }}" class="market-stat-link">
-                                <article class="card stat-card market-stat-card market-tone-{{ $loop->index % 5 }}">
-                                    <div class="market-card-accent"></div>
-                                    <div class="card-body">
-                                        <div class="market-stat-top">
-                                            <span class="stat-icon"><i class="fa {{ $stat->logo ?? 'fa-chart-bar' }}"></i></span>
-                                            <span class="market-stat-index">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</span>
-                                        </div>
-                                        <div class="market-stat-content">
-                                            <div class="stat-title">{{ $stat->title }}</div>
-                                            <div class="market-stat-number">
-                                                <span class="stat-value">{{ $stat->value }}</span>
-                                                @if($stat->unit)
-                                                    <span class="stat-unit">{{ $stat->unit }}</span>
-                                                @endif
-                                            </div>
-                                            @if($stat->description)
-                                                <div class="stat-desc">{{ $stat->description }}</div>
-                                            @endif
-                                        </div>
-                                        <div class="market-card-action">
-                                            <span>Lihat data</span><i class="fa-solid fa-arrow-right"></i>
-                                        </div>
+                                <article class="market-stat-card">
+                                    <div class="market-stat-top">
+                                        <span class="market-stat-icon"><i class="fa {{ $stat->logo ?? 'fa-diamond' }}"></i></span>
+                                        <span class="market-stat-index">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</span>
                                     </div>
+                                    <div class="stat-title market-stat-title">{{ $stat->title }}</div>
+                                    <div class="market-stat-reading">
+                                        <span class="stat-value market-stat-value">{{ $stat->value }}</span>
+                                        @if($stat->unit)
+                                            <span class="stat-unit market-stat-unit">{{ $stat->unit }}</span>
+                                        @endif
+                                    </div>
+                                    @if($stat->description)
+                                        <div class="stat-desc market-stat-description">{{ $stat->description }}</div>
+                                    @endif
+                                    <span class="market-stat-action"><i class="fa-solid fa-arrow-right"></i></span>
                                 </article>
                             </a>
                         @endforeach
                     </div>
-                </div>
-                <div class="market-dots" id="statDots"></div>
-            </div>
-
-            {{-- Featured statistics --}}
-            <div class="market-lane">
-                <div class="market-lane-heading">
-                    <div>
-                        <span class="market-lane-number">02</span>
-                        <div>
-                            <h3>Sorotan Pasar Kerja</h3>
-                            <p>Statistik pilihan yang perlu diperhatikan</p>
-                        </div>
-                    </div>
-                    <div class="market-controls">
-                        <button id="highlightStatScrollPrev" class="market-control" type="button" aria-label="Sorotan sebelumnya">
-                            <i class="fa-solid fa-arrow-left"></i>
-                        </button>
-                        <button id="highlightStatScrollNext" class="market-control" type="button" aria-label="Sorotan berikutnya">
-                            <i class="fa-solid fa-arrow-right"></i>
-                        </button>
-                    </div>
-                </div>
-                <div class="market-carousel-frame">
-                    <div id="highlightStatScrollRow" class="market-scroll-row">
-                        @foreach($highlightStatistics as $stat)
-                            <a href="{{ route('informasi.index', ['type' => 'statistik', 'search' => $stat->title]) }}" class="market-stat-link">
-                                <article class="card stat-card market-stat-card market-tone-{{ ($loop->index + 2) % 5 }}">
-                                    <div class="market-card-accent"></div>
-                                    <div class="card-body">
-                                        <div class="market-stat-top">
-                                            <span class="stat-icon"><i class="fa {{ $stat->logo ?? 'fa-star' }}"></i></span>
-                                            <span class="market-featured-label"><i class="fa-solid fa-star"></i> Pilihan</span>
-                                        </div>
-                                        <div class="market-stat-content">
-                                            <div class="stat-title">{{ $stat->title }}</div>
-                                            <div class="market-stat-number">
-                                                <span class="stat-value">{{ $stat->value }}</span>
-                                                @if($stat->unit)
-                                                    <span class="stat-unit">{{ $stat->unit }}</span>
-                                                @endif
-                                            </div>
-                                            @if($stat->description)
-                                                <div class="stat-desc">{{ $stat->description }}</div>
-                                            @endif
-                                        </div>
-                                        <div class="market-card-action">
-                                            <span>Lihat data</span><i class="fa-solid fa-arrow-right"></i>
-                                        </div>
-                                    </div>
-                                </article>
-                            </a>
-                        @endforeach
-                    </div>
-                </div>
-                <div class="market-dots" id="highlightStatDots"></div>
-            </div>
-
-            {{-- Karirhub statistics --}}
-            <div class="karirhub-insight">
-                <span class="karirhub-orb karirhub-orb-one" aria-hidden="true"></span>
-                <span class="karirhub-orb karirhub-orb-two" aria-hidden="true"></span>
-                <div class="karirhub-intro">
-                    <span class="karirhub-kicker"><i class="fa-solid fa-briefcase"></i> Data lowongan</span>
-                    <h3>Insight langsung dari</h3>
-                    <img src="{{ asset('images/services/karirhub_logo.png') }}" alt="Karirhub" class="karirhub-logo">
-                    <p>Pantau kebutuhan tenaga kerja berdasarkan aktivitas lowongan terkini.</p>
-                    <div class="market-controls market-controls-light">
-                        <button id="highlightStat2ScrollPrev" class="market-control" type="button" aria-label="Insight Karirhub sebelumnya">
-                            <i class="fa-solid fa-arrow-left"></i>
-                        </button>
-                        <button id="highlightStat2ScrollNext" class="market-control" type="button" aria-label="Insight Karirhub berikutnya">
-                            <i class="fa-solid fa-arrow-right"></i>
-                        </button>
-                    </div>
-                </div>
-                <div class="karirhub-carousel">
-                    <div class="market-carousel-frame">
-                        <div id="highlightStat2ScrollRow" class="market-scroll-row">
-                            @foreach($highlightStatistics2 ?? [] as $stat)
-                                <a href="{{ route('informasi.index', ['type' => 'statistik', 'search' => $stat->title]) }}" class="market-stat-link">
-                                    <article class="card stat-card market-stat-card market-tone-{{ ($loop->index + 1) % 5 }}">
-                                        <div class="market-card-accent"></div>
-                                        <div class="card-body">
-                                            <div class="market-stat-top">
-                                                <span class="stat-icon"><i class="fa {{ $stat->logo ?? 'fa-diamond' }}"></i></span>
-                                                <span class="market-stat-index">KH</span>
-                                            </div>
-                                            <div class="market-stat-content">
-                                                <div class="stat-title">{{ $stat->title }}</div>
-                                                <div class="market-stat-number">
-                                                    <span class="stat-value">{{ $stat->value }}</span>
-                                                    @if($stat->unit)
-                                                        <span class="stat-unit">{{ $stat->unit }}</span>
-                                                    @endif
-                                                </div>
-                                                @if($stat->description)
-                                                    <div class="stat-desc">{{ $stat->description }}</div>
-                                                @endif
-                                            </div>
-                                            <div class="market-card-action">
-                                                <span>Lihat data</span><i class="fa-solid fa-arrow-right"></i>
-                                            </div>
-                                        </div>
-                                    </article>
-                                </a>
-                            @endforeach
-                        </div>
-                    </div>
-                    <div class="market-dots market-dots-light" id="highlightStat2Dots"></div>
+                    <button id="highlightStat2ScrollNext" class="market-carousel-button market-carousel-button-next" type="button" aria-label="Berikutnya">
+                        <i class="fa fa-chevron-right"></i>
+                    </button>
+                    <div class="market-carousel-dots market-carousel-dots-light" id="highlightStat2Dots"></div>
                 </div>
             </div>
         </div>
@@ -1185,83 +1128,6 @@
     });
 
     document.addEventListener('DOMContentLoaded', function () {
-        // Auto-shrink description text to fit within fixed box height
-        function autoshrinkDescriptions(root) {
-            const descriptions = (root || document).querySelectorAll('.stat-card .stat-desc');
-            descriptions.forEach((el) => {
-                let minSize = 12; // px
-                let size = parseFloat(window.getComputedStyle(el).fontSize);
-                const original = el.innerText;
-                // Reset any previous inline style before measuring
-                el.style.fontSize = size + 'px';
-                // Reduce font size until it fits within max-height or until min size
-                const maxHeight = parseFloat(window.getComputedStyle(el).maxHeight || '0');
-                if (!maxHeight) return;
-                let guard = 0;
-                while (el.scrollHeight > el.clientHeight && size > minSize && guard < 20) {
-                    size -= 1;
-                    el.style.fontSize = size + 'px';
-                    guard++;
-                }
-            });
-        }
-
-        // Run after content and layout are ready
-        setTimeout(() => autoshrinkDescriptions(document), 0);
-        // Re-run on resize for responsiveness
-        window.addEventListener('resize', () => autoshrinkDescriptions(document));
-
-        const row = document.getElementById('statScrollRow');
-        const prev = document.getElementById('statScrollPrev');
-        const next = document.getElementById('statScrollNext');
-        const dots = document.getElementById('statDots');
-        const cards = row.querySelectorAll('.stat-card');
-        const cardWidth = 256; // width + gap
-        let visible = Math.floor(row.offsetWidth / cardWidth) || 1;
-        const total = cards.length;
-        let current = 0;
-
-        function updateDots() {
-            dots.innerHTML = '';
-            visible = Math.floor(row.offsetWidth / cardWidth) || 1;
-            const dotCount = Math.ceil(total / visible);
-            for (let i = 0; i < dotCount; i++) {
-                const dot = document.createElement('span');
-                dot.className = 'stat-dot' + (i === Math.floor(current / visible) ? ' active' : '');
-                dot.addEventListener('click', () => {
-                    row.scrollTo({ left: i * cardWidth * visible, behavior: 'smooth' });
-                    current = i * visible;
-                    updateDots();
-                });
-                dots.appendChild(dot);
-            }
-        }
-
-        function scrollToCurrent() {
-            row.scrollTo({ left: current * cardWidth, behavior: 'smooth' });
-            updateDots();
-        }
-
-        prev.addEventListener('click', () => {
-            current = Math.max(0, current - visible);
-            scrollToCurrent();
-        });
-        next.addEventListener('click', () => {
-            current = Math.min(total - visible, current + visible);
-            scrollToCurrent();
-        });
-
-        row.addEventListener('scroll', () => {
-            current = Math.round(row.scrollLeft / cardWidth);
-            updateDots();
-        });
-
-        window.addEventListener('resize', () => {
-            updateDots();
-        });
-
-        updateDots();
-
         // --- Chart.js for Trend Pencari Kerja ---
         const chartsData = @json($charts->mapWithKeys(function($chart) {
             return [$chart->id => json_decode($chart->data_json)];
@@ -1368,152 +1234,76 @@
         });
     });
 
-    // --- Highlight Stat Carousel ---
+    // --- Responsive market highlight carousels ---
     document.addEventListener('DOMContentLoaded', function () {
-        const row = document.getElementById('highlightStatScrollRow');
-        if (!row) return;
-        const prev = document.getElementById('highlightStatScrollPrev');
-        const next = document.getElementById('highlightStatScrollNext');
-        const dots = document.getElementById('highlightStatDots');
-        const cards = row.querySelectorAll('.stat-card');
-        const cardWidth = 256;
-        let visible = Math.floor(row.offsetWidth / cardWidth) || 1;
-        const total = cards.length;
-        let current = 0;
+        const carousels = [
+            ['statScrollRow', 'statScrollPrev', 'statScrollNext', 'statDots'],
+            ['highlightStatScrollRow', 'highlightStatScrollPrev', 'highlightStatScrollNext', 'highlightStatDots'],
+            ['highlightStat2ScrollRow', 'highlightStat2ScrollPrev', 'highlightStat2ScrollNext', 'highlightStat2Dots'],
+        ];
 
-        function updateDots() {
-            dots.innerHTML = '';
-            visible = Math.floor(row.offsetWidth / cardWidth) || 1;
-            const dotCount = Math.ceil(total / visible);
-            for (let i = 0; i < dotCount; i++) {
-                const dot = document.createElement('span');
-                dot.className = 'stat-dot' + (i === Math.floor(current / visible) ? ' active' : '');
-                dot.addEventListener('click', () => {
-                    row.scrollTo({ left: i * cardWidth * visible, behavior: 'smooth' });
-                    current = i * visible;
-                    updateDots();
-                });
-                dots.appendChild(dot);
-            }
-        }
+        carousels.forEach(([rowId, prevId, nextId, dotsId]) => {
+            const row = document.getElementById(rowId);
+            const prev = document.getElementById(prevId);
+            const next = document.getElementById(nextId);
+            const dots = document.getElementById(dotsId);
+            if (!row || !prev || !next || !dots) return;
 
-        function scrollToCurrent() {
-            row.scrollTo({ left: current * cardWidth, behavior: 'smooth' });
-            updateDots();
-        }
+            const cards = Array.from(row.querySelectorAll('.market-stat-link'));
+            let currentPage = 0;
+            let resizeTimer = null;
 
-        prev.addEventListener('click', () => {
-            current = Math.max(0, current - visible);
-            scrollToCurrent();
+            const metrics = () => {
+                if (!cards.length) return { step: 1, visible: 1, pages: 0 };
+                const styles = window.getComputedStyle(row);
+                const gap = parseFloat(styles.columnGap || styles.gap) || 0;
+                const step = cards[0].getBoundingClientRect().width + gap;
+                const visible = Math.max(1, Math.floor((row.clientWidth + gap) / step));
+                const pages = Math.max(1, Math.ceil(cards.length / visible));
+                return { step, visible, pages };
+            };
+
+            const updateControls = () => {
+                const { step, visible, pages } = metrics();
+                const maxScroll = Math.max(0, row.scrollWidth - row.clientWidth);
+                const firstVisible = step > 0 ? Math.round(row.scrollLeft / step) : 0;
+                currentPage = Math.min(pages - 1, Math.floor(firstVisible / visible));
+
+                prev.disabled = row.scrollLeft <= 2;
+                next.disabled = row.scrollLeft >= maxScroll - 2;
+                prev.hidden = maxScroll <= 2;
+                next.hidden = maxScroll <= 2;
+
+                dots.innerHTML = '';
+                if (pages <= 1) return;
+                for (let page = 0; page < pages; page++) {
+                    const dot = document.createElement('button');
+                    dot.type = 'button';
+                    dot.className = 'stat-dot' + (page === currentPage ? ' active' : '');
+                    dot.setAttribute('aria-label', `Halaman ${page + 1}`);
+                    dot.addEventListener('click', () => {
+                        const target = Math.min(page * visible, Math.max(0, cards.length - visible));
+                        row.scrollTo({ left: target * step, behavior: 'smooth' });
+                    });
+                    dots.appendChild(dot);
+                }
+            };
+
+            const move = (direction) => {
+                const { step, visible } = metrics();
+                row.scrollBy({ left: direction * step * visible, behavior: 'smooth' });
+            };
+
+            prev.addEventListener('click', () => move(-1));
+            next.addEventListener('click', () => move(1));
+            row.addEventListener('scroll', updateControls, { passive: true });
+            window.addEventListener('resize', () => {
+                window.clearTimeout(resizeTimer);
+                resizeTimer = window.setTimeout(updateControls, 100);
+            });
+
+            updateControls();
         });
-        next.addEventListener('click', () => {
-            current = Math.min(total - visible, current + visible);
-            scrollToCurrent();
-        });
-
-        row.addEventListener('scroll', () => {
-            current = Math.round(row.scrollLeft / cardWidth);
-            updateDots();
-        });
-
-        window.addEventListener('resize', () => {
-            updateDots();
-        });
-
-        updateDots();
-        // Apply autoshrink to ensure descriptions fit after any scroll adjustments
-        setTimeout(() => {
-            const container = document.getElementById('highlightStatScrollRow');
-            if (container) {
-                const descriptions = container.querySelectorAll('.stat-desc');
-                descriptions.forEach((el) => {
-                    let minSize = 12;
-                    let size = parseFloat(window.getComputedStyle(el).fontSize);
-                    el.style.fontSize = size + 'px';
-                    const maxHeight = parseFloat(window.getComputedStyle(el).maxHeight || '0');
-                    let guard = 0;
-                    while (el.scrollHeight > el.clientHeight && size > minSize && guard < 20) {
-                        size -= 1;
-                        el.style.fontSize = size + 'px';
-                        guard++;
-                    }
-                });
-            }
-        }, 0);
-    });
-
-    // --- Highlight Stat Carousel 2 ---
-    document.addEventListener('DOMContentLoaded', function () {
-        const row = document.getElementById('highlightStat2ScrollRow');
-        if (!row) return;
-        const prev = document.getElementById('highlightStat2ScrollPrev');
-        const next = document.getElementById('highlightStat2ScrollNext');
-        const dots = document.getElementById('highlightStat2Dots');
-        const cards = row.querySelectorAll('.stat-card');
-        const cardWidth = 256;
-        let visible = Math.floor(row.offsetWidth / cardWidth) || 1;
-        const total = cards.length;
-        let current = 0;
-
-        function updateDots() {
-            dots.innerHTML = '';
-            visible = Math.floor(row.offsetWidth / cardWidth) || 1;
-            const dotCount = Math.ceil(total / visible);
-            for (let i = 0; i < dotCount; i++) {
-                const dot = document.createElement('span');
-                dot.className = 'stat-dot' + (i === Math.floor(current / visible) ? ' active' : '');
-                dot.addEventListener('click', () => {
-                    row.scrollTo({ left: i * cardWidth * visible, behavior: 'smooth' });
-                    current = i * visible;
-                    updateDots();
-                });
-                dots.appendChild(dot);
-            }
-        }
-
-        function scrollToCurrent() {
-            row.scrollTo({ left: current * cardWidth, behavior: 'smooth' });
-            updateDots();
-        }
-
-        prev.addEventListener('click', () => {
-            current = Math.max(0, current - visible);
-            scrollToCurrent();
-        });
-        next.addEventListener('click', () => {
-            current = Math.min(total - visible, current + visible);
-            scrollToCurrent();
-        });
-
-        row.addEventListener('scroll', () => {
-            current = Math.round(row.scrollLeft / cardWidth);
-            updateDots();
-        });
-
-        window.addEventListener('resize', () => {
-            updateDots();
-        });
-
-        updateDots();
-        // Apply autoshrink for secondary list as well
-        setTimeout(() => {
-            const container = document.getElementById('highlightStat2ScrollRow');
-            if (container) {
-                const descriptions = container.querySelectorAll('.stat-desc');
-                descriptions.forEach((el) => {
-                    let minSize = 12;
-                    let size = parseFloat(window.getComputedStyle(el).fontSize);
-                    el.style.fontSize = size + 'px';
-                    const maxHeight = parseFloat(window.getComputedStyle(el).maxHeight || '0');
-                    let guard = 0;
-                    while (el.scrollHeight > el.clientHeight && size > minSize && guard < 20) {
-                        size -= 1;
-                        el.style.fontSize = size + 'px';
-                        guard++;
-                    }
-                });
-            }
-        }, 0);
     });
 
     </script>
@@ -2195,6 +1985,471 @@
     background: #187C19;
     opacity: 1;
 }
+
+/* Market highlight */
+.market-highlight-section {
+    position: relative;
+    z-index: 10;
+    padding: clamp(2.5rem, 6vw, 5rem) 0;
+    overflow: hidden;
+    background:
+        radial-gradient(circle at 5% 18%, rgba(47, 159, 232, 0.13), transparent 22%),
+        radial-gradient(circle at 96% 78%, rgba(0, 163, 138, 0.12), transparent 24%);
+}
+
+.market-highlight-shape {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.market-highlight-shape-one {
+    width: 250px;
+    height: 250px;
+    top: 5%;
+    left: -170px;
+    border: 42px solid rgba(47, 159, 232, 0.08);
+}
+
+.market-highlight-shape-two {
+    width: 180px;
+    height: 180px;
+    right: -110px;
+    bottom: 8%;
+    border: 32px solid rgba(0, 163, 138, 0.08);
+}
+
+.market-highlight-heading {
+    display: flex;
+    max-width: 1280px;
+    align-items: center;
+    gap: 1rem;
+    margin: 0 auto 1.75rem;
+}
+
+.market-highlight-heading h3 {
+    flex: 0 0 auto;
+    margin: 0;
+    color: #0b3859;
+    font-size: clamp(1.75rem, 3vw, 2.65rem);
+    font-weight: 800;
+    letter-spacing: -0.035em;
+}
+
+.market-highlight-heading-icon {
+    display: inline-flex;
+    width: 52px;
+    height: 52px;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    border-radius: 16px;
+    color: #fff;
+    background: linear-gradient(135deg, #1686d9, #06a88f);
+    box-shadow: 0 10px 25px rgba(15, 95, 168, 0.24);
+}
+
+.market-highlight-heading-line {
+    width: 100%;
+    height: 1px;
+    margin-left: 0.5rem;
+    background: linear-gradient(90deg, rgba(15, 95, 168, 0.3), transparent);
+}
+
+.market-carousel-panel {
+    --market-accent: #1686d9;
+    --market-accent-rgb: 22, 134, 217;
+    position: relative;
+    max-width: 1280px;
+    margin: 0 auto 1.25rem;
+    padding: 1.1rem 3.75rem 2.6rem;
+    border: 1px solid rgba(var(--market-accent-rgb), 0.15);
+    border-radius: 28px;
+    background:
+        linear-gradient(120deg, rgba(var(--market-accent-rgb), 0.08), transparent 32%),
+        rgba(255, 255, 255, 0.64);
+    box-shadow: 0 16px 38px rgba(12, 50, 82, 0.08);
+    backdrop-filter: blur(10px);
+}
+
+.market-carousel-panel-green {
+    --market-accent: #059f86;
+    --market-accent-rgb: 5, 159, 134;
+}
+
+.market-carousel-track {
+    display: flex;
+    align-items: stretch;
+    gap: 1rem;
+    width: 100%;
+    padding: 0.5rem 0;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+}
+
+.market-carousel-track::-webkit-scrollbar {
+    display: none;
+}
+
+.market-highlight-section a.market-stat-link {
+    display: flex;
+    width: clamp(260px, 24vw, 300px);
+    height: auto;
+    flex: 0 0 clamp(260px, 24vw, 300px);
+    margin: 0;
+    padding: 0;
+    color: inherit;
+    text-decoration: none;
+    scroll-snap-align: start;
+}
+
+.market-stat-card {
+    position: relative;
+    display: flex;
+    width: 100%;
+    min-height: 300px;
+    flex-direction: column;
+    padding: 1.35rem;
+    overflow: hidden;
+    border: 1px solid rgba(var(--market-accent-rgb), 0.14);
+    border-radius: 22px;
+    background: #fff;
+    box-shadow: 0 9px 25px rgba(11, 56, 89, 0.08);
+    transition: border-color 0.22s ease, box-shadow 0.22s ease, transform 0.22s ease;
+}
+
+.market-stat-card::before {
+    content: "";
+    position: absolute;
+    width: 125px;
+    height: 125px;
+    top: -72px;
+    right: -55px;
+    border-radius: 50%;
+    background: rgba(var(--market-accent-rgb), 0.1);
+    transition: transform 0.3s ease;
+}
+
+.market-stat-link:hover .market-stat-card {
+    border-color: rgba(var(--market-accent-rgb), 0.48);
+    box-shadow: 0 17px 34px rgba(11, 56, 89, 0.16);
+    transform: translateY(-4px);
+}
+
+.market-stat-link:hover .market-stat-card::before {
+    transform: scale(1.18);
+}
+
+.market-stat-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.market-stat-icon {
+    display: inline-flex;
+    width: 48px;
+    height: 48px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 15px;
+    color: var(--market-accent);
+    background: rgba(var(--market-accent-rgb), 0.11);
+    font-size: 1.15rem;
+}
+
+.market-stat-index {
+    position: relative;
+    color: rgba(var(--market-accent-rgb), 0.7);
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+}
+
+.home-ocean-theme .market-stat-title {
+    width: 100%;
+    margin-bottom: 0.8rem;
+    color: #17405c !important;
+    font-size: 1rem;
+    font-weight: 750;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+}
+
+.market-stat-reading {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.35rem;
+    margin-bottom: 0.9rem;
+}
+
+.market-stat-value {
+    color: #092d47;
+    font-size: clamp(1.8rem, 3vw, 2.45rem);
+    font-weight: 850;
+    line-height: 1.05;
+    letter-spacing: -0.045em;
+    overflow-wrap: anywhere;
+}
+
+.market-stat-unit {
+    color: #48697e;
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+.market-highlight-section .market-stat-description {
+    width: 100%;
+    max-height: none;
+    margin: 0;
+    padding: 0 2.5rem 0 0;
+    overflow: visible;
+    color: #647b8b !important;
+    font-size: 0.88rem !important;
+    line-height: 1.55;
+    text-overflow: clip;
+    overflow-wrap: anywhere;
+}
+
+.market-stat-action {
+    display: inline-flex;
+    width: 34px;
+    height: 34px;
+    align-items: center;
+    justify-content: center;
+    align-self: flex-end;
+    margin-top: auto;
+    border-radius: 50%;
+    color: #fff;
+    background: var(--market-accent);
+    box-shadow: 0 7px 16px rgba(var(--market-accent-rgb), 0.25);
+    transition: transform 0.2s ease;
+}
+
+.market-stat-link:hover .market-stat-action {
+    transform: translateX(3px);
+}
+
+.market-carousel-button {
+    position: absolute;
+    z-index: 4;
+    top: calc(50% - 0.75rem);
+    display: inline-flex;
+    width: 42px;
+    height: 42px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(var(--market-accent-rgb), 0.16);
+    border-radius: 50%;
+    color: var(--market-accent);
+    background: #fff;
+    box-shadow: 0 9px 22px rgba(11, 56, 89, 0.15);
+    transform: translateY(-50%);
+    transition: color 0.2s ease, background 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
+}
+
+.market-carousel-button:hover:not(:disabled) {
+    color: #fff;
+    background: var(--market-accent);
+    transform: translateY(-50%) scale(1.06);
+}
+
+.market-carousel-button:disabled {
+    cursor: default;
+    opacity: 0.35;
+}
+
+.market-carousel-button-prev {
+    left: 0.85rem;
+}
+
+.market-carousel-button-next {
+    right: 0.85rem;
+}
+
+.market-carousel-dots {
+    position: absolute;
+    right: 0;
+    bottom: 0.95rem;
+    left: 0;
+    display: flex;
+    min-height: 10px;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+}
+
+.market-carousel-dots .stat-dot {
+    width: 7px;
+    height: 7px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 999px;
+    background: rgba(var(--market-accent-rgb), 0.38);
+    opacity: 1;
+    transition: width 0.2s ease, background 0.2s ease;
+}
+
+.market-carousel-dots .stat-dot.active {
+    width: 24px;
+    background: var(--market-accent);
+}
+
+.market-source-panel {
+    --market-accent: #e83f6f;
+    --market-accent-rgb: 232, 63, 111;
+    display: grid;
+    max-width: 1280px;
+    grid-template-columns: minmax(230px, 0.85fr) minmax(0, 2fr);
+    align-items: center;
+    gap: clamp(1rem, 3vw, 2.5rem);
+    margin: 2rem auto 0;
+    padding: clamp(1.5rem, 3vw, 2.5rem);
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.26);
+    border-radius: 28px;
+    background: linear-gradient(125deg, #fb7185 0%, #e83f6f 48%, #b51757 100%);
+    box-shadow: 0 18px 42px rgba(181, 23, 87, 0.23);
+}
+
+.market-source-intro {
+    position: relative;
+    z-index: 1;
+}
+
+.market-source-intro::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    width: 210px;
+    height: 210px;
+    top: 50%;
+    left: -95px;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 50%;
+    transform: translateY(-50%);
+}
+
+.market-source-intro h2 {
+    margin: 0 0 1rem;
+    color: #fff;
+    font-size: clamp(1.8rem, 3.5vw, 3rem);
+    font-weight: 800;
+    line-height: 1.08;
+    letter-spacing: -0.04em;
+}
+
+.market-source-intro .thelogo-wrapper {
+    display: inline-flex;
+    padding: 0.7rem 0.85rem;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.94);
+    box-shadow: 0 10px 22px rgba(85, 10, 38, 0.16);
+}
+
+.market-source-carousel {
+    position: relative;
+    min-width: 0;
+    padding: 0 3rem 2rem;
+}
+
+.market-source-panel .market-stat-card {
+    min-height: 315px;
+}
+
+.market-source-panel .market-carousel-button-prev {
+    left: 0;
+}
+
+.market-source-panel .market-carousel-button-next {
+    right: 0;
+}
+
+.market-source-panel .market-carousel-dots {
+    bottom: 0;
+}
+
+.market-carousel-dots-light .stat-dot {
+    background: rgba(255, 255, 255, 0.45);
+}
+
+.market-carousel-dots-light .stat-dot.active {
+    background: #fff;
+}
+
+@media (max-width: 991.98px) {
+    .market-source-panel {
+        grid-template-columns: 1fr;
+    }
+
+    .market-source-intro {
+        text-align: center;
+    }
+
+    .market-source-intro h2 {
+        margin-bottom: 0.75rem;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .market-highlight-heading {
+        align-items: flex-start;
+    }
+
+    .market-highlight-heading-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 14px;
+    }
+
+    .market-highlight-heading-line {
+        display: none;
+    }
+
+    .market-carousel-panel {
+        padding: 0.75rem 0.75rem 2.5rem;
+        border-radius: 22px;
+    }
+
+    .market-highlight-section a.market-stat-link {
+        width: calc(100vw - 4.5rem);
+        flex-basis: calc(100vw - 4.5rem);
+    }
+
+    .market-stat-card {
+        min-height: 0;
+        padding: 1.15rem;
+        border-radius: 18px;
+    }
+
+    .market-carousel-panel .market-carousel-button {
+        display: none;
+    }
+
+    .market-source-panel {
+        padding: 1.35rem 0.75rem;
+        border-radius: 22px;
+    }
+
+    .market-source-carousel {
+        padding: 0 0 2rem;
+    }
+
+    .market-source-panel .market-stat-card {
+        min-height: 0;
+    }
+
+    .market-source-panel .market-carousel-button {
+        display: none;
+    }
+}
+
 .stat-hero-card {
     border-radius: 2rem;
     padding: 1rem 1rem 1.5rem 1rem;
@@ -2765,594 +3020,17 @@ html.dark-mode .home-ocean-theme [style*="color: #222"] {
 html.dark-mode .home-ocean-theme .card-footer {
     border-color: var(--theme-border);
 }
-
-/* Market highlight dashboard */
-.market-highlight {
-    position: relative;
-    z-index: 10;
-    padding: clamp(2.5rem, 6vw, 5rem) clamp(0.75rem, 4vw, 3rem);
+html.dark-mode .market-highlight-heading h3 {
+    color: var(--theme-text);
 }
-
-.market-highlight-shell {
-    width: min(100%, 1440px);
-    margin: 0 auto;
+html.dark-mode .market-highlight-heading-line {
+    background: linear-gradient(90deg, rgba(125, 211, 252, 0.34), transparent);
 }
-
-.market-highlight-heading {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: 2rem;
-    margin-bottom: 2.4rem;
-}
-
-.market-highlight-eyebrow {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 0.65rem;
-    color: #087f73;
-    font-size: 0.76rem;
-    font-weight: 800;
-    letter-spacing: 0.13em;
-    text-transform: uppercase;
-}
-
-.market-highlight-heading h2 {
-    margin: 0 0 0.55rem;
-    color: #0b2e47;
-    font-size: clamp(2rem, 4vw, 3.2rem);
-    font-weight: 850;
-    letter-spacing: -0.045em;
-}
-
-.market-highlight-heading p {
-    max-width: 620px;
-    margin: 0;
-    color: #61778a;
-    font-size: 1rem;
-}
-
-.market-live-badge {
-    display: inline-flex;
-    flex: 0 0 auto;
-    align-items: center;
-    gap: 0.55rem;
-    padding: 0.7rem 1rem;
-    border: 1px solid rgba(8, 127, 115, 0.16);
-    border-radius: 999px;
-    color: #087f73;
-    background: rgba(255, 255, 255, 0.74);
-    box-shadow: 0 8px 24px rgba(12, 50, 82, 0.07);
-    font-size: 0.78rem;
-    font-weight: 750;
-    backdrop-filter: blur(10px);
-}
-
-.market-live-badge span {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: #12b886;
-    box-shadow: 0 0 0 5px rgba(18, 184, 134, 0.13);
-    animation: marketPulse 2s ease-out infinite;
-}
-
-@keyframes marketPulse {
-    0%, 100% { box-shadow: 0 0 0 4px rgba(18, 184, 134, 0.13); }
-    50% { box-shadow: 0 0 0 8px rgba(18, 184, 134, 0.04); }
-}
-
-.market-lane {
-    position: relative;
-    margin-bottom: 1.5rem;
-    padding: clamp(1rem, 2.5vw, 1.6rem);
-    border: 1px solid rgba(15, 95, 168, 0.12);
-    border-radius: 26px;
-    background: rgba(255, 255, 255, 0.58);
-    box-shadow: 0 14px 38px rgba(12, 50, 82, 0.07);
-    backdrop-filter: blur(14px);
-}
-
-.market-lane-heading,
-.market-lane-heading > div:first-child {
-    display: flex;
-    align-items: center;
-}
-
-.market-lane-heading {
-    justify-content: space-between;
-    gap: 1rem;
-    margin-bottom: 1rem;
-}
-
-.market-lane-heading > div:first-child {
-    gap: 0.8rem;
-}
-
-.market-lane-number {
-    display: inline-flex;
-    width: 42px;
-    height: 42px;
-    flex: 0 0 auto;
-    align-items: center;
-    justify-content: center;
-    border-radius: 13px;
-    color: #fff;
-    background: linear-gradient(135deg, #0f5fa8, #00a38a);
-    box-shadow: 0 7px 16px rgba(15, 95, 168, 0.2);
-    font-size: 0.73rem;
-    font-weight: 850;
-    letter-spacing: 0.08em;
-}
-
-.market-lane-heading h3 {
-    margin: 0 0 0.15rem;
-    color: #12344d;
-    font-size: 1rem;
-    font-weight: 800;
-}
-
-.market-lane-heading p {
-    margin: 0;
-    color: #7b8d9b;
-    font-size: 0.76rem;
-}
-
-.market-controls {
-    display: flex;
-    gap: 0.5rem;
-}
-
-.market-control {
-    display: inline-flex;
-    width: 40px;
-    height: 40px;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid #dce8ef;
-    border-radius: 50%;
-    color: #164663;
-    background: #fff;
-    box-shadow: 0 6px 16px rgba(12, 50, 82, 0.08);
-    transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
-}
-
-.market-control:hover {
-    color: #fff;
-    border-color: #0b7f82;
-    background: #0b7f82;
-    transform: translateY(-2px);
-}
-
-.market-control:focus-visible {
-    outline: 3px solid rgba(47, 159, 232, 0.28);
-    outline-offset: 2px;
-}
-
-.market-carousel-frame {
-    width: 100%;
-    overflow: hidden;
-    border-radius: 19px;
-}
-
-.market-scroll-row {
-    display: flex;
-    width: 100%;
-    gap: 16px;
-    overflow-x: auto;
-    scroll-behavior: smooth;
-    scrollbar-width: none;
-}
-
-.market-scroll-row::-webkit-scrollbar {
-    display: none;
-}
-
-.market-highlight .market-stat-link {
-    display: block;
-    width: 240px;
-    min-width: 240px;
-    height: auto;
-    flex: 0 0 240px;
-}
-
-.market-highlight .market-stat-card {
-    --market-card-color: #168f89;
-    position: relative;
-    width: 240px;
-    height: 286px;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    align-items: stretch;
-    justify-content: stretch;
-    border: 1px solid rgba(15, 95, 168, 0.12) !important;
-    border-radius: 19px !important;
-    background: linear-gradient(155deg, #fff 0%, #f7fbfd 100%) !important;
-    box-shadow: 0 9px 24px rgba(12, 50, 82, 0.08) !important;
-    transition: transform 0.24s ease, box-shadow 0.24s ease, border-color 0.24s ease;
-}
-
-.market-highlight .market-stat-card::before {
-    display: none;
-}
-
-.market-highlight .market-stat-card:hover {
-    border-color: color-mix(in srgb, var(--market-card-color) 55%, white) !important;
-    box-shadow: 0 17px 30px rgba(12, 50, 82, 0.16) !important;
-    transform: translateY(-5px);
-}
-
-.market-card-accent {
-    height: 5px;
-    flex: 0 0 auto;
-    background: linear-gradient(90deg, var(--market-card-color), color-mix(in srgb, var(--market-card-color) 45%, #fff));
-}
-
-.market-highlight .market-stat-card .card-body {
-    display: flex;
-    width: 100%;
-    flex: 1;
-    flex-direction: column;
-    align-items: stretch;
-    justify-content: flex-start;
-    padding: 1.05rem 1.1rem 1rem;
-    text-align: left;
-}
-
-.market-stat-top {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.home-ocean-theme .market-highlight .market-stat-card .stat-icon {
-    display: inline-flex;
-    width: 42px;
-    height: 42px;
-    margin: 0;
-    align-items: center;
-    justify-content: center;
-    border-radius: 13px;
-    color: var(--market-card-color);
-    background: color-mix(in srgb, var(--market-card-color) 12%, white) !important;
-    box-shadow: none;
-    font-size: 1rem;
-}
-
-.market-stat-index {
-    color: color-mix(in srgb, var(--market-card-color) 62%, #8294a1);
-    font-size: 0.7rem;
-    font-weight: 850;
-    letter-spacing: 0.1em;
-}
-
-.market-featured-label {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.32rem;
-    padding: 0.28rem 0.5rem;
-    border-radius: 999px;
-    color: var(--market-card-color);
-    background: color-mix(in srgb, var(--market-card-color) 10%, white);
-    font-size: 0.64rem;
-    font-weight: 800;
-    text-transform: uppercase;
-}
-
-.market-stat-content {
-    display: flex;
-    min-height: 0;
-    flex: 1;
-    flex-direction: column;
-    padding: 1rem 0 0.8rem;
-}
-
-.home-ocean-theme .market-highlight .stat-title {
-    min-height: 2.6em;
-    margin-bottom: 0.45rem;
-    overflow: hidden;
-    color: #3e596c !important;
-    font-size: 0.82rem;
-    font-weight: 750;
-    line-height: 1.3;
-}
-
-.market-stat-number {
-    display: flex;
-    min-width: 0;
-    align-items: baseline;
-    gap: 0.32rem;
-    margin-bottom: 0.45rem;
-}
-
-.market-highlight .stat-value {
-    overflow: hidden;
-    color: #102f45;
-    font-size: clamp(1.55rem, 2.4vw, 2.05rem);
-    font-weight: 850;
-    letter-spacing: -0.045em;
-    line-height: 1.1;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.market-highlight .stat-unit {
-    flex: 0 0 auto;
-    color: var(--market-card-color);
-    font-size: 0.78rem;
-    font-weight: 800;
-}
-
-.market-highlight .stat-desc {
-    display: -webkit-box;
-    width: 100%;
-    max-height: none;
-    margin-top: 0;
-    overflow: hidden;
-    color: #7a8b98;
-    font-size: 0.72rem;
-    line-height: 1.4;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-}
-
-.market-card-action {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding-top: 0.75rem;
-    border-top: 1px solid #e6eef2;
-    color: var(--market-card-color);
-    font-size: 0.7rem;
-    font-weight: 800;
-}
-
-.market-card-action i {
-    transition: transform 0.2s ease;
-}
-
-.market-stat-card:hover .market-card-action i {
-    transform: translateX(3px);
-}
-
-.market-tone-0 { --market-card-color: #168f89 !important; }
-.market-tone-1 { --market-card-color: #267bd9 !important; }
-.market-tone-2 { --market-card-color: #e17428 !important; }
-.market-tone-3 { --market-card-color: #8759cf !important; }
-.market-tone-4 { --market-card-color: #d64f7d !important; }
-
-.market-dots {
-    display: flex;
-    min-height: 12px;
-    align-items: center;
-    justify-content: center;
-    margin-top: 0.9rem;
-}
-
-.market-highlight .stat-dot {
-    width: 18px;
-    height: 5px;
-    margin: 0 3px;
-    border-radius: 999px;
-    background: #8ca5b4;
-    cursor: pointer;
-    opacity: 0.3;
-    transition: width 0.2s ease, background 0.2s ease, opacity 0.2s ease;
-}
-
-.market-highlight .stat-dot.active {
-    width: 34px;
-    background: #0b8782;
-    opacity: 1;
-}
-
-.karirhub-insight {
-    position: relative;
-    display: grid;
-    grid-template-columns: minmax(230px, 0.7fr) minmax(0, 2fr);
-    gap: clamp(1.2rem, 3vw, 2.5rem);
-    margin-top: 2rem;
-    padding: clamp(1.4rem, 3vw, 2.3rem);
-    overflow: hidden;
-    border-radius: 28px;
-    color: #fff;
+html.dark-mode .market-carousel-panel {
+    border-color: rgba(var(--market-accent-rgb), 0.24);
     background:
-        radial-gradient(circle at 0 100%, rgba(255, 191, 207, 0.25), transparent 30%),
-        linear-gradient(130deg, #a1134d 0%, #df3f72 46%, #fa7288 100%);
-    box-shadow: 0 20px 44px rgba(173, 24, 81, 0.22);
-}
-
-.karirhub-orb {
-    position: absolute;
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    border-radius: 50%;
-    pointer-events: none;
-}
-
-.karirhub-orb-one {
-    width: 220px;
-    height: 220px;
-    top: -130px;
-    left: 24%;
-}
-
-.karirhub-orb-two {
-    width: 100px;
-    height: 100px;
-    right: -30px;
-    bottom: -35px;
-}
-
-.karirhub-intro,
-.karirhub-carousel {
-    position: relative;
-    z-index: 1;
-    min-width: 0;
-}
-
-.karirhub-intro {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-}
-
-.karirhub-kicker {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.45rem;
-    margin-bottom: 0.7rem;
-    color: #ffd4df;
-    font-size: 0.7rem;
-    font-weight: 800;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-}
-
-.karirhub-intro h3 {
-    margin: 0 0 0.6rem;
-    color: #fff;
-    font-size: clamp(1.55rem, 2.6vw, 2.4rem);
-    font-weight: 820;
-    letter-spacing: -0.035em;
-}
-
-.karirhub-logo {
-    width: auto;
-    max-width: min(220px, 100%);
-    max-height: 52px;
-    margin-bottom: 0.9rem;
-    object-fit: contain;
-    filter: brightness(0) invert(1);
-}
-
-.karirhub-intro p {
-    max-width: 330px;
-    margin: 0 0 1.2rem;
-    color: rgba(255, 255, 255, 0.76);
-    font-size: 0.86rem;
-}
-
-.market-controls-light .market-control {
-    color: #fff;
-    border-color: rgba(255, 255, 255, 0.28);
-    background: rgba(255, 255, 255, 0.12);
-    box-shadow: none;
-    backdrop-filter: blur(8px);
-}
-
-.market-controls-light .market-control:hover {
-    color: #a1134d;
-    border-color: #fff;
-    background: #fff;
-}
-
-.karirhub-carousel {
-    align-self: center;
-}
-
-.market-dots-light .stat-dot {
-    background: #fff;
-}
-
-.market-dots-light .stat-dot.active {
-    background: #fff;
-}
-
-@media (max-width: 991.98px) {
-    .karirhub-insight {
-        grid-template-columns: 1fr;
-    }
-
-    .karirhub-intro {
-        max-width: 620px;
-    }
-}
-
-@media (max-width: 575.98px) {
-    .market-highlight-heading {
-        align-items: flex-start;
-        flex-direction: column;
-        gap: 1rem;
-    }
-
-    .market-live-badge {
-        display: none;
-    }
-
-    .market-lane {
-        border-radius: 21px;
-    }
-
-    .market-lane-heading p {
-        display: none;
-    }
-
-    .market-lane-number {
-        width: 38px;
-        height: 38px;
-    }
-
-    .market-control {
-        width: 37px;
-        height: 37px;
-    }
-
-    .market-highlight .market-stat-link,
-    .market-highlight .market-stat-card {
-        width: 240px;
-        min-width: 240px;
-    }
-
-    .karirhub-insight {
-        border-radius: 23px;
-    }
-}
-
-html.dark-mode .market-highlight-heading h2,
-html.dark-mode .market-lane-heading h3 {
-    color: #edf7ff;
-}
-
-html.dark-mode .market-highlight-heading p,
-html.dark-mode .market-lane-heading p {
-    color: #9cb0c1;
-}
-
-html.dark-mode .market-live-badge,
-html.dark-mode .market-lane {
-    border-color: rgba(125, 211, 252, 0.13);
-    background: rgba(17, 27, 45, 0.72);
-}
-
-html.dark-mode .market-control {
-    color: #dceeff;
-    border-color: #34465e;
-    background: #1a2940;
-}
-
-html.dark-mode .home-ocean-theme .market-highlight .market-stat-card {
-    border-color: #2b4058 !important;
-    background: linear-gradient(155deg, #192a40, #122035) !important;
-}
-
-html.dark-mode .home-ocean-theme .market-highlight .stat-title,
-html.dark-mode .market-highlight .stat-value {
-    color: #edf7ff !important;
-}
-
-html.dark-mode .market-highlight .stat-desc {
-    color: #9cb0c1;
-}
-
-html.dark-mode .market-card-action {
-    border-color: #304158;
-}
-
-html.dark-mode .home-ocean-theme .market-highlight .market-stat-card .stat-icon {
-    background: color-mix(in srgb, var(--market-card-color) 18%, #18263b) !important;
+        linear-gradient(120deg, rgba(var(--market-accent-rgb), 0.13), transparent 32%),
+        rgba(17, 27, 45, 0.78);
 }
 
 </style>
