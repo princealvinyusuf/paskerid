@@ -370,129 +370,108 @@
         </div>
     </section> -->
 
-    {{-- Informasi Terbaru --}}
-    <section class="my-5 px-2 px-md-4 px-lg-5" id="informasi-terbaru" data-aos="fade-up">
-        <h3 class="text-center mb-4">Data dan Informasi</h3>
-        <ul class="nav nav-tabs justify-content-center mb-4" id="infoTab" role="tablist" >
-            <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="spark-tab" data-bs-toggle="tab" data-bs-target="#spark" type="button" role="tab" aria-controls="spark" aria-selected="true">Seputar Pasar Kerja (SPARK)</button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="infografis-sipk-tab" data-bs-toggle="tab" data-bs-target="#infografis-sipk" type="button" role="tab" aria-controls="infografis-sipk" aria-selected="false">Infografis SIPK</button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="angkatan-kerja-tab" data-bs-toggle="tab" data-bs-target="#angkatan-kerja" type="button" role="tab" aria-controls="angkatan-kerja" aria-selected="false">Angkatan Kerja</button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="regulasi-tab" data-bs-toggle="tab" data-bs-target="#regulasi" type="button" role="tab" aria-controls="regulasi" aria-selected="false">Pedoman / Regulasi</button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="lmir-tab" data-bs-toggle="tab" data-bs-target="#lmir" type="button" role="tab" aria-controls="lmir" aria-selected="false">Labour Market Inteligence Report</button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="infografis-job-fair-tab" data-bs-toggle="tab" data-bs-target="#infografis-job-fair" type="button" role="tab" aria-controls="infografis-job-fair" aria-selected="false">Infografis Job Fair</button>
-            </li>
-        </ul>
-        <div class="tab-content">
-            <div class="tab-pane fade show active" id="spark" role="tabpanel" aria-labelledby="spark-tab">
-                @foreach($spark as $info)
-                    <a href="{{ route('informasi.index', ['subject' => $info->subject, 'show' => $info->id]) }}" class="text-decoration-none">
-                        <div class="card mb-3 shadow-sm rounded-pill px-4 py-3 d-flex flex-row align-items-center" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}" style="cursor:pointer;">
-                            <div class="me-3 text-primary" style="font-size:2rem;"><i class="fa fa-bolt"></i></div>
-                            <div class="flex-grow-1">
-                                <div class="fw-bold">{{ $info->title }}</div>
-                                <div class="text-muted small">{{ indo_date($info->date) }}</div>
-                            </div>
+    {{-- Data dan Informasi --}}
+    @php
+        $informationCategories = [
+            ['id' => 'spark', 'label' => 'SPARK', 'fullLabel' => 'Seputar Pasar Kerja', 'icon' => 'fa-bolt', 'items' => $spark, 'tone' => 'blue'],
+            ['id' => 'infografis-sipk', 'label' => 'Infografis SIPK', 'fullLabel' => 'Infografis SIPK', 'icon' => 'fa-chart-pie', 'items' => $infografisSIPK, 'tone' => 'purple'],
+            ['id' => 'angkatan-kerja', 'label' => 'Angkatan Kerja', 'fullLabel' => 'Angkatan Kerja', 'icon' => 'fa-users', 'items' => $angkatanKerja, 'tone' => 'cyan'],
+            ['id' => 'regulasi', 'label' => 'Regulasi', 'fullLabel' => 'Pedoman & Regulasi', 'icon' => 'fa-scale-balanced', 'items' => $regulasi, 'tone' => 'orange'],
+            ['id' => 'lmir', 'label' => 'LMIR', 'fullLabel' => 'Labour Market Intelligence Report', 'icon' => 'fa-book-open', 'items' => $lmir, 'tone' => 'green'],
+            ['id' => 'infografis-job-fair', 'label' => 'Job Fair', 'fullLabel' => 'Infografis Job Fair', 'icon' => 'fa-calendar-day', 'items' => $infografisJobFair, 'tone' => 'pink'],
+        ];
+    @endphp
+    <section class="information-showcase my-5 mx-2 mx-md-4 mx-lg-5" id="informasi-terbaru" data-aos="fade-up">
+        <span class="information-orb information-orb-one" aria-hidden="true"></span>
+        <span class="information-orb information-orb-two" aria-hidden="true"></span>
+
+        <div class="information-showcase-inner">
+            <div class="information-heading">
+                <div>
+                    <span class="information-eyebrow"><i class="fa-solid fa-chart-line"></i> Wawasan Pasar Kerja</span>
+                    <h2>Data dan Informasi</h2>
+                    <p>Temukan publikasi, infografis, dan laporan terbaru seputar pasar kerja Indonesia.</p>
+                </div>
+                <a href="{{ route('informasi.index') }}" class="information-all-link d-none d-md-inline-flex">
+                    Jelajahi semua <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                </a>
+            </div>
+
+            <ul class="nav information-tabs" id="infoTab" role="tablist" aria-label="Kategori data dan informasi">
+                @foreach($informationCategories as $category)
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link {{ $loop->first ? 'active' : '' }}"
+                            id="{{ $category['id'] }}-tab"
+                            data-bs-toggle="tab"
+                            data-bs-target="#{{ $category['id'] }}"
+                            type="button"
+                            role="tab"
+                            aria-controls="{{ $category['id'] }}"
+                            aria-selected="{{ $loop->first ? 'true' : 'false' }}">
+                            <i class="fa-solid {{ $category['icon'] }}"></i>
+                            <span>{{ $category['label'] }}</span>
+                        </button>
+                    </li>
+                @endforeach
+            </ul>
+
+            <div class="tab-content information-content">
+                @foreach($informationCategories as $category)
+                    <div class="tab-pane fade {{ $loop->first ? 'show active' : '' }}"
+                        id="{{ $category['id'] }}"
+                        role="tabpanel"
+                        aria-labelledby="{{ $category['id'] }}-tab"
+                        tabindex="0">
+                        <div class="information-category-meta">
+                            <span class="information-category-icon tone-{{ $category['tone'] }}">
+                                <i class="fa-solid {{ $category['icon'] }}"></i>
+                            </span>
                             <div>
-                                <i class="fa fa-arrow-right fa-lg text-success"></i>
+                                <span class="information-category-kicker">Kategori pilihan</span>
+                                <h3>{{ $category['fullLabel'] }}</h3>
                             </div>
+                            <span class="information-count">{{ $category['items']->count() }} publikasi</span>
                         </div>
-                    </a>
+
+                        @if($category['items']->isNotEmpty())
+                            <div class="information-grid">
+                                @foreach($category['items'] as $info)
+                                    <a href="{{ route('informasi.index', ['subject' => $info->subject, 'show' => $info->id]) }}"
+                                        class="information-card tone-{{ $category['tone'] }}">
+                                        <div class="information-card-top">
+                                            <span class="information-card-icon">
+                                                <i class="fa-solid {{ $category['icon'] }}"></i>
+                                            </span>
+                                            <span class="information-card-number">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</span>
+                                        </div>
+                                        <div class="information-card-body">
+                                            <span class="information-card-date">
+                                                <i class="fa-regular fa-calendar"></i> {{ indo_date($info->date) }}
+                                            </span>
+                                            <h4>{{ $info->title }}</h4>
+                                        </div>
+                                        <div class="information-card-footer">
+                                            <span>Baca selengkapnya</span>
+                                            <span class="information-card-arrow"><i class="fa-solid fa-arrow-right"></i></span>
+                                        </div>
+                                    </a>
+                                @endforeach
+                            </div>
+                        @else
+                            <div class="information-empty">
+                                <i class="fa-regular fa-folder-open"></i>
+                                <p>Belum ada publikasi dalam kategori ini.</p>
+                            </div>
+                        @endif
+                    </div>
                 @endforeach
             </div>
-            <div class="tab-pane fade" id="infografis-sipk" role="tabpanel" aria-labelledby="infografis-sipk-tab">
-                @foreach($infografisSIPK as $info)
-                    <a href="{{ route('informasi.index', ['subject' => $info->subject, 'show' => $info->id]) }}" class="text-decoration-none">
-                        <div class="card mb-3 shadow-sm rounded-pill px-4 py-3 d-flex flex-row align-items-center" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}" style="cursor:pointer;">
-                            <div class="me-3 text-primary" style="font-size:2rem;"><i class="fa fa-chart-pie"></i></div>
-                            <div class="flex-grow-1">
-                                <div class="fw-bold">{{ $info->title }}</div>
-                                <div class="text-muted small">{{ indo_date($info->date) }}</div>
-                            </div>
-                            <div>
-                                <i class="fa fa-arrow-right fa-lg text-success"></i>
-                            </div>
-                        </div>
-                    </a>
-                @endforeach
+
+            <div class="text-center mt-4 d-md-none">
+                <a href="{{ route('informasi.index') }}" class="information-all-link">
+                    Jelajahi semua <i class="fa-solid fa-arrow-right"></i>
+                </a>
             </div>
-            <div class="tab-pane fade" id="angkatan-kerja" role="tabpanel" aria-labelledby="angkatan-kerja-tab">
-                @foreach($angkatanKerja as $info)
-                    <a href="{{ route('informasi.index', ['subject' => $info->subject, 'show' => $info->id]) }}" class="text-decoration-none">
-                        <div class="card mb-3 shadow-sm rounded-pill px-4 py-3 d-flex flex-row align-items-center" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}" style="cursor:pointer;">
-                            <div class="me-3 text-primary" style="font-size:2rem;"><i class="fa fa-users"></i></div>
-                            <div class="flex-grow-1">
-                                <div class="fw-bold">{{ $info->title }}</div>
-                                <div class="text-muted small">{{ indo_date($info->date) }}</div>
-                            </div>
-                            <div>
-                                <i class="fa fa-arrow-right fa-lg text-success"></i>
-                            </div>
-                        </div>
-                    </a>
-                @endforeach
-            </div>
-            <div class="tab-pane fade" id="regulasi" role="tabpanel" aria-labelledby="regulasi-tab">
-                @foreach($regulasi as $info)
-                    <a href="{{ route('informasi.index', ['subject' => $info->subject, 'show' => $info->id]) }}" class="text-decoration-none">
-                        <div class="card mb-3 shadow-sm rounded-pill px-4 py-3 d-flex flex-row align-items-center" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}" style="cursor:pointer;">
-                            <div class="me-3 text-primary" style="font-size:2rem;"><i class="fa fa-gavel"></i></div>
-                            <div class="flex-grow-1">
-                                <div class="fw-bold">{{ $info->title }}</div>
-                                <div class="text-muted small">{{ indo_date($info->date) }}</div>
-                            </div>
-                            <div>
-                                <i class="fa fa-arrow-right fa-lg text-success"></i>
-                            </div>
-                        </div>
-                    </a>
-                @endforeach
-            </div>
-            <div class="tab-pane fade" id="lmir" role="tabpanel" aria-labelledby="lmir-tab">
-                @foreach($lmir as $info)
-                    <a href="{{ route('informasi.index', ['subject' => $info->subject, 'show' => $info->id]) }}" class="text-decoration-none">
-                        <div class="card mb-3 shadow-sm rounded-pill px-4 py-3 d-flex flex-row align-items-center" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}" style="cursor:pointer;">
-                            <div class="me-3 text-primary" style="font-size:2rem;"><i class="fa fa-book-open"></i></div>
-                            <div class="flex-grow-1">
-                                <div class="fw-bold">{{ $info->title }}</div>
-                                <div class="text-muted small">{{ indo_date($info->date) }}</div>
-                            </div>
-                            <div>
-                                <i class="fa fa-arrow-right fa-lg text-success"></i>
-                            </div>
-                        </div>
-                    </a>
-                @endforeach
-            </div>
-            <div class="tab-pane fade" id="infografis-job-fair" role="tabpanel" aria-labelledby="infografis-job-fair-tab">
-                @foreach($infografisJobFair as $info)
-                    <a href="{{ route('informasi.index', ['subject' => $info->subject, 'show' => $info->id]) }}" class="text-decoration-none">
-                        <div class="card mb-3 shadow-sm rounded-pill px-4 py-3 d-flex flex-row align-items-center" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}" style="cursor:pointer;">
-                            <div class="me-3 text-primary" style="font-size:2rem;"><i class="fa fa-calendar-day"></i></div>
-                            <div class="flex-grow-1">
-                                <div class="fw-bold">{{ $info->title }}</div>
-                                <div class="text-muted small">{{ indo_date($info->date) }}</div>
-                            </div>
-                            <div>
-                                <i class="fa fa-arrow-right fa-lg text-success"></i>
-                            </div>
-                        </div>
-                    </a>
-                @endforeach
-            </div>
-        </div>
-        <div class="text-center mt-4">
-            <a href="{{ route('informasi.index') }}" class="btn btn-outline-success rounded-pill px-4 py-2">Lihat Semua <i class="fa fa-arrow-right"></i></a>
         </div>
     </section>
 
@@ -1599,6 +1578,421 @@
 .home-ocean-theme .thelogo-inline {
     max-height: 48px;
     width: auto;
+}
+
+/* Data and Information editorial showcase */
+.information-showcase {
+    position: relative;
+    overflow: hidden;
+    border-radius: 32px;
+    color: #eaf6ff;
+    background:
+        radial-gradient(circle at 88% 12%, rgba(45, 212, 191, 0.22), transparent 26%),
+        radial-gradient(circle at 8% 90%, rgba(56, 189, 248, 0.18), transparent 28%),
+        linear-gradient(135deg, #062d4e 0%, #084f75 52%, #087d78 100%);
+    box-shadow: 0 24px 60px rgba(6, 45, 78, 0.22);
+    isolation: isolate;
+}
+
+.information-showcase::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    opacity: 0.12;
+    background-image:
+        linear-gradient(rgba(255, 255, 255, 0.5) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.5) 1px, transparent 1px);
+    background-size: 44px 44px;
+    mask-image: linear-gradient(to bottom, #000, transparent 78%);
+}
+
+.information-showcase-inner {
+    position: relative;
+    z-index: 2;
+    padding: clamp(1.5rem, 4vw, 3.5rem);
+}
+
+.information-orb {
+    position: absolute;
+    z-index: 0;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.information-orb-one {
+    width: 250px;
+    height: 250px;
+    top: -145px;
+    right: 14%;
+}
+
+.information-orb-two {
+    width: 130px;
+    height: 130px;
+    right: -35px;
+    bottom: 12%;
+}
+
+.information-heading {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.information-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    margin-bottom: 0.7rem;
+    color: #7ee8dc;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.information-heading h2 {
+    margin: 0 0 0.65rem;
+    color: #fff;
+    font-size: clamp(2rem, 4vw, 3.35rem);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+}
+
+.information-heading p {
+    max-width: 650px;
+    margin: 0;
+    color: rgba(234, 246, 255, 0.75);
+    font-size: 1rem;
+}
+
+.information-all-link {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    gap: 0.65rem;
+    padding: 0.8rem 1.15rem;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 999px;
+    color: #fff;
+    background: rgba(255, 255, 255, 0.1);
+    font-weight: 700;
+    text-decoration: none;
+    backdrop-filter: blur(10px);
+    transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.information-all-link:hover {
+    color: #063b5c;
+    border-color: #fff;
+    background: #fff;
+    transform: translateY(-2px);
+}
+
+.information-tabs {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 0.6rem;
+    margin-bottom: 2rem;
+    padding: 0.45rem;
+    overflow-x: auto;
+    border: 1px solid rgba(255, 255, 255, 0.13);
+    border-radius: 18px;
+    background: rgba(2, 30, 51, 0.28);
+    scrollbar-width: thin;
+}
+
+.information-tabs .nav-item {
+    flex: 1 0 auto;
+}
+
+.information-tabs .nav-link {
+    display: flex;
+    width: 100%;
+    min-height: 48px;
+    align-items: center;
+    justify-content: center;
+    gap: 0.55rem;
+    padding: 0.65rem 0.9rem;
+    border: 0;
+    border-radius: 13px;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.86rem;
+    font-weight: 700;
+    white-space: nowrap;
+    transition: color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+}
+
+.information-tabs .nav-link:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.information-tabs .nav-link.active {
+    color: #074a68;
+    background: #fff;
+    box-shadow: 0 8px 22px rgba(2, 23, 40, 0.2);
+}
+
+.information-content {
+    min-height: 350px;
+}
+
+.information-category-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    margin-bottom: 1.25rem;
+}
+
+.information-category-icon {
+    display: inline-flex;
+    width: 48px;
+    height: 48px;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    border-radius: 15px;
+    color: var(--info-tone);
+    background: color-mix(in srgb, var(--info-tone) 16%, white);
+    font-size: 1.15rem;
+}
+
+.information-category-kicker {
+    display: block;
+    margin-bottom: 0.1rem;
+    color: rgba(255, 255, 255, 0.56);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.information-category-meta h3 {
+    margin: 0;
+    color: #fff;
+    font-size: 1.15rem;
+    font-weight: 750;
+}
+
+.information-count {
+    margin-left: auto;
+    padding: 0.38rem 0.7rem;
+    border-radius: 999px;
+    color: rgba(255, 255, 255, 0.7);
+    background: rgba(255, 255, 255, 0.09);
+    font-size: 0.76rem;
+    font-weight: 700;
+}
+
+.information-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.information-card {
+    --info-tone: #38bdf8;
+    display: flex;
+    min-height: 220px;
+    flex-direction: column;
+    padding: 1.25rem;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.72);
+    border-radius: 20px;
+    color: #163047;
+    background: rgba(255, 255, 255, 0.94);
+    box-shadow: 0 12px 30px rgba(2, 28, 48, 0.14);
+    text-decoration: none;
+    backdrop-filter: blur(12px);
+    transition: transform 0.24s ease, box-shadow 0.24s ease, border-color 0.24s ease;
+}
+
+.information-card:first-child {
+    grid-column: span 2;
+    background:
+        radial-gradient(circle at 92% 10%, color-mix(in srgb, var(--info-tone) 18%, transparent), transparent 35%),
+        rgba(255, 255, 255, 0.97);
+}
+
+.information-card:hover {
+    color: #102b40;
+    border-color: var(--info-tone);
+    box-shadow: 0 18px 34px rgba(2, 28, 48, 0.24);
+    transform: translateY(-5px);
+}
+
+.information-card-top,
+.information-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.information-card-icon {
+    display: inline-flex;
+    width: 42px;
+    height: 42px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 13px;
+    color: var(--info-tone);
+    background: color-mix(in srgb, var(--info-tone) 13%, white);
+}
+
+.information-card-number {
+    color: color-mix(in srgb, var(--info-tone) 60%, #718096);
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+}
+
+.information-card-body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 1.3rem 0 1rem;
+}
+
+.information-card-date {
+    display: block;
+    margin-bottom: 0.55rem;
+    color: #6b7e8e;
+    font-size: 0.76rem;
+    font-weight: 650;
+}
+
+.information-card-date i {
+    margin-right: 0.3rem;
+    color: var(--info-tone);
+}
+
+.information-card h4 {
+    display: -webkit-box;
+    margin: 0;
+    overflow: hidden;
+    color: #102b40;
+    font-size: 1rem;
+    font-weight: 750;
+    line-height: 1.45;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+}
+
+.information-card:first-child h4 {
+    max-width: 680px;
+    font-size: clamp(1.15rem, 2vw, 1.45rem);
+    -webkit-line-clamp: 2;
+}
+
+.information-card-footer {
+    padding-top: 0.85rem;
+    border-top: 1px solid #e7eef3;
+    color: #567083;
+    font-size: 0.78rem;
+    font-weight: 750;
+}
+
+.information-card-arrow {
+    display: inline-flex;
+    width: 30px;
+    height: 30px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: #fff;
+    background: var(--info-tone);
+    transition: transform 0.2s ease;
+}
+
+.information-card:hover .information-card-arrow {
+    transform: translateX(3px);
+}
+
+.tone-blue { --info-tone: #2583e8; }
+.tone-purple { --info-tone: #8b5cf6; }
+.tone-cyan { --info-tone: #0891b2; }
+.tone-orange { --info-tone: #ea7b17; }
+.tone-green { --info-tone: #059669; }
+.tone-pink { --info-tone: #db4d82; }
+
+.information-empty {
+    display: grid;
+    min-height: 240px;
+    place-content: center;
+    border: 1px dashed rgba(255, 255, 255, 0.28);
+    border-radius: 20px;
+    color: rgba(255, 255, 255, 0.68);
+    text-align: center;
+}
+
+.information-empty i {
+    margin-bottom: 0.75rem;
+    font-size: 2rem;
+}
+
+.information-empty p {
+    margin: 0;
+}
+
+@media (max-width: 991.98px) {
+    .information-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .information-tabs .nav-item {
+        flex: 0 0 auto;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .information-showcase {
+        border-radius: 24px;
+    }
+
+    .information-heading {
+        margin-bottom: 1.4rem;
+    }
+
+    .information-heading p {
+        font-size: 0.9rem;
+    }
+
+    .information-tabs {
+        margin-right: -0.35rem;
+        margin-left: -0.35rem;
+        border-radius: 15px;
+    }
+
+    .information-tabs .nav-link {
+        min-height: 44px;
+        padding: 0.55rem 0.75rem;
+        font-size: 0.8rem;
+    }
+
+    .information-category-meta {
+        align-items: flex-start;
+    }
+
+    .information-count {
+        display: none;
+    }
+
+    .information-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .information-card,
+    .information-card:first-child {
+        grid-column: auto;
+        min-height: 205px;
+    }
 }
 
 .contrib-card-v3 {
