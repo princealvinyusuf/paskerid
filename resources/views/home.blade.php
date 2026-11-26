@@ -77,23 +77,58 @@
         </div>
     @endif
 
-    {{-- Hero Banner Section (Static) --}}
-    <section class="hero-banner position-relative text-white mb-0 d-flex flex-column justify-content-center align-items-center h-100" style="background: url('{{ asset('images/banner_bg_2.jpg') }}') center center/cover no-repeat; min-height: 420px;">
-        <div class="w-100">
-            <h1 class="fw-bold mb-3 text-center lh-sm hero-title-responsive" style="text-shadow: 2px 2px 6px #000, 0 0 2px #fff, 0 0 8px #000;">
-                Get A Job Live Better
-            </h1>
-        </div>
-        <div class="w-100 d-flex justify-content-center mt-3 px-2 px-sm-3">
-            <form action="{{ route('informasi.index') }}" method="GET" class="d-flex flex-column flex-sm-row align-items-stretch shadow rounded-pill bg-white p-2 gap-2 searchbar-responsive" style="max-width: 600px; width: 100%; overflow: hidden;">
-                <input type="text" name="search" class="form-control border-0 rounded-pill ps-3 py-2 flex-grow-1 searchbar-input-responsive" placeholder="Cari informasi, statistik, atau publikasi..." aria-label="Cari informasi" style="font-size: 1rem; background: transparent; min-width:0;">
-                <button class="btn btn-success rounded-pill px-4 d-flex align-items-center justify-content-center searchbar-btn-responsive" type="submit" style="font-size: 1rem; min-width: 90px;">
-                    <i class="fa fa-search me-2"></i> Cari
-                </button>
-            </form>
+    {{-- Hero Banner Section --}}
+    <section class="home-hero" style="--home-hero-image: url('{{ asset('images/banner_bg_2.jpg') }}');">
+        <span class="home-hero-grid" aria-hidden="true"></span>
+        <span class="home-hero-glow home-hero-glow-one" aria-hidden="true"></span>
+        <span class="home-hero-glow home-hero-glow-two" aria-hidden="true"></span>
+
+        <div class="home-hero-inner">
+            <div class="home-hero-copy" data-aos="fade-right">
+                <span class="home-hero-eyebrow">
+                    <i class="fa-solid fa-chart-line"></i>
+                    Pusat Pasar Kerja
+                </span>
+                <h1 class="hero-title-responsive">
+                    <span>Get A Job</span>
+                    <span>Live Better</span>
+                </h1>
+
+                <form action="{{ route('informasi.index') }}" method="GET" class="home-hero-search searchbar-responsive">
+                    <label for="homeHeroSearch" class="visually-hidden">Cari informasi</label>
+                    <span class="home-hero-search-icon"><i class="fa-solid fa-magnifying-glass"></i></span>
+                    <input id="homeHeroSearch"
+                        type="text"
+                        name="search"
+                        class="searchbar-input-responsive"
+                        placeholder="Cari informasi, statistik, atau publikasi..."
+                        aria-label="Cari informasi">
+                    <button class="searchbar-btn-responsive" type="submit">
+                        <span>Cari</span><i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </form>
+
+                <div class="home-hero-points" aria-label="Keunggulan Pasker ID">
+                    <span><i class="fa-solid fa-circle-check"></i> Data terpercaya</span>
+                    <span><i class="fa-solid fa-circle-check"></i> Informasi terkini</span>
+                    <span><i class="fa-solid fa-circle-check"></i> Peluang karier</span>
+                </div>
+            </div>
+
+            <div class="home-hero-visual" aria-hidden="true" data-aos="fade-left">
+                <div class="home-hero-signal">
+                    <span class="home-hero-signal-icon"><i class="fa-solid fa-arrow-trend-up"></i></span>
+                    <span class="home-hero-signal-bars">
+                        <i></i><i></i><i></i><i></i><i></i>
+                    </span>
+                </div>
+                <span class="home-hero-orbit home-hero-orbit-one"></span>
+                <span class="home-hero-orbit home-hero-orbit-two"></span>
+            </div>
         </div>
     </section>
     <section class="running-text-strip" aria-label="Informasi berjalan">
+        <span class="running-text-label" aria-hidden="true"><i class="fa-solid fa-bullhorn"></i></span>
         <div class="running-text-track">
             <span class="running-text-item">Dengan Integritas dan Pelayanan Prima, Pusat Pasar Kerja Siap Menuju WBK dan WBBM — Mari Dukung Kami</span>
             <span class="running-text-item" aria-hidden="true">Dengan Integritas dan Pelayanan Prima, Pusat Pasar Kerja Siap Menuju WBK dan WBBM — Mari Dukung Kami</span>
@@ -2559,71 +2594,446 @@
         max-width: 100%;
     }
 }
-.hero-title-responsive {
-    font-size: 2.1rem;
+/* Homepage hero */
+.home-hero {
+    position: relative;
+    min-height: clamp(520px, 70vh, 680px);
+    overflow: hidden;
+    isolation: isolate;
+    background-color: #031b1c;
+    background-image: var(--home-hero-image);
+    background-position: center;
+    background-size: cover;
 }
+
+.home-hero::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    background:
+        linear-gradient(90deg, rgba(1, 20, 23, 0.94) 0%, rgba(1, 28, 28, 0.82) 35%, rgba(2, 29, 27, 0.2) 70%, rgba(1, 14, 16, 0.3) 100%),
+        linear-gradient(0deg, rgba(0, 15, 17, 0.62), transparent 45%);
+}
+
+.home-hero::after {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 145px;
+    background: linear-gradient(to top, rgba(0, 14, 16, 0.74), transparent);
+    pointer-events: none;
+}
+
+.home-hero-grid {
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    opacity: 0.12;
+    pointer-events: none;
+    background-image:
+        linear-gradient(rgba(94, 234, 212, 0.45) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(94, 234, 212, 0.45) 1px, transparent 1px);
+    background-size: 58px 58px;
+    mask-image: linear-gradient(90deg, #000, transparent 62%);
+}
+
+.home-hero-glow {
+    position: absolute;
+    z-index: -1;
+    border-radius: 50%;
+    pointer-events: none;
+    filter: blur(10px);
+}
+
+.home-hero-glow-one {
+    width: 390px;
+    height: 390px;
+    top: -250px;
+    left: 22%;
+    background: rgba(16, 185, 129, 0.2);
+}
+
+.home-hero-glow-two {
+    width: 260px;
+    height: 260px;
+    bottom: -170px;
+    left: 3%;
+    background: rgba(245, 158, 11, 0.14);
+}
+
+.home-hero-inner {
+    display: grid;
+    width: min(1380px, 100%);
+    min-height: inherit;
+    grid-template-columns: minmax(0, 0.95fr) minmax(320px, 1.05fr);
+    align-items: center;
+    gap: clamp(2rem, 5vw, 5rem);
+    margin: 0 auto;
+    padding: clamp(3rem, 7vw, 6.5rem) clamp(1.25rem, 5vw, 5rem);
+}
+
+.home-hero-copy {
+    position: relative;
+    z-index: 2;
+    max-width: 650px;
+    padding: clamp(1.4rem, 3vw, 2.5rem);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 30px;
+    background: linear-gradient(140deg, rgba(3, 39, 41, 0.78), rgba(3, 30, 32, 0.44));
+    box-shadow: 0 24px 60px rgba(0, 10, 12, 0.28);
+    backdrop-filter: blur(13px);
+}
+
+.home-hero-copy::before {
+    content: "";
+    position: absolute;
+    width: 62px;
+    height: 4px;
+    top: 0;
+    left: 2rem;
+    border-radius: 0 0 8px 8px;
+    background: linear-gradient(90deg, #f5c451, #34d399);
+}
+
+.home-hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    margin-bottom: 1.1rem;
+    color: #6ee7d2;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+}
+
+.home-hero .hero-title-responsive {
+    margin: 0 0 1.6rem;
+    color: #fff;
+    font-size: clamp(2.65rem, 5.5vw, 5.25rem);
+    font-weight: 850;
+    line-height: 0.98;
+    letter-spacing: -0.055em;
+    text-shadow: 0 5px 22px rgba(0, 0, 0, 0.35);
+}
+
+.home-hero .hero-title-responsive span {
+    display: block;
+}
+
+.home-hero .hero-title-responsive span:last-child {
+    color: #f4d26f;
+}
+
+.home-hero-search {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.55rem;
+    width: 100%;
+    padding: 0.45rem;
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.96);
+    box-shadow: 0 14px 34px rgba(0, 12, 13, 0.3);
+}
+
+.home-hero-search-icon {
+    display: inline-flex;
+    width: 40px;
+    height: 40px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    color: #07816d;
+    background: #e4f8f3;
+}
+
+.home-hero-search input {
+    width: 100%;
+    min-width: 0;
+    padding: 0.75rem 0.35rem;
+    border: 0;
+    outline: 0;
+    color: #17384a;
+    background: transparent;
+    font-size: 0.95rem;
+}
+
+.home-hero-search input::placeholder {
+    color: #78909d;
+    opacity: 1;
+}
+
+.home-hero-search button {
+    display: inline-flex;
+    min-height: 46px;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    padding: 0.7rem 1rem;
+    border: 0;
+    border-radius: 13px;
+    color: #fff;
+    background: linear-gradient(135deg, #0b8d76, #08705f);
+    box-shadow: 0 8px 18px rgba(7, 112, 95, 0.25);
+    font-size: 0.9rem;
+    font-weight: 800;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.home-hero-search button:hover {
+    box-shadow: 0 11px 23px rgba(7, 112, 95, 0.34);
+    transform: translateY(-2px);
+}
+
+.home-hero-points {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem 1rem;
+    margin-top: 1.15rem;
+}
+
+.home-hero-points span {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: rgba(255, 255, 255, 0.76);
+    font-size: 0.75rem;
+    font-weight: 650;
+}
+
+.home-hero-points i {
+    color: #5eead4;
+}
+
+.home-hero-visual {
+    position: relative;
+    min-height: 420px;
+    pointer-events: none;
+}
+
+.home-hero-signal {
+    position: absolute;
+    top: 4%;
+    right: 4%;
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.75rem 0.9rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 16px;
+    background: rgba(3, 39, 41, 0.58);
+    box-shadow: 0 14px 30px rgba(0, 9, 10, 0.2);
+    backdrop-filter: blur(10px);
+}
+
+.home-hero-signal-icon {
+    display: inline-flex;
+    width: 38px;
+    height: 38px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    color: #082e2c;
+    background: #f4d26f;
+}
+
+.home-hero-signal-bars {
+    display: flex;
+    height: 34px;
+    align-items: flex-end;
+    gap: 4px;
+}
+
+.home-hero-signal-bars i {
+    display: block;
+    width: 6px;
+    border-radius: 5px 5px 2px 2px;
+    background: linear-gradient(to top, #10b981, #6ee7d2);
+    animation: homeHeroBars 2.2s ease-in-out infinite alternate;
+}
+
+.home-hero-signal-bars i:nth-child(1) { height: 30%; animation-delay: -0.8s; }
+.home-hero-signal-bars i:nth-child(2) { height: 52%; animation-delay: -0.4s; }
+.home-hero-signal-bars i:nth-child(3) { height: 42%; animation-delay: -1.1s; }
+.home-hero-signal-bars i:nth-child(4) { height: 75%; animation-delay: -0.2s; }
+.home-hero-signal-bars i:nth-child(5) { height: 100%; animation-delay: -0.65s; }
+
+@keyframes homeHeroBars {
+    to { transform: scaleY(0.68); transform-origin: bottom; }
+}
+
+.home-hero-orbit {
+    position: absolute;
+    border: 1px solid rgba(110, 231, 210, 0.26);
+    border-radius: 50%;
+}
+
+.home-hero-orbit::after {
+    content: "";
+    position: absolute;
+    width: 9px;
+    height: 9px;
+    top: 15%;
+    right: 12%;
+    border-radius: 50%;
+    background: #f4d26f;
+    box-shadow: 0 0 18px rgba(244, 210, 111, 0.9);
+}
+
+.home-hero-orbit-one {
+    width: 260px;
+    height: 260px;
+    right: 2%;
+    bottom: -12%;
+}
+
+.home-hero-orbit-two {
+    width: 145px;
+    height: 145px;
+    right: 26%;
+    bottom: 5%;
+}
+
 .running-text-strip {
     position: relative;
+    display: flex;
+    align-items: center;
     overflow: hidden;
-    background: #0f6b2f;
-    color: #ffffff;
-    border-top: 2px solid #8dc71e;
-    border-bottom: 2px solid #8dc71e;
-    padding: 0.55rem 0;
+    border-top: 1px solid rgba(110, 231, 210, 0.36);
+    border-bottom: 1px solid rgba(110, 231, 210, 0.3);
+    color: #fff;
+    background: linear-gradient(90deg, #064e45, #087266 52%, #075c53);
 }
+
+.running-text-label {
+    position: relative;
+    z-index: 2;
+    display: inline-flex;
+    width: 52px;
+    min-height: 42px;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    color: #17403a;
+    background: #f4d26f;
+    box-shadow: 8px 0 20px rgba(2, 44, 39, 0.25);
+}
+
 .running-text-track {
     display: inline-flex;
-    gap: 3rem;
-    white-space: nowrap;
     min-width: 100%;
+    gap: 3rem;
+    padding: 0.65rem 0;
+    white-space: nowrap;
     animation: runningTextScroll 22s linear infinite;
 }
+
 .running-text-item {
-    font-weight: 600;
+    font-size: 0.88rem;
+    font-weight: 650;
     letter-spacing: 0.01em;
 }
+
 @keyframes runningTextScroll {
-    0% {
-        transform: translateX(0);
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+@media (max-width: 991.98px) {
+    .home-hero {
+        min-height: 590px;
+        background-position: 62% center;
     }
-    100% {
-        transform: translateX(-50%);
+
+    .home-hero-inner {
+        grid-template-columns: minmax(0, 1fr) minmax(130px, 0.35fr);
+        gap: 1rem;
+    }
+
+    .home-hero-copy {
+        max-width: 620px;
+    }
+
+    .home-hero-visual {
+        min-height: 320px;
     }
 }
-@media (min-width: 576px) {
-    .hero-title-responsive {
-        font-size: 2.5rem;
+
+@media (max-width: 767.98px) {
+    .home-hero {
+        min-height: 620px;
+        background-position: 64% center;
+    }
+
+    .home-hero::before {
+        background:
+            linear-gradient(90deg, rgba(1, 20, 23, 0.9), rgba(1, 24, 25, 0.52)),
+            linear-gradient(0deg, rgba(0, 15, 17, 0.8), rgba(0, 15, 17, 0.08));
+    }
+
+    .home-hero-inner {
+        display: flex;
+        align-items: flex-end;
+        padding-top: 7rem;
+        padding-bottom: 2rem;
+    }
+
+    .home-hero-copy {
+        width: 100%;
+    }
+
+    .home-hero-visual {
+        display: none;
     }
 }
-@media (min-width: 768px) {
-    .hero-title-responsive {
-        font-size: 3rem;
-    }
-}
+
 @media (max-width: 575.98px) {
-    .hero-title-responsive {
-        padding-left: 0.5rem;
-        padding-right: 0.5rem;
-        text-shadow: 1px 1px 3px #000, 0 0 1px #fff, 0 0 4px #000;
+    .home-hero {
+        min-height: 650px;
     }
-    .searchbar-responsive {
-        flex-direction: column !important;
-        border-radius: 1rem !important;
-        padding: 0.75rem 0.5rem !important;
-        gap: 0.5rem !important;
+
+    .home-hero-inner {
+        padding-right: 0.75rem;
+        padding-left: 0.75rem;
     }
-    .searchbar-input-responsive {
-        border-radius: 0.75rem !important;
-        width: 100% !important;
-        margin-bottom: 0.5rem !important;
+
+    .home-hero-copy {
+        padding: 1.3rem 1rem;
+        border-radius: 22px;
     }
-    .searchbar-btn-responsive {
-        border-radius: 0.75rem !important;
-        width: 100% !important;
-        min-width: 0 !important;
-        justify-content: center !important;
-        padding-left: 0 !important;
-        padding-right: 0 !important;
+
+    .home-hero .hero-title-responsive {
+        font-size: clamp(2.55rem, 13vw, 3.6rem);
+    }
+
+    .home-hero-search {
+        grid-template-columns: auto minmax(0, 1fr);
+    }
+
+    .home-hero-search button {
+        grid-column: 1 / -1;
+        width: 100%;
+    }
+
+    .home-hero-points {
+        gap: 0.45rem 0.8rem;
+    }
+
+    .running-text-label {
+        width: 46px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .home-hero-signal-bars i,
+    .running-text-track {
+        animation: none;
     }
 }
 .stat-carousel-section a {
