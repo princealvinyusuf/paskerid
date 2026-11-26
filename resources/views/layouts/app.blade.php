@@ -493,7 +493,7 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link @if(request()->routeIs('program-kemitraan.*')) active fw-bold @endif" href="{{ route('program-kemitraan.create') }}">
-                            Program Kemitraan
+                            Kemitraan
                         </a>
                     </li>
                     <li class="nav-item">
