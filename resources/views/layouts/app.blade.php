@@ -479,8 +479,6 @@
                             Layanan
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="layananDropdown">
-                            <li><a class="dropdown-item @if(request()->routeIs('virtual-karir.index')) active fw-bold @endif" href="{{ route('virtual-karir.index') }}">Virtual Karir</a></li>
-                            <li><a class="dropdown-item @if(request()->routeIs('pusat_bantuan')) active fw-bold @endif" href="{{ route('pusat_bantuan') }}">Pusat Bantuan</a></li>
                             <li><a class="dropdown-item @if(request()->routeIs('kemitraan.create')) active fw-bold @endif" href="{{ route('kemitraan.create') }}">Walk-In</a></li>
                             <li><a class="dropdown-item" href="https://paskerid.kemnaker.go.id/RIASEC/" target="_blank">Minat Karir</a></li>
                             <li>
@@ -492,6 +490,8 @@
                                     Career Boost Day
                                 </a>
                             </li>
+                            <li><a class="dropdown-item @if(request()->routeIs('virtual-karir.index')) active fw-bold @endif" href="{{ route('virtual-karir.index') }}">Virtual Karir</a></li>
+                            <li><a class="dropdown-item @if(request()->routeIs('pusat_bantuan')) active fw-bold @endif" href="{{ route('pusat_bantuan') }}">Pusat Bantuan</a></li>
                         </ul>
                     </li>
                     <li class="nav-item dropdown">
