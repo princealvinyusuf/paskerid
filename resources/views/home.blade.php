@@ -2347,10 +2347,16 @@
 .market-source-intro .thelogo-wrapper {
     display: inline-flex;
     padding: 0.7rem 0.85rem;
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.38);
     border-radius: 14px;
-    background: rgba(255, 255, 255, 0.94);
-    box-shadow: 0 10px 22px rgba(85, 10, 38, 0.16);
+    background: rgba(103, 10, 48, 0.28);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 10px 22px rgba(85, 10, 38, 0.18);
+    backdrop-filter: blur(8px);
+}
+
+.market-source-intro .thelogo-inline {
+    opacity: 1;
+    filter: drop-shadow(0 2px 5px rgba(67, 5, 31, 0.24));
 }
 
 .market-source-carousel {
