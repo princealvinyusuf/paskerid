@@ -100,117 +100,181 @@
         </div>
     </section>
 
-    {{-- Highlight Pasar Kerja Section (Both Carousels) --}}
-    <section class="stat-carousel-section position-relative" style="z-index: 10;">
-        <div class="container-fluid position-relative px-2 px-sm-3">
-            <h3 class="text-center mb-4">Highlight Pasar Kerja</h3>
-            {{-- First Carousel --}}
-            <div class="d-flex align-items-center position-relative mb-4">
-                <button id="statScrollPrev" class="btn btn-light shadow rounded-circle position-absolute start-0 translate-middle-y" style="top:50%; z-index:2; width:40px; height:40px;">
-                    <i class="fa fa-chevron-left"></i>
-                </button>
-                <div id="statScrollRow" class="d-flex justify-content-lg-center px-0" style="scroll-behavior:smooth; gap:16px; width:100%; overflow-x:hidden;">
-                    @foreach($statistics as $stat)
-                        <a href="{{ route('informasi.index', ['type' => 'statistik', 'search' => $stat->title]) }}" class="text-decoration-none">
-                            <div class="card shadow-sm stat-card text-center flex-shrink-0" style="max-width:260px; min-width:180px; cursor:pointer;">
-                                <div class="card-body d-flex flex-column align-items-center justify-content-center">
-                                    <div class="stat-icon mb-3">
-                                        <i class="fa {{ $stat->logo ?? 'fa-chart-bar' }} fa-2x text-success"></i>
-                                    </div>
-                                    <div class="stat-title fw-bold mb-1" style="font-size:1.1rem; color:#187C19;">{{ $stat->title }}</div>
-                                    <div class="stat-value fw-bold mb-0" style="font-size:2.2rem; color:#222;">{{ $stat->value }}</div>
-                                    @if($stat->unit)
-                                        <div class="stat-unit" style="font-size:1.2rem; color:#222;">{{ $stat->unit }}</div>
-                                    @endif
-                                    @if($stat->description)
-                                        <div class="stat-desc text-muted mt-1" style="font-size:0.95rem;">{{ $stat->description }}</div>
-                                    @endif
-                                </div>
-                            </div>
-                        </a>
-                    @endforeach
+    {{-- Highlight Pasar Kerja --}}
+    <section class="stat-carousel-section market-highlight" data-aos="fade-up">
+        <div class="market-highlight-shell">
+            <div class="market-highlight-heading">
+                <div>
+                    <span class="market-highlight-eyebrow"><i class="fa-solid fa-signal"></i> Data terkini</span>
+                    <h2>Highlight Pasar Kerja</h2>
+                    <p>Angka penting untuk membaca kondisi dan pergerakan pasar kerja Indonesia.</p>
                 </div>
-                <button id="statScrollNext" class="btn btn-light shadow rounded-circle position-absolute end-0 translate-middle-y" style="top:50%; z-index:2; width:40px; height:40px;">
-                    <i class="fa fa-chevron-right"></i>
-                </button>
-            </div>
-            <div class="d-flex justify-content-center mt-3" id="statDots"></div>
-            {{-- Second Carousel --}}
-            <div class="d-flex align-items-center position-relative">
-                <button id="highlightStatScrollPrev" class="btn btn-light shadow rounded-circle position-absolute start-0 translate-middle-y" style="top:50%; z-index:2; width:40px; height:40px;">
-                    <i class="fa fa-chevron-left"></i>
-                </button>
-                <div id="highlightStatScrollRow" class="d-flex justify-content-lg-center px-0" style="scroll-behavior:smooth; gap:16px; width:100%; overflow-x:hidden;">
-                    @foreach($highlightStatistics as $stat)
-                        <a href="{{ route('informasi.index', ['type' => 'statistik', 'search' => $stat->title]) }}" class="text-decoration-none">
-                            <div class="card shadow-sm stat-card text-center flex-shrink-0" style="max-width:260px; min-width:180px; cursor:pointer;">
-                                <div class="card-body d-flex flex-column align-items-center justify-content-center">
-                                    <div class="stat-icon mb-3">
-                                        <i class="fa {{ $stat->logo ?? 'fa-star' }} fa-2x text-warning"></i>
-                                    </div>
-                                    <div class="stat-title fw-bold mb-1" style="font-size:1.1rem; color:#187C19;">{{ $stat->title }}</div>
-                                    <div class="stat-value fw-bold mb-0" style="font-size:2.2rem; color:#222;">{{ $stat->value }}</div>
-                                    @if($stat->unit)
-                                        <div class="stat-unit" style="font-size:1.2rem; color:#222;">{{ $stat->unit }}</div>
-                                    @endif
-                                    @if($stat->description)
-                                        <div class="stat-desc text-muted mt-1" style="font-size:0.95rem;">{{ $stat->description }}</div>
-                                    @endif
-                                </div>
-                            </div>
-                        </a>
-                    @endforeach
+                <div class="market-live-badge">
+                    <span></span>
+                    Ringkasan statistik
                 </div>
-                <button id="highlightStatScrollNext" class="btn btn-light shadow rounded-circle position-absolute end-0 translate-middle-y" style="top:50%; z-index:2; width:40px; height:40px;">
-                    <i class="fa fa-chevron-right"></i>
-                </button>
             </div>
-            <div class="d-flex justify-content-center mt-3" id="highlightStatDots"></div>
-            {{-- Third Carousel (Secondary Highlights) with Blue Background Wrapper --}}
-            <div class="my-4 py-4 text-white rounded-4 home-ocean-banner home-ocean-banner-pink">
-                <div class="container-fluid px-2 px-sm-3">
-                    <div class="row align-items-center">
-                        <div class="col-md-4 mb-4 mb-md-0">
-                            <h2 class="fw-bold d-flex align-items-center flex-wrap gap-2" style="font-size:3rem;">
-                                <span>Informasi bersumber dari</span>
-                                <span class="thelogo-wrapper">
-                                    <img src="{{ asset('images/services/karirhub_logo.png') }}" alt="Karirhub" class="img-fluid thelogo-inline">
-                                </span>
-                            </h2>
-                        </div>
-                        <div class="col-md-8 position-relative">
-                            <div class="d-flex align-items-center position-relative">
-                                <button id="highlightStat2ScrollPrev" class="btn btn-light shadow rounded-circle position-absolute start-0 translate-middle-y" style="top:50%; z-index:2; width:40px; height:40px;">
-                                    <i class="fa fa-chevron-left"></i>
-                                </button>
-                                <div id="highlightStat2ScrollRow" class="d-flex px-0" style="scroll-behavior:smooth; gap:16px; width:100%; overflow-x:hidden;">
-                                    @foreach($highlightStatistics2 ?? [] as $stat)
-                                        <a href="{{ route('informasi.index', ['type' => 'statistik', 'search' => $stat->title]) }}" class="text-decoration-none">
-                                            <div class="card shadow-sm stat-card text-center flex-shrink-0" style="max-width:260px; min-width:180px; cursor:pointer;">
-                                                <div class="card-body d-flex flex-column align-items-center justify-content-center">
-                                                    <div class="stat-icon mb-3">
-                                                        <i class="fa {{ $stat->logo ?? 'fa-diamond' }} fa-2x text-info"></i>
-                                                    </div>
-                                    <div class="stat-title fw-bold mb-1" style="font-size:1.1rem; color:#187C19;">{{ $stat->title }}</div>
-                                    <div class="stat-value fw-bold mb-0" style="font-size:2.2rem; color:#222;">{{ $stat->value }}</div>
-                                    @if($stat->unit)
-                                        <div class="stat-unit" style="font-size:1.2rem; color:#222;">{{ $stat->unit }}</div>
-                                    @endif
-                                                    @if($stat->description)
-                                                        <div class="stat-desc text-muted mt-1" style="font-size:0.95rem;">{{ $stat->description }}</div>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        </a>
-                                    @endforeach
-                                </div>
-                                <button id="highlightStat2ScrollNext" class="btn btn-light shadow rounded-circle position-absolute end-0 translate-middle-y" style="top:50%; z-index:2; width:40px; height:40px;">
-                                    <i class="fa fa-chevron-right"></i>
-                                </button>
-                            </div>
-                            <div class="d-flex justify-content-center mt-3" id="highlightStat2Dots"></div>
+
+            {{-- Main statistics --}}
+            <div class="market-lane">
+                <div class="market-lane-heading">
+                    <div>
+                        <span class="market-lane-number">01</span>
+                        <div>
+                            <h3>Indikator Utama</h3>
+                            <p>Gambaran umum ketenagakerjaan</p>
                         </div>
                     </div>
+                    <div class="market-controls">
+                        <button id="statScrollPrev" class="market-control" type="button" aria-label="Indikator sebelumnya">
+                            <i class="fa-solid fa-arrow-left"></i>
+                        </button>
+                        <button id="statScrollNext" class="market-control" type="button" aria-label="Indikator berikutnya">
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="market-carousel-frame">
+                    <div id="statScrollRow" class="market-scroll-row">
+                        @foreach($statistics as $stat)
+                            <a href="{{ route('informasi.index', ['type' => 'statistik', 'search' => $stat->title]) }}" class="market-stat-link">
+                                <article class="card stat-card market-stat-card market-tone-{{ $loop->index % 5 }}">
+                                    <div class="market-card-accent"></div>
+                                    <div class="card-body">
+                                        <div class="market-stat-top">
+                                            <span class="stat-icon"><i class="fa {{ $stat->logo ?? 'fa-chart-bar' }}"></i></span>
+                                            <span class="market-stat-index">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</span>
+                                        </div>
+                                        <div class="market-stat-content">
+                                            <div class="stat-title">{{ $stat->title }}</div>
+                                            <div class="market-stat-number">
+                                                <span class="stat-value">{{ $stat->value }}</span>
+                                                @if($stat->unit)
+                                                    <span class="stat-unit">{{ $stat->unit }}</span>
+                                                @endif
+                                            </div>
+                                            @if($stat->description)
+                                                <div class="stat-desc">{{ $stat->description }}</div>
+                                            @endif
+                                        </div>
+                                        <div class="market-card-action">
+                                            <span>Lihat data</span><i class="fa-solid fa-arrow-right"></i>
+                                        </div>
+                                    </div>
+                                </article>
+                            </a>
+                        @endforeach
+                    </div>
+                </div>
+                <div class="market-dots" id="statDots"></div>
+            </div>
+
+            {{-- Featured statistics --}}
+            <div class="market-lane">
+                <div class="market-lane-heading">
+                    <div>
+                        <span class="market-lane-number">02</span>
+                        <div>
+                            <h3>Sorotan Pasar Kerja</h3>
+                            <p>Statistik pilihan yang perlu diperhatikan</p>
+                        </div>
+                    </div>
+                    <div class="market-controls">
+                        <button id="highlightStatScrollPrev" class="market-control" type="button" aria-label="Sorotan sebelumnya">
+                            <i class="fa-solid fa-arrow-left"></i>
+                        </button>
+                        <button id="highlightStatScrollNext" class="market-control" type="button" aria-label="Sorotan berikutnya">
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="market-carousel-frame">
+                    <div id="highlightStatScrollRow" class="market-scroll-row">
+                        @foreach($highlightStatistics as $stat)
+                            <a href="{{ route('informasi.index', ['type' => 'statistik', 'search' => $stat->title]) }}" class="market-stat-link">
+                                <article class="card stat-card market-stat-card market-tone-{{ ($loop->index + 2) % 5 }}">
+                                    <div class="market-card-accent"></div>
+                                    <div class="card-body">
+                                        <div class="market-stat-top">
+                                            <span class="stat-icon"><i class="fa {{ $stat->logo ?? 'fa-star' }}"></i></span>
+                                            <span class="market-featured-label"><i class="fa-solid fa-star"></i> Pilihan</span>
+                                        </div>
+                                        <div class="market-stat-content">
+                                            <div class="stat-title">{{ $stat->title }}</div>
+                                            <div class="market-stat-number">
+                                                <span class="stat-value">{{ $stat->value }}</span>
+                                                @if($stat->unit)
+                                                    <span class="stat-unit">{{ $stat->unit }}</span>
+                                                @endif
+                                            </div>
+                                            @if($stat->description)
+                                                <div class="stat-desc">{{ $stat->description }}</div>
+                                            @endif
+                                        </div>
+                                        <div class="market-card-action">
+                                            <span>Lihat data</span><i class="fa-solid fa-arrow-right"></i>
+                                        </div>
+                                    </div>
+                                </article>
+                            </a>
+                        @endforeach
+                    </div>
+                </div>
+                <div class="market-dots" id="highlightStatDots"></div>
+            </div>
+
+            {{-- Karirhub statistics --}}
+            <div class="karirhub-insight">
+                <span class="karirhub-orb karirhub-orb-one" aria-hidden="true"></span>
+                <span class="karirhub-orb karirhub-orb-two" aria-hidden="true"></span>
+                <div class="karirhub-intro">
+                    <span class="karirhub-kicker"><i class="fa-solid fa-briefcase"></i> Data lowongan</span>
+                    <h3>Insight langsung dari</h3>
+                    <img src="{{ asset('images/services/karirhub_logo.png') }}" alt="Karirhub" class="karirhub-logo">
+                    <p>Pantau kebutuhan tenaga kerja berdasarkan aktivitas lowongan terkini.</p>
+                    <div class="market-controls market-controls-light">
+                        <button id="highlightStat2ScrollPrev" class="market-control" type="button" aria-label="Insight Karirhub sebelumnya">
+                            <i class="fa-solid fa-arrow-left"></i>
+                        </button>
+                        <button id="highlightStat2ScrollNext" class="market-control" type="button" aria-label="Insight Karirhub berikutnya">
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="karirhub-carousel">
+                    <div class="market-carousel-frame">
+                        <div id="highlightStat2ScrollRow" class="market-scroll-row">
+                            @foreach($highlightStatistics2 ?? [] as $stat)
+                                <a href="{{ route('informasi.index', ['type' => 'statistik', 'search' => $stat->title]) }}" class="market-stat-link">
+                                    <article class="card stat-card market-stat-card market-tone-{{ ($loop->index + 1) % 5 }}">
+                                        <div class="market-card-accent"></div>
+                                        <div class="card-body">
+                                            <div class="market-stat-top">
+                                                <span class="stat-icon"><i class="fa {{ $stat->logo ?? 'fa-diamond' }}"></i></span>
+                                                <span class="market-stat-index">KH</span>
+                                            </div>
+                                            <div class="market-stat-content">
+                                                <div class="stat-title">{{ $stat->title }}</div>
+                                                <div class="market-stat-number">
+                                                    <span class="stat-value">{{ $stat->value }}</span>
+                                                    @if($stat->unit)
+                                                        <span class="stat-unit">{{ $stat->unit }}</span>
+                                                    @endif
+                                                </div>
+                                                @if($stat->description)
+                                                    <div class="stat-desc">{{ $stat->description }}</div>
+                                                @endif
+                                            </div>
+                                            <div class="market-card-action">
+                                                <span>Lihat data</span><i class="fa-solid fa-arrow-right"></i>
+                                            </div>
+                                        </div>
+                                    </article>
+                                </a>
+                            @endforeach
+                        </div>
+                    </div>
+                    <div class="market-dots market-dots-light" id="highlightStat2Dots"></div>
                 </div>
             </div>
         </div>
@@ -2700,6 +2764,595 @@ html.dark-mode .home-ocean-theme [style*="color: #222"] {
 }
 html.dark-mode .home-ocean-theme .card-footer {
     border-color: var(--theme-border);
+}
+
+/* Market highlight dashboard */
+.market-highlight {
+    position: relative;
+    z-index: 10;
+    padding: clamp(2.5rem, 6vw, 5rem) clamp(0.75rem, 4vw, 3rem);
+}
+
+.market-highlight-shell {
+    width: min(100%, 1440px);
+    margin: 0 auto;
+}
+
+.market-highlight-heading {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 2rem;
+    margin-bottom: 2.4rem;
+}
+
+.market-highlight-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.65rem;
+    color: #087f73;
+    font-size: 0.76rem;
+    font-weight: 800;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+}
+
+.market-highlight-heading h2 {
+    margin: 0 0 0.55rem;
+    color: #0b2e47;
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 850;
+    letter-spacing: -0.045em;
+}
+
+.market-highlight-heading p {
+    max-width: 620px;
+    margin: 0;
+    color: #61778a;
+    font-size: 1rem;
+}
+
+.market-live-badge {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.7rem 1rem;
+    border: 1px solid rgba(8, 127, 115, 0.16);
+    border-radius: 999px;
+    color: #087f73;
+    background: rgba(255, 255, 255, 0.74);
+    box-shadow: 0 8px 24px rgba(12, 50, 82, 0.07);
+    font-size: 0.78rem;
+    font-weight: 750;
+    backdrop-filter: blur(10px);
+}
+
+.market-live-badge span {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #12b886;
+    box-shadow: 0 0 0 5px rgba(18, 184, 134, 0.13);
+    animation: marketPulse 2s ease-out infinite;
+}
+
+@keyframes marketPulse {
+    0%, 100% { box-shadow: 0 0 0 4px rgba(18, 184, 134, 0.13); }
+    50% { box-shadow: 0 0 0 8px rgba(18, 184, 134, 0.04); }
+}
+
+.market-lane {
+    position: relative;
+    margin-bottom: 1.5rem;
+    padding: clamp(1rem, 2.5vw, 1.6rem);
+    border: 1px solid rgba(15, 95, 168, 0.12);
+    border-radius: 26px;
+    background: rgba(255, 255, 255, 0.58);
+    box-shadow: 0 14px 38px rgba(12, 50, 82, 0.07);
+    backdrop-filter: blur(14px);
+}
+
+.market-lane-heading,
+.market-lane-heading > div:first-child {
+    display: flex;
+    align-items: center;
+}
+
+.market-lane-heading {
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.market-lane-heading > div:first-child {
+    gap: 0.8rem;
+}
+
+.market-lane-number {
+    display: inline-flex;
+    width: 42px;
+    height: 42px;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    border-radius: 13px;
+    color: #fff;
+    background: linear-gradient(135deg, #0f5fa8, #00a38a);
+    box-shadow: 0 7px 16px rgba(15, 95, 168, 0.2);
+    font-size: 0.73rem;
+    font-weight: 850;
+    letter-spacing: 0.08em;
+}
+
+.market-lane-heading h3 {
+    margin: 0 0 0.15rem;
+    color: #12344d;
+    font-size: 1rem;
+    font-weight: 800;
+}
+
+.market-lane-heading p {
+    margin: 0;
+    color: #7b8d9b;
+    font-size: 0.76rem;
+}
+
+.market-controls {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.market-control {
+    display: inline-flex;
+    width: 40px;
+    height: 40px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #dce8ef;
+    border-radius: 50%;
+    color: #164663;
+    background: #fff;
+    box-shadow: 0 6px 16px rgba(12, 50, 82, 0.08);
+    transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.market-control:hover {
+    color: #fff;
+    border-color: #0b7f82;
+    background: #0b7f82;
+    transform: translateY(-2px);
+}
+
+.market-control:focus-visible {
+    outline: 3px solid rgba(47, 159, 232, 0.28);
+    outline-offset: 2px;
+}
+
+.market-carousel-frame {
+    width: 100%;
+    overflow: hidden;
+    border-radius: 19px;
+}
+
+.market-scroll-row {
+    display: flex;
+    width: 100%;
+    gap: 16px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+}
+
+.market-scroll-row::-webkit-scrollbar {
+    display: none;
+}
+
+.market-highlight .market-stat-link {
+    display: block;
+    width: 240px;
+    min-width: 240px;
+    height: auto;
+    flex: 0 0 240px;
+}
+
+.market-highlight .market-stat-card {
+    --market-card-color: #168f89;
+    position: relative;
+    width: 240px;
+    height: 286px;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    align-items: stretch;
+    justify-content: stretch;
+    border: 1px solid rgba(15, 95, 168, 0.12) !important;
+    border-radius: 19px !important;
+    background: linear-gradient(155deg, #fff 0%, #f7fbfd 100%) !important;
+    box-shadow: 0 9px 24px rgba(12, 50, 82, 0.08) !important;
+    transition: transform 0.24s ease, box-shadow 0.24s ease, border-color 0.24s ease;
+}
+
+.market-highlight .market-stat-card::before {
+    display: none;
+}
+
+.market-highlight .market-stat-card:hover {
+    border-color: color-mix(in srgb, var(--market-card-color) 55%, white) !important;
+    box-shadow: 0 17px 30px rgba(12, 50, 82, 0.16) !important;
+    transform: translateY(-5px);
+}
+
+.market-card-accent {
+    height: 5px;
+    flex: 0 0 auto;
+    background: linear-gradient(90deg, var(--market-card-color), color-mix(in srgb, var(--market-card-color) 45%, #fff));
+}
+
+.market-highlight .market-stat-card .card-body {
+    display: flex;
+    width: 100%;
+    flex: 1;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    padding: 1.05rem 1.1rem 1rem;
+    text-align: left;
+}
+
+.market-stat-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.home-ocean-theme .market-highlight .market-stat-card .stat-icon {
+    display: inline-flex;
+    width: 42px;
+    height: 42px;
+    margin: 0;
+    align-items: center;
+    justify-content: center;
+    border-radius: 13px;
+    color: var(--market-card-color);
+    background: color-mix(in srgb, var(--market-card-color) 12%, white) !important;
+    box-shadow: none;
+    font-size: 1rem;
+}
+
+.market-stat-index {
+    color: color-mix(in srgb, var(--market-card-color) 62%, #8294a1);
+    font-size: 0.7rem;
+    font-weight: 850;
+    letter-spacing: 0.1em;
+}
+
+.market-featured-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.32rem;
+    padding: 0.28rem 0.5rem;
+    border-radius: 999px;
+    color: var(--market-card-color);
+    background: color-mix(in srgb, var(--market-card-color) 10%, white);
+    font-size: 0.64rem;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.market-stat-content {
+    display: flex;
+    min-height: 0;
+    flex: 1;
+    flex-direction: column;
+    padding: 1rem 0 0.8rem;
+}
+
+.home-ocean-theme .market-highlight .stat-title {
+    min-height: 2.6em;
+    margin-bottom: 0.45rem;
+    overflow: hidden;
+    color: #3e596c !important;
+    font-size: 0.82rem;
+    font-weight: 750;
+    line-height: 1.3;
+}
+
+.market-stat-number {
+    display: flex;
+    min-width: 0;
+    align-items: baseline;
+    gap: 0.32rem;
+    margin-bottom: 0.45rem;
+}
+
+.market-highlight .stat-value {
+    overflow: hidden;
+    color: #102f45;
+    font-size: clamp(1.55rem, 2.4vw, 2.05rem);
+    font-weight: 850;
+    letter-spacing: -0.045em;
+    line-height: 1.1;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.market-highlight .stat-unit {
+    flex: 0 0 auto;
+    color: var(--market-card-color);
+    font-size: 0.78rem;
+    font-weight: 800;
+}
+
+.market-highlight .stat-desc {
+    display: -webkit-box;
+    width: 100%;
+    max-height: none;
+    margin-top: 0;
+    overflow: hidden;
+    color: #7a8b98;
+    font-size: 0.72rem;
+    line-height: 1.4;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
+
+.market-card-action {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 0.75rem;
+    border-top: 1px solid #e6eef2;
+    color: var(--market-card-color);
+    font-size: 0.7rem;
+    font-weight: 800;
+}
+
+.market-card-action i {
+    transition: transform 0.2s ease;
+}
+
+.market-stat-card:hover .market-card-action i {
+    transform: translateX(3px);
+}
+
+.market-tone-0 { --market-card-color: #168f89 !important; }
+.market-tone-1 { --market-card-color: #267bd9 !important; }
+.market-tone-2 { --market-card-color: #e17428 !important; }
+.market-tone-3 { --market-card-color: #8759cf !important; }
+.market-tone-4 { --market-card-color: #d64f7d !important; }
+
+.market-dots {
+    display: flex;
+    min-height: 12px;
+    align-items: center;
+    justify-content: center;
+    margin-top: 0.9rem;
+}
+
+.market-highlight .stat-dot {
+    width: 18px;
+    height: 5px;
+    margin: 0 3px;
+    border-radius: 999px;
+    background: #8ca5b4;
+    cursor: pointer;
+    opacity: 0.3;
+    transition: width 0.2s ease, background 0.2s ease, opacity 0.2s ease;
+}
+
+.market-highlight .stat-dot.active {
+    width: 34px;
+    background: #0b8782;
+    opacity: 1;
+}
+
+.karirhub-insight {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(230px, 0.7fr) minmax(0, 2fr);
+    gap: clamp(1.2rem, 3vw, 2.5rem);
+    margin-top: 2rem;
+    padding: clamp(1.4rem, 3vw, 2.3rem);
+    overflow: hidden;
+    border-radius: 28px;
+    color: #fff;
+    background:
+        radial-gradient(circle at 0 100%, rgba(255, 191, 207, 0.25), transparent 30%),
+        linear-gradient(130deg, #a1134d 0%, #df3f72 46%, #fa7288 100%);
+    box-shadow: 0 20px 44px rgba(173, 24, 81, 0.22);
+}
+
+.karirhub-orb {
+    position: absolute;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.karirhub-orb-one {
+    width: 220px;
+    height: 220px;
+    top: -130px;
+    left: 24%;
+}
+
+.karirhub-orb-two {
+    width: 100px;
+    height: 100px;
+    right: -30px;
+    bottom: -35px;
+}
+
+.karirhub-intro,
+.karirhub-carousel {
+    position: relative;
+    z-index: 1;
+    min-width: 0;
+}
+
+.karirhub-intro {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.karirhub-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    margin-bottom: 0.7rem;
+    color: #ffd4df;
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.karirhub-intro h3 {
+    margin: 0 0 0.6rem;
+    color: #fff;
+    font-size: clamp(1.55rem, 2.6vw, 2.4rem);
+    font-weight: 820;
+    letter-spacing: -0.035em;
+}
+
+.karirhub-logo {
+    width: auto;
+    max-width: min(220px, 100%);
+    max-height: 52px;
+    margin-bottom: 0.9rem;
+    object-fit: contain;
+    filter: brightness(0) invert(1);
+}
+
+.karirhub-intro p {
+    max-width: 330px;
+    margin: 0 0 1.2rem;
+    color: rgba(255, 255, 255, 0.76);
+    font-size: 0.86rem;
+}
+
+.market-controls-light .market-control {
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.28);
+    background: rgba(255, 255, 255, 0.12);
+    box-shadow: none;
+    backdrop-filter: blur(8px);
+}
+
+.market-controls-light .market-control:hover {
+    color: #a1134d;
+    border-color: #fff;
+    background: #fff;
+}
+
+.karirhub-carousel {
+    align-self: center;
+}
+
+.market-dots-light .stat-dot {
+    background: #fff;
+}
+
+.market-dots-light .stat-dot.active {
+    background: #fff;
+}
+
+@media (max-width: 991.98px) {
+    .karirhub-insight {
+        grid-template-columns: 1fr;
+    }
+
+    .karirhub-intro {
+        max-width: 620px;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .market-highlight-heading {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .market-live-badge {
+        display: none;
+    }
+
+    .market-lane {
+        border-radius: 21px;
+    }
+
+    .market-lane-heading p {
+        display: none;
+    }
+
+    .market-lane-number {
+        width: 38px;
+        height: 38px;
+    }
+
+    .market-control {
+        width: 37px;
+        height: 37px;
+    }
+
+    .market-highlight .market-stat-link,
+    .market-highlight .market-stat-card {
+        width: 240px;
+        min-width: 240px;
+    }
+
+    .karirhub-insight {
+        border-radius: 23px;
+    }
+}
+
+html.dark-mode .market-highlight-heading h2,
+html.dark-mode .market-lane-heading h3 {
+    color: #edf7ff;
+}
+
+html.dark-mode .market-highlight-heading p,
+html.dark-mode .market-lane-heading p {
+    color: #9cb0c1;
+}
+
+html.dark-mode .market-live-badge,
+html.dark-mode .market-lane {
+    border-color: rgba(125, 211, 252, 0.13);
+    background: rgba(17, 27, 45, 0.72);
+}
+
+html.dark-mode .market-control {
+    color: #dceeff;
+    border-color: #34465e;
+    background: #1a2940;
+}
+
+html.dark-mode .home-ocean-theme .market-highlight .market-stat-card {
+    border-color: #2b4058 !important;
+    background: linear-gradient(155deg, #192a40, #122035) !important;
+}
+
+html.dark-mode .home-ocean-theme .market-highlight .stat-title,
+html.dark-mode .market-highlight .stat-value {
+    color: #edf7ff !important;
+}
+
+html.dark-mode .market-highlight .stat-desc {
+    color: #9cb0c1;
+}
+
+html.dark-mode .market-card-action {
+    border-color: #304158;
+}
+
+html.dark-mode .home-ocean-theme .market-highlight .market-stat-card .stat-icon {
+    background: color-mix(in srgb, var(--market-card-color) 18%, #18263b) !important;
 }
 
 </style>
